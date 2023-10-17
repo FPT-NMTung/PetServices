@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://gitlab.com/vanhung38ht/se490_g65.git
+git remote add origin https://gitlab.com/hungnphe150914/se490_g65.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.com/vanhung38ht/se490_g65/-/settings/integrations)
+- [ ] [Set up project integrations](https://gitlab.com/hungnphe150914/se490_g65/-/settings/integrations)
 
 ## Collaborate with your team
 
