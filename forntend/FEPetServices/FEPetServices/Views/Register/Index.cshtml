@@ -9,16 +9,19 @@
 <head>
     <link rel="stylesheet" href="~/css/Register.css">
     <title>HASH TECHIE OFFICIAL</title>
+
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
 </head>
 <body>
     <section>
         <div class="form-box">
             <div class="form-value">
-                <form class="login-form" method="post">
+                <form asp-controller="Register" asp-action="Index" class="login-form" method="post">
                     <h2>Đăng ký</h2>
                     @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
                     {
-                        <h1 style="color: red ; text-align: center">Chúc mừng bạn đến với chúng tôi</h1>
+                        <h1 style="color: red ; text-align: center; font-size: 20px">Chúc mừng bạn đến với chúng tôi</h1>
+                        <p style="text-align:center; font-style: italic; font-size: 16px;">Vui lòng kiểm tra Email để lấy mã OTP xác minh tài khoản</p>
                         <p style="text-align:center"><a href="~/Login/Index">Đăng nhập</a> để nghiệm hệ thống</p>
                     }
                     else
@@ -30,13 +33,17 @@
                         </div>
                         <div class="inputbox">
                             <ion-icon name="lock-closed-outline"></ion-icon>
-                            <input asp-for="Password" type="password"  required>
+                            <input asp-for="Password" type="password" required>
                             <label for="">Mật khẩu</label>
-                        </div>                       
+                        </div>
                         <button id="registerButton">Đăng ký</button>
                         <div class="register">
                             <p>Quay trở lại <a href="~/Login/Index">Đăng nhập</a></p>
                         </div>
+                        <br />
+                        <br />
+                        <br />
+
                     }
                 </form>
             </div>
