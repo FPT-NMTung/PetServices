@@ -1,0 +1,58 @@
+﻿@model FEPetServices.Form.LoginForm
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="~/css/Login.css">
+    <title>HASH TECHIE OFFICIAL</title>
+
+    <script src="https://smtpjs.com/v3/smtp.js">
+    </script>
+</head>
+<body>
+    <section>
+        <div class="form-box">
+            <div class="form-value">
+                <form class="login-form" method="post">
+                    <h2>Đăng nhập</h2>
+                    <div class="inputbox">
+                        <ion-icon name="mail-outline"></ion-icon>
+                        <input asp-for="Email" type="email" required>
+                        <label for="">Email</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="lock-closed-outline"></ion-icon>
+                        <input asp-for="Password" type="password" required>
+                        <label for="">Mật khẩu</label>
+                    </div>
+                    <div class="forget">
+                        <label for=""><input type="checkbox">Ghi nhớ tài khoản  </label>
+                        <label>
+                            <a href="~/ForgotPassword/Index">Quên mật khẩu</a>
+                            @*<a href="#">Quên mật khẩu</a>*@
+                        </label>
+
+                    </div>
+                    <button>Đăng nhập</button>
+                    <div class="register">
+                        <p>Nếu bạn chưa có tài khoản hãy <a href="~/Register/Index">Đăng ký</a></p>
+                    </div>
+                    <div class="register">
+                        <p><a href="~/PartnerRegister/Index">Đăng ký</a> trở thành đối tác</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
+
+
+@section scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
