@@ -102,7 +102,14 @@ fetch("https://provinces.open-api.vn/api/p/")
     .then(data => {
         var provinces = data;
         var provinceDropdown = document.getElementById("provinceDropdown");
-
+        var selectedProvince = provinceDropdown.value;
+        
+        if (selectedProvince === "") {
+            // Get the first district option
+            var firstProvinceOption = provinceDropdown.querySelector("option:not([value=''])");
+            selectedProvince = firstProvinceOption.value;
+            firstProvinceOption.selected = true;
+        }
         // Add province options
         for (var i = 0; i < provinces.length; i++) {
             var option = document.createElement("option");

@@ -1,0 +1,117 @@
+﻿@model FEPetServices.Form.ChangePassword
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đổi mật khẩu</title>
+    <!-- Thông báo -->
+    <link href="~/css/test.css" rel="stylesheet" />
+    <script src="~/js/toastnotification.js"></script>
+</head>
+<body>
+    <div class="container-xl mt-4">
+        <hr class="mt-0 mb-4">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card mb-4">
+                    <div class="card-header">Đổi mật khẩu</div>
+                    <div class="card-body">
+                        <form method="post" asp-controller="ChangePassword" asp-action="Index" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="OldPassword" class="form-label">Mật khẩu cũ</label>
+                                <input asp-area="Manager" asp-for="OldPassword" class="form-control" id="OldPassword" name="OldPassword" type="password" placeholder="Nhập mật khẩu cũ" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="NewPassword" class="form-label">Mật khẩu mới</label>
+                                <div class="input-group">
+                                    <input asp-area="Manager" asp-for="NewPassword" class="form-control" id="NewPassword" name="NewPassword" type="password" placeholder="Nhập mật khẩu mới" required>
+                                    <span class="input-group-text" id="showPassword">
+                                        <i class="far fa-eye" id="eyeIcon"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="ConfirmNewPassword" class="form-label">Nhập lại mật khẩu mới</label>
+                                <div class="input-group">
+                                    <input class="form-control" id="ConfirmNewPassword" name="ConfirmNewPassword" type="password" placeholder="Nhập lại mật khẩu mới" required>
+                                    <span class="input-group-text" id="showConfirmPassword">
+                                        <i class="far fa-eye" id="eyeConfirmIcon"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary" type="submit">Đổi mật khẩu</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="toast"></div>
+        @if (!string.IsNullOrEmpty(ViewBag.SuccessToast))
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                showSuccessToast();
+                });
+            </script>
+        }
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorToast))
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                showErrorToast();
+                });
+            </script>
+        }
+</body>
+    <script>
+        function showSuccessToast() {
+            toast({
+                title: 'Thành công',
+                message: '@ViewBag.SuccessToast',
+                type: 'success',
+                duration: 2000
+            });
+        }
+        function showErrorToast() {
+            toast({
+                title: 'Thất bại',
+                message: '@ViewBag.ErrorToast',
+                type: 'error',
+                duration: 2000
+            });
+        }
+
+        $(document).ready(function () {
+            $("#showPassword").click(function () {
+                togglePasswordVisibility("NewPassword", "eyeIcon");
+            });
+
+            $("#showConfirmPassword").click(function () {
+                togglePasswordVisibility("ConfirmNewPassword", "eyeConfirmIcon");
+            });
+
+            function togglePasswordVisibility(passwordFieldId, eyeIconId) {
+                var passwordField = $("#" + passwordFieldId);
+                var eyeIcon = $("#" + eyeIconId);
+
+                if (passwordField.attr("type") === "password") {
+                    passwordField.attr("type", "text");
+                    eyeIcon.removeClass("far fa-eye");
+                    eyeIcon.addClass("far fa-eye-slash");
+                } else {
+                    passwordField.attr("type", "password");
+                    eyeIcon.removeClass("far fa-eye-slash");
+                    eyeIcon.addClass("far fa-eye");
+                }
+            }
+        });
+    </script>
+
+</html>

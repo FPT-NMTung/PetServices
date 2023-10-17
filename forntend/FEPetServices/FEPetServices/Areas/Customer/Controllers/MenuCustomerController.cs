@@ -8,5 +8,11 @@ namespace FEPetServices.Areas.Customer.Controllers
         {
             return View();
         }
+
+        public IActionResult Information()
+        {
+
+            return View();
+        }
     }
 }
