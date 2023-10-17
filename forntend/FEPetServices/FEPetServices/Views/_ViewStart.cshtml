@@ -1,0 +1,13 @@
+﻿@{
+    var routeUrl = ViewContext.RouteData.Values["controller"].ToString();
+    var pages = new List<string> { "Manager" };
+
+    if (pages.Any(routeUrl.Contains))
+    {
+        Layout = "_LayoutManager" ;
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutHome.cshtml";
+    }
+}
