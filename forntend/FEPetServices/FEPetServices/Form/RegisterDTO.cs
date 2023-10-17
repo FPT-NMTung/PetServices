@@ -10,6 +10,6 @@
         public string? Address { get; set; }
         public string? CardNumber { get; set; }
         public string? ImageCertificate { get; set; }
-
+        public int OTP { get; set; }
     }
 }

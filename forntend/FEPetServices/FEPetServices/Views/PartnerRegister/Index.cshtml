@@ -22,9 +22,10 @@
                     @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
                     {
                         <h1 style="color: red ; text-align: center; font-size: 20px">Chúc mừng bạn đến với chúng tôi</h1>
-                        <p style ="text-align:center; font-style: italic; font-size: 16px;">Vui lòng chờ đợi quản trị viên xét duyệt thông tin tài khoản của bạn</p>
+                        <p style="text-align:center; font-style: italic; font-size: 16px;">Vui lòng chờ đợi quản trị viên xét duyệt thông tin tài khoản của bạn</p>
                         <p style="text-align:center"><a href="~/Login/Index">Đăng nhập</a> để nghiệm hệ thống</p>
-                    } else
+                    }
+                    else
                     {
                         <div class="inputbox">
                             <ion-icon name="accessibility-outline"></ion-icon>
@@ -56,13 +57,13 @@
                                 <input type="checkbox" id="agreeCheckbox">Tôi đồng ý với các
                                 <a id="showTerms" href="" style="color:blue">điều khoản</a>
                                 của hệ thống
-                            </label>                           
+                            </label>
                         </div>
                         <button id="registerButton">Đăng ký</button>
                         <div class="register">
                             <p>Quay trở lại <a href="~/Login/Index">Đăng nhập</a></p>
                         </div>
-                    }                  
+                    }
                 </form>
             </div>
         </div>
@@ -73,27 +74,27 @@
                     <div class="rules">
                         <h1>Điều khoản hệ thống</h1>
                         <div class="ruleinfo">
-                            <p>Điều 1: Bạn cần chấp nhận tất cả điều khoản và điều kiện của chúng tôi</p>                   
-                        </div>   
-                        <div class="ruleinfo">
-                            <p>Điều 2: Làm việc với sự nghiêm túc, nhiệt huyết, trung thực</p>                           
+                            <p>Điều 1: Bạn cần chấp nhận tất cả điều khoản và điều kiện của chúng tôi</p>
                         </div>
                         <div class="ruleinfo">
-                            <p>Điều 3: Đảm bảo dịch vụ bạn phụ trách đáp ứng đủ chất lượng</p>                           
+                            <p>Điều 2: Làm việc với sự nghiêm túc, nhiệt huyết, trung thực</p>
+                        </div>
+                        <div class="ruleinfo">
+                            <p>Điều 3: Đảm bảo dịch vụ bạn phụ trách đáp ứng đủ chất lượng</p>
                         </div>
                         <div class="ruleinfo">
                             <p>Điều 4: Tuân thủ các biện pháp bảo mật thông tin của khách hàng</p>
-                        </div>                      
-                        <div class="ruleinfo">                          
+                        </div>
+                        <div class="ruleinfo">
                             <p>Điều 5:Không thực hiện bất kỳ hành động làm tổn hại đến hệ thống</p>
                         </div>
-                        <div class="ruleinfo">                           
+                        <div class="ruleinfo">
                             <p>Điều 6: Cam kết cung cấp chính xác thông tin</p>
-                        </div>                        
+                        </div>
                     </div>
-                    <div class="image">                      
-                        <input id="checkimage" type="file" />                                                                                                               
-                    </div>                   
+                    <div class="image">
+                        <input id="checkimage" type="file" />
+                    </div>
                 </div>
             </div>
         </div>

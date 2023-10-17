@@ -198,7 +198,7 @@ namespace PetServices.Controllers
 
                     Account account = await _context.Accounts.SingleAsync(i => i.AccountId == result.AccountId);
                     account.Password = pass;
-                    // Cập nhật mật khẩu trong cơ sở dữ liệu ở đây
+                    
                     _context.Entry(account).State = EntityState.Modified;
                     _context.SaveChanges();
                     var json = new { Gmail = account.Email, NewPass = pass };
@@ -212,7 +212,83 @@ namespace PetServices.Controllers
             }
         }
 
+        [HttpPost("SendOTP")]
+        public async Task<IActionResult> SendOTP([FromBody] string email)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(email))
+                {
+                    return BadRequest("Cần nhập thông tin Email.");
+                }
 
+                var account = await _context.Accounts.FirstOrDefaultAsync(a => a.Email == email);
+
+                if (account == null)
+                {
+                    return NotFound("Email không tồn tại.");
+                }
+                
+                Random random = new Random();
+                int otp = random.Next(100000, 999999);
+                
+                var newOTP = new Otp
+                {
+                    Code = otp.ToString()
+                };
+                
+                _context.Otps.Add(newOTP);
+                await _context.SaveChangesAsync();
+               
+                account.Otpid = newOTP.Otpid;
+                _context.Update(account);
+                await _context.SaveChangesAsync();
+                
+                var response = new { Email = email, OTP = otp };
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                // Handle errors appropriately and return the appropriate error code
+                return BadRequest("Đã xảy ra lỗi.");
+            }
+        }
+
+        [HttpPost("VerifyOTPAndActivateAccount")]
+        public async Task<IActionResult> VerifyOTPAndActivateAccount([FromBody] VerifyOTPModel verifyOTPModel)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(verifyOTPModel.Email) || verifyOTPModel.OTP <= 0)
+                {
+                    return BadRequest("Email and OTP cần được nhập chính xác.");
+                }
+
+                var account = await _context.Accounts.FirstOrDefaultAsync(a => a.Email == verifyOTPModel.Email);
+
+                if (account == null)
+                {
+                    return NotFound("Email không tồn tại.");
+                }
+
+                var otp = await _context.Otps.FirstOrDefaultAsync(o => o.Otpid == account.Otpid && o.Code == verifyOTPModel.OTP.ToString());
+
+                if (otp == null)
+                {
+                    return BadRequest("Sai OTP.");
+                }
+              
+                account.Status = true;
+                _context.Update(account);
+                await _context.SaveChangesAsync();
+
+                return Ok("Tài khoản đã được kích hoạt");
+            }
+            catch (Exception ex)
+            {               
+                return BadRequest("Đã xảy ra lỗi.");
+            }
+        }
 
         [HttpPut("newpassword")]
         public async Task<IActionResult> ChangePassword(string email, string oldpassword, string newpassword)
