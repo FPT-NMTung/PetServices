@@ -48,7 +48,7 @@ namespace PetServices.Controllers
         public async Task<IActionResult> Login([FromBody] LoginForm login)
         {
             var result = await _context.Accounts
-                .Include(a => a.Role)
+                .Include(a => a.Role) 
                 .SingleOrDefaultAsync(x => x.Email == login.Email && x.Password == login.Password);
 
             if (result != null)
@@ -78,7 +78,6 @@ namespace PetServices.Controllers
             }
         }
 
-
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDto)
         {
@@ -98,8 +97,7 @@ namespace PetServices.Controllers
             {
                 Email = registerDto.Email,
                 Password = registerDto.Password,
-                Status = false, // Hoặc giá trị mặc định khác tùy thuộc vào yêu cầu
-                RoleId = 2
+                Status = false // Hoặc giá trị mặc định khác tùy thuộc vào yêu cầu
             };
 
             // Thêm Account vào cơ sở dữ liệu
@@ -123,118 +121,21 @@ namespace PetServices.Controllers
             return Ok("Đăng ký thành công! Đăng nhập để trải nghiệm hệ thống");
         }
 
-        [HttpPost("RegisterPartner")]
-        public async Task<IActionResult> RegisterPartner([FromBody] RegisterDTO registerDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            // Kiểm tra xem tài khoản đã tồn tại dựa trên UserName
-            if (_context.Accounts.Any(a => a.Email == registerDto.Email))
-            {
-                return Conflict("Email đã được đăng ký");
-            }
-
-            // Tạo một đối tượng Account từ thông tin đăng ký (email và password)
-            var newAccount = new Account
-            {
-                Email = registerDto.Email,
-                Password = registerDto.Password,
-                Status = false, // Hoặc giá trị mặc định khác tùy thuộc vào yêu cầu
-                RoleId = 4
-            };
-
-            // Thêm Account vào cơ sở dữ liệu
-            await _context.Accounts.AddAsync(newAccount);
-            await _context.SaveChangesAsync();
-
-            // Gán thông tin UserInfo cho Account
-            newAccount.PartnerInfo = new PartnerInfo
-            {
-                // Thiết lập thông tin UserInfo tại đây
-                FirstName = registerDto.FirstName,
-                LastName = registerDto.LastName,
-                Phone = registerDto.Phone,
-                Address = registerDto.Address,
-                CardNumber = registerDto.CardNumber,
-                ImageCertificate = registerDto.ImageCertificate
-                
-            };
-
-            // Lưu thông tin UserInfo vào cơ sở dữ liệu
-            _context.Update(newAccount);
-            await _context.SaveChangesAsync();
-
-            return Ok("Đăng ký thành công! Đăng nhập để trải nghiệm hệ thống");
-        }
-
-
-        [HttpPost("ForgotPassword")]
-        public async Task<ActionResult> ForgotPassword([FromBody] string email)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(email))
-                {
-                    return BadRequest("Email is required.");
-                }
-
-                var result = await _context.Accounts
-                    .Where(i => i.Email == email)
-                    .Select(i => new { i.AccountId })
-                    .FirstOrDefaultAsync();
-
-                if (result == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    string guid = Guid.NewGuid().ToString();
-                    string convert = Convert.ToBase64String(Encoding.UTF8.GetBytes(guid));
-                    string pass = convert.Substring(0, 15);
-
-                    Account account = await _context.Accounts.SingleAsync(i => i.AccountId == result.AccountId);
-                    account.Password = pass;
-                    // Cập nhật mật khẩu trong cơ sở dữ liệu ở đây
-                    _context.Entry(account).State = EntityState.Modified;
-                    _context.SaveChanges();
-                    var json = new { Gmail = account.Email, NewPass = pass };
-                    return Ok(json);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Xử lý các trường hợp lỗi một cách thích hợp và trả về mã lỗi phù hợp
-                return BadRequest("An error occurred.");
-            }
-        }
-
-
 
         [HttpPut("newpassword")]
-        public async Task<IActionResult> ChangePassword(string email, string oldpassword, string newpassword)
+        public async Task<IActionResult> ChangePassword(string email, string newpassword)
         {
-            Account account = await _context.Accounts.Include(a => a.UserInfo).SingleOrDefaultAsync(a => a.Email == email);
+            Account account = await  _context.Accounts.Include(a => a.UserInfo).SingleOrDefaultAsync(a => a.Email == email);
             if (account == null)
             {
                 return NotFound("Tài khoản không tồn tài");
             }
-            if (account.Password == oldpassword)
-            {
-                account.Password = newpassword;
+            account.Password = newpassword;
 
-                _context.Accounts.Update(account);
-                await _context.SaveChangesAsync();
+            _context.Accounts.Update(account);
+            await _context.SaveChangesAsync();
 
-                return Ok("Đổi mật khẩu thành công");
-            }
-            else
-            {
-                return BadRequest("Mật khẩu cũ không chính xác");
-            }
+            return null;
         }
     }
 }
