@@ -11,6 +11,7 @@ using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace PetServices.Controllers
 {
@@ -27,9 +28,7 @@ namespace PetServices.Controllers
             _mapper = mapper;
             _configuration = configuration;
         }
-
-
-        [Authorize(Roles = "MANAGER")]
+      
         [HttpGet]
         public IActionResult Get()
         {
@@ -87,6 +86,20 @@ namespace PetServices.Controllers
                 return BadRequest(ModelState);
             }
 
+            // Kiểm tra Email
+            if (!IsValidEmail(registerDto.Email))
+            {
+                ModelState.AddModelError("Email không hợp lệ", "Email cần có @");
+                return BadRequest(ModelState);
+            }
+
+            // Kiểm tra Password
+            if (!IsValidPassword(registerDto.Password))
+            {
+                ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu cần tối thiểu 8 ký tự và không chứa ký tự đặc biệt!");
+                return BadRequest(ModelState);
+            }
+
             // Kiểm tra xem tài khoản đã tồn tại dựa trên UserName
             if (_context.Accounts.Any(a => a.Email == registerDto.Email))
             {
@@ -123,11 +136,51 @@ namespace PetServices.Controllers
             return Ok("Đăng ký thành công! Đăng nhập để trải nghiệm hệ thống");
         }
 
+        private bool IsValidEmail(string email)
+        {
+            // Sử dụng Regular Expression để kiểm tra định dạng Email
+            string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$";
+            return Regex.IsMatch(email, emailPattern);
+        }
+
+        private bool IsValidPassword(string password)
+        {
+            // Kiểm tra độ dài và các quy tắc khác cho mật khẩu
+            return !string.IsNullOrWhiteSpace(password) && password.Length >= 8 && !password.Contains(" "); // Kiểm tra không chứa khoảng trắng
+        }
+
+        private bool IsValidPhone(string phone)
+        {
+            // Kiểm tra độ dài và định dạng số điện thoại
+            return !string.IsNullOrWhiteSpace(phone) && phone.Length == 10 && phone.StartsWith("0") && phone.All(char.IsDigit);
+        }
+
         [HttpPost("RegisterPartner")]
         public async Task<IActionResult> RegisterPartner([FromBody] RegisterDTO registerDto)
         {
             if (!ModelState.IsValid)
             {
+                return BadRequest(ModelState);
+            }
+
+            // Kiểm tra Email
+            if (!IsValidEmail(registerDto.Email))
+            {
+                ModelState.AddModelError("Email không hợp lệ", "Email cần có @");
+                return BadRequest(ModelState);
+            }
+
+            // Kiểm tra Password
+            if (!IsValidPassword(registerDto.Password))
+            {
+                ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu cần tối thiểu 8 ký tự và không chứa ký tự đặc biệt!");
+                return BadRequest(ModelState);
+            }
+
+            // Kiểm tra Phone
+            if (!IsValidPhone(registerDto.Phone))
+            {
+                ModelState.AddModelError("Số điện thoại không hợp lệ", "Số điện thoại bắt đầu bằng số 0 và có tổng 10 số");
                 return BadRequest(ModelState);
             }
 
