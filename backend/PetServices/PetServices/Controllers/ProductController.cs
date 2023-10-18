@@ -35,7 +35,7 @@ namespace PetServices.Controllers
                 .ToList();
             return Ok(_mapper.Map<List<ProductDTO>>(product));
         }
-        [HttpPost]
+        [HttpPost("Add")]
         public async Task<IActionResult> CreateProduct(ProductDTO productDTO)
         {
             if (productDTO == null)

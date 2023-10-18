@@ -18,7 +18,7 @@
 <link href="~/css/manager/productcategory.css" rel="stylesheet" />
 
 <div class="container-add-new">
-    <form asp-action="CreateNewProductCategory" method="post" enctype="multipart/form-data">
+    <form asp-action="CreateNewProductCategory" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
         <div class="noidung">
             <div class="anh-cate-product">
                 <div class="form-group">
@@ -26,7 +26,7 @@
                         <label for="image">Ảnh:</label>
                     </div>
                     <div class="typeinput">
-                        <input type="file" class="form-control" style="color: red;" id="image" name="image" onchange="changeImageSource()">
+                        <input type="file" class="form-control" id="image" name="image" onchange="changeImageSource()">
                         <img class="form-control-anh" src="~/img/add-image-1.png" height="50%" width="50%" style="float: left;" id="imagePreview" />
                     </div>
                 </div>
@@ -38,6 +38,7 @@
                     </div>
                     <div class="typeinput">
                         <input type="text" class="form-control" id="ProCategoriesName" name="ProCategoriesName" value="@Model?.ProCategoriesName" style="width:100%" />
+                        <div style="color: red" class="error-message" id="fnameErrorMessage"></div>
                     </div>
                     
                 </div>
@@ -48,6 +49,7 @@
                     </div>
                     <div class="typeinput">
                         <textarea class="form-control" id="Desciptions" name="Desciptions" style="width:100%; height: auto"> @Model?.Desciptions</textarea>
+                        <div style="color: red" class="error-message" id="subjectErrorMessage"></div>
                     </div>
                 </div>
             </div>
@@ -65,3 +67,34 @@
     </form>
     <script src="~/js/manager/productcategory.js"></script>
 </div>
+<script>
+    function validateForm() {
+        const fname = document.getElementById('SerCategoriesName');
+        const subject = document.getElementById('Desciptions');
+        const fnameErrorMessage = document.getElementById('fname-error-message');
+        const subjectErrorMessage = document.getElementById('subject-error-message');
+
+        console.log('Debug: fname.value', fname.value);
+        console.log('Debug: subject.value', subject.value);
+
+        const specialChars = /[!#$%^&*()_+{}\[\]:;<>,.?~\\/-]/; // Special character regex
+
+        // Reset error messages
+        fnameErrorMessage.textContent = "";
+        subjectErrorMessage.textContent = "";
+
+        let isValid = true;
+
+        if (specialChars.test(fname.value)) {
+            fnameErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
+            isValid = false;
+        }
+
+        if (specialChars.test(subject.value)) {
+            subjectErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+</script>

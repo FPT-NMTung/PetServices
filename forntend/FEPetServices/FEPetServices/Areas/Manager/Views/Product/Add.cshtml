@@ -1,5 +1,100 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@*@model FEPetServices.Form.ProductCategoryDTO*@
 @{
+    ViewData["Title"] = "Thêm Loại Sản Phẩm";
 }
+<h1 style="text-align:center">Thêm Loại Sản Phẩm Mới</h1>
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger" style="color:red">
+        @ViewBag.ErrorMessage
+    </div>
+}
+@if (!string.IsNullOrEmpty(TempData["SuccessMessage"]?.ToString()))
+{
+    <div class="alert alert-success" style="color:red">
+        @TempData["SuccessMessage"]
+    </div>
+}
+<link href="~/css/manager/product.css" rel="stylesheet" />
+
+<div class="container-add-new">
+    <form asp-action="Add" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
+        <div class="noidung">
+            <div class="anh-product">
+                <div class="form-group">
+                    <div class="title">
+                        <label for="image">Ảnh:</label>
+                    </div>
+                    <div class="typeinput">
+                        <input type="file" class="form-control" style="color: red;" id="image" name="image" onchange="changeImageSource()">
+                        <img class="form-control-anh" src="~/img/add-image-1.png" height="50%" width="50%" style="float: left;" id="imagePreview" />
+                    </div>
+                </div>
+            </div>
+            <div class="noidung-product">
+                <div class="form-group">
+                    <div class="title">
+                        <label for="ProductName">Tên Sản Phẩm: </label>
+                    </div>
+                    <div class="typeinput">
+                        <input type="text" class="form-control" id="ProductName" name="ProductName" value="@Model?.ProductName" style="width:100%" />
+                        <div style="color: red" class="error-message" id="fnameErrorMessage"></div>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <div class="title">
+                        <label for="Desciption">Mô Tả Chi Tiết: </label>
+                    </div>
+                    <div class="typeinput">
+                        <textarea class="form-control" id="Desciption" name="Desciption" style="width:100%; height: auto"> @Model?.Desciption</textarea>
+                        <div style="color: red" class="error-message" id="subjectErrorMessage"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="btn-cate">
+            <div class="btn-add-new">
+                <button type="submit" class="btn btn-primary" style="background: #FFD6E4; color: #E21033;">Thêm Mới</button>
+            </div>
+            <div class="btn-return-proList">
+                <button type="button" style="background: #FFD6E4; color: #E21033;" onclick="returnProduct()">
+                    Quay lại Danh Sách
+                </button>
+            </div>
+        </div>
+    </form>
+    <script src="~/js/manager/product.js"/>
+</div>
+@*<script>
+    function validateForm() {
+        const fname = document.getElementById('SerCategoriesName');
+        const subject = document.getElementById('Desciptions');
+        const fnameErrorMessage = document.getElementById('fname-error-message');
+        const subjectErrorMessage = document.getElementById('subject-error-message');
+
+        console.log('Debug: fname.value', fname.value);
+        console.log('Debug: subject.value', subject.value);
+
+        const specialChars = /[!#$%^&*()_+{}\[\]:;<>,.?~\\/-]/; // Special character regex
+
+        // Reset error messages
+        fnameErrorMessage.textContent = "";
+        subjectErrorMessage.textContent = "";
+
+        let isValid = true;
+
+        if (specialChars.test(fname.value)) {
+            fnameErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
+            isValid = false;
+        }
+
+        if (specialChars.test(subject.value)) {
+            subjectErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+</script>*@

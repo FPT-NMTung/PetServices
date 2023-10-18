@@ -10,9 +10,6 @@
         reader.readAsDataURL(imageInput.files[0]);
     }
 }
-function returnProductCategory() {
-    window.location.href = '/Manager/ProductCategory/Index';
-}
 function returnProduct() {
     window.location.href = '/Manager/Product/Index';
 }

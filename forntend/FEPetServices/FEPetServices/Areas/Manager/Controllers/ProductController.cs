@@ -56,5 +56,46 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             return View();
         }
+        public async Task<IActionResult> Add([FromForm] ProductDTO pro, IFormFile image)
+        {
+            try
+            {
+                if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
+                {
+                    if (image != null && image.Length > 0)
+                    {
+                        // Xử lý và lưu trữ ảnh
+                        Console.WriteLine(image);
+                        pro.Prictue = "/img/" + image.FileName.ToString();
+                    }
+
+                    var json = JsonConvert.SerializeObject(pro);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    // Gửi dữ liệu lên máy chủ
+                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrlProductAdd, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        TempData["SuccessMessage"] = "Thêm dịch vụ thành công!";
+                        return View(pro); // Chuyển hướng đến trang thành công hoặc trang danh sách
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "Thêm dịch vụ thất bại. Vui lòng thử lại sau.";
+                        return View(pro); // Hiển thị lại biểu mẫu với dữ liệu đã điền
+                    }
+                }
+                else
+                {
+                    return View(pro);
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                return View(pro); // Hiển thị lại biểu mẫu với dữ liệu đã điền
+            }
+        }
     }
 }
