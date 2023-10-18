@@ -7,6 +7,7 @@ using System.Data;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Web;
 
 namespace FEPetServices.Areas.Admin.Controllers
 {
@@ -56,19 +57,21 @@ namespace FEPetServices.Areas.Admin.Controllers
                     var json = JsonConvert.SerializeObject(addAccount);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    ApiUrlAddAccount = ApiUrlAddAccount + "?email=" + addAccount.Email + "&password=" + addAccount.Password + "&roleId=" + addAccount.RoleId;
+                    string password = HttpUtility.UrlEncode(addAccount.Password);
+
+                    ApiUrlAddAccount = ApiUrlAddAccount + "?email=" + addAccount.Email + "&password=" + password + "&roleId=" + addAccount.RoleId;
 
                     HttpResponseMessage response = await client.PostAsync(ApiUrlAddAccount, content);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        ViewBag.Success = "thêm tài khoản thành công!";
+                        ViewBag.Success = "Thêm tài khoản thành công!";
                         return View(addAccount);
                     }
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
                         var errorMessage = await response.Content.ReadAsStringAsync();
-                        ViewBag.ErrorMessage = "Thêm tài khoản thất bại: " + errorMessage;
+                        ViewBag.ErrorMessage = errorMessage;
                         return View(addAccount);
                     }
                     else

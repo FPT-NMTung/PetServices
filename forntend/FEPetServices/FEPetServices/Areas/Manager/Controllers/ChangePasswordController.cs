@@ -1,0 +1,47 @@
+﻿using FEPetServices.Form;
+using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+
+namespace FEPetServices.Areas.Manager.Controllers
+{
+    public class ChangePasswordController : Controller
+    {
+        private readonly HttpClient _client = null;
+        private string DefaultApiUrl = "";
+
+        public ChangePasswordController()
+        {
+            _client = new HttpClient();
+            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
+            _client.DefaultRequestHeaders.Accept.Add(contentType);
+            DefaultApiUrl = "https://localhost:7255/api/Account";
+        }
+        public async Task<IActionResult> Index([FromForm] ChangePassword changePassword)
+        {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+            if (changePassword.OldPassword == null || changePassword.NewPassword == null)
+            {
+                return View();
+            }
+
+            string apiUrl = $"https://localhost:7255/api/Account/newpassword?email={email}&oldpassword={changePassword.OldPassword}&newpassword={changePassword.NewPassword}";
+
+            HttpResponseMessage response = await _client.PutAsync(apiUrl, null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                ViewBag.SuccessToast = "Đổi mật khẩu thành công";
+                return View();
+            }
+            else
+            {
+                ViewBag.ErrorToast = "Mật khẩu cũ không chính xác";
+                return View();
+            }
+        }
+
+    }
+}

@@ -1,0 +1,50 @@
+﻿@model FEPetServices.Form.VerifyOTPModel
+
+@{
+    ViewData["Title"] = "Xác minh Email";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="~/css/VerifyEmail.css">
+    <title>HASH TECHIE OFFICIAL</title>
+</head>
+<body>
+    <section>
+        <div class="form-box">
+            <div class="form-value">
+                <form asp-controller="VerifyEmail" asp-action="Verify" method="post">
+                    <h2>Xác minh Email</h2>
+                    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                    {
+                        <p style="color: red; text-align: center; font-size: 16px">@ViewBag.ErrorMessage</p>
+                    }
+
+                    @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+                    {
+                        <h1 style="color: green; text-align: center; font-size: 20px">@ViewBag.SuccessMessage</h1>
+                        <p style="text-align:center"><a href="~/Login/Index">Đăng nhập</a> để nghiệm hệ thống</p>
+                    }
+                    else
+                    {
+                        <div class="inputbox">
+                            <ion-icon name="mail-outline"></ion-icon>
+                            <input asp-for="Email" class="form-control" required>
+                            <label for="">Email</label>
+                        </div>
+                        <div class="inputbox">
+                            <ion-icon name="key-outline"></ion-icon>
+                            <input asp-for="OTP" class="form-control" required>
+                            <label for="">Mã OTP</label>
+                        </div>
+
+                        
+                        <button id="verifyButton" type="submit" class="btn btn-primary">Xác minh</button>
+                    }
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

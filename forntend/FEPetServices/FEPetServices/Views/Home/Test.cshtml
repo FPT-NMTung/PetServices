@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="~/css/test.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container" id="toast"></div>
+    <div onclick="showSuccessToat();" class="btn btn-success">Show success</div>
+    <div onclick="showErrorToat();" class="btn btn-error">Show error</div>
+</body>
+<script>
+    function toast({
+        title = '', 
+        message = '', 
+        type = '', 
+        duration = ''}) {
+        const main = document.getElementById('toast');
+        if(main){
+            const toast = document.createElement('div');
+            const icons = {
+                success: 'fa-solid fa-check',
+                error: 'fa-solid fa-triangle-exclamation',
+            }
+            const icon = icons[type];
+            const autoRemoveId =  setTimeout(function () {
+                main.removeChild(toast);
+            }, duration + 1500);
+
+            toast.onclick = function (e) {
+                if (e.target.closest('.toast_close')) {
+                    main.removeChild(toast);
+                    clearTimeout(autoRemoveId);
+                }
+            }
+            toast.classList.add('toast', `toast--${type}`);
+            toast.style.animation = `slideInLeft ease .5s, fadeOut linear 1.5s ${duration}ms forwards`;
+            toast.innerHTML=`
+                 <div class="toast_icon">
+                    <i class="${icon}"></i>
+                </div>
+                <div class="toast_body">
+                     <h3 class="toast_title">${title}</h3>
+                     <p class="toast_msg">${message}</p>
+                </div>
+                <div class="toast_close">
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
+            `;
+            main.appendChild(toast);
+        }
+    }
+
+    function showSuccessToat(){
+        toast({
+            title: 'Thành công',
+            message: 'Bạn đăng nhập thành công',
+            type: 'success',
+            duration: 2000
+        });
+    }
+    function showErrorToat(){
+        toast({
+            title: 'Thất bại',
+            message: 'Có lỗi xảy ra',
+            type: 'error',
+            duration: 2000
+        });
+    }
+
+</script>
+</html>
