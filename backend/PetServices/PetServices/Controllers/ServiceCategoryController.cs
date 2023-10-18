@@ -55,7 +55,6 @@ namespace PetServices.Controllers
             return Ok(_mapper.Map<List<ServiceCategoryDTO>>(serviceCategories));
         }
 
-
         
         [HttpPost("AddServiceCategory")]
         public async Task<IActionResult> CreateSerCategories(ServiceCategoryDTO serviceCategoryDTO)
@@ -70,7 +69,7 @@ namespace PetServices.Controllers
                 SerCategoriesId = serviceCategoryDTO.SerCategoriesId,
                 SerCategoriesName = serviceCategoryDTO.SerCategoriesName,
                 Desciptions = serviceCategoryDTO.Desciptions,
-                Prictue = serviceCategoryDTO.Prictue,
+                Picture = serviceCategoryDTO.Picture,
             };
 
             _context.ServiceCategories.Add(newServiceCategory);
@@ -98,7 +97,7 @@ namespace PetServices.Controllers
 
             servicecategorie.SerCategoriesName = serviceCategoryDTO.SerCategoriesName;
             servicecategorie.Desciptions = serviceCategoryDTO.Desciptions;
-            servicecategorie.Prictue = serviceCategoryDTO.Prictue;
+            servicecategorie.Picture = serviceCategoryDTO.Picture;
 
             try
             {
