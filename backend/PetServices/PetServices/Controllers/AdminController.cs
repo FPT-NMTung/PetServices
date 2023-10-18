@@ -159,8 +159,7 @@ namespace PetServices.Controllers
 
             if (!IsValidEmail(email))
             {
-                ModelState.AddModelError("Email không hợp lệ", "Email cần có @");
-                return BadRequest(ModelState);
+                return BadRequest("Email không hợp lệ");
             }
 
             if (!IsValidPassword(password))
