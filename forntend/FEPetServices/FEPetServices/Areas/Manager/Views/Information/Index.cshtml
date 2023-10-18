@@ -4,12 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Đính kèm tệp CSS của Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
-    <!-- Đính kèm tệp JavaScript của jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- Đính kèm tệp JavaScript của Bootstrap (bao gồm Popper.js) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
 </head>
 <body>
     <div class="container-xl px-4 mt-4">
@@ -33,74 +28,115 @@
                 <div class="card mb-4">
                     <div class="card-header">Thông tin người dùng</div>
                     <div class="card-body">
-                        <form>
+                        <form method="post" asp-controller="Infomation" asp-action="Index">
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputFirstName">Họ</label>
-                                    <input class="form-control" id="inputFirstName" type="text" placeholder="Nhập họ hoặc tên đệm của bạn" value="Valerie">
+                                    <input class="form-control" name="FirstName" id="inputFirstName" type="text" placeholder="Nhập họ hoặc tên đệm của bạn" value="@Model?.UserInfo.FirstName" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputLastName">Tên</label>
-                                    <input class="form-control" id="inputLastName" type="text" placeholder="Nhập tên của bạn" value="Luna">
+                                    <input class="form-control" name="LastName" id="inputLastName" type="text" placeholder="Nhập tên của bạn" value="@Model?.UserInfo.LastName" required>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label class="small mb-1" for="inputEmailAddress">Email</label>
-                                <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="name@example.com">
+                                <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="@Model?.Email" disabled>
                             </div>
-                            
+
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
-                                    <label class="small mb-1" for="inputPhone">Tỉnh</label>
+                                    <label class="small mb-1" for="inputProvince">Tỉnh</label>
                                     <select class="form-control" id="provinceDropdown" onchange="loadDistricts()">
-                                        <option value="">Chọn tỉnh</option>
+                                        <option value="" selected disabled>@Model?.UserInfo.Province</option>
                                     </select>
-
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="small mb-1" for="inputBirthday">Huyện/Thành Phố</label>
+                                    <label class="small mb-1" for="inputDistrict">Huyện/Thành Phố</label>
                                     <select class="form-control" id="districtDropdown" onchange="loadWards()">
-                                        <option value="">Chọn huyện/thành phố</option>
+                                        <option value="" selected disabled>@Model?.UserInfo.District</option>
                                     </select>
-
                                 </div>
                             </div>
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
-                                    <label class="small mb-1" for="inputPhone">Xã/Quận</label>
+                                    <label class="small mb-1" for="inputWard">Xã/Quận</label>
                                     <select class="form-control" id="wardDropdown">
-                                        <option value="">Chọn xã/quận</option>
+                                        <option value="" selected disabled>@Model?.UserInfo.Commune</option>
                                     </select>
-
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="small mb-1" for="inputBirthday">Địa chỉ cụ thể</label>
-                                    <input class="form-control" id="inputBirthday" type="text" name="birthday" placeholder="Nhập địa chỉ " value="Hà Nội">
+                                    <label class="small mb-1" for="inputAddress">Địa chỉ cụ thể</label>
+                                    <input class="form-control" name="Address" id="inputAddress" type="text" placeholder="Nhập địa chỉ" value="@Model?.UserInfo.Address" required>
                                 </div>
                             </div>
+
                             <div class="mb-3">
-                                <label class="small mb-1" for="inputEmailAddress">Số điện thoại </label>
-                                <input class="form-control" id="inputEmailAddress" type="text" placeholder="Nhập số điện thoại của bạn" value="0987654321">
+                                <label class="small mb-1" for="inputPhone">Số điện thoại </label>
+                                <input class="form-control" name="Phone" id="inputPhone" type="text" placeholder="Nhập số điện thoại của bạn" value="@Model?.UserInfo.Phone" required>
                             </div>
                             <div class="mb-3">
-                                <label class="small mb-1" for="inputEmailAddress">Mô tả </label>
-                                <textarea class="form-control" id="inputEmailAddress" placeholder="Mô tả về bạn" value="name@example.com"></textarea>
+                                <label class="small mb-1" for="inputDescriptions">Mô tả </label>
+                                <textarea class="form-control" name="Descriptions" id="inputDesciptions" placeholder="Mô tả về bạn">@Model?.UserInfo.Descriptions</textarea>
                             </div>
-                            <button class="btn btn-primary" type="button">Lưu thay đổi</button>
-                            <button class="btn btn-primary" type="button">Đổi mật khẩu</button>
-                            
+                            <input type="hidden" name="Province" id="provinceNameInput" />
+                            <input type="hidden" name="District" id="districtNameInput" />
+                            <input type="hidden" name="Commune" id="wardsNameInput" />
+
+                            <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <button class="btn btn-primary" type="submit">Đổi mật khẩu</button>
 
-     <script src="~/js/takeAddress.js"></script>
+    <div id="toast"></div>
+    @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showSuccessToast();
+            });
+        </script>
+    }
+    @if (!string.IsNullOrEmpty(TempData["ErrorToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showErrorToast();
+            });
+        </script>
+    }
 </body>
+    <script src="~/js/takeAddress.js"></script>
+    <script src="~/js/toastnotification.js"></script>
+
+    <script>
+        function showSuccessToast() {
+            toast({
+                title: 'Thành công',
+                message: '@TempData["SuccessToast"]',
+                type: 'success',
+                duration: 2000
+            });
+        }
+        function showErrorToast() {
+            toast({
+                title: 'Thất bại',
+                message: '@TempData["ErrorToast"]',
+                type: 'error',
+                duration: 2000
+            });
+        }
+    </script>
 </html>
 
-@*<html>
+
+
+@*
+<html>
 <head>
     <title>Google Maps Example</title>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIkw2datIu4EYiyedKQJ08DmMJnboVSqs"></script>
@@ -126,3 +162,4 @@
     </script>
 </body>
 </html>*@
+
