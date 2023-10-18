@@ -1,16 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
-using PetServices.Form;
 using PetServices.Models;
 using System.Data;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using System.Transactions;
-using System.Net.Http.Json;
-using System.Runtime.Serialization.Json;
 using System.Text.RegularExpressions;
 
 namespace PetServices.Controllers
