@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const registerButton = document.getElementById('registerButton');
     const agreeCheckbox = document.getElementById('agreeCheckbox');
     const checkImage = document.getElementById('checkimage');
-    
+
 
     registerButton.addEventListener('click', function (event) {
         const passwordInput = document.querySelector('input[name="Password"]');

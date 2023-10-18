@@ -154,23 +154,23 @@ button {
     margin-bottom: 15px;
 }
 
-.rules h1 {
-    color: red;
-    text-align: center;
-    padding-top: 10px;    
-}
+    .rules h1 {
+        color: red;
+        text-align: center;
+        padding-top: 10px;
+    }
 
 .ruleinfo {
     margin-top: 20px;
 }
 
-.ruleinfo p {
-    color: white;
-    font-style: italic;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 18px;
-    margin-top: 10px;
-}
+    .ruleinfo p {
+        color: white;
+        font-style: italic;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: 18px;
+        margin-top: 10px;
+    }
 
 .image {
     border-radius: 20px;

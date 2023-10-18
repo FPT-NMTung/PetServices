@@ -43,6 +43,7 @@ namespace PetServices.Models
                     optionsBuilder.UseSqlServer(conf.GetConnectionString("DbConnection"));
                 }
             }
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -55,6 +56,8 @@ namespace PetServices.Models
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Otpid).HasColumnName("OTPID");
+
                 entity.Property(e => e.PartnerInfoId).HasColumnName("PartnerInfoID");
 
                 entity.Property(e => e.Password)
@@ -64,6 +67,11 @@ namespace PetServices.Models
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
                 entity.Property(e => e.UserInfoId).HasColumnName("UserInfoID");
+
+                entity.HasOne(d => d.Otp)
+                    .WithMany(p => p.Accounts)
+                    .HasForeignKey(d => d.Otpid)
+                    .HasConstraintName("FK_Accounts_OTPS");
 
                 entity.HasOne(d => d.PartnerInfo)
                     .WithMany(p => p.Accounts)
