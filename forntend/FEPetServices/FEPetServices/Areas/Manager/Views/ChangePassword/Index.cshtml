@@ -42,8 +42,8 @@
                                         <i class="far fa-eye" id="eyeConfirmIcon"></i>
                                     </span>
                                 </div>
+                                <div id="passwordMismatchMessage" style="color: red;"></div> 
                             </div>
-
                             <button class="btn btn-primary" type="submit">Đổi mật khẩu</button>
                         </form>
                     </div>
@@ -70,6 +70,7 @@
         }
 </body>
     <script src="~/js/toastnotification.js"></script>
+    <script src="~/js/checkpassword.js"></script>
     <script>
         function showSuccessToast() {
             toast({
@@ -87,31 +88,6 @@
                 duration: 2000
             });
         }
-
-        $(document).ready(function () {
-            $("#showPassword").click(function () {
-                togglePasswordVisibility("NewPassword", "eyeIcon");
-            });
-
-            $("#showConfirmPassword").click(function () {
-                togglePasswordVisibility("ConfirmNewPassword", "eyeConfirmIcon");
-            });
-
-            function togglePasswordVisibility(passwordFieldId, eyeIconId) {
-                var passwordField = $("#" + passwordFieldId);
-                var eyeIcon = $("#" + eyeIconId);
-
-                if (passwordField.attr("type") === "password") {
-                    passwordField.attr("type", "text");
-                    eyeIcon.removeClass("far fa-eye");
-                    eyeIcon.addClass("far fa-eye-slash");
-                } else {
-                    passwordField.attr("type", "password");
-                    eyeIcon.removeClass("far fa-eye-slash");
-                    eyeIcon.addClass("far fa-eye");
-                }
-            }
-        });
     </script>
 
 </html>

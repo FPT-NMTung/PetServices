@@ -17,7 +17,7 @@
                         @*Hình ảnh profile*@
                         <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
                         <!-- Profile picture help block-->
-                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                        <div class="small font-italic text-muted mb-4">JPG hoặc PNG không vượt quá 5 MB</div>
                         @* Uploat ảnh*@
                         <button class="btn btn-primary" type="button">Tải lên hình ảnh mới</button>
                     </div>
@@ -84,13 +84,15 @@
                             <input type="hidden" name="Commune" id="wardsNameInput" />
 
                             <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
+                            <a href="~/Manager/ChangePassword" class="btn btn-primary">
+                                Đổi mật khẩu
+                            </a>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <button class="btn btn-primary" type="submit">Đổi mật khẩu</button>
 
     <div id="toast"></div>
     @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))

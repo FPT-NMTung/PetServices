@@ -325,13 +325,19 @@ namespace PetServices.Controllers
         }
 
         [HttpPut("newpassword")]
-        public async Task<IActionResult> ChangePassword(string email, string oldpassword, string newpassword)
+        public async Task<IActionResult> ChangePassword(string email, string oldpassword, string newpassword, string confirmnewpassword)
         {
             Account account = await _context.Accounts.Include(a => a.UserInfo).SingleOrDefaultAsync(a => a.Email == email);
             if (account == null)
             {
                 return NotFound("Tài khoản không tồn tài");
             }
+
+            if(newpassword != confirmnewpassword)
+            {
+                return BadRequest("Mật khẩu xác nhận không chính xác");
+            }
+
             if (account.Password == oldpassword)
             {
                 account.Password = newpassword;
