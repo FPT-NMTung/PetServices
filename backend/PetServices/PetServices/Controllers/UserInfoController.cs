@@ -61,7 +61,6 @@ namespace PetServices.Controllers
                 {
                     return NotFound("Tài khoản không tồn tài");
                 }
-
                 existingAccount.UserInfo.LastName = updateInfo.LastName;
                 existingAccount.UserInfo.FirstName = updateInfo.FirstName;
                 existingAccount.UserInfo.Phone = updateInfo.Phone;
