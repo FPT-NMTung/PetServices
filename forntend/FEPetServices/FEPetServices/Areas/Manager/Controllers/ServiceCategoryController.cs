@@ -153,7 +153,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         }
 
 
-        [HttpPost]
+/*        [HttpPost]
         public async Task<IActionResult> EditServiceCategory([FromForm] ServiceCategoryDTO serviceCategory, IFormFile image, int serCategoriesId)
         {
             try
@@ -196,7 +196,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
                 return View(serviceCategory); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
-        }
+        }*/
 
     }
 }

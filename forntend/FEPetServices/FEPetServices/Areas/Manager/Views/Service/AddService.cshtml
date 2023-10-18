@@ -1,10 +1,17 @@
-﻿@*
-@{
-    ViewData["Title"] = "Thêm Dịch Vụ";
+﻿@{
+    ViewData["Title"] = "Chỉnh sửa Dịch Vụ";
 }
 
-<h1>Thêm Dịch Vụ</h1>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="~/css/Service.css">
 
+</head>
+<body>
+
+<h2>Thêm Dịch Vụ Thú Cưng</h2>
 @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
 {
     <div class="alert alert-danger" style="color:red">
@@ -17,103 +24,74 @@
         @TempData["SuccessMessage"]
     </div>
 }
-
-
-<form asp-action="AddService" method="post" enctype="multipart/form-data">
-    <div class="form-group">
+<div class="container">
+  <form asp-action="AddService" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+    <div class="row">
+      <div class="col-25">
         <label for="ServiceName">Tên Dịch Vụ:</label>
-        <input type="text" class="form-control" id="ServiceName" name="ServiceName" value="@Model?.ServiceName">
-
-    </div>
-    <div class="form-group">
-        <label for="Desciptions">Mô Tả:</label>
-        <textarea class="form-control" id="Desciptions" name="Desciptions">@Model?.Desciptions</textarea>
-    </div>
-    <div class="form-group">
-        <label for="Price">Giá:</label>
-        <input class="form-control" id="Price" name="Price">@Model?.Price</input>
-    </div>
-    <div class="form-group row">
-      <div class="col-md-12">
-          <label for="SerCategoriesId">Category:</label>
-            <select asp-for="SerCategoriesId" class="form-control" asp-items="ViewBag.Categories">
-                   <option value="">Select a category...</option>
-             </select>
       </div>
-     </div>
-    <div class="form-group">
+      <div class="col-75">
+        <input type="text" id="ServiceName" name="ServiceName" placeholder="Tên Dịch Vụ.." required>
+        <div style="color:red" class="error-message" id="fname-error-message"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
         <label for="image">Ảnh:</label>
-        <input type="file" class="form-control-file" id="image" name="image">
+      </div>
+      <div class="col-75">
+        <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" required>
+        <img src="/img/pngtree-add-vector-icon-png-image_470700.jpg" height="100px" width="100px" style="float: left;" id="imagePreview">
+      </div>
     </div>
-    <button type="submit" class="btn btn-primary">Thêm</button>
-</form>   
-
-<a asp-action="ServiceCategory">Quay lại danh sách</a>
-*@
-@model PetServices.Models.ServiceDTO
-
-@{
-    ViewData["Title"] = "Add Service";
-}
-
-<h1>Add Service</h1>
-
-@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-{
-    <div class="alert alert-danger">
-        @ViewBag.ErrorMessage
+    <div class="row">
+      <div class="col-25">
+        <label for="Price">Giá:</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="Price" name="Price" placeholder="Giá tiền" required>
+        <div style="color:red" class="error-message" id="price-error-message"></div> <!-- Lưu ý rằng id ở đây là "price-error-message" -->
+      </div>
     </div>
-}
-
-@if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
-{
-    <div class="alert alert-success">
-        @ViewBag.SuccessMessage
-    </div>
-}
-
-<form method="post" asp-controller="Service" asp-action="AddService">
-    <div class="form-group">
-        <label for="ServiceName">Service Name</label>
-        <input type="text" class="form-control" id="ServiceName" name="ServiceName" asp-for="ServiceName" required>
-    </div>
-    
-    <div class="form-group">
-        <label for="Desciptions">Description</label>
-        <textarea class="form-control" id="Desciptions" name="Desciptions" asp-for="Desciptions" required></textarea>
-    </div>
-    
-    <div class="form-group">
-        <label for="Price">Price</label>
-        <input type="number" class="form-control" id="Price" name="Price" asp-for="Price" required>
-    </div>
-
-    <div class="form-group">
-        <label for="SerCategoriesId">Service Category</label>
-        @if (ViewBag.Categories != null)
-        {
-            <select class="form-control" id="SerCategoriesId" name="SerCategoriesId" asp-for="SerCategoriesId" required>
-                <option value="">Select a Service Category</option>
-                @foreach (var category in ViewBag.Categories)
+    <div class="row">
+      <div class="col-25">
+        <label for="SerCategoriesId">Loại Dịch Vụ</label>
+      </div>
+      <div class="col-75">
+          @if (ViewBag.Categories != null){
+         <select id="SerCategoriesId" name="SerCategoriesId" required>
+            <option value="">Select a Service Category</option>
+            @foreach (var category in ViewBag.Categories)
                 {
                     <option value="@category.Value">@category.Text</option>
                 }
-            </select>
-        }
-        else
-        {
+        </select>
+        } else {
             <span class="text-danger">Error: Service Categories data not available.</span>
         }
+      </div>
     </div>
-
-
-
-    <div class="form-group">
-        <label for="image">Image</label>
-        <input type="file" class="form-control-file" id="image" name="image" accept=".jpg, .jpeg, .png">
+    <div class="row">
+      <div class="col-25">
+        <label for="Desciptions">Mô Tả:</label>
+      </div>
+      <div class="col-75">
+        <textarea id="Desciptions" name="Desciptions" placeholder="Nội Dung .." style="height:200px" required></textarea>
+        <div style="color:red" class="error-message" id="subject-error-message"></div>
+      </div>
     </div>
+    <div class="row">
+      <div class="col-25">
+        <a type="submit" value="Cancel" href="/Manager/Service" class="cancel">Cancel</a>
+      </div>
+      <div class="col-75">
+        <input type="submit" value="Submit">
+      </div>
+    </div>
+  </form>
+</div>
 
-    <button type="submit" class="btn btn-primary">Add Service</button>
-</form>
+<script src="/js/Service.js"></script>
 
-<a asp-action="Index">Back to Service List</a>
+</body>
+</html>
