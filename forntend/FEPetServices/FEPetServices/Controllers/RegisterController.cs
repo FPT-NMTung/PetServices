@@ -42,7 +42,7 @@ namespace FEPetServices.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     // Đăng ký thành công, bạn có thể xử lý kết quả ở đây (ví dụ: hiển thị thông báo thành công)
-                    ViewBag.SuccessMessage = "Đăng ký thành công!";
+                    /*ViewBag.SuccessMessage = "Đăng ký thành công!";*/
 
                     var sendOtpResult = await CallSendOTP(registerInfo.Email);
                     if (!string.IsNullOrEmpty(sendOtpResult) && sendOtpResult == "Gửi OTP thành công.")
@@ -55,6 +55,8 @@ namespace FEPetServices.Controllers
                         // Xử lý lỗi khi gọi API SendOTP hoặc gửi OTP qua email không thành công
                         ViewBag.OTPErrorMessage = "Lỗi khi gọi API SendOTP hoặc gửi OTP qua email: " + sendOtpResult;
                     }
+
+                    return RedirectToAction("Index", "VerifyEmail");
                 }
                 else
                 {
