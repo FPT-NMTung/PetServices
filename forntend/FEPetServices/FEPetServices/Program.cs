@@ -76,6 +76,11 @@ app.UseEndpoints(endpoints =>
     areaName: "Customer",
     pattern: "Customer/{controller=MenuCustomer}/{action=Index}/{id?}");
 
+    endpoints.MapAreaControllerRoute(
+    name: "admin",
+    areaName: "Admin",
+    pattern: "Admin/{controller=Account}/{action=Index}/{id?}");
+
     endpoints.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Index}/{id?}"

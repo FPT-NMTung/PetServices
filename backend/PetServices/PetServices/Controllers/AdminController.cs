@@ -1,16 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
-using PetServices.Form;
 using PetServices.Models;
 using System.Data;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using System.Transactions;
-using System.Net.Http.Json;
-using System.Runtime.Serialization.Json;
 using System.Text.RegularExpressions;
 
 namespace PetServices.Controllers
@@ -38,6 +31,21 @@ namespace PetServices.Controllers
             return Ok(acc);
         }
 
+        [HttpGet("GetAllUser")]
+        public async Task<ActionResult> GetAllUser()
+        {
+            var user = await _context.UserInfos.ToListAsync();
+
+            return Ok(user);
+        }
+
+        [HttpGet("GetAllPartner")]
+        public async Task<ActionResult> GetAllPartner()
+        {
+            var partner = await _context.PartnerInfos.ToListAsync();
+
+            return Ok(partner);
+        }
 
         [HttpGet("GetAllAccountByAdmin")]
         public async Task<ActionResult> GetAllAccount()
@@ -67,6 +75,8 @@ namespace PetServices.Controllers
             try
             {
                 var account = await _context.Accounts
+                            .Include(a => a.UserInfo)
+                            .Include(a => a.PartnerInfo)
                             .Where(a => a.Email == email).FirstOrDefaultAsync();
                 if (account == null)
                 {
@@ -142,8 +152,7 @@ namespace PetServices.Controllers
 
             if (!IsValidEmail(email))
             {
-                ModelState.AddModelError("Email không hợp lệ", "Email cần có @");
-                return BadRequest(ModelState);
+                return BadRequest("Email không hợp lệ");
             }
 
             if (!IsValidPassword(password))
