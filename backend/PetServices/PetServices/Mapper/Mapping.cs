@@ -33,6 +33,7 @@ namespace PetServices.Mapper
                             act => act.MapFrom(src => src.Status))
                 .ForMember(des => des.UserInfoId,
                             act => act.MapFrom(src => src.UserInfoId));
+
             CreateMap<ServiceCategory, ServiceCategoryDTO>()
                 .ForMember(des => des.SerCategoriesId,
                             act => act.MapFrom(src => src.SerCategoriesId))
@@ -58,6 +59,19 @@ namespace PetServices.Mapper
                             act => act.MapFrom(src => src.Status))
                 .ForMember(des => des.SerCategoriesId,
                             act => act.MapFrom(src => src.SerCategoriesId));
+
+            CreateMap<Account, AccountByAdminDTO>()
+            .ForMember(dest => dest.Stt, opt => opt.Ignore())
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src =>
+                        src.PartnerInfoId != null ? src.PartnerInfo.FirstName + " " + src.PartnerInfo.LastName :
+                        (src.UserInfoId != null ? src.UserInfo.FirstName + " " + src.UserInfo.LastName : "Null")))
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src =>
+                        src.PartnerInfoId != null ? src.PartnerInfo.Province + ", " + src.PartnerInfo.District
+                        + ", " + src.PartnerInfo.Commune + ", " + src.PartnerInfo.Address :
+                        (src.UserInfoId != null ? src.UserInfo.Province + ", " + src.UserInfo.District
+                        + ", " + src.UserInfo.Commune + ", " + src.UserInfo.Address : "Null")))
+            .ForMember(dest => dest.RoleName,
+                        opt => opt.MapFrom(src => src.Role.RoleName ?? "Null"));
         }
     }
 }
