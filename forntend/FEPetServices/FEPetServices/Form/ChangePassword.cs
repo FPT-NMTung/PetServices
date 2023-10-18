@@ -8,5 +8,7 @@ namespace FEPetServices.Form
         public string? OldPassword { get; set; }
         [Required]
         public string? NewPassword { get; set; }
+        [Required]
+        public string? ConfirmNewPassword { get; set; }
     }
 }
