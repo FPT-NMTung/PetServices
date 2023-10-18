@@ -40,28 +40,28 @@
                             </div>
                             <div class="mb-3">
                                 <label class="small mb-1" for="inputEmailAddress">Email</label>
-                                <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="@Model?.Email">
+                                <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="@Model?.Email" disabled>
                             </div>
 
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputProvince">Tỉnh</label>
-                                    <select class="form-control" id="provinceDropdown" onchange="loadDistricts()" name="Province">
-                                        <option value="@Model?.UserInfo.Province" selected></option>
+                                    <select class="form-control" id="provinceDropdown" onchange="loadDistricts()">
+                                        <option value="" selected disabled>@Model?.UserInfo.Province</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputDistrict">Huyện/Thành Phố</label>
-                                    <select class="form-control" id="districtDropdown" onchange="loadWards()" name="District">
-                                        <option value="@Model?.UserInfo.District" selected>@Model?.UserInfo.District</option>
+                                    <select class="form-control" id="districtDropdown" onchange="loadWards()">
+                                        <option value="" selected disabled>@Model?.UserInfo.District</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputWard">Xã/Quận</label>
-                                    <select class="form-control" id="wardDropdown" name="Commune">
-                                        <option value="@Model?.UserInfo.Commune" selected>@Model?.UserInfo.Commune</option>
+                                    <select class="form-control" id="wardDropdown">
+                                        <option value="" selected disabled>@Model?.UserInfo.Commune</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
@@ -78,6 +78,10 @@
                                 <label class="small mb-1" for="inputDescriptions">Mô tả </label>
                                 <textarea class="form-control" name="Descriptions" id="inputDesciptions" placeholder="Mô tả về bạn">@Model?.UserInfo.Descriptions</textarea>
                             </div>
+                            <input type="hidden" name="Province" id="provinceNameInput" />
+                            <input type="hidden" name="District" id="districtNameInput" />
+                            <input type="hidden" name="Commune" id="wardsNameInput" />
+
                             <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
                         </form>
                     </div>
@@ -86,134 +90,48 @@
         </div>
     </div>
     <button class="btn btn-primary" type="submit">Đổi mật khẩu</button>
+    <div id="toast"></div>
 
-     @*<script src="~/js/takeAddress.js"></script>*@
-
-     <script>
-        function loadDistricts() {
-            var provinceDropdown = document.getElementById("provinceDropdown");
-            var selectedProvince = provinceDropdown.value;
-            var districtDropdown = document.getElementById("districtDropdown");
-            var selectedDistrict = districtDropdown.value;
-
-            fetch(`https://provinces.open-api.vn/api/p/${selectedProvince}?depth=2`)
-                .then(response => response.json())
-                .then(data => {
-                    var districts = data.districts;
-                    var districtDropdown = document.getElementById("districtDropdown");
-                    var wardDropdown = document.getElementById("wardDropdown");
-
-                    // Clear existing options in district and ward dropdowns
-                    districtDropdown.innerHTML = "";
-                    wardDropdown.innerHTML = "";
-
-                    // Add new district options
-                    for (var i = 0; i < districts.length; i++) {
-                        var option = document.createElement("option");
-                        option.value = districts[i].code;
-                        option.text = districts[i].name;
-                        districtDropdown.appendChild(option);
-                    }
-
-                    // Trigger the change event on district dropdown to load wards
-                    districtDropdown.dispatchEvent(new Event("change"));
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
-
-            fetch(`https://provinces.open-api.vn/api/d/${selectedDistrict}?depth=2`)
-                .then(response => response.json())
-                .then(data => {
-                    var wards = data.wards;
-
-                    // Clear existing options in ward dropdown
-                    wardDropdown.innerHTML = "";
-
-                    // Add new ward options
-                    for (var i = 0; i < wards.length; i++) {
-                        var option = document.createElement("option");
-                        option.value = wards[i].code;
-                        option.text = wards[i].name;
-                        wardDropdown.appendChild(option);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
-        }
-
-        function loadWards() {
-            var districtDropdown = document.getElementById("districtDropdown");
-            var selectedDistrict = districtDropdown.value;
-            var wardDropdown = document.getElementById("wardDropdown");
-
-            if (selectedDistrict === "") {
-                // Get the first district option
-                var firstDistrictOption = districtDropdown.querySelector("option:not([value=''])");
-                selectedDistrict = firstDistrictOption.value;
-                firstDistrictOption.selected = true;
-            }
-
-            fetch(`https://provinces.open-api.vn/api/d/${selectedDistrict}?depth=2`)
-                .then(response => response.json())
-                .then(data => {
-                    var wards = data.wards;
-
-                    // Clear existing options in ward dropdown
-                    wardDropdown.innerHTML = "";
-
-                    // Add new ward options
-                    for (var i = 0; i < wards.length; i++) {
-                        var option = document.createElement("option");
-                        option.value = wards[i].code;
-                        option.text = wards[i].name;
-                        wardDropdown.appendChild(option);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
-        }
-
-        fetch("https://provinces.open-api.vn/api/p/")
-            .then(response => response.json())
-            .then(data => {
-                var provinces = data;
-                var provinceDropdown = document.getElementById("provinceDropdown");
-                var selectedProvince = provinceDropdown.value;
-                console.log(selectedProvince);
-
-                if (selectedProvince === "") {
-                    // Get the first district option
-                    var firstProvinceOption = provinceDropdown.querySelector("option:not([value=''])");
-                    selectedProvince = firstProvinceOption.value;
-                    firstProvinceOption.selected = true;
-                    console.log(selectedProvince);
-                }
-                // Add province options
-                for (var i = 0; i < provinces.length; i++) {
-                    var option = document.createElement("option");
-                    option.value = provinces[i].code;
-                    option.text = provinces[i].name;
-                    provinceDropdown.appendChild(option);
-                }
-
-                // Trigger the change event on province dropdown to load districts
-                provinceDropdown.dispatchEvent(new Event("change"));
-            })
-            .catch(error => {
-                console.error("Error:", error);
+    @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showSuccessToast();
             });
-
-        var provinceDropdown = document.getElementById("provinceDropdown");
-        provinceDropdown.addEventListener("change", loadDistricts);
-
-        var districtDropdown = document.getElementById("districtDropdown");
-        districtDropdown.addEventListener("change", loadWards);
-     </script>
+        </script>
+    }
+    @if (!string.IsNullOrEmpty(TempData["ErrorToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showErrorToast();
+            });
+        </script>
+    }
 </body>
+    <script src="~/js/takeAddress.js"></script>
+    <script>
+        function showSuccessToast() {
+            toast({
+                title: 'Thành công',
+                message: '@TempData["SuccessToast"]',
+                type: 'success',
+                duration: 2000
+            });
+        }
+        function showErrorToast() {
+            toast({
+                title: 'Thất bại',
+                message: '@TempData["ErrorToast"]',
+                type: 'error',
+                duration: 2000
+            });
+        }
+    </script>
 </html>
+
+
+
 @*
 <html>
 <head>

@@ -53,18 +53,30 @@ namespace FEPetServices.Areas.Manager.Controllers
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
             // Sử dụng HttpClient để gửi dữ liệu cập nhật lên API
-            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/updateInfo?email=" + email, userInfo);
+            if(userInfo.Address == null || userInfo.FirstName == null || 
+                userInfo.LastName == null)
+            {
+                TempData["ErrorToast"] = "Vui lòng điền đầy đủ thông tin";
+                return RedirectToAction("Index");
+            }
 
+            if(userInfo.Province == null ||
+                userInfo.District == null || userInfo.Commune == null)
+            {
+                TempData["ErrorToast"] = "Vui lòng cung cấp lại địa chỉ";
+                return RedirectToAction("Index");
+            }
+
+            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/updateInfo?email=" + email, userInfo);
             if (response.IsSuccessStatusCode)
             {
-                // Xử lý thành công, ví dụ: chuyển hướng hoặc hiển thị thông báo
+                TempData["SuccessToast"] = "Lưu thông tin thành công";
                 return RedirectToAction("Index");
             }
             else
             {
-                // Xử lý thất bại, ví dụ: hiển thị thông báo lỗi
-                ModelState.AddModelError(string.Empty, "Có lỗi xảy ra khi cập nhật thông tin.");
-                return View(userInfo);
+                TempData["ErrorToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return RedirectToAction("Index");
             }
         }
     }

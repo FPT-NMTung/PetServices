@@ -28,6 +28,11 @@ namespace FEPetServices.Controllers
             return View();
         }
 
+        public IActionResult Index1()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Index([FromForm, Bind("Email", "Password")] LoginForm loginInfo)
         {
