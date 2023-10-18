@@ -6,11 +6,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="~/css/Login.css">
     <title>HASH TECHIE OFFICIAL</title>
-
-    <script src="https://smtpjs.com/v3/smtp.js">
-    </script>
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <link href="~/css/Login.css" rel="stylesheet"/>
 </head>
 <body>
     <section>
@@ -36,7 +34,7 @@
                         </label>
 
                     </div>
-                    <button>Đăng nhập</button>
+                    <button onclick="loading();">Đăng nhập</button>
                     <div class="register">
                         <p>Nếu bạn chưa có tài khoản hãy <a href="~/Register/Index">Đăng ký</a></p>
                     </div>
@@ -46,9 +44,63 @@
                 </form>
             </div>
         </div>
+
+        <div id="toast"></div>
+            @if (!string.IsNullOrEmpty(ViewBag.SuccessToast))
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    showSuccessToast();
+                });
+            </script>
+        }
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorToast))
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    showErrorToast();
+                });
+            </script>
+        }
     </section>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <script src="~/js/toastnotification.js"></script>
+
+    <script>
+        function loading() {
+            @if (string.IsNullOrEmpty(ViewBag.ErrorToast) || string.IsNullOrEmpty(ViewBag.SuccessToast))
+            {
+                @:showWaitToast();
+            }
+        }
+        function showSuccessToast() {
+            toast({
+                title: 'Thành công',
+                message: 'Bạn đăng nhập thành công',
+                type: 'success',
+                duration: 2000
+            });
+        }
+        function showErrorToast(message = '') {
+            toast({
+                title: 'Thất bại',
+                message: '@ViewBag.ErrorToast',
+                type: 'error',
+                duration: 2000
+            });
+        }
+
+        function showWaitToast() {
+            toast({
+                title: 'Chờ đợi',
+                message: 'Vui lòng đợi ít phút hoặc điền đầy đủ thông tin',
+                type: 'wating',
+                duration: 2000
+            });
+        }
+    </script>
 </body>
 </html>
 

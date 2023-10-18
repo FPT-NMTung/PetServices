@@ -1,16 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using FEPetServices.Form;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using System.Text;
-using FEPetServices.Form;
 using Newtonsoft.Json;
-using System.Net.Http;
-using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using System.Collections.Generic;
-using System.Linq;
-using System;
 using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text;
 
 namespace FEPetServices.Controllers
 {
@@ -32,6 +28,11 @@ namespace FEPetServices.Controllers
             return View();
         }
 
+        public IActionResult Index1()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Index([FromForm, Bind("Email", "Password")] LoginForm loginInfo)
         {
@@ -40,7 +41,7 @@ namespace FEPetServices.Controllers
                 var json = JsonConvert.SerializeObject(loginInfo);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "/Login", content); // Đảm bảo URL của API đúng
+                HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "/Login", content); // Hãy đảm bảo rằng URL API của bạn là chính xác
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -53,8 +54,19 @@ namespace FEPetServices.Controllers
                         var tokenHandler = new JwtSecurityTokenHandler();
                         var token = tokenHandler.ReadJwtToken(loginResponse.Token);
 
-                        var claims = token.Claims;
-                        var roleNameClaim = claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role);
+                        var claim = token.Claims;
+                        var roleNameClaim = claim.FirstOrDefault(claim => claim.Type == ClaimTypes.Role);
+
+                        var claims = new List<Claim>
+                        {
+                           new Claim(ClaimTypes.Email, loginInfo.Email)
+                        };
+
+                        // Create claims identity
+                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                        // Sign in the user
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
                         if (roleNameClaim != null)
                         {
@@ -63,35 +75,42 @@ namespace FEPetServices.Controllers
                             // Chuyển hướng dựa trên vai trò (role) của người dùng
                             if (roleName == "MANAGER")
                             {
-                                return RedirectToAction("Index", "Information", new { area = "Manager" }); // Chuyển trang đến trang quản lý
+                                // Hiển thị toast thông báo thành công và sau đó chuyển hướng
+                                ViewBag.SuccessToast = "Bạn đăng nhập thành công";
+                                return RedirectToAction("Index", "Information", new { area = "Manager" });
                             }
                             else if (roleName == "CUSTOMER")
                             {
-                                return RedirectToAction("Index", "Home"); // Chuyển trang đến trang chính của người dùng
+                                // Hiển thị toast thông báo thành công và sau đó chuyển hướng
+                                ViewBag.SuccessToast = "Bạn đăng nhập thành công";
+                                return RedirectToAction("Index", "Home");
                             }
                         }
                         else
                         {
-                            ViewBag.ErrorMessage = "Token không chứa thông tin vai trò (role).";
+                            ViewBag.ErrorToast = "Đăng nhập không thành công. Tài khoản chưa được cung cấp";
+                            return View();
                         }
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "Đăng nhập không thành công.";
+                        ViewBag.ErrorToast = "Đăng nhập không thành công.";
+                        return View();
                     }
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Đăng nhập không thành công. Mã lỗi HTTP: " + (int)response.StatusCode;
+                    ViewBag.ErrorToast = "Đăng nhập không thành công. Tài khoản hoặc mật khẩu không chính xác";
+                    return View();
                 }
-
                 return View();
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
                 return View();
             }
         }
+
     }
 }
