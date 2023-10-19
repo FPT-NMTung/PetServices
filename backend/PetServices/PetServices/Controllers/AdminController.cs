@@ -1,17 +1,14 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
-using PetServices.Form;
 using PetServices.Models;
-using System.Data;
-using System.Text.Json.Serialization;
 using System.Text.Json;
-using System.Transactions;
-using System.Net.Http.Json;
-using System.Runtime.Serialization.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace PetServices.Controllers
 {
@@ -54,6 +51,14 @@ namespace PetServices.Controllers
             return Ok(partner);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> GetRole()
+        {
+            var roles = await _context.Roles.ToListAsync();
+
+            return Ok(roles);
+        }
+
         [HttpGet("GetAllAccountByAdmin")]
         public async Task<ActionResult> GetAllAccount()
         {
@@ -68,36 +73,46 @@ namespace PetServices.Controllers
             return Ok(accountsViewModel);
         }
 
-        [HttpGet("GetRole")]
-        public async Task<ActionResult> GetRole()
+        /*[HttpGet("{ServiceCategorysName}")]
+        public IActionResult GetByName(string ServiceCategorysName)
         {
-            var roles = await _context.Roles.ToListAsync();
-
-            return Ok(roles);
+            List<ServiceCategory> serviceCategories = _context.ServiceCategories
+                .Where(c => c.SerCategoriesName == ServiceCategorysName)
+                .ToList();
+            return Ok(_mapper.Map<List<ServiceCategoryDTO>>(serviceCategories));
+        }*/
+        
+        [HttpGet("{methodName}")]
+        public IActionResult GetMethod(string methodName)
+        {
+            List<Account> acc = _context.Accounts
+                .Where(c => c.Email == methodName)
+                .ToList();
+            return Ok(_mapper.Map<List<UpdateAccountDTO>>(acc));
         }
 
         [HttpPut("UpdateAccount")]
-        public async Task<ActionResult> UpdateAccount(string email, int roleId, bool status)
+        public async Task<ActionResult> UpdateAccount(string Email, int RoleId, bool Status)
         {
             try
             {
                 var account = await _context.Accounts
                             .Include(a => a.UserInfo)
                             .Include(a => a.PartnerInfo)
-                            .Where(a => a.Email == email).FirstOrDefaultAsync();
+                            .FirstOrDefaultAsync(a => a.Email == Email);
                 if (account == null)
                 {
                     return BadRequest("Không tìm thấy tài khoản");
                 }
 
-                else if (account.RoleId == roleId && account.Status == status)
+                else if (account.RoleId == RoleId && account.Status == Status)
                 {
                     return BadRequest("Bạn không có gì thay đổi so với ban đầu.");
                 }
 
                 else
                 {
-                    if (account.PartnerInfoId == null && roleId == 4)
+                    if (account.PartnerInfoId == null && RoleId == 4)
                     {
                         account.PartnerInfo = new PartnerInfo
                         {
@@ -113,7 +128,7 @@ namespace PetServices.Controllers
                         };
                     }
 
-                    else if (account.UserInfoId == null && roleId != 4)
+                    else if (account.UserInfoId == null && RoleId != 4)
                     {
                         account.UserInfo = new UserInfo
                         {
@@ -129,11 +144,13 @@ namespace PetServices.Controllers
                         };
                     }
 
-                    account.RoleId = roleId;
-                    account.Status = status;
+                    account.RoleId = RoleId;
+                    account.Status = Status;
+
+                    _context.Entry(account).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     _context.Update(account);
                     await _context.SaveChangesAsync();
-                    
+
 
                     return Ok(account);
                 }
@@ -145,7 +162,7 @@ namespace PetServices.Controllers
         }
 
         [HttpPost("AddAccount")]
-        public async Task<ActionResult> AddAccount(string email, string password, int roleId )
+        public async Task<ActionResult> AddAccount(string email, string password, int roleId)
         {
             if (!ModelState.IsValid)
             {
