@@ -71,7 +71,24 @@ namespace PetServices.Controllers
             }
             else
             {
-                return BadRequest("Đăng nhập không hợp lệ.");
+                string errorMessage = "Đăng nhập không hợp lệ.";
+                if (string.IsNullOrWhiteSpace(login.Password))
+                {
+                    errorMessage = "Mật khẩu không được để trống!";
+                }
+                else if (login.Password.Length < 8)
+                {
+                    errorMessage = "Mật khẩu phải có ít nhất 8 ký tự.";
+                }
+                else if (login.Password.Contains(" "))
+                {
+                    errorMessage = "Mật khẩu không được chứa khoảng trắng.";
+                }
+                else if (Regex.IsMatch(login.Password, @"[^a-zA-Z0-9]"))
+                {
+                    errorMessage = "Mật khẩu không được chứa ký tự đặc biệt.";
+                }
+                return BadRequest(errorMessage);
             }
         }
 
