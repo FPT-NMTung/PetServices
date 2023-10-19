@@ -1,29 +1,17 @@
 ﻿@{
-    ViewData["Title"] = "Chỉnh sửa Dịch Vụ";
+    ViewData["Title"] = "Thêm Dịch Vụ";
 }
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="~/css/Service.css">
+<link href="~/css/toastNotification.css" rel="stylesheet" />
 
 </head>
 <body>
 
 <h2>Thêm Dịch Vụ Thú Cưng</h2>
-@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-{
-    <div class="alert alert-danger" style="color:red">
-        @ViewBag.ErrorMessage
-    </div>
-}
-@if (!string.IsNullOrEmpty(TempData["SuccessMessage"]?.ToString()))
-{
-    <div class="alert alert-success" style="color:red">
-        @TempData["SuccessMessage"]
-    </div>
-}
 <div class="container">
   <form asp-action="AddService" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
     <div class="row">
@@ -90,8 +78,43 @@
     </div>
   </form>
 </div>
-
-<script src="/js/Service.js"></script>
+ <div id="toast"></div>
+    @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showSuccessToast();
+            });
+        </script>
+    }
+    @if (!string.IsNullOrEmpty(TempData["ErrorToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showErrorToast();
+            });
+        </script>
+    }
+ <script src="~/js/toastnotification.js"></script>
+<script src="~/js/Service.js"></script>
+<script>
+        function showSuccessToast() {
+            toast({
+                title: 'Thành công',
+                message: '@TempData["SuccessToast"]',
+                type: 'success',
+                duration: 2000
+            });
+        }
+        function showErrorToast() {
+            toast({
+                title: 'Thất bại',
+                message: '@TempData["ErrorToast"]',
+                type: 'error',
+                duration: 2000
+            });
+        }
+    </script>
 
 </body>
 </html>

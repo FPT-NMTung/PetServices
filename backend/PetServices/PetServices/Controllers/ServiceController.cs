@@ -41,7 +41,17 @@ namespace PetServices.Controllers
             return Ok(_mapper.Map<List<ServiceDTO>>(service));
         }
 
-        
+
+        [HttpGet("ServiceID/{id}")]
+        public IActionResult GetById(int id)
+        {
+            List<Service> service = _context.Services
+                .Where(c => c.ServiceId == id)
+                .ToList();
+            return Ok(_mapper.Map<List<ServiceDTO>>(service));
+        }
+
+
         [HttpPost("CreateService")]
         public async Task<IActionResult> CreateService(ServiceDTO serviceDTO)
         {

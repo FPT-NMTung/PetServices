@@ -42,7 +42,7 @@
 
     return isValid;
 }
-}
+
 function changeImageSource() {
     const imageInput = document.getElementById('image');
     const imagePreview = document.getElementById('imagePreview');
@@ -54,3 +54,4 @@ function changeImageSource() {
         };
         reader.readAsDataURL(imageInput.files[0]);
     }
+}

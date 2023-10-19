@@ -205,12 +205,12 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TempData["SuccessToast"] = "Thêm dịch vụ thành công!";
+                        TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
                         return View(serviceCategory); // Chuyển hướng đến trang thành công hoặc trang danh sách
                     }
                     else
                     {
-                       TempData["ErrorToast"] = "Thêm dịch vụ thất bại. Vui lòng thử lại sau.";
+                       TempData["ErrorToast"] = "Chỉnh sửa dịch vụ thất bại. Vui lòng thử lại sau.";
                         return View(serviceCategory); // Hiển thị lại biểu mẫu với dữ liệu đã điền
                     }
                 }

@@ -1,39 +1,4 @@
-﻿@*<h1>sửa Dịch Vụ</h1>
-
-@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-{
-    <div class="alert alert-danger">
-        @ViewBag.ErrorMessage
-    </div>
-}
-@if (!string.IsNullOrEmpty(TempData["SuccessMessage"]?.ToString()))
-{
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
-    </div>
-}
-
-<form method="post" asp-controller="ServiceCategory" asp-action="EditServiceCategory">
-    <div class="form-group">
-        <label for="SerCategoriesName">Tên Dịch Vụ:</label>
-        <input type="text" class="form-control" id="SerCategoriesName" name="SerCategoriesName" value="@Model?.SerCategoriesName">
-
-
-    </div>
-    <div class="form-group">
-        <label for="Desciptions">Mô Tả:</label>
-        <textarea class="form-control" id="Desciptions" name="Desciptions">@Model?.Desciptions</textarea>
-    </div>
-    <div class="form-group">
-        <label for="image">Ảnh:</label>
-        <input type="file" class="form-control-file" id="image" name="image">
-    </div>
-    <button type="submit" class="btn btn-primary">Thêm</button>
-</form>
-
-<a asp-action="ServiceCategory">Quay lại danh sách</a>
-*@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,18 +8,6 @@
 <body>
 
 <h2>Chỉnh Sửa Loại Dịch Vụ Thú Cưng</h2>
-@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-{
-    <div class="alert alert-danger" style="color:red">
-        @ViewBag.ErrorMessage
-    </div>
-}
-@if (!string.IsNullOrEmpty(TempData["SuccessMessage"]?.ToString()))
-{
-    <div class="alert alert-success" style="color:red">
-        @TempData["SuccessMessage"]
-    </div>
-}
 <div class="container">
   <form method="post" asp-controller="ServiceCategory" asp-action="EditServiceCategory" enctype="multipart/form-data" onsubmit="return validateForm()">
     <div class="row">
