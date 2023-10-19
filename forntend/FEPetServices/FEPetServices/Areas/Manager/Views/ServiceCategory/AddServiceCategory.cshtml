@@ -8,7 +8,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="~/css/SeriveCategory.css">
-    <script src="/js/ServiceCategory.js"></script>
+<link href="~/css/toastNotification.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -67,7 +67,44 @@
  </div>
   </form>
 </div>
+ <div id="toast"></div>
+    @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showSuccessToast();
+            });
+        </script>
+    }
+    @if (!string.IsNullOrEmpty(TempData["ErrorToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showErrorToast();
+            });
+        </script>
+    }
+ <script src="~/js/toastnotification.js"></script>
 <script src="~/js/ServiceCategory.js"></script>
+
+ <script>
+        function showSuccessToast() {
+            toast({
+                title: 'Thành công',
+                message: '@TempData["SuccessToast"]',
+                type: 'success',
+                duration: 2000
+            });
+        }
+        function showErrorToast() {
+            toast({
+                title: 'Thất bại',
+                message: '@TempData["ErrorToast"]',
+                type: 'error',
+                duration: 2000
+            });
+        }
+    </script>
 </body>
 </html>
 
