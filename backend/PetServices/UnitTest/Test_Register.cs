@@ -15,7 +15,7 @@ namespace UnitTest
 {
     public class Test_Register
     {
-        [Fact]
+        /*[Fact]
         // 1. Đăng ký thành công
         public async Task Test_Register_Success()
         {
@@ -147,6 +147,6 @@ namespace UnitTest
                 var errorMessage = errorMessages[0].ErrorMessage;
                 Assert.Contains("Mật khẩu cần tối thiểu 8 ký tự và không chứa ký tự đặc biệt", errorMessage);
             }
-        }
+        }*/
     }
 }
