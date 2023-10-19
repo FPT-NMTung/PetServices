@@ -7,10 +7,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="~/css/Register.css">
     <title>HASH TECHIE OFFICIAL</title>
+    <link rel="stylesheet" href="~/css/Register.css">
 
-    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <link href="~/css/toastnotification.css" rel="stylesheet" />
+    <script src="~/js/toastnotification.js"></script>
 </head>
 <body>
     <section>
@@ -18,18 +19,6 @@
             <div class="form-value">
                 <form asp-controller="Register" asp-action="Index" class="login-form" method="post">
                     <h2>Đăng ký</h2>
-                    @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
-                    {
-                        @*<h1 style="color: red ; text-align: center; font-size: 20px">Chúc mừng bạn đến với chúng tôi</h1>
-                        <p style="text-align:center; font-style: italic; font-size: 16px;">Vui lòng kiểm tra Email để lấy mã OTP xác minh tài khoản</p>
-                        <p style="text-align:center"><a href="~/VerifyEmail/Index">Xác minh</a> để nghiệm hệ thống</p>       *@
-
-                        <script>
-                            window.location.href = "~/VerifyEmail/Index";
-                        </script>
-                    }
-                    else
-                    {
                         <div class="inputbox">
                             <ion-icon name="mail-outline"></ion-icon>
                             <input asp-for="Email" type="email" required>
@@ -44,26 +33,47 @@
                         <div class="register">
                             <p>Quay trở lại <a href="~/Login/Index">Đăng nhập</a></p>
                         </div>
-                        <br />
-                        <br />
-                        <br />
-
-                    }
                 </form>
             </div>
         </div>
+        <div id="toast"></div>
+        @if (!string.IsNullOrEmpty(ViewBag.SuccessToast))
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    showSuccessToast();
+                });
+            </script>
+        }
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorToast))
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    showErrorToast();
+                });
+            </script>
+        }
     </section>
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
 </body>
+    <script>
+        function showSuccessToast() {
+            toast({
+                title: 'Thành công',
+                message: '@ViewBag.SuccessToast',
+                type: 'success',
+                duration: 2000
+            });
+        }
+        function showErrorToast() {
+            toast({
+                title: 'Thất bại',
+                message: '@ViewBag.ErrorToast',
+                type: 'error',
+                duration: 2000
+            });
+        }
+    </script>
 </html>
 
-<script src="~/js/Register.js"></script>
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
 
 

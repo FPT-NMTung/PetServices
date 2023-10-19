@@ -1,7 +1,11 @@
-﻿namespace FEPetServices.Form
+﻿using Microsoft.Build.Framework;
+using System.ComponentModel.DataAnnotations;
+
+namespace FEPetServices.Form
 {
     public class RegisterDTO
     {
+        [EmailAddress]
         public string Email { get; set; }
         public string Password { get; set; }
         public string? FirstName { get; set; }
