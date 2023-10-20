@@ -249,6 +249,23 @@
             <div class="text">Xin chào : Admin</div>
             <img class="iconUser" src="../img/iconUser.png" />
         </div>
+        <div id="toast"></div>
+        @if (!string.IsNullOrEmpty(ViewBag.Success))
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    showSuccessToast();
+                });
+            </script>
+        }
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    showErrorToast();
+                });
+            </script>
+        }
         <a class="title">Tài khoản</a>
         <div class="content">
             <table id="myTable" class="table">
@@ -302,23 +319,6 @@
             </table>
         </div>
     </div>
-    <div id="toast"></div>
-    @if (!string.IsNullOrEmpty(ViewBag.Success))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showSuccessToast();
-            });
-        </script>
-    }
-    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showErrorToast();
-            });
-        </script>
-    }
 </body>
 
 <script>
@@ -335,12 +335,20 @@
                     console.log("Status:", status);
 
             $.ajax({
-                url: '/Account/UpdateAccount',
-                method: 'POST',
+                url: "/Account/UpdateAccount",
+                type: "PUT",
                 data: {
                     Email: email,
                     RoleId: roleId,
                     Status: status
+                },
+                success: function (data) {
+                    // Xử lý thành công nếu cần
+                    console.log("Cập nhật thành công:", data);
+                },
+                error: function (error) {
+                    // Xử lý lỗi nếu cần
+                    console.error("Lỗi khi cập nhật:", error);
                 }
             });
         });

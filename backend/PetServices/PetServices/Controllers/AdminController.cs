@@ -72,15 +72,6 @@ namespace PetServices.Controllers
 
             return Ok(accountsViewModel);
         }
-
-        /*[HttpGet("{ServiceCategorysName}")]
-        public IActionResult GetByName(string ServiceCategorysName)
-        {
-            List<ServiceCategory> serviceCategories = _context.ServiceCategories
-                .Where(c => c.SerCategoriesName == ServiceCategorysName)
-                .ToList();
-            return Ok(_mapper.Map<List<ServiceCategoryDTO>>(serviceCategories));
-        }*/
         
         [HttpGet("{methodName}")]
         public IActionResult GetMethod(string methodName)

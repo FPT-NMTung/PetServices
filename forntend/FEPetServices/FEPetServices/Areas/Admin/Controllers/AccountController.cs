@@ -78,6 +78,7 @@ namespace FEPetServices.Areas.Admin.Controllers
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
                         var errorMessage = await response.Content.ReadAsStringAsync();
+                        errorMessage = RemoveUnwantedCharacters(errorMessage);
                         ViewBag.ErrorMessage = errorMessage;
                         return View(addAccount);
                     }
@@ -117,34 +118,43 @@ namespace FEPetServices.Areas.Admin.Controllers
                     var json = JsonConvert.SerializeObject(acc);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    HttpResponseMessage response = await client.PutAsync(apiUrl, content); 
+                    HttpResponseMessage response = await client.PutAsJsonAsync(apiUrl, content);
 
 
                     if (response.IsSuccessStatusCode)
                     {
                         ViewBag.Success = "Cập nhật tài khoản thành công!";
-
-                        return Ok("Cập nhật thành công");
+                        Debug.WriteLine(response.Content);
+                        return Json(new
+                        {
+                            Success = true
+                        }); 
                     }
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
                         var errorMessage = await response.Content.ReadAsStringAsync();
                         ViewBag.ErrorMessage = errorMessage;
-                        return View();
+                        return Json(new
+                        {
+                            Success = false
+                        });
                     }
                     else
                     {
                         var errorMessage = await response.Content.ReadAsStringAsync();
                         ViewBag.ErrorMessage = "Cập nhật tài khoản thất bại!";
-                        return View();
+                        return Json(new
+                        {
+                            Success = false
+                        });
                     }
                 }
                 else
                 {
-
-                    ViewBag.ErrorMessage = "Cập nhật tài khoản thất bại!";
-
-                    return BadRequest(ModelState);
+                    return Json(new
+                    {
+                        Success = false
+                    });
                 }
             }
             catch (Exception ex)
@@ -152,7 +162,17 @@ namespace FEPetServices.Areas.Admin.Controllers
                 ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
                 return View();
             }
+        }
 
+        private string RemoveUnwantedCharacters(string input)
+        {
+            string[] unwantedCharacters = { "[", "{", "\"", "}", "]" };
+            foreach (var character in unwantedCharacters)
+            {
+                input = input.Replace(character, string.Empty);
+            }
+
+            return input;
         }
     }
 }
