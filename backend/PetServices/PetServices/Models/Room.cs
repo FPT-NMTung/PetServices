@@ -17,6 +17,7 @@ namespace PetServices.Models
         public string? Picture { get; set; }
         public double? Price { get; set; }
         public int? RoomCategoriesId { get; set; }
+        public int? Slot { get; set; }
 
         public virtual RoomCategory? RoomCategories { get; set; }
 
