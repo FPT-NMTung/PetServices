@@ -209,6 +209,9 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+<link href="~/css/toastNotification.css" rel="stylesheet" />
+<script src="~/js/toastnotification.js"></script>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 <script>
@@ -246,6 +249,23 @@
             <div class="text">Xin chào : Admin</div>
             <img class="iconUser" src="../img/iconUser.png" />
         </div>
+        <div id="toast"></div>
+        @if (!string.IsNullOrEmpty(ViewBag.Success))
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    showSuccessToast();
+                });
+            </script>
+        }
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    showErrorToast();
+                });
+            </script>
+        }
         <a class="title">Tài khoản</a>
         <div class="content">
             <table id="myTable" class="table">
@@ -262,9 +282,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model != null){
+                    @if (Model != null)
+                    {
                         int itemCount = 0;
-                        @foreach (var account in Model)
+                        foreach (var account in Model)
                         {
                             itemCount++;
                             <tr>
@@ -275,25 +296,22 @@
                                 <td>@account.Address</td>
                                 <td>
                                     <select class="form-select" name="Role" id="Role">
-                                        <option value="1" @(account.RoleName == "ADMIN" ? "selected" : "")>Quản trị viên</option>
-                                        <option value="2" @(account.RoleName == "CUSTOMER" ? "selected" : "")>Khách hàng</option>
-                                        <option value="3" @(account.RoleName == "MANAGER" ? "selected" : "")>Quản lý</option>
-                                        <option value="4" @(account.RoleName == "PARTNER" ? "selected" : "")>Đối tác</option>
+                                        <option value="1" @(account.RoleId == 1 ? "selected" : "")>Quản trị viên</option>
+                                        <option value="2" @(account.RoleId == 2 ? "selected" : "")>Khách hàng</option>
+                                        <option value="3" @(account.RoleId == 3 ? "selected" : "")>Quản lý</option>
+                                        <option value="4" @(account.RoleId == 4 ? "selected" : "")>Đối tác</option>
                                     </select>
-
                                 </td>
                                 <td>
                                     <div class="switch">
-                                        <input type="checkbox" id="toggle" class="toggle" @(account.Status ? "checked" : "") />
-                                        <label for="toggle" class="label @(account.Status ? "active" : "inactive")"></label>
+                                        <input type="checkbox" id="toggle-@itemCount" class="toggle" @(account.Status ? "checked" : "") />
+                                        <label for="toggle-@itemCount" class="label @(account.Status ? "active" : "inactive")"></label>
                                     </div>
                                 </td>
                                 <td>
-                                    <a class="btn-edit">Lưu</a>
-                                    </td>
-                                @*<td>
-                                    <a class="btn-edit" href="@Url.Action("UpdateAccount", "AccountController", new { email = account.Email, roleId = account.RoleId, status = account.Status })">Lưu</a>
-                                </td>*@
+                                    <button class="btn-edit" id="btn-edit-@itemCount">Lưu thay đổi</button>
+
+                                </td>
                             </tr>
                         }
                     }
@@ -302,3 +320,57 @@
         </div>
     </div>
 </body>
+
+<script>
+    $(document).ready(function () {
+        var btnEdits = $('.btn-edit');
+
+        btnEdits.click(function () {
+            var email = $(this).closest('tr').find('td:eq(1)').text();
+            var roleId = $(this).closest('tr').find('select[name="Role"]').val();
+            var status = $(this).closest('tr').find('input[type="checkbox"]').is(':checked');
+
+            console.log("Email:", email);
+                    console.log("RoleId:", roleId);
+                    console.log("Status:", status);
+
+            $.ajax({
+                url: "/Account/UpdateAccount",
+                type: "PUT",
+                data: {
+                    Email: email,
+                    RoleId: roleId,
+                    Status: status
+                },
+                success: function (data) {
+                    // Xử lý thành công nếu cần
+                    console.log("Cập nhật thành công:", data);
+                },
+                error: function (error) {
+                    // Xử lý lỗi nếu cần
+                    console.error("Lỗi khi cập nhật:", error);
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    function showSuccessToast() {
+        toast({
+            title: 'Thành công',
+            message: '@ViewBag.Success',
+            type: 'success',
+            duration: 2000
+        });
+    }
+
+    function showErrorToast() {
+        toast({
+            title: 'Thất bại',
+            message: '@ViewBag.ErrorMessage',
+            type: 'error',
+            duration: 2000
+        });
+    }
+</script>
