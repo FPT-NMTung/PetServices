@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div>
+        <div class="header">
+            <img class="image" src="https://th.bing.com/th/id/OIG.vxG0JxTUMqr5SuseWGhL?pid=ImgGn" />
+            <div class="text">Xin chào : Admin</div>
+            <img class="iconUser" src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" />
+        </div>
+        @RenderBody()
+    </div>
+</body>
+<style>
+    .header {
+        padding-top: 10px;
+        top: 0;
+        display: flex;
+        align-items: center;
+    }
+
+        .header .image {
+            width: 50px;
+            height: 50px;
+            align-items: center;
+            padding-left: 10px;
+            font-size: 10px;
+        }
+
+        .header .text {
+            font-weight: bold;
+            font-size: 20px;
+            padding-left: 15px;
+        }
+</style>
+</html>
