@@ -1,13 +1,13 @@
 ﻿function validateForm() {
-    const fname = document.getElementById('ServiceName');
+    const name = document.getElementById('ServiceName');
     const price = document.getElementById('Price');
-    const subject = document.getElementById('Desciptions');
+    const desciptions = document.getElementById('Desciptions');
     const fnameErrorMessage = document.getElementById('fname-error-message');
     const priceErrorMessage = document.getElementById('price-error-message');
     const subjectErrorMessage = document.getElementById('subject-error-message');
 
-    console.log('Debug: fname.value', fname.value);
-    console.log('Debug: subject.value', subject.value);
+    console.log('Debug: fname.value', name.value);
+    console.log('Debug: subject.value', desciptions.value);
 
     const specialChars = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/; // Special character regex
     const numbersOnly = /^[0-9]+$/; // Only numbers regex
@@ -19,7 +19,7 @@
 
     let isValid = true;
 
-    if (specialChars.test(fname.value)) {
+    if (specialChars.test(name.value)) {
         fnameErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
         isValid = false;
     }
@@ -35,7 +35,7 @@
         }
     }
 
-    if (specialChars.test(subject.value)) {
+    if (specialChars.test(desciptions.value)) {
         subjectErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
         isValid = false;
     }

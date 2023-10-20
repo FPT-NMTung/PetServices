@@ -1,13 +1,9 @@
-﻿@{
-    ViewData["Title"] = "Thêm Dịch Vụ";
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="~/css/Service.css">
 <link href="~/css/toastNotification.css" rel="stylesheet" />
-
 </head>
 <body>
 
@@ -38,7 +34,7 @@
       </div>
       <div class="col-75">
         <input type="text" id="Price" name="Price" placeholder="Giá tiền" required>
-        <div style="color:red" class="error-message" id="price-error-message"></div> <!-- Lưu ý rằng id ở đây là "price-error-message" -->
+        <div style="color:red" class="error-message" id="price-error-message"></div> 
       </div>
     </div>
     <div class="row">
@@ -95,8 +91,9 @@
             });
         </script>
     }
- <script src="~/js/toastnotification.js"></script>
-<script src="~/js/Service.js"></script>
+<script src="~/js/toastnotification.js"></script>
+
+<script src="/js/Service.js"></script>
 <script>
         function showSuccessToast() {
             toast({
@@ -115,6 +112,8 @@
             });
         }
     </script>
+
+
 
 </body>
 </html>
