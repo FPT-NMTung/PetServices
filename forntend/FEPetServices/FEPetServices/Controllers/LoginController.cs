@@ -76,13 +76,13 @@ namespace FEPetServices.Controllers
                             if (roleName == "MANAGER")
                             {
                                 // Hiển thị toast thông báo thành công và sau đó chuyển hướng
-                                ViewBag.SuccessToast = "Bạn đăng nhập thành công";
+                                TempData["SuccessLoginToast"] = "Đăng nhập thành công";
                                 return RedirectToAction("Index", "Information", new { area = "Manager" });
                             }
                             else if (roleName == "CUSTOMER")
                             {
                                 // Hiển thị toast thông báo thành công và sau đó chuyển hướng
-                                ViewBag.SuccessToast = "Bạn đăng nhập thành công";
+                                TempData["SuccessLoginToast"] = "Đăng nhập thành công";
                                 return RedirectToAction("Index", "Home");
                             }
                         }

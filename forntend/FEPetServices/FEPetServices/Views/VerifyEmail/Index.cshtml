@@ -7,8 +7,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>VERIFY PASSWORD</title>
     <link rel="stylesheet" href="~/css/VerifyEmail.css">
-    <title>HASH TECHIE OFFICIAL</title>
+
+    <link href="~/css/toastnotification.css" rel="stylesheet" />
+    <script src="~/js/toastnotification.js"></script>
+
 </head>
 <body>
     <section>
@@ -16,35 +20,79 @@
             <div class="form-value">
                 <form asp-controller="VerifyEmail" asp-action="Verify" method="post">
                     <h2>Xác minh Email</h2>
-                    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-                    {
-                        <p style="color: red; text-align: center; font-size: 16px">@ViewBag.ErrorMessage</p>
-                    }
-
-                    @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
-                    {
-                        <h1 style="color: green; text-align: center; font-size: 20px">@ViewBag.SuccessMessage</h1>
-                        <p style="text-align:center"><a href="~/Login/Index">Đăng nhập</a> để nghiệm hệ thống</p>
-                    }
-                    else
-                    {
                         <div class="inputbox">
                             <ion-icon name="mail-outline"></ion-icon>
                             <input asp-for="Email" class="form-control" required>
                             <label for="">Email</label>
                         </div>
-                        <div class="inputbox">
-                            <ion-icon name="key-outline"></ion-icon>
-                            <input asp-for="OTP" class="form-control" required>
-                            <label for="">Mã OTP</label>
-                        </div>
 
+                        <div class="input-field">
+                            <input type="number" class="form-control" asp-for="OTP_1" pattern="[0-9]">
+                            <input type="number" class="form-control" disabled asp-for="OTP_2" pattern="[0-9]">
+                            <input type="number" class="form-control" disabled asp-for="OTP_3" pattern="[0-9]">
+                            <input type="number" class="form-control" disabled asp-for="OTP_4" pattern="[0-9]">
+                            <input type="number" class="form-control" disabled asp-for="OTP_5" pattern="[0-9]">
+                            <input type="number" class="form-control" disabled asp-for="OTP_6" pattern="[0-9]">
+                        </div>
                         
                         <button id="verifyButton" type="submit" class="btn btn-primary">Xác minh</button>
-                    }
                 </form>
             </div>
         </div>
+        <div id="toast"></div>
+        @if (!string.IsNullOrEmpty(TempData["SuccessRegisterToast"] as string))
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    showSuccessRegisterToast();
+                });
+            </script>
+        }
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorToast))
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    showErrorToast();
+                });
+            </script>
+        }
     </section>
+
 </body>
+    <script>
+    function showSuccessRegisterToast() {
+            toast({
+                title: 'Thành công',
+            message: '@TempData["SuccessRegisterToast"]',
+                type: 'success',
+                duration: 2000
+            });
+        }
+    function showErrorToast() {
+        toast({
+            title: 'Thất bại',
+            message: '@ViewBag.ErrorToast',
+            type: 'error',
+            duration: 2000
+        });
+    }
+    </script>
+
+    <script>
+        const inputs = document.querySelectorAll('input[type="number"]');
+
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (event) => {
+                if (event.target.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].removeAttribute('disabled');
+                    inputs[index + 1].focus();
+                } else if (event.target.value.length === 0 && index < inputs.length - 1) {
+                    for (let i = index + 1; i < inputs.length; i++) {
+                        inputs[i].setAttribute('disabled', 'disabled');
+                        inputs[i].value = '';
+                    }
+                }
+            });
+        });
+    </script>
 </html>

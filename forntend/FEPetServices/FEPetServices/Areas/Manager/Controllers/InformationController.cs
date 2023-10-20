@@ -70,7 +70,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/updateInfo?email=" + email, userInfo);
             if (response.IsSuccessStatusCode)
             {
-                TempData["SuccessToast"] = "Lưu thông tin thành công";
+                TempData["SuccessToast"] = "Cập nhật thông tin thành công";
                 return RedirectToAction("Index");
             }
             else

@@ -32,6 +32,10 @@ namespace FEPetServices.Controllers
         {
             try
             {
+                if (registerInfo.Email == null || registerInfo.Password == null)
+                {
+                    return View();
+                }
                 // Chuyển thông tin đăng ký thành dạng JSON
                 var json = JsonConvert.SerializeObject(registerInfo);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -48,12 +52,12 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(sendOtpResult) && sendOtpResult == "Gửi OTP thành công.")
                     {
                         // Thành công khi gửi OTP
-                        ViewBag.OTPSuccessMessage = "Mã OTP đã được gửi đến hòm thư của bạn.";
+                        TempData["SuccessRegisterToast"] = "Mã OTP đã được gửi đến hòm thư của bạn.";
                     }
                     else
                     {
                         // Xử lý lỗi khi gọi API SendOTP hoặc gửi OTP qua email không thành công
-                        ViewBag.OTPErrorMessage = "Lỗi khi gọi API SendOTP hoặc gửi OTP qua email: " + sendOtpResult;
+                        ViewBag.ErrorToast = "Lỗi khi gọi API SendOTP hoặc gửi OTP qua email: " + sendOtpResult;
                     }
 
                     return RedirectToAction("Index", "VerifyEmail");
@@ -61,13 +65,13 @@ namespace FEPetServices.Controllers
                 else
                 {
                     // Đăng ký không thành công, bạn có thể xử lý kết quả ở đây (ví dụ: hiển thị thông báo lỗi)
-                    ViewBag.ErrorMessage = "Đăng ký không thành công. Mã lỗi HTTP: " + (int)response.StatusCode;
+                    ViewBag.ErrorToast = "Đăng ký không thành công. Mã lỗi HTTP: " + (int)response.StatusCode;
                 }
             }
             catch (Exception ex)
             {
                 // Xử lý lỗi nếu có
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
             }
 
             return View();

@@ -29,11 +29,14 @@ namespace FEPetServices.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.OTP))
+                if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.OTP_1) || string.IsNullOrEmpty(model.OTP_2)
+                    || string.IsNullOrEmpty(model.OTP_3) || string.IsNullOrEmpty(model.OTP_4) || string.IsNullOrEmpty(model.OTP_5)
+                    || string.IsNullOrEmpty(model.OTP_6))
                 {
-                    ViewBag.ErrorMessage = "Email và mã OTP cần phải được nhập đúng.";
                     return View("Index", model);
                 }
+                string graftOTP = model.OTP_1.Trim() + model.OTP_2.Trim() + model.OTP_3.Trim() + model.OTP_4.Trim() + model.OTP_5.Trim() + model.OTP_6.Trim();
+                model.OTP = graftOTP;
 
                 var json = JsonConvert.SerializeObject(model);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -41,16 +44,18 @@ namespace FEPetServices.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    ViewBag.SuccessMessage = "Tài khoản đã được kích hoạt thành công.";
+                    TempData["SuccessRegisterSuccessToast"] = "Tài khoản đã được kích hoạt thành công.";
+                    return View("Success");
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Xác minh không thành công. Vui lòng kiểm tra lại email và mã OTP.";
+                    ViewBag.ErrorToast = "Xác minh không thành công. Vui lòng kiểm tra lại email và mã OTP.";
+                    return View("Index", model);
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
             }
 
             return View("Index", model);
