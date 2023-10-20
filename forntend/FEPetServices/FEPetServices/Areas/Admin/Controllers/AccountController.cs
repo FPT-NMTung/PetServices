@@ -123,7 +123,6 @@ namespace FEPetServices.Areas.Admin.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        ViewBag.Success = "Cập nhật tài khoản thành công!";
                         Debug.WriteLine(response.Content);
                         return Json(new
                         {
@@ -142,7 +141,6 @@ namespace FEPetServices.Areas.Admin.Controllers
                     else
                     {
                         var errorMessage = await response.Content.ReadAsStringAsync();
-                        ViewBag.ErrorMessage = "Cập nhật tài khoản thất bại!";
                         return Json(new
                         {
                             Success = false
