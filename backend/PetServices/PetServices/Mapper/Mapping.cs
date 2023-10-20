@@ -78,6 +78,9 @@ namespace PetServices.Mapper
                             act => act.MapFrom(src => src.RoleId))
                 .ForMember(des => des.Status,
                             act => act.MapFrom(src => src.Status));
+
+            CreateMap<RoomCategory, RoomCategoryDTO>()
+                .ReverseMap();
         }
     }
 }
