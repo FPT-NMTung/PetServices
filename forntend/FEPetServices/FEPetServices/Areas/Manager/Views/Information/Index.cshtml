@@ -111,6 +111,14 @@
             });
         </script>
     }
+    @if (!string.IsNullOrEmpty(TempData["SuccessLoginToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showSuccessLoginToast();
+            });
+        </script>
+    }
 </body>
     <script src="~/js/takeAddress.js"></script>
     <script src="~/js/toastnotification.js"></script>
@@ -129,6 +137,14 @@
                 title: 'Thất bại',
                 message: '@TempData["ErrorToast"]',
                 type: 'error',
+                duration: 2000
+            });
+        }
+    function showSuccessLoginToast() {
+            toast({
+                title: 'Thành công',
+                message: '@TempData["SuccessLoginToast"]',
+                type: 'success',
                 duration: 2000
             });
         }
