@@ -13,7 +13,7 @@ namespace PetServices.Models
         public int ProCategoriesId { get; set; }
         public string? ProCategoriesName { get; set; }
         public string? Desciptions { get; set; }
-        public string? Picrtue { get; set; }
+        public string? Picture { get; set; }
         public bool? Status { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
