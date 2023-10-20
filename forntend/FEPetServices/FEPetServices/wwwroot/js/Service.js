@@ -10,6 +10,7 @@
     console.log('Debug: subject.value', desciptions.value);
 
     const specialChars = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/; // Special character regex
+    const specialChar = /[@#$%^&*{}\[\]~]/;
     const numbersOnly = /^[0-9]+$/; // Only numbers regex
 
     // Reset error messages
@@ -35,7 +36,7 @@
         }
     }
 
-    if (specialChars.test(desciptions.value)) {
+    if (specialChar.test(desciptions.value)) {
         subjectErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
         isValid = false;
     }

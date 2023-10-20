@@ -115,12 +115,60 @@ namespace FEPetServices.Areas.Manager.Controllers
                 return View(service); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> EditService(int ServiceId)
+        {
+            try
+            {
+                //goi api de lay thong tin can sua
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceDetail + "/" + ServiceId);
 
+                if (response.IsSuccessStatusCode)
+                {
+                    var rep = await response.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(rep))
+                    {
+                        //deserialize du lieu tu api thanh ds cac doi tuongdto
+                        var existPL = JsonConvert.DeserializeObject<List<ServiceDTO>>(rep);
+                        if (existPL.Count > 0)
+                        {
+                            var existProduct = existPL[0];
+                            HttpResponseMessage SerCateResponse = await client.GetAsync("https://localhost:7255/api/ServiceCategory/GetAllServiceCategory");
+                            if (SerCateResponse.IsSuccessStatusCode)
+                            {
+                                var serCate = await SerCateResponse.Content.ReadAsStringAsync();
+                                var serCategories = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(serCate);
+                                //var cateSelectList = new SelectList(proCategories, "ProCategoriesId", "ProCategoriesName", existProduct.ProCategoriesId);
 
-
-
-
-
+                                ViewBag.Categories = new SelectList(serCategories, "SerCategoriesId", "SerCategoriesName", existProduct.SerCategoriesId);
+                                return View(existProduct);
+                            }
+                            else
+                            {
+                                ViewBag.ErrorMessage = "Tải danh sách loại sản phẩm thất bại";
+                            }
+                        }
+                        else
+                        {
+                            ViewBag.ErrorMessage = "Không tìm thấy sản phẩm với ID được cung cấp.";
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
+                    }
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+            }
+            return View();
+        }
 
 
     }
