@@ -49,17 +49,17 @@ namespace FEPetServices.Areas.Manager.Controllers
                     }
                     else
                     {
-                        TempData["ErrorToast"] = "API trả về dữ liệu rỗng.";
+                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
                     }
                 }
                 else
                 {
-                    TempData["ErrorToast"] = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
             }
 
             // Return the view with or without an error message

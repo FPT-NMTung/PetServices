@@ -141,15 +141,15 @@
                 </tr>
             }
         }
-        else
+@*        else
         {
             <tr>
                 <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
             </tr>
-        }
+        }*@
     </tbody>
     <tfoot>
-     @if (ViewBag.ErrorMessage != null)
+          @if (ViewBag.ErrorMessage != null)
             {
                 <div class="alert alert-danger">
                     <span style="color:red">@ViewBag.ErrorMessage</span>

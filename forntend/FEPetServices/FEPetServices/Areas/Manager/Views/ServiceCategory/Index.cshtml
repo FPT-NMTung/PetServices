@@ -132,7 +132,7 @@
                     <td>@itemCount</td>
                     <td>@servicecategory.SerCategoriesName</td>
                     <td>@servicecategory.Desciptions</td>
-                    <td><img src="@servicecategory.Prictue" width="50" height="50"></td>
+                    <td><img src="@servicecategory.Picture" width="50" height="50"></td>
 
                     <td>
                         <a href="/Manager/ServiceCategory/EditServiceCategory?serCategoriesId=@servicecategory.SerCategoriesId">Chi tiết</a>
@@ -141,12 +141,12 @@
                 </tr>
             }
         }
-        else
+@*        else
         {
             <tr>
                 <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
             </tr>
-        }
+        }*@
     </tbody>
     <tfoot>
      @if (ViewBag.ErrorMessage != null)

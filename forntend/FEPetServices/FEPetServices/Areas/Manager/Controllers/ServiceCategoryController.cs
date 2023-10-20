@@ -77,8 +77,10 @@ namespace FEPetServices.Areas.Manager.Controllers
                     {
                         // Xử lý và lưu trữ ảnh
                         Console.WriteLine(image);
-                        serviceCategory.Prictue = "/img/" + image.FileName.ToString();
+                        serviceCategory.Picture = "/img/" + image.FileName.ToString();
                     }
+                    // mặc định status là true
+                    serviceCategory.Status = true;
 
                     var json = JsonConvert.SerializeObject(serviceCategory);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -164,7 +166,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     Console.WriteLine(image);
                     // Save the image to a location (e.g., a folder in your application)
                     var imagePath = "/img/" + image.FileName;
-                    serviceCategory.Prictue = imagePath;
+                    serviceCategory.Picture = imagePath;
 
                     // Save the image file to a folder on your server
                     var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", image.FileName);
@@ -172,6 +174,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     {
                         await image.CopyToAsync(stream);
                     }
+                    
                 }
                 else
                 {
@@ -191,10 +194,18 @@ namespace FEPetServices.Areas.Manager.Controllers
                             if (existingServiceCategory != null)
                             {
                                 // Assign the existing image path to serviceCategory.Prictue.
-                                serviceCategory.Prictue = existingServiceCategory.Prictue;
+                                serviceCategory.Picture = existingServiceCategory.Picture;
                             }
                         }
                     }
+                }
+                if (Request.Form["Status"] == "on")
+                {
+                    serviceCategory.Status = true;
+                }
+                else
+                {
+                    serviceCategory.Status = false;
                 }
 
                 var json = JsonConvert.SerializeObject(serviceCategory);

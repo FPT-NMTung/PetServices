@@ -8,7 +8,7 @@
     console.log('Debug: subject.value', subject.value);
 
     const specialChars = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/; // Special character regex
-
+    const specialChar = /[@#$%^&*{}\[\]~]/;
     // Reset error messages
     fnameErrorMessage.textContent = "";
     subjectErrorMessage.textContent = "";
@@ -20,7 +20,7 @@
         isValid = false;
     }
 
-    if (specialChars.test(subject.value)) {
+    if (specialChar.test(subject.value)) {
         subjectErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
         isValid = false;
     }
