@@ -81,6 +81,9 @@ namespace PetServices.Mapper
 
             CreateMap<RoomCategory, RoomCategoryDTO>()
                 .ReverseMap();
+
+            CreateMap<Room, RoomDTO>()
+                .ReverseMap();
         }
     }
 }

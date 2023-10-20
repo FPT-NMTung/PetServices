@@ -40,13 +40,14 @@ namespace PetServices.Controllers
                     Desciptions = roomDTO.Desciptions,
                     Picture = roomDTO.Picture,
                     Price = roomDTO.Price,
-
+                    Slot = roomDTO.Slot,
+                    Status = true,
                 };
 
-                _context.Services.Add(newServices);
-
+                await _context.Rooms.AddAsync(newRoom);
                 await _context.SaveChangesAsync();
-                return Ok(_mapper.Map<ServiceDTO>(newServices));
+
+                return Ok(_mapper.Map<RoomDTO>(newRoom));
             }
             catch (Exception ex)
             {
@@ -54,52 +55,56 @@ namespace PetServices.Controllers
             }
         }
 
-        [HttpPut("UpdateServices")]
-        public IActionResult Update(ServiceDTO serviceDTO, int serviceId)
+        [HttpPut("UpdateRoom")]
+        public async Task<ActionResult> UpdateRoom(RoomDTO roomDTO, int roomId)
         {
-            var service = _context.Services.FirstOrDefault(p => p.ServiceId == serviceId);
-            if (service == null)
-            {
-                return NotFound();
-            }
-
-            service.ServiceName = serviceDTO.ServiceName;
-            service.Desciptions = serviceDTO.Desciptions;
-            service.Price = serviceDTO.Price;
-            service.Picture = serviceDTO.Picture;
-            service.Status = serviceDTO.Status;
-            service.SerCategoriesId = serviceDTO.SerCategoriesId;
-
             try
             {
-                _context.Entry(service).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                _context.SaveChanges();
+                var room = await _context.Rooms.FirstOrDefaultAsync(p => p.RoomId == roomId);
+                if (room == null)
+                {
+                    return BadRequest("Không tìm thấy phòng bạn chọn.");
+                }
+
+                room.RoomName = roomDTO.RoomName;
+                room.Desciptions = roomDTO.Desciptions;
+                room.Picture = roomDTO.Picture;
+                room.Price = roomDTO.Price;
+                room.Slot = roomDTO.Slot;
+
+                _context.Entry(room).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+                return Ok(room);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                return Conflict();
+                return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
             }
-            return Ok(service);
         }
 
-        [HttpDelete]
-        public IActionResult Delete(int serviceId)
+        [HttpPut("ChangeStatusRoom")]
+        public async Task<ActionResult> ChangeStatusRoom(int RoomId, bool status)
         {
-            var service = _context.Services.FirstOrDefault(p => p.ServiceId == serviceId);
-            if (service == null)
-            {
-                return NotFound();
-            }
             try
             {
-                _context.Services.Remove(service);
-                _context.SaveChanges();
+                var room = await _context.Rooms.FirstOrDefaultAsync(p => p.RoomId == RoomId);
+                if (room == null)
+                {
+                    return BadRequest("Không tìm thấy phòng cần thay đổi.");
+                }
+
+                room.Status = status;
+
+                _context.Entry(room).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+                return Ok(room);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                return Conflict();
+                return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
             }
-            return Ok(service);
         }
     }
 }
