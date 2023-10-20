@@ -90,6 +90,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     /*ViewBag.ErrorMessage = "Vui lòng chọn một tệp ảnh.";*/
                     return View(service); // Hiển thị lại biểu mẫu với thông báo lỗi
                 }
+                service.Status = true;
 
                 var json = JsonConvert.SerializeObject(service);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
