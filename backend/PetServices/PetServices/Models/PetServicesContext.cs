@@ -239,7 +239,7 @@ namespace PetServices.Models
 
                 entity.Property(e => e.Desciptions).HasMaxLength(500);
 
-                entity.Property(e => e.Picrtue).HasMaxLength(500);
+                entity.Property(e => e.Picture).HasMaxLength(500);
 
                 entity.Property(e => e.ProCategoriesName).HasMaxLength(500);
             });

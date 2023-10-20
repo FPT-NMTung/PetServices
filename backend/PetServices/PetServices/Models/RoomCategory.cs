@@ -14,6 +14,7 @@ namespace PetServices.Models
         public string? RoomCategoriesName { get; set; }
         public string? Desciptions { get; set; }
         public string? Picture { get; set; }
+        public bool? Status { get; set; }
 
         public virtual ICollection<Room> Rooms { get; set; }
     }
