@@ -178,8 +178,6 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
                 else
                 {
-                    // No image file has been uploaded, so do not update the image path.
-                    // Retrieve the existing image path from the database and assign it to serviceCategory.Prictue.
 
                     HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrlServiceCategoryDetail + "/" + serCategoriesId);
 

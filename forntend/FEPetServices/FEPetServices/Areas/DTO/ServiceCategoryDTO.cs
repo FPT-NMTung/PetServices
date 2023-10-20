@@ -9,5 +9,6 @@ namespace PetServices.Models
         public string? Desciptions { get; set; }
         public string? Picture { get; set; }
         public bool? Status { get; set; }
+
     }
 }

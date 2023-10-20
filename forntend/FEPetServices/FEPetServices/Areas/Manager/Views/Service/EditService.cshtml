@@ -10,7 +10,7 @@
 
 <h2>Chỉnh Sửa Dịch Vụ Thú Cưng</h2>
 <div class="container">
-  <form asp-action="EditService" method="post"  onsubmit="return validateForm()">
+  <form asp-action="EditService" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
     <div class="row">
       <div class="col-25">
         <label for="ServiceName">Tên Dịch Vụ:</label>
@@ -21,13 +21,16 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-25">
+    <div class="col-25">
         <label for="image">Ảnh:</label>
-      </div>
-      <div class="col-75">
-        <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" required>
+    </div>
+        
+    <div class="col-75">
+        <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" >
+
         <img src="@Model.Picture" height="100px" width="100px" style="float: left;" id="imagePreview">
-      </div>
+        
+    </div>
     </div>
     <div class="row">
       <div class="col-25">
@@ -39,23 +42,27 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-25">
-        <label for="SerCategoriesId">Loại Dịch Vụ</label>
-      </div>
-      <div class="col-75">
-          @if (ViewBag.Categories != null){
-         <select id="SerCategoriesId" name="SerCategoriesId"  required>
-            <option value="@Model.SerCategoriesId">@Model.ServiceName</option>
-            @foreach (var category in ViewBag.Categories)
-                {
-                    <option value="@category.Value">@category.Text</option>
-                }
-        </select>
-        } else {
-            <span class="text-danger">Error: Service Categories data not available.</span>
-        }
-      </div>
+        <div class="col-25">
+            <label for="SerCategoriesId">Loại Dịch Vụ</label>
+        </div>
+        <div class="col-75">
+            @if (ViewBag.Categories != null)
+            {
+                <select id="SerCategoriesId" name="ServiceCategory.SerCategoriesId" required>
+                    <option value="@Model.SerCategoriesId">@Model.SerCategoriesName</option>
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <option value="@category.Value">@category.Text</option>
+                    }
+                </select>
+            }
+            else
+            {
+                <span class="text-danger">Error: Service Categories data not available.</span>
+            }
+        </div>
     </div>
+
     <div class="row">
       <div class="col-25">
         <label for="Desciptions">Mô Tả:</label>
@@ -65,6 +72,17 @@
         <div style="color:red" class="error-message" id="subject-error-message"></div>
       </div>
     </div>
+      <div class="row">
+    <div class="col-25">
+        <label for="Status">Trạng thái:</label>
+    </div>
+    <div class="col-75">
+        <label class="switch">
+            <input type="checkbox"  name="Status" @(Model.Status ? "checked" : "")>
+            <span class="slider round"></span>
+        </label>
+    </div>
+</div>
     <div class="row">
       <div class="col-25">
         <a type="submit" value="Cancel" href="/Manager/Service" class="cancel">Cancel</a>
