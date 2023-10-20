@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -73,7 +71,24 @@ namespace PetServices.Controllers
             }
             else
             {
-                return BadRequest("Đăng nhập không hợp lệ.");
+                string errorMessage = "Đăng nhập không hợp lệ.";
+                if (string.IsNullOrWhiteSpace(login.Password))
+                {
+                    errorMessage = "Mật khẩu không được để trống!";
+                }
+                else if (login.Password.Length < 8)
+                {
+                    errorMessage = "Mật khẩu phải có ít nhất 8 ký tự.";
+                }
+                else if (login.Password.Contains(" "))
+                {
+                    errorMessage = "Mật khẩu không được chứa khoảng trắng.";
+                }
+                else if (Regex.IsMatch(login.Password, @"[^a-zA-Z0-9]"))
+                {
+                    errorMessage = "Mật khẩu không được chứa ký tự đặc biệt.";
+                }
+                return BadRequest(errorMessage);
             }
         }
 
@@ -325,13 +340,19 @@ namespace PetServices.Controllers
         }
 
         [HttpPut("newpassword")]
-        public async Task<IActionResult> ChangePassword(string email, string oldpassword, string newpassword)
+        public async Task<IActionResult> ChangePassword(string email, string oldpassword, string newpassword, string confirmnewpassword)
         {
             Account account = await _context.Accounts.Include(a => a.UserInfo).SingleOrDefaultAsync(a => a.Email == email);
             if (account == null)
             {
                 return NotFound("Tài khoản không tồn tài");
             }
+
+            if(newpassword != confirmnewpassword)
+            {
+                return BadRequest("Mật khẩu xác nhận không chính xác");
+            }
+
             if (account.Password == oldpassword)
             {
                 account.Password = newpassword;

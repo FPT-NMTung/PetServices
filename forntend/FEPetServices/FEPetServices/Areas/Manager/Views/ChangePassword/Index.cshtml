@@ -42,8 +42,8 @@
                                         <i class="far fa-eye" id="eyeConfirmIcon"></i>
                                     </span>
                                 </div>
+                                <div id="passwordMismatchMessage" style="color: red;"></div> 
                             </div>
-
                             <button class="btn btn-primary" type="submit">Đổi mật khẩu</button>
                         </form>
                     </div>
@@ -70,6 +70,7 @@
         }
 </body>
     <script src="~/js/toastnotification.js"></script>
+    <script src="~/js/checkpassword.js"></script>
     <script>
         function showSuccessToast() {
             toast({
@@ -87,4 +88,5 @@
                 duration: 2000
             });
         }
+    </script>
 </html>

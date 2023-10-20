@@ -41,8 +41,8 @@ namespace PetServices.Mapper
                             act => act.MapFrom(src => src.SerCategoriesName))
                 .ForMember(des => des.Desciptions,
                             act => act.MapFrom(src => src.Desciptions))
-                .ForMember(des => des.Prictue,
-                            act => act.MapFrom(src => src.Prictue));
+                .ForMember(des => des.Picture,
+                            act => act.MapFrom(src => src.Picture));
 
             CreateMap<Service, ServiceDTO>()
                 .ForMember(des => des.ServiceId,

@@ -43,7 +43,6 @@ namespace PetServices.Models
                     optionsBuilder.UseSqlServer(conf.GetConnectionString("DbConnection"));
                 }
             }
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -92,6 +91,10 @@ namespace PetServices.Models
             modelBuilder.Entity<Blog>(entity =>
             {
                 entity.Property(e => e.BlogId).HasColumnName("BlogID");
+
+                entity.Property(e => e.ImageUrl).HasColumnName("ImageURL");
+
+                entity.Property(e => e.PublisheDate).HasColumnType("date");
             });
 
             modelBuilder.Entity<Booking>(entity =>
@@ -236,7 +239,7 @@ namespace PetServices.Models
 
                 entity.Property(e => e.Desciptions).HasMaxLength(500);
 
-                entity.Property(e => e.Prictue).HasMaxLength(500);
+                entity.Property(e => e.Picture).HasMaxLength(500);
 
                 entity.Property(e => e.ProCategoriesName).HasMaxLength(500);
             });
@@ -335,7 +338,7 @@ namespace PetServices.Models
 
                 entity.Property(e => e.SerCategoriesId).HasColumnName("SerCategoriesID");
 
-                entity.Property(e => e.Prictue).HasMaxLength(500);
+                entity.Property(e => e.Picture).HasMaxLength(500);
 
                 entity.Property(e => e.SerCategoriesName).HasMaxLength(500);
             });

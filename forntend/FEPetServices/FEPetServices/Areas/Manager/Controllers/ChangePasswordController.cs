@@ -27,7 +27,13 @@ namespace FEPetServices.Areas.Manager.Controllers
                 return View();
             }
 
-            string apiUrl = $"https://localhost:7255/api/Account/newpassword?email={email}&oldpassword={changePassword.OldPassword}&newpassword={changePassword.NewPassword}";
+            if (changePassword.NewPassword != changePassword.ConfirmNewPassword)
+            {
+                ViewBag.ErrorToast = "Mật khẩu mới và xác nhận lại mật khẩu không trùng khớp";
+                return View();
+            }
+
+            string apiUrl = $"https://localhost:7255/api/Account/newpassword?email={email}&oldpassword={changePassword.OldPassword}&newpassword={changePassword.NewPassword}&confirmnewpassword={changePassword.ConfirmNewPassword}";
 
             HttpResponseMessage response = await _client.PutAsync(apiUrl, null);
 
