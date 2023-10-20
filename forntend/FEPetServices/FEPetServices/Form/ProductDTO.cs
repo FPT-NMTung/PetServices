@@ -10,5 +10,6 @@
         public double? Price { get; set; }
         public DateTime? CreateDate { get; set; }
         public int? ProCategoriesId { get; set; }
+        public string? ProCategoriesName { get; set; }
     }
 }

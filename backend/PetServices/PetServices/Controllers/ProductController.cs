@@ -24,13 +24,15 @@ namespace PetServices.Controllers
         [HttpGet("GetAll")]
         public IActionResult GetAllProduct()
         {
-            List<Product> products = _context.Products.ToList();
+            List<Product> products = _context.Products.Include(s=>s.ProCategories)
+                .ToList();
             return Ok(_mapper.Map<List<ProductDTO>>(products));
         }
         [HttpGet("ProductID/{id}")]
         public IActionResult GetById(int id)
         {
             List<Product> product = _context.Products
+                .Include(s => s.ProCategories)
                 .Where(c => c.ProductId == id)
                 .ToList();
             return Ok(_mapper.Map<List<ProductDTO>>(product));
@@ -48,7 +50,7 @@ namespace PetServices.Controllers
                 ProductName = productDTO.ProductName,
                 Desciption = productDTO.Desciption,
                 Picture = productDTO.Picture,
-                Status = productDTO.Status,
+                Status = true,
                 Price = productDTO.Price,
                 CreateDate = DateTime.Now,
                 ProCategoriesId = productDTO.ProCategoriesId
@@ -67,7 +69,9 @@ namespace PetServices.Controllers
         [HttpPut("Update")]
         public IActionResult Update(ProductDTO productDTO, int proId)
         {
-            var product = _context.Products.FirstOrDefault(p=>p.ProductId == proId);
+            var product = _context.Products
+                .Include(a=> a.ProCategories)
+                .FirstOrDefault(p=>p.ProductId == proId);
             if (product == null)
             {
                 return NotFound();

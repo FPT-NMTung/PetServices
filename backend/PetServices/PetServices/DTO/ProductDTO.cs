@@ -4,6 +4,7 @@
     {
         public int ProductId { get; set; }
         public string? ProductName { get; set; }
+        public string? ProCategoriesName { get; set; }
         public string? Desciption { get; set; }
         public string? Picture { get; set; }
         public bool? Status { get; set; }
