@@ -107,9 +107,9 @@ namespace UnitTest
                 var result = await controller.Register(registerDto) as ObjectResult;
 
                 Assert.NotNull(result);
-                Assert.Equal(400, result.StatusCode);                
+                Assert.Equal(400, result.StatusCode);
                 Assert.True(controller.ModelState.ContainsKey("Email không hợp lệ"));
-               
+
                 var errorMessages = controller.ModelState["Email không hợp lệ"].Errors;
                 var errorMessage = errorMessages[0].ErrorMessage;
                 Assert.Contains("Email cần có @", errorMessage);
