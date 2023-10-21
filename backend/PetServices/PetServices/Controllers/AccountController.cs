@@ -72,6 +72,11 @@ namespace PetServices.Controllers
             else
             {
                 string errorMessage = "Đăng nhập không hợp lệ.";
+                if (string.IsNullOrWhiteSpace(login.Email)) {
+                    errorMessage = "Email không được để trống!";
+                }
+
+
                 if (string.IsNullOrWhiteSpace(login.Password))
                 {
                     errorMessage = "Mật khẩu không được để trống!";
