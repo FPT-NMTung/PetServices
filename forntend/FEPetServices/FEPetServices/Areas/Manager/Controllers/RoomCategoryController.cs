@@ -23,7 +23,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "";
             ApiUrlRoomCategoryList = "https://localhost:7255/api/RoomCategory/GetAllRoomCategory";
-            ApiUrlRoomCategoryDetail = "https://localhost:7255/api/RoomCategory/GetRoomCategory";
+            ApiUrlRoomCategoryDetail = "https://localhost:7255/api/RoomCategory/GetRoomCategory/";
             ApiUrlRoomCategoryAdd = "https://localhost:7255/api/RoomCategory/AddRoomCategory";
             ApiUrlRoomCategoryUpdate = "https://localhost:7255/api/RoomCategory/UpdateRoomCategory?roomCategoryId=";
 
@@ -106,14 +106,13 @@ namespace FEPetServices.Areas.Manager.Controllers
         }
 
 
-        /*
+        
         [HttpGet]
-        public async Task<IActionResult> EditServiceCategory(int serCategoriesId)
+        public async Task<ActionResult> EditRoomCategory(int roomCategoryId)
         {
             try
             {
-                // Gọi API để lấy thông tin ServiceCategory cần chỉnh sửa
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceCategoryDetail + "/" + serCategoriesId);
+                HttpResponseMessage response = await client.GetAsync(ApiUrlRoomCategoryDetail + roomCategoryId);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -121,70 +120,102 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     if (!string.IsNullOrEmpty(responseContent))
                     {
-                        // Deserialize dữ liệu từ API thành danh sách các đối tượng ServiceCategoryDTO
-                        var existingServiceCategoryList = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseContent);
+                        var existingRoomCategoryList = JsonConvert.DeserializeObject<List<RoomCategoryDTO>>(responseContent);
 
-                        // Lấy đối tượng cần chỉnh sửa từ danh sách (có thể là phần tử đầu tiên)
-                        var existingServiceCategory = existingServiceCategoryList.FirstOrDefault();
+                        var existingRoomCategory = existingRoomCategoryList.FirstOrDefault();
 
-                        return View(existingServiceCategory);
+                        return View(existingRoomCategory);
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
+                        TempData["ErrorToast"] = "API trả về dữ liệu rỗng.";
                     }
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                    TempData["ErrorToast"] = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
             }
 
-            // Return the view with or without an error message
             return View();
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> EditServiceCategory([FromForm] ServiceCategoryDTO serviceCategory, IFormFile image, int serCategoriesId)
+        public async Task<ActionResult> EditServiceCategory([FromForm] RoomCategoryDTO roomCategoryDTO, IFormFile image, int roomCategoryId)
         {
             try
             {
 
                 if (image != null && image.Length > 0)
                 {
-                    // Xử lý và lưu trữ ảnh
                     Console.WriteLine(image);
-                    serviceCategory.Picture = "/img/" + image.FileName.ToString();
-                }
+                    var imagePath = "/img/" + image.FileName;
+                    roomCategoryDTO.Picture = imagePath;
 
-                var json = JsonConvert.SerializeObject(serviceCategory);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                // Gửi dữ liệu lên máy chủ
-                HttpResponseMessage response = await client.PutAsync(DefaultApiUrlServiceCategoryUpdate + serCategoriesId, content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    TempData["SuccessMessage"] = "Thêm dịch vụ thành công!";
-                    return View(serviceCategory);
+                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", image.FileName);
+                    using (var stream = new FileStream(physicalImagePath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
 
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Thêm dịch vụ thất bại. Vui lòng thử lại sau.";
-                    return RedirectToAction("EditServiceCategory");
+
+                    HttpResponseMessage responseForImage = await client.GetAsync(ApiUrlRoomCategoryDetail + roomCategoryId);
+
+                    if (responseForImage.IsSuccessStatusCode)
+                    {
+                        var responseContent = await responseForImage.Content.ReadAsStringAsync();
+
+                        if (!string.IsNullOrEmpty(responseContent))
+                        {
+                            var existingRoomCategoryList = JsonConvert.DeserializeObject<List<RoomCategoryDTO>>(responseContent);
+                            var existingRoomCategory = existingRoomCategoryList.FirstOrDefault();
+                            if (existingRoomCategory != null)
+                            {
+                                roomCategoryDTO.Picture = existingRoomCategory.Picture;
+                            }
+                        }
+                    }
+                }
+                if (Request.Form["Status"] == "on")
+                {
+                    roomCategoryDTO.Status = true;
+                }
+                else
+                {
+                    roomCategoryDTO.Status = false;
+                }
+
+                var json = JsonConvert.SerializeObject(roomCategoryDTO);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await client.PutAsync(ApiUrlRoomCategoryUpdate + roomCategoryId, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
+                    return View(roomCategoryDTO); 
+                }
+                else
+                {
+                    TempData["ErrorToast"] = "Chỉnh sửa dịch vụ thất bại. Vui lòng thử lại sau.";
+                    return View(roomCategoryDTO);
                 }
             }
+
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
-                return RedirectToAction("EditServiceCategory");
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
+                return View(roomCategoryDTO);
             }
-        }*/
+        }
+
     }
 }
