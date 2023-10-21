@@ -78,6 +78,25 @@ namespace PetServices.Mapper
                             act => act.MapFrom(src => src.RoleId))
                 .ForMember(des => des.Status,
                             act => act.MapFrom(src => src.Status));
+
+            CreateMap<RoomCategory, RoomCategoryDTO>()
+                .ReverseMap();
+
+            CreateMap<Room, RoomDTO>()
+                .ForMember(dest => dest.RoomCategoriesName, opt => opt.MapFrom(src => src.RoomCategories.RoomCategoriesName))
+                .ReverseMap();
+
+            CreateMap<Product, ProductDTO>()
+                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ProductName))
+                .ForMember(dest => dest.Desciption, opt => opt.MapFrom(src => src.Desciption))
+                .ForMember(dest => dest.Picture, opt => opt.MapFrom(src => src.Picture))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateDate))
+                .ForMember(dest => dest.ProCategoriesId, opt => opt.MapFrom(src => src.ProCategoriesId))
+                .ForMember(dest => dest.ProCategoriesName, opt => opt.MapFrom(src => src.ProCategories.ProCategoriesName));
+
         }
     }
 }
