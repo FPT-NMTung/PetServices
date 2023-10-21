@@ -16,7 +16,7 @@
         <label for="ServiceName">Tên Dịch Vụ:</label>
       </div>
       <div class="col-75">
-        <input type="text" id="ServiceName" name="ServiceName" value="@Model.ServiceName" placeholder="Tên Dịch Vụ.." required>
+        <input type="text" id="ServiceName" name="ServiceName" value="@Model?.ServiceName" placeholder="Tên Dịch Vụ.." required>
         <div style="color:red" class="error-message" id="fname-error-message"></div>
       </div>
     </div>
@@ -28,7 +28,7 @@
     <div class="col-75">
         <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" >
 
-        <img src="@Model.Picture" height="100px" width="100px" style="float: left;" id="imagePreview">
+        <img src="@Model?.Picture" height="100px" width="100px" style="float: left;" id="imagePreview">
         
     </div>
     </div>
@@ -37,29 +37,33 @@
         <label for="Price">Giá:</label>
       </div>
       <div class="col-75">
-        <input type="text" id="Price" name="Price" value="@Model.Price" placeholder="Giá tiền" required>
+        <input type="text" id="Price" name="Price" value="@Model?.Price" placeholder="Giá tiền" required>
         <div style="color:red" class="error-message" id="price-error-message"></div> <!-- Lưu ý rằng id ở đây là "price-error-message" -->
       </div>
     </div>
+    <div>@Model?.SerCategoriesName  hello</div>
     <div class="row">
         <div class="col-25">
+            @*<input type="hidden" name="SerCategoriesId" value="@Model.SerCategoriesId" />*@
+
             <label for="SerCategoriesId">Loại Dịch Vụ</label>
         </div>
         <div class="col-75">
-            @if (ViewBag.Categories != null)
-            {
-                <select id="SerCategoriesId" name="ServiceCategory.SerCategoriesId" required>
-                    <option value="@Model.SerCategoriesId">@Model.SerCategoriesName</option>
+     @*       @if (ViewBag.Categories != null)
+            {*@
+                <select id="SerCategoriesId" name="SerCategoriesId"  required>
+                    <option value="@Model?.SerCategoriesId" >@Model?.SerCategoriesName</option>
                     @foreach (var category in ViewBag.Categories)
                     {
                         <option value="@category.Value">@category.Text</option>
                     }
                 </select>
-            }
-            else
+
+        
+@*            else
             {
                 <span class="text-danger">Error: Service Categories data not available.</span>
-            }
+            }*@
         </div>
     </div>
 
@@ -68,7 +72,7 @@
         <label for="Desciptions">Mô Tả:</label>
       </div>
       <div class="col-75">
-        <textarea id="Desciptions" name="Desciptions" placeholder="Nội Dung .." style="height:200px" required>@Model.Desciptions</textarea>
+        <textarea id="Desciptions" name="Desciptions" placeholder="Nội Dung .." style="height:200px" required>@Model?.Desciptions</textarea>
         <div style="color:red" class="error-message" id="subject-error-message"></div>
       </div>
     </div>

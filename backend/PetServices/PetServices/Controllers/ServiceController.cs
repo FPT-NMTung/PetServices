@@ -38,12 +38,12 @@ namespace PetServices.Controllers
         [HttpGet("ServiceID/{id}")]
         public IActionResult GetById(int id)
         {
-            List<Service> service = _context.Services
+            Service  service = _context.Services
                 .Include(s => s.SerCategories)
-                .Where(c => c.ServiceId == id)
-                .ToList();
+                .FirstOrDefault(c => c.ServiceId == id)
+                ;
 
-            return Ok(_mapper.Map<List<ServiceDTO>>(service));
+            return Ok(_mapper.Map<ServiceDTO>(service));
         }
 
 
