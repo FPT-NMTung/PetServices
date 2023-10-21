@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PetServices.Models;
+using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -120,9 +121,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     if (!string.IsNullOrEmpty(responseContent))
                     {
-                        var existingRoomCategoryList = JsonConvert.DeserializeObject<List<RoomCategoryDTO>>(responseContent);
-
-                        var existingRoomCategory = existingRoomCategoryList.FirstOrDefault();
+                        var existingRoomCategory = JsonConvert.DeserializeObject<RoomCategoryDTO>(responseContent);
 
                         return View(existingRoomCategory);
                     }
@@ -146,11 +145,10 @@ namespace FEPetServices.Areas.Manager.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> EditServiceCategory([FromForm] RoomCategoryDTO roomCategoryDTO, IFormFile image, int roomCategoryId)
+        public async Task<ActionResult> EditRoomCategory([FromForm] RoomCategoryDTO roomCategoryDTO, IFormFile image, int roomCategoryId)
         {
             try
             {
-
                 if (image != null && image.Length > 0)
                 {
                     Console.WriteLine(image);
@@ -162,11 +160,9 @@ namespace FEPetServices.Areas.Manager.Controllers
                     {
                         await image.CopyToAsync(stream);
                     }
-
                 }
                 else
                 {
-
                     HttpResponseMessage responseForImage = await client.GetAsync(ApiUrlRoomCategoryDetail + roomCategoryId);
 
                     if (responseForImage.IsSuccessStatusCode)
@@ -175,8 +171,9 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                         if (!string.IsNullOrEmpty(responseContent))
                         {
-                            var existingRoomCategoryList = JsonConvert.DeserializeObject<List<RoomCategoryDTO>>(responseContent);
-                            var existingRoomCategory = existingRoomCategoryList.FirstOrDefault();
+                            var existingRoomCategory = JsonConvert.DeserializeObject<RoomCategoryDTO>(responseContent);
+
+                            Console.WriteLine(existingRoomCategory);
                             if (existingRoomCategory != null)
                             {
                                 roomCategoryDTO.Picture = existingRoomCategory.Picture;

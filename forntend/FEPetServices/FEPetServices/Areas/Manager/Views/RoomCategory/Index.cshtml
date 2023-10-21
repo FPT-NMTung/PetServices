@@ -7,6 +7,7 @@
         width: 100%;
         margin-top: 30px;
         border-collapse: collapse;
+        background-color: white;
     }
 
         #RoomCategory th,
@@ -33,13 +34,6 @@
         margin-bottom: 10px;
     }
 
-    /*.addRoomCategoryButton {
-        float: left; 
-        margin-right: 10px;
-        width: 150px;
-        height: 25px;
-    }*/
-
     .btn-add {
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         border-radius: 4px;
@@ -65,6 +59,7 @@
 
     .dataTables_wrapper .dataTables_filter input[type="search"] {
         margin-left: 10px;
+        background-color: white;
     }
 
     .dataTables_wrapper {
@@ -108,10 +103,22 @@
             color: black;
         }
 
+    /*.bg {
+        background-color: #FFD6E4;
+        position: absolute;
+        top: 60px;
+        left: 0px;
+        right: 0px;
+    }*/
+
+    .dataTables_wrapper .dataTables_length select {
+        background-color: #ffffff;
+    }
 </style>
 
 <link href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
-<link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+
 
 @section Scripts {
     <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -164,7 +171,8 @@
         });
     </script>
 }
-<h1 style="font-size: 40px; font-weight: bold;">Danh sách các loại phòng cho thú cưng</h1>
+<div class="bg">
+<h1 style="font-size: 40px; font-weight: bold; margin-top: 10px">Danh sách các loại phòng cho thú cưng</h1>
 
 <table id="RoomCategory" class="display">
     <thead>
@@ -235,3 +243,4 @@
         }
     }
 </script>
+</div>
