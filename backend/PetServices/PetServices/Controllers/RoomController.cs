@@ -25,23 +25,36 @@ namespace PetServices.Controllers
         [HttpGet("GetAllRoom")]
         public async Task<ActionResult> GetAllRoom()
         {
-            var rooms = await _context.Rooms.ToListAsync();
+            var rooms = await _context.Rooms.Include(r => r.RoomCategories).ToListAsync();
             return Ok(_mapper.Map<List<RoomDTO>>(rooms));
         }
 
+        [HttpGet("GetRoom/{roomId}")]
+        public async Task<ActionResult> GetRoom(int roomId)
+        {
+            var room = await _context.Rooms
+                .Include(r => r.RoomCategories)
+                .Where(r => r.RoomId == roomId)
+                .ToListAsync();
+
+            return Ok(_mapper.Map<List<RoomDTO>>(room));
+        }
+
         [HttpPost("AddRoom")]
-        public async Task<IActionResult> AddRoom(RoomDTO roomDTO)
+        public async Task<ActionResult> AddRoom(RoomDTO roomDTO)
         {
             try
             {
                 var newRoom = new Room
                 {
+                    RoomId = roomDTO.RoomId,
                     RoomName = roomDTO.RoomName,
                     Desciptions = roomDTO.Desciptions,
                     Picture = roomDTO.Picture,
                     Price = roomDTO.Price,
                     Slot = roomDTO.Slot,
-                    Status = true,
+                    Status = roomDTO.Status,
+                    RoomCategoriesId = roomDTO.RoomCategoriesId,
                 };
 
                 await _context.Rooms.AddAsync(newRoom);
@@ -60,7 +73,7 @@ namespace PetServices.Controllers
         {
             try
             {
-                var room = await _context.Rooms.FirstOrDefaultAsync(p => p.RoomId == roomId);
+                var room = await _context.Rooms.Include(r => r.RoomCategories).FirstOrDefaultAsync(p => p.RoomId == roomId);
                 if (room == null)
                 {
                     return BadRequest("Không tìm thấy phòng bạn chọn.");
@@ -70,7 +83,9 @@ namespace PetServices.Controllers
                 room.Desciptions = roomDTO.Desciptions;
                 room.Picture = roomDTO.Picture;
                 room.Price = roomDTO.Price;
+                room.Status = roomDTO.Status;
                 room.Slot = roomDTO.Slot;
+                room.RoomCategoriesId = roomDTO.RoomCategoriesId;
 
                 _context.Entry(room).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 await _context.SaveChangesAsync();

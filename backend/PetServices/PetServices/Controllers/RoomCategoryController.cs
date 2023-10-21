@@ -25,8 +25,15 @@ namespace PetServices.Controllers
         [HttpGet("GetAllRoomCategory")]
         public async Task<ActionResult> GetAllRoomCategory()
         {
-            List<RoomCategory> roomCategories = await _context.RoomCategories.ToListAsync();
-            return Ok(_mapper.Map<List<RoomCategory>>(roomCategories));
+            var roomCategories = await _context.RoomCategories.ToListAsync();
+            return Ok(_mapper.Map<List<RoomCategoryDTO>>(roomCategories));
+        }
+
+        [HttpGet("GetRoomCategory/{roomCategoryId}")]
+        public async Task<ActionResult> GetRoomCategory(int roomCategoryId)
+        {
+            var roomCategory = await _context.RoomCategories.FirstOrDefaultAsync(r => r.RoomCategoriesId == roomCategoryId);
+            return Ok(_mapper.Map<RoomCategoryDTO>(roomCategory));
         }
 
         [HttpPost("AddRoomCategory")]
@@ -36,10 +43,11 @@ namespace PetServices.Controllers
             {
                 var newRoomCategory = new RoomCategory
                 {
+                    RoomCategoriesId = roomCategoryDTO.RoomCategoriesId,
                     RoomCategoriesName = roomCategoryDTO.RoomCategoriesName,
                     Desciptions = roomCategoryDTO.Desciptions,
                     Picture = roomCategoryDTO.Picture,
-                    Status = true,
+                    Status = roomCategoryDTO.Status,
                 };
 
                 await _context.RoomCategories.AddAsync(newRoomCategory);
@@ -67,6 +75,7 @@ namespace PetServices.Controllers
                 roomCategory.RoomCategoriesName = roomCategoryDTO.RoomCategoriesName;
                 roomCategory.Desciptions = roomCategoryDTO.Desciptions;
                 roomCategory.Picture = roomCategoryDTO.Picture;
+                roomCategory.Status = roomCategoryDTO.Status;
 
                 _context.Entry(roomCategory).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 await _context.SaveChangesAsync();

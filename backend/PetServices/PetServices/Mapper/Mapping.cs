@@ -83,6 +83,7 @@ namespace PetServices.Mapper
                 .ReverseMap();
 
             CreateMap<Room, RoomDTO>()
+                .ForMember(dest => dest.RoomCategoriesName, opt => opt.MapFrom(src => src.RoomCategories.RoomCategoriesName))
                 .ReverseMap();
         }
     }
