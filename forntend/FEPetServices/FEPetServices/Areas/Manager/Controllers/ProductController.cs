@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
@@ -74,7 +75,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     {
                         // Xử lý và lưu trữ ảnh
                         Console.WriteLine(image);
-                        pro.Prictue = "/img/" + image.FileName.ToString();
+                        pro.Picture = "/img/" + image.FileName.ToString();
                     }
                     var json = JsonConvert.SerializeObject(pro);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -111,41 +112,25 @@ namespace FEPetServices.Areas.Manager.Controllers
             {
                 //goi api de lay thong tin can sua
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductDetail + "/" + proId);
-                
+                HttpResponseMessage proCateResponse = await client.GetAsync("https://localhost:7255/api/ProductCategory/GetAll");
+                if (proCateResponse.IsSuccessStatusCode)
+                {
+                    var proCategories = await proCateResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
+                    ViewBag.ProCategories = new SelectList(proCategories, "ProCategoriesId", "ProCategoriesName");
+                }
                 if (response.IsSuccessStatusCode)
                 {
-                    var rep = await response.Content.ReadAsStringAsync();
-                    if (!string.IsNullOrEmpty(rep))
-                    {
-                        //deserialize du lieu tu api thanh ds cac doi tuongdto
-                        var existPL = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
-                        if(existPL.Count >0)
-                        {
-                            var existProduct = existPL[0];
-                            HttpResponseMessage proCateResponse = await client.GetAsync("https://localhost:7255/api/ProductCategory/GetAll");
-                            if (proCateResponse.IsSuccessStatusCode)
-                            {
-                                var proCate = await proCateResponse.Content.ReadAsStringAsync();
-                                var proCategories = JsonConvert.DeserializeObject<List<ProductCategoryDTO>>(proCate);
-                                //var cateSelectList = new SelectList(proCategories, "ProCategoriesId", "ProCategoriesName", existProduct.ProCategoriesId);
+                    string responseContent = await response.Content.ReadAsStringAsync();
 
-                                ViewBag.ProCategories = new SelectList(proCategories, "ProCategoriesId", "ProCategoriesName", existProduct.ProCategoriesId);
-                                return View(existProduct);
-                            }
-                            else
-                            {
-                                ViewBag.ErrorMessage = "Tải danh sách loại sản phẩm thất bại";
-                            }
-                        }
-                        else
-                        {
-                            ViewBag.ErrorMessage = "Không tìm thấy sản phẩm với ID được cung cấp.";
-                        }
-                    }
-                    else
+                    var options = new JsonSerializerOptions
                     {
-                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
-                    }
+                        PropertyNameCaseInsensitive = true
+                    };
+
+                    ProductDTO managerInfos = System.Text.Json.JsonSerializer.Deserialize<ProductDTO>(responseContent, options);
+
+                    return View(managerInfos);
+
                 }
                 else
                 {
@@ -157,6 +142,81 @@ namespace FEPetServices.Areas.Manager.Controllers
                 ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
             }
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update([FromForm] ProductDTO productDTO, IFormFile image, int proId, int SelectedCategory)
+        {
+            try
+            {
+                HttpResponseMessage proCateResponse = await client.GetAsync("https://localhost:7255/api/ProductCategory/GetAll");
+                if (proCateResponse.IsSuccessStatusCode)
+                {
+                    var proCategories = await proCateResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
+                    ViewBag.ProCategories = new SelectList(proCategories, "ProCategoriesId", "ProCategoriesName");
+                }
+                if (image != null && image.Length > 0)
+                {
+                    // Handle the case when a new image is uploaded
+                    var imagePath = "/img/" + image.FileName;
+                    productDTO.Picture = imagePath;
+
+                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", image.FileName);
+                    using (var stream = new FileStream(physicalImagePath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
+                }
+                else
+                {
+                    // Handle the case when no new image is uploaded
+                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrlProductDetail + "/" + proId);
+
+                    if (responseForImage.IsSuccessStatusCode)
+                    {
+                        var responseContent = await responseForImage.Content.ReadAsStringAsync();
+
+                        if (!string.IsNullOrEmpty(responseContent))
+                        {
+                            var existingServiceCategory = JsonConvert.DeserializeObject<ProductDTO>(responseContent);
+                            /*var existingServiceCategory = existingServiceCategoryList.FirstOrDefault();*/
+                            if (existingServiceCategory != null)
+                            {
+                                // Assign the existing image path to service.Picture.
+                                productDTO.Picture = existingServiceCategory.Picture;
+                            }
+                        }
+                    }
+                }
+
+                if (Request.Form["Status"] == "on")
+                {
+                    productDTO.Status = true;
+                }
+                else
+                {
+                    productDTO.Status = false;
+                }
+
+                var json = JsonConvert.SerializeObject(productDTO);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await client.PutAsync(DefaultApiUrlProductUpdate + proId, content);
+                if(response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessToast"] = "Chỉnh sửa sản phẩm thành công!";
+                    return RedirectToAction("Update", new { proId = proId });
+                }
+                else
+                {
+                    TempData["ErrorToast"] = "Chỉnh sửa sản phẩm không thành công!";
+                    return View(productDTO);
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
+                return View(productDTO);
+            }
         }
     }
 }

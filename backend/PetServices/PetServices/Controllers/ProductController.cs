@@ -31,11 +31,10 @@ namespace PetServices.Controllers
         [HttpGet("ProductID/{id}")]
         public IActionResult GetById(int id)
         {
-            List<Product> product = _context.Products
+            Product product = _context.Products
                 .Include(s => s.ProCategories)
-                .Where(c => c.ProductId == id)
-                .ToList();
-            return Ok(_mapper.Map<List<ProductDTO>>(product));
+                .FirstOrDefault(c => c.ProductId == id);
+            return Ok(_mapper.Map<ProductDTO>(product));
         }
         [HttpPost("Add")]
         public async Task<IActionResult> CreateProduct(ProductDTO productDTO)
@@ -67,7 +66,7 @@ namespace PetServices.Controllers
             }
         }
         [HttpPut("Update")]
-        public IActionResult Update(ProductDTO productDTO, int proId)
+        public async Task<IActionResult> Update(ProductDTO productDTO, int proId)
         {
             var product = _context.Products
                 .Include(a=> a.ProCategories)
@@ -83,15 +82,20 @@ namespace PetServices.Controllers
             product.Price = productDTO.Price;
             product.CreateDate = DateTime.Now;
             product.ProCategoriesId = productDTO.ProCategoriesId;
-            try
-            {
-                _context.Entry(product).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                _context.SaveChanges();
-            }
-            catch (DbUpdateException ex)
-            {
-                return StatusCode(500, ex.InnerException.Message);
-            }
+            //try
+            //{
+            //    _context.Entry(product).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            //    _context.SaveChanges();
+            //}
+            //catch (DbUpdateException ex)
+            //{
+            //    return StatusCode(500, ex.InnerException.Message);
+            //}
+            //_context.Entry(product).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.Update(product);
+            await _context.SaveChangesAsync();
+
+
             return Ok(product);
         }
     }

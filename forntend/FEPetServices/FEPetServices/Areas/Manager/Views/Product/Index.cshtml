@@ -79,9 +79,10 @@
                 "columnDefs": [
                     { "targets": [0], "width": "5%" },
                     { "targets": [1], "width": "20%" },
-                    { "targets": [2], "width": "35%" },
+                    { "targets": [2], "width": "20%" },
                     { "targets": [3], "width": "25%" }, // Điều chỉnh cột này để khớp với số cột thực tế
                     { "targets": [4], "width": "15%" },
+                    { "targets": [5], "width": "15%" },
                 ],
                 "language": {
                     "lengthMenu": "Hiển thị _MENU_ dòng",
@@ -119,6 +120,7 @@
             <th>Ảnh</th>
             <th>Tên Sản Phẩm</th>
             <th>Mô Tả</th>
+            <th>Trạng Thái</th>
             <th>Chi Tiết</th>
         </tr>
     </thead>
@@ -126,20 +128,25 @@
         @if (Model != null && Model.Count > 0)
         {
             int itemCount = 0;
-            foreach (var product in Model)
+            @foreach (var product in Model)
             {
-                itemCount++;
                 <tr>
-                    <td>@itemCount</td>
-                    <td><img src="@product.Prictue" width="50" height="50"></td>
+                    <td>@product.ProductId</td>
+                    <td><img src="@product.Picture" width="50" height="50"></td>
                     <td>@product.ProductName</td>
                     <td>@product.Desciption</td>
                     <td>
+                        <div class="switch">
+                            <input type="checkbox" name="Status" class="toggle" @(product?.Status ? "checked" : "") />
+                            <label class="label @(product?.Status ? "active" : "inactive")"></label>
+                        </div>
+                    </td>
+                    <td>
                         <a href="/Manager/Product/Update?proId=@product.ProductId">Chi tiết</a>
                     </td>
-
                 </tr>
             }
+
         }
         else
         {
@@ -162,3 +169,71 @@
     <!-- Your table and data display code -->
 
 </table>
+<style>
+    .switch {
+        position: relative;
+        width: 80px;
+        height: 35px;
+        margin-left: -7px;
+    }
+
+    .toggle {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: inherit;
+        height: inherit;
+        opacity: 0;
+        z-index: 2;
+        cursor: pointer;
+    }
+
+    .label {
+        position: absolute;
+        top: 2px;
+        left: 10px;
+        right: 2px;
+        bottom: 2px;
+        background-color: #C84444;
+        border-radius: 24px;
+        transition: background-color .2s ease-in-out;
+    }
+
+        .label::before {
+            content: "";
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: 35px;
+            height: 35px;
+            background-color: white;
+            border-radius: inherit;
+            border: 1px solid grey;
+        }
+
+    .toggle:checked + .label {
+        background-color: #43e240;
+    }
+
+        .toggle:checked + .label::before {
+            transform: translateX(100%);
+        }
+
+    .td-switch {
+        display: flex;
+        align-items: center;
+    }
+
+        .td-switch .label {
+            width: 25px;
+            height: 25px;
+        }
+
+            .td-switch .label.active {
+                background-color: #43e240;
+            }
+
+            .td-switch .label.inactive {
+                background-color: #f2110d;
+            }
+</style>

@@ -134,5 +134,82 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(ProductCategoryDTO productCategoryDTO, int procateId, IFormFile image)
+        {
+            try
+            {
+                if (image != null && image.Length > 0)
+                {
+                    // An image file has been uploaded, so update the image path.
+                    Console.WriteLine(image);
+                    // Save the image to a location (e.g., a folder in your application)
+                    var imagePath = "/img/" + image.FileName;
+                    productCategoryDTO.Prictue = imagePath;
+
+                    // Save the image file to a folder on your server
+                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", image.FileName);
+                    using (var stream = new FileStream(physicalImagePath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
+
+                }
+                else
+                {
+
+                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrlProductCategoryDetail + "/" + procateId);
+
+                    if (responseForImage.IsSuccessStatusCode)
+                    {
+                        var responseContent = await responseForImage.Content.ReadAsStringAsync();
+
+                        if (!string.IsNullOrEmpty(responseContent))
+                        {
+                            var existinPCL = JsonConvert.DeserializeObject<List<ProductCategoryDTO>>(responseContent);
+                            var existingPC = existinPCL.FirstOrDefault();
+                            if (existingPC != null)
+                            {
+                                // Assign the existing image path to serviceCategory.Prictue.
+                                productCategoryDTO.Prictue = productCategoryDTO.Prictue;
+                            }
+                        }
+                    }
+                }
+                //if (Request.Form["Status"] == "on")
+                //{
+                //    productCategoryDTO.Status = true;
+                //}
+                //else
+                //{
+                //    productCategoryDTO.Status = false;
+                //}
+
+                var json = JsonConvert.SerializeObject(productCategoryDTO);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // Gửi dữ liệu lên máy chủ
+                HttpResponseMessage response = await client.PutAsync(DefaultApiUrlProductCategoryUpdate + procateId, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
+                    return View(productCategoryDTO); // Chuyển hướng đến trang thành công hoặc trang danh sách
+                }
+                else
+                {
+                    TempData["ErrorToast"] = "Chỉnh sửa dịch vụ thất bại. Vui lòng thử lại sau.";
+                    return View(productCategoryDTO); // Hiển thị lại biểu mẫu với dữ liệu đã điền
+                }
+            }
+
+            catch (Exception ex)
+            {
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
+                return View(productCategoryDTO); // Hiển thị lại biểu mẫu với dữ liệu đã điền
+            }
+        }
+
     }
 }
