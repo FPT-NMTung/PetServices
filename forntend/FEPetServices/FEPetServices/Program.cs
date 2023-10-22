@@ -23,18 +23,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Error/AccessDenied";
     });
 
-/*builder.Services.AddAuthorization(options =>
+builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("ManagerPolicy", policy =>
-    {
-        policy.RequireRole("MANAGER");
-    });
-
-    options.AddPolicy("CustomerPolicy", policy =>
-    {
-        policy.RequireRole("CUSTOMER");
-    });
-});*/
+    options.AddPolicy("ManaOnly", policy => policy.RequireRole("MANAGER"));
+    options.AddPolicy("CusOnly", policy => policy.RequireRole("CUSTOMER"));
+});
 
 var app = builder.Build();
 

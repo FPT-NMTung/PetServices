@@ -53,7 +53,8 @@ namespace PetServices.Controllers
                 var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, login.Email),
-                new Claim(ClaimTypes.Role, result.Role?.RoleName) // Lưu tên vai trò (RoleName) vào mã thông báo
+                new Claim(ClaimTypes.Role, result.Role?.RoleName), // Lưu tên vai trò (RoleName) vào mã thông báo
+                new Claim("RoleId", result.Role?.RoleId.ToString()) // Lưu RoleId vào mã thông báo
             };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -67,7 +68,7 @@ namespace PetServices.Controllers
                     signingCredentials: creds
                 );
 
-                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
+                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName });
             }
             else
             {

@@ -7,8 +7,7 @@ using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
-    /*[Authorize(Roles = "MANAGER")]*/
-    /*[Authorize(Policy = "ManaOnly")]*/
+    [Authorize(Policy = "ManaOnly")]
     public class InformationController : Controller
     {
         private readonly HttpClient _client = null;
