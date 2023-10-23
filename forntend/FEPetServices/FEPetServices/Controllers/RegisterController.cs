@@ -189,7 +189,7 @@ namespace FEPetServices.Controllers
                                                         <p style=""margin: 0px; padding: 0px;""><br></p>
                                                         <p style=""margin: 0px; padding: 0px;"">Đây là mã OTP để xác nhận tài khoản của bạn !!!</p>
                                                         <p style=""margin: 10px; padding: 0px; font-size: 17px; text-align: center;"">Tài khoản: "+ email + @"</p>
-                                                        <p style=""margin: 0px; padding: 0px; font-size: 17px; text-align: center;"">Mật khẩu: "+ otp + @"</p>
+                                                        <p style=""margin: 0px; padding: 0px; font-size: 17px; text-align: center;"">Mã OTP của bạn: "+ otp + @"</p>
                                                         <p class=""text-right"" style=""text-align: right; margin: 0px; padding: 0px;"">
                                                             <a href=""#"" style=""color: #16c2d0; font-size: 14px; font-family: Helvetica, Arial, sans-serif; text-decoration: none;""><span><u>Đăng nhập ngay&gt;&gt;</u></span></a>
                                                         </p>

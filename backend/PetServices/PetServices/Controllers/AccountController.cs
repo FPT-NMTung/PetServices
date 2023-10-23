@@ -44,6 +44,22 @@ namespace PetServices.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginForm login)
         {
+            if (string.IsNullOrWhiteSpace(login.Email))
+            {
+                string errorMessage = "Email không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            else if (login.Email.Contains(" "))
+            {
+                string errorMessage = "Email không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            if (!IsValidEmail(login.Email))
+            {
+                ModelState.AddModelError("Email không hợp lệ", "Email cần có @");
+                return BadRequest(ModelState);
+            }
+
             var result = await _context.Accounts
                 .Include(a => a.Role)
                 .SingleOrDefaultAsync(x => x.Email == login.Email && x.Password == login.Password);
@@ -72,12 +88,7 @@ namespace PetServices.Controllers
             }
             else
             {
-                string errorMessage = "Đăng nhập không hợp lệ.";
-                if (string.IsNullOrWhiteSpace(login.Email)) {
-                    errorMessage = "Email không được để trống!";
-                }
-
-
+                string errorMessage = "Đăng nhập không hợp lệ.";               
                 if (string.IsNullOrWhiteSpace(login.Password))
                 {
                     errorMessage = "Mật khẩu không được để trống!";
@@ -154,6 +165,7 @@ namespace PetServices.Controllers
             string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$";
             return Regex.IsMatch(email, emailPattern);
         }
+       
 
         private bool IsValidPassword(string password)
         {            
