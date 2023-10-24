@@ -1,4 +1,4 @@
-﻿namespace PetServices.DTO
+﻿namespace FEPetServices.Form
 {
     public class ProductDTO
     {
@@ -12,6 +12,5 @@
         public int? ProCategoriesId { get; set; }
         public string? ProCategoriesName { get; set; }
         public int? Quanlity { get; set; }
-
     }
 }
