@@ -67,6 +67,7 @@ namespace PetServices.Controllers
                 SerCategoriesName = serviceCategoryDTO.SerCategoriesName,
                 Desciptions = serviceCategoryDTO.Desciptions,
                 Picture = serviceCategoryDTO.Picture,
+                Status = serviceCategoryDTO.Status
             };
 
             _context.ServiceCategories.Add(newServiceCategory);
@@ -95,6 +96,7 @@ namespace PetServices.Controllers
             servicecategorie.SerCategoriesName = serviceCategoryDTO.SerCategoriesName;
             servicecategorie.Desciptions = serviceCategoryDTO.Desciptions;
             servicecategorie.Picture = serviceCategoryDTO.Picture;
+            servicecategorie.Status = serviceCategoryDTO.Status;
 
             try
             {

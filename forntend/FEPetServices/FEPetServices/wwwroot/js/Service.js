@@ -1,26 +1,42 @@
 ﻿function validateForm() {
-    const fname = document.getElementById('SerCategoriesName');
-    const subject = document.getElementById('Desciptions');
+    const name = document.getElementById('ServiceName');
+    const price = document.getElementById('Price');
+    const desciptions = document.getElementById('Desciptions');
     const fnameErrorMessage = document.getElementById('fname-error-message');
+    const priceErrorMessage = document.getElementById('price-error-message');
     const subjectErrorMessage = document.getElementById('subject-error-message');
 
-    console.log('Debug: fname.value', fname.value);
-    console.log('Debug: subject.value', subject.value);
+    console.log('Debug: fname.value', name.value);
+    console.log('Debug: subject.value', desciptions.value);
 
     const specialChars = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/; // Special character regex
     const specialChar = /[@#$%^&*{}\[\]~]/;
+    const numbersOnly = /^[0-9]+$/; // Only numbers regex
+
     // Reset error messages
     fnameErrorMessage.textContent = "";
+    priceErrorMessage.textContent = "";
     subjectErrorMessage.textContent = "";
 
     let isValid = true;
 
-    if (specialChars.test(fname.value)) {
+    if (specialChars.test(name.value)) {
         fnameErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
         isValid = false;
     }
 
-    if (specialChar.test(subject.value)) {
+    if (!numbersOnly.test(price.value)) {
+        priceErrorMessage.textContent = "Giá phải là số.";
+        isValid = false;
+    } else {
+        const priceValue = parseInt(price.value);
+        if (priceValue <= 0) {
+            priceErrorMessage.textContent = "Giá phải lớn hơn 0.";
+            isValid = false;
+        }
+    }
+
+    if (specialChar.test(desciptions.value)) {
         subjectErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
         isValid = false;
     }
