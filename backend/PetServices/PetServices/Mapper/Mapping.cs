@@ -15,6 +15,9 @@ namespace PetServices.Mapper
             CreateMap<PartnerInfo, PartnerInfoDTO>()
                 .ReverseMap();
 
+            CreateMap<PetInfo, PetInfoDTO>()
+                .ReverseMap();
+
             CreateMap<Account, AccountInfo>()
                 .ForMember(dest => dest.RoleName,
                     opt => opt.MapFrom(src => src.Role.RoleName))
