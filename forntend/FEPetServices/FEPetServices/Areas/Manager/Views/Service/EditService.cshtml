@@ -7,7 +7,18 @@
 
 </head>
 <body>
-
+@if (!string.IsNullOrEmpty( TempData["ErrorToast"]?.ToString()))
+{
+    <div class="alert alert-danger" style="color:red">
+        @TempData["ErrorToast"]
+    </div>
+}
+@if (!string.IsNullOrEmpty(TempData["SuccessToast"]?.ToString()))
+{
+    <div class="alert alert-success" style="color:red">
+        @TempData["SuccessToast"]
+    </div>
+}
 <h2>Chỉnh Sửa Dịch Vụ Thú Cưng</h2>
 <div class="container">
   <form asp-action="EditService" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
@@ -49,8 +60,6 @@
             <label for="SerCategoriesId">Loại Dịch Vụ</label>
         </div>
         <div class="col-75">
-     @*       @if (ViewBag.Categories != null)
-            {*@
                 <select id="SerCategoriesId" name="SerCategoriesId"  required>
                     <option value="@Model?.SerCategoriesId" >@Model?.SerCategoriesName</option>
                     @foreach (var category in ViewBag.Categories)
@@ -58,12 +67,6 @@
                         <option value="@category.Value">@category.Text</option>
                     }
                 </select>
-
-        
-@*            else
-            {
-                <span class="text-danger">Error: Service Categories data not available.</span>
-            }*@
         </div>
     </div>
 

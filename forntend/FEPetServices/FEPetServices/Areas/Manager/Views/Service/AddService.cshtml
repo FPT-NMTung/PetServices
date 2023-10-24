@@ -6,6 +6,18 @@
 <link href="~/css/toastNotification.css" rel="stylesheet" />
 </head>
 <body>
+@if (!string.IsNullOrEmpty( TempData["ErrorToast"]?.ToString()))
+{
+    <div class="alert alert-danger" style="color:red">
+        @TempData["ErrorToast"]
+    </div>
+}
+@if (!string.IsNullOrEmpty(TempData["SuccessToast"]?.ToString()))
+{
+    <div class="alert alert-success" style="color:red">
+        @TempData["SuccessToast"]
+    </div>
+}
 
 <h2>Thêm Dịch Vụ Thú Cưng</h2>
 <div class="container">
@@ -100,7 +112,7 @@
                 title: 'Thành công',
                 message: '@TempData["SuccessToast"]',
                 type: 'success',
-                duration: 2000
+                duration: 5000
             });
         }
         function showErrorToast() {
@@ -108,7 +120,7 @@
                 title: 'Thất bại',
                 message: '@TempData["ErrorToast"]',
                 type: 'error',
-                duration: 2000
+                duration: 5000
             });
         }
     </script>

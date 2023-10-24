@@ -1,4 +1,5 @@
 ﻿using FEPetServices.Form;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -6,7 +7,8 @@ using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
-
+    /*[Authorize(Roles = "MANAGER")]*/
+    /*[Authorize(Policy = "ManaOnly")]*/
     public class InformationController : Controller
     {
         private readonly HttpClient _client = null;
@@ -70,7 +72,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/updateInfo?email=" + email, userInfo);
             if (response.IsSuccessStatusCode)
             {
-                TempData["SuccessToast"] = "Lưu thông tin thành công";
+                TempData["SuccessToast"] = "Cập nhật thông tin thành công";
                 return RedirectToAction("Index");
             }
             else

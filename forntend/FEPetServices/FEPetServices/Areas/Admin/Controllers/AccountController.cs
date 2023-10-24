@@ -1,11 +1,17 @@
 ﻿using FEPetServices.Areas.Admin.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using PetServices.DTO;
+using PetServices.Models;
+using System;
 using System.Data;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Security.Principal;
 using System.Text;
 using System.Web;
 
@@ -66,11 +72,13 @@ namespace FEPetServices.Areas.Admin.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         ViewBag.Success = "Thêm tài khoản thành công!";
+
                         return View(addAccount);
                     }
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
                         var errorMessage = await response.Content.ReadAsStringAsync();
+                        errorMessage = RemoveUnwantedCharacters(errorMessage);
                         ViewBag.ErrorMessage = errorMessage;
                         return View(addAccount);
                     }
@@ -93,10 +101,76 @@ namespace FEPetServices.Areas.Admin.Controllers
             }
         }
 
-        public async Task<IActionResult> UpdateAccount([FromForm] AddAccountDTO addAccount)
+        public async Task<IActionResult> UpdateAccount(string email, int roleId, bool status)
         {
-            return View();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    string apiUrl = ApiUrlUpdateAccount + "?Email=" + email + "&RoleId=" + roleId + "&Status=" + status;
+                    var acc = new UpdateAccountDTO
+                    {
+                        Email = email,
+                        RoleId = roleId,
+                        Status = status
+                    };
+
+                    var json = JsonConvert.SerializeObject(acc);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    HttpResponseMessage response = await client.PutAsJsonAsync(apiUrl, content);
+
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Debug.WriteLine(response.Content);
+                        return Json(new
+                        {
+                            Success = true
+                        }); 
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        var errorMessage = await response.Content.ReadAsStringAsync();
+                        ViewBag.ErrorMessage = errorMessage;
+                        return Json(new
+                        {
+                            Success = false
+                        });
+                    }
+                    else
+                    {
+                        var errorMessage = await response.Content.ReadAsStringAsync();
+                        return Json(new
+                        {
+                            Success = false
+                        });
+                    }
+                }
+                else
+                {
+                    return Json(new
+                    {
+                        Success = false
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                return View();
+            }
         }
 
+        private string RemoveUnwantedCharacters(string input)
+        {
+            string[] unwantedCharacters = { "[", "{", "\"", "}", "]" };
+            foreach (var character in unwantedCharacters)
+            {
+                input = input.Replace(character, string.Empty);
+            }
+
+            return input;
+        }
     }
 }

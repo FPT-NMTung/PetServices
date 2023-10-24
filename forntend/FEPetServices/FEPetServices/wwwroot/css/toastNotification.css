@@ -1,13 +1,18 @@
+<<<<<<< HEAD
 ﻿
 .toast {
+=======
+﻿.toast {
+>>>>>>> c403d3c78a5b1d8540baa40ef7b681e9025ae5b3
     display: flex;
-    min-width: 350px;
     max-width: 420px;
+    width: 420px;
+    height: auto;
     align-items: center;
     background-color: white;
-    border-radius: 2px;
-    border-left: 4px solid;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.8);
+    border-radius: 16px;
+    border-left: 6px solid;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.8);
     padding: 5px 0;
     transition: all linear 3s;
 }

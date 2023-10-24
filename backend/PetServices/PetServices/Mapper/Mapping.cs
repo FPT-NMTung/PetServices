@@ -64,9 +64,15 @@ namespace PetServices.Mapper
                         src.PartnerInfoId != null ? src.PartnerInfo.Province + ", " + src.PartnerInfo.District
                         + ", " + src.PartnerInfo.Commune + ", " + src.PartnerInfo.Address :
                         (src.UserInfoId != null ? src.UserInfo.Province + ", " + src.UserInfo.District
-                        + ", " + src.UserInfo.Commune + ", " + src.UserInfo.Address : "Null")))
-            .ForMember(dest => dest.RoleName,
-                        opt => opt.MapFrom(src => src.Role.RoleName ?? "Null"));
+                        + ", " + src.UserInfo.Commune + ", " + src.UserInfo.Address : "Null")));
+
+            CreateMap<Account,UpdateAccountDTO >()
+                .ForMember(des => des.Email,
+                            act => act.MapFrom(src => src.Email))
+                .ForMember(des => des.RoleId,
+                            act => act.MapFrom(src => src.RoleId))
+                .ForMember(des => des.Status,
+                            act => act.MapFrom(src => src.Status));
         }
     }
 }
