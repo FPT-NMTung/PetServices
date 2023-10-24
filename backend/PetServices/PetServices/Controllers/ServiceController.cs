@@ -28,19 +28,25 @@ namespace PetServices.Controllers
         [HttpGet("GetAllService")]
         public IActionResult Get()
         {
-            List<Service> service = _context.Services.ToList();
-            return Ok(_mapper.Map<List<ServiceDTO>>(service));
+            List<Service> services = _context.Services.Include(s => s.SerCategories)
+               .ToList();
+            return Ok(_mapper.Map<List<ServiceDTO>>(services));
         }
 
-        
-        [HttpGet("{ServicesName}")]
-        public IActionResult Get(string ServicesName)
+    
+
+        [HttpGet("ServiceID/{id}")]
+        public IActionResult GetById(int id)
         {
-            List<Service> service = _context.Services.Where(c => c.ServiceName == ServicesName).ToList();
-            return Ok(_mapper.Map<List<ServiceDTO>>(service));
+            Service  service = _context.Services
+                .Include(s => s.SerCategories)
+                .FirstOrDefault(c => c.ServiceId == id)
+                ;
+
+            return Ok(_mapper.Map<ServiceDTO>(service));
         }
 
-        
+
         [HttpPost("CreateService")]
         public async Task<IActionResult> CreateService(ServiceDTO serviceDTO)
         {
@@ -78,7 +84,10 @@ namespace PetServices.Controllers
         [HttpPut("UpdateServices")]
         public IActionResult Update(ServiceDTO serviceDTO, int serviceId)
         {
-            var service = _context.Services.FirstOrDefault(p => p.ServiceId == serviceId);
+            var service = _context.Services
+                .Include(a => a.SerCategories)
+                .FirstOrDefault(p => p.ServiceId == serviceId);
+
             if (service == null)
             {
                 return NotFound();

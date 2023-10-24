@@ -19,8 +19,6 @@ namespace FEPetServices.Areas.Manager.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "https://localhost:7255/api/UserInfo";
-            //https://localhost:7255/api/UserInfo/manager%40gmail.com
-            //https://localhost:7255/api/UserInfo/updateInfo?email=manager%40gmail.com
         }
         [HttpGet]
         public async Task<IActionResult> Index()

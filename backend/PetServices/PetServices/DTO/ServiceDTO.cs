@@ -12,6 +12,6 @@ namespace PetServices.DTO
         public string? Picture { get; set; }
         public double? Price { get; set; }
         public int? SerCategoriesId { get; set; }
-        
+        public string? SerCategoriesName { get; set; }
     }
 }
