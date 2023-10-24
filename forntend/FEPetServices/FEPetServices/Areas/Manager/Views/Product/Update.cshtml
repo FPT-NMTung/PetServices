@@ -1,7 +1,5 @@
-﻿@{
-    ViewData["Title"] = "Thêm Loại Sản Phẩm";
-}
-<h1 style="text-align:center">Thêm Loại Sản Phẩm Mới</h1>
+﻿@*@model FEPetServices.Form.ProductDTO*@
+<h1 style="text-align:center">Chi Tiết Sản Phẩm</h1>
 @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
 {
     <div class="alert alert-danger" style="color:red">
@@ -15,7 +13,7 @@
     </div>
 }
 <link href="~/css/manager/product.css" rel="stylesheet" />
-
+<script src="~/js/manager/product.js"></script>
 <div class="container-add-new">
     <form asp-action="Update" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
         <div class="noidung">
@@ -25,7 +23,7 @@
                         <label for="image">Ảnh:</label>
                     </div>
                     <div class="typeinput">
-                        <input type="file" class="form-control" id="image" name="image" onchange="changeImageSource()">
+                        <input type="file" class="form-control" id="image" name="image" onchange="changeImageSource()" required>
                         @if (!string.IsNullOrEmpty(Model?.Picture))
                         {
                             <img class="form-control-anh" src="@Model?.Picture" height="50%" width="50%" style="float: left;" id="imagePreview" />
@@ -43,7 +41,7 @@
                         <label for="ProductName">Tên Sản Phẩm: </label>
                     </div>
                     <div class="typeinput">
-                        <input type="text" class="form-control" id="ProductName" name="ProductName" value="@Model?.ProductName" style="width:100%" />
+                        <input type="text" class="form-control" id="ProductName" name="ProductName" value="@Model?.ProductName" style="width:100%" required />
                         <div style="color: red" class="error-message" id="fnameErrorMessage"></div>
                     </div>
                 </div>
@@ -52,7 +50,7 @@
                         <label for="Price">Giá Sản Phẩm: </label>
                     </div>
                     <div class="typeinput">
-                        <input type="text" class="form-control" id="Price" name="Price" value="@Model?.Price" style="width:100%" />
+                        <input type="text" class="form-control" id="Price" name="Price" value="@Model?.Price" style="width:100%" required />
                         <div style="color: red" class="error-message" id="fnameErrorMessage"></div>
                     </div>
 
@@ -62,7 +60,7 @@
                         <label for="Quantity">Số Lượng Sản Phẩm: </label>
                     </div>
                     <div class="typeinput">
-                        <input type="text" class="form-control" id="Quantity" name="Quantity" value="@Model?.Quantity" style="width:100%" />
+                        <input type="text" class="form-control" id="Quantity" name="Quantity" value="@Model?.Quantity" style="width:100%" required/>
                         <div style="color: red" class="error-message" id="fnameErrorMessage"></div>
                     </div>
                 </div>*@
@@ -71,7 +69,7 @@
                         <label for="Desciption">Mô Tả Chi Tiết: </label>
                     </div>
                     <div class="typeinput">
-                        <textarea class="form-control" id="Desciption" name="Desciption" style="width:100%; height: auto">@Model?.Desciption</textarea>
+                        <textarea class="form-control" id="Desciption" name="Desciption" style="width:100%; height: auto" required>@Model?.Desciption</textarea>
                         <div style="color: red" class="error-message" id="subjectErrorMessage"></div>
                     </div>
                 </div>
@@ -82,7 +80,7 @@
                     </div>
                     <div class="typeinput" style="display:flex">
                         <label class="switch">
-                            <input type="checkbox" name="Status" @(Model?.Status ? "checked" : "")>
+                            <input type="checkbox" required name="Status" @(Model?.Status ? "checked" : "")>
                             <span class="slider round"></span>
                         </label>
                         <div style="color: red" class="error-message" id="fnameErrorMessage"></div>
@@ -127,5 +125,4 @@
             </div>
         </div>
     </form>
-    <script src="~/js/manager/product.js" />
 </div>

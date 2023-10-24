@@ -1,5 +1,4 @@
-﻿@*@model FEPetServices.Form.ProductCategoryDTO*@
-@{
+﻿@{
     ViewData["Title"] = "Thêm Loại Sản Phẩm";
 }
 <h1 style="text-align:center">Thêm Loại Sản Phẩm Mới</h1>
@@ -16,17 +15,18 @@
     </div>
 }
 <link href="~/css/manager/productcategory.css" rel="stylesheet" />
+<script src="~/js/manager/productcategory.js"></script>
 
 <div class="container-add-new">
     <form asp-action="CreateNewProductCategory" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
         <div class="noidung">
             <div class="anh-cate-product">
                 <div class="form-group">
-                    <div class ="title">
+                    <div class="title">
                         <label for="image">Ảnh:</label>
                     </div>
                     <div class="typeinput">
-                        <input type="file" class="form-control" id="image" name="image" onchange="changeImageSource()">
+                        <input type="file" class="form-control" id="image" name="image" onchange="changeImageSource()" required>
                         <img class="form-control-anh" src="~/img/add-image-1.png" height="50%" width="50%" style="float: left;" id="imagePreview" />
                     </div>
                 </div>
@@ -37,18 +37,18 @@
                         <label for="ProCategoriesName">Tên Loại Sản Phẩm: </label>
                     </div>
                     <div class="typeinput">
-                        <input type="text" class="form-control" id="ProCategoriesName" name="ProCategoriesName" value="@Model?.ProCategoriesName" style="width:100%" />
+                        <input type="text" class="form-control" id="ProCategoriesName" name="ProCategoriesName" value="@Model?.ProCategoriesName" style="width:100%" required />
                         <div style="color: red" class="error-message" id="fnameErrorMessage"></div>
                     </div>
-                    
+
                 </div>
-    
+
                 <div class="form-group">
                     <div class="title">
                         <label for="Desciptions">Mô Tả Chi Tiết: </label>
                     </div>
                     <div class="typeinput">
-                        <textarea class="form-control" id="Desciptions" name="Desciptions" style="width:100%; height: auto"> @Model?.Desciptions</textarea>
+                        <textarea class="form-control" id="Desciptions" name="Desciptions" style="width:100%; height: auto" required> @Model?.Desciptions</textarea>
                         <div style="color: red" class="error-message" id="subjectErrorMessage"></div>
                     </div>
                 </div>
@@ -65,21 +65,20 @@
             </div>
         </div>
     </form>
-    <script src="~/js/manager/productcategory.js"></script>
 </div>
 <script>
     function validateForm() {
-        const fname = document.getElementById('SerCategoriesName');
+        const fname = document.getElementById('ProCategoriesName');
         const subject = document.getElementById('Desciptions');
-        const fnameErrorMessage = document.getElementById('fname-error-message');
-        const subjectErrorMessage = document.getElementById('subject-error-message');
+        const fnameErrorMessage = document.getElementById('fnameErrorMessage');
+        const subjectErrorMessage = document.getElementById('subjectErrorMessage');
 
         console.log('Debug: fname.value', fname.value);
         console.log('Debug: subject.value', subject.value);
 
-        const specialChars = /[!#$%^&*()_+{}\[\]:;<>,.?~\\/-]/; // Special character regex
+        const specialChars = /[!#$%^&*()_+{}\[\]:;<>,.?~\\/-]/; // Regular expression kiểm tra ký tự đặc biệt
 
-        // Reset error messages
+        // Đặt lại thông báo lỗi
         fnameErrorMessage.textContent = "";
         subjectErrorMessage.textContent = "";
 

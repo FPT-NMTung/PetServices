@@ -12,23 +12,6 @@
         @TempData["SuccessMessage"]
     </div>
 }
-@*<form asp-action="Update" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="method" value="put" />
-    <div class="form-group">
-        <label for="ProCategoriesName">Tên Loại Sản Phẩm: </label>
-        <input type="text" class="form-control" id="ProCategoriesName" name="ProCategoriesName" value="@Model?.ProCategoriesName" />
-    </div>
-    <div class="form-group">
-        <label for="Picture">Hình Ảnh Loại Sản Phẩm: </label>
-        <input type="file" class="form-control-file" id="Picture" name="Picture"/>
-        <img class="form-control-anh" src="@Model.Prictue" height="50%" width="50%" style="float: left;" id="imagePreview" />
-    </div>
-    <div class="form-group">
-        <label for="Desciptions">Mô Tả Chi Tiết: </label>
-        <textarea class="form-control" id="Desciptions" name="Desciptions"> @Model?.Desciptions</textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Thêm Mới</button>
-</form>*@
 <link href="~/css/manager/productcategory.css" rel="stylesheet" />
 <div class="container-add-new">
     <form asp-action="CreateNewProductCategory" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
@@ -57,7 +40,7 @@
                         <label for="ProCategoriesName">Tên Loại Sản Phẩm: </label>
                     </div>
                     <div class="typeinput">
-                        <input type="text" class="form-control" id="ProCategoriesName" name="ProCategoriesName" value="@Model?.ProCategoriesName" style="width:100%" />
+                        <input type="text" class="form-control" id="ProCategoriesName" name="ProCategoriesName" value="@Model?.ProCategoriesName" style="width:100%" required />
                         <div style="color: red" class="error-message" id="fnameErrorMessage"></div>
                     </div>
 
@@ -68,7 +51,7 @@
                         <label for="Desciptions">Mô Tả Chi Tiết: </label>
                     </div>
                     <div class="typeinput">
-                        <textarea class="form-control" id="Desciptions" name="Desciptions" style="width:100%; height: auto">@Model?.Desciptions</textarea>
+                        <textarea class="form-control" id="Desciptions" name="Desciptions" style="width:100%; height: auto" required>@Model?.Desciptions</textarea>
                         <div style="color: red" class="error-message" id="subjectErrorMessage"></div>
                     </div>
                 </div>
@@ -87,3 +70,34 @@
     </form>
     <script src="~/js/manager/productcategory.js"></script>
 </div>
+<script>
+    function validateForm() {
+        const fname = document.getElementById('ProCategoriesName');
+        const subject = document.getElementById('Desciptions');
+        const fnameErrorMessage = document.getElementById('fnameErrorMessage');
+        const subjectErrorMessage = document.getElementById('subjectErrorMessage');
+
+        console.log('Debug: fname.value', fname.value);
+        console.log('Debug: subject.value', subject.value);
+
+        const specialChars = /[!#$%^&*()_+{}\[\]:;<>,.?~\\/-]/; // Regular expression kiểm tra ký tự đặc biệt
+
+        // Đặt lại thông báo lỗi
+        fnameErrorMessage.textContent = "";
+        subjectErrorMessage.textContent = "";
+
+        let isValid = true;
+
+        if (specialChars.test(fname.value)) {
+            fnameErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
+            isValid = false;
+        }
+
+        if (specialChars.test(subject.value)) {
+            subjectErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+</script>
