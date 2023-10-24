@@ -66,24 +66,6 @@
         margin: 30px;
     }
 
-    .btn-active {
-        background-color: #43e240;
-        color: white;
-        font-size: 13px;
-        width: 135px;
-        height: 40px;
-        border-radius: 5px;
-    }
-
-    .btn-inactive {
-        background-color: #f2110d;
-        color: white;
-        font-size: 13px;
-        width: 135px;
-        height: 40px;
-        border-radius: 5px;
-    }
-
     .btn-detail {
         text-align: center;
         border-radius: 5px;
@@ -91,7 +73,7 @@
         color: white;
         display: inline-block;
         padding: 8px;
-        border: 1px solid ;
+        border: 1px solid;
         width: 100px;
         height: 40px;
         background-color: #E21033;
@@ -99,17 +81,9 @@
         cursor: pointer;
     }
 
-    .btn-detail:hover{
+        .btn-detail:hover {
             color: black;
         }
-
-    /*.bg {
-        background-color: #FFD6E4;
-        position: absolute;
-        top: 60px;
-        left: 0px;
-        right: 0px;
-    }*/
 </style>
 
 <link href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
@@ -129,7 +103,7 @@
 
     <script>
         $(document).ready(function () {
-            var table = $('#RoomCategory').DataTable({
+            var table = $('#Room').DataTable({
                 "paging": true,
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "searching": true,
@@ -137,12 +111,14 @@
                 "info": true,
                 "autoWidth": false,
                 "columnDefs": [
-                    { "targets": [0], "width": "5%" },
-                    { "targets": [1], "width": "20%" },
-                    { "targets": [2], "width": "30%" },
-                    { "targets": [3], "width": "20%" }, 
-                    { "targets": [4], "width": "15%" },
-                    { "targets": [5], "width": "10%" },
+                    { "targets": [0], "width": "2%" },
+                    { "targets": [1], "width": "13%" },
+                    { "targets": [2], "width": "25%" },
+                    { "targets": [3], "width": "15%" },
+                    { "targets": [4], "width": "10%" },
+                    { "targets": [5], "width": "15%" },
+                    { "targets": [6], "width": "10%" },
+                    { "targets": [7], "width": "10%" },
                 ],
                 "language": {
                     "lengthMenu": "Hiển thị _MENU_ dòng",
@@ -157,38 +133,39 @@
                 },
             });
 
-            var addRoomCategoryButton = $('<button id="addRoomCategoryButton" class="btn btn-add btn-primary">Thêm loại phòng</button>');
+            var addRoomCategoryButton = $('<button id="addRoomButton" class="btn btn-add btn-primary">Thêm phòng</button>');
             $('.dataTables_filter').append(addRoomCategoryButton);
 
-            $('#addRoomCategoryButton').on('click', function () {
-                window.location.href = '/Manager/RoomCategory/AddRoomCategory';
+            $('#addRoomButton').on('click', function () {
+                window.location.href = '/Manager/RoomCategory/AddRoom';
             });
-
         });
     </script>
 }
 <div class="bg">
-<h1 style="font-size: 40px; font-weight: bold; margin-top: 10px">Danh sách các loại phòng cho thú cưng</h1>
+    <h1 style="font-size: 40px; font-weight: bold; margin-top: 10px">Danh sách các phòng cho thú cưng</h1>
 
-<table id="RoomCategory" class="display">
-    <thead>
-        <tr>
-            <th>STT</th>
-            <th>Tên loại phòng</th>
-            <th>Mô tả</th>
-            <th>Ảnh</th>
-            <th>Trạng thái</th>
-            <th>Chi tiết</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Count > 0)
-        {
-            int itemCount = 0;
-            foreach (var roomCategory in Model)
+    <table id="Room" class="display">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên phòng</th>
+                <th>Mô tả</th>
+                <th>Ảnh</th>
+                <th>Giá</th>
+                <th>Loại phòng</th>
+                <th>Số lượng</th>
+                <th>Chi tiết</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
             {
-                itemCount++;
-                    string description = roomCategory.Desciptions;
+                int itemCount = 0;
+                foreach (var room in Model)
+                {
+                    itemCount++;
+                    string description = room.Desciptions;
 
                     if (description.Length > 100)
                     {
@@ -196,41 +173,34 @@
 
                         description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
                     }
+                    <tr>
+                        <td>@itemCount</td>
+                        <td>@room.RoomName</td>
+                        <td>@description</td>
+                        <td><img src="@room.Picture" width="50" height="50"></td>
+                        <td>@room.Price</td>
+                        <td>@room.RoomCategoriesName</td>
+                        <td>@room.Slot</td>
+                        <td>
+                            <a class="btn-detail" href="/Manager/Room/EditRoom?roomId=@room.RoomId">Chi tiết</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
                 <tr>
-                    <td>@itemCount</td>
-                    <td>@roomCategory.RoomCategoriesName</td>
-                    <td>@description</td>
-                    <td><img src="@roomCategory.Picture" width="50" height="50"></td>
-                    <td>
-                        @if (@roomCategory.Status)
-                        {
-                            <button class="btn btn-active" onclick="toggleStatus(this)">Đang hoạt động</button>
-                        }
-                        else
-                        {
-                            <button class="btn btn-inactive" onclick="toggleStatus(this)">Ngưng hoạt động</button>
-                        }
-                    </td>
-                    <td>
-                        <a class="btn-detail" href="/Manager/RoomCategory/EditRoomCategory?roomCategoryId=@roomCategory.RoomCategoriesId">Chi tiết</a>
-                    </td>
+                    <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
                 </tr>
             }
-        }
-        else
-        {
-            <tr>
-                <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
-            </tr>
-        }
-    </tbody>
-    <tfoot>
-        @if (ViewBag.ErrorMessage != null)
-        {
-            <div class="alert alert-danger">
-                <span style="color:red">@ViewBag.ErrorMessage</span>
-            </div>
-        }
-    </tfoot>
-</table>
+        </tbody>
+        <tfoot>
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger">
+                    <span style="color:red">@ViewBag.ErrorMessage</span>
+                </div>
+            }
+        </tfoot>
+    </table>
 </div>

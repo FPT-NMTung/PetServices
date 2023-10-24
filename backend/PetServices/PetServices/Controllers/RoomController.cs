@@ -40,6 +40,15 @@ namespace PetServices.Controllers
             return Ok(_mapper.Map<List<RoomDTO>>(room));
         }
 
+        [HttpGet("GetRoomCategory")]
+        public async Task<ActionResult> GetRoomCategory()
+        {
+            var roomCategory = await _context.RoomCategories
+                .ToListAsync();
+
+            return Ok(_mapper.Map<List<RoomCategoryDTO>>(roomCategory));
+        }
+
         [HttpPost("AddRoom")]
         public async Task<ActionResult> AddRoom(RoomDTO roomDTO)
         {
