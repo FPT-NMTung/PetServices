@@ -110,10 +110,6 @@
         left: 0px;
         right: 0px;
     }*/
-
-    .dataTables_wrapper .dataTables_length select {
-        background-color: #ffffff;
-    }
 </style>
 
 <link href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
@@ -229,18 +225,4 @@
         }
     </tfoot>
 </table>
-<script>
-    function toggleStatus(button) {
-        if (button.classList.contains("btn-active")) {
-            button.classList.remove("btn-active");
-            button.classList.add("btn-inactive");
-            button.textContent = "Ngưng hoạt động";
-        }
-        else {
-            button.classList.remove("btn-inactive");
-            button.classList.add("btn-active");
-            button.textContent = "Đang hoạt động";
-        }
-    }
-</script>
 </div>

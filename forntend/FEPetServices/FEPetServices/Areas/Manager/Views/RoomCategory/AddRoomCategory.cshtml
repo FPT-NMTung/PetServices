@@ -55,7 +55,7 @@
         </form>
     </div>
     <div id="toast"></div>
-    @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))
+    @if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
     {
         <script>
             document.addEventListener("DOMContentLoaded", function () {
@@ -63,7 +63,7 @@
             });
         </script>
     }
-    @if (!string.IsNullOrEmpty(TempData["ErrorToast"] as string))
+    @if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
     {
         <script>
             document.addEventListener("DOMContentLoaded", function () {
@@ -78,7 +78,7 @@
         function showSuccessToast() {
             toast({
                 title: 'Thành công',
-                message: '@TempData["SuccessToast"]',
+                message: '@TempData["SuccessMessage"]',
                 type: 'success',
                 duration: 2000
             });
@@ -86,7 +86,7 @@
         function showErrorToast() {
             toast({
                 title: 'Thất bại',
-                message: '@TempData["ErrorToast"]',
+                message: '@TempData["ErrorMessage"]',
                 type: 'error',
                 duration: 2000
             });
