@@ -30,8 +30,8 @@ namespace PetServices.Controllers
             return Ok(_mapper.Map<List<AccountDTO>>(account));
         }
 
-        [HttpGet]
-        public IActionResult GetAcoountNotActive()
+        [HttpGet("accountNotActive")]
+        public IActionResult GetAcountNotActive()
         {
             List<Account> account = _context.Accounts.Include(a => a.Role).Where(a => a.Role.RoleName == "PARTNER" && a.Status == false).ToList();
             return Ok(_mapper.Map<List<AccountDTO>>(account));
