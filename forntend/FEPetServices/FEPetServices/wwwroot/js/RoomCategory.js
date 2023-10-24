@@ -1,5 +1,5 @@
 ﻿function validateForm() {
-    const fname = document.getElementById('SerCategoriesName');
+    const fname = document.getElementById('RoomCategoriesName');
     const subject = document.getElementById('Desciptions');
     const fnameErrorMessage = document.getElementById('fname-error-message');
     const subjectErrorMessage = document.getElementById('subject-error-message');
@@ -7,9 +7,9 @@
     console.log('Debug: fname.value', fname.value);
     console.log('Debug: subject.value', subject.value);
 
-    const specialChars = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/; // Special character regex
+    const specialChars = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/;
     const specialChar = /[@#$%^&*{}\[\]~]/;
-    // Reset error messages
+
     fnameErrorMessage.textContent = "";
     subjectErrorMessage.textContent = "";
 

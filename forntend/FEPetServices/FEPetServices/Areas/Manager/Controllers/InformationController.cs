@@ -7,8 +7,7 @@ using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
-    /*[Authorize(Roles = "MANAGER")]*/
-    /*[Authorize(Policy = "ManaOnly")]*/
+    [Authorize(Policy = "ManaOnly")]
     public class InformationController : Controller
     {
         private readonly HttpClient _client = null;
@@ -20,8 +19,6 @@ namespace FEPetServices.Areas.Manager.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "https://localhost:7255/api/UserInfo";
-            //https://localhost:7255/api/UserInfo/manager%40gmail.com
-            //https://localhost:7255/api/UserInfo/updateInfo?email=manager%40gmail.com
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -55,14 +52,14 @@ namespace FEPetServices.Areas.Manager.Controllers
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
             // Sử dụng HttpClient để gửi dữ liệu cập nhật lên API
-            if(userInfo.Address == null || userInfo.FirstName == null || 
+            if (userInfo.Address == null || userInfo.FirstName == null ||
                 userInfo.LastName == null)
             {
                 TempData["ErrorToast"] = "Vui lòng điền đầy đủ thông tin";
                 return RedirectToAction("Index");
             }
 
-            if(userInfo.Province == null ||
+            if (userInfo.Province == null ||
                 userInfo.District == null || userInfo.Commune == null)
             {
                 TempData["ErrorToast"] = "Vui lòng cung cấp lại địa chỉ";

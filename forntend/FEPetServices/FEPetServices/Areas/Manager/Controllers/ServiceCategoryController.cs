@@ -79,6 +79,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                         Console.WriteLine(image);
                         serviceCategory.Picture = "/img/" + image.FileName.ToString();
                     }
+                    // mặc định status là true
+                    serviceCategory.Status = true;
 
                     var json = JsonConvert.SerializeObject(serviceCategory);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -88,12 +90,12 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TempData["SuccessMessage"] = "Thêm dịch vụ thành công!";
+                        TempData["SuccessToast"] = "Thêm dịch vụ thành công!";
                         return View(serviceCategory); // Chuyển hướng đến trang thành công hoặc trang danh sách
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "Thêm dịch vụ thất bại. Vui lòng thử lại sau.";
+                        TempData["ErrorToast"] = "Thêm dịch vụ thất bại. Vui lòng thử lại sau.";
                         return View(serviceCategory); // Hiển thị lại biểu mẫu với dữ liệu đã điền
                     }
                 }
@@ -104,7 +106,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
                 return View(serviceCategory); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
         }
@@ -135,17 +137,17 @@ namespace FEPetServices.Areas.Manager.Controllers
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
+                        TempData["ErrorToast"] = "API trả về dữ liệu rỗng.";
                     }
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                    TempData["ErrorToast"] = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
             }
 
             // Return the view with or without an error message
@@ -158,38 +160,77 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                if (image != null && image.Length > 0)
+                {
+                    // An image file has been uploaded, so update the image path.
+                    Console.WriteLine(image);
+                    // Save the image to a location (e.g., a folder in your application)
+                    var imagePath = "/img/" + image.FileName;
+                    serviceCategory.Picture = imagePath;
 
-                    if (image != null && image.Length > 0)
+                    // Save the image file to a folder on your server
+                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", image.FileName);
+                    using (var stream = new FileStream(physicalImagePath, FileMode.Create))
                     {
-                        // Xử lý và lưu trữ ảnh
-                        Console.WriteLine(image);
-                        serviceCategory.Picture = "/img/" + image.FileName.ToString();
+                        await image.CopyToAsync(stream);
                     }
+                    
+                }
+                else
+                {
 
-                    var json = JsonConvert.SerializeObject(serviceCategory);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrlServiceCategoryDetail + "/" + serCategoriesId);
+
+                    if (responseForImage.IsSuccessStatusCode)
+                    {
+                        var responseContent = await responseForImage.Content.ReadAsStringAsync();
+
+                        if (!string.IsNullOrEmpty(responseContent))
+                        {
+                            var existingServiceCategoryList = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseContent);
+                            var existingServiceCategory = existingServiceCategoryList.FirstOrDefault();
+                            if (existingServiceCategory != null)
+                            {
+                                // Assign the existing image path to serviceCategory.Prictue.
+                                serviceCategory.Picture = existingServiceCategory.Picture;
+                            }
+                        }
+                    }
+                }
+                if (Request.Form["Status"] == "on")
+                {
+                    serviceCategory.Status = true;
+                }
+                else
+                {
+                    serviceCategory.Status = false;
+                }
+
+                var json = JsonConvert.SerializeObject(serviceCategory);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                     // Gửi dữ liệu lên máy chủ
-                    HttpResponseMessage response = await client.PutAsync(DefaultApiUrlServiceCategoryUpdate+ serCategoriesId, content);
+                    HttpResponseMessage response = await client.PutAsync(DefaultApiUrlServiceCategoryUpdate + serCategoriesId, content);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TempData["SuccessMessage"] = "Thêm dịch vụ thành công!";
-                        return View(serviceCategory);
-                        
+                        TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
+                        return View(serviceCategory); // Chuyển hướng đến trang thành công hoặc trang danh sách
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "Thêm dịch vụ thất bại. Vui lòng thử lại sau.";
-                        return RedirectToAction("EditServiceCategory");
+                       TempData["ErrorToast"] = "Chỉnh sửa dịch vụ thất bại. Vui lòng thử lại sau.";
+                        return View(serviceCategory); // Hiển thị lại biểu mẫu với dữ liệu đã điền
                     }
-            }
+                }
+            
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
-                return RedirectToAction("EditServiceCategory");
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
+                return View(serviceCategory); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
         }
 
     }
 }
+

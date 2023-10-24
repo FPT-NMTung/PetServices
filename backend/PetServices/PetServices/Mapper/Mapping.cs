@@ -48,20 +48,15 @@ namespace PetServices.Mapper
                             act => act.MapFrom(src => src.Picture));
 
             CreateMap<Service, ServiceDTO>()
-                .ForMember(des => des.ServiceId,
-                            act => act.MapFrom(src => src.ServiceId))
-                .ForMember(des => des.ServiceName,
-                            act => act.MapFrom(src => src.ServiceName))
-                .ForMember(des => des.Desciptions,
-                            act => act.MapFrom(src => src.Desciptions))
-                .ForMember(des => des.Picture,
-                            act => act.MapFrom(src => src.Picture))
-                .ForMember(des => des.Price,
-                            act => act.MapFrom(src => src.Price))
-                .ForMember(des => des.Status,
-                            act => act.MapFrom(src => src.Status))
-                .ForMember(des => des.SerCategoriesId,
-                            act => act.MapFrom(src => src.SerCategoriesId));
+                .ForMember(dest => dest.ServiceId, opt => opt.MapFrom(src => src.ServiceId))
+                .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.ServiceName))
+                .ForMember(dest => dest.Desciptions, opt => opt.MapFrom(src => src.Desciptions))
+                .ForMember(dest => dest.Picture, opt => opt.MapFrom(src => src.Picture))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.SerCategoriesId, opt => opt.MapFrom(src => src.SerCategoriesId))
+                .ForMember(dest => dest.SerCategoriesName, opt => opt.MapFrom(src => src.SerCategories.SerCategoriesName));
+
 
             CreateMap<Account, AccountByAdminDTO>()
             .ForMember(dest => dest.Stt, opt => opt.Ignore())
@@ -82,6 +77,23 @@ namespace PetServices.Mapper
                 .ForMember(des => des.Status,
                             act => act.MapFrom(src => src.Status));
 
+            CreateMap<RoomCategory, RoomCategoryDTO>()
+                .ReverseMap();
+
+            CreateMap<Room, RoomDTO>()
+                .ForMember(dest => dest.RoomCategoriesName, opt => opt.MapFrom(src => src.RoomCategories.RoomCategoriesName))
+                .ReverseMap();
+
+            CreateMap<Product, ProductDTO>()
+                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ProductName))
+                .ForMember(dest => dest.Desciption, opt => opt.MapFrom(src => src.Desciption))
+                .ForMember(dest => dest.Picture, opt => opt.MapFrom(src => src.Picture))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateDate))
+                .ForMember(dest => dest.ProCategoriesId, opt => opt.MapFrom(src => src.ProCategoriesId))
+                .ForMember(dest => dest.ProCategoriesName, opt => opt.MapFrom(src => src.ProCategories.ProCategoriesName));
 
         }
     }
