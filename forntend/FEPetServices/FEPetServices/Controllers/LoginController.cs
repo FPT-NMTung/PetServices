@@ -49,46 +49,33 @@ namespace FEPetServices.Controllers
                     var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
 
                     if (loginResponse.Successful)
+                    {                       
+                        var roleName = loginResponse.RoleName;
+
+                        if (!string.IsNullOrEmpty(roleName))
+                        {
+                            var claims = new List<Claim>
                     {
-                        // Đọc thông tin từ token
-                        var tokenHandler = new JwtSecurityTokenHandler();
-                        var token = tokenHandler.ReadJwtToken(loginResponse.Token);
+                        new Claim(ClaimTypes.Email, loginInfo.Email),
+                        new Claim(ClaimTypes.Role, roleName)
+                    };
 
-                        var claim = token.Claims;
-                        var roleNameClaim = claim.FirstOrDefault(claim => claim.Type == ClaimTypes.Role);
+                            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                        var claims = new List<Claim>
-                        {
-                           new Claim(ClaimTypes.Email, loginInfo.Email)
-                        };
-
-                        // Create claims identity
-                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                        // Sign in the user
-                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-                        if (roleNameClaim != null)
-                        {
-                            var roleName = roleNameClaim.Value;
-
-                            // Chuyển hướng dựa trên vai trò (role) của người dùng
+                            // Redirect based on the role
                             if (roleName == "MANAGER")
                             {
-                                // Hiển thị toast thông báo thành công và sau đó chuyển hướng
-                                TempData["SuccessLoginToast"] = "Đăng nhập thành công";
                                 return RedirectToAction("Index", "Information", new { area = "Manager" });
                             }
                             else if (roleName == "CUSTOMER")
                             {
-                                // Hiển thị toast thông báo thành công và sau đó chuyển hướng
-                                TempData["SuccessLoginToast"] = "Đăng nhập thành công";
                                 return RedirectToAction("Index", "Home");
                             }
                         }
                         else
                         {
-                            ViewBag.ErrorToast = "Đăng nhập không thành công. Tài khoản chưa được cung cấp";
+                            ViewBag.ErrorToast = "Đăng nhập không thành công. Tài khoản không có vai trò được xác định.";
                             return View();
                         }
                     }
@@ -111,6 +98,5 @@ namespace FEPetServices.Controllers
                 return View();
             }
         }
-
     }
 }

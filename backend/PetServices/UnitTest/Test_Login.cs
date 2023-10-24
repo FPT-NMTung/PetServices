@@ -284,5 +284,186 @@ namespace UnitTest
             Assert.Equal(400, result.StatusCode);
             Assert.Equal("Mật khẩu không được chứa ký tự đặc biệt.", result.Value);
         }
+
+        [Fact]
+        // 7. Email rỗng
+        public async Task Test_Login_Fail_EmailIsEmpty()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var testUser = new Account
+                {
+                    Email = "hungnvhe153434@fpt.edu.vn",
+                    Password = "12345678",
+                    Role = new Role { RoleName = "CUSTOMER" }
+                };
+
+                context.Accounts.Add(testUser);
+                context.SaveChanges();
+            }
+
+            var mockMapper = new Mock<IMapper>();
+            var mockConfiguration = new Mock<IConfiguration>();
+
+            mockConfiguration.Setup(x => x["Jwt:Key"]).Returns("Imsdg2wmP9DigIlxBV8czvXOa7XB442TBtioyAsVo5JEVCuOteFIGGJeo4nz4wa");
+            mockConfiguration.Setup(x => x["Jwt:Issuer"]).Returns("http://project");
+            mockConfiguration.Setup(x => x["Jwt:Audience"]).Returns("http://localhost5xxx");
+            mockConfiguration.Setup(x => x["Jwt:ExpiryInDays"]).Returns("1");
+
+            var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+            var loginForm = new LoginForm
+            {
+                Email = "",  
+                Password = "12345678"
+            };
+
+            var result = await controller.Login(loginForm) as ObjectResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(400, result.StatusCode);
+            Assert.Equal("Email không được để trống!", result.Value); 
+        }
+
+        [Fact]
+        // 8. Email chứa khoảng trắng
+        public async Task Test_Login_Fail_EmailContainsWhitespace()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var testUser = new Account
+                {
+                    Email = "hungnvhe153434@fpt.edu.vn", 
+                    Password = "12345678",
+                    Role = new Role { RoleName = "CUSTOMER" }
+                };
+
+                context.Accounts.Add(testUser);
+                context.SaveChanges();
+            }
+
+            var mockMapper = new Mock<IMapper>();
+            var mockConfiguration = new Mock<IConfiguration>();
+
+            mockConfiguration.Setup(x => x["Jwt:Key"]).Returns("Imsdg2wmP9DigIlxBV8czvXOa7XB442TBtioyAsVo5JEVCuOteFIGGJeo4nz4wa");
+            mockConfiguration.Setup(x => x["Jwt:Issuer"]).Returns("http://project");
+            mockConfiguration.Setup(x => x["Jwt:Audience"]).Returns("http://localhost5xxx");
+            mockConfiguration.Setup(x => x["Jwt:ExpiryInDays"]).Returns("1");
+
+            var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+            var loginForm = new LoginForm
+            {
+                Email = "hungnvhe153434@fpt.edu.vn     ",  
+                Password = "12345678"
+            };
+
+            var result = await controller.Login(loginForm) as ObjectResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(400, result.StatusCode);
+            Assert.Equal("Email không chứa khoảng trắng!", result.Value); 
+        }
+
+        [Fact]
+        // 9. Email chỉ có tên + @
+        public async Task Test_Login_Fail_InvalidEmailFormat()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var testUser = new Account
+                {
+                    Email = "hungnvhe153434@fpt.edu.vn",
+                    Password = "12345678",
+                    Role = new Role { RoleName = "CUSTOMER" }
+                };
+
+                context.Accounts.Add(testUser);
+                context.SaveChanges();
+            }
+
+            var mockMapper = new Mock<IMapper>();
+            var mockConfiguration = new Mock<IConfiguration>();
+
+            mockConfiguration.Setup(x => x["Jwt:Key"]).Returns("Imsdg2wmP9DigIlxBV8czvXOa7XB442TBtioyAsVo5JEVCuOteFIGGJeo4nz4wa");
+            mockConfiguration.Setup(x => x["Jwt:Issuer"]).Returns("http://project");
+            mockConfiguration.Setup(x => x["Jwt:Audience"]).Returns("http://localhost5xxx");
+            mockConfiguration.Setup(x => x["Jwt:ExpiryInDays"]).Returns("1");
+
+            var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+            var loginForm = new LoginForm
+            {
+                Email = "hungnvhe153434.fpt.edu",
+                Password = "12345678"
+            };
+
+            var result = await controller.Login(loginForm) as ObjectResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(400, result.StatusCode);
+            Assert.True(controller.ModelState.ContainsKey("Email không hợp lệ"));
+
+            var errorMessages = controller.ModelState["Email không hợp lệ"].Errors;
+            var errorMessage = errorMessages[0].ErrorMessage;
+            Assert.Contains("Email cần có @", errorMessage);
+        }
+
+        [Fact]
+        // 10 Email sai định dạng
+        public async Task Test_Login_Fail_InvalidEmail_Format()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var testUser = new Account
+                {
+                    Email = "hungnvhe153434@fpt.edu.vn", // Email không có dấu "@"
+                    Password = "12345678",
+                    Role = new Role { RoleName = "CUSTOMER" }
+                };
+
+                context.Accounts.Add(testUser);
+                context.SaveChanges();
+            }
+
+            var mockMapper = new Mock<IMapper>();
+            var mockConfiguration = new Mock<IConfiguration>();
+
+            // Thiết lập cấu hình của JWT
+
+            var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+            var loginForm = new LoginForm
+            {
+                Email = "hungnvhe153434",
+                Password = "12345678"
+            };
+
+            var result = await controller.Login(loginForm) as ObjectResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(400, result.StatusCode);
+            Assert.True(controller.ModelState.ContainsKey("Email không hợp lệ"));
+
+            var errorMessages = controller.ModelState["Email không hợp lệ"].Errors;
+            var errorMessage = errorMessages[0].ErrorMessage;
+            Assert.Contains("Email cần có @", errorMessage);
+        }
     }
 }

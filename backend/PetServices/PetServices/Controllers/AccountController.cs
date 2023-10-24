@@ -44,6 +44,22 @@ namespace PetServices.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginForm login)
         {
+            if (string.IsNullOrWhiteSpace(login.Email))
+            {
+                string errorMessage = "Email không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            else if (login.Email.Contains(" "))
+            {
+                string errorMessage = "Email không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            if (!IsValidEmail(login.Email))
+            {
+                ModelState.AddModelError("Email không hợp lệ", "Email cần có @");
+                return BadRequest(ModelState);
+            }
+
             var result = await _context.Accounts
                 .Include(a => a.Role)
                 .SingleOrDefaultAsync(x => x.Email == login.Email && x.Password == login.Password);
@@ -53,7 +69,8 @@ namespace PetServices.Controllers
                 var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, login.Email),
-                new Claim(ClaimTypes.Role, result.Role?.RoleName) // Lưu tên vai trò (RoleName) vào mã thông báo
+                new Claim(ClaimTypes.Role, result.Role?.RoleName), // Lưu tên vai trò (RoleName) vào mã thông báo
+                new Claim("RoleId", result.Role?.RoleId.ToString()) // Lưu RoleId vào mã thông báo
             };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -67,11 +84,11 @@ namespace PetServices.Controllers
                     signingCredentials: creds
                 );
 
-                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
+                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName });
             }
             else
             {
-                string errorMessage = "Đăng nhập không hợp lệ.";
+                string errorMessage = "Đăng nhập không hợp lệ.";               
                 if (string.IsNullOrWhiteSpace(login.Password))
                 {
                     errorMessage = "Mật khẩu không được để trống!";
@@ -148,6 +165,7 @@ namespace PetServices.Controllers
             string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$";
             return Regex.IsMatch(email, emailPattern);
         }
+       
 
         private bool IsValidPassword(string password)
         {            

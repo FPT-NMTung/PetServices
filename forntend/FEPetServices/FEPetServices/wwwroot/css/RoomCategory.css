@@ -1,0 +1,198 @@
+
+* {
+    box-sizing: border-box;
+}
+
+h1 {
+    margin-bottom: 50px;
+}
+
+input[type=text], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+}
+
+input[type=submit] {
+    background-color: #43e240;
+    height: 40px;
+    color: white;
+    padding: 5px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right;
+}
+
+    input[type=submit]:hover {
+        background-color: #04cf00;
+        color: black;
+    }
+
+.container {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+
+.col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
+}
+
+.col-75 {
+    float: left;
+    width: 75%;
+    margin-top: 6px;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.cancel {
+    background-color: #f2110d;
+    height: 40px;
+    color: white;
+    padding: 5px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+    .cancel:hover {
+        background-color: #cc0400;
+        color: black;
+    }
+
+.switch {
+    position: relative;
+    width: 80px;
+    height: 35px;
+    margin-left: -7px;
+}
+
+.toggles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: inherit;
+    opacity: 0;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.label {
+    position: absolute;
+    top: 2px;
+    left: 10px;
+    right: 2px;
+    bottom: 2px;
+    background-color: #C84444;
+    border-radius: 24px;
+    transition: background-color .2s ease-in-out;
+}
+
+    .label::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        width: 35px;
+        height: 35px;
+        background-color: white;
+        border-radius: inherit;
+        border: 1px solid grey;
+    }
+
+.toggles:checked + .label {
+    background-color: #43e240;
+}
+
+    .toggles:checked + .label::before {
+        transform: translateX(100%);
+    }
+
+.td-switch {
+    display: flex;
+    align-items: center;
+}
+
+    .td-switch .label {
+        width: 25px;
+        height: 25px;
+    }
+
+        .td-switch .label.active {
+            background-color: #43e240;
+        }
+
+        .td-switch .label.inactive {
+            background-color: #f2110d;
+        }
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+.btn-row {
+    display: flex;
+    justify-content: center;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
