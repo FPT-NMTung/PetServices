@@ -8,71 +8,77 @@
     <link href="~/css/datatable.css" rel="stylesheet" />
 </head>
 <body>
-    <div>
-        <h1>Thông tin chi tiết đổi tác</h1>
-    </div>
-    <div class="tab-content">
-        <div class="tab-pane fade active show" id="account-general">
-            <div class="card-body media align-items-center">
-                @*Chưa thêm ảnh*@
-                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="d-block ui-w-80">
-                <div class="media-body ml-3">
-                    <label class="btn btn-outline-primary">
-                        Upload new photo
-                        <input type="file" class="account-settings-fileinput">
-                    </label> &nbsp;
-                    <button type="button" class="btn btn-default md-btn-flat">Reset</button>
+    <div class="container light-style flex-grow-1 container-p-y">
+        <div>
+            <h1>Thông tin chi tiết đổi tác</h1>
+        </div>
+        <div class="card overflow-hidden">
+            <div class="tab-content">
+                <div class="tab-pane fade active show" id="account-general">
+                    <div class="card-body media align-items-center">
+                        @*Chưa thêm ảnh*@
+                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="d-block ui-w-80">
+                        <div class="media-body ml-3">
+                            <label class="btn btn-outline-primary">
+                                Upload new photo
+                                <input type="file" class="account-settings-fileinput">
+                            </label> &nbsp;
+                            <button type="button" class="btn btn-default md-btn-flat">Reset</button>
 
-                    <div class="text-light small mt-1">Được phép JPG, GIF hoặc PNG. Kích thước tối đa 800K</div>
+                            <div class="text-light small mt-1">Được phép JPG, GIF hoặc PNG. Kích thước tối đa 800K</div>
+                        </div>
+                    </div>
+
+                    <form method="post" asp-controller="ListPartner" asp-action="DetailPartner" style="margin-right:10px">
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" >Họ</label>
+                                <input class="form-control"  type="text" value="@Model?.PartnerInfo.FirstName" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputLastName">Tên</label>
+                                <input class="form-control"  type="text" value="@Model?.PartnerInfo.LastName" disabled>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="small mb-1" >Email</label>
+                            <input class="form-control"  type="email" value="@Model?.Email" disabled>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" >Tỉnh</label>
+                                <input class="form-control"  type="email" value="@Model?.PartnerInfo.Province" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" >Huyện/Thành Phố</label>
+                                <input class="form-control" type="email" value="@Model?.PartnerInfo.District" disabled>
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputWard">Xã/Quận</label>
+                                <input class="form-control"value="@Model?.PartnerInfo.Commune" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputAddress">Địa chỉ cụ thể</label>
+                                <input class="form-control" value="@Model?.PartnerInfo.Address" disabled>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="small mb-1" for="inputPhone">Số điện thoại </label>
+                            <input class="form-control" value="@Model?.PartnerInfo.Phone" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label class="small mb-1" for="inputDescriptions">Mô tả </label>
+                            <textarea class="form-control">@Model?.PartnerInfo.Descriptions</textarea>
+                        </div>
+                        <input  name="Email" value="@Model?.Email" />
+                        <input  name="Password" value="@Model?.Password" />
+
+                        <button class="btn btn-primary" type="submit">Chấp nhận đăng ký</button>
+                    </form>
                 </div>
             </div>
-
-            <form method="post" asp-controller="ListPartner" asp-action="DetailPartner" style="margin-right:10px">
-                <div class="row gx-3 mb-3">
-                    <div class="col-md-6">
-                        <label class="small mb-1" for="inputFirstName">Họ</label>
-                        <input class="form-control" id="inputFirstName" type="text" value="@Model?.PartnerInfo.FirstName" disabled>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="small mb-1" for="inputLastName">Tên</label>
-                        <input class="form-control" id="inputLastName" type="text" value="@Model?.PartnerInfo.LastName" disabled>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="small mb-1" for="inputEmailAddress">Email</label>
-                    <input class="form-control" id="inputEmailAddress" type="email" value="@Model?.Email" disabled>
-                </div>
-                <div class="row gx-3 mb-3">
-                    <div class="col-md-6">
-                        <label class="small mb-1" for="inputProvince">Tỉnh</label>
-                        <input class="form-control" id="inputEmailAddress" type="email" value="@Model?.PartnerInfo.Province" disabled>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="small mb-1" for="inputDistrict">Huyện/Thành Phố</label>
-                        <input class="form-control" id="inputEmailAddress" type="email" value="@Model?.PartnerInfo.District" disabled>
-                    </div>
-                </div>
-                <div class="row gx-3 mb-3">
-                    <div class="col-md-6">
-                        <label class="small mb-1" for="inputWard">Xã/Quận</label>
-                        <input class="form-control" id="inputEmailAddress" type="email" value="@Model?.PartnerInfo.Commune" disabled>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="small mb-1" for="inputAddress">Địa chỉ cụ thể</label>
-                        <input class="form-control" id="inputAddress" type="text" value="@Model?.PartnerInfo.Address" disabled>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label class="small mb-1" for="inputPhone">Số điện thoại </label>
-                    <input class="form-control" id="inputPhone" type="text" value="@Model?.PartnerInfo.Phone" disabled>
-                </div>
-                <div class="mb-3">
-                    <label class="small mb-1" for="inputDescriptions">Mô tả </label>
-                    <textarea class="form-control" id="inputDesciptions" >@Model?.PartnerInfo.Descriptions</textarea>
-                </div>
-                <button class="btn btn-primary" type="submit">Chấp nhận đăng ký</button>
-            </form>
         </div>
     </div>
 </body>
