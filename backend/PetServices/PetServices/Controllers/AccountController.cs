@@ -119,15 +119,38 @@ namespace PetServices.Controllers
             // Kiểm tra Email
             if (!IsValidEmail(registerDto.Email))
             {
-                ModelState.AddModelError("Email không hợp lệ", "Email cần có @");
+                ModelState.AddModelError("Email không hợp lệ", "Email cần có @!");
+                return BadRequest(ModelState);
+            }
+            if (!IsValidPhone(registerDto.Phone))
+            {
+                ModelState.AddModelError("Số điện thoại không hợp lệ", "Số điện thoại bắt đầu bằng số 0 và có tổng 10 số");
                 return BadRequest(ModelState);
             }
 
-            // Kiểm tra Password
-            if (!IsValidPassword(registerDto.Password))
+            if (string.IsNullOrWhiteSpace(registerDto.Password))
             {
-                ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu cần tối thiểu 8 ký tự và không chứa ký tự đặc biệt!");
-                return BadRequest(ModelState);
+                //ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu không được để trống");
+                string errorMessage = "Mật khẩu không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (registerDto.Password.Length < 8)
+            {
+                //ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu phải có ít nhất 8 ký tự");
+                string errorMessage = "Mật khẩu phải có ít nhất 8 ký tự!";
+                return BadRequest(errorMessage);
+            }
+            if (registerDto.Password.Contains(" "))
+            {
+                //ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu không được chứa khoảng trắng");
+                string errorMessage = "Mật khẩu không được chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            if (Regex.IsMatch(registerDto.Password, @"[^a-zA-Z0-9]"))
+            {
+                //ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu không được chứa ký tự đặc biệt");
+                string errorMessage = "Mật khẩu không được chứa ký tự đặc biệt!";
+                return BadRequest(errorMessage);
             }
 
             if (_context.Accounts.Any(a => a.Email == registerDto.Email))
@@ -167,10 +190,10 @@ namespace PetServices.Controllers
         }
        
 
-        private bool IsValidPassword(string password)
+        /*private bool IsValidPassword(string password)
         {            
             return !string.IsNullOrWhiteSpace(password) && password.Length >= 8 && !password.Contains(" "); 
-        }
+        }*/
 
         private bool IsValidPhone(string phone)
         {
@@ -193,11 +216,11 @@ namespace PetServices.Controllers
             }
 
             // Kiểm tra Password
-            if (!IsValidPassword(registerDto.Password))
+            /*if (!IsValidPassword(registerDto.Password))
             {
                 ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu cần tối thiểu 8 ký tự và không chứa ký tự đặc biệt!");
                 return BadRequest(ModelState);
-            }
+            }*/
 
             // Kiểm tra Phone
             if (!IsValidPhone(registerDto.Phone))

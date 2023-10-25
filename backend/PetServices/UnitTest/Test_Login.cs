@@ -97,7 +97,7 @@ namespace UnitTest
             var loginForm = new LoginForm
             {
                 Email = "hungnvhe153434@fpt.edu.vn",
-                Password = "12345611aa"
+                Password = "1234abvcaas"
             };
 
             var result = await controller.Login(loginForm) as ObjectResult;
