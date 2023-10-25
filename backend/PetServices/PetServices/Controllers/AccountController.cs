@@ -122,6 +122,11 @@ namespace PetServices.Controllers
                 ModelState.AddModelError("Email không hợp lệ", "Email cần có @!");
                 return BadRequest(ModelState);
             }
+            if (!IsValidPhone(registerDto.Phone))
+            {
+                ModelState.AddModelError("Số điện thoại không hợp lệ", "Số điện thoại bắt đầu bằng số 0 và có tổng 10 số");
+                return BadRequest(ModelState);
+            }
 
             if (string.IsNullOrWhiteSpace(registerDto.Password))
             {
