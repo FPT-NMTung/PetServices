@@ -2,20 +2,49 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="~/css/RoomCategory.css">
+    <link rel="stylesheet" href="~/css/Room.css">
     <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <script>
+        function decreaseQuantity() {
+            var slotQuantity = parseInt(document.getElementById("Slot").value);
+            if (slotQuantity > 1) {
+                slotQuantity--;
+                document.getElementById("Slot").value = slotQuantity;
+            }
+        }
+
+        function increaseQuantity() {
+            var slotQuantity = parseInt(document.getElementById("Slot").value);
+            slotQuantity++;
+            document.getElementById("Slot").value = slotQuantity;
+        }
+    </script>
+    <script>
+        function decreasePrice() {
+            var priceQuantity = parseInt(document.getElementById("Price").value);
+            if (priceQuantity > 1) {
+                priceQuantity -= 10000;
+                document.getElementById("Price").value = priceQuantity;
+            }
+        }
+
+        function increasePrice() {
+            var priceQuantity = parseInt(document.getElementById("Price").value);
+            priceQuantity += 10000;
+            document.getElementById("Price").value = priceQuantity;
+        }
+    </script>
 </head>
 <body>
-
-    <h1 style="font-size: 40px; font-weight: bold; text-align:center">Thêm loại phòng cho thú cưng</h1>
+    <h1 style="font-size: 40px; font-weight: bold; text-align:center">Thêm phòng cho thú cưng</h1>
     <div class="container">
-        <form asp-action="AddRoomCategory" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <form asp-action="AddRoom" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div class="row">
                 <div class="col-25">
-                    <label for="RoomCategoriesName">Tên Dịch Vụ:</label>
+                    <label for="RoomName">Tên Phòng:</label>
                 </div>
                 <div class="col-75">
-                    <input type="text" id="RoomCategoriesName" name="RoomCategoriesName" placeholder="Tên Dịch Vụ.." required>
+                    <input type="text" id="RoomName" name="RoomName" placeholder="Tên phòng..." required>
                     <div style="color:red" class="error-message" id="fname-error-message"></div>
                 </div>
             </div>
@@ -33,6 +62,59 @@
             </div>
             <div class="row">
                 <div class="col-25">
+                    <label for="Price">Giá:</label>
+                </div>
+                <div class="col-75">
+                    <div class="quantity-container">
+                        <input type="text" class="price" id="Price" name="Price" placeholder="Giá tiền" required>
+                        <span class="currency">đ</span>
+                        <div class="quantityslot">
+                            <button type="button" class="dequantity-btn quantity-btn" onclick="decreasePrice()">-</button>
+                            <button type="button" class="inquantity-btn quantity-btn" onclick="increasePrice()">+</button>
+                        </div>
+                    </div>
+                    <div style="color:red" class="error-message" id="price-error-message"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="Slot">Số lượng:</label>
+                </div>
+                <div class="col-75">
+                    <div class="quantity-container">
+                        <input type="text" class="slot" id="Slot" name="Slot" placeholder="Số lượng" required>
+                        <div class="quantityslot">
+                            <button type="button" class="dequantity-btn quantity-btn" onclick="decreaseQuantity()">-</button>
+                            <button type="button" class="inquantity-btn quantity-btn" onclick="increaseQuantity()">+</button>
+                        </div>
+                    </div>
+                    <div style="color:red" class="error-message" id="slot-error-message"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="SerCategoriesId">Loại Phòng</label>
+                </div>
+                <div class="col-75">
+                    @if (ViewBag.Categories != null)
+                    {
+                        <select id="RoomCategoriesId" name="RoomCategoriesId" required>
+                            <option value="">Chọn một loại phòng</option>
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                                <option value="@category.Value">@category.Text</option>
+                            }
+                        </select>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Lỗi: Dữ liệu không khả dụng.</span>
+                    }
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-25">
                     <label for="Desciptions">Mô Tả:</label>
                 </div>
                 <div class="col-75">
@@ -45,7 +127,7 @@
                 </div>
                 <div class="col-75 btn-row">
                     <div class="btn-back">
-                        <a type="submit" value="Cancal" href="/Manager/RoomCategory" class="cancel">Trở lại</a>
+                        <a type="submit" value="Cancal" href="/Manager/Room" class="cancel">Trở lại</a>
                     </div>
                     <div class="btn-submit">
                         <input type="submit" value="Thêm loại dịch vụ">
@@ -72,8 +154,7 @@
         </script>
     }
     <script src="~/js/toastnotification.js"></script>
-    <script src="~/js/RoomCategory.js"></script>
-
+    <script src="~/js/Room.js"></script>
     <script>
         function showSuccessToast() {
             toast({

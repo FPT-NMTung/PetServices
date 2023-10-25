@@ -1,5 +1,6 @@
 ﻿using FEPetServices.Areas.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using PetServices.Models;
 using System.Net.Http.Headers;
@@ -63,6 +64,52 @@ namespace FEPetServices.Areas.Manager.Controllers
 
             return View();
         }
+
+        public async Task<IActionResult> AddRoom([FromForm] RoomDTO roomDTO, IFormFile image)
+        {
+            try
+            {
+                HttpResponseMessage roomCategoryResponse = await client.GetAsync(ApiUrlRoomCategoryList);
+
+                if (roomCategoryResponse.IsSuccessStatusCode)
+                {
+                    var categories = await roomCategoryResponse.Content.ReadFromJsonAsync<List<RoomCategoryDTO>>();
+                    ViewBag.Categories = new SelectList(categories, "RoomCategoriesId", "RoomCategoriesName");
+                }
+
+                if (image != null && image.Length > 0)
+                {
+                    roomDTO.Picture = "/img/" + image.FileName.ToString();
+                }
+                else
+                {
+                    return View(roomDTO); 
+                }
+                roomDTO.Status = true;
+
+                var json = JsonConvert.SerializeObject(roomDTO);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await client.PostAsync(ApiUrlRoomAdd, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessMessage"] = "Thêm phòng thành công!";
+                    return View();
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Thêm phòng thất bại. Vui lòng thử lại sau.";
+                    return View();
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi: " + ex.Message;
+                return View(roomDTO);
+            }
+        }
+
 
     }
 }

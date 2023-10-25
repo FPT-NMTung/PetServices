@@ -137,7 +137,7 @@
             $('.dataTables_filter').append(addRoomCategoryButton);
 
             $('#addRoomButton').on('click', function () {
-                window.location.href = '/Manager/RoomCategory/AddRoom';
+                window.location.href = '/Manager/Room/AddRoom';
             });
         });
     </script>
@@ -178,7 +178,7 @@
                         <td>@room.RoomName</td>
                         <td>@description</td>
                         <td><img src="@room.Picture" width="50" height="50"></td>
-                        <td>@room.Price</td>
+                        <td>@room.Price đ</td>
                         <td>@room.RoomCategoriesName</td>
                         <td>@room.Slot</td>
                         <td>
