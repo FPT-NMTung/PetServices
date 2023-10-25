@@ -34,10 +34,9 @@ namespace PetServices.Controllers
         {
             var room = await _context.Rooms
                 .Include(r => r.RoomCategories)
-                .Where(r => r.RoomId == roomId)
-                .ToListAsync();
+                .FirstOrDefaultAsync(r => r.RoomId == roomId);
 
-            return Ok(_mapper.Map<List<RoomDTO>>(room));
+            return Ok(_mapper.Map<RoomDTO>(room));
         }
 
         [HttpGet("GetRoomCategory")]
