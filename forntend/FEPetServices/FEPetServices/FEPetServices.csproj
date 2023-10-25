@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Areas\Customer\Views\MenuCustomer\ChangePassword.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\dataTable.css" />
   </ItemGroup>
 
   <ItemGroup>
