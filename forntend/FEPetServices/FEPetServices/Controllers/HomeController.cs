@@ -14,8 +14,11 @@ namespace FEPetServices.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult ServiceList()
         {
             return View();
         }
