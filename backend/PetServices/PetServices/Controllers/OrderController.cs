@@ -39,11 +39,12 @@ namespace PetServices.Controllers
         }
 
         [HttpGet("GetOrder/{Id}")]
-        public IActionResult Get(int Id)
+        public async Task<IActionResult> Get(int Id)
         {
             try
             {
-                Booking bookings = _context.Bookings.Include(b => b.UserInfo).Include(b => b.OrderProductDetails).ThenInclude(o => o.Product).FirstOrDefault(b => b.BookingId == Id);
+                Booking bookings = await _context.Bookings.Include(b => b.UserInfo).Include(b => b.OrderProductDetails)
+                .ThenInclude(o => o.Product).SingleOrDefaultAsync(b => b.BookingId == Id);
                 return Ok(_mapper.Map<BookingDTO>(bookings));
             }
             catch (Exception ex)
@@ -59,10 +60,12 @@ namespace PetServices.Controllers
             try
             {
                 Booking booking = await _context.Bookings.SingleOrDefaultAsync(b => b.BookingId == Id);
+                // Kiểm tra booking có tồn tại hay không
                 if(booking == null)
                 {
                     return NotFound("Booking không tồn tài");
                 }
+                // Kiểm tra xem trạng thái cũ có chính xác hay không
                 if(booking.BookingStatus.Trim() != status.oldStatus)
                 {
                     return BadRequest("Trạng thái cũ không hợp lệ");

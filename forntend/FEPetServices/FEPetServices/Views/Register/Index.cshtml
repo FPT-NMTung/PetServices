@@ -9,9 +9,6 @@
 <head>
     <title>HASH TECHIE OFFICIAL</title>
     <link rel="stylesheet" href="~/css/Register.css">
-
-    <link href="~/css/toastnotification.css" rel="stylesheet" />
-    <script src="~/js/toastnotification.js"></script>
 </head>
 <body>
     <section>
@@ -36,43 +33,8 @@
                 </form>
             </div>
         </div>
-        <div id="toast"></div>
-        @if (!string.IsNullOrEmpty(ViewBag.SuccessToast))
-        {
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    showSuccessToast();
-                });
-            </script>
-        }
-        @if (!string.IsNullOrEmpty(ViewBag.ErrorToast))
-        {
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    showErrorToast();
-                });
-            </script>
-        }
     </section>
 </body>
-    <script>
-        function showSuccessToast() {
-            toast({
-                title: 'Thành công',
-                message: '@ViewBag.SuccessToast',
-                type: 'success',
-                duration: 2000
-            });
-        }
-        function showErrorToast() {
-            toast({
-                title: 'Thất bại',
-                message: '@ViewBag.ErrorToast',
-                type: 'error',
-                duration: 2000
-            });
-        }
-    </script>
 </html>
 
 
