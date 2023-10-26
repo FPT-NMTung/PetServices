@@ -1,13 +1,10 @@
 ﻿using FEPetServices.Form;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
-using System.Text.Json;
-using System.Net.Mail;
 using System.Net;
-using System.Net.Http.Json;
-using Newtonsoft.Json;
-using System.Text;
+using System.Net.Http.Headers;
+using System.Net.Mail;
+using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
