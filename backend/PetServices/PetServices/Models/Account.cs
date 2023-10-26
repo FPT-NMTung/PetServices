@@ -5,11 +5,6 @@ namespace PetServices.Models
 {
     public partial class Account
     {
-        public Account()
-        {
-            Bookings = new HashSet<Booking>();
-        }
-
         public int AccountId { get; set; }
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
@@ -23,6 +18,5 @@ namespace PetServices.Models
         public virtual PartnerInfo? PartnerInfo { get; set; }
         public virtual Role? Role { get; set; }
         public virtual UserInfo? UserInfo { get; set; }
-        public virtual ICollection<Booking> Bookings { get; set; }
     }
 }

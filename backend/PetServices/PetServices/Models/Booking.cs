@@ -15,9 +15,9 @@ namespace PetServices.Models
         public int BookingId { get; set; }
         public DateTime? BookingDate { get; set; }
         public string? BookingStatus { get; set; }
-        public int? AccountId { get; set; }
+        public int? UserInfoId { get; set; }
 
-        public virtual Account? Account { get; set; }
+        public virtual UserInfo? UserInfo { get; set; }
         public virtual ICollection<OrderProductDetail> OrderProductDetails { get; set; }
 
         public virtual ICollection<Room> Rooms { get; set; }
