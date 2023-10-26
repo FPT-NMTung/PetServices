@@ -18,6 +18,15 @@ namespace PetServices.Mapper
             CreateMap<PetInfo, PetInfoDTO>()
                 .ReverseMap();
 
+            CreateMap<Booking, BookingDTO>()
+                .ReverseMap();
+
+            CreateMap<Booking, BookingDTO>()
+                .ReverseMap();
+
+            CreateMap<OrderProductDetail, OrderProductDetailDTO>()
+               .ReverseMap();
+
             CreateMap<Account, AccountInfo>()
                 .ForMember(dest => dest.RoleName,
                     opt => opt.MapFrom(src => src.Role.RoleName))
