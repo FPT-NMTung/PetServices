@@ -23,6 +23,10 @@
     <Folder Include="Areas\Customer\Models\" />
     <Folder Include="Areas\Manager\Data\" />
     <Folder Include="Areas\Manager\Models\" />
+    <Folder Include="Areas\Partner\Controllers\" />
+    <Folder Include="Areas\Partner\Data\" />
+    <Folder Include="Areas\Partner\Models\" />
+    <Folder Include="Areas\Partner\Views\" />
   </ItemGroup>
 
   <ItemGroup>

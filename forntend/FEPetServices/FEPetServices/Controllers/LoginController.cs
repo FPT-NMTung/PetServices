@@ -66,11 +66,18 @@ namespace FEPetServices.Controllers
                             // Redirect based on the role
                             if (roleName == "MANAGER")
                             {
+                                TempData["SuccessLoginToast"] = "Đăng nhập thành công.";
                                 return RedirectToAction("Index", "Information", new { area = "Manager" });
                             }
                             else if (roleName == "CUSTOMER")
                             {
+                                TempData["SuccessLoginToast"] = "Đăng nhập thành công.";
                                 return RedirectToAction("Index", "Home");
+                            }
+                            else if (roleName == "PARTNER")
+                            {
+                                TempData["SuccessLoginToast"] = "Đăng nhập thành công.";
+                                return RedirectToAction("Index", "Information", new { area = "Partner" });
                             }
                         }
                         else
