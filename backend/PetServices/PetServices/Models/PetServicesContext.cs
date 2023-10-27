@@ -29,7 +29,6 @@ namespace PetServices.Models
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Room> Rooms { get; set; } = null!;
         public virtual DbSet<RoomCategory> RoomCategories { get; set; } = null!;
-        public virtual DbSet<RoomService> RoomServices { get; set; } = null!;
         public virtual DbSet<Service> Services { get; set; } = null!;
         public virtual DbSet<ServiceCategory> ServiceCategories { get; set; } = null!;
         public virtual DbSet<UserInfo> UserInfos { get; set; } = null!;
@@ -281,11 +280,6 @@ namespace PetServices.Models
                     .HasForeignKey(d => d.RoomCategoriesId)
                     .HasConstraintName("FK_Room_RoomCategories");
 
-                entity.HasOne(d => d.RoomServices)
-                    .WithMany(p => p.Rooms)
-                    .HasForeignKey(d => d.RoomServicesId)
-                    .HasConstraintName("FK_Room_RoomServices");
-
                 entity.HasMany(d => d.Bookings)
                     .WithMany(p => p.Rooms)
                     .UsingEntity<Dictionary<string, object>>(
@@ -313,19 +307,6 @@ namespace PetServices.Models
                 entity.Property(e => e.Picture).HasMaxLength(500);
 
                 entity.Property(e => e.RoomCategoriesName).HasMaxLength(500);
-            });
-
-            modelBuilder.Entity<RoomService>(entity =>
-            {
-                entity.HasKey(e => e.RoomServicesId);
-
-                entity.Property(e => e.RoomServicesId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("RoomServicesID");
-
-                entity.Property(e => e.Picture).IsUnicode(false);
-
-                entity.Property(e => e.RoomServiceName).HasMaxLength(500);
             });
 
             modelBuilder.Entity<Service>(entity =>
@@ -358,6 +339,23 @@ namespace PetServices.Models
                             j.IndexerProperty<int>("ServiceId").HasColumnName("ServiceID");
 
                             j.IndexerProperty<int>("BookingId").HasColumnName("BookingID");
+                        });
+
+                entity.HasMany(d => d.Rooms)
+                    .WithMany(p => p.Services)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "RoomService",
+                        l => l.HasOne<Room>().WithMany().HasForeignKey("RoomId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RoomServices_Room"),
+                        r => r.HasOne<Service>().WithMany().HasForeignKey("ServiceId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RoomServices_Services"),
+                        j =>
+                        {
+                            j.HasKey("ServiceId", "RoomId");
+
+                            j.ToTable("RoomServices");
+
+                            j.IndexerProperty<int>("ServiceId").HasColumnName("ServiceID");
+
+                            j.IndexerProperty<int>("RoomId").HasColumnName("RoomID");
                         });
             });
 
