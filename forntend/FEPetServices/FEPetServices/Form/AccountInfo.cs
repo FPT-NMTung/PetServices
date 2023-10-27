@@ -9,7 +9,7 @@
         public int? UserInfoId { get; set; }
         public int? PartnerInfoId { get; set; }
         public string RoleName { get; set; }
-        // public virtual PartnerInfoDTO? PartnerInfo { get; set; }
+        public virtual PartnerInfo? PartnerInfo { get; set; }
         public virtual UserInfo? UserInfo { get; set; }
 
     }
