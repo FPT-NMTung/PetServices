@@ -123,7 +123,6 @@ namespace FEPetServices.Areas.Admin.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        Debug.WriteLine(response.Content);
                         return Json(new
                         {
                             Success = true
