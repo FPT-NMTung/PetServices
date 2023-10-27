@@ -310,7 +310,7 @@ namespace PetServices.Models
 
             modelBuilder.Entity<RoomService>(entity =>
             {
-                entity.HasNoKey();
+                entity.Property(e => e.RoomServiceId).HasColumnName("RoomServiceID");
 
                 entity.Property(e => e.RoomId).HasColumnName("RoomID");
 

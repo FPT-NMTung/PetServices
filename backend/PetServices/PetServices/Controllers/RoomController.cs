@@ -48,6 +48,14 @@ namespace PetServices.Controllers
             return Ok(_mapper.Map<List<RoomCategoryDTO>>(roomCategory));
         }
 
+        [HttpGet("GetRoomService")]
+        public async Task<ActionResult> GetRoomService()
+        {
+            var roomService = await _context.RoomServices.ToListAsync();
+
+            return Ok(roomService);
+        }
+
         [HttpPost("AddRoom")]
         public async Task<ActionResult> AddRoom(RoomDTO roomDTO)
         {
@@ -63,10 +71,25 @@ namespace PetServices.Controllers
                     Slot = roomDTO.Slot,
                     Status = roomDTO.Status,
                     RoomCategoriesId = roomDTO.RoomCategoriesId,
+
                 };
 
                 await _context.Rooms.AddAsync(newRoom);
                 await _context.SaveChangesAsync();
+
+                var listService = await _context.Services.ToListAsync();
+                foreach (var service in listService)
+                {
+                    var newRoomService = new RoomService
+                    {
+                        RoomId = newRoom.RoomId,
+                        ServiceId = service.ServiceId,
+                        Status = false,
+                    };
+
+                    await _context.RoomServices.AddAsync(newRoomService);
+                    await _context.SaveChangesAsync();
+                }
 
                 return Ok(_mapper.Map<RoomDTO>(newRoom));
             }
