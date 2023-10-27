@@ -29,6 +29,7 @@ namespace PetServices.Models
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Room> Rooms { get; set; } = null!;
         public virtual DbSet<RoomCategory> RoomCategories { get; set; } = null!;
+        public virtual DbSet<RoomService> RoomServices { get; set; } = null!;
         public virtual DbSet<Service> Services { get; set; } = null!;
         public virtual DbSet<ServiceCategory> ServiceCategories { get; set; } = null!;
         public virtual DbSet<UserInfo> UserInfos { get; set; } = null!;
@@ -273,8 +274,6 @@ namespace PetServices.Models
 
                 entity.Property(e => e.RoomName).HasMaxLength(500);
 
-                entity.Property(e => e.RoomServicesId).HasColumnName("RoomServicesID");
-
                 entity.HasOne(d => d.RoomCategories)
                     .WithMany(p => p.Rooms)
                     .HasForeignKey(d => d.RoomCategoriesId)
@@ -309,6 +308,15 @@ namespace PetServices.Models
                 entity.Property(e => e.RoomCategoriesName).HasMaxLength(500);
             });
 
+            modelBuilder.Entity<RoomService>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.RoomId).HasColumnName("RoomID");
+
+                entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
+            });
+
             modelBuilder.Entity<Service>(entity =>
             {
                 entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
@@ -339,23 +347,6 @@ namespace PetServices.Models
                             j.IndexerProperty<int>("ServiceId").HasColumnName("ServiceID");
 
                             j.IndexerProperty<int>("BookingId").HasColumnName("BookingID");
-                        });
-
-                entity.HasMany(d => d.Rooms)
-                    .WithMany(p => p.Services)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "RoomService",
-                        l => l.HasOne<Room>().WithMany().HasForeignKey("RoomId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RoomServices_Room"),
-                        r => r.HasOne<Service>().WithMany().HasForeignKey("ServiceId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RoomServices_Services"),
-                        j =>
-                        {
-                            j.HasKey("ServiceId", "RoomId");
-
-                            j.ToTable("RoomServices");
-
-                            j.IndexerProperty<int>("ServiceId").HasColumnName("ServiceID");
-
-                            j.IndexerProperty<int>("RoomId").HasColumnName("RoomID");
                         });
             });
 

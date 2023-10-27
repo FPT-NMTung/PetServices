@@ -1,4 +1,6 @@
-﻿namespace PetServices.DTO
+﻿using PetServices.Models;
+
+namespace PetServices.DTO
 {
     public class RoomDTO
     {
