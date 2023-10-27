@@ -29,6 +29,7 @@ namespace PetServices.Models
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Room> Rooms { get; set; } = null!;
         public virtual DbSet<RoomCategory> RoomCategories { get; set; } = null!;
+        public virtual DbSet<RoomService> RoomServices { get; set; } = null!;
         public virtual DbSet<Service> Services { get; set; } = null!;
         public virtual DbSet<ServiceCategory> ServiceCategories { get; set; } = null!;
         public virtual DbSet<UserInfo> UserInfos { get; set; } = null!;
@@ -273,10 +274,17 @@ namespace PetServices.Models
 
                 entity.Property(e => e.RoomName).HasMaxLength(500);
 
+                entity.Property(e => e.RoomServicesId).HasColumnName("RoomServicesID");
+
                 entity.HasOne(d => d.RoomCategories)
                     .WithMany(p => p.Rooms)
                     .HasForeignKey(d => d.RoomCategoriesId)
                     .HasConstraintName("FK_Room_RoomCategories");
+
+                entity.HasOne(d => d.RoomServices)
+                    .WithMany(p => p.Rooms)
+                    .HasForeignKey(d => d.RoomServicesId)
+                    .HasConstraintName("FK_Room_RoomServices");
 
                 entity.HasMany(d => d.Bookings)
                     .WithMany(p => p.Rooms)
@@ -305,6 +313,19 @@ namespace PetServices.Models
                 entity.Property(e => e.Picture).HasMaxLength(500);
 
                 entity.Property(e => e.RoomCategoriesName).HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<RoomService>(entity =>
+            {
+                entity.HasKey(e => e.RoomServicesId);
+
+                entity.Property(e => e.RoomServicesId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("RoomServicesID");
+
+                entity.Property(e => e.Picture).IsUnicode(false);
+
+                entity.Property(e => e.RoomServiceName).HasMaxLength(500);
             });
 
             modelBuilder.Entity<Service>(entity =>
