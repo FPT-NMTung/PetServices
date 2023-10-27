@@ -28,8 +28,8 @@ namespace PetServices.Controllers
         {
             try
             {
-                List<Booking> bookings = _context.Bookings.Include(b => b.UserInfo).ToList();
-                return Ok(_mapper.Map<List<BookingDTO>>(bookings));
+                List<Order> orders = _context.Orders.Include(b => b.UserInfo).ToList();
+                return Ok(_mapper.Map<List<OrdersDTO>>(orders));
             }
             catch (Exception ex)
             {
@@ -43,9 +43,9 @@ namespace PetServices.Controllers
         {
             try
             {
-                Booking bookings = await _context.Bookings.Include(b => b.UserInfo).Include(b => b.OrderProductDetails)
-                .ThenInclude(o => o.Product).SingleOrDefaultAsync(b => b.BookingId == Id);
-                return Ok(_mapper.Map<BookingDTO>(bookings));
+                Order order = await _context.Orders.Include(b => b.UserInfo).Include(b => b.OrderProductDetails)
+                .ThenInclude(o => o.Product).SingleOrDefaultAsync(b => b.OrderId == Id);
+                return Ok(_mapper.Map<OrdersDTO>(order));
             }
             catch (Exception ex)
             {
@@ -59,19 +59,19 @@ namespace PetServices.Controllers
         {
             try
             {
-                Booking booking = await _context.Bookings.SingleOrDefaultAsync(b => b.BookingId == Id);
+                Order order = await _context.Orders.SingleOrDefaultAsync(b => b.OrderId == Id);
                 // Kiểm tra booking có tồn tại hay không
-                if(booking == null)
+                if(order == null)
                 {
                     return NotFound("Booking không tồn tài");
                 }
                 // Kiểm tra xem trạng thái cũ có chính xác hay không
-                if(booking.BookingStatus.Trim() != status.oldStatus)
+                if(order.OrderStatus.Trim() != status.oldStatus)
                 {
                     return BadRequest("Trạng thái cũ không hợp lệ");
                 }
-                booking.BookingStatus = status.newStatus;
-                _context.Bookings.Update(booking);
+                order.OrderStatus = status.newStatus;
+                _context.Orders.Update(order);
 
                 await _context.SaveChangesAsync();
                 return Ok("Đổi trạng thái thành công");
