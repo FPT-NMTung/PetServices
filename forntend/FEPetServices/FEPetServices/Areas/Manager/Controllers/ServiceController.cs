@@ -67,7 +67,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             return View();
         }
 
-        public async Task<IActionResult> AddService([FromForm] ServiceDTO service, IFormFile image)
+        public async Task<IActionResult> AddService([FromForm] ServiceDTO service, List<IFormFile> image)
         {
             try
             {
@@ -79,18 +79,17 @@ namespace FEPetServices.Areas.Manager.Controllers
                     ViewBag.Categories = new SelectList(categories, "SerCategoriesId", "SerCategoriesName");
                 }
 
-                if (image != null && image.Length > 0)
+                if (service.SerCategoriesName == null) { return View(); }
+                foreach (var file in image)
                 {
-                    // Xử lý và lưu trữ ảnh
-                    Console.WriteLine(image);
-                    service.Picture = "/img/" + image.FileName.ToString();
+                    string filename = GenerateRandomNumber(5) + file.FileName;
+                    filename = Path.GetFileName(filename);
+                    string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                    var stream = new FileStream(uploadfile, FileMode.Create);
+                    file.CopyToAsync(stream);
+                    service.Picture = "/img/" + filename;
                 }
-                else
-                {
-                    // Xử lý lỗi nếu không có tệp ảnh được tải lên
-                    /*ViewBag.ErrorMessage = "Vui lòng chọn một tệp ảnh.";*/
-                    return View(service); // Hiển thị lại biểu mẫu với thông báo lỗi
-                }
+                
                 service.Status = true;
 
                 var json = JsonConvert.SerializeObject(service);
@@ -115,6 +114,19 @@ namespace FEPetServices.Areas.Manager.Controllers
                 TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
                 return View(service); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
+        }
+        public static string GenerateRandomNumber(int length)
+        {
+            Random random = new Random();
+            const string chars = "0123456789"; // Chuỗi chứa các chữ số từ 0 đến 9
+            char[] randomChars = new char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                randomChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(randomChars);
         }
 
         [HttpGet]

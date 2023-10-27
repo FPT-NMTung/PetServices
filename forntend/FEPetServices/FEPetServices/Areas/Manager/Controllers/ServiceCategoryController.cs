@@ -73,21 +73,16 @@ namespace FEPetServices.Areas.Manager.Controllers
             {
                 if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
                 {
-                    /*if (image != null && image.Length > 0)
-                    {
-                        // Xử lý và lưu trữ ảnh
-                        Console.WriteLine(image);
-                        serviceCategory.Picture = "/img/" + image.FileName.ToString();
-                    }*/
-                    foreach(var file in image)
-                    {
-                        string filename = file.FileName;
+                    if (serviceCategory.SerCategoriesName == null) { return View(); }
+                    foreach(var file in image) {
+                        string filename = GenerateRandomNumber(5) + file.FileName;
                         filename = Path.GetFileName(filename);
-                        serviceCategory.Picture = Path.Combine(Directory.GetCurrentDirectory(), "img/", filename);
-                        var stream = new FileStream(serviceCategory.Picture, FileMode.Create);
+                        string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                        var stream = new FileStream(uploadfile, FileMode.Create);
                         file.CopyToAsync(stream);
+                        serviceCategory.Picture = "/img/" +filename;
+                     }
 
-                    }
                     // mặc định status là true
                     serviceCategory.Status = true;
 
@@ -120,7 +115,19 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
         }
 
+        public static string GenerateRandomNumber(int length)
+        {
+            Random random = new Random();
+            const string chars = "0123456789"; // Chuỗi chứa các chữ số từ 0 đến 9
+            char[] randomChars = new char[length];
 
+            for (int i = 0; i < length; i++)
+            {
+                randomChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(randomChars);
+        }
 
         [HttpGet]
         public async Task<IActionResult> EditServiceCategory(int serCategoriesId)
