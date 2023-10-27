@@ -2,7 +2,7 @@
 {
     public class PartnerInfoDTO
     {
-        public int PartnerInfo1 { get; set; }
+        public int PartnerInfoId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Phone { get; set; }

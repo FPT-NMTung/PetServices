@@ -45,7 +45,7 @@ namespace FEPetServices.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["SuccessRegisterSuccessToast"] = "Tài khoản đã được kích hoạt thành công.";
-                    return View("Success");
+                    return RedirectToAction("Index", "Login");
                 }
                 else
                 {

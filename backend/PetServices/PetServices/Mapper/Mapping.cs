@@ -18,6 +18,15 @@ namespace PetServices.Mapper
             CreateMap<PetInfo, PetInfoDTO>()
                 .ReverseMap();
 
+            CreateMap<Booking, BookingDTO>()
+                .ReverseMap();
+
+            CreateMap<Booking, BookingDTO>()
+                .ReverseMap();
+
+            CreateMap<OrderProductDetail, OrderProductDetailDTO>()
+               .ReverseMap();
+
             CreateMap<Account, AccountInfo>()
                 .ForMember(dest => dest.RoleName,
                     opt => opt.MapFrom(src => src.Role.RoleName))
@@ -92,9 +101,15 @@ namespace PetServices.Mapper
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
                 .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateDate))
+                .ForMember(dest => dest.Quanlity, opt => opt.MapFrom(src => src.Quantity))
                 .ForMember(dest => dest.ProCategoriesId, opt => opt.MapFrom(src => src.ProCategoriesId))
                 .ForMember(dest => dest.ProCategoriesName, opt => opt.MapFrom(src => src.ProCategories.ProCategoriesName));
-
+            CreateMap<ProductCategory, ProductCategoryDTO>()
+                .ForMember(dest => dest.ProCategoriesId, opt => opt.MapFrom(src => src.ProCategoriesId))
+                .ForMember(dest => dest.ProCategoriesName, opt => opt.MapFrom(src => src.ProCategoriesName))
+                .ForMember(dest => dest.Desciptions, opt => opt.MapFrom(src => src.Desciptions))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.Picture, opt => opt.MapFrom(src => src.Picture));
         }
     }
 }

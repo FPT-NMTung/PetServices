@@ -9,10 +9,6 @@
 <head>
     <title>VERIFY PASSWORD</title>
     <link rel="stylesheet" href="~/css/VerifyEmail.css">
-
-    <link href="~/css/toastnotification.css" rel="stylesheet" />
-    <script src="~/js/toastnotification.js"></script>
-
 </head>
 <body>
     <section>
@@ -39,45 +35,8 @@
                 </form>
             </div>
         </div>
-        <div id="toast"></div>
-        @if (!string.IsNullOrEmpty(TempData["SuccessRegisterToast"] as string))
-        {
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    showSuccessRegisterToast();
-                });
-            </script>
-        }
-        @if (!string.IsNullOrEmpty(ViewBag.ErrorToast))
-        {
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    showErrorToast();
-                });
-            </script>
-        }
     </section>
-
 </body>
-    <script>
-    function showSuccessRegisterToast() {
-            toast({
-                title: 'Thành công',
-            message: '@TempData["SuccessRegisterToast"]',
-                type: 'success',
-                duration: 2000
-            });
-        }
-    function showErrorToast() {
-        toast({
-            title: 'Thất bại',
-            message: '@ViewBag.ErrorToast',
-            type: 'error',
-            duration: 2000
-        });
-    }
-    </script>
-
     <script>
         const inputs = document.querySelectorAll('input[type="number"]');
 
