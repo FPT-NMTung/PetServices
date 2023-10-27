@@ -170,7 +170,7 @@ namespace PetServices.Controllers
 
             if (!IsValidPassword(password))
             {
-                ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu cần tối thiểu 8 ký tự và không chứa ký tự đặc biệt!");
+                ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu cần tối thiểu 8 ký tự!");
                 return BadRequest(ModelState);
             }
 
