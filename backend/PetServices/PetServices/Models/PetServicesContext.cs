@@ -19,6 +19,7 @@ namespace PetServices.Models
         public virtual DbSet<Account> Accounts { get; set; } = null!;
         public virtual DbSet<Blog> Blogs { get; set; } = null!;
         public virtual DbSet<Booking> Bookings { get; set; } = null!;
+        public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderProductDetail> OrderProductDetails { get; set; } = null!;
         public virtual DbSet<Otp> Otps { get; set; } = null!;
         public virtual DbSet<PartnerInfo> PartnerInfos { get; set; } = null!;
@@ -103,11 +104,19 @@ namespace PetServices.Models
 
                 entity.Property(e => e.BookingId).HasColumnName("BookingID");
 
+                entity.Property(e => e.Address).HasMaxLength(500);
+
                 entity.Property(e => e.BookingDate).HasColumnType("date");
 
                 entity.Property(e => e.BookingStatus)
                     .HasMaxLength(20)
                     .IsFixedLength();
+
+                entity.Property(e => e.Commune).HasMaxLength(500);
+
+                entity.Property(e => e.District).HasMaxLength(500);
+
+                entity.Property(e => e.Province).HasMaxLength(500);
 
                 entity.Property(e => e.UserInfoId).HasColumnName("UserInfoID");
 
@@ -117,15 +126,9 @@ namespace PetServices.Models
                     .HasConstraintName("FK_Booking_UserInfo");
             });
 
-            modelBuilder.Entity<OrderProductDetail>(entity =>
+            modelBuilder.Entity<Order>(entity =>
             {
-                entity.HasKey(e => new { e.ProductId, e.BookingId });
-
-                entity.ToTable("OrderProductDetail");
-
-                entity.Property(e => e.ProductId).HasColumnName("ProductID");
-
-                entity.Property(e => e.BookingId).HasColumnName("BookingID");
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
                 entity.Property(e => e.Address).HasMaxLength(500);
 
@@ -133,13 +136,37 @@ namespace PetServices.Models
 
                 entity.Property(e => e.District).HasMaxLength(500);
 
+                entity.Property(e => e.OrderDate).HasColumnType("date");
+
+                entity.Property(e => e.OrderStatus)
+                    .HasMaxLength(20)
+                    .IsFixedLength();
+
                 entity.Property(e => e.Province).HasMaxLength(500);
 
-                entity.HasOne(d => d.Booking)
+                entity.Property(e => e.UserInfoId).HasColumnName("UserInfoID");
+
+                entity.HasOne(d => d.UserInfo)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.UserInfoId)
+                    .HasConstraintName("FK_Orders_UserInfo");
+            });
+
+            modelBuilder.Entity<OrderProductDetail>(entity =>
+            {
+                entity.HasKey(e => new { e.ProductId, e.OrderId });
+
+                entity.ToTable("OrderProductDetail");
+
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderProductDetails)
-                    .HasForeignKey(d => d.BookingId)
+                    .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderProductDetail_Booking");
+                    .HasConstraintName("FK_OrderProductDetail_Orders");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.OrderProductDetails)
@@ -273,8 +300,6 @@ namespace PetServices.Models
 
                 entity.Property(e => e.RoomName).HasMaxLength(500);
 
-                entity.Property(e => e.RoomServicesId).HasColumnName("RoomServicesID");
-
                 entity.HasOne(d => d.RoomCategories)
                     .WithMany(p => p.Rooms)
                     .HasForeignKey(d => d.RoomCategoriesId)
@@ -295,6 +320,23 @@ namespace PetServices.Models
                             j.IndexerProperty<int>("RoomId").HasColumnName("RoomID");
 
                             j.IndexerProperty<int>("BookingId").HasColumnName("BookingID");
+                        });
+
+                entity.HasMany(d => d.Services)
+                    .WithMany(p => p.Rooms)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "RoomService",
+                        l => l.HasOne<Service>().WithMany().HasForeignKey("ServiceId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RoomServices_Services"),
+                        r => r.HasOne<Room>().WithMany().HasForeignKey("RoomId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RoomServices_Room"),
+                        j =>
+                        {
+                            j.HasKey("RoomId", "ServiceId");
+
+                            j.ToTable("RoomServices");
+
+                            j.IndexerProperty<int>("RoomId").HasColumnName("RoomID");
+
+                            j.IndexerProperty<int>("ServiceId").HasColumnName("ServiceID");
                         });
             });
 
@@ -339,23 +381,6 @@ namespace PetServices.Models
                             j.IndexerProperty<int>("ServiceId").HasColumnName("ServiceID");
 
                             j.IndexerProperty<int>("BookingId").HasColumnName("BookingID");
-                        });
-
-                entity.HasMany(d => d.Rooms)
-                    .WithMany(p => p.Services)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "RoomService",
-                        l => l.HasOne<Room>().WithMany().HasForeignKey("RoomId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RoomServices_Room"),
-                        r => r.HasOne<Service>().WithMany().HasForeignKey("ServiceId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RoomServices_Services"),
-                        j =>
-                        {
-                            j.HasKey("ServiceId", "RoomId");
-
-                            j.ToTable("RoomServices");
-
-                            j.IndexerProperty<int>("ServiceId").HasColumnName("ServiceID");
-
-                            j.IndexerProperty<int>("RoomId").HasColumnName("RoomID");
                         });
             });
 
