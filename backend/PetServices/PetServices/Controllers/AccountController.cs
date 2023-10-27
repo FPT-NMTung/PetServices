@@ -26,7 +26,7 @@ namespace PetServices.Controllers
             _mapper = mapper;
             _configuration = configuration;
         }
-      
+
         [HttpGet]
         public IActionResult Get()
         {
@@ -69,8 +69,8 @@ namespace PetServices.Controllers
                 var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, login.Email),
-                new Claim(ClaimTypes.Role, result.Role?.RoleName), 
-                new Claim("RoleId", result.Role?.RoleId.ToString()) 
+                new Claim(ClaimTypes.Role, result.Role?.RoleName),
+                new Claim("RoleId", result.Role?.RoleId.ToString())
             };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -88,7 +88,7 @@ namespace PetServices.Controllers
             }
             else
             {
-                string errorMessage = "Đăng nhập không hợp lệ.";               
+                string errorMessage = "Đăng nhập không hợp lệ.";
                 if (string.IsNullOrWhiteSpace(login.Password))
                 {
                     errorMessage = "Mật khẩu không được để trống!";
@@ -115,7 +115,7 @@ namespace PetServices.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }           
+            }
 
             if (string.IsNullOrWhiteSpace(registerDto.Email))
             {
@@ -138,7 +138,7 @@ namespace PetServices.Controllers
                 string errorMessage = "Số điện thoại không được để trống!";
                 return BadRequest(errorMessage);
             }
-            if(registerDto.Phone.Length !=  10 )
+            if (registerDto.Phone.Length != 10)
             {
                 string errorMessage = "Số điện thoại phải có 10 ký tự!";
                 return BadRequest(errorMessage);
@@ -178,7 +178,7 @@ namespace PetServices.Controllers
             {
                 string errorMessage = "Mật khẩu không được chứa ký tự đặc biệt!";
                 return BadRequest(errorMessage);
-            }           
+            }
 
             if (_context.Accounts.Any(a => a.Email == registerDto.Email))
             {
@@ -189,7 +189,7 @@ namespace PetServices.Controllers
             {
                 Email = registerDto.Email,
                 Password = registerDto.Password,
-                Status = false, 
+                Status = false,
                 RoleId = 2
             };
 
@@ -211,11 +211,11 @@ namespace PetServices.Controllers
         }
 
         private bool IsValidEmail(string email)
-        {          
+        {
             string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$";
             return Regex.IsMatch(email, emailPattern);
         }
-       
+
 
         /*private bool IsValidPassword(string password)
         {            
@@ -240,7 +240,7 @@ namespace PetServices.Controllers
             {
                 ModelState.AddModelError("Email không hợp lệ", "Email cần có @");
                 return BadRequest(ModelState);
-            }           
+            }
 
             // Kiểm tra Phone
             if (!IsValidPhone(registerDto.Phone))
@@ -248,17 +248,17 @@ namespace PetServices.Controllers
                 ModelState.AddModelError("Số điện thoại không hợp lệ", "Số điện thoại bắt đầu bằng số 0 và có tổng 10 số");
                 return BadRequest(ModelState);
             }
-            
+
             if (_context.Accounts.Any(a => a.Email == registerDto.Email))
             {
                 return Conflict("Email đã được đăng ký");
             }
-            
+
             var newAccount = new Account
             {
                 Email = registerDto.Email,
                 Password = registerDto.Password,
-                Status = false, 
+                Status = false,
                 RoleId = 4
             };
 
@@ -273,7 +273,7 @@ namespace PetServices.Controllers
                 Address = registerDto.Address,
                 CardNumber = registerDto.CardNumber,
                 ImageCertificate = registerDto.ImageCertificate
-                
+
             };
 
             _context.Update(newAccount);
@@ -310,7 +310,7 @@ namespace PetServices.Controllers
 
                     Account account = await _context.Accounts.SingleAsync(i => i.AccountId == result.AccountId);
                     account.Password = pass;
-                    
+
                     _context.Entry(account).State = EntityState.Modified;
                     _context.SaveChanges();
                     var json = new { Gmail = account.Email, NewPass = pass };
@@ -318,7 +318,7 @@ namespace PetServices.Controllers
                 }
             }
             catch (Exception ex)
-            {               
+            {
                 return BadRequest("An error occurred.");
             }
         }
@@ -339,22 +339,22 @@ namespace PetServices.Controllers
                 {
                     return NotFound("Email không tồn tại.");
                 }
-                
+
                 Random random = new Random();
                 int otp = random.Next(100000, 999999);
-                
+
                 var newOTP = new Otp
                 {
                     Code = otp.ToString()
                 };
-                
+
                 _context.Otps.Add(newOTP);
                 await _context.SaveChangesAsync();
-               
+
                 account.Otpid = newOTP.Otpid;
                 _context.Update(account);
                 await _context.SaveChangesAsync();
-                
+
                 var response = new { Email = email, OTP = otp };
                 return Ok(response);
             }
@@ -387,7 +387,7 @@ namespace PetServices.Controllers
                 {
                     return BadRequest("Sai OTP.");
                 }
-              
+
                 account.Status = true;
                 _context.Update(account);
                 await _context.SaveChangesAsync();
@@ -395,7 +395,7 @@ namespace PetServices.Controllers
                 return Ok("Tài khoản đã được kích hoạt");
             }
             catch (Exception ex)
-            {               
+            {
                 return BadRequest("Đã xảy ra lỗi.");
             }
         }
@@ -409,7 +409,7 @@ namespace PetServices.Controllers
                 return NotFound("Tài khoản không tồn tài");
             }
 
-            if(newpassword != confirmnewpassword)
+            if (newpassword != confirmnewpassword)
             {
                 return BadRequest("Mật khẩu xác nhận không chính xác");
             }

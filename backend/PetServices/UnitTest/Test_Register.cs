@@ -67,14 +67,14 @@ namespace UnitTest
                     FirstName = "Pet",
                     LastName = "Service",
                     Phone = "0987654321",
-                    Email = "", 
+                    Email = "",
                     Password = "12345678"
                 };
 
                 var result = await controller.Register(registerDto) as ObjectResult;
 
                 Assert.NotNull(result);
-                Assert.Equal(400, result.StatusCode); 
+                Assert.Equal(400, result.StatusCode);
                 Assert.Contains("Email không được để trống!", result.Value.ToString());
             }
         }
