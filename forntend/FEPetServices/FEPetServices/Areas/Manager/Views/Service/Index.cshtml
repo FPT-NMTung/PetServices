@@ -135,21 +135,21 @@
                     <td><img src="@service.Picture" width="50" height="50"></td>
 
                     <td>
-                        <a href="/Manager/ServiceCategory/EditServiceCategory?serCategoriesId">Chi tiết</a>
+                        <a href="/Manager/Service/EditService?serviceId=@service.ServiceId">Chi tiết</a>
                     </td>
                     
                 </tr>
             }
         }
-        else
+@*        else
         {
             <tr>
                 <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
             </tr>
-        }
+        }*@
     </tbody>
     <tfoot>
-     @if (ViewBag.ErrorMessage != null)
+          @if (ViewBag.ErrorMessage != null)
             {
                 <div class="alert alert-danger">
                     <span style="color:red">@ViewBag.ErrorMessage</span>

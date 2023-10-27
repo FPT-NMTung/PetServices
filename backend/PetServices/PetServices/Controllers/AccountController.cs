@@ -44,6 +44,22 @@ namespace PetServices.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginForm login)
         {
+            if (string.IsNullOrWhiteSpace(login.Email))
+            {
+                string errorMessage = "Email không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            else if (login.Email.Contains(" "))
+            {
+                string errorMessage = "Email không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            if (!IsValidEmail(login.Email))
+            {
+                ModelState.AddModelError("Email không hợp lệ", "Email cần có @");
+                return BadRequest(ModelState);
+            }
+
             var result = await _context.Accounts
                 .Include(a => a.Role)
                 .SingleOrDefaultAsync(x => x.Email == login.Email && x.Password == login.Password);
@@ -53,7 +69,8 @@ namespace PetServices.Controllers
                 var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, login.Email),
-                new Claim(ClaimTypes.Role, result.Role?.RoleName) // Lưu tên vai trò (RoleName) vào mã thông báo
+                new Claim(ClaimTypes.Role, result.Role?.RoleName), // Lưu tên vai trò (RoleName) vào mã thông báo
+                new Claim("RoleId", result.Role?.RoleId.ToString()) // Lưu RoleId vào mã thông báo
             };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -67,11 +84,11 @@ namespace PetServices.Controllers
                     signingCredentials: creds
                 );
 
-                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
+                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName });
             }
             else
             {
-                string errorMessage = "Đăng nhập không hợp lệ.";
+                string errorMessage = "Đăng nhập không hợp lệ.";               
                 if (string.IsNullOrWhiteSpace(login.Password))
                 {
                     errorMessage = "Mật khẩu không được để trống!";
@@ -102,15 +119,38 @@ namespace PetServices.Controllers
             // Kiểm tra Email
             if (!IsValidEmail(registerDto.Email))
             {
-                ModelState.AddModelError("Email không hợp lệ", "Email cần có @");
+                ModelState.AddModelError("Email không hợp lệ", "Email cần có @!");
+                return BadRequest(ModelState);
+            }
+            if (!IsValidPhone(registerDto.Phone))
+            {
+                ModelState.AddModelError("Số điện thoại không hợp lệ", "Số điện thoại bắt đầu bằng số 0 và có tổng 10 số");
                 return BadRequest(ModelState);
             }
 
-            // Kiểm tra Password
-            if (!IsValidPassword(registerDto.Password))
+            if (string.IsNullOrWhiteSpace(registerDto.Password))
             {
-                ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu cần tối thiểu 8 ký tự và không chứa ký tự đặc biệt!");
-                return BadRequest(ModelState);
+                //ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu không được để trống");
+                string errorMessage = "Mật khẩu không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (registerDto.Password.Length < 8)
+            {
+                //ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu phải có ít nhất 8 ký tự");
+                string errorMessage = "Mật khẩu phải có ít nhất 8 ký tự!";
+                return BadRequest(errorMessage);
+            }
+            if (registerDto.Password.Contains(" "))
+            {
+                //ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu không được chứa khoảng trắng");
+                string errorMessage = "Mật khẩu không được chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            if (Regex.IsMatch(registerDto.Password, @"[^a-zA-Z0-9]"))
+            {
+                //ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu không được chứa ký tự đặc biệt");
+                string errorMessage = "Mật khẩu không được chứa ký tự đặc biệt!";
+                return BadRequest(errorMessage);
             }
 
             if (_context.Accounts.Any(a => a.Email == registerDto.Email))
@@ -148,11 +188,12 @@ namespace PetServices.Controllers
             string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$";
             return Regex.IsMatch(email, emailPattern);
         }
+       
 
-        private bool IsValidPassword(string password)
+        /*private bool IsValidPassword(string password)
         {            
             return !string.IsNullOrWhiteSpace(password) && password.Length >= 8 && !password.Contains(" "); 
-        }
+        }*/
 
         private bool IsValidPhone(string phone)
         {
@@ -175,11 +216,11 @@ namespace PetServices.Controllers
             }
 
             // Kiểm tra Password
-            if (!IsValidPassword(registerDto.Password))
+            /*if (!IsValidPassword(registerDto.Password))
             {
                 ModelState.AddModelError("Mật khẩu không hợp lệ", "Mật khẩu cần tối thiểu 8 ký tự và không chứa ký tự đặc biệt!");
                 return BadRequest(ModelState);
-            }
+            }*/
 
             // Kiểm tra Phone
             if (!IsValidPhone(registerDto.Phone))

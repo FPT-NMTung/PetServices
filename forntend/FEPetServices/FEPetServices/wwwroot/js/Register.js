@@ -5,7 +5,7 @@
         // Kiểm tra tất cả các trường
         const emailInput = document.querySelector('input[name="Email"]');
         const passwordInput = document.querySelector('input[name="Password"]');
-        
+        const phoneInput = document.querySelector('input[name="Phone"]');
 
         // Kiểm tra email không được để trống
         if (!emailInput.value) {
@@ -14,6 +14,15 @@
             return;
         } else if (!emailInput.value.includes('@')) {
             alert('Email phải chứa ký tự @.');
+            event.preventDefault();
+            return;
+        }
+
+        if (!phoneInput.value) {
+            alert('Vui lòng nhập SĐT!!');
+            event.preventDefault();
+        } else if (!/^0\d{9}$/.test(phoneInput.value)) {
+            alert('SĐT cần bắt đầu bằng số 0 và có 10 số');
             event.preventDefault();
             return;
         }

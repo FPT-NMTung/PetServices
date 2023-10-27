@@ -20,6 +20,21 @@
                 <form asp-controller="Register" asp-action="Index" class="login-form" method="post">
                     <h2>Đăng ký</h2>
                         <div class="inputbox">
+                            <ion-icon name="accessibility-outline"></ion-icon>
+                            <input asp-for="FirstName" type="text" required>
+                            <label for="">Họ</label>
+                        </div>
+                        <div class="inputbox">
+                            <ion-icon name="accessibility-outline"></ion-icon>
+                            <input asp-for="LastName" type="text" required>
+                            <label for="">Tên</label>
+                        </div>
+                        <div class="inputbox">
+                            <ion-icon name="call-outline"></ion-icon>
+                            <input asp-for="Phone" type="tel" pattern="0\d{9}" title="Số điện thoại phải bắt đầu bằng số 0 và có tổng cộng 10 chữ số" required>
+                            <label for="">Số điện thoại</label>
+                        </div>
+                        <div class="inputbox">
                             <ion-icon name="mail-outline"></ion-icon>
                             <input asp-for="Email" type="email" required>
                             <label for="">Email</label>
@@ -27,7 +42,7 @@
                         <div class="inputbox">
                             <ion-icon name="lock-closed-outline"></ion-icon>
                             <input asp-for="Password" type="password" required>
-                            <label for="">Mật khẩu</label>
+                        <label for="">Mật khẩu</label>
                         </div>
                         <button id="registerButton">Đăng ký</button>
                         <div class="register">
@@ -76,4 +91,4 @@
 </html>
 
 
-
+<script src="~/js/Register.js"></script>

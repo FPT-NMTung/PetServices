@@ -1,25 +1,42 @@
-﻿function handleImageFileChange(event) {
-    const fileInput = event.target;
-    const imagePreview = fileInput.previousElementSibling;
-    const file = fileInput.files[0];
+﻿function validateForm() {
+    const fname = document.getElementById('SerCategoriesName');
+    const subject = document.getElementById('Desciptions');
+    const fnameErrorMessage = document.getElementById('fname-error-message');
+    const subjectErrorMessage = document.getElementById('subject-error-message');
 
-    // Check if a file is selected
-    if (file) {
-        // Create a FileReader to read the selected image file
-        const reader = new FileReader();
+    console.log('Debug: fname.value', fname.value);
+    console.log('Debug: subject.value', subject.value);
 
-        reader.onload = function (e) {
-            // Set the image source to the data URL of the selected image
-            imagePreview.src = e.target.result;
-        };
+    const specialChars = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/; // Special character regex
+    const specialChar = /[@#$%^&*{}\[\]~]/;
+    // Reset error messages
+    fnameErrorMessage.textContent = "";
+    subjectErrorMessage.textContent = "";
 
-        // Read the selected image file as a data URL
-        reader.readAsDataURL(file);
+    let isValid = true;
+
+    if (specialChars.test(fname.value)) {
+        fnameErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
+        isValid = false;
     }
+
+    if (specialChar.test(subject.value)) {
+        subjectErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
+        isValid = false;
+    }
+
+    return isValid;
 }
 
-// Add an event listener to the file input
-document.addEventListener('DOMContentLoaded', function () {
-    const fileInput = document.getElementById('imageFile');
-    fileInput.addEventListener('change', handleImageFileChange);
-});
+function changeImageSource() {
+    const imageInput = document.getElementById('image');
+    const imagePreview = document.getElementById('imagePreview');
+
+    if (imageInput.files && imageInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+        };
+        reader.readAsDataURL(imageInput.files[0]);
+    }
+}

@@ -56,7 +56,7 @@ namespace UnitTest
             {
                 var testUser = new Account
                 {
-                    Email = "hungnvhe153434@gpt.edu.vn",
+                    Email = "hungnvhe153434@fpt.edu.vn",
                     Password = "12345678",
                     RoleId = 2
                 };
@@ -71,7 +71,7 @@ namespace UnitTest
 
                 var registerDto = new RegisterDTO
                 {
-                    Email = "hungnvhe153434@gpt.edu.vn",
+                    Email = "hungnvhe153434@fpt.edu.vn",
                     Password = "12345678"
                 };
 
@@ -120,6 +120,41 @@ namespace UnitTest
         // 4. Đăng ký với pass không đủ 8 ký tự
         public async Task Test_Register_PasswordTooShort()
         {
+            // Tạo một cơ sở dữ liệu ảo trên bộ nhớ để test
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            // context với cơ sở dữ liệu ảo
+            using (var context = new PetServicesContext(options))
+            { 
+                // Tạo đối tượng giả (mock) cho IMapper và IConfiguration
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                // Khởi tạo một đối tượng controller AccountController với cơ sở dữ liệu ảo và các đối tượng mock
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                // Tạo một đối tượng RegisterDTO với Email và Password 
+                var registerDto = new RegisterDTO
+                {
+                    Email = "psmsg65@gmail.com",
+                    Password = "123456" // Mật khẩu có ít hơn 8 ký tự
+                };
+
+                // Gọi action Register trên controller và nhận kết quả trả về
+                var result = await controller.Register(registerDto) as BadRequestObjectResult;  
+
+                Assert.NotNull(result); 
+                Assert.Equal(400, result.StatusCode);
+                Assert.Equal("Mật khẩu phải có ít nhất 8 ký tự!", result.Value); 
+            }
+        }
+
+        [Fact]
+        // 5. Đăng ký với pass rỗng
+        public async Task Test_Register_PasswordIsEmpty()
+        {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
@@ -134,18 +169,72 @@ namespace UnitTest
                 var registerDto = new RegisterDTO
                 {
                     Email = "psmsg65@gmail.com",
-                    Password = "123456"
+                    Password = "" // Mật khẩu có ít hơn 8 ký tự
                 };
 
-                var result = await controller.Register(registerDto) as ObjectResult;
+                var result = await controller.Register(registerDto) as BadRequestObjectResult;
 
                 Assert.NotNull(result);
                 Assert.Equal(400, result.StatusCode);
-                Assert.True(controller.ModelState.ContainsKey("Mật khẩu không hợp lệ"));
-                var errorMessages = controller.ModelState["Mật khẩu không hợp lệ"].Errors;
+                Assert.Equal("Mật khẩu không được để trống!", result.Value);
+            }
+        }
 
-                var errorMessage = errorMessages[0].ErrorMessage;
-                Assert.Contains("Mật khẩu cần tối thiểu 8 ký tự và không chứa ký tự đặc biệt", errorMessage);
+        [Fact]
+        // 6. Đăng ký với pass không chứa khoảng trắng
+        public async Task Test_Register_PasswordNoWhiteSpace()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var registerDto = new RegisterDTO
+                {
+                    Email = "psmsg65@gmail.com",
+                    Password = "1 234567" // Mật khẩu chứa khoảng trắng
+                };
+
+                var result = await controller.Register(registerDto) as BadRequestObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Equal("Mật khẩu không được chứa khoảng trắng!", result.Value);
+            }
+        }
+
+        [Fact]
+        // 7. Đăng ký với pass có ký tự đặc biệt
+        public async Task Test_Register_PasswordSpecialCharacters()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var registerDto = new RegisterDTO
+                {
+                    Email = "psmsg65@gmail.com",
+                    Password = "123456@7" // Mật khẩu chứa ký tự đặc biệt
+                };
+
+                var result = await controller.Register(registerDto) as BadRequestObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Equal("Mật khẩu không được chứa ký tự đặc biệt!", result.Value);
             }
         }
     }
