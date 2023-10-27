@@ -67,17 +67,26 @@ namespace FEPetServices.Areas.Manager.Controllers
             return View();
         }
 
-        public async Task<IActionResult> AddServiceCategory([FromForm] ServiceCategoryDTO serviceCategory, IFormFile image)
+        public async Task<IActionResult> AddServiceCategory([FromForm] ServiceCategoryDTO serviceCategory,List<IFormFile> image)
         {
             try
             {
                 if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
                 {
-                    if (image != null && image.Length > 0)
+                    /*if (image != null && image.Length > 0)
                     {
                         // Xử lý và lưu trữ ảnh
                         Console.WriteLine(image);
                         serviceCategory.Picture = "/img/" + image.FileName.ToString();
+                    }*/
+                    foreach(var file in image)
+                    {
+                        string filename = file.FileName;
+                        filename = Path.GetFileName(filename);
+                        serviceCategory.Picture = Path.Combine(Directory.GetCurrentDirectory(), "img/", filename);
+                        var stream = new FileStream(serviceCategory.Picture, FileMode.Create);
+                        file.CopyToAsync(stream);
+
                     }
                     // mặc định status là true
                     serviceCategory.Status = true;
