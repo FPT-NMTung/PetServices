@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using PetServices.Models;
 
-namespace PetServices.Models
+namespace PetServices.DTO
 {
-    public partial class OrderProductDetail
+    public class OrderProductDetailDTO
     {
         public int? Quantity { get; set; }
         public double? Price { get; set; }
@@ -13,8 +12,6 @@ namespace PetServices.Models
         public string? District { get; set; }
         public string? Commune { get; set; }
         public string? Address { get; set; }
-
-        public virtual Booking Booking { get; set; } = null!;
-        public virtual Product Product { get; set; } = null!;
+        public virtual ProductDTO Product { get; set; } = null!;
     }
 }

@@ -51,7 +51,7 @@ namespace PetServices.Controllers
                 Picture = productDTO.Picture,
                 Status = true,
                 Price = productDTO.Price,
-                Quanlity = productDTO.Quanlity,
+                Quantity = productDTO.Quanlity,
                 CreateDate = DateTime.Now,
                 ProCategoriesId = productDTO.ProCategoriesId
             };
@@ -81,7 +81,7 @@ namespace PetServices.Controllers
             product.Picture = productDTO.Picture;
             product.Status = productDTO.Status;
             product.Price = productDTO.Price;
-            product.Quanlity = productDTO.Quanlity;
+            product.Quantity = productDTO.Quanlity;
             product.CreateDate = DateTime.Now;
             product.ProCategoriesId = productDTO.ProCategoriesId;
             _context.Update(product);

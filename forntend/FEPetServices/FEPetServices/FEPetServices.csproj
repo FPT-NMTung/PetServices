@@ -23,6 +23,8 @@
     <Folder Include="Areas\Customer\Models\" />
     <Folder Include="Areas\Manager\Data\" />
     <Folder Include="Areas\Manager\Models\" />
+    <Folder Include="Areas\Partner\Data\" />
+    <Folder Include="Areas\Partner\Models\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +40,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Areas\Customer\Views\MenuCustomer\ChangePassword.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\dataTable.css" />
   </ItemGroup>
 
   <ItemGroup>
