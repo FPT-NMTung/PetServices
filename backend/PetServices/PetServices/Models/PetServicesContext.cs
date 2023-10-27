@@ -273,6 +273,8 @@ namespace PetServices.Models
 
                 entity.Property(e => e.RoomName).HasMaxLength(500);
 
+                entity.Property(e => e.RoomServicesId).HasColumnName("RoomServicesID");
+
                 entity.HasOne(d => d.RoomCategories)
                     .WithMany(p => p.Rooms)
                     .HasForeignKey(d => d.RoomCategoriesId)
@@ -337,6 +339,23 @@ namespace PetServices.Models
                             j.IndexerProperty<int>("ServiceId").HasColumnName("ServiceID");
 
                             j.IndexerProperty<int>("BookingId").HasColumnName("BookingID");
+                        });
+
+                entity.HasMany(d => d.Rooms)
+                    .WithMany(p => p.Services)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "RoomService",
+                        l => l.HasOne<Room>().WithMany().HasForeignKey("RoomId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RoomServices_Room"),
+                        r => r.HasOne<Service>().WithMany().HasForeignKey("ServiceId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RoomServices_Services"),
+                        j =>
+                        {
+                            j.HasKey("ServiceId", "RoomId");
+
+                            j.ToTable("RoomServices");
+
+                            j.IndexerProperty<int>("ServiceId").HasColumnName("ServiceID");
+
+                            j.IndexerProperty<int>("RoomId").HasColumnName("RoomID");
                         });
             });
 
