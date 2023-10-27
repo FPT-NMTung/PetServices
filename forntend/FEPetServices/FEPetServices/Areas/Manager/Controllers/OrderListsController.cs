@@ -1,8 +1,10 @@
 ﻿using FEPetServices.Form;
 using FEPetServices.Form.BookingForm;
+using FEPetServices.Form.OrdersForm;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
@@ -35,7 +37,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                List<BookingForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<BookingForm>>(responseContent, options);
+                List<OrdersForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrdersForm>>(responseContent, options);
                 return View(orderLists);
             }
             else
@@ -57,7 +59,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                BookingForm bookingForm = System.Text.Json.JsonSerializer.Deserialize<BookingForm>(responseContent, options);
+                OrdersForm bookingForm = System.Text.Json.JsonSerializer.Deserialize<OrdersForm>(responseContent, options);
                 return View(bookingForm);
             }
             else
@@ -66,7 +68,23 @@ namespace FEPetServices.Areas.Manager.Controllers
                 return View();
             }
         }
-
+        [HttpPost]
+        public async Task<IActionResult> OrderDetail(int id, [FromForm] Status status)
+        {
+        //https://localhost:7255/api/Order/changeStatus?Id=1
+          https://localhost:7255/api/Order
+            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/changeStatus?Id=" + id, status);
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessToast"] = "Cập nhật thành công";
+                return RedirectToAction("OrderDetail", new { id = id });
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
 
     }
 }
