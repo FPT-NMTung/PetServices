@@ -38,7 +38,7 @@ namespace PetServices.Controllers
             }
         }
 
-        [HttpGet("GetOrder/{Id}")]
+        [HttpGet("{Id}")]
         public async Task<IActionResult> Get(int Id)
         {
             try

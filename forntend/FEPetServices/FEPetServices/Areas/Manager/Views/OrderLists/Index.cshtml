@@ -20,7 +20,7 @@
                     <th>No.</th>
                     <th>Tên</th>
                     <th>Số điện thoại</th>
-                    <th>Mô tả</th>
+                    <th>Ngày đặt đơn</th>
                     <th>Chi tiết</th>
                 </tr>
             </thead>
@@ -37,7 +37,7 @@
                             <td>@orderLists.UserInfo.Phone</td>
                             <td>@orderLists.BookingDate</td>
                             <td>
-                                <a class="detail-button">Chi tiết</a>
+                                <a class="detail-button" href="~/Manager/OrderLists/OrderDetail?id=@orderLists.BookingId">Chi tiết</a>
                             </td>
                         </tr>
                     }

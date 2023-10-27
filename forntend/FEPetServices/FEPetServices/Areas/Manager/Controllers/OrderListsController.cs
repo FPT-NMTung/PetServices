@@ -44,5 +44,29 @@ namespace FEPetServices.Areas.Manager.Controllers
                 return View();
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> OrderDetail(int id)
+        {
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                BookingForm bookingForm = System.Text.Json.JsonSerializer.Deserialize<BookingForm>(responseContent, options);
+                return View(bookingForm);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
+
+
     }
 }
