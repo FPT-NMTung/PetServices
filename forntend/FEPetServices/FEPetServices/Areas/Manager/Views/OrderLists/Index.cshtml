@@ -14,7 +14,7 @@
         <h1>Dánh sách order</h1>
     </div>
     <div>
-        <table id="listspartner">
+        <table id="orders">
             <thead>
                 <tr>
                     <th>No.</th>
@@ -35,9 +35,9 @@
                             <td>@itemCount</td>
                             <td>@orderLists.UserInfo.FirstName  @orderLists.UserInfo.LastName</td>
                             <td>@orderLists.UserInfo.Phone</td>
-                            <td>@orderLists.BookingDate</td>
+                            <td>@orderLists.OrderDate</td>
                             <td>
-                                <a class="detail-button" href="~/Manager/OrderLists/OrderDetail?id=@orderLists.BookingId">Chi tiết</a>
+                                <a class="detail-button" href="~/Manager/OrderLists/OrderDetail?id=@orderLists.OrderId">Chi tiết</a>
                             </td>
                         </tr>
                     }
@@ -67,7 +67,7 @@
 <script>
     $(document).ready(function () {
         // Khởi tạo DataTables
-        var table = $('#listspartner').DataTable({
+        var table = $('#orders').DataTable({
             "paging": true,
             "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
             "searching": true,

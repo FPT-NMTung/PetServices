@@ -72,13 +72,16 @@
                             <label class="small mb-1" for="inputDescriptions">Mô tả </label>
                             <textarea class="form-control">@Model?.PartnerInfo.Descriptions</textarea>
                         </div>
-                        <input  name="Email" value="@Model?.Email" />
-                        <input  name="Password" value="@Model?.Password" />
+                        <input type="hidden" name="Email" value="@Model?.Email" />
+                        <input type="hidden" name="Password" value="@Model?.Password" />
 
                         <button class="btn btn-primary" type="submit">Chấp nhận đăng ký</button>
                     </form>
                 </div>
             </div>
+        </div>
+        <div class="btn-group">
+            <a class="btn btn-primary" href="~/Manager/ListPartner/Index">Trở lại</a>
         </div>
     </div>
 </body>
