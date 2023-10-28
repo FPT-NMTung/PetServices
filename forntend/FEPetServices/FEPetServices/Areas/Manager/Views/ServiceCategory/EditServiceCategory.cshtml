@@ -6,18 +6,6 @@
 <link href="~/css/toastNotification.css" rel="stylesheet" />
 </head>
 <body>
-@*@if (!string.IsNullOrEmpty( TempData["ErrorToast"]?.ToString()))
-{
-    <div class="alert alert-danger" style="color:red">
-        @TempData["ErrorToast"]
-    </div>
-}
-@if (!string.IsNullOrEmpty(TempData["SuccessToast"]?.ToString()))
-{
-    <div class="alert alert-success" style="color:red">
-        @TempData["SuccessToast"]
-    </div>
-}*@
 <h2>Chỉnh Sửa Loại Dịch Vụ Thú Cưng</h2>
 <div class="container">
   <form method="post" asp-controller="ServiceCategory" asp-action="EditServiceCategory" enctype="multipart/form-data" onsubmit="return validateForm()">

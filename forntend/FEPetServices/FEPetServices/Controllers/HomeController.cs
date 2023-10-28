@@ -22,7 +22,10 @@ namespace FEPetServices.Controllers
         {
             return View();
         }
-
+        public IActionResult ServiceDetail()
+        {
+            return View();
+        }
         public IActionResult Test()
         {
             return View();
