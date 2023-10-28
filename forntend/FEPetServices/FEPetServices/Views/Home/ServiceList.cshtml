@@ -13,63 +13,80 @@
     
     <div class="group">
        <img class="icon" src="/img/kitty.png">
-       <input placeholder="Search" type="search" class="input">
+       
+       <form method="get" action="@Url.Action("ServiceList")">
+            <input class="input" name="CategoriesName" type="text" placeholder="Nhập tên phòng" value="@ViewBag.CategoriesName">
+        </form>
     </div>
     
     <div class="card-container">
-        @foreach (var serviceCategory in Model)
-        {
-            string description = serviceCategory.Desciptions;
-
-                if (description?.Length > 100)
+      @if (Model != null && Model.Count > 0)
+            {
+                @foreach (var serviceCategory in Model)
                 {
-                    int lastSpace = description.LastIndexOf(' ', 100);
 
-                    description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                    string description = serviceCategory.Desciptions;
+
+                    if (description?.Length > 100)
+                    {
+                        int lastSpace = description.LastIndexOf(' ', 100);
+
+                        description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                    }
+                    <div class="card">
+                        <div class="image">
+                            <img src="@serviceCategory.Picture">
+                        </div>
+
+
+                        <div class="card-content">
+
+                            <h3>@serviceCategory.SerCategoriesName</h3>
+
+                            <p>@description</p>
+
+                        </div>
+                        <div class="learn">
+                            <a href="" class="learn-more">Xem Chi Tiết</a>
+                        </div>
+
+                    </div>
                 }
-        <div class="card">
-            <div class="image">
-               <img src="@serviceCategory.Picture">
-            </div>
+            }else
+                {
+                    <tr>
+                        <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
+                    </tr>
+                }
         
-
-           <div class="card-content">
-
-             <h3>@serviceCategory.SerCategoriesName</h3>
-
-             <p>@description</p>
-
-           </div>
-           <div class="learn">
-             <a href="" class="learn-more">Xem Chi Tiết</a>
-           </div>
-
-        </div>
-         }
+         
      </div>
   <div style="text-align:center;">   
-      @if (ViewBag.TotalPages > 1)
-        {
-
-         <div class="pagination">
-             @if (ViewBag.CurrentPage > 1)
+            @if (ViewBag.TotalPages > 1)
+            {
+                <ul class="pagination">
+                    @if (ViewBag.CurrentPage > 1)
                     {
-                        <a href="@Url.Action("ServiceList", new { page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">&laquo;</a>
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("ServiceList", new { page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">Previous</a>
+                        </li>
                     }
 
-               @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
                     {
-                     <a class="active" href="@Url.Action("ServiceList", new { page = i, pageSize = ViewBag.PageSize })">@i</a>
-                    @* <a class="active@(ViewBag.CurrentPage == i ? "active" : "")" href="@Url.Action("ServiceList", new { page = i, pageSize = ViewBag.PageSize })">@i</a>*@
-      
+                        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("ServiceList", new { page = i, pageSize = ViewBag.PageSize })">@i</a>
+                        </li>
                     }
-                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
                     {
-                     <a href="@Url.Action("ServiceList", new { page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">&raquo;</a>
-                     @*<a href="@Url.Action("ServiceList", new { page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">Next</a> *@  
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("ServiceList", new { page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize})">Next</a>
+                        </li>
                     }
+                </ul>
+            }
         </div>
-}</div>
 </div>
   </body>
 </html>
