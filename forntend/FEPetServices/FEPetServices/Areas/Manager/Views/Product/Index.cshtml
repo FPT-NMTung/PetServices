@@ -128,13 +128,23 @@
         @if (Model != null && Model.Count > 0)
         {
             int itemCount = 0;
+
+            
             @foreach (var product in Model)
             {
+                string description = product.Desciption;
+
+                if (description.Length > 100)
+                {
+                    int lastSpace = description.LastIndexOf(' ', 100);
+
+                    description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                }
                 <tr>
                     <td>@product.ProductId</td>
                     <td><img src="@product.Picture" width="50" height="50"></td>
                     <td>@product.ProductName</td>
-                    <td>@product.Desciption</td>
+                    <td>@description</td>
                     <td>
                         <div class="switch">
                             <input type="checkbox" name="Status" class="toggle" @(product?.Status ? "checked" : "") />
