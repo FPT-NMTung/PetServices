@@ -56,6 +56,14 @@ namespace PetServices.Controllers
             return Ok(roomService);
         }
 
+        [HttpGet("GetAllService")]
+        public async Task<ActionResult> GetAllService()
+        {
+            var listService = await _context.Services.ToListAsync();
+
+            return Ok(listService);
+        }
+
         [HttpPost("AddRoom")]
         public async Task<ActionResult> AddRoom(RoomDTO roomDTO)
         {
