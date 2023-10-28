@@ -28,8 +28,10 @@
                     description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
                 }
         <div class="card">
-
-        <img src="@serviceCategory.Picture">
+            <div class="image">
+               <img src="@serviceCategory.Picture">
+            </div>
+        
 
            <div class="card-content">
 
@@ -44,8 +46,30 @@
 
         </div>
          }
-    </div>
-    
+     </div>
+  <div style="text-align:center;">   
+      @if (ViewBag.TotalPages > 1)
+        {
+
+         <div class="pagination">
+             @if (ViewBag.CurrentPage > 1)
+                    {
+                        <a href="@Url.Action("ServiceList", new { page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">&laquo;</a>
+                    }
+
+               @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                     <a class="active" href="@Url.Action("ServiceList", new { page = i, pageSize = ViewBag.PageSize })">@i</a>
+                    @* <a class="active@(ViewBag.CurrentPage == i ? "active" : "")" href="@Url.Action("ServiceList", new { page = i, pageSize = ViewBag.PageSize })">@i</a>*@
+      
+                    }
+                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                    {
+                     <a href="@Url.Action("ServiceList", new { page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">&raquo;</a>
+                     @*<a href="@Url.Action("ServiceList", new { page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">Next</a> *@  
+                    }
+        </div>
+}</div>
 </div>
   </body>
 </html>

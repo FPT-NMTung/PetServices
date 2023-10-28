@@ -22,7 +22,7 @@ namespace FEPetServices.Controllers
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrlServiceCategoryList = "https://localhost:7255/api/ServiceCategory";
         }
-        public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory)
+        public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory, int page = 1, int pageSize = 4, string serCategoriesName = "")
         {
             try
             {
@@ -30,6 +30,8 @@ namespace FEPetServices.Controllers
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
+                
+
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
@@ -37,7 +39,22 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var servicecategoryList = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseContent);
-                        return View(servicecategoryList);
+
+                        if (!string.IsNullOrEmpty(serCategoriesName))
+                        {
+                            servicecategoryList = servicecategoryList
+                                .Where(c => c.SerCategoriesName.Contains(serCategoriesName, StringComparison.OrdinalIgnoreCase))
+                                .ToList();
+                        }
+                        int totalItems = servicecategoryList.Count;
+                        int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+                        int startIndex = (page - 1) * pageSize;
+                        List<ServiceCategoryDTO> currentPageServicecategoryList = servicecategoryList.Skip(startIndex).Take(pageSize).ToList();
+
+                        ViewBag.TotalPages = totalPages;
+                        ViewBag.CurrentPage = page;
+                        ViewBag.PageSize = pageSize;
+                        return View(currentPageServicecategoryList);
                     }
                     else
                     {

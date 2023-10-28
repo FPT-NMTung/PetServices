@@ -14,24 +14,26 @@ body {
     /*display: flex;*/
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 50px;
+    /*margin-top: 50px;*/
     
 }
     .card {
         width: 255px;
+        height:450px;
         background-color: #f0f0f0;
         border-radius: 8px;
         overflow: hidden;
         box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
         margin: 20px;
     }
-    .card img {
-        width: 100%;
-        height: 200px;
-    }
+.image img {
+    width: 100%;
+    height: 200px;
+}
 
 .card-content {
     padding: 16px;
+    height:160px;
 }
 
     .card-content h3 {
@@ -40,11 +42,11 @@ body {
     }
     .card-content p {
         color: #666;
-        font-size: 15px;
+        font-size: 13px;
         Line-height: 1.3;
     }
 
-    .card-content .btn {
+    /*.card-content .btn {
         display: inline-block;
         padding: 8px 16px;
         background-color: #333;
@@ -52,7 +54,7 @@ body {
         border-radius: 4px;
         margin-top: 16px;
         color: #fff;
-    }
+    }*/
 .container .card-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
@@ -69,9 +71,7 @@ body {
 
 .heading {
     text-align: center;
-    /*padding-bottom: 15px;*/
-    /*font-family: 'Playpen Sans', cursive;*/
-    font-family: 'Roboto', sans-serif;
+    font-family: HP-Amazone;
     padding-top: 30px;
     color: #ff6a00;
     text-shadow: 0 5px 10px ☐ rgba(0,0,0,.2);
@@ -85,7 +85,7 @@ body {
     align-items: center;
     position: relative;
     max-width: 800px;
-    margin-left:2%;
+    margin-left:20%;
 
 }
 
@@ -140,7 +140,7 @@ a {
     position:static;
     text-align:center;
     margin-bottom:20px;
-    height:50px;
+    height:100px;
     
 }
 
@@ -202,7 +202,32 @@ a {
                 -webkit-transform: translate3d(0, 0, -1em);
                 transform: translate3d(0, 0, -1em);
             }
-/*backrough của màn hình */
+/*phân trang chia */
+.pagination {
+    display: inline-block;
+    /*margin-left:30%;*/
+}
+
+    .pagination a {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+        border: 1px solid #ddd;
+        margin: 0 4px;
+        /*font-size:50px;*/
+    }
+
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #4CAF50;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
 
    
 @media (max-width:768px) {
