@@ -101,7 +101,7 @@
                         {
                             @foreach (var service in ViewBag.services)
                             {
-                                <input type="checkbox" id="@service.Value" name="@service.Value" value="">
+                                <input type="checkbox" id="@service.Value" name="SelectedServices" value="@service.Value">
                                 <label for="@service.Value">@service.Text</label>
                             }
                         }

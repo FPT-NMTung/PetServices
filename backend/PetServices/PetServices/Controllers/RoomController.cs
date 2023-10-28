@@ -33,10 +33,20 @@ namespace PetServices.Controllers
         public async Task<ActionResult> GetRoom(int roomId)
         {
             var room = await _context.Rooms
+                .Include(r => r.Services)
                 .Include(r => r.RoomCategories)
                 .FirstOrDefaultAsync(r => r.RoomId == roomId);
 
-            return Ok(_mapper.Map<RoomDTO>(room));
+            if (room == null)
+            {
+                return NotFound();
+            }
+
+            var roomDto = _mapper.Map<RoomDTO>(room);
+
+            roomDto.ServiceIds = room.Services.Select(s => s.ServiceId).ToList();
+
+            return Ok(roomDto);
         }
 
         [HttpGet("GetRoomCategory")]
@@ -46,14 +56,6 @@ namespace PetServices.Controllers
                 .ToListAsync();
 
             return Ok(_mapper.Map<List<RoomCategoryDTO>>(roomCategory));
-        }
-
-        [HttpGet("GetRoomService")]
-        public async Task<ActionResult> GetRoomService()
-        {
-            var roomService = await _context.RoomServices.ToListAsync();
-
-            return Ok(roomService);
         }
 
         [HttpGet("GetAllService")]
@@ -79,25 +81,17 @@ namespace PetServices.Controllers
                     Slot = roomDTO.Slot,
                     Status = roomDTO.Status,
                     RoomCategoriesId = roomDTO.RoomCategoriesId,
-
                 };
+
+                var services = _context.Services.Where(s => roomDTO.ServiceIds.Contains(s.ServiceId)).ToList();
+
+                foreach (var service in services)
+                {
+                    newRoom.Services.Add(service);
+                }
 
                 await _context.Rooms.AddAsync(newRoom);
                 await _context.SaveChangesAsync();
-
-                var listService = await _context.Services.ToListAsync();
-                foreach (var service in listService)
-                {
-                    var newRoomService = new RoomService
-                    {
-                        RoomId = newRoom.RoomId,
-                        ServiceId = service.ServiceId,
-                        Status = false,
-                    };
-
-                    await _context.RoomServices.AddAsync(newRoomService);
-                    await _context.SaveChangesAsync();
-                }
 
                 return Ok(_mapper.Map<RoomDTO>(newRoom));
             }
@@ -112,11 +106,15 @@ namespace PetServices.Controllers
         {
             try
             {
-                var room = await _context.Rooms.Include(r => r.RoomCategories).FirstOrDefaultAsync(p => p.RoomId == roomId);
+                var room = await _context.Rooms.Include(r => r.RoomCategories).Include(r => r.Services).FirstOrDefaultAsync(p => p.RoomId == roomId);
                 if (room == null)
                 {
                     return BadRequest("Không tìm thấy phòng bạn chọn.");
                 }
+
+                var servicesToRemove = room.Services.ToList();
+                room.Services.Clear();
+                _context.SaveChanges();
 
                 room.RoomName = roomDTO.RoomName;
                 room.Desciptions = roomDTO.Desciptions;
@@ -125,6 +123,13 @@ namespace PetServices.Controllers
                 room.Status = roomDTO.Status;
                 room.Slot = roomDTO.Slot;
                 room.RoomCategoriesId = roomDTO.RoomCategoriesId;
+
+                var services = _context.Services.Where(s => roomDTO.ServiceIds.Contains(s.ServiceId)).ToList();
+
+                foreach (var service in services)
+                {
+                    room.Services.Add(service);
+                }
 
                 _context.Entry(room).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 await _context.SaveChangesAsync();

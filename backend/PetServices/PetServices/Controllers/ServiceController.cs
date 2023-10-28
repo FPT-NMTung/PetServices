@@ -71,22 +71,7 @@ namespace PetServices.Controllers
 
             try
             {
-                await _context.SaveChangesAsync();
-
-                var listRoom = await _context.Rooms.ToListAsync();
-                foreach (var room in listRoom)
-                {
-                    var newRoomService = new RoomService
-                    {
-                        RoomId = room.RoomId,
-                        ServiceId = newServices.ServiceId,
-                        Status = false,
-                    };
-
-                    await _context.RoomServices.AddAsync(newRoomService);
-                    await _context.SaveChangesAsync();
-                }
-
+                await _context.SaveChangesAsync();  
                 return Ok(_mapper.Map<ServiceDTO>(newServices));
             }
             catch (DbUpdateException ex)

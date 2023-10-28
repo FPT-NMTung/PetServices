@@ -86,6 +86,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 if (serviceResponse.IsSuccessStatusCode)
                 {
                     var services = await serviceResponse.Content.ReadFromJsonAsync<List<ServiceDTO>>();
+                    Console.WriteLine(services);
+
                     ViewBag.services = new SelectList(services, "ServiceId", "ServiceName");
                 }
 
@@ -103,6 +105,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                     return View(roomDTO); 
                 }
                 roomDTO.Status = true;
+
+                roomDTO.ServiceIds = Request.Form["SelectedServices"].ToString().Split(',').Select(int.Parse).ToList();
 
                 var json = JsonConvert.SerializeObject(roomDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -146,6 +150,15 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                HttpResponseMessage serviceResponse = await client.GetAsync(ApiUrlServiceList);
+
+                if (serviceResponse.IsSuccessStatusCode)
+                {
+                    var services = await serviceResponse.Content.ReadFromJsonAsync<List<ServiceDTO>>();
+
+                    ViewBag.services = new SelectList(services, "ServiceId", "ServiceName");
+                }
+
                 HttpResponseMessage categoryResponse = await client.GetAsync(ApiUrlRoomCategoryList);
 
                 if (!categoryResponse.IsSuccessStatusCode)
@@ -169,8 +182,6 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 var roomDto = JsonConvert.DeserializeObject<RoomDTO>(responseContent);
 
-                Console.WriteLine("12");
-
                 return View(roomDto);
 
             }
@@ -182,7 +193,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditRoom([FromForm] RoomDTO roomDTO, IFormFile image, int RoomId, int SelectedCategory)
+        public async Task<ActionResult> EditRoom([FromForm] RoomDTO roomDTO, IFormFile image, int RoomId, int SelectedCategory, List<int> selectedServices)
         {
             try
             {
@@ -193,6 +204,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                     var categories = await categoryResponse.Content.ReadFromJsonAsync<List<RoomCategoryDTO>>();
                     ViewBag.Categories = new SelectList(categories, "RoomCategoriesId", "RoomCategoriesName");
                 }
+
+                roomDTO.ServiceIds = Request.Form["SelectedServices"].ToString().Split(',').Select(int.Parse).ToList();
 
                 if (image != null && image.Length > 0)
                 {

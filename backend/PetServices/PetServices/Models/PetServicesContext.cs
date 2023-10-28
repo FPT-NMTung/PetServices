@@ -29,7 +29,6 @@ namespace PetServices.Models
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Room> Rooms { get; set; } = null!;
         public virtual DbSet<RoomCategory> RoomCategories { get; set; } = null!;
-        public virtual DbSet<RoomService> RoomServices { get; set; } = null!;
         public virtual DbSet<Service> Services { get; set; } = null!;
         public virtual DbSet<ServiceCategory> ServiceCategories { get; set; } = null!;
         public virtual DbSet<UserInfo> UserInfos { get; set; } = null!;
@@ -295,6 +294,23 @@ namespace PetServices.Models
 
                             j.IndexerProperty<int>("BookingId").HasColumnName("BookingID");
                         });
+
+                entity.HasMany(d => d.Services)
+                    .WithMany(p => p.Rooms)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "RoomService",
+                        l => l.HasOne<Service>().WithMany().HasForeignKey("ServiceId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RoomService_Services"),
+                        r => r.HasOne<Room>().WithMany().HasForeignKey("RoomId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RoomService_Room"),
+                        j =>
+                        {
+                            j.HasKey("RoomId", "ServiceId");
+
+                            j.ToTable("RoomService");
+
+                            j.IndexerProperty<int>("RoomId").HasColumnName("RoomID");
+
+                            j.IndexerProperty<int>("ServiceId").HasColumnName("ServiceID");
+                        });
             });
 
             modelBuilder.Entity<RoomCategory>(entity =>
@@ -306,15 +322,6 @@ namespace PetServices.Models
                 entity.Property(e => e.Picture).HasMaxLength(500);
 
                 entity.Property(e => e.RoomCategoriesName).HasMaxLength(500);
-            });
-
-            modelBuilder.Entity<RoomService>(entity =>
-            {
-                entity.Property(e => e.RoomServiceId).HasColumnName("RoomServiceID");
-
-                entity.Property(e => e.RoomId).HasColumnName("RoomID");
-
-                entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
             });
 
             modelBuilder.Entity<Service>(entity =>
