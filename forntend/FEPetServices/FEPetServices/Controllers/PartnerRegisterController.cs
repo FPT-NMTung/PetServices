@@ -20,17 +20,29 @@ namespace FEPetServices.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index([FromForm] RegisterDTO registerInfo)
+        public async Task<IActionResult> Index([FromForm] RegisterDTO registerInfo, IFormFile image)
         {
             try
             {
-               /* if (image != null && image.Length > 0)
+                /* if (image != null && image.Length > 0)
+                 {
+                     // Xử lý và lưu trữ ảnh
+                     Console.WriteLine(image);
+                     registerInfo.ImageCertificate = "/img/" + image.FileName.ToString();
+                 }*/
+                if (image != null)
                 {
-                    // Xử lý và lưu trữ ảnh
-                    Console.WriteLine(image);
-                    registerInfo.ImageCertificate = "/img/" + image.FileName.ToString();
-                }*/
+                    string filename = GenerateRandomNumber(5) + image.FileName;
+                    filename = Path.GetFileName(filename);
+                    string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                    using (var stream = new FileStream(uploadfile, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
+                    registerInfo.ImageCertificate = "/img/" + filename;
+                }
                 // Chuyển thông tin đăng ký thành dạng JSON
+
                 var json = JsonConvert.SerializeObject(registerInfo);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -56,5 +68,21 @@ namespace FEPetServices.Controllers
 
             return View();
         }
+
+        public static string GenerateRandomNumber(int length)
+        {
+            Random random = new Random();
+            const string chars = "0123456789"; // Chuỗi chứa các chữ số từ 0 đến 9
+            char[] randomChars = new char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                randomChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(randomChars);
+        }
     }
+
+
 }

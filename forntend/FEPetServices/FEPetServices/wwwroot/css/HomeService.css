@@ -27,7 +27,7 @@ body {
     }
     .card img {
         width: 100%;
-        height: auto;
+        height: 200px;
     }
 
 .card-content {
@@ -84,8 +84,9 @@ body {
     line-height: 28px;
     align-items: center;
     position: relative;
-    max-width: 300px;
+    max-width: 800px;
     margin-left:2%;
+
 }
 
 .input {
@@ -135,8 +136,15 @@ a {
  
     
 }
+.learn{
+    position:static;
+    text-align:center;
+    margin-bottom:20px;
+    height:50px;
+    
+}
 
-    a.learn-more {
+    .learn a.learn-more {
         font-weight: 600;
         color: #382b22;
         text-transform: uppercase;

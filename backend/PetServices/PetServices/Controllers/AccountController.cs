@@ -218,11 +218,7 @@ namespace PetServices.Controllers
                 Status = false, 
                 RoleId = 4
             };
-
-            await _context.Accounts.AddAsync(newAccount);
-            await _context.SaveChangesAsync();
-
-            newAccount.PartnerInfo = new PartnerInfo
+            var partner = new PartnerInfo
             {
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
@@ -230,10 +226,10 @@ namespace PetServices.Controllers
                 Address = registerDto.Address,
                 CardNumber = registerDto.CardNumber,
                 ImageCertificate = registerDto.ImageCertificate
-                
-            };
 
-            _context.Update(newAccount);
+            };
+            await _context.Accounts.AddAsync(newAccount);
+             _context.PartnerInfos.Add(partner);
             await _context.SaveChangesAsync();
 
             return Ok("Đăng ký thành công! Đăng nhập để trải nghiệm hệ thống");

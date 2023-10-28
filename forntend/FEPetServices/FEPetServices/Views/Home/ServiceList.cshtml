@@ -17,72 +17,33 @@
     </div>
     
     <div class="card-container">
+        @foreach (var serviceCategory in Model)
+        {
+            string description = serviceCategory.Desciptions;
 
+                if (description?.Length > 100)
+                {
+                    int lastSpace = description.LastIndexOf(' ', 100);
+
+                    description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                }
         <div class="card">
 
-        <img src="/img/spa-cho-meo-1.jpg">
+        <img src="@serviceCategory.Picture">
 
            <div class="card-content">
 
-             <h3>Card 1</h3>
+             <h3>@serviceCategory.SerCategoriesName</h3>
 
-             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+             <p>@description</p>
 
-             <a href="" class="learn-more">Read More</a>
-
+           </div>
+           <div class="learn">
+             <a href="" class="learn-more">Xem Chi Tiết</a>
            </div>
 
         </div>
-
-        <div class="card">
-
-        <img src="/img/spa-cho-meo-1.jpg">
-
-           <div class="card-content">
-
-             <h3>Card 1</h3>
-
-             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-
-             <a href="" class="learn-more">Read More</a>
-
-           </div>
-
-        </div>
-
-        <div class="card">
-
-        <img src="/img/spa-cho-meo-1.jpg">
-
-           <div class="card-content">
-
-             <h3>Card 1</h3>
-
-             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-
-             <a href="" class="learn-more">Read More</a>
-
-           </div>
-
-        </div>
-
-        <div class="card">
-
-        <img src="/img/spa-cho-meo-1.jpg">
-
-           <div class="card-content">
-
-             <h3>Card 1</h3>
-
-             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-
-             <a href="" class="learn-more">Read More</a>
-
-           </div>
-
-        </div>
-
-        
+         }
     </div>
     
 </div>

@@ -17,7 +17,7 @@
     <section>
         <div class="form-box">
             <div class="form-value">
-                <form class="login-form" method="post">
+                <form class="login-form" method="post" enctype="multipart/form-data">
                     <h2>Đăng ký làm đối tác</h2>
                     @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
                     {
@@ -59,6 +59,10 @@
                                 của hệ thống
                             </label>
                         </div>
+                         <div class="image">
+                            <label for="image">Chọn ảnh:</label>
+                            <input type="file" id="image" name="image"  multiple>
+                        </div>
                         <button id="registerButton">Đăng ký</button>
                         <div class="register">
                             <p>Quay trở lại <a href="~/Login/Index">Đăng nhập</a></p>
@@ -92,14 +96,7 @@
                             <p>Điều 6: Cam kết cung cấp chính xác thông tin</p>
                         </div>
                     </div>
-                    <div class="image">
-<<<<<<< HEAD
-                       <input type="file" id="checkimage"  >
-=======
-                        <input id="checkimage" type="file" />
-                       @* <input type="file" id="image" name="image" required>*@
->>>>>>> 2f38beea30a39b8902dc60307cfc075cf48e99c6
-                    </div>
+                   
                 </div>
             </div>
         </div>

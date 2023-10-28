@@ -58,36 +58,38 @@ namespace FEPetServices.Areas.Manager.Controllers
             return new string(randomChars);
         }
         [HttpPost]
-        public async Task<IActionResult> Index([FromForm] UserInfo userInfo, List<IFormFile> image)
+        public async Task<IActionResult> Index([FromForm] UserInfo userInfo, IFormFile image)
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
-            
-            foreach (var file in image)
+
+            // Handle the uploaded image
+            if (image != null)
             {
-                string filename = GenerateRandomNumber(5) + file.FileName;
+                string filename = GenerateRandomNumber(5) + image.FileName;
                 filename = Path.GetFileName(filename);
                 string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
-                var stream = new FileStream(uploadfile, FileMode.Create);
-                file.CopyToAsync(stream);
+                using (var stream = new FileStream(uploadfile, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
                 userInfo.ImageUser = "/img/" + filename;
             }
 
-            // Sử dụng HttpClient để gửi dữ liệu cập nhật lên API
-            if (userInfo.Address == null || userInfo.FirstName == null ||
-                userInfo.LastName == null)
+            // Check if other fields are valid
+            if (userInfo.Address == null || userInfo.FirstName == null || userInfo.LastName == null)
             {
                 TempData["ErrorToast"] = "Vui lòng điền đầy đủ thông tin";
                 return RedirectToAction("Index");
             }
 
-            if (userInfo.Province == null ||
-                userInfo.District == null || userInfo.Commune == null)
+            if (userInfo.Province == null || userInfo.District == null || userInfo.Commune == null)
             {
                 TempData["ErrorToast"] = "Vui lòng cung cấp lại địa chỉ";
                 return RedirectToAction("Index");
             }
 
+            // Update the user information, including the image URL
             HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/updateInfo?email=" + email, userInfo);
             if (response.IsSuccessStatusCode)
             {
@@ -100,5 +102,6 @@ namespace FEPetServices.Areas.Manager.Controllers
                 return RedirectToAction("Index");
             }
         }
+
     }
 }
