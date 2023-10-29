@@ -10,15 +10,30 @@
   <body>
     <div class="container">
     <h1 class="heading"> Dịch Vụ Thú Cưng</h1>
-    
-    <div class="group">
-       <img class="icon" src="/img/kitty.png">
-       
-       <form method="get" action="@Url.Action("ServiceList")">
+    <div> 
+     <form method="get">
+       <div class="group">
+          <img class="icon" src="/img/kitty.png">
+           <input type="hidden" value="@ViewBag.pageSize" name="pageSize" />
             <input class="input" name="CategoriesName" type="text" placeholder="Nhập tên phòng" value="@ViewBag.CategoriesName">
-        </form>
-    </div>
-    
+        </div>
+    </form>
+</div>
+                <div style="display: flex; align-items: flex-end;">
+                    <p class="name-search" style="margin-left: 35px;">Hiển thị: </p>
+                    <form method="get">
+                        <input type="hidden" name="CategoriesName" value="@ViewBag.CategoriesName" />
+                        @*<input type="hidden" name="sortOrder" value="@ViewBag.SortOrder" />
+                        <input type="hidden" name="RoomCategoriesId" value="@ViewBag.RoomCategoriesId" />*@
+                        <select id="pageSize" name="pageSize" onchange="this.form.submit();">
+                            <!option value="8" @(ViewBag.PageSize == 4 ? "selected" : "")>4 Dịch Vụ</!option>
+                            <!option value="12" @(ViewBag.PageSize == 8 ? "selected" : "")>8 Dịch Vụ</!option>
+                            <!option value="24" @(ViewBag.PageSize == 12 ? "selected" : "")>12 Dịch Vụ</!option>
+                            <!option value="48" @(ViewBag.PageSize == 24 ? "selected" : "")>24 Dịch Vụ</!option>
+                        </select>
+                    </form>
+                </div>
+
     <div class="card-container">
       @if (Model != null && Model.Count > 0)
             {
@@ -68,20 +83,20 @@
                     @if (ViewBag.CurrentPage > 1)
                     {
                         <li class="page-item">
-                            <a class="page-link" href="@Url.Action("ServiceList", new { page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">Previous</a>
+                            <a class="page-link" href="@Url.Action("ServiceList", new { page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize , CategoriesName = ViewBag.CategoriesName })">Previous</a>
                         </li>
                     }
 
                     @for (int i = 1; i <= ViewBag.TotalPages; i++)
                     {
                         <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
-                            <a class="page-link" href="@Url.Action("ServiceList", new { page = i, pageSize = ViewBag.PageSize })">@i</a>
+                            <a class="page-link" href="@Url.Action("ServiceList", new { page = i, pageSize = ViewBag.PageSize, CategoriesName = ViewBag.CategoriesName })">@i</a>
                         </li>
                     }
                     @if (ViewBag.CurrentPage < ViewBag.TotalPages)
                     {
                         <li class="page-item">
-                            <a class="page-link" href="@Url.Action("ServiceList", new { page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize})">Next</a>
+                            <a class="page-link" href="@Url.Action("ServiceList", new { page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize,CategoriesName = ViewBag.CategoriesName})">Next</a>
                         </li>
                     }
                 </ul>

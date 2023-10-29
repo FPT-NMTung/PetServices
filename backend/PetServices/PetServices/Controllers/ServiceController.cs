@@ -46,6 +46,24 @@ namespace PetServices.Controllers
             return Ok(_mapper.Map<ServiceDTO>(service));
         }
 
+        [HttpGet("GetServicesByCategory/{serviceCategoryID}")]
+        public IActionResult GetServicesByCategory(int serviceCategoryID)
+        {
+            // Find services that belong to the specified serviceCategoryID.
+            List<Service> servicesInCategory = _context.Services
+                .Where(s => s.SerCategoriesId == serviceCategoryID)
+                .ToList();
+
+            if (servicesInCategory.Count == 0)
+            {
+                return NotFound("No services found for the specified category.");
+            }
+
+            // Map the services to ServiceDTO objects.
+            List<ServiceDTO> serviceDTOs = _mapper.Map<List<ServiceDTO>>(servicesInCategory);
+
+            return Ok(serviceDTOs);
+        }
 
         [HttpPost("CreateService")]
         public async Task<IActionResult> CreateService(ServiceDTO serviceDTO)

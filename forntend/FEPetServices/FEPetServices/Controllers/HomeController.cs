@@ -9,7 +9,7 @@ using System.Text;
 
 namespace FEPetServices.Controllers
 {
-   /* [Authorize(Policy = "CusOnly")]*/
+    /* [Authorize(Policy = "CusOnly")]*/
     public class HomeController : Controller
     {
         private readonly HttpClient client = null;
@@ -31,7 +31,7 @@ namespace FEPetServices.Controllers
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
-
+                
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -41,12 +41,14 @@ namespace FEPetServices.Controllers
                     {
                         var servicecategoryList = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseContent);
 
-                        if (!string.IsNullOrEmpty(CategoriesName))
+                        if (!string.IsNullOrEmpty(CategoriesName) && servicecategoryList != null)
                         {
                             servicecategoryList = servicecategoryList
-                                .Where(c => c.SerCategoriesName.Contains(CategoriesName, StringComparison.OrdinalIgnoreCase))
+                                .Where(c => c.SerCategoriesName != null && c.SerCategoriesName.Contains(CategoriesName, StringComparison.OrdinalIgnoreCase))
                                 .ToList();
+                            Console.WriteLine(1);
                         }
+
                         int totalItems = servicecategoryList.Count;
                         int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
                         int startIndex = (page - 1) * pageSize;
@@ -55,7 +57,7 @@ namespace FEPetServices.Controllers
                         ViewBag.TotalPages = totalPages;
                         ViewBag.CurrentPage = page;
                         ViewBag.PageSize = pageSize;
-                        ViewBag.CategoriesName = CategoriesName;
+                        ViewBag.CategoriesName =CategoriesName ;
                         return View(currentPageServicecategoryList);
                     }
                     else
@@ -81,7 +83,7 @@ namespace FEPetServices.Controllers
         {
             return View();
         }
-        
+
         public IActionResult ServiceDetail()
         {
             return View();

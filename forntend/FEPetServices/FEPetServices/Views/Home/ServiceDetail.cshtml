@@ -34,7 +34,7 @@
         <!-- Swiper Slider -->
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
-            <img src="/img/1000100 Em này rất thích hợp dùng cho da dầu nha thấm nhanh cấp ẩm quá đỉnh luôn.png" />
+            <img src="@Model?.Picture>" />
 
             </div>
 
@@ -46,29 +46,21 @@
         <!--**Text************************-->
         <div class="product-text">
             <!--category-->
-            <span class="product-category">Women Clothes & Dresses</span>
+            <span class="product-category">@Model?.ServiceName</span>
             <h3>ASOS Women Clothe</h3>
-            <span class="product-price">$135.3</span>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officiis laboriosam vitae ab aspernatur qui facere a commodi cupiditate praesentium. Aliquam, voluptatem est debitis consequuntur ex autem exercitationem quas dolorem alias?
-                <br/>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic illo, enim non molestias dolores eos officia minima quidem architecto labore soluta? Expedita officiis voluptas sapiente officia debitis, mollitia eum quia.
+            <span class="product-price">@Model?.Price</span>
+            <p>
+                @Model?.Desciptions
             </p>
             <!--size-->
             <div class="product-size-container">
-                <strong>Select Size:-</strong>
+                <strong>Dịch Vụ:</strong>
                 <div class="product-size">
-                    <!--xl-->
+                   @foreach (var service in ViewBag.Services)
+                   {
                     <input type="checkbox" class="s-checkbox" id="s-xl">
-                    <label for="s-xl" class="s-label">XL</label>
-                    <!--Small-->
-                    <input type="checkbox" class="s-checkbox" id="s-s">
-                    <label for="s-s" class="s-label">S</label>
-                    <!--Medium-->
-                    <input type="checkbox" class="s-checkbox" id="s-m">
-                    <label for="s-m" class="s-label">M</label>
-                    <!--Large-->
-                    <input type="checkbox" class="s-checkbox" id="s-l">
-                    <label for="s-l" class="s-label">L</label>
+                    <button href="" for="s-xl" class="s-label">@service.ServiceName</button>  
+                   }
                 </div>
             </div>
 
@@ -84,15 +76,10 @@
     </section>
 
     <!--==Jquery===========================-->
-@*    <script
+   <script
   src="https://code.jquery.com/jquery-3.6.1.js"
-  integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
-  crossorigin="anonymous"></script>
+  </script>
 
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>*@
-
-    <!-- Initialize Swiper -->
     <script>
       $('.s-checkbox').on('change', function() {
 		    $('.s-checkbox').not(this).prop('checked', false);  
