@@ -259,5 +259,38 @@ namespace UnitTest
                 Assert.Contains("Mật khẩu phải có ít nhất 8 ký tự!", result.Value.ToString());
             }
         }
+
+        [Fact]
+        // 8. Email + Pass(có khoảng trắng) + Phone + ImageCertificate
+        public async Task Test_Register_Pass_WhiteSpace()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var registerDto = new RegisterPartnerDTO
+                {
+                    FirstName = "Pet",
+                    LastName = "Service",
+                    Phone = "0987654321",
+                    Email = "psmsg65@gmail.com",
+                    Password = "12345 678",
+                    ImageCertificate = "https://s.net.vn/NsSG"
+                };
+
+                var result = await controller.RegisterPartner(registerDto) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Contains("Mật khẩu không được chứa khoảng trắng!", result.Value.ToString());
+            }
+        }
     }
 }
