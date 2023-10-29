@@ -29,6 +29,38 @@ namespace PetServices.Controllers
             return Ok(_mapper.Map<List<RoomDTO>>(rooms));
         }
 
+        [HttpGet("GetServiceInRoom")]
+        public async Task<ActionResult> GetServiceInRoom(int roomId)
+        {
+            var room = await _context.Rooms
+                .Include(r => r.Services)
+                .FirstOrDefaultAsync(r => r.RoomId == roomId);
+
+            var services = _mapper.Map<List<ServiceDTO>>(room.Services);
+
+            return Ok(services);
+        }
+
+        [HttpGet("GetServiceOutRoom")]
+        public async Task<ActionResult> GetServiceOutRoom(int roomId)
+        {
+            var allServices = await _context.Services.ToListAsync();
+
+            var room = await _context.Rooms
+                .Include(r => r.Services)
+                .FirstOrDefaultAsync(r => r.RoomId == roomId);
+
+            var servicesInRoom = room?.Services.Select(s => s.ServiceId).ToList();
+
+            var remainingServices = allServices.Where(s => !servicesInRoom.Contains(s.ServiceId))
+                                               .Select(service => _mapper.Map<ServiceDTO>(service))
+                                               .ToList();
+
+            var services = _mapper.Map<List<ServiceDTO>>(remainingServices);
+
+            return Ok(services);
+        }
+
         [HttpGet("GetRoom/{roomId}")]
         public async Task<ActionResult> GetRoom(int roomId)
         {

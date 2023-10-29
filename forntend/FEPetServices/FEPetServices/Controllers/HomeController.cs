@@ -65,11 +65,10 @@ namespace FEPetServices.Controllers
                             roomList = roomList.Where(r => r.RoomCategoriesId == roomCategoriesId).ToList();
                         }
 
-                        ViewBag.SortOrder = sortOrder;
-                        ViewBag.PageSize = pageSize;
                         ViewBag.RoomCategoriesId = RoomCategoriesId;
                         ViewBag.SortOrder = sortOrder;
                         ViewBag.PageSize = pageSize;
+                        ViewBag.RoomName = RoomName;
 
                         switch (sortOrder)
                         {
@@ -117,11 +116,50 @@ namespace FEPetServices.Controllers
             return View();
         }
 
-        public async Task<ActionResult> RoomDetail(RoomDTO roomDTO)
+        public async Task<ActionResult> RoomDetail(int roomId)
         {
+            try
+            {
+                HttpResponseMessage serviceAvailableResponse = await client.GetAsync("https://localhost:7255/api/Room/GetServiceInRoom?roomId=" + roomId);
+
+                if (serviceAvailableResponse.IsSuccessStatusCode)
+                {
+                    var services = await serviceAvailableResponse.Content.ReadFromJsonAsync<List<ServiceDTO>>();
+
+                    ViewBag.ServiceAvailable = new SelectList(services, "ServiceId", "ServiceName");
+                }
+
+                HttpResponseMessage serviceUnavailableResponse = await client.GetAsync("https://localhost:7255/api/Room/GetServiceOutRoom?roomId=" + roomId);
+
+                if (serviceUnavailableResponse.IsSuccessStatusCode)
+                {
+                    var services = await serviceUnavailableResponse.Content.ReadFromJsonAsync<List<ServiceDTO>>();
+
+                    ViewBag.ServiceUnavailable = new SelectList(services, "ServiceId", "ServiceName");
+                }
+
+                HttpResponseMessage response = await client.GetAsync(ApiUrlRoomDetail + roomId);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    var roomDto = JsonConvert.DeserializeObject<RoomDTO>(responseContent);
+
+                    return View(roomDto);
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+            }
+
             return View();
         }
-
 
         public IActionResult Index()
         {
