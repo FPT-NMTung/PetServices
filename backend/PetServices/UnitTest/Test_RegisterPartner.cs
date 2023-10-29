@@ -292,5 +292,269 @@ namespace UnitTest
                 Assert.Contains("Mật khẩu không được chứa khoảng trắng!", result.Value.ToString());
             }
         }
+
+        [Fact]
+        // 9. Email + Pass(có @) + Phone + ImageCertificate
+        public async Task Test_Register_Pass_Special()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var registerDto = new RegisterPartnerDTO
+                {
+                    FirstName = "Pet",
+                    LastName = "Service",
+                    Phone = "0987654321",
+                    Email = "psmsg65@gmail.com",
+                    Password = "12345678@",
+                    ImageCertificate = "https://s.net.vn/NsSG"
+                };
+
+                var result = await controller.RegisterPartner(registerDto) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Contains("Mật khẩu không được chứa ký tự đặc biệt!", result.Value.ToString());
+            }
+        }
+
+        [Fact]
+        // 10. Email + Pass + Phone(null) + ImageCertificate
+        public async Task Test_Register_Phone_Null()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var registerDto = new RegisterPartnerDTO
+                {
+                    FirstName = "Pet",
+                    LastName = "Service",
+                    Phone = "",
+                    Email = "psmsg65@gmail.com",
+                    Password = "12345678",
+                    ImageCertificate = "https://s.net.vn/NsSG"
+                };
+
+                var result = await controller.RegisterPartner(registerDto) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Contains("Số điện thoại không được để trống!", result.Value.ToString());
+            }
+        }
+
+        [Fact]
+        // 11. Email + Pass + Phone(9 số) + ImageCertificate
+        public async Task Test_Register_Phone_ToShort()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var registerDto = new RegisterPartnerDTO
+                {
+                    FirstName = "Pet",
+                    LastName = "Service",
+                    Phone = "098765432",
+                    Email = "psmsg65@gmail.com",
+                    Password = "12345678",
+                    ImageCertificate = "https://s.net.vn/NsSG"
+                };
+
+                var result = await controller.RegisterPartner(registerDto) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Contains("Số điện thoại phải có 10 ký tự!", result.Value.ToString());
+            }
+        }
+
+        [Fact]
+        // 12. Email + Pass + Phone(k bđ = số 0) + ImageCertificate
+        public async Task Test_Register_Phone_NoZeroStart()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var registerDto = new RegisterPartnerDTO
+                {
+                    FirstName = "Pet",
+                    LastName = "Service",
+                    Phone = "9876543210",
+                    Email = "psmsg65@gmail.com",
+                    Password = "12345678",
+                    ImageCertificate = "https://s.net.vn/NsSG"
+                };
+
+                var result = await controller.RegisterPartner(registerDto) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Contains("Số điện thoại phải bắt đầu bằng số 0!", result.Value.ToString());
+            }
+        }
+
+        [Fact]
+        // 13. Email + Pass + Phone(có chữ) + ImageCertificate
+        public async Task Test_Register_Phone_HaveWord()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var registerDto = new RegisterPartnerDTO
+                {
+                    FirstName = "Pet",
+                    LastName = "Service",
+                    Phone = "098765432a",
+                    Email = "psmsg65@gmail.com",
+                    Password = "12345678",
+                    ImageCertificate = "https://s.net.vn/NsSG"
+                };
+
+                var result = await controller.RegisterPartner(registerDto) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Contains("Số điện thoại không phải là số! Bạn cần nhập số điện thoại ở dạng số!", result.Value.ToString());
+            }
+        }
+
+        [Fact]
+        // 14. Email + Pass + Phone(có khoảng trắng) + ImageCertificate
+        public async Task Test_Register_Phone_WhiteSpace()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var registerDto = new RegisterPartnerDTO
+                {
+                    FirstName = "Pet",
+                    LastName = "Service",
+                    Phone = "098765 432",
+                    Email = "psmsg65@gmail.com",
+                    Password = "12345678",
+                    ImageCertificate = "https://s.net.vn/NsSG"
+                };
+
+                var result = await controller.RegisterPartner(registerDto) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Contains("Số điện thoại không được chứa khoảng trắng!", result.Value.ToString());
+            }
+        }
+
+        [Fact]
+        // 14. Email + Pass + Phone + ImageCertificate(Null)
+        public async Task Test_Register_Image_Null()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var registerDto = new RegisterPartnerDTO
+                {
+                    FirstName = "Pet",
+                    LastName = "Service",
+                    Phone = "0987654321",
+                    Email = "psmsg65@gmail.com",
+                    Password = "12345678",
+                    ImageCertificate = ""
+                };
+
+                var result = await controller.RegisterPartner(registerDto) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Contains("Bạn cần cung cấp hình ảnh chứng chỉ!", result.Value.ToString());
+            }
+        }
+
+        [Fact]
+        // 15. Email + Pass + Phone + ImageCertificate(Null)
+        public async Task Test_Register_Image_WhiteSpace()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var registerDto = new RegisterPartnerDTO
+                {
+                    FirstName = "Pet",
+                    LastName = "Service",
+                    Phone = "0987654321",
+                    Email = "psmsg65@gmail.com",
+                    Password = "12345678",
+                    ImageCertificate = "https://s.net.vn/N sSG"
+                };
+
+                var result = await controller.RegisterPartner(registerDto) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Contains("URL ảnh không chứa khoảng trắng!", result.Value.ToString());
+            }
+        }
     }
 }
