@@ -104,6 +104,7 @@ namespace PetServices.Mapper
                 .ForMember(dest => dest.Quanlity, opt => opt.MapFrom(src => src.Quantity))
                 .ForMember(dest => dest.ProCategoriesId, opt => opt.MapFrom(src => src.ProCategoriesId))
                 .ForMember(dest => dest.ProCategoriesName, opt => opt.MapFrom(src => src.ProCategories.ProCategoriesName));
+
             CreateMap<ProductCategory, ProductCategoryDTO>()
                 .ForMember(dest => dest.ProCategoriesId, opt => opt.MapFrom(src => src.ProCategoriesId))
                 .ForMember(dest => dest.ProCategoriesName, opt => opt.MapFrom(src => src.ProCategoriesName))
