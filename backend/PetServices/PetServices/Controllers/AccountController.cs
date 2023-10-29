@@ -228,25 +228,84 @@ namespace PetServices.Controllers
         }
 
         [HttpPost("RegisterPartner")]
-        public async Task<IActionResult> RegisterPartner([FromBody] RegisterDTO registerDto)
+        public async Task<IActionResult> RegisterPartner([FromBody] RegisterPartnerDTO registerDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            // Kiểm tra Email
+            if (string.IsNullOrWhiteSpace(registerDto.Email))
+            {
+                string errorMessage = "Email không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            else if (registerDto.Email.Contains(" "))
+            {
+                string errorMessage = "Email không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
             if (!IsValidEmail(registerDto.Email))
             {
                 ModelState.AddModelError("Email không hợp lệ", "Email cần có @");
                 return BadRequest(ModelState);
             }
 
-            // Kiểm tra Phone
-            if (!IsValidPhone(registerDto.Phone))
+            if (string.IsNullOrWhiteSpace(registerDto.Phone))
             {
-                ModelState.AddModelError("Số điện thoại không hợp lệ", "Số điện thoại bắt đầu bằng số 0 và có tổng 10 số");
-                return BadRequest(ModelState);
+                string errorMessage = "Số điện thoại không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (registerDto.Phone.Length != 10)
+            {
+                string errorMessage = "Số điện thoại phải có 10 ký tự!";
+                return BadRequest(errorMessage);
+            }
+            if (registerDto.Phone.Contains(" "))
+            {
+                string errorMessage = "Số điện thoại không được chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            if (!registerDto.Phone.StartsWith("0"))
+            {
+                string errorMessage = "Số điện thoại phải bắt đầu bằng số 0!";
+                return BadRequest(errorMessage);
+            }
+            if (!int.TryParse(registerDto.Phone, out int phoneNumber))
+            {
+                string errorMessage = "Số điện thoại không phải là số! Bạn cần nhập số điện thoại ở dạng số!";
+                return BadRequest(errorMessage);
+            }
+
+            if (string.IsNullOrWhiteSpace(registerDto.Password))
+            {
+                string errorMessage = "Mật khẩu không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (registerDto.Password.Length < 8)
+            {
+                string errorMessage = "Mật khẩu phải có ít nhất 8 ký tự!";
+                return BadRequest(errorMessage);
+            }
+            if (registerDto.Password.Contains(" "))
+            {
+                string errorMessage = "Mật khẩu không được chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            if (Regex.IsMatch(registerDto.Password, @"[^a-zA-Z0-9]"))
+            {
+                string errorMessage = "Mật khẩu không được chứa ký tự đặc biệt!";
+                return BadRequest(errorMessage);
+            }
+            if (string.IsNullOrWhiteSpace(registerDto.ImageCertificate))
+            {
+                string errorMessage = "Bạn cần cung cấp hình ảnh chứng chỉ!";
+                return BadRequest(errorMessage);
+            }
+            else if (registerDto.ImageCertificate.Contains(" "))
+            {
+                string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
             }
 
             if (_context.Accounts.Any(a => a.Email == registerDto.Email))
@@ -279,7 +338,7 @@ namespace PetServices.Controllers
             _context.Update(newAccount);
             await _context.SaveChangesAsync();
 
-            return Ok("Đăng ký thành công! Đăng nhập để trải nghiệm hệ thống");
+            return Ok("Đăng ký thành công! Vui lòng chờ đợi quản lý xác nhận tài khoản của bạn trước khi đăng nhập");
         }
 
 

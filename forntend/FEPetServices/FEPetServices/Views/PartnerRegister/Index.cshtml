@@ -9,15 +9,14 @@
 <head>
     <link rel="stylesheet" href="~/css/RegisterPartner.css">
     <title>HASH TECHIE OFFICIAL</title>
-
     <script src="https://smtpjs.com/v3/smtp.js">
     </script>
 </head>
 <body>
     <section>
-        <div class="form-box">
-            <div class="form-value">
-                <form class="login-form" method="post">
+        <form class="login-form" method="post" enctype="multipart/form-data">
+            <div class="form-box">
+                <div class="form-value">
                     <h2>Đăng ký làm đối tác</h2>
                     @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
                     {
@@ -51,7 +50,7 @@
                             <ion-icon name="lock-closed-outline"></ion-icon>
                             <input asp-for="Password" type="password" required>
                             <label for="">Mật khẩu</label>
-                        </div>
+                        </div>                       
                         <div class="forget">
                             <label for="">
                                 <input type="checkbox" id="agreeCheckbox">Tôi đồng ý với các
@@ -64,40 +63,41 @@
                             <p>Quay trở lại <a href="~/Login/Index">Đăng nhập</a></p>
                         </div>
                     }
-                </form>
-            </div>
-        </div>
 
-        <div class="form-box2">
-            <div class="form-box3">
-                <div class="form-value">
-                    <div class="rules">
-                        <h1>Điều khoản hệ thống</h1>
-                        <div class="ruleinfo">
-                            <p>Điều 1: Bạn cần chấp nhận tất cả điều khoản và điều kiện của chúng tôi</p>
+                </div>
+            </div>
+
+            <div class="form-box2">
+                <div class="form-box3">
+                    <div class="form-value">
+                        <div class="rules">
+                            <h1>Điều khoản hệ thống</h1>
+                            <div class="ruleinfo">
+                                <p>Điều 1: Bạn cần chấp nhận tất cả điều khoản và điều kiện của chúng tôi</p>
+                            </div>
+                            <div class="ruleinfo">
+                                <p>Điều 2: Làm việc với sự nghiêm túc, nhiệt huyết, trung thực</p>
+                            </div>
+                            <div class="ruleinfo">
+                                <p>Điều 3: Đảm bảo dịch vụ bạn phụ trách đáp ứng đủ chất lượng</p>
+                            </div>
+                            <div class="ruleinfo">
+                                <p>Điều 4: Tuân thủ các biện pháp bảo mật thông tin của khách hàng</p>
+                            </div>
+                            <div class="ruleinfo">
+                                <p>Điều 5:Không thực hiện bất kỳ hành động làm tổn hại đến hệ thống</p>
+                            </div>
+                            <div class="ruleinfo">
+                                <p>Điều 6: Cam kết cung cấp chính xác thông tin</p>
+                            </div>
                         </div>
-                        <div class="ruleinfo">
-                            <p>Điều 2: Làm việc với sự nghiêm túc, nhiệt huyết, trung thực</p>
+                        <div class="image">
+                            <input type="file" id="checkimage" name="image">
                         </div>
-                        <div class="ruleinfo">
-                            <p>Điều 3: Đảm bảo dịch vụ bạn phụ trách đáp ứng đủ chất lượng</p>
-                        </div>
-                        <div class="ruleinfo">
-                            <p>Điều 4: Tuân thủ các biện pháp bảo mật thông tin của khách hàng</p>
-                        </div>
-                        <div class="ruleinfo">
-                            <p>Điều 5:Không thực hiện bất kỳ hành động làm tổn hại đến hệ thống</p>
-                        </div>
-                        <div class="ruleinfo">
-                            <p>Điều 6: Cam kết cung cấp chính xác thông tin</p>
-                        </div>
-                    </div>
-                    <div class="image">
-                       <input type="file" id="checkimage"  >
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </section>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
