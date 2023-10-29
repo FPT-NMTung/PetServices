@@ -74,6 +74,33 @@
             "ordering": true,
             "info": true,
             "autoWidth": false,
+            "dom": 'Bfrtip',
+            "buttons": [
+                {
+                    extend: 'copy',
+                    text: 'Sao chép',
+                },
+                {
+                    extend: 'csv',
+                    text: 'Xuất CSV',
+                    filename: 'Danh sách order'
+                },
+                {
+                    extend: 'excel',
+                    text: 'Xuất Excel',
+                    filename: 'Danh sách order'
+                },
+                {
+                    extend: 'pdf',
+                    text: 'Xuất PDF',
+                    filename: 'Danh sách order'
+                },
+                {
+                    extend: 'print',
+                    text: 'In',
+                }
+            ],
+
             "columnDefs": [
                 { "targets": [0], "width": "5%" },
                 { "targets": [1], "width": "20%" },

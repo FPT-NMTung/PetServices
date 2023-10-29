@@ -80,6 +80,10 @@
                     <td>@(productDetail.Quantity * productDetail.Price) VNĐ</td>
                     </tr>
             }
+                    <tr>
+                        <td colspan="3" style="text-align: right;"><strong>Tổng tiền:</strong></td>
+                        <td><strong>@ViewBag.TotalPrice VNĐ</strong></td>
+                    </tr>
             </tbody>
         </table>
             @if (Model.OrderStatus.Trim() == "Waiting")

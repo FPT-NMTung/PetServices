@@ -59,8 +59,14 @@ namespace FEPetServices.Areas.Manager.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                OrdersForm bookingForm = System.Text.Json.JsonSerializer.Deserialize<OrdersForm>(responseContent, options);
-                return View(bookingForm);
+                OrdersForm orderDetail = System.Text.Json.JsonSerializer.Deserialize<OrdersForm>(responseContent, options);
+                double totalPrice = 0;
+                foreach(var od in orderDetail.OrderProductDetails)
+                {
+                    totalPrice = (double)(totalPrice + od.Price * od.Quantity); 
+                }
+                ViewBag.TotalPrice = totalPrice;
+                return View(orderDetail);
             }
             else
             {
