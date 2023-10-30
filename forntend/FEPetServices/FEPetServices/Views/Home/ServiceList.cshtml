@@ -26,20 +26,33 @@
                         @*<input type="hidden" name="sortOrder" value="@ViewBag.SortOrder" />
                         <input type="hidden" name="RoomCategoriesId" value="@ViewBag.RoomCategoriesId" />*@
                         <select id="pageSize" name="pageSize" onchange="this.form.submit();">
-                            <!option value="8" @(ViewBag.PageSize == 4 ? "selected" : "")>4 Dịch Vụ</!option>
-                            <!option value="12" @(ViewBag.PageSize == 8 ? "selected" : "")>8 Dịch Vụ</!option>
-                            <!option value="24" @(ViewBag.PageSize == 12 ? "selected" : "")>12 Dịch Vụ</!option>
-                            <!option value="48" @(ViewBag.PageSize == 24 ? "selected" : "")>24 Dịch Vụ</!option>
+                            <!option value="4" @(ViewBag.PageSize == 4 ? "selected" : "")>4 Dịch Vụ</!option>
+                            <!option value="8" @(ViewBag.PageSize == 8 ? "selected" : "")>8 Dịch Vụ</!option>
+                            <!option value="12" @(ViewBag.PageSize == 12 ? "selected" : "")>12 Dịch Vụ</!option>
+                            <!option value="24" @(ViewBag.PageSize == 24 ? "selected" : "")>24 Dịch Vụ</!option>
                         </select>
                     </form>
                 </div>
-
-    <div class="card-container">
-      @if (Model != null && Model.Count > 0)
+           @*   <div class="sort">
+                 <div style="display: flex; align-items: flex-end;">
+                        <p class="name-search" style="margin-left: 30px;">Sắp xếp theo: </p>
+                        <form method="get" style="margin-right: 35px;">
+                            <input type="hidden" name="CategoriesName" value="@ViewBag.CategoriesName" /> 
+                            <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
+                            <select id="sortOrder" name="sortOrder" onchange="this.form.submit();">
+                                <!option value="name_asc" @(ViewBag.SortOrder == "name_asc" ? "selected" : "")>Tên từ A-Z</!option>
+                                <!option value="name_desc" @(ViewBag.SortOrder == "name_desc" ? "selected" : "")>Tên từ Z-A</!option>
+                                
+                            </select>
+                        </form>
+                    </div>
+                </div>
+              </div>*@
+            <div class="card-container">
+            @if (Model != null && Model.Count > 0)
             {
                 @foreach (var serviceCategory in Model)
                 {
-
                     string description = serviceCategory.Desciptions;
 
                     if (description?.Length > 100)
@@ -48,34 +61,38 @@
 
                         description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
                     }
-                    <div class="card">
-                        <div class="image">
-                            <img src="@serviceCategory.Picture">
+
+                    // Kiểm tra trạng thái trước khi hiển thị
+                    if (serviceCategory.Status)
+                    {
+                        <div class="card">
+                            <div class="image">
+                                <img src="@serviceCategory.Picture">
+                            </div>
+
+                            <div class="card-content">
+                                <h3>@serviceCategory.SerCategoriesName</h3>
+                                <p>@description</p>
+                            </div>
+                            <div class="learn">
+                                <a href="" class="learn-more">Xem Chi Tiết</a>
+                            </div>
                         </div>
-
-
-                        <div class="card-content">
-
-                            <h3>@serviceCategory.SerCategoriesName</h3>
-
-                            <p>@description</p>
-
-                        </div>
-                        <div class="learn">
-                            <a href="" class="learn-more">Xem Chi Tiết</a>
-                        </div>
-
-                    </div>
+                    }
+                    else
+                    {
+                        
+                    }
                 }
-            }else
-                {
-                    <tr>
-                        <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
-                    </tr>
-                }
-        
-         
-     </div>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
+                </tr>
+            }
+        </div>
+
   <div style="text-align:center;">   
             @if (ViewBag.TotalPages > 1)
             {

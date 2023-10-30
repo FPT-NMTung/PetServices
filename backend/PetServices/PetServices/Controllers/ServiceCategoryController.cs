@@ -46,7 +46,7 @@ namespace PetServices.Controllers
         [HttpGet("ServiceCategorysID/{id}")]
         public IActionResult GetById(int id)
         {
-            List<ServiceCategory> serviceCategories = _context.ServiceCategories
+            List<ServiceCategory> serviceCategories = _context.ServiceCategories.Include(s => s.Services)
                 .Where(c => c.SerCategoriesId == id)
                 .ToList();
             return Ok(_mapper.Map<List<ServiceCategoryDTO>>(serviceCategories));

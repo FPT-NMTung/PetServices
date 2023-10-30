@@ -34,7 +34,7 @@
         <!-- Swiper Slider -->
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
-            <img src="@Model?.Picture>" />
+            <img src="/img/dichvutamthucung.png" />
 
             </div>
 
@@ -46,21 +46,29 @@
         <!--**Text************************-->
         <div class="product-text">
             <!--category-->
-            <span class="product-category">@Model?.ServiceName</span>
+            <span class="product-category">Women Clothes & Dresses</span>
             <h3>ASOS Women Clothe</h3>
-            <span class="product-price">@Model?.Price</span>
-            <p>
-                @Model?.Desciptions
+            <span class="product-price">$135.3</span>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officiis laboriosam vitae ab aspernatur qui facere a commodi cupiditate praesentium. Aliquam, voluptatem est debitis consequuntur ex autem exercitationem quas dolorem alias?
+                <br/>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic illo, enim non molestias dolores eos officia minima quidem architecto labore soluta? Expedita officiis voluptas sapiente officia debitis, mollitia eum quia.
             </p>
             <!--size-->
             <div class="product-size-container">
-                <strong>Dịch Vụ:</strong>
+                <strong>Select Size:-</strong>
                 <div class="product-size">
-                   @foreach (var service in ViewBag.Services)
-                   {
+                    <!--xl-->
                     <input type="checkbox" class="s-checkbox" id="s-xl">
-                    <button href="" for="s-xl" class="s-label">@service.ServiceName</button>  
-                   }
+                    <label for="s-xl" class="s-label">XL</label>
+                    <!--Small-->
+                    <input type="checkbox" class="s-checkbox" id="s-s">
+                    <label for="s-s" class="s-label">S</label>
+                    <!--Medium-->
+                    <input type="checkbox" class="s-checkbox" id="s-m">
+                    <label for="s-m" class="s-label">M</label>
+                    <!--Large-->
+                    <input type="checkbox" class="s-checkbox" id="s-l">
+                    <label for="s-l" class="s-label">L</label>
                 </div>
             </div>
 

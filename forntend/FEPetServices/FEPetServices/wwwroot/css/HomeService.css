@@ -219,6 +219,28 @@ a {
         border: 1px solid #3f51b5;
     }
 /* Hiển thị các laoij chia size*/
+#sortOrder {
+    width: 180px;
+    font-size: 16px;
+    border: none;
+    color: #7888DE;
+    margin: 10px 0;
+    box-shadow: rgba(79, 156, 232, 0.7019607843) 3px 3px 5px 0px, rgba(79, 156, 232, 0.7019607843) 5px 5px 20px 0px;
+    background: linear-gradient(135deg, rgb(239, 247, 255) 0%, rgb(214, 229, 247) 100%);
+    border-radius: 30px;
+    padding: 10px;
+    outline: none;
+}
+
+    #sortOrder option {
+        color: #7888DE;
+    }
+
+        #sortOrder option:not([disabled]):hover {
+            background: #3d76e9;
+            color: white;
+        }
+
 #pageSize {
     width: 160px;
     font-size: 16px;
@@ -244,6 +266,9 @@ a {
     color: #617aff;
     margin-right: 10px;
     font-size: 17px;
+}
+.sort {
+    display: flex;
 }
 
    

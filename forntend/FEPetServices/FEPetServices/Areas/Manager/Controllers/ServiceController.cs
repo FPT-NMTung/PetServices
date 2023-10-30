@@ -79,7 +79,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     ViewBag.Categories = new SelectList(categories, "SerCategoriesId", "SerCategoriesName");
                 }
 
-                if (service.SerCategoriesName == null) { return View(); }
+                if (service.ServiceName == null) { return View(); }
                 foreach (var file in image)
                 {
                     string filename = GenerateRandomNumber(5) + file.FileName;
@@ -89,7 +89,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     file.CopyToAsync(stream);
                     service.Picture = "/img/" + filename;
                 }
-                
+
                 service.Status = true;
 
                 var json = JsonConvert.SerializeObject(service);
@@ -172,7 +172,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpPost]
         public async Task<IActionResult> EditService([FromForm] ServiceDTO service, IFormFile image, int ServiceId, int SelectedCategory)
         {
-           
+
             try
             {
 
@@ -181,42 +181,42 @@ namespace FEPetServices.Areas.Manager.Controllers
                 if (categoryResponse.IsSuccessStatusCode)
                 {
                     var categories = await categoryResponse.Content.ReadFromJsonAsync<List<ServiceCategoryDTO>>();
-                    ViewBag.Categories = new SelectList(categories, "SerCategoriesId", "SerCategoriesName");  
+                    ViewBag.Categories = new SelectList(categories, "SerCategoriesId", "SerCategoriesName");
                 }
 
                 if (image != null && image.Length > 0)
-                    {
-                        // Handle the case when a new image is uploaded
-                        var imagePath = "/img/" + image.FileName;
-                        service.Picture = imagePath;
+                {
+                    // Handle the case when a new image is uploaded
+                    var imagePath = "/img/" + image.FileName;
+                    service.Picture = imagePath;
 
-                        var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", image.FileName);
-                        using (var stream = new FileStream(physicalImagePath, FileMode.Create))
-                        {
-                            await image.CopyToAsync(stream);
-                        }
+                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", image.FileName);
+                    using (var stream = new FileStream(physicalImagePath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
                     }
-                    else
+                }
+                else
+                {
+                    // Handle the case when no new image is uploaded
+                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrlServiceDetail + "/" + ServiceId);
+
+                    if (responseForImage.IsSuccessStatusCode)
                     {
-                        // Handle the case when no new image is uploaded
-                        HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrlServiceDetail + "/" + ServiceId);
+                        var responseContent = await responseForImage.Content.ReadAsStringAsync();
 
-                        if (responseForImage.IsSuccessStatusCode)
+                        if (!string.IsNullOrEmpty(responseContent))
                         {
-                            var responseContent = await responseForImage.Content.ReadAsStringAsync();
-
-                            if (!string.IsNullOrEmpty(responseContent))
+                            var existingServiceCategory = JsonConvert.DeserializeObject<ServiceDTO>(responseContent);
+                            /*var existingServiceCategory = existingServiceCategoryList.FirstOrDefault();*/
+                            if (existingServiceCategory != null)
                             {
-                                var existingServiceCategory = JsonConvert.DeserializeObject<ServiceDTO>(responseContent);
-                                /*var existingServiceCategory = existingServiceCategoryList.FirstOrDefault();*/
-                                if (existingServiceCategory != null)
-                                {
-                                    // Assign the existing image path to service.Picture.
-                                    service.Picture = existingServiceCategory.Picture;
-                                }
+                                // Assign the existing image path to service.Picture.
+                                service.Picture = existingServiceCategory.Picture;
                             }
                         }
                     }
+                }
 
                 if (Request.Form["Status"] == "on")
                 {
@@ -228,21 +228,21 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 var json = JsonConvert.SerializeObject(service);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    // Send the data to the server
-                    HttpResponseMessage response = await client.PutAsync(DefaultApiUrlServiceUpdate + ServiceId, content);
+                // Send the data to the server
+                HttpResponseMessage response = await client.PutAsync(DefaultApiUrlServiceUpdate + ServiceId, content);
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
                     return RedirectToAction("EditService", new { serviceId = ServiceId }); // Redirect to a success page or a list page
                 }
-                    else
-                    {
-                        TempData["ErrorToast"] = "Chỉnh sửa dịch vụ thất bại. Vui lòng thử lại sau.";
-                        return View(service); // Display the form with the filled data
-                    }
+                else
+                {
+                    TempData["ErrorToast"] = "Chỉnh sửa dịch vụ thất bại. Vui lòng thử lại sau.";
+                    return View(service); // Display the form with the filled data
+                }
 
             }
             catch (Exception ex)
@@ -259,4 +259,3 @@ namespace FEPetServices.Areas.Manager.Controllers
 
 
 
-      

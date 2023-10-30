@@ -50,7 +50,7 @@ namespace PetServices.Controllers
         public IActionResult GetServicesByCategory(int serviceCategoryID)
         {
             // Find services that belong to the specified serviceCategoryID.
-            List<Service> servicesInCategory = _context.Services
+            List<Service> servicesInCategory = _context.Services.Include(s => s.SerCategories)
                 .Where(s => s.SerCategoriesId == serviceCategoryID)
                 .ToList();
 

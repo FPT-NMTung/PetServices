@@ -14,6 +14,7 @@ namespace FEPetServices.Controllers
     {
         private readonly HttpClient client = null;
         private string DefaultApiUrlServiceCategoryList = "";
+        private string DefaultApiUrlServiceCategoryDetail = "";
 
         public HomeController()
         {
@@ -21,6 +22,7 @@ namespace FEPetServices.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrlServiceCategoryList = "https://localhost:7255/api/ServiceCategory";
+            DefaultApiUrlServiceCategoryDetail = "";
         }
 
         public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory, int page = 1, int pageSize = 4, string CategoriesName = "")
