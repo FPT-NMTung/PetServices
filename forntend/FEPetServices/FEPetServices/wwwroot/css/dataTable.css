@@ -88,3 +88,22 @@ td a.detail-button {
         background-color: #0056b3;
     }
 
+.dataTables_wrapper .dt-button {
+    margin-bottom: 10px;
+}
+
+    .dataTables_wrapper .dt-button {
+        padding: 8px 15px;
+        margin-right: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .dataTables_wrapper .dt-button :hover {
+            background-color: #0056b3;
+        }

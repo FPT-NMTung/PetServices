@@ -14,13 +14,13 @@
         <h1>Dánh sách order</h1>
     </div>
     <div>
-        <table id="listspartner">
+        <table id="orders">
             <thead>
                 <tr>
                     <th>No.</th>
                     <th>Tên</th>
                     <th>Số điện thoại</th>
-                    <th>Mô tả</th>
+                    <th>Ngày đặt đơn</th>
                     <th>Chi tiết</th>
                 </tr>
             </thead>
@@ -35,9 +35,9 @@
                             <td>@itemCount</td>
                             <td>@orderLists.UserInfo.FirstName  @orderLists.UserInfo.LastName</td>
                             <td>@orderLists.UserInfo.Phone</td>
-                            <td>@orderLists.BookingDate</td>
+                            <td>@orderLists.OrderDate</td>
                             <td>
-                                <a class="detail-button">Chi tiết</a>
+                                <a class="detail-button" href="~/Manager/OrderLists/OrderDetail?id=@orderLists.OrderId">Chi tiết</a>
                             </td>
                         </tr>
                     }
@@ -67,13 +67,40 @@
 <script>
     $(document).ready(function () {
         // Khởi tạo DataTables
-        var table = $('#listspartner').DataTable({
+        var table = $('#orders').DataTable({
             "paging": true,
             "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
             "searching": true,
             "ordering": true,
             "info": true,
             "autoWidth": false,
+            "dom": 'Bfrtip',
+            "buttons": [
+                {
+                    extend: 'copy',
+                    text: 'Sao chép',
+                },
+                {
+                    extend: 'csv',
+                    text: 'Xuất CSV',
+                    filename: 'Danh sách order'
+                },
+                {
+                    extend: 'excel',
+                    text: 'Xuất Excel',
+                    filename: 'Danh sách order'
+                },
+                {
+                    extend: 'pdf',
+                    text: 'Xuất PDF',
+                    filename: 'Danh sách order'
+                },
+                {
+                    extend: 'print',
+                    text: 'In',
+                }
+            ],
+
             "columnDefs": [
                 { "targets": [0], "width": "5%" },
                 { "targets": [1], "width": "20%" },

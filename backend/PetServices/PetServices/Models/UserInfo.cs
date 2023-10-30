@@ -9,6 +9,7 @@ namespace PetServices.Models
         {
             Accounts = new HashSet<Account>();
             Bookings = new HashSet<Booking>();
+            Orders = new HashSet<Order>();
             PetInfos = new HashSet<PetInfo>();
         }
 
@@ -25,6 +26,7 @@ namespace PetServices.Models
 
         public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<PetInfo> PetInfos { get; set; }
     }
 }

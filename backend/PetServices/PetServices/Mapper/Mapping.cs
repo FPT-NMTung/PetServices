@@ -9,6 +9,7 @@ namespace PetServices.Mapper
     {
         public Mapping()
         {
+            #region Infomation
             CreateMap<UserInfo, UserInfoDTO>()
                 .ReverseMap();
 
@@ -18,15 +19,25 @@ namespace PetServices.Mapper
             CreateMap<PetInfo, PetInfoDTO>()
                 .ReverseMap();
 
+            CreateMap<PetInfo, PetInfoForm>()
+                .ReverseMap();
+            #endregion
+
+            #region Booking
             CreateMap<Booking, BookingDTO>()
                 .ReverseMap();
 
-            CreateMap<Booking, BookingDTO>()
+            #endregion
+
+            #region Order
+            CreateMap<Order, OrdersDTO>()
                 .ReverseMap();
 
             CreateMap<OrderProductDetail, OrderProductDetailDTO>()
                .ReverseMap();
+            #endregion
 
+            #region Account
             CreateMap<Account, AccountInfo>()
                 .ForMember(dest => dest.RoleName,
                     opt => opt.MapFrom(src => src.Role.RoleName))
@@ -45,6 +56,7 @@ namespace PetServices.Mapper
                             act => act.MapFrom(src => src.Status))
                 .ForMember(des => des.UserInfoId,
                             act => act.MapFrom(src => src.UserInfoId));
+            #endregion
 
             CreateMap<ServiceCategory, ServiceCategoryDTO>()
                 .ForMember(des => des.SerCategoriesId,
