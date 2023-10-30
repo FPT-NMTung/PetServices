@@ -1,12 +1,12 @@
 ﻿using FEPetServices.Form;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace FEPetServices.Controllers
 {
@@ -51,14 +51,19 @@ namespace FEPetServices.Controllers
                     if (loginResponse.Successful)
                     {                       
                         var roleName = loginResponse.RoleName;
+                        if(loginResponse.Status != true)
+                        {
+                            ViewBag.ErrorToast = "Tài khoản chưa được kích hoạt";
+                            return View();
+                        }
 
                         if (!string.IsNullOrEmpty(roleName))
                         {
                             var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Email, loginInfo.Email),
-                        new Claim(ClaimTypes.Role, roleName)
-                    };
+                            {
+                                new Claim(ClaimTypes.Email, loginInfo.Email),
+                                new Claim(ClaimTypes.Role, roleName)
+                            };
 
                             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));

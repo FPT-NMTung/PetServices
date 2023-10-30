@@ -24,13 +24,18 @@ namespace FEPetServices.Controllers
         {
             try
             {
-               /* if (image != null && image.Length > 0)
-                {
-                    // Xử lý và lưu trữ ảnh
-                    Console.WriteLine(image);
-                    registerInfo.ImageCertificate = "/img/" + image.FileName.ToString();
-                }*/
+                /* if (image != null && image.Length > 0)
+                 {
+                     // Xử lý và lưu trữ ảnh
+                     Console.WriteLine(image);
+                     registerInfo.ImageCertificate = "/img/" + image.FileName.ToString();
+                 }*/
                 // Chuyển thông tin đăng ký thành dạng JSON
+                if (registerInfo.Password.Length < 8)
+                {
+                    ViewBag.ErrorToast = "Mật khẩu phải trên hoặc bằng 8 ký tự";
+                    return View();
+                }
                 var json = JsonConvert.SerializeObject(registerInfo);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -40,21 +45,22 @@ namespace FEPetServices.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     // Đăng ký thành công, bạn có thể xử lý kết quả ở đây (ví dụ: hiển thị thông báo thành công)
-                    ViewBag.SuccessMessage = "Đăng ký thành công!";
+                    TempData["SuccessRegisterSuccessToast"] = "Vui lòng chờ đợi quản trị viên xét duyệt thông tin tài khoản của bạn";
+                    return RedirectToAction("Index", "Login");
                 }
                 else
                 {
                     // Đăng ký không thành công, bạn có thể xử lý kết quả ở đây (ví dụ: hiển thị thông báo lỗi)
-                    ViewBag.ErrorMessage = "Đăng ký không thành công. Mã lỗi HTTP: " + (int)response.StatusCode;
+                    ViewBag.ErrorToast = "Đăng ký không thành công. Mã lỗi HTTP: " + (int)response.StatusCode;
+                    return View();
                 }
             }
             catch (Exception ex)
             {
                 // Xử lý lỗi nếu có
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
+                return View();
             }
-
-            return View();
         }
     }
 }

@@ -67,11 +67,11 @@ namespace PetServices.Controllers
             if (result != null)
             {
                 var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, login.Email),
-                new Claim(ClaimTypes.Role, result.Role?.RoleName),
-                new Claim("RoleId", result.Role?.RoleId.ToString())
-            };
+                {
+                    new Claim(ClaimTypes.Name, login.Email),
+                    new Claim(ClaimTypes.Role, result.Role?.RoleName),
+                    new Claim("RoleId", result.Role?.RoleId.ToString())
+                };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -84,7 +84,7 @@ namespace PetServices.Controllers
                     signingCredentials: creds
                 );
 
-                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName });
+                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName, Status= result.Status });
             }
             else
             {

@@ -19,8 +19,11 @@ namespace PetServices.Models
         public virtual DbSet<Account> Accounts { get; set; } = null!;
         public virtual DbSet<Blog> Blogs { get; set; } = null!;
         public virtual DbSet<Booking> Bookings { get; set; } = null!;
+        public virtual DbSet<BookingRoomDetail> BookingRoomDetails { get; set; } = null!;
+        public virtual DbSet<BookingServicesDetail> BookingServicesDetails { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderProductDetail> OrderProductDetails { get; set; } = null!;
+        public virtual DbSet<OrderType> OrderTypes { get; set; } = null!;
         public virtual DbSet<Otp> Otps { get; set; } = null!;
         public virtual DbSet<PartnerInfo> PartnerInfos { get; set; } = null!;
         public virtual DbSet<Payment> Payments { get; set; } = null!;
@@ -44,6 +47,7 @@ namespace PetServices.Models
                     optionsBuilder.UseSqlServer(conf.GetConnectionString("DbConnection"));
                 }
             }
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -126,6 +130,64 @@ namespace PetServices.Models
                     .HasConstraintName("FK_Booking_UserInfo");
             });
 
+            modelBuilder.Entity<BookingRoomDetail>(entity =>
+            {
+                entity.HasKey(e => new { e.RoomId, e.OrderId });
+
+                entity.ToTable("BookingRoomDetail");
+
+                entity.Property(e => e.RoomId).HasColumnName("RoomID");
+
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.BookingRoomDetails)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookingRoomDetail_Booking");
+
+                entity.HasOne(d => d.OrderNavigation)
+                    .WithMany(p => p.BookingRoomDetails)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookingRoomDetail_Orders");
+
+                entity.HasOne(d => d.Room)
+                    .WithMany(p => p.BookingRoomDetails)
+                    .HasForeignKey(d => d.RoomId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookingRoomDetail_Room");
+            });
+
+            modelBuilder.Entity<BookingServicesDetail>(entity =>
+            {
+                entity.HasKey(e => new { e.ServiceId, e.OrderId });
+
+                entity.ToTable("BookingServicesDetail");
+
+                entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
+
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.BookingServicesDetails)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookingServicesDetail_Booking");
+
+                entity.HasOne(d => d.OrderNavigation)
+                    .WithMany(p => p.BookingServicesDetails)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookingServicesDetail_Orders");
+
+                entity.HasOne(d => d.Service)
+                    .WithMany(p => p.BookingServicesDetails)
+                    .HasForeignKey(d => d.ServiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookingServicesDetail_Services");
+            });
+
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
@@ -173,6 +235,20 @@ namespace PetServices.Models
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderProductDetail_Product");
+            });
+
+            modelBuilder.Entity<OrderType>(entity =>
+            {
+                entity.ToTable("OrderType");
+
+                entity.Property(e => e.OrderTypeId).HasColumnName("OrderTypeID");
+
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.OrderTypes)
+                    .HasForeignKey(d => d.OrderId)
+                    .HasConstraintName("FK_OrderType_Orders");
             });
 
             modelBuilder.Entity<Otp>(entity =>
@@ -305,23 +381,6 @@ namespace PetServices.Models
                     .HasForeignKey(d => d.RoomCategoriesId)
                     .HasConstraintName("FK_Room_RoomCategories");
 
-                entity.HasMany(d => d.Bookings)
-                    .WithMany(p => p.Rooms)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "BookingRoomDetail",
-                        l => l.HasOne<Booking>().WithMany().HasForeignKey("BookingId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_BookingRoomDetail_Booking"),
-                        r => r.HasOne<Room>().WithMany().HasForeignKey("RoomId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_BookingRoomDetail_Room"),
-                        j =>
-                        {
-                            j.HasKey("RoomId", "BookingId");
-
-                            j.ToTable("BookingRoomDetail");
-
-                            j.IndexerProperty<int>("RoomId").HasColumnName("RoomID");
-
-                            j.IndexerProperty<int>("BookingId").HasColumnName("BookingID");
-                        });
-
                 entity.HasMany(d => d.Services)
                     .WithMany(p => p.Rooms)
                     .UsingEntity<Dictionary<string, object>>(
@@ -365,23 +424,6 @@ namespace PetServices.Models
                     .WithMany(p => p.Services)
                     .HasForeignKey(d => d.SerCategoriesId)
                     .HasConstraintName("FK_Services_ServiceCategories");
-
-                entity.HasMany(d => d.Bookings)
-                    .WithMany(p => p.Services)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "BookingServicesDetail",
-                        l => l.HasOne<Booking>().WithMany().HasForeignKey("BookingId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_BookingServicesDetail_Booking"),
-                        r => r.HasOne<Service>().WithMany().HasForeignKey("ServiceId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_BookingServicesDetail_Services"),
-                        j =>
-                        {
-                            j.HasKey("ServiceId", "BookingId");
-
-                            j.ToTable("BookingServicesDetail");
-
-                            j.IndexerProperty<int>("ServiceId").HasColumnName("ServiceID");
-
-                            j.IndexerProperty<int>("BookingId").HasColumnName("BookingID");
-                        });
             });
 
             modelBuilder.Entity<ServiceCategory>(entity =>
