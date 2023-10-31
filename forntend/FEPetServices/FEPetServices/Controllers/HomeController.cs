@@ -15,6 +15,7 @@ namespace FEPetServices.Controllers
         private readonly HttpClient client = null;
         private string DefaultApiUrlServiceCategoryList = "";
         private string DefaultApiUrlServiceCategoryDetail = "";
+        private string DefaultApiUrlServiceCategoryandService = "";
 
         public HomeController()
         {
@@ -22,10 +23,11 @@ namespace FEPetServices.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrlServiceCategoryList = "https://localhost:7255/api/ServiceCategory";
-            DefaultApiUrlServiceCategoryDetail = "";
+            DefaultApiUrlServiceCategoryDetail = "https://localhost:7255/api/ServiceCategory/ServiceCategorysID/";
+            
         }
 
-        public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory, int page = 1, int pageSize = 4, string CategoriesName = "")
+        public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory, int page = 1, int pageSize = 4, string CategoriesName = "" )
         {
             try
             {
@@ -42,6 +44,8 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var servicecategoryList = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseContent);
+
+             
 
                         if (!string.IsNullOrEmpty(CategoriesName) && servicecategoryList != null)
                         {
@@ -86,10 +90,69 @@ namespace FEPetServices.Controllers
             return View();
         }
 
-        public IActionResult ServiceDetail()
+        public async Task<IActionResult> ServiceDetail(int serviceCategoryId, int serviceIds)
         {
+            ServiceDetailModel model = new ServiceDetailModel();
+           
+                HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(responseContent))
+                    {
+                        ServiceCategoryDTO servicecategory = JsonConvert.DeserializeObject<ServiceCategoryDTO>(responseContent);
+                        int serviceId = 0;
+
+                        foreach (var sr in servicecategory.Services)
+                        {
+                            serviceId = sr.ServiceId;
+                            break;
+                        }
+
+                    if (serviceIds == 0)
+                    {
+                        HttpResponseMessage responseService = await client.GetAsync("https://localhost:7255/api/ServiceCategory/GetServiceByServiceCategoryAndServiceID/"
+                        + "?serviceCategoryId=" + serviceCategoryId + "&serviceId=" + serviceId);
+
+                        var responseContentService = await responseService.Content.ReadAsStringAsync();
+                        var service = JsonConvert.DeserializeObject<ServiceDTO>(responseContentService);
+                        model.Service = service;
+                        model.ServiceCategory = servicecategory;
+
+                        return View(model);
+                    }
+                    else
+                    {
+                        HttpResponseMessage responseService = await client.GetAsync("https://localhost:7255/api/ServiceCategory/GetServiceByServiceCategoryAndServiceID/"
+                     + "?serviceCategoryId=" + serviceCategoryId + "&serviceId=" + serviceIds);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var responseContentService = await responseService.Content.ReadAsStringAsync();
+                            var service = JsonConvert.DeserializeObject<ServiceDTO>(responseContentService);
+                            model.Service = service;
+                            model.ServiceCategory = servicecategory;
+
+                            return View(model);
+                        }
+                    }
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                }
+            }
+
             return View();
         }
+
+        public class ServiceDetailModel
+        {
+            public ServiceDTO Service { get; set; }
+            public ServiceCategoryDTO ServiceCategory { get; set; }
+        }
+
+
         public IActionResult Test()
         {
             return View();
