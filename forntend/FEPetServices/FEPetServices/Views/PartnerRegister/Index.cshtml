@@ -9,15 +9,14 @@
 <head>
     <link rel="stylesheet" href="~/css/RegisterPartner.css">
     <title>HASH TECHIE OFFICIAL</title>
-
     <script src="https://smtpjs.com/v3/smtp.js">
     </script>
 </head>
 <body>
     <section>
-        <div class="form-box">
-            <div class="form-value">
-                <form class="login-form" method="post">
+        <form class="login-form" method="post" enctype="multipart/form-data">
+            <div class="form-box">
+                <div class="form-value">
                     <h2>Đăng ký làm đối tác</h2>
                         <div class="inputbox">
                             <ion-icon name="accessibility-outline"></ion-icon>
@@ -29,6 +28,26 @@
                             <input asp-for="LastName" type="text" required>
                             <label for="">Tên</label>
                         </div>
+                        @*start - Địa chỉ *@
+                        <div class="inputbox">
+                            <ion-icon name="accessibility-outline"></ion-icon>
+                            <select style="background-color:rgb(0,0,0,0);" class="form-control" id="provinceDropdown" onchange="loadDistricts()">
+                                <option style="" value="" disabled></option>
+                            </select>
+                        </div>
+                        <div class="inputbox">
+                            <ion-icon name="accessibility-outline"></ion-icon>
+                        <select style="background-color:rgb(0,0,0,0);" class="form-control" id="districtDropdown" onchange="loadWards()">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="inputbox">
+                            <ion-icon name="accessibility-outline"></ion-icon>
+                        <select style="background-color:rgb(0,0,0,0);" class="form-control" id="wardDropdown">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        @*end - Địa chỉ*@
                         <div class="inputbox">
                             <ion-icon name="call-outline"></ion-icon>
                             <input asp-for="Phone" type="tel" pattern="0\d{9}" title="Số điện thoại phải bắt đầu bằng số 0 và có tổng cộng 10 chữ số" required>
@@ -43,7 +62,7 @@
                             <ion-icon name="lock-closed-outline"></ion-icon>
                             <input asp-for="Password" type="password" required>
                             <label for="">Mật khẩu</label>
-                        </div>
+                        </div>                       
                         <div class="forget">
                             <label for="">
                                 <input type="checkbox" id="agreeCheckbox">Tôi đồng ý với các
@@ -55,44 +74,141 @@
                         <div class="register">
                             <p>Quay trở lại <a href="~/Login/Index">Đăng nhập</a></p>
                         </div>
-                </form>
+                        <input type="hidden" asp-for="Province" id="provinceNameInput" />
+                        <input type="hidden" asp-for="District" id="districtNameInput" />
+                        <input type="hidden" asp-for="Commune" id="wardsNameInput" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-box2">
-            <div class="form-box3">
-                <div class="form-value">
-                    <div class="rules">
-                        <h1>Điều khoản hệ thống</h1>
-                        <div class="ruleinfo">
-                            <p>Điều 1: Bạn cần chấp nhận tất cả điều khoản và điều kiện của chúng tôi</p>
+            <div class="form-box2">
+                <div class="form-box3">
+                    <div class="form-value">
+                        <div class="rules">
+                            <h1>Điều khoản hệ thống</h1>
+                            <div class="ruleinfo">
+                                <p>Điều 1: Bạn cần chấp nhận tất cả điều khoản và điều kiện của chúng tôi</p>
+                            </div>
+                            <div class="ruleinfo">
+                                <p>Điều 2: Làm việc với sự nghiêm túc, nhiệt huyết, trung thực</p>
+                            </div>
+                            <div class="ruleinfo">
+                                <p>Điều 3: Đảm bảo dịch vụ bạn phụ trách đáp ứng đủ chất lượng</p>
+                            </div>
+                            <div class="ruleinfo">
+                                <p>Điều 4: Tuân thủ các biện pháp bảo mật thông tin của khách hàng</p>
+                            </div>
+                            <div class="ruleinfo">
+                                <p>Điều 5:Không thực hiện bất kỳ hành động làm tổn hại đến hệ thống</p>
+                            </div>
+                            <div class="ruleinfo">
+                                <p>Điều 6: Cam kết cung cấp chính xác thông tin</p>
+                            </div>
                         </div>
-                        <div class="ruleinfo">
-                            <p>Điều 2: Làm việc với sự nghiêm túc, nhiệt huyết, trung thực</p>
+                        <div class="image">
+                            <input type="file" id="checkimage" name="image">
                         </div>
-                        <div class="ruleinfo">
-                            <p>Điều 3: Đảm bảo dịch vụ bạn phụ trách đáp ứng đủ chất lượng</p>
-                        </div>
-                        <div class="ruleinfo">
-                            <p>Điều 4: Tuân thủ các biện pháp bảo mật thông tin của khách hàng</p>
-                        </div>
-                        <div class="ruleinfo">
-                            <p>Điều 5:Không thực hiện bất kỳ hành động làm tổn hại đến hệ thống</p>
-                        </div>
-                        <div class="ruleinfo">
-                            <p>Điều 6: Cam kết cung cấp chính xác thông tin</p>
-                        </div>
-                    </div>
-                    <div class="image">
-                       <input type="file" id="checkimage"  >
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </section>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="~/js/takeAddress_vs2.js"></script>
 </body>
 </html>
-@*<script src="~/js/RegisterPartner.js"></script>*@
+<script src="~/js/RegisterPartner.js"></script>
+<script>
+    function updateDisplayedNames() {
+        var provinceDropdown = document.getElementById("provinceDropdown");
+        var districtDropdown = document.getElementById("districtDropdown");
+        var wardDropdown = document.getElementById("wardDropdown");
+
+        var selectedProvinceOption = provinceDropdown.options[provinceDropdown.selectedIndex];
+        var selectedDistrictOption = districtDropdown.options[districtDropdown.selectedIndex];
+        var selectedWardOption = wardDropdown.options[wardDropdown.selectedIndex];
+
+        var provinceNameInput = document.getElementById("provinceNameInput");
+        var districtNameInput = document.getElementById("districtNameInput");
+        var wardsNameInput = document.getElementById("wardsNameInput");
+
+        provinceNameInput.value = selectedProvinceOption.text;
+        districtNameInput.value = selectedDistrictOption.text;
+        wardsNameInput.value = selectedWardOption.text;
+    }
+
+    function loadDistricts() {
+        var provinceDropdown = document.getElementById("provinceDropdown");
+        var selectedProvinceOption = provinceDropdown.options[provinceDropdown.selectedIndex];
+        selectedProvinceName = selectedProvinceOption.text;
+
+        fetch(`https://provinces.open-api.vn/api/p/${selectedProvinceOption.value}?depth=2`)
+            .then(response => response.json())
+            .then(data => {
+                var districts = data.districts;
+                var districtDropdown = document.getElementById("districtDropdown");
+                var wardDropdown = document.getElementById("wardDropdown");
+
+                // Clear existing options in district and ward dropdowns
+                districtDropdown.innerHTML = "";
+                wardDropdown.innerHTML = "";
+
+                // Add new district options
+                for (var i = 0; i < districts.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = districts[i].code;
+                    option.text = districts[i].name;
+                    districtDropdown.appendChild(option);
+                }
+
+                // Update displayed names after loading districts
+                updateDisplayedNames();
+
+                // Trigger the change event on district dropdown to load wards
+                districtDropdown.dispatchEvent(new Event("change"));
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    }
+
+    function loadWards() {
+        var districtDropdown = document.getElementById("districtDropdown");
+        var selectedDistrictOption = districtDropdown.options[districtDropdown.selectedIndex];
+        selectedDistrictName = selectedDistrictOption.text;
+
+        if (selectedDistrictOption.value === "") {
+            // Get the first district option
+            var firstDistrictOption = districtDropdown.querySelector("option:not([value=''])");
+            selectedDistrictName = firstDistrictOption.text;
+            firstDistrictOption.selected = true;
+        }
+
+        fetch(`https://provinces.open-api.vn/api/d/${selectedDistrictOption.value}?depth=2`)
+            .then(response => response.json())
+            .then(data => {
+                var wards = data.wards;
+                var wardDropdown = document.getElementById("wardDropdown");
+
+                // Clear existing options in ward dropdown
+                wardDropdown.innerHTML = "";
+
+                // Add new ward options
+                for (var i = 0; i < wards.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = wards[i].code;
+                    option.text = wards[i].name;
+                    wardDropdown.appendChild(option);
+                }
+
+                // Update displayed names after loading wards
+                updateDisplayedNames();
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    }
+</script>
+
+
 

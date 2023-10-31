@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
-using FEPetServices.Form; // Import namespace chứa class RegisterDTO
+using FEPetServices.Form; 
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Net.Mail;
