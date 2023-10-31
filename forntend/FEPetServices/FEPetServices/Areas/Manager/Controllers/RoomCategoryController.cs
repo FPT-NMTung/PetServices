@@ -90,7 +90,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "Thêm loại phòng thất bại. Vui lòng thử lại sau!";
+                        TempData["ErrorMessage"] = "Thêm loại phòng thất bại. Vui lòng thử lại sau!";
                         return View(roomCategoryDTO);
                     }
                 }

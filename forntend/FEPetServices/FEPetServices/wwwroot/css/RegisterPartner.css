@@ -182,3 +182,7 @@ button {
         border-radius: 20px;
         background-color: yellow;
     }
+
+.login-form {
+    display: flex;
+}

@@ -1,8 +1,7 @@
-﻿using FEPetServices.Form;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Text;
-
+using FEPetServices.Form; 
+using Newtonsoft.Json;
 namespace FEPetServices.Controllers
 {
     public class PartnerRegisterController : Controller
@@ -12,7 +11,7 @@ namespace FEPetServices.Controllers
         public PartnerRegisterController()
         {
             _client = new HttpClient();
-            _defaultApiUrl = "https://localhost:7255/api/Account/RegisterPartner"; // URL của API Register   
+            _defaultApiUrl = "https://localhost:7255/api/Account/RegisterPartner"; 
         }
         public IActionResult Index()
         {
@@ -20,49 +19,35 @@ namespace FEPetServices.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index([FromForm] RegisterDTO registerInfo, IFormFile image)
+        public async Task<IActionResult> Index([FromForm] RegisterDTO registerInfo, List<IFormFile> image)
         {
-            try
+            foreach (var file in image)
             {
-                /* if (image != null && image.Length > 0)
-                 {
-                     // Xử lý và lưu trữ ảnh
-                     Console.WriteLine(image);
-                     registerInfo.ImageCertificate = "/img/" + image.FileName.ToString();
-                 }*/
-                if (image != null)
-                {
-                    string filename = GenerateRandomNumber(5) + image.FileName;
-                    filename = Path.GetFileName(filename);
-                    string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
-                    using (var stream = new FileStream(uploadfile, FileMode.Create))
-                    {
-                        await image.CopyToAsync(stream);
-                    }
-                    registerInfo.ImageCertificate = "/img/" + filename;
-                }
-                // Chuyển thông tin đăng ký thành dạng JSON
-
+                string filename = GenerateRandomNumber(5) + file.FileName;
+                filename = Path.GetFileName(filename);
+                string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                var stream = new FileStream(uploadfile, FileMode.Create);
+                file.CopyToAsync(stream);
+                registerInfo.ImageCertificate = "/img/" + filename;
+            }
+            try
+            {              
                 var json = JsonConvert.SerializeObject(registerInfo);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                // Gửi yêu cầu POST đến API Register
                 HttpResponseMessage response = await _client.PostAsync(_defaultApiUrl, content);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    // Đăng ký thành công, bạn có thể xử lý kết quả ở đây (ví dụ: hiển thị thông báo thành công)
                     ViewBag.SuccessMessage = "Đăng ký thành công!";
                 }
                 else
                 {
-                    // Đăng ký không thành công, bạn có thể xử lý kết quả ở đây (ví dụ: hiển thị thông báo lỗi)
                     ViewBag.ErrorMessage = "Đăng ký không thành công. Mã lỗi HTTP: " + (int)response.StatusCode;
                 }
             }
             catch (Exception ex)
             {
-                // Xử lý lỗi nếu có
                 ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
             }
 

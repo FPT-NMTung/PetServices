@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Areas\Customer\Views\MenuCustomer\ChangePassword.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.20" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
@@ -23,6 +19,8 @@
     <Folder Include="Areas\Customer\Models\" />
     <Folder Include="Areas\Manager\Data\" />
     <Folder Include="Areas\Manager\Models\" />
+    <Folder Include="Areas\Partner\Data\" />
+    <Folder Include="Areas\Partner\Models\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,15 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Areas\Customer\Views\MenuCustomer\ChangePassword.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Areas\Customer\Views\MenuCustomer\ChangePassword.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Areas\Customer\Views\MenuCustomer\ChangePassword.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\dataTable.css" />
   </ItemGroup>
 
 </Project>

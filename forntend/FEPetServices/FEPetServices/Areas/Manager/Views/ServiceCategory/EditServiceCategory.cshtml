@@ -26,7 +26,7 @@
     <div class="col-75">
         <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" >
 
-        <img src="@Model.Picture" height="100px" width="100px" style="float: left;" id="imagePreview">
+        <img src="@Model?.Picture" height="100px" width="100px" style="float: left;" id="imagePreview">
         
     </div>
     </div>
@@ -45,7 +45,8 @@
     </div>
     <div class="col-75">
         <label class="switch">
-            <input type="checkbox" name="Status" @(Model.Status ? "checked" : "")>
+            <input type="checkbox" name="Status" @(Model?.Status ? "checked" : "")>
+
             <span class="slider round"></span>
         </label>
     </div>
