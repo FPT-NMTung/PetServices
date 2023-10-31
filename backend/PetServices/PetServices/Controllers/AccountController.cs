@@ -382,11 +382,7 @@ namespace PetServices.Controllers
                 Status = false,
                 RoleId = 4
             };
-
-            await _context.Accounts.AddAsync(newAccount);
-            await _context.SaveChangesAsync();
-
-            newAccount.PartnerInfo = new PartnerInfo
+            var partner = new PartnerInfo
             {
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
@@ -399,8 +395,8 @@ namespace PetServices.Controllers
                 ImageCertificate = registerDto.ImageCertificate
 
             };
-
-            _context.Update(newAccount);
+            await _context.Accounts.AddAsync(newAccount);
+             _context.PartnerInfos.Add(partner);
             await _context.SaveChangesAsync();
 
             return Ok("Đăng ký thành công! Vui lòng chờ đợi quản lý xác nhận tài khoản của bạn trước khi đăng nhập");

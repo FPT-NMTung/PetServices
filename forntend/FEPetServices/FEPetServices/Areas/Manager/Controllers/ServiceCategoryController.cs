@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using PetServices.Models;
 using System.Security.Claims;
+using FEPetServices.Areas.DTO;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
@@ -67,18 +68,22 @@ namespace FEPetServices.Areas.Manager.Controllers
             return View();
         }
 
-        public async Task<IActionResult> AddServiceCategory([FromForm] ServiceCategoryDTO serviceCategory, IFormFile image)
+        public async Task<IActionResult> AddServiceCategory([FromForm] ServiceCategoryDTO serviceCategory,List<IFormFile> image)
         {
             try
             {
                 if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
                 {
-                    if (image != null && image.Length > 0)
-                    {
-                        // Xử lý và lưu trữ ảnh
-                        Console.WriteLine(image);
-                        serviceCategory.Picture = "/img/" + image.FileName.ToString();
-                    }
+                    if (serviceCategory.SerCategoriesName == null) { return View(); }
+                    foreach(var file in image) {
+                        string filename = GenerateRandomNumber(5) + file.FileName;
+                        filename = Path.GetFileName(filename);
+                        string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                        var stream = new FileStream(uploadfile, FileMode.Create);
+                        file.CopyToAsync(stream);
+                        serviceCategory.Picture = "/img/" +filename;
+                     }
+
                     // mặc định status là true
                     serviceCategory.Status = true;
 
@@ -111,7 +116,19 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
         }
 
+        public static string GenerateRandomNumber(int length)
+        {
+            Random random = new Random();
+            const string chars = "0123456789"; // Chuỗi chứa các chữ số từ 0 đến 9
+            char[] randomChars = new char[length];
 
+            for (int i = 0; i < length; i++)
+            {
+                randomChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(randomChars);
+        }
 
         [HttpGet]
         public async Task<IActionResult> EditServiceCategory(int serCategoriesId)
@@ -123,22 +140,16 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    string responseContent = await response.Content.ReadAsStringAsync();
 
-                    if (!string.IsNullOrEmpty(responseContent))
+                    var options = new JsonSerializerOptions
                     {
-                        // Deserialize dữ liệu từ API thành danh sách các đối tượng ServiceCategoryDTO
-                        var existingServiceCategoryList = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseContent);
+                        PropertyNameCaseInsensitive = true
+                    };
 
-                        // Lấy đối tượng cần chỉnh sửa từ danh sách (có thể là phần tử đầu tiên)
-                        var existingServiceCategory = existingServiceCategoryList.FirstOrDefault();
+                    ServiceCategoryDTO managerInfos = System.Text.Json.JsonSerializer.Deserialize<ServiceCategoryDTO>(responseContent, options);
 
-                        return View(existingServiceCategory);
-                    }
-                    else
-                    {
-                        TempData["ErrorToast"] = "API trả về dữ liệu rỗng.";
-                    }
+                    return View(managerInfos);
                 }
                 else
                 {
@@ -187,8 +198,8 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                         if (!string.IsNullOrEmpty(responseContent))
                         {
-                            var existingServiceCategoryList = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseContent);
-                            var existingServiceCategory = existingServiceCategoryList.FirstOrDefault();
+                            var existingServiceCategory = JsonConvert.DeserializeObject<ServiceCategoryDTO>(responseContent);
+                           
                             if (existingServiceCategory != null)
                             {
                                 // Assign the existing image path to serviceCategory.Prictue.
