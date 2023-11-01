@@ -89,12 +89,12 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TempData["SuccessMessage"] = "Thêm loại phòng thành công!";
+                        ViewBag.Success = "Thêm loại phòng thành công!";
                         return View(roomCategoryDTO);
                     }
                     else
                     {
-                        TempData["ErrorMessage"] = "Thêm loại phòng thất bại. Vui lòng thử lại sau!";
+                        ViewBag.ErrorMessage = "Thêm loại phòng thất bại. Vui lòng thử lại sau!";
                         return View(roomCategoryDTO);
                     }
                 }
@@ -143,17 +143,17 @@ namespace FEPetServices.Areas.Manager.Controllers
                     }
                     else
                     {
-                        TempData["ErrorToast"] = "API trả về dữ liệu rỗng.";
+                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
                     }
                 }
                 else
                 {
-                    TempData["ErrorToast"] = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
             }
 
             return View();
@@ -213,19 +213,19 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
+                    ViewBag.Success = "Chỉnh sửa dịch vụ thành công!";
                     return View(roomCategoryDTO); 
                 }
                 else
                 {
-                    TempData["ErrorToast"] = "Chỉnh sửa dịch vụ thất bại. Vui lòng thử lại sau.";
+                    ViewBag.ErrorMessage = "Chỉnh sửa dịch vụ thất bại. Vui lòng thử lại sau.";
                     return View(roomCategoryDTO);
                 }
             }
 
             catch (Exception ex)
             {
-                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
                 return View(roomCategoryDTO);
             }
         }

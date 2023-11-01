@@ -115,18 +115,18 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessMessage"] = "Thêm phòng thành công!";
+                    ViewBag.Success = "Thêm phòng thành công!";
                     return View();
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Thêm phòng thất bại. Vui lòng thử lại sau.";
+                    ViewBag.ErrorMessage = "Thêm phòng thất bại. Vui lòng thử lại sau.";
                     return View();
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
                 return View(roomDTO);
             }
         }
@@ -163,7 +163,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (!categoryResponse.IsSuccessStatusCode)
                 {
-                    TempData["ErrorToast"] = "Tải danh sách loại phòng thất bại. Vui lòng tải lại trang.";
+                    ViewBag.ErrorMessage = "Tải danh sách loại phòng thất bại. Vui lòng tải lại trang.";
                     return View();
                 }
 
@@ -174,7 +174,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    TempData["ErrorToast"] = "Tải thông tin phòng thất bại. Vui lòng tải lại trang.";
+                    ViewBag.ErrorMessage = "Tải thông tin phòng thất bại. Vui lòng tải lại trang.";
                     return View();
                 }
 
@@ -187,7 +187,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
             }
             return View();
         }
@@ -253,19 +253,19 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
+                    ViewBag.Success = "Chỉnh sửa dịch vụ thành công!";
                     return RedirectToAction("EditRoom", new { roomId = RoomId });
                 }
                 else
                 {
-                    TempData["ErrorToast"] = "Chỉnh sửa dịch vụ thất bại. Vui lòng thử lại sau.";
+                    ViewBag.ErrorMessage = "Chỉnh sửa dịch vụ thất bại. Vui lòng thử lại sau.";
                     return View(roomDTO);
                 }
 
             }
             catch (Exception ex)
             {
-                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
                 return View(roomDTO);
             }
         }

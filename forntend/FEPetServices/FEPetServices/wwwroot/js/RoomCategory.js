@@ -15,6 +15,16 @@
 
     let isValid = true;
 
+    if (subject === null) {
+        subjectErrorMessage.textContent = 'Mô tả không được để trống!';
+        isValid = false;
+    }
+
+    if (subject === null) {
+        fnameErrorMessage.textContent = 'Tên loại phòng không được để trống!';
+        isValid = false;
+    }
+
     if (specialChars.test(fname.value)) {
         fnameErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
         isValid = false;
