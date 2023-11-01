@@ -47,7 +47,6 @@ namespace PetServices.Models
                     optionsBuilder.UseSqlServer(conf.GetConnectionString("DbConnection"));
                 }
             }
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
