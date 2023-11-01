@@ -108,6 +108,65 @@ namespace PetServices.Controllers
         [HttpPost("AddRoom")]
         public async Task<ActionResult> AddRoom(RoomDTO roomDTO)
         {
+                // check tên phòng
+            if (string.IsNullOrWhiteSpace(roomDTO.RoomName))
+            {
+                string errorMessage = "Tên phòng không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (roomDTO.RoomName.Length > 500)
+            {
+                string errorMessage = "Tên phòng vượt quá số ký tự. Tối đa 500 ký tự!";
+                return BadRequest(errorMessage);
+            }
+            // check mô tả
+            if (string.IsNullOrWhiteSpace(roomDTO.Desciptions))
+            {
+                string errorMessage = "Mô tả không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            // check ảnh
+            if (string.IsNullOrWhiteSpace(roomDTO.Picture))
+            {
+                string errorMessage = "Ảnh phòng không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            else if (roomDTO.Picture.Contains(" "))
+            {
+                string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            // check giá
+            if (roomDTO.Price == null)
+            {
+                string errorMessage = "Giá phòng không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            /*if (!double.TryParse(roomDTO.Price.ToString(), out double price)) // lỗi
+            {
+                string errorMessage = "Giá phòng phải là một số!";
+                return BadRequest(errorMessage);
+            }*/
+            // check loại phòng
+            if (roomDTO.RoomCategoriesId == null)
+            {
+                string errorMessage = "Loại phòng không được để trống!";
+                return BadRequest(errorMessage);
+            }
+
+            var roomcategory = _context.RoomCategories.FirstOrDefault(r => r.RoomCategoriesId == roomDTO.RoomCategoriesId);
+
+            if (roomcategory == null)
+            {
+                string errorMessage = "Loại phòng không tồn tại!";
+                return BadRequest(errorMessage);
+            }
+            /*if (!int.TryParse(roomDTO.RoomCategoriesId.ToString(), out int categoryId))
+            {
+                string errorMessage = "Loại phòng không hợp lệ!";
+                return BadRequest(errorMessage);
+            }*/
+
             try
             {
                 var newRoom = new Room
@@ -143,6 +202,52 @@ namespace PetServices.Controllers
         [HttpPut("UpdateRoom")]
         public async Task<ActionResult> UpdateRoom(RoomDTO roomDTO, int roomId)
         {
+            if (string.IsNullOrWhiteSpace(roomDTO.RoomName))
+            {
+                string errorMessage = "Tên phòng không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (roomDTO.RoomName.Length > 500)
+            {
+                string errorMessage = "Tên phòng vượt quá số ký tự. Tối đa 500 ký tự!";
+                return BadRequest(errorMessage);
+            }
+            // check mô tả
+            if (string.IsNullOrWhiteSpace(roomDTO.Desciptions))
+            {
+                string errorMessage = "Mô tả không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            // check ảnh
+            if (string.IsNullOrWhiteSpace(roomDTO.Picture))
+            {
+                string errorMessage = "Ảnh phòng không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            else if (roomDTO.Picture.Contains(" "))
+            {
+                string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            // check giá
+            if (roomDTO.Price == null)
+            {
+                string errorMessage = "Giá phòng không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (roomDTO.RoomCategoriesId == null)
+            {
+                string errorMessage = "Loại phòng không được để trống!";
+                return BadRequest(errorMessage);
+            }
+
+            var roomcategory = _context.RoomCategories.FirstOrDefault(r => r.RoomCategoriesId == roomDTO.RoomCategoriesId);
+
+            if (roomcategory == null)
+            {
+                string errorMessage = "Loại phòng không tồn tại!";
+                return BadRequest(errorMessage);
+            }
             try
             {
                 var room = await _context.Rooms.Include(r => r.RoomCategories).Include(r => r.Services).FirstOrDefaultAsync(p => p.RoomId == roomId);
