@@ -3,9 +3,11 @@ using FEPetServices.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using PetServices.Models;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -35,7 +37,7 @@ namespace FEPetServices.Controllers
             DefaultApiUrlServiceCategoryDetail = "https://localhost:7255/api/ServiceCategory/ServiceCategorysID/";
         }
 
-        public async Task<ActionResult> Room(RoomDTO roomDTO, int page = 1, int pagesize = 6, string roomcategory = "", string pricefrom = "", string priceto = "", string sortby = "", string roomname = "", string viewstyle = "grid")
+        public async Task<ActionResult> Room(RoomDTO roomDTO, RoomSearchDTO searchDTO)
         {
             try
             {
@@ -55,43 +57,46 @@ namespace FEPetServices.Controllers
 
                     var responseContent = await response.Content.ReadAsStringAsync();
 
+                    int page = searchDTO.page ?? 1; ;
+                    int pagesize = searchDTO.pagesize ?? 6;
+
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(responseContent);
 
-                        if (!string.IsNullOrEmpty(roomname))
+                        if (!string.IsNullOrEmpty(searchDTO.roomname))
                         {
-                            roomList = roomList.Where(r => r.RoomName.Contains(roomname, StringComparison.OrdinalIgnoreCase)).ToList();
+                            roomList = roomList.Where(r => r.RoomName.Contains(searchDTO.roomname, StringComparison.OrdinalIgnoreCase)).ToList();
                         }
 
-                        if (!string.IsNullOrEmpty(roomcategory))
+                        if (!string.IsNullOrEmpty(searchDTO.roomcategory))
                         {
-                            int roomCategoriesId = int.Parse(roomcategory);
+                            int roomCategoriesId = int.Parse(searchDTO.roomcategory);
                             roomList = roomList.Where(r => r.RoomCategoriesId == roomCategoriesId).ToList();
                         }
 
-                        if (!string.IsNullOrEmpty(pricefrom) || !string.IsNullOrEmpty(priceto))
+                        if (!string.IsNullOrEmpty(searchDTO.pricefrom) || !string.IsNullOrEmpty(searchDTO.priceto))
                         {
-                            if (string.IsNullOrEmpty(pricefrom))
+                            if (string.IsNullOrEmpty(searchDTO.pricefrom))
                             {
-                                int priceTo = int.Parse(priceto);
+                                int priceTo = int.Parse(searchDTO.priceto);
                                 roomList = roomList.Where(r => r.Price < priceTo).ToList();
                             }
-                            if (string.IsNullOrEmpty(priceto))
+                            if (string.IsNullOrEmpty(searchDTO.priceto))
                             {
-                                int priceFrom = int.Parse(pricefrom);
+                                int priceFrom = int.Parse(searchDTO.pricefrom);
                                 roomList = roomList.Where(r => r.Price > priceFrom).ToList();
                             }
-                            if (!string.IsNullOrEmpty(pricefrom) && !string.IsNullOrEmpty(priceto))
+                            if (!string.IsNullOrEmpty(searchDTO.pricefrom) && !string.IsNullOrEmpty(searchDTO.priceto))
                             {
-                                int PriceTo = int.Parse(priceto);
-                                int PriceFrom = int.Parse(pricefrom);
+                                int PriceTo = int.Parse(searchDTO.priceto);
+                                int PriceFrom = int.Parse(searchDTO.pricefrom);
 
                                 roomList = roomList.Where(r => r.Price > PriceFrom && r.Price < PriceTo).ToList();
                             }
                         }
 
-                        switch (sortby)
+                        switch (searchDTO.sortby)
                         {
                             case "name_desc":
                                 roomList = roomList.OrderByDescending(r => r.RoomName).ToList();
@@ -113,16 +118,16 @@ namespace FEPetServices.Controllers
                         List<RoomDTO> currentPageRoomList = roomList.Skip(startIndex).Take(pagesize).ToList();
 
                         ViewBag.TotalPages = totalPages;
-                        ViewBag.CurrentPage = page;
-                        ViewBag.PageSize = pagesize;
+                        ViewBag.CurrentPage = searchDTO.page;
+                        ViewBag.PageSize = searchDTO.pagesize;
 
-                        ViewBag.roomcategory = roomcategory;
-                        ViewBag.pricefrom = pricefrom;
-                        ViewBag.priceto = priceto;
-                        ViewBag.sortby = sortby;
-                        ViewBag.roomname = roomname;
-                        ViewBag.pagesize = pagesize;
-                        ViewBag.viewstyle = viewstyle;
+                        ViewBag.roomcategory = searchDTO.roomcategory;
+                        ViewBag.pricefrom = searchDTO.pricefrom;
+                        ViewBag.priceto = searchDTO.priceto;
+                        ViewBag.sortby = searchDTO.sortby;
+                        ViewBag.roomname = searchDTO.roomname;
+                        ViewBag.pagesize = searchDTO.pagesize;
+                        ViewBag.viewstyle = searchDTO.viewstyle;
 
                         return View(currentPageRoomList);
                     }
@@ -163,7 +168,7 @@ namespace FEPetServices.Controllers
                 {
                     var services = await serviceUnavailableResponse.Content.ReadFromJsonAsync<List<ServiceDTO>>();
 
-                    ViewBag.ServiceUnavailable = new SelectList(services, "ServiceId", "ServiceName");
+                    ViewBag.ServiceUnavailable = services;
                 }
 
                 HttpResponseMessage response = await client.GetAsync(ApiUrlRoomDetail + roomId);
