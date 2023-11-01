@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using PetServices.Models;
-using Newtonsoft.Json;
-using PetServices.Models;
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text;
@@ -14,13 +12,15 @@ using System.Text;
 namespace FEPetServices.Controllers
 {
     /*[Authorize(Policy = "CusOnly")]*/
-    /* [Authorize(Policy = "CusOnly")]*/
     public class HomeController : Controller
     {
         private readonly HttpClient client = null;
         private string ApiUrlRoomList;
         private string ApiUrlRoomCategoryList;
         private string ApiUrlRoomDetail;
+        private string DefaultApiUrlServiceCategoryList = "";
+        private string DefaultApiUrlServiceCategoryDetail = "";
+        private string DefaultApiUrlServiceCategoryandService = "";
 
         public HomeController()
         {
@@ -31,6 +31,8 @@ namespace FEPetServices.Controllers
             ApiUrlRoomList = "https://localhost:7255/api/Room/GetAllRoomCustomer";
             ApiUrlRoomCategoryList = "https://localhost:7255/api/Room/GetRoomCategory";
             ApiUrlRoomDetail = "https://localhost:7255/api/Room/GetRoom/";
+            DefaultApiUrlServiceCategoryList = "https://localhost:7255/api/ServiceCategory";
+            DefaultApiUrlServiceCategoryDetail = "https://localhost:7255/api/ServiceCategory/ServiceCategorysID/";
         }
 
         public async Task<ActionResult> Room(RoomDTO roomDTO, int page = 1, int pagesize = 6, string roomcategory = "", string pricefrom = "", string priceto = "", string sortby = "", string roomname = "", string viewstyle = "grid")
@@ -171,10 +173,6 @@ namespace FEPetServices.Controllers
                     var responseContent = await response.Content.ReadAsStringAsync();
 
                     var roomDto = JsonConvert.DeserializeObject<RoomDTO>(responseContent);
-        private readonly HttpClient client = null;
-        private string DefaultApiUrlServiceCategoryList = "";
-        private string DefaultApiUrlServiceCategoryDetail = "";
-        private string DefaultApiUrlServiceCategoryandService = "";
 
                     return View(roomDto);
                 }
@@ -189,14 +187,6 @@ namespace FEPetServices.Controllers
             }
 
             return View();
-        public HomeController()
-        {
-            client = new HttpClient();
-            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
-            client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrlServiceCategoryList = "https://localhost:7255/api/ServiceCategory";
-            DefaultApiUrlServiceCategoryDetail = "https://localhost:7255/api/ServiceCategory/ServiceCategorysID/";
-            
         }
 
         public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory, int page = 1, int pageSize = 4, string CategoriesName = "" )
