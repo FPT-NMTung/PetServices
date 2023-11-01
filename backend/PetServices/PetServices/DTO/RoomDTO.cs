@@ -1,4 +1,6 @@
-﻿namespace PetServices.DTO
+﻿using PetServices.Models;
+
+namespace PetServices.DTO
 {
     public class RoomDTO
     {
@@ -11,5 +13,6 @@
         public int RoomCategoriesId { get; set; }
         public string? RoomCategoriesName { get; set; }
         public int Slot { get; set; }
+        public List<int>? ServiceIds { get; set; }
     }
 }

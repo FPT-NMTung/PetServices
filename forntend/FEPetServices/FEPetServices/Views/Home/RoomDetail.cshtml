@@ -1,0 +1,179 @@
+﻿<html>
+<head>
+    <meta charset=utf-8>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="~/css/RoomDetailCustomer.css">
+</head>
+<body>
+    <p class="title">Thông tin phòng</p>
+    <div class="container">
+        <div class="part">
+            <div class="image-container">
+                <img src="@Model.Picture" class="image">
+                <img src="/img/pictureframe.png" class="frame">
+            </div>
+            <div class="part-container">
+                <p class="roomName">@Model.RoomName</p>
+                <div class="part-content">
+                    <div class="part1-content">
+                        <p class="part1-serviceTitle">Dịch vụ hiện có:</p>
+                        <div class="part1-serviceName">
+                            @if (ViewBag.ServiceAvailable != null)
+                            {
+                                foreach (var service in ViewBag.ServiceAvailable)
+                                {
+                                    <div class="part1-serviceName-title">
+                                        <img src="/img/availableIcon.png" />
+                                        <p>@service.Text</p>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="part2-content">
+                        <p class="part2-serviceTitle">Dịch vụ muốn đặt thêm:</p>
+                        <div class="part2-serviceName">
+                            @if (ViewBag.ServiceUnavailable != null)
+                            {
+                                foreach (var service in ViewBag.ServiceUnavailable)
+                                {
+                                    <div class="part2-serviceName-title">
+                                        <img src="/img/unavailableIcon.png" />
+                                        <p>@service.Text</p>
+                                        <div class="checkbox-wrapper-12">
+                                            <div class="cbx">
+                                                <input type="checkbox" id="cbx-12">
+                                                <label for="cbx-12"></label>
+                                                <svg fill="none" viewBox="0 0 15 14" height="14" width="15">
+                                                    <path d="M2 8.36364L6.23077 12L13 2"></path>
+                                                </svg>
+                                            </div>
+
+                                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                                <defs>
+                                                    <filter id="goo-12">
+                                                        <feGaussianBlur result="blur" stdDeviation="4" in="SourceGraphic"></feGaussianBlur>
+                                                        <feColorMatrix result="goo-12" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" mode="matrix" in="blur"></feColorMatrix>
+                                                        <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                                                    </filter>
+                                                </defs>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="part2">
+            <p class="part2-title">Chú ý cho thú cưng:</p>
+            <div>
+                <textarea rows="5" cols="100" name="description" placeholder="Chú thích thêm cho thú cưng của bạn."></textarea>
+            </div>
+        </div>
+        <div class="part3">
+            <p class="part3-title">Thời gian thuê phòng:</p>
+            <div class="part3-content">
+                <div class="part3-content-child">
+                    <input type="datetime-local" id="datetime" name="datetime">
+                    <img src="/img/icon-.png">
+                    <input type="datetime-local" id="datetime" name="date">
+                </div>
+                <p class="price">Giá thuê theo ngày: @Model.Price đ</p>
+            </div>
+        </div>
+        <div class="part4">
+            <div class="part4-price">
+                <p class="part4-title">Chi tiết giá:</p>
+                <div>
+                   @* asd*@
+                </div>
+            </div>
+            <div class="part4-description">
+                <p class="part4-title">Mô tả phòng:</p>
+                <p>@Model.Desciptions</p>
+            </div>
+        </div>
+        <div class="part5">
+            <p>Khi nhấn vào nút này bạn công nhận mình đã đọc và đồng ý với các <a>Điều khoản & điều kiện</a> và <a>Chính sách quyền riêng tư</a> của chúng tôi.</p>
+            <button>
+                <span class="box">
+                    Đặt phòng
+                </span>
+
+                <div class="star-1">
+                    <svg height="25" width="25" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M427.313,88.686c-47.803-47.803-125.213-47.803-173.016,0l-17.087,17.087l-17.087-17.087
+    c-47.803-47.803-125.213-47.803-173.016,0c-47.803,47.803-47.803,125.213,0,173.016l190.103,190.103
+    c4.88,4.88,11.316,7.322,17.752,7.322c6.435,0,13.871-2.442,18.751-7.322l190.103-190.103
+    C475.116,213.899,475.116,136.489,427.313,88.686z" fill="#fd1853"></path>
+                    </svg>
+
+
+                </div>
+                <div class="star-2">
+                    <svg height="20" width="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M427.313,88.686c-47.803-47.803-125.213-47.803-173.016,0l-17.087,17.087l-17.087-17.087
+    c-47.803-47.803-125.213-47.803-173.016,0c-47.803,47.803-47.803,125.213,0,173.016l190.103,190.103
+    c4.88,4.88,11.316,7.322,17.752,7.322c6.435,0,13.871-2.442,18.751-7.322l190.103-190.103
+    C475.116,213.899,475.116,136.489,427.313,88.686z" fill="#fd1853"></path>
+                    </svg>
+
+                </div>
+                <div class="star-3">
+                    <svg height="9" width="9" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M427.313,88.686c-47.803-47.803-125.213-47.803-173.016,0l-17.087,17.087l-17.087-17.087
+    c-47.803-47.803-125.213-47.803-173.016,0c-47.803,47.803-47.803,125.213,0,173.016l190.103,190.103
+    c4.88,4.88,11.316,7.322,17.752,7.322c6.435,0,13.871-2.442,18.751-7.322l190.103-190.103
+    C475.116,213.899,475.116,136.489,427.313,88.686z" fill="#fd1853"></path>
+                    </svg>
+
+                </div>
+                <div class="star-4">
+                    <svg height="10" width="10" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M427.313,88.686c-47.803-47.803-125.213-47.803-173.016,0l-17.087,17.087l-17.087-17.087
+    c-47.803-47.803-125.213-47.803-173.016,0c-47.803,47.803-47.803,125.213,0,173.016l190.103,190.103
+    c4.88,4.88,11.316,7.322,17.752,7.322c6.435,0,13.871-2.442,18.751-7.322l190.103-190.103
+    C475.116,213.899,475.116,136.489,427.313,88.686z" fill="#fd1853"></path>
+                    </svg>
+
+                </div>
+                <div class="star-5">
+                    <svg height="20" width="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M427.313,88.686c-47.803-47.803-125.213-47.803-173.016,0l-17.087,17.087l-17.087-17.087
+    c-47.803-47.803-125.213-47.803-173.016,0c-47.803,47.803-47.803,125.213,0,173.016l190.103,190.103
+    c4.88,4.88,11.316,7.322,17.752,7.322c6.435,0,13.871-2.442,18.751-7.322l190.103-190.103
+    C475.116,213.899,475.116,136.489,427.313,88.686z" fill="#fd1853"></path>
+                    </svg>
+
+                </div>
+                <div class="star-6">
+                    <svg height="7" width="7" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M427.313,88.686c-47.803-47.803-125.213-47.803-173.016,0l-17.087,17.087l-17.087-17.087
+    c-47.803-47.803-125.213-47.803-173.016,0c-47.803,47.803-47.803,125.213,0,173.016l190.103,190.103
+    c4.88,4.88,11.316,7.322,17.752,7.322c6.435,0,13.871-2.442,18.751-7.322l190.103-190.103
+    C475.116,213.899,475.116,136.489,427.313,88.686z" fill="#fd1853"></path>
+                    </svg>
+
+                </div>
+
+            </button>
+        </div>
+    </div>
+    <script>
+        const datetimeInput = document.getElementById("datetime");
+        const dateInput = document.getElementById("date");
+
+        datetimeInput.addEventListener("input", function () {
+            const datetimeValue = datetimeInput.value;
+            const [datePart, timePart] = datetimeValue.split("T");
+            dateInput.value = datePart;
+        });
+    </script>
+</body>
+</html>
+

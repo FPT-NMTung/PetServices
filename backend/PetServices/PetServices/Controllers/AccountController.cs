@@ -67,11 +67,11 @@ namespace PetServices.Controllers
             if (result != null)
             {
                 var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, login.Email),
-                new Claim(ClaimTypes.Role, result.Role?.RoleName),
-                new Claim("RoleId", result.Role?.RoleId.ToString())
-            };
+                {
+                    new Claim(ClaimTypes.Name, login.Email),
+                    new Claim(ClaimTypes.Role, result.Role?.RoleName),
+                    new Claim("RoleId", result.Role?.RoleId.ToString())
+                };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -84,7 +84,7 @@ namespace PetServices.Controllers
                     signingCredentials: creds
                 );
 
-                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName });
+                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName, Status= result.Status });
             }
             else
             {
@@ -382,11 +382,7 @@ namespace PetServices.Controllers
                 Status = false,
                 RoleId = 4
             };
-
-            await _context.Accounts.AddAsync(newAccount);
-            await _context.SaveChangesAsync();
-
-            newAccount.PartnerInfo = new PartnerInfo
+            var partner = new PartnerInfo
             {
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
@@ -399,8 +395,8 @@ namespace PetServices.Controllers
                 ImageCertificate = registerDto.ImageCertificate
 
             };
-
-            _context.Update(newAccount);
+            await _context.Accounts.AddAsync(newAccount);
+             _context.PartnerInfos.Add(partner);
             await _context.SaveChangesAsync();
 
             return Ok("Đăng ký thành công! Vui lòng chờ đợi quản lý xác nhận tài khoản của bạn trước khi đăng nhập");
