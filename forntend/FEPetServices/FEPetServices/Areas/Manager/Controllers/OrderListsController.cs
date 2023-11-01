@@ -37,6 +37,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
+                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 List<OrdersForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrdersForm>>(responseContent, options);
                 return View(orderLists);
             }
@@ -65,6 +66,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 {
                     totalPrice = (double)(totalPrice + od.Price * od.Quantity); 
                 }
+
+                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 ViewBag.TotalPrice = totalPrice;
                 return View(orderDetail);
             }

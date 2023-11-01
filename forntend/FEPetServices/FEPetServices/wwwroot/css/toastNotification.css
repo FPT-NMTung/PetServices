@@ -99,3 +99,11 @@
     .toast--wating .toast_icon {
         color: #ffd43b;
     }
+
+.toast:not(.showing):not(.show) {
+    opacity: 1;
+}
+
+.toast:not(.show) {
+     display: flex; 
+}

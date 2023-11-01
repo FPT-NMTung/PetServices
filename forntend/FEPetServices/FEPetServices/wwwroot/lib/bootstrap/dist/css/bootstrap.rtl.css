@@ -5369,9 +5369,9 @@ textarea.form-control-lg {
 .toast.showing {
   opacity: 0;
 }
-.toast:not(.show) {
+/*.toast:not(.show) {
   display: none;
-}
+}*/
 
 .toast-container {
   width: -webkit-max-content;
