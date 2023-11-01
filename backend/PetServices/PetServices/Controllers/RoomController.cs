@@ -29,6 +29,13 @@ namespace PetServices.Controllers
             return Ok(_mapper.Map<List<RoomDTO>>(rooms));
         }
 
+        [HttpGet("GetAllRoomCustomer")]
+        public async Task<ActionResult> GetAllRoomCustomer()
+        {
+            var rooms = await _context.Rooms.Include(r => r.RoomCategories).Where(r => r.Status == true).ToListAsync();
+            return Ok(_mapper.Map<List<RoomDTO>>(rooms));
+        }
+
         [HttpGet("GetServiceInRoom")]
         public async Task<ActionResult> GetServiceInRoom(int roomId)
         {
@@ -84,7 +91,7 @@ namespace PetServices.Controllers
         [HttpGet("GetRoomCategory")]
         public async Task<ActionResult> GetRoomCategory()
         {
-            var roomCategory = await _context.RoomCategories
+            var roomCategory = await _context.RoomCategories.Where(r => r.Status == true)
                 .ToListAsync();
 
             return Ok(_mapper.Map<List<RoomCategoryDTO>>(roomCategory));

@@ -1,145 +1,305 @@
 ﻿<html>
+
 <head>
     <meta charset=utf-8>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="~/css/RoomCustomer.css">
+
 </head>
+
 <body>
     <div class="bg">
-        <p class="title">Dịch vụ đặt phòng cho thú cưng</p>
+        <div class="first">
+            <h1 class="title">Dịch vụ đặt phòng cho thú cưng</h1>
+            <div class="path">
+                <a href="/home">Home &ensp;</a> /
+                <p>&ensp; Rooms </p>
+            </div>
+        </div>
         <div class="container">
-            <form method="get">
-                <input type="hidden" name="pageSize" value="@ViewBag.pageSize" />
-                <input type="hidden" name="sortOrder" value="@ViewBag.SortOrder" />
-                <input type="hidden" name="RoomCategoriesId" value="@ViewBag.RoomCategoriesId" />
-                <div class="search-container-first" style="display: flex; justify-content: center">
-                    <div class="search-container" style="width: 500px;">
-                        <input class="input" name="RoomName" type="text" placeholder="Nhập tên phòng" value="@ViewBag.RoomName">
-                        <button type="submit" style="border: none; padding: 0; background: none;">
-                            <svg viewBox="0 0 24 24" class="search__icon">
-                                <g>
-                                    <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z">
-                                    </path>
-                                </g>
-                            </svg>
-                        </button>
+            <div class="containerLeft">
+                <div>
+                    <h3>Loại phòng:</h3>
+                    <div>
+                        <form method="get" id="myForm">
+                            <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom" />
+                            <input type="hidden" name="priceto" value="@ViewBag.priceto" />
+                            <input type="hidden" name="sortby" value="@ViewBag.sortby" />
+                            <input type="hidden" name="roomname" value="@ViewBag.roomname" />
+                            <input type="hidden" name="pagesize" value="@ViewBag.pagesize" />
+                            <input type="hidden" name="viewstyle" value="@ViewBag.viewstyle" />
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                                <a class="containerCate" href="javascript:void(0);" onclick="filterByCategory('@category.Value')">
+                                    <label>
+                                        <input type="checkbox" value="@category.Value" @(ViewBag.roomcategory == category.Value ? "checked" : "")>
+                                        <p>@category.Text</p>
+                                    </label>
+                                </a>
+                            }
+                            <input type="hidden" id="roomcategory" name="roomcategory" value="" />
+                        </form>
                     </div>
                 </div>
-            </form>
-            <div style="display: flex; justify-content: space-between;">
-                <div style="display: flex; align-items: flex-end;">
-                    <p class="name-search" style="margin-left: 35px;">Hiển thị: </p>
-                    <form method="get">
-                        <input type="hidden" name="RoomName" value="@ViewBag.RoomName" />
-                        <input type="hidden" name="sortOrder" value="@ViewBag.SortOrder" />
-                        <input type="hidden" name="RoomCategoriesId" value="@ViewBag.RoomCategoriesId" />
-                        <select id="pageSize" name="pageSize" onchange="this.form.submit();">
-                            <!option value="8" @(ViewBag.PageSize == 8 ? "selected" : "")>8 phòng/trang</!option>
-                            <!option value="12" @(ViewBag.PageSize == 12 ? "selected" : "")>12 phòng/trang</!option>
-                            <!option value="24" @(ViewBag.PageSize == 24 ? "selected" : "")>24 phòng/trang</!option>
-                            <!option value="48" @(ViewBag.PageSize == 48 ? "selected" : "")>48 phòng/trang</!option>
-                        </select>
-                    </form>
+                <div class="containerprice">
+                    <h3>Giá:</h3>
+                    <div>
+                        <form method="get">
+                            <input type="hidden" name="roomcategory" value="@ViewBag.roomcategory" />
+                            <input type="hidden" name="sortby" value="@ViewBag.sortby" />
+                            <input type="hidden" name="roomname" value="@ViewBag.roomname" />
+                            <input type="hidden" name="pagesize" value="@ViewBag.pagesize" />
+                            <input type="hidden" name="viewstyle" value="@ViewBag.viewstyle" />
+
+                            <div class="price-container">
+                                <div class="number-control">
+                                    <div style="display: flex;">
+                                        <p>Từ</p>
+                                        <input type="number" name="pricefrom" class="number-quantity" value="@ViewBag.pricefrom" min="0">đ
+                                    </div>
+                                    <div style="display: flex;">
+                                        <p>đến</p>
+                                        <input type="number" name="priceto" class="number-quantity" value="@ViewBag.priceto" min="0">đ
+                                    </div>
+                                </div>
+                                <button>
+                                    <span>Tìm kiếm</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="sort">
-                    @if (ViewBag.Categories != null)
-                    {
-                        <div style="display: flex; align-items: flex-end;">
-                            <p class="name-search">Loại phòng: </p>
-                            <form method="get">
-                                <input type="hidden" name="RoomName" value="@ViewBag.RoomName" />
-                                <input type="hidden" name="sortOrder" value="@ViewBag.SortOrder" />
-                                <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
-                                <select id="RoomCategoriesId" name="RoomCategoriesId" onchange="this.form.submit();">
-                                    <option value="">Hiển thị tất cả phòng</option>
-                                    @foreach (var category in ViewBag.Categories)
-                                    {
-                                        <!option value="@category.Value" @(ViewBag.RoomCategoriesId == @category.Value ? "selected" : "")>@category.Text</!option>
-                                    }
-                                </select>
-                            </form>
-                        </div>
-                    }
-                    else
-                    {
-                        <span class="text-danger">Lỗi: Dữ liệu không khả dụng.</span>
-                    }
-                    <div style="display: flex; align-items: flex-end;">
-                        <p class="name-search" style="margin-left: 30px;">Sắp xếp theo: </p>
-                        <form method="get" style="margin-right: 35px;">
-                            <input type="hidden" name="RoomName" value="@ViewBag.RoomName" />
-                            <input type="hidden" name="RoomCategoriesId" value="@ViewBag.RoomCategoriesId" />
-                            <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
-                            <select id="sortOrder" name="sortOrder" onchange="this.form.submit();">
-                                <!option value="name_asc" @(ViewBag.SortOrder == "name_asc" ? "selected" : "")>Tên từ A-Z</!option>
-                                <!option value="name_desc" @(ViewBag.SortOrder == "name_desc" ? "selected" : "")>Tên từ Z-A</!option>
-                                <!option value="price" @(ViewBag.SortOrder == "price" ? "selected" : "")>Giá từ thấp đến cao</!option>
-                                <!option value="price_desc" @(ViewBag.SortOrder == "price_desc" ? "selected" : "")>Giá từ cao đến thấp</!option>
-                            </select>
+                <div>
+                    <h3>Sắp xếp theo:</h3>
+                    <div>
+                        <form method="get" id="sortForm">
+                            <input type="hidden" name="roomcategory" value="@ViewBag.roomcategory" />
+                            <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom" />
+                            <input type="hidden" name="priceto" value="@ViewBag.priceto" />
+                            <input type="hidden" name="roomname" value="@ViewBag.roomname" />
+                            <input type="hidden" name="pagesize" value="@ViewBag.pagesize" />
+                            <input type="hidden" name="viewstyle" value="@ViewBag.viewstyle" />
+
+                            <div>
+                                <a class="containerCate" href="javascript:void(0);" onclick="sortBy('name_asc')">
+                                    <label>
+                                        <input type="checkbox" value="name_asc" @(ViewBag.sortby == "name_asc" ? "checked" : "")>
+                                        <p>Tên từ A-Z</p>
+                                    </label>
+                                </a>
+                                <a class="containerCate" href="javascript:void(0);" onclick="sortBy('name_desc')">
+                                    <label>
+                                        <input type="checkbox" value="name_desc" @(ViewBag.sortby == "name_desc" ? "checked" : "")>
+                                        <p>Tên từ Z-A</p>
+                                    </label>
+                                </a>
+                                <a class="containerCate" href="javascript:void(0);" onclick="sortBy('price')">
+                                    <label>
+                                        <input type="checkbox" value="price" @(ViewBag.sortby == "price" ? "checked" : "")>
+                                        <p>Giá từ thấp đến cao</p>
+                                    </label>
+                                </a>
+                                <a class="containerCate" href="javascript:void(0);" onclick="sortBy('price_desc')">
+                                    <label>
+                                        <input type="checkbox" value="price_desc" @(ViewBag.sortby == "price_desc" ? "checked" : "")>
+                                        <p>Giá từ cao đến thấp</p>
+                                    </label>
+                                </a>
+                            </div>
+                            <input type="hidden" id="sortby" name="sortby" value="" />
                         </form>
                     </div>
                 </div>
             </div>
-            <div class="listRoom">
-                @if (Model != null && Model.Count > 0)
-                {
-                    foreach (var room in Model)
+            <div class="containerRight">
+                <div class="container1">
+                    <div class="container12">
+                        <form class="form" method="get">
+                            <input type="hidden" name="roomcategory" value="@ViewBag.roomcategory" />
+                            <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom" />
+                            <input type="hidden" name="priceto" value="@ViewBag.priceto" />
+                            <input type="hidden" name="sortby" value="@ViewBag.sortby" />
+                            <input type="hidden" name="pagesize" value="@ViewBag.pagesize" />
+                            <input type="hidden" name="viewstyle" value="@ViewBag.viewstyle" />
+
+                            <label for="search">
+                                <input class="input" name="roomname" type="text" placeholder="Nhập tên phòng" value="@ViewBag.roomname">
+                                <div class="fancy-bg"></div>
+                                <div class="search">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true" class="r-14j79pv r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-4wgw6l r-f727ji r-bnwqim r-1plcrui r-lrvibr">
+                                        <g>
+                                            <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </label>
+                        </form>
+                    </div>
+                    <div class="container11">
+                        <div class="container11-content">
+                            <div class="name-search">Hiển thị: </div>
+                            <form method="get">
+                                <input type="hidden" name="roomcategory" value="@ViewBag.roomcategory" />
+                                <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom" />
+                                <input type="hidden" name="priceto" value="@ViewBag.priceto" />
+                                <input type="hidden" name="sortby" value="@ViewBag.sortby" />
+                                <input type="hidden" name="roomname" value="@ViewBag.roomname" />
+                                <input type="hidden" name="viewstyle" value="@ViewBag.viewstyle" />
+
+                                <select id="pageSize" name="pagesize" onchange="this.form.submit();">
+                                    <!option value="6" @(ViewBag.PageSize == 6 ? "selected" : "")>6 phòng</!option>
+                                    <!option value="9" @(ViewBag.PageSize == 9 ? "selected" : "")>9 phòng</!option>
+                                    <!option value="12" @(ViewBag.PageSize == 12 ? "selected" : "")>12 phòng</!option>
+                                    <!option value="24" @(ViewBag.PageSize == 24 ? "selected" : "")>24 phòng</!option>
+                                </select>
+                            </form>
+                        </div>
+                        <div class="container11-content">
+                            <div class="name-search">Kiểu xem: </div>
+                            <form method="get">
+                                <input type="hidden" name="roomcategory" value="@ViewBag.roomcategory" />
+                                <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom" />
+                                <input type="hidden" name="priceto" value="@ViewBag.priceto" />
+                                <input type="hidden" name="sortby" value="@ViewBag.sortby" />
+                                <input type="hidden" name="roomname" value="@ViewBag.roomname" />
+                                <input type="hidden" name="pagesize" value="@ViewBag.pagesize" />
+
+                                <a class="a1" href="/home/room?roomcategory=@ViewBag.roomcategory&pricefrom=@ViewBag.pricefrom&priceto=@ViewBag.priceto&sortby=@ViewBag.sortby&roomname=@ViewBag.roomname&pagesize=@ViewBag.pagesize&viewstyle=grid">
+                                    <img src="~/img/listviewicon.png" style="width: 15px; height: 15px;"/>
+                                </a>
+                                <a href="/home/room?roomcategory=@ViewBag.roomcategory&pricefrom=@ViewBag.pricefrom&priceto=@ViewBag.priceto&sortby=@ViewBag.sortby&roomname=@ViewBag.roomname&pagesize=@ViewBag.pagesize&viewstyle=listview">
+                                    <img src="~/img/gridviewicon.png" style="width: 24px; height: 24px;" />
+                                </a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    @if (ViewBag.viewstyle == "grid" || ViewBag.viewstyle == null)
                     {
-                        string description = room.Desciptions;
-
-                        if (description.Length > 100)
-                        {
-                            int lastSpace = description.LastIndexOf(' ', 100);
-
-                            description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
-                        }
-                        <div class="block">
-                            <ul>
-                                <li>
-                                    <a href="/Home/RoomDetail?roomId=@room.RoomId">
-                                        <div class="room">
-                                            <div class="image-container">
-                                                <img src="@room.Picture" class="image">
-                                                <img src="/img/pictureframe.png" class="frame">
+                        <div class="listRoom-grid">
+                            @if (Model != null && Model.Count > 0)
+                            {
+                                foreach (var room in Model)
+                                {
+                                    string formattedPrice = room.Price.ToString("#,##0", System.Globalization.CultureInfo.InvariantCulture);
+                                    <div class="block">
+                                        <div>
+                                            <div class="room">
+                                                <div class="image-container">
+                                                    <img src="@room.Picture" class="image">
+                                                </div>
+                                                <a class="name" href="/Home/RoomDetail?roomId=@room.RoomId">@room.RoomName</a>
+                                                <div class="price">@formattedPrice đ</div>
                                             </div>
-                                            <div class="name">@room.RoomName</div>
-                                            <div class="description">@description</div>
-                                            <div class="price">@room.Price đ</div>
                                         </div>
-                                    </a>
-                                </li>
-                            </ul>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
+                                </tr>
+                            }
                         </div>
                     }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
-                    </tr>
-                }
-            </div>
-            <div style="text-align:center;">
-                <div class="pagination">
-                    @if (ViewBag.CurrentPage > 1)
+                    @if (ViewBag.viewstyle == "listview")
                     {
-                        <a href="@Url.Action("Room", new { page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize, RoomName = ViewBag.RoomName, sortOrder = ViewBag.SortOrder, RoomCategoriesId = ViewBag.RoomCategoriesId })">&laquo;</a>
-                    }
+                        <div class="listRoom-listview">
+                            @if (Model != null && Model.Count > 0)
+                            {
+                                foreach (var room in Model)
+                                {
+                                    string formattedPrice = room.Price.ToString("#,##0", System.Globalization.CultureInfo.InvariantCulture);
+                                    string description = room.Desciptions;
 
-                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                    {
-                        <a class="active" href="@Url.Action("Room", new { page = i, pageSize = ViewBag.PageSize, RoomName = ViewBag.RoomName, sortOrder = ViewBag.SortOrder, RoomCategoriesId = ViewBag.RoomCategoriesId })">@i</a>
+                                    if (description.Length > 300)
+                                    {
+                                        int lastSpace = description.LastIndexOf(' ', 300);
+
+                                        description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 300) + "...";
+                                    }
+
+                                    <div class="block">
+                                        <div>
+                                            <div class="room">
+                                                <div class="image-container">
+                                                    <img src="@room.Picture" class="image">
+                                                </div>
+                                                <div class="text-container">
+                                                    <div>
+                                                        <a class="name" href="/Home/RoomDetail?roomId=@room.RoomId">@room.RoomName</a>
+                                                        <div class="price">@formattedPrice đ</div>
+                                                        <div class="description">@description</div>
+                                                    </div>
+                                                    <div>
+                                                        <a href="/Home/RoomDetail?roomId=@room.RoomId">
+                                                            <button class="detail">
+                                                                <span>Xem chi tiết</span>
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
+                                </tr>
+                            }
+                        </div>
                     }
-                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-                    {
-                        <a href="@Url.Action("Room", new { page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize, RoomName = ViewBag.RoomName, sortOrder = ViewBag.SortOrder, RoomCategoriesId = ViewBag.RoomCategoriesId })">&raquo;</a>
-                    }
+                </div>
+                <div style="text-align:center;">
+                    <div class="pagination">
+                        @if (ViewBag.CurrentPage > 1)
+                        {
+                            <a href="@Url.Action("Room", new { page = ViewBag.CurrentPage - 1, roomcategory=ViewBag.roomcategory, pricefrom=ViewBag.pricefrom, priceto=ViewBag.priceto, sortby=ViewBag.sortby, roomname=ViewBag.roomname, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">&laquo;</a>
+                        }
+
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            <a class="active" href="@Url.Action("Room", new { page = i, roomcategory=ViewBag.roomcategory, pricefrom=ViewBag.pricefrom, priceto=ViewBag.priceto, sortby=ViewBag.sortby, roomname=ViewBag.roomname, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">@i</a>
+                        }
+                        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                        {
+                            <a href="@Url.Action("Room", new { page = ViewBag.CurrentPage + 1, roomcategory=ViewBag.roomcategory, pricefrom=ViewBag.pricefrom, priceto=ViewBag.priceto, sortby=ViewBag.sortby, roomname=ViewBag.roomname, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">&raquo;</a>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        document.querySelectorAll('#myForm input[type="checkbox"]').forEach(function (checkbox) {
+            checkbox.addEventListener('click', function () {
+                if (this.checked) {
+                    document.getElementById('roomcategory').value = this.value;
+                } else {
+                    document.getElementById('roomcategory').value = null;
+                }
+                document.getElementById('myForm').submit();
+            });
+        });
+
+        document.querySelectorAll('#sortForm input[type="checkbox"]').forEach(function (checkbox) {
+            checkbox.addEventListener('click', function () {
+                if (this.checked) {
+                    document.getElementById('sortby').value = this.value;
+                } else {
+                    document.getElementById('sortby').value = null;
+                }
+                document.getElementById('sortForm').submit();
+            });
+        });
+
+    </script>
 </body>
 </html>
-    

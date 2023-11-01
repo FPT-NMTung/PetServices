@@ -25,12 +25,12 @@ namespace FEPetServices.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            ApiUrlRoomList = "https://localhost:7255/api/Room/GetAllRoom";
+            ApiUrlRoomList = "https://localhost:7255/api/Room/GetAllRoomCustomer";
             ApiUrlRoomCategoryList = "https://localhost:7255/api/Room/GetRoomCategory";
             ApiUrlRoomDetail = "https://localhost:7255/api/Room/GetRoom/";
         }
 
-        public async Task<ActionResult> Room(RoomDTO roomDTO, int page = 1, int pageSize = 8, string RoomName = "", string sortOrder = "", string RoomCategoriesId = "")
+        public async Task<ActionResult> Room(RoomDTO roomDTO, int page = 1, int pagesize = 6, string roomcategory = "", string pricefrom = "", string priceto = "", string sortby = "", string roomname = "", string viewstyle = "grid")
         {
             try
             {
@@ -54,23 +54,39 @@ namespace FEPetServices.Controllers
                     {
                         var roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(responseContent);
 
-                        if (!string.IsNullOrEmpty(RoomName))
+                        if (!string.IsNullOrEmpty(roomname))
                         {
-                            roomList = roomList.Where(r => r.RoomName.Contains(RoomName, StringComparison.OrdinalIgnoreCase)).ToList();
+                            roomList = roomList.Where(r => r.RoomName.Contains(roomname, StringComparison.OrdinalIgnoreCase)).ToList();
                         }
 
-                        if (!string.IsNullOrEmpty(RoomCategoriesId))
+                        if (!string.IsNullOrEmpty(roomcategory))
                         {
-                            int roomCategoriesId = int.Parse(RoomCategoriesId);
+                            int roomCategoriesId = int.Parse(roomcategory);
                             roomList = roomList.Where(r => r.RoomCategoriesId == roomCategoriesId).ToList();
                         }
 
-                        ViewBag.RoomCategoriesId = RoomCategoriesId;
-                        ViewBag.SortOrder = sortOrder;
-                        ViewBag.PageSize = pageSize;
-                        ViewBag.RoomName = RoomName;
+                        if (!string.IsNullOrEmpty(pricefrom) || !string.IsNullOrEmpty(priceto))
+                        {
+                            if (string.IsNullOrEmpty(pricefrom))
+                            {
+                                int priceTo = int.Parse(priceto);
+                                roomList = roomList.Where(r => r.Price < priceTo).ToList();
+                            }
+                            if (string.IsNullOrEmpty(priceto))
+                            {
+                                int priceFrom = int.Parse(pricefrom);
+                                roomList = roomList.Where(r => r.Price > priceFrom).ToList();
+                            }
+                            if (!string.IsNullOrEmpty(pricefrom) && !string.IsNullOrEmpty(priceto))
+                            {
+                                int PriceTo = int.Parse(priceto);
+                                int PriceFrom = int.Parse(pricefrom);
 
-                        switch (sortOrder)
+                                roomList = roomList.Where(r => r.Price > PriceFrom && r.Price < PriceTo).ToList();
+                            }
+                        }
+
+                        switch (sortby)
                         {
                             case "name_desc":
                                 roomList = roomList.OrderByDescending(r => r.RoomName).ToList();
@@ -87,14 +103,21 @@ namespace FEPetServices.Controllers
                         }
 
                         int totalItems = roomList.Count;
-                        int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-                        int startIndex = (page - 1) * pageSize;
-                        List<RoomDTO> currentPageRoomList = roomList.Skip(startIndex).Take(pageSize).ToList();
+                        int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
+                        int startIndex = (page - 1) * pagesize;
+                        List<RoomDTO> currentPageRoomList = roomList.Skip(startIndex).Take(pagesize).ToList();
 
                         ViewBag.TotalPages = totalPages;
                         ViewBag.CurrentPage = page;
-                        ViewBag.PageSize = pageSize;
+                        ViewBag.PageSize = pagesize;
 
+                        ViewBag.roomcategory = roomcategory;
+                        ViewBag.pricefrom = pricefrom;
+                        ViewBag.priceto = priceto;
+                        ViewBag.sortby = sortby;
+                        ViewBag.roomname = roomname;
+                        ViewBag.pagesize = pagesize;
+                        ViewBag.viewstyle = viewstyle;
 
                         return View(currentPageRoomList);
                     }
