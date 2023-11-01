@@ -93,6 +93,28 @@
             </div>
             <div class="row">
                 <div class="col-25">
+                    <label for="Slot">Các dịch vụ có sẵn:</label>
+                </div>
+                <div class="col-75">
+                    <div class="service-container">
+                        @if (ViewBag.services != null)
+                        {
+                            @foreach (var service in ViewBag.services)
+                            {
+                                <input type="checkbox" id="@service.Value" name="SelectedServices" value="@service.Value">
+                                <label for="@service.Value">@service.Text</label>
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-danger">Lỗi: Dữ liệu không khả dụng.</span>
+                        }
+                    </div>
+                    <div style="color:red" class="error-message" id="slot-error-message"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
                     <label for="SerCategoriesId">Loại Phòng</label>
                 </div>
                 <div class="col-75">
