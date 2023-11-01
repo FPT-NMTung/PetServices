@@ -27,7 +27,7 @@ namespace FEPetServices.Controllers
             
         }
 
-        public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory, int page = 1, int pageSize = 4, string CategoriesName = "" )
+        public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory, int page = 1, int pagesize = 6, string CategoriesName = "" , string viewstyle = "grid", string sortby = "")
         {
             try
             {
@@ -55,15 +55,31 @@ namespace FEPetServices.Controllers
                             Console.WriteLine(1);
                         }
 
+                        switch (sortby)
+                        {
+                            case "name_desc":
+                                servicecategoryList = servicecategoryList.OrderByDescending(r => r.SerCategoriesName).ToList();
+                                break;
+                            default:
+                                servicecategoryList = servicecategoryList.OrderBy(r => r.SerCategoriesName).ToList();
+                                break;
+                        }
+
+
                         int totalItems = servicecategoryList.Count;
-                        int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-                        int startIndex = (page - 1) * pageSize;
-                        List<ServiceCategoryDTO> currentPageServicecategoryList = servicecategoryList.Skip(startIndex).Take(pageSize).ToList();
+                        int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
+                        int startIndex = (page - 1) * pagesize;
+                        List<ServiceCategoryDTO> currentPageServicecategoryList = servicecategoryList.Skip(startIndex).Take(pagesize).ToList();
 
                         ViewBag.TotalPages = totalPages;
                         ViewBag.CurrentPage = page;
-                        ViewBag.PageSize = pageSize;
+                        ViewBag.PageSize = pagesize;
+
                         ViewBag.CategoriesName =CategoriesName ;
+                        ViewBag.sortby = sortby;
+                        ViewBag.pagesize = pagesize;
+                        ViewBag.viewstyle = viewstyle;
+
                         return View(currentPageServicecategoryList);
                     }
                     else
