@@ -1,0 +1,9 @@
+﻿<div>
+    <p>@Model.Service.ServiceId</p>
+</div>
+<div>
+    @foreach(var sr in Model.ServiceCategory.Services)
+    {
+        <a href="~/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sr.ServiceId">@sr.ServiceId</a>
+    }
+</div>

@@ -18,6 +18,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         private string ApiUrlRoomCategoryList;
         private string ApiUrlRoomDetail;
         private string ApiUrlRoomUpdate;
+        private string ApiUrlServiceList;
 
         public RoomController()
         {
@@ -30,6 +31,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             ApiUrlRoomCategoryList = "https://localhost:7255/api/Room/GetRoomCategory";
             ApiUrlRoomDetail = "https://localhost:7255/api/Room/GetRoom/";
             ApiUrlRoomUpdate = "https://localhost:7255/api/Room/UpdateRoom?roomId=";
+            ApiUrlServiceList = "https://localhost:7255/api/Room/GetAllService";
         }
 
         public async Task<ActionResult> Index(RoomDTO roomDTO)
@@ -79,15 +81,32 @@ namespace FEPetServices.Areas.Manager.Controllers
                     ViewBag.Categories = new SelectList(categories, "RoomCategoriesId", "RoomCategoriesName");
                 }
 
+                HttpResponseMessage serviceResponse = await client.GetAsync(ApiUrlServiceList);
+
+                if (serviceResponse.IsSuccessStatusCode)
+                {
+                    var services = await serviceResponse.Content.ReadFromJsonAsync<List<ServiceDTO>>();
+                    Console.WriteLine(services);
+
+                    ViewBag.services = new SelectList(services, "ServiceId", "ServiceName");
+                }
+
                 if (image != null && image.Length > 0)
                 {
-                    roomDTO.Picture = "/img/" + image.FileName.ToString();
+                    string filename = GenerateRandomNumber(5) + image.FileName;
+                    filename = Path.GetFileName(filename);
+                    string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                    var stream = new FileStream(uploadfile, FileMode.Create);
+                    image.CopyToAsync(stream);
+                    roomDTO.Picture = "/img/" + filename;
                 }
                 else
                 {
                     return View(roomDTO); 
                 }
                 roomDTO.Status = true;
+
+                roomDTO.ServiceIds = Request.Form["SelectedServices"].ToString().Split(',').Select(int.Parse).ToList();
 
                 var json = JsonConvert.SerializeObject(roomDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -112,11 +131,34 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
         }
 
+        public static string GenerateRandomNumber(int length)
+        {
+            Random random = new Random();
+            const string chars = "0123456789";
+            char[] randomChars = new char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                randomChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(randomChars);
+        }
+
         [HttpGet]
         public async Task<ActionResult> EditRoom(int RoomId)
         {
             try
             {
+                HttpResponseMessage serviceResponse = await client.GetAsync(ApiUrlServiceList);
+
+                if (serviceResponse.IsSuccessStatusCode)
+                {
+                    var services = await serviceResponse.Content.ReadFromJsonAsync<List<ServiceDTO>>();
+
+                    ViewBag.services = new SelectList(services, "ServiceId", "ServiceName");
+                }
+
                 HttpResponseMessage categoryResponse = await client.GetAsync(ApiUrlRoomCategoryList);
 
                 if (!categoryResponse.IsSuccessStatusCode)
@@ -140,8 +182,6 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 var roomDto = JsonConvert.DeserializeObject<RoomDTO>(responseContent);
 
-                Console.WriteLine("12");
-
                 return View(roomDto);
 
             }
@@ -153,7 +193,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditRoom([FromForm] RoomDTO roomDTO, IFormFile image, int RoomId, int SelectedCategory)
+        public async Task<ActionResult> EditRoom([FromForm] RoomDTO roomDTO, IFormFile image, int RoomId, int SelectedCategory, List<int> selectedServices)
         {
             try
             {
@@ -164,6 +204,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                     var categories = await categoryResponse.Content.ReadFromJsonAsync<List<RoomCategoryDTO>>();
                     ViewBag.Categories = new SelectList(categories, "RoomCategoriesId", "RoomCategoriesName");
                 }
+
+                roomDTO.ServiceIds = Request.Form["SelectedServices"].ToString().Split(',').Select(int.Parse).ToList();
 
                 if (image != null && image.Length > 0)
                 {

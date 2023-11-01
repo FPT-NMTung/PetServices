@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
-    [Authorize(Policy = "ManaOnly")]
+   /* [Authorize(Policy = "ManaOnly")]*/
     public class InformationController : Controller
     {
         private readonly HttpClient _client = null;
@@ -44,28 +44,52 @@ namespace FEPetServices.Areas.Manager.Controllers
 
             return View();
         }
+        public static string GenerateRandomNumber(int length)
+        {
+            Random random = new Random();
+            const string chars = "0123456789"; // Chuỗi chứa các chữ số từ 0 đến 9
+            char[] randomChars = new char[length];
 
+            for (int i = 0; i < length; i++)
+            {
+                randomChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(randomChars);
+        }
         [HttpPost]
-        public async Task<IActionResult> Index([FromForm] UserInfo userInfo)
+        public async Task<IActionResult> Index([FromForm] UserInfo userInfo, IFormFile image)
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
-            // Sử dụng HttpClient để gửi dữ liệu cập nhật lên API
-            if (userInfo.Address == null || userInfo.FirstName == null ||
-                userInfo.LastName == null)
+            // Handle the uploaded image
+            if (image != null)
+            {
+                string filename = GenerateRandomNumber(5) + image.FileName;
+                filename = Path.GetFileName(filename);
+                string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                using (var stream = new FileStream(uploadfile, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
+                userInfo.ImageUser = "/img/" + filename;
+            }
+
+            // Check if other fields are valid
+            if (userInfo.Address == null || userInfo.FirstName == null || userInfo.LastName == null)
             {
                 TempData["ErrorToast"] = "Vui lòng điền đầy đủ thông tin";
                 return RedirectToAction("Index");
             }
 
-            if (userInfo.Province == null ||
-                userInfo.District == null || userInfo.Commune == null)
+            if (userInfo.Province == null || userInfo.District == null || userInfo.Commune == null)
             {
                 TempData["ErrorToast"] = "Vui lòng cung cấp lại địa chỉ";
                 return RedirectToAction("Index");
             }
 
+            // Update the user information, including the image URL
             HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/updateInfo?email=" + email, userInfo);
             if (response.IsSuccessStatusCode)
             {
@@ -78,5 +102,6 @@ namespace FEPetServices.Areas.Manager.Controllers
                 return RedirectToAction("Index");
             }
         }
+
     }
 }
