@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace FEPetServices.Controllers
 {
-    [Authorize(Policy = "CusOnly")]
+    //[Authorize(Policy = "CusOnly")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

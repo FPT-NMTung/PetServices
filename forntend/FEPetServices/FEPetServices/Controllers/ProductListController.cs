@@ -6,7 +6,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
-namespace FEPetServices.Areas.Customer.Controllers
+namespace FEPetServices.Controllers
 {
     public class ProductListController : Controller
     {
@@ -61,12 +61,12 @@ namespace FEPetServices.Areas.Customer.Controllers
             {
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductDetail + "/" + proId);
                 HttpResponseMessage proCateResponse = await client.GetAsync("https://localhost:7255/api/ProductCategory/GetAll");
-                if(proCateResponse.IsSuccessStatusCode)
+                if (proCateResponse.IsSuccessStatusCode)
                 {
                     var proCategories = await proCateResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
                     ViewBag.ProCategories = new SelectList(proCategories, "ProCategoriesId", "ProCategoriesName");
                 }
-                if(response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
                     var option = new JsonSerializerOptions
@@ -81,7 +81,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                     ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
             }
