@@ -177,7 +177,7 @@ namespace PetServices.Controllers
                     Picture = roomDTO.Picture,
                     Price = roomDTO.Price,
                     Slot = roomDTO.Slot,
-                    Status = roomDTO.Status,
+                    Status = true,
                     RoomCategoriesId = roomDTO.RoomCategoriesId,
                 };
 
@@ -191,7 +191,8 @@ namespace PetServices.Controllers
                 await _context.Rooms.AddAsync(newRoom);
                 await _context.SaveChangesAsync();
 
-                return Ok(_mapper.Map<RoomDTO>(newRoom));
+                /*return Ok(_mapper.Map<RoomDTO>(newRoom));*/
+                return Ok("Thêm phòng thành công!");
             }
             catch (Exception ex)
             {
