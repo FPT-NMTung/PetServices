@@ -97,6 +97,7 @@
 <link href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
 <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="~/css/datatable.css" rel="stylesheet" />
+<link href="~/css/toastNotification.css" rel="stylesheet" />
 
 @section Scripts {
     <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -206,13 +207,5 @@
             </tr>
         }
     </tbody>
-    <tfoot>
-        @if (ViewBag.ErrorMessage != null)
-        {
-            <div class="alert alert-danger">
-                <span style="color:red">@ViewBag.ErrorMessage</span>
-            </div>
-        }
-    </tfoot>
 </table>
 </div>

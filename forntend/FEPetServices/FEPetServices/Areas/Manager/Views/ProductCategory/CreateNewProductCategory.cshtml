@@ -2,19 +2,8 @@
     ViewData["Title"] = "Thêm Loại Sản Phẩm";
 }
 <h1 style="text-align:center">Thêm Loại Sản Phẩm Mới</h1>
-@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-{
-    <div class="alert alert-danger" style="color:red">
-        @ViewBag.ErrorMessage
-    </div>
-}
-@if (!string.IsNullOrEmpty(TempData["SuccessMessage"]?.ToString()))
-{
-    <div class="alert alert-success" style="color:red">
-        @TempData["SuccessMessage"]
-    </div>
-}
 <link href="~/css/manager/productcategory.css" rel="stylesheet" />
+<link href="~/css/toastNotification.css" rel="stylesheet" />
 <script src="~/js/manager/productcategory.js"></script>
 
 <div class="container-add-new">
