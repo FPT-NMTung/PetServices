@@ -7,20 +7,21 @@ namespace PetServices.Models
     {
         public Booking()
         {
-            OrderProductDetails = new HashSet<OrderProductDetail>();
-            Rooms = new HashSet<Room>();
-            Services = new HashSet<Service>();
+            BookingRoomDetails = new HashSet<BookingRoomDetail>();
+            BookingServicesDetails = new HashSet<BookingServicesDetail>();
         }
 
         public int BookingId { get; set; }
         public DateTime? BookingDate { get; set; }
         public string? BookingStatus { get; set; }
-        public int? AccountId { get; set; }
+        public int? UserInfoId { get; set; }
+        public string? Province { get; set; }
+        public string? District { get; set; }
+        public string? Commune { get; set; }
+        public string? Address { get; set; }
 
-        public virtual Account? Account { get; set; }
-        public virtual ICollection<OrderProductDetail> OrderProductDetails { get; set; }
-
-        public virtual ICollection<Room> Rooms { get; set; }
-        public virtual ICollection<Service> Services { get; set; }
+        public virtual UserInfo? UserInfo { get; set; }
+        public virtual ICollection<BookingRoomDetail> BookingRoomDetails { get; set; }
+        public virtual ICollection<BookingServicesDetail> BookingServicesDetails { get; set; }
     }
 }

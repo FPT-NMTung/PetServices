@@ -26,15 +26,27 @@ namespace PetServices.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            List<Account> account = _context.Accounts.Include(a => a.Role).Where(a => a.Role.RoleName == "PARTNER").ToList();
-            return Ok(_mapper.Map<List<AccountDTO>>(account));
+            List<Account> account = _context.Accounts.Include(a => a.Role).Include(a => a.PartnerInfo).Where(a => a.Role.RoleName == "PARTNER").ToList();
+            return Ok(_mapper.Map<List<AccountInfo>>(account));
         }
 
         [HttpGet("accountNotActive")]
         public IActionResult GetAcountNotActive()
         {
-            List<Account> account = _context.Accounts.Include(a => a.Role).Where(a => a.Role.RoleName == "PARTNER" && a.Status == false).ToList();
-            return Ok(_mapper.Map<List<AccountDTO>>(account));
+            List<Account> account = _context.Accounts.Include(a => a.Role).Include(a => a.PartnerInfo).Where(a => a.Role.RoleName == "PARTNER" && a.Status == false).ToList();
+            return Ok(_mapper.Map<List<AccountInfo>>(account));
+        }
+
+        [HttpGet("{email}")]
+        public IActionResult Get(string email)
+        {
+            //Account roles partner
+            Account account = _context.Accounts.Include(a => a.PartnerInfo).Include(a => a.Role).FirstOrDefault(a => a.Email == email && a.Role.RoleName == "PARTNER");
+            if (account == null)
+            {
+                return NotFound("Tài khoản không tồn tài");
+            }
+            return Ok(_mapper.Map<AccountInfo>(account));
         }
 
         [HttpPut("updateAccount")]

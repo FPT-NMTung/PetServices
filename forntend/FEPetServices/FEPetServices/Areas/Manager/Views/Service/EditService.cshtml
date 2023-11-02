@@ -7,18 +7,6 @@
 
 </head>
 <body>
-@if (!string.IsNullOrEmpty( TempData["ErrorToast"]?.ToString()))
-{
-    <div class="alert alert-danger" style="color:red">
-        @TempData["ErrorToast"]
-    </div>
-}
-@if (!string.IsNullOrEmpty(TempData["SuccessToast"]?.ToString()))
-{
-    <div class="alert alert-success" style="color:red">
-        @TempData["SuccessToast"]
-    </div>
-}
 <h2>Chỉnh Sửa Dịch Vụ Thú Cưng</h2>
 <div class="container">
   <form asp-action="EditService" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
@@ -117,9 +105,10 @@
             });
         </script>
     }
- <script src="~/js/toastnotification.js"></script>
-<script src="~/js/Service.js"></script>
-<script>
+</body>
+    <script src="~/js/toastnotification.js"></script>
+    <script src="~/js/Service.js"></script>
+    <script>
         function showSuccessToast() {
             toast({
                 title: 'Thành công',
@@ -137,6 +126,4 @@
             });
         }
     </script>
-
-</body>
 </html>

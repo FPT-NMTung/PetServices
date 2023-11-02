@@ -4,6 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+    @* Thư viện chung // *@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
           integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -19,8 +20,13 @@
 
     <!-- Add Slick slider JS from CDN -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="~/css/homepage.css" rel="stylesheet" />
+    @*// Thư viện chung*@
+
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
 </head>
 <body>
     <div id="homepage">
@@ -86,5 +92,98 @@
             <div class="credit"> Cảm Ơn Các Bạn <span> Đã Đến Với Trang Web </span> Của Chúng Tôi | Love You, Guys </div>
         </footer>
     </div>
+    <div>
+        @RenderBody()
+    </div>
+
+    @*Toast notification design*@
+    <div id="toast"></div>
+    @*Common toast notification*@
+    @if (!string.IsNullOrEmpty(ViewBag.SuccessToast))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showSuccessToast();
+            });
+        </script>
+    }
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorToast))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showErrorToast();
+            });
+        </script>
+    }
+
+    @*Register toast notification*@
+    @if (!string.IsNullOrEmpty(TempData["SuccessRegisterToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showSuccessRegisterToast();
+            });
+        </script>
+    }
+    @if (!string.IsNullOrEmpty(TempData["SuccessRegisterSuccessToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showSuccessRegisterSuccessToast();
+            });
+        </script>
+    }
 </body>
+    <script src="~/js/toastnotification.js"></script>
+    <script>
+        function loading() {
+            @if (string.IsNullOrEmpty(ViewBag.ErrorToast) || string.IsNullOrEmpty(ViewBag.SuccessToast))
+            {
+                @:showWaitToast();
+            }
+        }
+        @*Common toast notification*@
+        function showSuccessToast() {
+            toast({
+                title: 'Thành công',
+                message: '@ViewBag.SuccessToast',
+                type: 'success',
+                duration: 2000
+            });
+        }
+        function showErrorToast(message = '') {
+            toast({
+                title: 'Thất bại',
+                message: '@ViewBag.ErrorToast',
+                type: 'error',
+                duration: 2000
+            });
+        }
+        function showWaitToast() {
+            toast({
+                title: 'Chờ đợi',
+                message: 'Vui lòng đợi ít phút hoặc điền đầy đủ thông tin',
+                type: 'wating',
+                duration: 2000
+            });
+        }
+
+       @*Register toast notification*@
+        function showSuccessRegisterToast() {
+            toast({
+                title: 'Thành công',
+                message: '@TempData["SuccessRegisterToast"]',
+                type: 'success',
+                duration: 2000
+            });
+        }
+        function showSuccessRegisterSuccessToast() {
+            toast({
+                title: 'Thành công',
+                message: '@TempData["SuccessRegisterSuccessToast"]',
+                type: 'success',
+                duration: 2000
+            });
+        }
+    </script>
 </html>

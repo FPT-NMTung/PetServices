@@ -1,8 +1,7 @@
-﻿using FEPetServices.Form;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Text;
-
+using FEPetServices.Form; 
+using Newtonsoft.Json;
 namespace FEPetServices.Controllers
 {
     public class PartnerRegisterController : Controller
@@ -12,7 +11,7 @@ namespace FEPetServices.Controllers
         public PartnerRegisterController()
         {
             _client = new HttpClient();
-            _defaultApiUrl = "https://localhost:7255/api/Account/RegisterPartner"; // URL của API Register   
+            _defaultApiUrl = "https://localhost:7255/api/Account/RegisterPartner"; 
         }
         public IActionResult Index()
         {
@@ -20,8 +19,17 @@ namespace FEPetServices.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index([FromForm] RegisterDTO registerInfo)
+        public async Task<IActionResult> Index([FromForm] RegisterDTO registerInfo, List<IFormFile> image)
         {
+            foreach (var file in image)
+            {
+                string filename = GenerateRandomNumber(5) + file.FileName;
+                filename = Path.GetFileName(filename);
+                string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                var stream = new FileStream(uploadfile, FileMode.Create);
+                file.CopyToAsync(stream);
+                registerInfo.ImageCertificate = "/img/" + filename;
+            }
             try
             {
                /* if (image != null && image.Length > 0)
@@ -34,27 +42,43 @@ namespace FEPetServices.Controllers
                 var json = JsonConvert.SerializeObject(registerInfo);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                // Gửi yêu cầu POST đến API Register
                 HttpResponseMessage response = await _client.PostAsync(_defaultApiUrl, content);
 
                 if (response.IsSuccessStatusCode)
                 {
                     // Đăng ký thành công, bạn có thể xử lý kết quả ở đây (ví dụ: hiển thị thông báo thành công)
-                    ViewBag.SuccessMessage = "Đăng ký thành công!";
+                    TempData["SuccessRegisterSuccessToast"] = "Vui lòng chờ đợi quản trị viên xét duyệt thông tin tài khoản của bạn";
+                    return RedirectToAction("Index", "Login");
                 }
                 else
                 {
                     // Đăng ký không thành công, bạn có thể xử lý kết quả ở đây (ví dụ: hiển thị thông báo lỗi)
-                    ViewBag.ErrorMessage = "Đăng ký không thành công. Mã lỗi HTTP: " + (int)response.StatusCode;
+                    ViewBag.ErrorToast = "Đăng ký không thành công. Mã lỗi HTTP: " + (int)response.StatusCode;
+                    return View();
                 }
             }
             catch (Exception ex)
             {
                 // Xử lý lỗi nếu có
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
+                return View();
+            }
+        }
+
+        public static string GenerateRandomNumber(int length)
+        {
+            Random random = new Random();
+            const string chars = "0123456789"; // Chuỗi chứa các chữ số từ 0 đến 9
+            char[] randomChars = new char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                randomChars[i] = chars[random.Next(chars.Length)];
             }
 
-            return View();
+            return new string(randomChars);
         }
     }
+
+
 }

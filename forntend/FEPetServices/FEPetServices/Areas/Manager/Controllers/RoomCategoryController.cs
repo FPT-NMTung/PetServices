@@ -72,8 +72,12 @@ namespace FEPetServices.Areas.Manager.Controllers
                 {
                     if (image != null && image.Length > 0)
                     {
-                        Console.WriteLine(image);
-                        roomCategoryDTO.Picture = "/img/" + image.FileName.ToString();
+                        string filename = GenerateRandomNumber(5) + image.FileName;
+                        filename = Path.GetFileName(filename);
+                        string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                        var stream = new FileStream(uploadfile, FileMode.Create);
+                        image.CopyToAsync(stream);
+                        roomCategoryDTO.Picture = "/img/" + filename;
                     }
 
                     roomCategoryDTO.Status = true;
@@ -90,7 +94,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "Thêm loại phòng thất bại. Vui lòng thử lại sau!";
+                        TempData["ErrorMessage"] = "Thêm loại phòng thất bại. Vui lòng thử lại sau!";
                         return View(roomCategoryDTO);
                     }
                 }
@@ -106,8 +110,20 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
         }
 
+        public static string GenerateRandomNumber(int length)
+        {
+            Random random = new Random();
+            const string chars = "0123456789";
+            char[] randomChars = new char[length];
 
-        
+            for (int i = 0; i < length; i++)
+            {
+                randomChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(randomChars);
+        }
+
         [HttpGet]
         public async Task<ActionResult> EditRoomCategory(int roomCategoryId)
         {

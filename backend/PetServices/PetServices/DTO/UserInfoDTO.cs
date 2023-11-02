@@ -1,4 +1,6 @@
-﻿namespace PetServices.DTO
+﻿using PetServices.Models;
+
+namespace PetServices.DTO
 {
     public class UserInfoDTO
     {
@@ -12,5 +14,6 @@
         public string? Address { get; set; }
         public string? Descriptions { get; set; }
         public string? ImageUser { get; set; }
+        public virtual ICollection<PetInfoDTO> PetInfos { get; set; }
     }
 }

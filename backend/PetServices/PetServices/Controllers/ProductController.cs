@@ -41,8 +41,44 @@ namespace PetServices.Controllers
         {
             if (productDTO == null)
             {
-                return BadRequest("Product data is missing.");
+                return BadRequest("Sản phẩm không có!");
             }
+            // check tên sản phẩm
+            if (string.IsNullOrWhiteSpace(productDTO.ProductName))
+            {
+                string errorMessage = "Tên sản phẩm không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (productDTO.ProductName.Length > 500)
+            {
+                string errorMessage = "Tên sản phẩm vượt quá số ký tự. Tối đa 500 ký tự!";
+                return BadRequest(errorMessage);
+            }
+            // check mô tả
+            if (string.IsNullOrWhiteSpace(productDTO.Desciption))
+            {
+                string errorMessage = "Mô tả không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            // check ảnh
+            if (string.IsNullOrWhiteSpace(productDTO.Picture))
+            {
+                string errorMessage = "Ảnh phòng không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            else if (productDTO.Picture.Contains(" "))
+            {
+                string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }           
+            // check loại sản phẩm
+            var proCategoriesId = _context.ProductCategories.FirstOrDefault(p => p.ProCategoriesId == productDTO.ProCategoriesId);
+            if (proCategoriesId == null)
+            {
+                string errorMessage = "Loại sản phẩm không tồn tại!";
+                return BadRequest(errorMessage);
+            }           
+
             var product = new Product
             {
                 ProductId = productDTO.ProductId,
@@ -51,7 +87,7 @@ namespace PetServices.Controllers
                 Picture = productDTO.Picture,
                 Status = true,
                 Price = productDTO.Price,
-                Quanlity = productDTO.Quanlity,
+                Quantity = productDTO.Quantity,
                 CreateDate = DateTime.Now,
                 ProCategoriesId = productDTO.ProCategoriesId
             };
@@ -59,7 +95,7 @@ namespace PetServices.Controllers
             try
             {
                 await _context.SaveChangesAsync();
-                return Ok(_mapper.Map<ProductDTO>(product));
+                return Ok("Thêm sản phẩm thành công!");
             }
             catch (DbUpdateException ex)
             {
@@ -81,7 +117,7 @@ namespace PetServices.Controllers
             product.Picture = productDTO.Picture;
             product.Status = productDTO.Status;
             product.Price = productDTO.Price;
-            product.Quanlity = productDTO.Quanlity;
+            product.Quantity = productDTO.Quantity;
             product.CreateDate = DateTime.Now;
             product.ProCategoriesId = productDTO.ProCategoriesId;
             _context.Update(product);

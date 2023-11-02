@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
-using FEPetServices.Form; // Import namespace chứa class RegisterDTO
+using FEPetServices.Form; 
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Net.Mail;
@@ -32,8 +29,9 @@ namespace FEPetServices.Controllers
         {
             try
             {
-                if (registerInfo.Email == null || registerInfo.Password == null)
+                if (registerInfo.Password.Length < 8)
                 {
+                    ViewBag.ErrorToast = "Mật khẩu phải trên hoặc bằng 8 ký tự";
                     return View();
                 }
                 // Chuyển thông tin đăng ký thành dạng JSON
@@ -65,7 +63,7 @@ namespace FEPetServices.Controllers
                 else
                 {
                     // Đăng ký không thành công, bạn có thể xử lý kết quả ở đây (ví dụ: hiển thị thông báo lỗi)
-                    ViewBag.ErrorToast = "Đăng ký không thành công. Mã lỗi HTTP: " + (int)response.StatusCode;
+                    ViewBag.ErrorToast = "Đăng ký không thành công. Tài khoản đã tồn tại";
                 }
             }
             catch (Exception ex)
@@ -73,7 +71,6 @@ namespace FEPetServices.Controllers
                 // Xử lý lỗi nếu có
                 ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
             }
-
             return View();
         }
 

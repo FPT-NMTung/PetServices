@@ -14,12 +14,17 @@
                 <div class="card mb-4 mb-xl-0">
                     <div class="card-header">Hình ảnh cá nhân</div>
                     <div class="card-body text-center">
-                        @*Hình ảnh profile*@
-                        <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                        Hình ảnh profile
+
+                        <img class="img-account-profile rounded-circle mb-2" src="@Model?.UserInfo.ImageUser" alt="">
+
+                        
+                        
                         <!-- Profile picture help block-->
                         <div class="small font-italic text-muted mb-4">JPG hoặc PNG không vượt quá 5 MB</div>
                         @* Uploat ảnh*@
-                        <button class="btn btn-primary" type="button">Tải lên hình ảnh mới</button>
+                        
+                        @*<button class="btn btn-primary" type="button">Tải lên hình ảnh mới</button>*@
                     </div>
                 </div>
             </div>
@@ -28,7 +33,12 @@
                 <div class="card mb-4">
                     <div class="card-header">Thông tin người dùng</div>
                     <div class="card-body">
-                        <form method="post" asp-controller="Infomation" asp-action="Index">
+                        <form method="post" asp-controller="Infomation" asp-action="Index" enctype="multipart/form-data">
+                            <div>
+                                <label for="image"></label>
+                                <input type="file" id="image" name="image" enctype="multipart/form-data"  required>
+                            </div>
+                            
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputFirstName">Họ</label>
@@ -140,13 +150,13 @@
                 duration: 2000
             });
         }
-    function showSuccessLoginToast() {
-            toast({
-                title: 'Thành công',
-                message: '@TempData["SuccessLoginToast"]',
-                type: 'success',
-                duration: 2000
-            });
+        function showSuccessLoginToast() {
+                toast({
+                    title: 'Thành công',
+                    message: '@TempData["SuccessLoginToast"]',
+                    type: 'success',
+                    duration: 2000
+                });
         }
     </script>
 </html>

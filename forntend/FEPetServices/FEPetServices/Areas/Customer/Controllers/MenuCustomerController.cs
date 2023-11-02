@@ -1,5 +1,5 @@
 ﻿using FEPetServices.Form;
-using Microsoft.AspNetCore.Authorization;
+using FEPetServices.Form.BookingForm;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -11,6 +11,7 @@ namespace FEPetServices.Areas.Customer.Controllers
     {
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
+        private string DefaultApiUrlPet = "";
 
         public MenuCustomerController()
         {
@@ -18,6 +19,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "https://localhost:7255/api/UserInfo";
+            DefaultApiUrlPet = "https://localhost:7255/api/PetInfo";
         }
         public IActionResult Index()
         {
@@ -83,7 +85,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> ChangePassword([FromForm] ChangePassword changePassword)
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
@@ -112,6 +114,33 @@ namespace FEPetServices.Areas.Customer.Controllers
             else
             {
                 TempData["ErrorToast"] = "Mật khẩu cũ không chính xác";
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PetInfo()
+        {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlPet + "/" + email);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                AccountInfo petInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
+
+                return View(petInfos);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
                 return View();
             }
         }

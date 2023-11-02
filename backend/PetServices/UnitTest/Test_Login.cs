@@ -16,7 +16,7 @@ namespace UnitTest
     public class Test_Login
     {
         [Fact]
-        // 1. đúng email và password
+        // 1. Đăng nhập thành công
         public async Task Test_Login_Success()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
@@ -64,7 +64,7 @@ namespace UnitTest
         }
 
          [Fact]
-        // 2. đúng email và sai password
+        // 2. Email + Pass(sai)
         public async Task Test_Login_Fail_wrongPassword()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
@@ -97,7 +97,7 @@ namespace UnitTest
             var loginForm = new LoginForm
             {
                 Email = "hungnvhe153434@fpt.edu.vn",
-                Password = "12345611aa"
+                Password = "1234abvcaas"
             };
 
             var result = await controller.Login(loginForm) as ObjectResult;
@@ -108,7 +108,7 @@ namespace UnitTest
         }
 
         [Fact]
-        // 3. đúng email và pass rỗng
+        // 3. Email + Pass(null)
         public async Task Test_Login_Fail_PasswordIsEmpty()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
@@ -144,17 +144,15 @@ namespace UnitTest
                 Password = "" 
             };
 
-            // Act
             var result = await controller.Login(loginForm) as ObjectResult;
 
-            // Assert
             Assert.NotNull(result);
             Assert.Equal(400, result.StatusCode);
             Assert.Equal("Mật khẩu không được để trống!", result.Value);
         }
 
         [Fact]
-        // 4. đúng email và pass không đủ 8 ký tự
+        // 4. Email + Pass(7 ký tự)
         public async Task Test_Login_Fail_PasswordTooShort()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
@@ -198,7 +196,7 @@ namespace UnitTest
         }
 
         [Fact]
-        // 5. đúng email và pass chứa khoảng trắng
+        // 5. Email + Pass(có khoảng trắng)
         public async Task Test_Login_Fail_PasswordContainsWhitespace()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
@@ -242,7 +240,7 @@ namespace UnitTest
         }
 
         [Fact]
-        // 6. đúng email và pass chứa ký tự đặc biệt
+        // 6. Email + Pass(có ký tự đặc biệt)
         public async Task Test_Login_Fail_PasswordContainsSpecialCharacters()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
@@ -286,7 +284,7 @@ namespace UnitTest
         }
 
         [Fact]
-        // 7. Email rỗng
+        // 7. Email(null) + Pass
         public async Task Test_Login_Fail_EmailIsEmpty()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
@@ -330,7 +328,7 @@ namespace UnitTest
         }
 
         [Fact]
-        // 8. Email chứa khoảng trắng
+        // 8. Email(chứa khoảng trắng) + Pass
         public async Task Test_Login_Fail_EmailContainsWhitespace()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
@@ -374,7 +372,7 @@ namespace UnitTest
         }
 
         [Fact]
-        // 9. Email chỉ có tên + @
+        // 9. Email(thiếu @) + Pass
         public async Task Test_Login_Fail_InvalidEmailFormat()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
@@ -422,7 +420,7 @@ namespace UnitTest
         }
 
         [Fact]
-        // 10 Email sai định dạng
+        // 10 Email(sai định dạng) + Pass
         public async Task Test_Login_Fail_InvalidEmail_Format()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
