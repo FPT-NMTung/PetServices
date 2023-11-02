@@ -16,12 +16,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/managerjs/layoutmanager.js"></script>
-    <script src="~/js/toastnotification.js"></script>
 
     <title>Slidebar Manager</title>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
 </head>
 
 <body>
@@ -195,7 +193,8 @@
             @RenderBody()
         </div>
     </main>
-     <div id="toast"></div>
+    <div id="toast"></div>
+    @*Start - Base TempData*@
     @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))
     {
         <script>
@@ -208,10 +207,32 @@
     {
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                showErrorToast();
+                showErrorLoadingDataToast();
             });
         </script>
     }
+    @*End - Base *@
+     @*-------------------------------------------------------*@
+    @*Start - Loading data TempData*@
+    @if (!string.IsNullOrEmpty(TempData["SuccessLoadingDataToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showSuccessLoadingDataToast();
+            });
+        </script>
+    }
+    @if (!string.IsNullOrEmpty(TempData["ErrorLoadingDataToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showErrorLoadingDataToast();
+            });
+        </script>
+    }
+    @*End - Loading data TempData*@
+     @*-------------------------------------------------------*@
+    @*Start - Login TempData*@
     @if (!string.IsNullOrEmpty(TempData["SuccessLoginToast"] as string))
     {
         <script>
@@ -220,7 +241,29 @@
             });
         </script>
     }
+    @*End - Login TempData*@
+     @*-------------------------------------------------------*@
+    @*Start - Base ViewBag*@
+    @if (!string.IsNullOrEmpty(ViewBag.SuccessToast))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showSuccessToastViewBag();
+            });
+        </script>
+    }
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorToast))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showErrorToastViewBag();
+            });
+        </script>
+    }
+    @*End - Base ViewBag*@
+    @*-------------------------------------------------------*@
     <script>
+        @*Start - Base TempData*@
             function showSuccessToast() {
                 toast({
                     title: 'Thành công',
@@ -229,22 +272,67 @@
                     duration: 2000
                 });
             }
-        function showErrorToast() {
+            function showErrorToast() {
+                toast({
+                    title: 'Thất bại',
+                    message: '@TempData["ErrorToast"]',
+                    type: 'error',
+                    duration: 2000
+                });
+            }
+        @*End - Base *@
+        @*-------------------------------------------------------*@
+        @*Start - LoadingData TempData*@
+            function showSuccessLoadingDataToast() {
+                toast({
+                    title: 'Thành công',
+                    message: '@TempData["SuccessLoadingDataToast"]',
+                    type: 'success',
+                    duration: 2000
+                });
+            }
+        function showErrorLoadingDataToast() {
             toast({
                 title: 'Thất bại',
-                message: '@TempData["ErrorToast"]',
+                message: '@TempData["ErrorLoadingDataToast"]',
                 type: 'error',
                 duration: 2000
             });
         }
-        function showSuccessLoginToast() {
-            toast({
-                title: 'Thành công',
-                message: '@TempData["SuccessLoginToast"]',
-                type: 'success',
-                duration: 2000
-            });
-        }
+        @*End - LoadingData *@
+        @*-------------------------------------------------------*@
+        @*Start - Login TempData*@
+            function showSuccessLoginToast() {
+                toast({
+                    title: 'Thành công',
+                    message: '@TempData["SuccessLoginToast"]',
+                    type: 'success',
+                    duration: 2000
+                });
+            }
+        @*End - Login TempData*@
+        @*-------------------------------------------------------*@
+        @*Start - Base ViewBag*@
+            function showSuccessToastViewBag() {
+                toast({
+                    title: 'Thành công',
+                    message: '@ViewBag.SuccessToast',
+                    type: 'success',
+                    duration: 2000
+                });
+            }
+
+            function showErrorToastViewBag() {
+                toast({
+                    title: 'Thất bại',
+                    message: '@ViewBag.ErrorToast',
+                    type: 'error',
+                    duration: 2000
+                });
+            }
+        @*End - Base ViewBag*@
+        @*-------------------------------------------------------*@
     </script>
+    <script src="~/js/toastnotification.js"></script>
 </body>
 </html>

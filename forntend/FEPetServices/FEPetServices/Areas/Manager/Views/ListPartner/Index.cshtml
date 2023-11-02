@@ -43,14 +43,6 @@
                     }
                 }
             </tbody>
-            <tfoot>
-                @if (!string.IsNullOrEmpty(TempData["ErrorLoadingDataToast"] as string))
-                {
-                    <div class="alert alert-danger">
-                        <span style="color:red">@TempData["ErrorLoadingDataToast"]</span>
-                    </div>
-                }
-            </tfoot>
         </table>
     </div>
 </body>

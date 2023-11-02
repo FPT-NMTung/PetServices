@@ -157,43 +157,7 @@
             </div>
         </form>
     </div>
-    <div id="toast"></div>
-    @if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showSuccessToast();
-            });
-        </script>
-    }
-    @if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showErrorToast();
-            });
-        </script>
-    }
-    <script src="~/js/toastnotification.js"></script>
     <script src="~/js/Room.js"></script>
-    <script>
-        function showSuccessToast() {
-            toast({
-                title: 'Thành công',
-                message: '@TempData["SuccessMessage"]',
-                type: 'success',
-                duration: 2000
-            });
-        }
-        function showErrorToast() {
-            toast({
-                title: 'Thất bại',
-                message: '@TempData["ErrorMessage"]',
-                type: 'error',
-                duration: 2000
-            });
-        }
-    </script>
 </body>
 </html>
 
