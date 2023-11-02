@@ -68,6 +68,8 @@ namespace FEPetServices.Controllers
                             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
+                            HttpContext.Session.SetString("UserName", loginResponse.UserName);
+                            HttpContext.Session.SetString("UserImage", loginResponse.UserImage);
                             // Redirect based on the role
                             if (roleName == "MANAGER")
                             {

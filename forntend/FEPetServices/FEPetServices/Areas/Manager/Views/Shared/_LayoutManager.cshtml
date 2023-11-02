@@ -160,9 +160,22 @@
                 <h1 class="fw-bold mb-0 me-auto"></h1>
                 <div class="dropdown">
                     <div class="d-flex align-items-center cursor-pointer dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="me-2 d-none d-sm-block">John Doe</span>
-                        <img class="navbar-profile-image" src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGVyc29ufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" alt="Image">
-                    </div>
+                        @{
+                            string? username = Context.Session.GetString("UserName");
+                            if (username is not null)
+                            {
+                                <span class="me-2 d-none d-sm-block">@username</span>
+                            }
+                        }
+                        @{
+                            string? userimage = Context.Session.GetString("UserImage");
+                            if (userimage is not null)
+                            {
+                                <img class="navbar-profile-image" src="@userimage" alt="Image">
+
+                            }
+                        }
+                         </div>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li><a class="dropdown-item" href="~/Manager/Information">Thông tin người dùng</a></li>
                         <li><a class="dropdown-item" href="~/Logout/Index">Đăng xuất @RenderSection("Logout", required: false)</a></li>
