@@ -22,9 +22,9 @@ namespace FEPetServices.Areas.Manager.Controllers
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "";
             DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
-            DefaultApiUrlBlogDetail = "https://localhost:7255/api/ServiceCategory/ServiceCategorysID";
-            DefaultApiUrlBlogAdd = "https://localhost:7255/api/ServiceCategory/AddServiceCategory";
-            DefaultApiUrlBlogUpdate = "https://localhost:7255/api/ServiceCategory/EditServiceCategory?serCategoriesId=";
+            DefaultApiUrlBlogDetail = "";
+            DefaultApiUrlBlogAdd = "https://localhost:7255/api/Blog/CreateBlog";
+            DefaultApiUrlBlogUpdate = "";
 
         }
 
@@ -64,13 +64,13 @@ namespace FEPetServices.Areas.Manager.Controllers
             return View();
         }
 
-        /*public async Task<IActionResult> AddServiceCategory([FromForm] ServiceCategoryDTO serviceCategory, List<IFormFile> image)
+        public async Task<IActionResult> AddBlog([FromForm] BlogDTO blog, List<IFormFile> image)
         {
             try
             {
                 if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
                 {
-                    if (serviceCategory.SerCategoriesName == null) { return View(); }
+                    if (blog.PageTile == null) { return View(); }
                     foreach (var file in image)
                     {
                         string filename = GenerateRandomNumber(5) + file.FileName;
@@ -78,38 +78,38 @@ namespace FEPetServices.Areas.Manager.Controllers
                         string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
                         var stream = new FileStream(uploadfile, FileMode.Create);
                         file.CopyToAsync(stream);
-                        serviceCategory.Picture = "/img/" + filename;
+                        blog.ImageUrl = "/img/" + filename;
                     }
 
                     // mặc định status là true
-                    serviceCategory.Status = true;
+                    /*serviceCategory.Status = true;*/
 
-                    var json = JsonConvert.SerializeObject(serviceCategory);
+                    var json = JsonConvert.SerializeObject(blog);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                     // Gửi dữ liệu lên máy chủ
-                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrlServiceCategoryAdd, content);
+                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrlBlogAdd, content);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TempData["SuccessToast"] = "Thêm dịch vụ thành công!";
-                        return View(serviceCategory); // Chuyển hướng đến trang thành công hoặc trang danh sách
+                        TempData["SuccessToast"] = "Thêm bài viết thành công!";
+                        return View(blog); // Chuyển hướng đến trang thành công hoặc trang danh sách
                     }
                     else
                     {
-                        TempData["ErrorToast"] = "Thêm dịch vụ thất bại. Vui lòng thử lại sau.";
-                        return View(serviceCategory); // Hiển thị lại biểu mẫu với dữ liệu đã điền
+                        TempData["ErrorToast"] = "Thêm bài viết thất bại. Vui lòng thử lại sau.";
+                        return View(blog); // Hiển thị lại biểu mẫu với dữ liệu đã điền
                     }
                 }
                 else
                 {
-                    return View(serviceCategory);
+                    return View(blog);
                 }
             }
             catch (Exception ex)
             {
                 TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
-                return View(serviceCategory); // Hiển thị lại biểu mẫu với dữ liệu đã điền
+                return View(blog); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
         }
 
@@ -127,7 +127,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             return new string(randomChars);
         }
 
-        [HttpGet]
+       /* [HttpGet]
         public async Task<IActionResult> EditServiceCategory(int serCategoriesId)
         {
             try
@@ -238,7 +238,10 @@ namespace FEPetServices.Areas.Manager.Controllers
                 return View(serviceCategory); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
         }*/
-
+        /*public async Task<IActionResult> AddBlog(BlogDTO blog)
+        {
+            return View();
+        }*/
     }
 }
 
