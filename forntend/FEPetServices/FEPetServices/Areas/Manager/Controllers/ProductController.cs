@@ -40,17 +40,17 @@ namespace FEPetServices.Areas.Manager.Controllers
                     if (!string.IsNullOrEmpty(rep))
                     {
                         var productList = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
-                        
+                        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                         return View(productList);
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng";
+                        ViewBag.ErrorToast = "API trả về dữ liệu rỗng";
                     }
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang!";
+                    ViewBag.ErrorToast = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang!";
                 }
                 
             }
@@ -87,12 +87,12 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TempData["SuccessMessage"] = "Thêm dịch vụ thành công!";
+                        TempData["SuccessToast"] = "Thêm dịch vụ thành công!";
                         return View(pro); // Chuyển hướng đến trang thành công hoặc trang danh sách
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "Thêm dịch vụ thất bại. Vui lòng thử lại sau.";
+                        ViewBag.ErrorToast = "Thêm dịch vụ thất bại. Vui lòng thử lại sau.";
                         return View(pro); // Hiển thị lại biểu mẫu với dữ liệu đã điền
                     }
                 }
@@ -103,7 +103,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
                 return View(pro); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
         }
@@ -136,7 +136,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                    ViewBag.ErrorToast = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
                 }
                 if (Request.Form["Status"] == "on")
                 {
@@ -149,7 +149,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
             }
             return View();
         }

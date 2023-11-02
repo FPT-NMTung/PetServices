@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đổi mật khẩu</title>
-    <!-- Thông báo -->
     <link href="~/css/toastNotification.css" rel="stylesheet" />
 </head>
 <body>
@@ -51,43 +50,6 @@
             </div>
         </div>
     </div>
-    <div id="toast"></div>
-        @if (!string.IsNullOrEmpty(ViewBag.SuccessToast))
-        {
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                showSuccessToast();
-                });
-            </script>
-        }
-        @if (!string.IsNullOrEmpty(ViewBag.ErrorToast))
-        {
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                showErrorToast();
-                });
-            </script>
-        }
-
 </body>
-    <script src="~/js/toastnotification.js"></script>
     <script src="~/js/checkpassword.js"></script>
-    <script>
-        function showSuccessToast() {
-            toast({
-                title: 'Thành công',
-                message: '@ViewBag.SuccessToast',
-                type: 'success',
-                duration: 2000
-            });
-        }
-        function showErrorToast() {
-            toast({
-                title: 'Thất bại',
-                message: '@ViewBag.ErrorToast',
-                type: 'error',
-                duration: 2000
-            });
-        }
-    </script>
 </html>
