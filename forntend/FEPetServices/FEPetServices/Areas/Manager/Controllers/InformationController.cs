@@ -57,6 +57,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
             return new string(randomChars);
         }
+
         [HttpPost]
         public async Task<IActionResult> Index([FromForm] UserInfo userInfo, IFormFile image)
         {
@@ -67,17 +68,22 @@ namespace FEPetServices.Areas.Manager.Controllers
                 TempData["ErrorToast"] = "Số điện thoại không được để trống";
                 return RedirectToAction("Index");
             }
-            else if (userInfo.Phone.Length == 10 && userInfo.Phone.StartsWith("0"))
+            if (userInfo.Phone.Length == 10 && userInfo.Phone.StartsWith("0"))
+            {
+                
+            }
+            else
             {
                 TempData["ErrorToast"] = "Số điện thoại phải bắt đầu bằng số 0 và có 10 chữ số";
                 return RedirectToAction("Index");
             }
+
             if (userInfo.Address == null)
             {
                 TempData["ErrorToast"] = "Địa chỉ cụ thể không được để trống";
                 return RedirectToAction("Index");
             }
-            else if (userInfo.Address.Length >= 10)
+            if (userInfo.Address.Length >= 10)
             {
                 TempData["ErrorToast"] = "Địa chỉ cụ thể phải lớn hơn 10 ký tự";
                 return RedirectToAction("Index");

@@ -82,12 +82,12 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TempData["SuccessToast"] = "Thêm dịch vụ thành công!";
+                        TempData["SuccessToast"] = "Thêm loại sản phẩm thành công!";
                         return View(proCategory); // Chuyển hướng đến trang thành công hoặc trang danh sách
                     }
                     else
                     {
-                        ViewBag.ErrorToast = "Thêm dịch vụ thất bại. Vui lòng thử lại sau.";
+                        TempData["ErrorToast"] = "Thêm loại sản phẩm thất bại. Vui lòng thử lại sau.";
                         return View(proCategory); // Hiển thị lại biểu mẫu với dữ liệu đã điền
                     }
                 }
@@ -98,7 +98,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
                 return View(proCategory); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
         }
@@ -123,12 +123,12 @@ namespace FEPetServices.Areas.Manager.Controllers
                     }
                     else
                     {
-                        ViewBag.ErrorToast = "API trả về dữ liệu rỗng.";
+                        TempData["ErrorToast"] = "API trả về dữ liệu rỗng.";
                     }
                 }
                 else
                 {
-                    ViewBag.ErrorToast = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                    TempData["ErrorToast"] = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
                 }
                 if (Request.Form["Status"] == "on")
                 {
@@ -141,7 +141,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
             }
             return View();
         }
