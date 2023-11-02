@@ -62,7 +62,26 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
-
+            if (userInfo.Phone == null)
+            {
+                TempData["ErrorToast"] = "Số điện thoại không được để trống";
+                return RedirectToAction("Index");
+            }
+            else if (userInfo.Phone.Length == 10 && userInfo.Phone.StartsWith("0"))
+            {
+                TempData["ErrorToast"] = "Số điện thoại phải bắt đầu bằng số 0 và có 10 chữ số";
+                return RedirectToAction("Index");
+            }
+            if (userInfo.Address == null)
+            {
+                TempData["ErrorToast"] = "Địa chỉ cụ thể không được để trống";
+                return RedirectToAction("Index");
+            }
+            else if (userInfo.Address.Length >= 10)
+            {
+                TempData["ErrorToast"] = "Địa chỉ cụ thể phải lớn hơn 10 ký tự";
+                return RedirectToAction("Index");
+            }
             // Handle the uploaded image
             if (image != null)
             {
@@ -75,8 +94,23 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
                 userInfo.ImageUser = "/img/" + filename;
             }
+            else
+            {
+                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "/" + email);
+                if (responseUser.IsSuccessStatusCode)
+                {
+                    string responseContent = await responseUser.Content.ReadAsStringAsync();
 
-            // Check if other fields are valid
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+
+                    AccountInfo managerInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
+                    userInfo.ImageUser = managerInfos.UserInfo.ImageUser;
+                }
+            }
+
             if (userInfo.Address == null || userInfo.FirstName == null || userInfo.LastName == null)
             {
                 TempData["ErrorToast"] = "Vui lòng điền đầy đủ thông tin";
@@ -85,8 +119,21 @@ namespace FEPetServices.Areas.Manager.Controllers
 
             if (userInfo.Province == null || userInfo.District == null || userInfo.Commune == null)
             {
-                TempData["ErrorToast"] = "Vui lòng cung cấp lại địa chỉ";
-                return RedirectToAction("Index");
+                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "/" + email);
+                if (responseUser.IsSuccessStatusCode)
+                {
+                    string responseContent = await responseUser.Content.ReadAsStringAsync();
+
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+
+                    AccountInfo managerInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
+                    userInfo.Province = managerInfos.UserInfo.Province;
+                    userInfo.District = managerInfos.UserInfo.District;
+                    userInfo.Commune = managerInfos.UserInfo.Province;
+                }
             }
 
             // Update the user information, including the image URL

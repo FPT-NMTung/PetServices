@@ -32,6 +32,11 @@ namespace FEPetServices.Areas.Manager.Controllers
                 ViewBag.ErrorToast = "Mật khẩu mới và xác nhận lại mật khẩu không trùng khớp";
                 return View();
             }
+            else if (changePassword.NewPassword.Length < 8)
+            {
+                ViewBag.ErrorToast = "Mật khẩu mới phải có ít nhất 8 ký tự";
+                return View();
+            }
 
             string apiUrl = $"https://localhost:7255/api/Account/newpassword?email={email}&oldpassword={changePassword.OldPassword}&newpassword={changePassword.NewPassword}&confirmnewpassword={changePassword.ConfirmNewPassword}";
 
