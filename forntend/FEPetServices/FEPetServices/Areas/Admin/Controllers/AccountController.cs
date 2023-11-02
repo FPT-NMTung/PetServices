@@ -1,23 +1,16 @@
 ﻿using FEPetServices.Areas.Admin.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using PetServices.DTO;
-using PetServices.Models;
-using System;
-using System.Data;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Security.Principal;
 using System.Text;
 using System.Web;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Admin.Controllers
 {
-
+    [Authorize(Policy = "AdminOnly")]
     public class AccountController : Controller
     {
         private readonly HttpClient client = null;
