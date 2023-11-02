@@ -62,6 +62,7 @@ namespace PetServices.Controllers
 
             var result = await _context.Accounts
                 .Include(a => a.Role)
+                .Include(a => a.UserInfo)
                 .SingleOrDefaultAsync(x => x.Email == login.Email && x.Password == login.Password);
 
             if (result != null)
@@ -70,7 +71,7 @@ namespace PetServices.Controllers
                 {
                     new Claim(ClaimTypes.Name, login.Email),
                     new Claim(ClaimTypes.Role, result.Role?.RoleName),
-                    new Claim("RoleId", result.Role?.RoleId.ToString())
+                    new Claim("RoleId", result.Role?.RoleId.ToString()),
                 };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -84,7 +85,9 @@ namespace PetServices.Controllers
                     signingCredentials: creds
                 );
 
-                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName, Status= result.Status });
+                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName, Status= result.Status,
+                UserName = result?.UserInfo.FirstName +" " + result?.UserInfo.LastName, UserImage = result?.UserInfo.ImageUser
+                });
             }
             else
             {
