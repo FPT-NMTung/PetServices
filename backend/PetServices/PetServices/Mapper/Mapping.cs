@@ -122,6 +122,14 @@ namespace PetServices.Mapper
                 .ForMember(dest => dest.Desciptions, opt => opt.MapFrom(src => src.Desciptions))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.Picture, opt => opt.MapFrom(src => src.Picture));
+            CreateMap<Blog, BlogDTO>()
+                .ForMember(dest => dest.BlogId, opt => opt.MapFrom(src => src.BlogId))
+                .ForMember(dest => dest.PageTile, opt => opt.MapFrom(src => src.PageTile))
+                .ForMember(dest => dest.Heading, opt => opt.MapFrom(src => src.Heading))
+                .ForMember(dest => dest.PublisheDate, opt => opt.MapFrom(src => src.PublisheDate))
+                .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
         }
     }
 }
