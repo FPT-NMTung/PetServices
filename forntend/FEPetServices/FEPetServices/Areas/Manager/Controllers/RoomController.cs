@@ -48,22 +48,23 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     if (!string.IsNullOrEmpty(responseContent))
                     {
+                        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                         var roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(responseContent);
                         return View(roomList);
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
+                        ViewBag.ErrorToast = "API trả về dữ liệu rỗng.";
                     }
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                    ViewBag.ErrorToast = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
             }
 
             return View();
@@ -115,18 +116,18 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessMessage"] = "Thêm phòng thành công!";
+                    TempData["SuccessToast"] = "Thêm phòng thành công!";
                     return View();
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Thêm phòng thất bại. Vui lòng thử lại sau.";
+                    TempData["ErrorToast"] = "Thêm phòng thất bại. Vui lòng thử lại sau.";
                     return View();
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi: " + ex.Message;
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
                 return View(roomDTO);
             }
         }

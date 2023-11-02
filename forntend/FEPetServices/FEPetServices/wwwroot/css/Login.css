@@ -56,7 +56,7 @@ input:focus ~ label,
 input:valid ~ label,
 input:not(:placeholder-shown) ~ label {
     top: -5px;
-    font-size: 0.8em;
+    font-size: 1.5em;
 }
 
 .inputbox input {
@@ -65,7 +65,7 @@ input:not(:placeholder-shown) ~ label {
     background: transparent;
     border: none;
     outline: none;
-    font-size: 1em;
+    font-size: 1.8em;
     padding: 0 35px 0 5px;
     color: #fff;
     border-bottom: 2px solid #fff;
@@ -75,13 +75,13 @@ input:not(:placeholder-shown) ~ label {
     position: absolute;
     right: 8px;
     color: #fff;
-    font-size: 1.2em;
+    font-size: 2em;
     top: 20px;
 }
 
 .forget {
     margin: -15px 0 15px;
-    font-size: .9em;
+    font-size: 1.6em;
     color: #fff;
     display: flex;
     justify-content: space-between;
@@ -108,12 +108,12 @@ button {
     border: none;
     outline: none;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1.7em;
     font-weight: 600;
 }
 
 .register {
-    font-size: .9em;
+    font-size: 1.6em;
     color: #fff;
     text-align: center;
     margin: 25px 0 10px;
