@@ -29,7 +29,7 @@
                 <img src="@Model.Picture" class="image">
             </div>
             <div class="part-container">
-                <p class="roomName">@Model.RoomName</p>
+                <p class="roomName" style="padding-bottom: 20px;">@Model.RoomName</p>
                 <div class="part-content">
                     <div class="part1-content">
                         <p class="part1-serviceTitle">Dịch vụ hiện có:</p>
@@ -46,12 +46,14 @@
                             }
                         </div>
                     </div>
-                    <div class="part2" style="width: 85%;">
-                        <div class="part4-description">
-                            <p class="part3-title">Mô tả phòng:</p>
-                            <p style="font-size: 15px;">@Model.Desciptions</p>
-                        </div>
-                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="part2" style="margin-bottom: 20px; width: 92%;">
+                <div class="part4-description">
+                    <p class="part3-title">Mô tả phòng:</p>
+                    <p style="font-size: 15px;">@Model.Desciptions</p>
                 </div>
             </div>
         </div>
@@ -63,9 +65,10 @@
                     foreach (var service in ViewBag.ServiceUnavailable)
                     {
                         <div class="part2-serviceName-title">
-                            <img src="/img/unavailableIcon.png" style="width: 20px; height: 20px;"/>
+                            <img src="/img/unavailableIcon.png" style="width: 20px; height: 20px;" />
                             <div>
-                                <p>@service.ServiceName <br> @service.Price đ</p>
+                                <p>@service.ServiceName</p>
+                                <p class="service-name-price">@service.Price đ</p>
                             </div>
                             <div class="checkbox-wrapper-12">
                                 <div class="cbx">
@@ -117,7 +120,7 @@
                 <div class="form-group">
                     <label>Giá thuê theo ngày:</label>
                     <div>
-                        <p style="color: red; text-align: center;">@Model.Price.ToString("#,##0", System.Globalization.CultureInfo.InvariantCulture) đ/ngày</p>
+                        <p style="color: red; text-align: center;" id="timebook-price">@Model.Price đ/ngày</p>
                     </div>
                 </div>
             </div>
@@ -125,23 +128,42 @@
         <div class="part4">
             <div class="part4-price">
                 <p class="part4-title">Chi tiết giá:</p>
-                <div class="price-detail" id="priceDetail">
-                    <p class="total-price">Tổng số tiền: 0 đ</p>
+                <div style="display: flex;">
+                    <div style="width: 30%;">
+                    </div>
+                    <div class="price-detail" id="priceDetail">
+                        <p class="service-price-title">Các dịch vụ đặt thêm:</p>
+                        <div class="service-price">
+                            <p class="name-priceDetail"></p>
+                            <p class="price-priceDetail"></p>
+                        </div>
+                        <p class="service-price-title">Ngày đặt phòng:</p>
+                        <div class="date-price">
+                            <p class="name1-priceDetail"></p>
+                            <p class="price1-priceDetail"></p>
+                        </div>
+                        <div>
+                            <p class="total-price-title">Tổng số tiền:</p>
+                            <p class="total-price">0 đ</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="part5">
             <p>Khi nhấn vào nút này bạn công nhận mình đã đọc và đồng ý với các <a href="/">Điều khoản & điều kiện</a> và <a href="/">Chính sách quyền riêng tư</a> của chúng tôi.</p>
+            <button>
+                <span>Đặt phòng</span>
+            </button>
         </div>
     </div>
     <script>
-        $(function () {
-            var startDate, endDate;
+        var startDate, endDate;
+        var totalPrice = 0;
 
-            // Tính toán thời gian hiện tại cộng thêm 3 tiếng
+        $(function () {
             var minDate = new Date(new Date().getTime() + 3 * 60 * 60 * 1000);
 
-            // Thiết lập datetimepicker cho start-datetime
             $('#start-datetime').datetimepicker({
                 format: 'DD/MM/YYYY HH:mm',
                 stepping: 60,
@@ -150,11 +172,10 @@
                 enabledHours: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
             }).on('dp.change', function (e) {
                 startDate = e.date;
-                // Cập nhật minDate cho end-datetime
                 $('#end-datetime').data("DateTimePicker").minDate(e.date.add(1, 'd'));
+                updateRentalPrice();
             });
 
-            // Thiết lập datetimepicker cho end-datetime
             $('#end-datetime').datetimepicker({
                 format: 'DD/MM/YYYY HH:mm',
                 stepping: 60,
@@ -162,54 +183,89 @@
                 enabledHours: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
             }).on('dp.change', function (e) {
                 endDate = e.date;
+                updateRentalPrice();
+            });
+        });
+
+        function updateRentalPrice() {
+            // Tính số giờ thuê
+            var diffInHours = (endDate - startDate) / 1000 / 60 / 60;
+
+            // Tính số ngày và giờ dư
+            var days = Math.floor(diffInHours / 24) + 1;
+            var hours = diffInHours % 24;
+
+            // Tính tổng số tiền thuê
+            totalPrice = Math.floor((days + hours / 24) * @Model.Price);
+
+            // Cập nhật thông tin thuê và giá tiền thuê
+            document.querySelector('.name1-priceDetail').innerText = days + ' ngày, ' + hours + ' giờ :';
+            document.querySelector('.price1-priceDetail').innerText = totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đ';
+
+            updateTotalAmount();
+        }
+
+        function updateTotalAmount() {
+            var totalServicePrice = 0;
+            var nameDetails = '';
+            var priceDetails = '';
+            document.querySelectorAll('.service-checkbox:checked').forEach(function (checkedBox) {
+                var price = parseInt(checkedBox.dataset.servicePrice, 10);
+                totalServicePrice += price;
+
+                nameDetails += checkedBox.dataset.serviceName + ' :' + '<br>';
+                priceDetails += price + ' đ<br>';
+            });
+
+            document.querySelector('.name-priceDetail').innerHTML = nameDetails;
+            document.querySelector('.price-priceDetail').innerHTML = priceDetails;
+
+            var totalAmount = totalPrice + totalServicePrice; // Sử dụng totalPrice đã được cập nhật
+            document.querySelector('.total-price').textContent = 'Tổng số tiền: ' + totalAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đ';
+        }
+
+        document.querySelectorAll('.service-checkbox').forEach(function (checkbox) {
+            checkbox.addEventListener('change', function (e) {
+                var totalServicePrice = 0;
+                var nameDetails = '';
+                var priceDetails = '';
+                document.querySelectorAll('.service-checkbox:checked').forEach(function (checkedBox) {
+                    var price = parseInt(checkedBox.dataset.servicePrice, 10);
+                    totalServicePrice += price;
+
+                    nameDetails += checkedBox.dataset.serviceName + ' :' + '<br>';
+                    priceDetails += price + ' đ<br>';
+                });
+
+                document.querySelector('.name-priceDetail').innerHTML = nameDetails;
+                document.querySelector('.price-priceDetail').innerHTML = priceDetails.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+                var totalAmount = totalPrice + totalServicePrice; // Sử dụng totalPrice đã được cập nhật
+                document.querySelector('.total-price').textContent = 'Tổng số tiền: ' + totalAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đ';
             });
         });
     </script>
 
     <script>
-        // Lấy danh sách checkbox
-        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        // Lấy phần tử hiển thị chi tiết giá
-        var priceDetail = document.querySelector('.price-detail');
-        // Lấy phần tử hiển thị tổng số tiền
-        var totalPrice = document.querySelector('.part4-price');
+        //format double
+        window.onload = function () {
+            // format giá dịch vụ 
+            var priceElements = document.querySelectorAll('.service-name-price');
 
-        // Xử lý sự kiện khi người dùng tích vào checkbox
-        checkboxes.forEach(function (checkbox) {
-            checkbox.addEventListener('change', function () {
-                // Xóa chi tiết giá cũ
-                priceDetail.innerHTML = '';
-                // Tính lại tổng số tiền
-                var total = 0;
-                checkboxes.forEach(function (cb) {
-                    if (cb.checked) {
-                        var serviceName = cb.parentElement.parentElement.querySelector('p').innerText;
-                        var servicePrice = parseInt(serviceName.split(' ')[1]);
-                        total += servicePrice;
-                        priceDetail.innerHTML += serviceName + '<br>';
-                    }
-                });
-                totalPrice.innerText = 'Tổng số tiền: ' + total + ' đ';
+            priceElements.forEach(function (priceElement) {
+                var price = priceElement.textContent.split(' ')[0];
+                var formattedPrice = Number(price).toLocaleString().replace(/,/g, ".");
+                priceElement.textContent = formattedPrice + ' đ';
             });
-        });
 
-        // Lấy phần tử nhập thời gian thuê phòng
-        var datetimeInputs = document.querySelectorAll('input[type="datetime-local"]');
-        datetimeInputs[0].addEventListener('change', function () {
-            datetimeInputs[1].min = datetimeInputs[0].value;
-        });
-        datetimeInputs[1].addEventListener('change', function () {
-            if (datetimeInputs[0].value && datetimeInputs[1].value) {
-                var startDate = new Date(datetimeInputs[0].value);
-                var endDate = new Date(datetimeInputs[1].value);
-                var days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-                var dailyPrice = parseInt(document.querySelector('.price').innerText.split(':')[1]);
-                totalPrice.innerText += ' + Tiền thuê phòng: ' + (days * dailyPrice) + ' đ';
-            }
-        });
+            //format Giá thuê theo ngày
+            var priceElement2 = document.getElementById('timebook-price');
+
+            var price2 = priceElement2.textContent.split(' ')[0];
+            var formattedPrice2 = price2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            priceElement2.textContent = formattedPrice2 + ' đ/ngày';
+        }
     </script>
-
 </body>
-<link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.min.css" />
 </html>
 

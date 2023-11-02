@@ -13,6 +13,7 @@
         font-size: 45px;
         font-weight: 400;
         color: #666;
+        text-align: center;
     }
 
     .first .path {
@@ -31,14 +32,6 @@
         .first .path p {
             color: #9d9c9c;
         }
-
-.title {
-    font-size: 45px;
-    font-weight: bold;
-    padding-top: 20px;
-    padding-bottom: 30px;
-    text-align: center;
-}
 
 .checkbox-wrapper-12 {
     position: relative;
@@ -170,7 +163,7 @@ button {
         text-align: center;
         text-decoration: none;
         width: 100%;
-        padding: 18px 25px;
+        padding: 18px 15px;
         color: #fffcfd;
         font-size: 1.125em;
         font-weight: 700;
@@ -181,12 +174,10 @@ button {
 
     button:hover span {
         animation: scaleUp 0.3s ease-in-out;
-        color: #fd1853;
+        color: black;
     }
 
-    button:hover {
-        animation: scaleUp 0.3s ease-in-out;
-    }
+    
 
 @keyframes scaleUp {
     0% {
@@ -368,6 +359,7 @@ button:hover .star-6 {
 .part1-content .part1-serviceName .part1-serviceName-title img {
     width: 15%;
     height: fit-content;
+    margin-right: 5px;
 }
 
     .part1-content .part1-serviceName .part1-serviceName-title p {
@@ -407,13 +399,14 @@ button:hover .star-6 {
     .part2-content .part2-serviceName {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        margin-bottom: 20px;
     }
 
         .part2-content .part2-serviceName .part2-serviceName-title {
             display: flex;
             width: 180px;
             justify-content: space-between;
+            margin-right: 25px;
         }
 
 .part2-title {
@@ -461,7 +454,7 @@ button:hover .star-6 {
 }
 
     .part4 .part4-price {
-        width: 50%;
+        width: 100%;
     }
         .part4 .part4-price .part4-title {
             font-size: 20px;
@@ -488,3 +481,115 @@ button:hover .star-6 {
 .part5 a:hover{
     color: limegreen;
 }
+
+.part4 .part4-price .price-detail .service-price{
+    display: flex;
+}
+
+.part4 .part4-price .price-detail .date-price{
+    display: flex;
+}
+
+.part4 .part4-price .price-detail {
+    width: 60%;
+    right: 0;
+}
+
+    .part4 .part4-price .price-detail .name-priceDetail {
+        width: 60%;
+        float: right;
+        padding-left: 20%;
+    }
+
+    .part4 .part4-price .price-detail .name1-priceDetail {
+        width: 60%;
+        float: right;
+        padding-left: 20%;
+    }
+
+    .part4 .part4-price .price-detail .price-priceDetail{
+        width: 30%;
+        padding-left: 10px;
+    }
+
+    .part4 .part4-price .price-detail .price1-priceDetail {
+        width: 30%;
+        padding-left: 10px;
+    }
+
+    .part4 .part4-price .price-detail .total-price {
+        float: right;
+        margin-right: 200px;
+    }
+
+    .part4 .part4-price .price-detail .service-price-title{
+        font-size: 18px;
+    }
+
+    .part4 .part4-price .price-detail .service-price p{
+        font-size: 16px;
+    }
+
+    .part4 .part4-price .price-detail .date-price p {
+        font-size: 16px;
+    }
+
+/*.part5 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;*/ /* Điều chỉnh chiều cao của div part5 tùy ý */
+/*}*/
+.part5 {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.part5 button {
+    border-radius: 5px;
+    background-color: #393939;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 17px;
+    width: 200px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+}
+
+    .part5 button span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+    }
+
+        .part5 button span:after {
+            content: '»';
+            position: absolute;
+            opacity: 0;
+            right: -15px;
+            transition: 0.5s;
+        }
+
+    .part5 button:hover span {
+        padding-right: 15px;
+    }
+
+        .part5 button:hover span:after {
+            opacity: 1;
+            right: 0;
+        }
+
+.part5 p{
+    font-size: 17px;
+    padding-bottom: 10px;
+}
+
+
+
+

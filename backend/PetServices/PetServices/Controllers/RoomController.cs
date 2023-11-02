@@ -43,7 +43,7 @@ namespace PetServices.Controllers
                 .Include(r => r.Services)
                 .FirstOrDefaultAsync(r => r.RoomId == roomId);
 
-            var services = _mapper.Map<List<ServiceDTO>>(room.Services);
+            var services = _mapper.Map<List<ServiceDTO>>(room.Services.Where(s => s.Status == true).ToList());
 
             return Ok(services);
         }
@@ -63,7 +63,7 @@ namespace PetServices.Controllers
                                                .Select(service => _mapper.Map<ServiceDTO>(service))
                                                .ToList();
 
-            var services = _mapper.Map<List<ServiceDTO>>(remainingServices);
+            var services = _mapper.Map<List<ServiceDTO>>(remainingServices.Where(s => s.Status == true).ToList());
 
             return Ok(services);
         }
@@ -177,7 +177,7 @@ namespace PetServices.Controllers
                     Picture = roomDTO.Picture,
                     Price = roomDTO.Price,
                     Slot = roomDTO.Slot,
-                    Status = roomDTO.Status,
+                    Status = true,
                     RoomCategoriesId = roomDTO.RoomCategoriesId,
                 };
 
