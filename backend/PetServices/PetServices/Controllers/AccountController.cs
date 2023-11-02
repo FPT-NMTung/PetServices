@@ -363,7 +363,7 @@ namespace PetServices.Controllers
                 return BadRequest(errorMessage);
             }
             string commune = registerDto.Commune;
-            if (!Regex.IsMatch(district, "^[a-zA-ZÀ-Ỹà-ỹ ]+$"))
+            if (!Regex.IsMatch(commune, "^[a-zA-ZÀ-Ỹà-ỹ ]+$"))
             {
                 string errorMessage = "Xã chỉ chấp nhận các ký tự văn bản và không được chứa ký tự đặc biệt hoặc số.";
                 return BadRequest(errorMessage);
