@@ -166,13 +166,20 @@
                             {
                                 <span class="me-2 d-none d-sm-block">@username</span>
                             }
+                            else
+                            {
+                                <span class="me-2 d-none d-sm-block">Xin Chào</span>
+                            }
                         }
                         @{
                             string? userimage = Context.Session.GetString("UserImage");
                             if (userimage is not null)
                             {
                                 <img class="navbar-profile-image" src="@userimage" alt="Image">
-
+                            }
+                            else
+                            {
+                                <img class="navbar-profile-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPzVNWWirLZJ6H95_YOLsLkxju6ZNaSxdj37F7nXfd29TXvBVI9PeZWrTfYEin-XBDnkk&usqp=CAU" alt="Image">
                             }
                         }
                          </div>
