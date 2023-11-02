@@ -1,10 +1,14 @@
+:root {
+    --pink-pastel: #FFD6E4;
+    --pink: #E21033;
+}
 * {
     margin: 0;
     padding: 0;
     font-family: 'poppins', sans-serif;
 }
 
-section {
+.section-register {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,10 +19,11 @@ section {
     background-size: cover;
 }
 
-.form-box {
+.section-register .form-box {    
+    margin-top: 5.5%;
     position: relative;
     width: 450px;
-    height: 650px;
+    height: 580px;
     background: transparent;
     border: 2px solid rgba(255, 255, 255, 0.5);
     border-radius: 20px;
@@ -31,19 +36,19 @@ section {
 }
 
 
-h2 {
+.section-register .form-box .login-form h2 {
     font-size: 2em;
     color: #fff;
     text-align: center;
 }
 
-.inputbox {
+.section-register .form-box .login-form .inputbox {
     position: relative;
     margin: 30px 0;
     width: 310px;
 }
 
-    .inputbox label {
+    .section-register .form-box .login-form .inputbox label {
         position: absolute;
         top: 50%;
         left: 5px;
@@ -54,55 +59,34 @@ h2 {
         transition: .5s;
     }
 
-input:focus ~ label,
-input:valid ~ label,
-input:not(:placeholder-shown) ~ label {
+.section-register .form-box .login-form input:focus ~ label,
+.section-register .form-box .login-form input:valid ~ label,
+.section-register .form-box .login-form input:not(:placeholder-shown) ~ label {
     top: -5px;
-    font-size: 0.8em;
+    font-size: 1.5em;
 }
 
-.inputbox input {
+.section-register .form-box .login-form .inputbox input {
     width: 90%;
     height: 50px;
     background: transparent;
     border: none;
     outline: none;
-    font-size: 1em;
+    font-size: 1.8em;
     padding: 0 35px 0 5px;
     color: #fff;
     border-bottom: 2px solid #fff;
 }
 
-.inputbox ion-icon {
+.section-register .form-box .login-form .inputbox ion-icon {
     position: absolute;
     right: 8px;
     color: #fff;
-    font-size: 1.2em;
+    font-size: 2em;
     top: 20px;
 }
 
-.forget {
-    margin: -15px 0 15px;
-    font-size: .9em;
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-}
-
-    .forget label input {
-        margin-right: 3px;
-    }
-
-    .forget label a {
-        color: #fff;
-        text-decoration: none;
-    }
-
-        .forget label a:hover {
-            text-decoration: underline;
-        }
-
-button {
+.section-register .form-box .login-form button {
     width: 100%;
     height: 40px;
     border-radius: 40px;
@@ -110,23 +94,28 @@ button {
     border: none;
     outline: none;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1.7em;
     font-weight: 600;
 }
 
-.register {
-    font-size: .9em;
+.section-register .form-box .login-form .register {
+    font-size: 1.6em;
     color: #fff;
     text-align: center;
     margin: 25px 0 10px;
 }
+.section-register .form-box .login-form button:hover {
+    background: var(--pink-pastel);
+    color: var(--pink);
+}
 
-    .register p a {
+    .section-register .form-box .login-form .register p a {
         text-decoration: none;
-        color: blueviolet;
+        color: var(--pink-pastel);
         font-weight: 600;
     }
 
-        .register p a:hover {
+        .section-register .form-box .login-form .register p a:hover {
             text-decoration: underline;
+            color:var(--pink);
         }
