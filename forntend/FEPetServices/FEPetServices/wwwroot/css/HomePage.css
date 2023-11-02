@@ -100,6 +100,7 @@ header .icons .item .dropdown .dropdown-content {
 
 header .icons .item .dropdown .dropdown-content a {
     color: black;
+    font-size: 15px;
     padding: 12px 24px;
     text-decoration: none;
     display: flex;

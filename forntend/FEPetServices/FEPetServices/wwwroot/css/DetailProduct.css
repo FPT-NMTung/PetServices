@@ -1,4 +1,8 @@
-﻿﻿#product {
+﻿:root {
+    --pink-pastel: #FFD6E4;
+    --pink: #E21033;
+}﻿
+#product {
     background-color: #ffffff;
     width: 100%;
     margin-bottom: 10px;
@@ -10,6 +14,7 @@ body {
 }
 
 #content-detail {
+    margin-top: 5.5%;
     width: 100%;
 }
 
@@ -23,7 +28,7 @@ body {
 }
 
 #product-name {
-    padding: 15px;
+    padding: 15px 133px;
 }
 
     #product-name h2 {
