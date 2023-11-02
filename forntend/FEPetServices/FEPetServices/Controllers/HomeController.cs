@@ -101,30 +101,30 @@ namespace FEPetServices.Controllers
             return View();
         }
 
-        public IActionResult Index()
+        /*public IActionResult ServiceDetail()
         {
             return View();
-        }
+        }*/
 
         public async Task<IActionResult> ServiceDetail(int serviceCategoryId, int serviceIds)
         {
             ServiceDetailModel model = new ServiceDetailModel();
-           
-                HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
-                if (response.IsSuccessStatusCode)
+
+            HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                if (!string.IsNullOrEmpty(responseContent))
                 {
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    ServiceCategoryDTO servicecategory = JsonConvert.DeserializeObject<ServiceCategoryDTO>(responseContent);
+                    int serviceId = 0;
 
-                    if (!string.IsNullOrEmpty(responseContent))
+                    foreach (var sr in servicecategory.Services)
                     {
-                        ServiceCategoryDTO servicecategory = JsonConvert.DeserializeObject<ServiceCategoryDTO>(responseContent);
-                        int serviceId = 0;
-
-                        foreach (var sr in servicecategory.Services)
-                        {
-                            serviceId = sr.ServiceId;
-                            break;
-                        }
+                        serviceId = sr.ServiceId;
+                        break;
+                    }
 
                     if (serviceIds == 0)
                     {

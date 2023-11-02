@@ -14,7 +14,8 @@
             <h1 class="title">Dịch vụ cho thú cưng</h1>
             <div class="path">
                 <a href="/home">Home &ensp;</a> /
-                <p>&ensp; Rooms </p>
+                @*<a href="/Home/ServiceList">&ensp; Dịch vụ</a>*@
+                <p href="">&ensp; Dịch vụ </p>
             </div>
         </div>
         <div class="container">
@@ -153,7 +154,8 @@
                                                 <div class="image-container">
                                                     <img src="@room.Picture" class="image">
                                                 </div>
-                                                <a class="name" href="/Home/RoomDetail?roomId=">@room.SerCategoriesName</a>
+                                                @*=@serviceCategory.SerCategoriesId*@
+                                                <a class="name" href="~/Home/ServiceDetail?serviceCategoryId=@room.SerCategoriesId">@room.SerCategoriesName</a>
                                                 <div class="description">@description</div>
                                             </div>
                                         </div>
@@ -197,14 +199,14 @@
                                                 </div>
                                                 <div class="text-container">
                                                     <div>
-                                                        <a class="name" href="/Home/RoomDetail?roomId=">@room.SerCategoriesName</a>
+                                                        <a class="name" href="~/Home/ServiceDetail?serviceCategoryId=@room.SerCategoriesId">@room.SerCategoriesName</a>
                                                         <div class="description">@description</div>
                                                     </div>
                                                     <div>
-                                                        <a href="/Home/RoomDetail?roomId=">
+                                                        <a href="~/Home/ServiceDetail?serviceCategoryId=@room.SerCategoriesId">
                                                             <button class="detail">
                                                                 <span>Xem chi tiết</span>
-                                                            </button>
+                                                            </button>                      
                                                         </a>
                                                     </div>
                                                 </div>

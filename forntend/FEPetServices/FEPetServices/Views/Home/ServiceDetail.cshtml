@@ -1,4 +1,82 @@
-﻿<div>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Product Page</title>
+    <!-- css -->
+    <link rel="stylesheet" href="/css/ServiceDetail.css">
+</head>
+<body>
+    <div class="pagination">
+        <a href="/Home">Home  </a> ><a href="">Dịch Vụ </a> ><p>Sản Phẩm </p> 
+    </div>
+    <!-- product section -->
+    <section class="product-container">
+        <!-- left side -->
+        <div class="img-card">
+            <img src="@Model?.Service.Picture" alt="" id="featured-image"  class="small-Img">
+            <!-- small img -->
+            @*<div class="small-Card">
+                <img src="img/image-1.png" alt="" class="small-Img">
+                <img src="img/small-img-2.png" alt="" class="small-Img">
+                <img src="img/small-img-3.png" alt="" class="small-Img">
+                <img src="img/image-1.png" alt="" class="small-Img">
+            </div>*@
+        </div>
+        <!-- Right side -->
+        <div class="product-info">
+            <h3>@Model?.Service.ServiceName</h3>
+            <h5>Giá:@Model?.Service.Price</h5>
+            <p>@Model?.Service.Desciptions</p>
+
+            <div class="sizes">
+                <p>Phân Loại:</p>
+                 @foreach(var sr in Model?.ServiceCategory.Services)
+               {
+                <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sr.ServiceId" class="size-option">@sr.ServiceName</a>
+               }
+            </div>
+
+            <div class="quantity">
+                <button>Thêm vào giỏ</button>
+                <button>Mua ngay</button>
+            </div>
+
+         @*   <div>
+                <p>Delivery:</p>
+                <p>Free standard shipping on orders over $35 before tax, plus free returns.</p>
+                <div class="delivery">
+                    <p>TYPE</p> <p>HOW LONG</p> <p>HOW MUCH</p>
+                </div>
+                <hr>
+                <div class="delivery">
+                    <p>Standard delivery</p> 
+                    <p>1-4 business days</p> 
+                    <p>$4.50</p>
+                </div>
+                <hr>
+                <div class="delivery">
+                    <p>Express delivery</p> 
+                    <p>1 business day</p> 
+                    <p>$10.00</p>
+                </div>
+                <hr>
+                <div class="delivery">
+                    <p>Pick up in store</p> 
+                    <p>1-3 business days</p> 
+                    <p>Free</p>
+                </div>
+            </div>*@
+       </div>
+    </section>
+
+    <!-- script tags -->
+    <script src="js/cart.js"></script>
+</body>
+</html>
+
+@*<div>
     <p>@Model.Service.ServiceId</p>
 </div>
 <div>
@@ -6,4 +84,4 @@
     {
         <a href="~/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sr.ServiceId">@sr.ServiceId</a>
     }
-</div>
+</div>*@
