@@ -5,9 +5,11 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
+    [Authorize(Policy = "ManaOnly")]
     public class ProductController : Controller
     {
         private readonly HttpClient client = null;

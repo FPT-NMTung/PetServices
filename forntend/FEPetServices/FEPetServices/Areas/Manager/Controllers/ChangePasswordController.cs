@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
+    [Authorize(Policy = "ManaOnly")]
     public class ChangePasswordController : Controller
     {
         private readonly HttpClient _client = null;
