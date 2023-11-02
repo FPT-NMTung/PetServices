@@ -135,37 +135,16 @@ namespace PetServices.Controllers
             {
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
                 return BadRequest(errorMessage);
-            }
-            // check giá
-            if (roomDTO.Price == null)
-            {
-                string errorMessage = "Giá phòng không được để trống!";
-                return BadRequest(errorMessage);
-            }
-            /*if (!double.TryParse(roomDTO.Price.ToString(), out double price)) // lỗi
-            {
-                string errorMessage = "Giá phòng phải là một số!";
-                return BadRequest(errorMessage);
-            }*/
-            // check loại phòng
-            if (roomDTO.RoomCategoriesId == null)
-            {
-                string errorMessage = "Loại phòng không được để trống!";
-                return BadRequest(errorMessage);
-            }
-
+            }                       
+            // check loại phòng           
             var roomcategory = _context.RoomCategories.FirstOrDefault(r => r.RoomCategoriesId == roomDTO.RoomCategoriesId);
 
             if (roomcategory == null)
             {
                 string errorMessage = "Loại phòng không tồn tại!";
                 return BadRequest(errorMessage);
-            }
-            /*if (!int.TryParse(roomDTO.RoomCategoriesId.ToString(), out int categoryId))
-            {
-                string errorMessage = "Loại phòng không hợp lệ!";
-                return BadRequest(errorMessage);
-            }*/
+            }          
+
 
             try
             {
