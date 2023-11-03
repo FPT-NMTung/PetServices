@@ -100,7 +100,7 @@ namespace PetServices.Controllers
         [HttpGet("GetAllService")]
         public async Task<ActionResult> GetAllService()
         {
-            var listService = await _context.Services.ToListAsync();
+            var listService = await _context.Services.Where(r => r.Status == true).ToListAsync();
 
             return Ok(listService);
         }

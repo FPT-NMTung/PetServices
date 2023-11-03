@@ -210,20 +210,22 @@ input:checked + .slider:before {
 }
 
 .quantity-container .slot {
-    width: 100px;
+    width: 150px;
     text-align: center;
     border: 1px solid #ccc;
     background-color: #fff;
     color: #000;
+    height: 40px;   
 }
 
 .quantity-container .price {
-    width: 200px;
+    width: 150px;
     text-align: center;
     border: 1px solid #ccc;
     background-color: #fff;
     color: #000;
     border-bottom: 1px solid #ccc;
+    height: 40px;
 }
 .currency {
     position: absolute;
@@ -247,6 +249,23 @@ input:checked + .slider:before {
 .dequantity-btn {
     border-radius: 0px 0px 5px 5px;
 }
+
+.service-container{
+    display: flex;
+}
+
+.service-container div {
+    display: flex;
+    width: 25%;
+}
+
+    .service-container div label{
+        margin-right: -10px;
+    }
+
+    .service-container div p {
+        padding-top: 7px;
+    }
 
 .service-container input {
     display: none;

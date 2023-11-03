@@ -74,6 +74,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+               
                 HttpResponseMessage categoryResponse = await client.GetAsync("https://localhost:7255/api/ServiceCategory/GetAllServiceCategory");
 
                 if (categoryResponse.IsSuccessStatusCode)
