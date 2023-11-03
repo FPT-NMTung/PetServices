@@ -57,11 +57,13 @@
                                 <div class="number-control">
                                     <div style="display: flex;">
                                         <p>Từ</p>
-                                        <input type="number" name="pricefrom" class="number-quantity" value="@ViewBag.pricefrom" min="0">đ
+                                        <input type="number" name="pricefrom" class="number-quantity" value="@ViewBag.pricefrom" min="0">
+                                        <p>đ</p>
                                     </div>
                                     <div style="display: flex;">
-                                        <p>đến</p>
-                                        <input type="number" name="priceto" class="number-quantity" value="@ViewBag.priceto" min="0">đ
+                                        <p>Đến</p>
+                                        <input type="number" name="priceto" class="number-quantity" value="@ViewBag.priceto" min="0" style="text-transform: uppercase;">
+                                        <p>đ</p>
                                     </div>
                                 </div>
                                 <button>
@@ -125,7 +127,7 @@
                             <input type="hidden" name="viewstyle" value="@ViewBag.viewstyle" />
 
                             <label for="search">
-                                <input class="input" name="roomname" type="text" placeholder="Nhập tên phòng" value="@ViewBag.roomname">
+                                <input class="input" name="roomname" type="text" placeholder="Nhập tên phòng" value="@ViewBag.roomname" style="font-size: 15px;">
                                 <div class="fancy-bg"></div>
                                 <div class="search">
                                     <svg viewBox="0 0 24 24" aria-hidden="true" class="r-14j79pv r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-4wgw6l r-f727ji r-bnwqim r-1plcrui r-lrvibr">
@@ -299,6 +301,7 @@
             });
         });
 
+        // format url
         var currentUrl = window.location.href;
         var updatedUrl = currentUrl.replace(/&?(\w+)=(&|$)/g, '')
             .replace(/&&/g, '&')
