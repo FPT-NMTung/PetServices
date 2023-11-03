@@ -66,6 +66,9 @@
     --bs-code-color: #d63384;
     --bs-highlight-bg: #fff3cd;
 }
+a {
+    text-decoration:none;
+}
 
 .sidebar.collapsed:hover,
 .sidebar {
