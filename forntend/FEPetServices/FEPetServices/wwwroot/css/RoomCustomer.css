@@ -6,6 +6,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    margin-top: 95px;
 }
 
     .first .title {
@@ -45,6 +46,7 @@
 
     .price-container .number-control p {
         width: 10%;
+        font-size: 15px;
     }
 
 .price-container .number-quantity {
@@ -56,11 +58,11 @@
     margin-right: 5px;
 }
 
-    .containerLeft h3{
-        color: limegreen;
-    }
+.containerLeft h3 {
+    color: limegreen;
+}
 
-.containerprice{
+.containerprice {
     margin-bottom: 20px;
 }
 
@@ -71,42 +73,42 @@
         border: none;
         color: #FFFFFF;
         text-align: center;
-        font-size: 17px;
-        padding: 10px;
-        width: 35%;
+        font-size: 13px;
+        padding: 7px;
+        width: 90px;
         transition: all 0.5s;
         cursor: pointer;
         margin: 5px;
     }
 
-.containerprice button span {
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    transition: 0.5s;
-}
+        .containerprice button span {
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            transition: 0.5s;
+        }
 
-.containerprice button span:after {
-    content: '»';
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    right: -15px;
-    transition: 0.5s;
-}
+            .containerprice button span:after {
+                content: '»';
+                position: absolute;
+                opacity: 0;
+                top: 0;
+                right: -15px;
+                transition: 0.5s;
+            }
 
-.containerprice button:hover span {
-    padding-right: 15px;
-}
+        .containerprice button:hover span {
+            padding-right: 15px;
+        }
 
-.containerprice button:hover span:after {
-    opacity: 1;
-    right: 0;
-}
+            .containerprice button:hover span:after {
+                opacity: 1;
+                right: 0;
+            }
 
-    .containerRight {
-        width: 75%;
-    }
+.containerRight {
+    width: 75%;
+}
 
 .container1 {
     display: flex;
@@ -134,11 +136,11 @@
         height: 30px;
     }
 
-    .containerCate {
-        color: black;
-    }
+.containerCate {
+    color: black;
+}
 
-    .containerCate:hover{
+    .containerCate:hover {
         color: forestgreen;
     }
 
@@ -153,13 +155,18 @@
         width: 20px;
     }
 
+    .containerCate p{
+        margin-top: 4px;
+        font-size: 14px;
+    }
 
 
-        .container12 {
-            width: 60%;
-            display: flex;
-            justify-content: center;
-        }
+
+    .container12 {
+        width: 60%;
+        display: flex;
+        justify-content: center;
+    }
 
 #pageSize {
     color: #666;
@@ -239,10 +246,10 @@
     position: absolute;
 }
 
-.container12 .search {
-    fill: var(--text-color);
-    left: var(--inline-padding-of-input);
-}
+    .container12 .search {
+        fill: var(--text-color);
+        left: var(--inline-padding-of-input);
+    }
 
 .container12 svg {
     width: 17px;
@@ -323,7 +330,7 @@ a {
 
     .listRoom-grid .room .price {
         color: limegreen;
-        font-size: 23px;
+        font-size: 20px;
     }
 
     .listRoom-grid .room .name:hover {
@@ -335,14 +342,14 @@ a {
     padding-top: 20px;
 }
 
-    .listRoom-listview .block{
+    .listRoom-listview .block {
         margin-top: 20px;
         padding-bottom: 30px;
     }
 
-    .listRoom-listview .block .room {
-        display: flex;
-    }
+        .listRoom-listview .block .room {
+            display: flex;
+        }
 
     .listRoom-listview .room .image {
         width: 250px;
@@ -414,33 +421,33 @@ a {
                 transition: 0.5s;
             }
 
-        .listRoom-listview .text-container .detail:hover{
+        .listRoom-listview .text-container .detail:hover {
             background-color: limegreen;
         }
 
-        .listRoom-listview .text-container .detail:hover span {
-            padding-right: 15px;
-        }
+            .listRoom-listview .text-container .detail:hover span {
+                padding-right: 15px;
+            }
 
-    .listRoom-listview .text-container .detail:hover span:after {
-        opacity: 1;
-        right: 0;
-    }
+                .listRoom-listview .text-container .detail:hover span:after {
+                    opacity: 1;
+                    right: 0;
+                }
 
-        .pagination {
-            display: inline-block;
-            padding-bottom: 40px;
-        }
-
-.pagination a {
-    color: black;
-    float: left;
-    padding: 8px 16px;
-    text-decoration: none;
-    transition: background-color .3s;
-    border: 1px solid #ddd;
-    margin: 0 4px;
+.pagination {
+    display: inline-block;
+    padding-bottom: 40px;
 }
+
+    .pagination a {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+        border: 1px solid #ddd;
+        margin: 0 4px;
+    }
 
         .pagination a.active {
             background-color: #4CAF50;
@@ -460,4 +467,8 @@ a {
     color: #666;
     margin-right: 10px;
     font-size: 17px;
+}
+
+.first .path{
+    font-size: 20px;
 }

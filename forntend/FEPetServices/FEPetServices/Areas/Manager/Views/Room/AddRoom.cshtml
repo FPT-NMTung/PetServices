@@ -4,36 +4,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="~/css/Room.css">
     <link href="~/css/toastNotification.css" rel="stylesheet" />
-    <script>
-        function decreaseQuantity() {
-            var slotQuantity = parseInt(document.getElementById("Slot").value);
-            if (slotQuantity > 1) {
-                slotQuantity--;
-                document.getElementById("Slot").value = slotQuantity;
-            }
-        }
-
-        function increaseQuantity() {
-            var slotQuantity = parseInt(document.getElementById("Slot").value);
-            slotQuantity++;
-            document.getElementById("Slot").value = slotQuantity;
-        }
-    </script>
-    <script>
-        function decreasePrice() {
-            var priceQuantity = parseInt(document.getElementById("Price").value);
-            if (priceQuantity > 1) {
-                priceQuantity -= 10000;
-                document.getElementById("Price").value = priceQuantity;
-            }
-        }
-
-        function increasePrice() {
-            var priceQuantity = parseInt(document.getElementById("Price").value);
-            priceQuantity += 10000;
-            document.getElementById("Price").value = priceQuantity;
-        }
-    </script>
 </head>
 <body>
     <h1 style="font-size: 40px; font-weight: bold; text-align:center">Thêm phòng cho thú cưng</h1>
@@ -66,12 +36,7 @@
                 </div>
                 <div class="col-75">
                     <div class="quantity-container">
-                        <input type="text" class="price" id="Price" name="Price" placeholder="Giá tiền" required>
-                        <span class="currency">đ</span>
-                        <div class="quantityslot">
-                            <button type="button" class="dequantity-btn quantity-btn" onclick="decreasePrice()">-</button>
-                            <button type="button" class="inquantity-btn quantity-btn" onclick="increasePrice()">+</button>
-                        </div>
+                        <input type="number" class="slot" id="Slot" name="Slot" placeholder="Số lượng" min="0" required>&ensp; đ
                     </div>
                     <div style="color:red" class="error-message" id="price-error-message"></div>
                 </div>
@@ -82,11 +47,7 @@
                 </div>
                 <div class="col-75">
                     <div class="quantity-container">
-                        <input type="text" class="slot" id="Slot" name="Slot" placeholder="Số lượng" required>
-                        <div class="quantityslot">
-                            <button type="button" class="dequantity-btn quantity-btn" onclick="decreaseQuantity()">-</button>
-                            <button type="button" class="inquantity-btn quantity-btn" onclick="increaseQuantity()">+</button>
-                        </div>
+                        <input type="number" class="slot" id="Slot" name="Slot" placeholder="Số lượng" min="0" required>&ensp; đ
                     </div>
                     <div style="color:red" class="error-message" id="slot-error-message"></div>
                 </div>
@@ -101,8 +62,11 @@
                         {
                             @foreach (var service in ViewBag.services)
                             {
-                                <input type="checkbox" id="@service.Value" name="SelectedServices" value="@service.Value">
-                                <label for="@service.Value">@service.Text</label>
+                                <div>
+                                    <input type="checkbox" id="@service.Value" name="SelectedServices" value="@service.Value">
+                                    <label for="@service.Value"></label>
+                                    <p>@service.Text</p>
+                                </div>
                             }
                         }
                         else
