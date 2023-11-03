@@ -5,9 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="~/css/toastNotification.css" rel="stylesheet" />
-    <link href="~/css/menuCustomer.css" rel="stylesheet" />
-
-    <script src="~/js/takeAddress.js"></script>
 </head>
 <body>
     <div class="container light-style flex-grow-1 container-p-y">
@@ -28,20 +25,18 @@
                 <div class="col-md-9">
                     <div class="tab-content">
                         <div class="tab-pane fade active show" id="account-general">
-                            <div class="card-body media align-items-center">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="d-block ui-w-80">
+                            <div style="padding:1rem 0;" class="card-body media align-items-center">
+                                <img style="height:60px;width:58px;margin:0.5rem;" src="@Model?.UserInfo.ImageUser" alt="" class="d-block ui-w-80">
                                 <div class="media-body ml-3">
-                                    <label class="btn btn-outline-primary">
-                                        Upload new photo
-                                        <input type="file" class="account-settings-fileinput">
-                                    </label> &nbsp;
-                                    <button type="button" class="btn btn-default md-btn-flat">Reset</button>
-
-                                    <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                                    <div class="text-light small mt-1">JPG hoặc PNG không vượt quá 5 MB</div>
                                 </div>
                             </div>
 
-                            <form method="post" asp-controller="MenuCustomer" asp-action="Information" style="margin-right:10px">
+                            <form method="post" asp-controller="MenuCustomer" asp-action="Information" style="margin-right:10px" enctype="multipart/form-data">
+                                <div>
+                                    <label for="image"></label>
+                                    <input class="btn btn-outline-primary" type="file" id="image" name="image" enctype="multipart/form-data">
+                                </div> &nbsp;
                                 <div class="row gx-3 mb-3">
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputFirstName">Họ</label>
@@ -95,7 +90,8 @@
                                 <input type="hidden" name="Province" id="provinceNameInput" />
                                 <input type="hidden" name="District" id="districtNameInput" />
                                 <input type="hidden" name="Commune" id="wardsNameInput" />
-                                <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
+
+                                <button style="margin-bottom:2%;" class="btn btn-primary" type="submit">Lưu thay đổi</button>
                             </form>
 
                         </div>
@@ -105,60 +101,8 @@
             </div>
         </div>
     </div>
-    <div id="toast"></div>
-    @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showSuccessToast();
-            });
-        </script>
-    }
-    @if (!string.IsNullOrEmpty(TempData["ErrorToast"] as string))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showErrorToast();
-            });
-        </script>
-    }
-    @if (!string.IsNullOrEmpty(TempData["SuccessLoginToast"] as string))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showSuccessLoginToast();
-            });
-        </script>
-    }
 </body>
     <script src="~/js/takeAddress.js"></script>
     <script src="~/js/toastnotification.js"></script>
     <script src="~/js/checkpassword.js"></script>
-    <script>
-        function showSuccessToast() {
-            toast({
-                title: 'Thành công',
-                message: '@TempData["SuccessToast"]',
-                type: 'success',
-                duration: 2000
-            });
-        }
-        function showErrorToast() {
-            toast({
-                title: 'Thất bại',
-                message: '@TempData["ErrorToast"]',
-                type: 'error',
-                duration: 2000
-            });
-        }
-        function showSuccessLoginToast() {
-            toast({
-                title: 'Thành công',
-                message: '@TempData["SuccessLoginToast"]',
-                type: 'success',
-                duration: 2000
-            });
-        }
-
-    </script>
 </html>
