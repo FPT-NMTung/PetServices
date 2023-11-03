@@ -1,0 +1,67 @@
+﻿<link rel="stylesheet" href="/css/Blog/AddBlog.css"></link>
+
+<head>
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+         tinymce.init({
+            selector: 'textarea#tiny',
+            plugins: [
+                'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
+            ],
+            toolbar: 'undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify |' +
+                'bullist numlist checklist outdent indent | removeformat | code table help'
+        });
+    </script>
+</head>
+<body>
+<div class="title">
+    <h1>Tạo Bài Viết Mới</h1>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <form asp-action="EditBlog" method="post"  enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="PageTile">Tên bài viết:</label>
+          <input type="text" class="form-control" name="PageTile" value="@Model?.PageTile" placeholder="Tên bài viết"/>
+        </div>
+        <div class="form-group">
+          <label>Tiêu đề bài viết:</label>
+          <input type="text" class="form-control" name="Heading" value="@Model?.Heading" placeholder="Tiêu đề bài viết"/>
+        </div>
+        <div class="form-group">
+          <label>Mô tả:</label>
+          <input type="text" class="form-control" name="Description" value="@Model?.Description" placeholder="Mô tả"/>
+        </div>
+        <div class="form-group">
+          <label for="PublisheDate">Ngày đăng:</label>
+          <input type="datetime" class="form-control" name="PublisheDate" value="@Model.PublisheDate" />
+
+        </div>
+        <div class="form-group">
+          <label>Ảnh:</label>
+          <div class="input-group">
+            <input type="file" name="image" class="form-control">
+           </div>
+        </div>
+        <div class="form-group">
+            <label>Nội dung:</label>
+          <textarea class="form-control" id="tiny" name="Content">@Model?.Content</textarea>
+        </div>
+        <div class="form-group">
+            <div class="row">
+            <div class="sub">
+            <a href="/Manager/Blog"><input value="Trở Lại" class="btn btn-primary form-control"/></a>
+            </div>
+            <div class="sub">
+               <input type="submit" name="Submit" value="Lưu" class="btn btn-primary form-control" />
+            </div>
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
