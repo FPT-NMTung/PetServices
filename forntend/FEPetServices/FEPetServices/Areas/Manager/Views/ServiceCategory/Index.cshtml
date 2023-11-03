@@ -23,11 +23,12 @@
                 "info": true,
                 "autoWidth": false,
                 "columnDefs": [
-                    { "targets": [0], "width": "5%" },
+                     { "targets": [0], "width": "5%" },
                     { "targets": [1], "width": "20%" },
-                    { "targets": [2], "width": "35%" },
-                    { "targets": [3], "width": "25%" }, // Điều chỉnh cột này để khớp với số cột thực tế
-                    { "targets": [4], "width": "15%" }, 
+                    { "targets": [2], "width": "30%" },
+                    { "targets": [3], "width": "20%" }, 
+                    { "targets": [4], "width": "15%" },
+                    { "targets": [5], "width": "10%" }, 
                 ],
                 "language": {
                     "lengthMenu": "Hiển thị _MENU_ dòng",
@@ -64,6 +65,7 @@
             <th>Tên dịch vụ</th>
             <th>Mô tả</th>
             <th>Ảnh</th>
+            <Th>Trạng thái</Th>
             <th>Chi tiết</th>
         </tr>
     </thead>
@@ -71,15 +73,37 @@
          @if (Model != null && Model.Count > 0)
         {
             int itemCount = 0;
+            
             foreach (var servicecategory in Model)
             {
                 itemCount++;
+                string description = servicecategory.Desciptions;
+
+                    if (description != null)
+                    {
+                        if (description.Length > 100)
+                        {
+                            int lastSpace = description.LastIndexOf(' ', 100);
+
+                            description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                        }
+                    }
                 <tr>
                     <td>@itemCount</td>
                     <td>@servicecategory.SerCategoriesName</td>
-                    <td>@servicecategory.Desciptions</td>
+                    <td>@description</td>
                     <td><img src="@servicecategory.Picture" width="50" height="50"></td>
-
+                    <td>
+                        @if (@servicecategory.Status)
+                        {
+                            <button class="btn btn-active"
+                            >Đang hoạt động</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-inactive" >Ngưng hoạt động</button>
+                        }
+                    </td>
                     <td>
                         <a href="/Manager/ServiceCategory/EditServiceCategory?serCategoriesId=@servicecategory.SerCategoriesId">Chi tiết</a>
                     </td>
@@ -89,4 +113,22 @@
         }
     </tbody>
 </table>
+<style>
+    .btn-active {
+        background-color: #43e240;
+        color: white;
+        font-size: 13px;
+        width: 135px;
+        height: 40px;
+        border-radius: 5px;
+    }
 
+    .btn-inactive {
+        background-color: #f2110d;
+        color: white;
+        font-size: 13px;
+        width: 135px;
+        height: 40px;
+        border-radius: 5px;
+    }
+</style>
