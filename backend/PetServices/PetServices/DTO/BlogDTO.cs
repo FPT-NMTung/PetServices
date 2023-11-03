@@ -3,7 +3,7 @@
     public class BlogDTO
     {
         public int BlogId { get; set; }
-        public string?PageTile { get; set; }
+        public string? PageTile { get; set; }
         public string? Heading { get; set; }
         public string?  Description { get; set; }
         public string? Content { get; set; }
