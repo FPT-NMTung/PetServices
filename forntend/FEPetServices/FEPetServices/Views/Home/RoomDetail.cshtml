@@ -39,7 +39,7 @@
                                 foreach (var service in ViewBag.ServiceAvailable)
                                 {
                                     <div class="part1-serviceName-title">
-                                        <img src="/img/availableIcon.png" />
+                                        <img src="~/img/icon/availableIcon.png" />
                                         <p>@service.Text</p>
                                     </div>
                                 }
@@ -65,7 +65,7 @@
                     foreach (var service in ViewBag.ServiceUnavailable)
                     {
                         <div class="part2-serviceName-title">
-                            <img src="/img/unavailableIcon.png" style="width: 20px; height: 20px;" />
+                            <img src="~/img/icon/unavailableIcon.png" style="width: 20px; height: 20px;" />
                             <div>
                                 <p>@service.ServiceName</p>
                                 <p class="service-name-price">@service.Price đ</p>
@@ -106,7 +106,7 @@
                             </span>
                         </div>
                     </div>
-                    <img src="/img/icon-.png">
+                    <img src="~/img/icon/icon-.png">
                     <div class="form-group">
                         <label for='end-datetime'>Ngày và giờ kết thúc:</label>
                         <div class='input-group date' id='end-datetime'>
