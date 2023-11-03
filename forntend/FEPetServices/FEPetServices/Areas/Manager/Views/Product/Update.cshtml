@@ -12,7 +12,7 @@
                         <label for="image">Ảnh:</label>
                     </div>
                     <div class="typeinput">
-                        <input type="file" class="form-control" id="image" name="image" onchange="changeImageSource()" required>
+                        <input type="file" class="form-control" id="image" name="image" onchange="changeImageSource()" >
                         @if (!string.IsNullOrEmpty(Model?.Picture))
                         {
                             <img class="form-control-anh" src="@Model?.Picture" height="50%" width="50%" style="float: left;" id="imagePreview" />

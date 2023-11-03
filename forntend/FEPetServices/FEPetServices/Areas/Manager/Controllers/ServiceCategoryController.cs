@@ -6,10 +6,11 @@ using System.Text.Json;
 using PetServices.Models;
 using System.Security.Claims;
 using FEPetServices.Areas.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
-    /*[Authorize(Roles = "MANAGER")]*/
+    [Authorize(Policy = "ManaOnly")]
     public class ServiceCategoryController : Controller
     {
         private readonly HttpClient client = null;

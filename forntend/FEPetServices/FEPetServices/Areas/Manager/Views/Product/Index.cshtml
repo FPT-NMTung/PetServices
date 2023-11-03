@@ -1,8 +1,6 @@
 ﻿<link href="~/css/toastNotification.css" rel="stylesheet" />
 <link href="~/css/datatable.css" rel="stylesheet" />
 <link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
-
-@section Scripts {
     <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
@@ -53,7 +51,6 @@
 
         });
     </script>
-}
 
 <h1>Danh Sách Sản Phẩm Cho Thú Cưng</h1>
 
@@ -72,8 +69,6 @@
         @if (Model != null && Model.Count > 0)
         {
             int itemCount = 0;
-
-            
             @foreach (var product in Model)
             {
                 string description = product.Desciption;
@@ -109,15 +104,6 @@
             </tr>
         }
     </tbody>
-    <tfoot>
-        @if (ViewBag.ErrorMessage != null)
-        {
-            <div class="alert alert-danger">
-                <span style="color:red">@ViewBag.ErrorMessage</span>
-            </div>
-        }
-    </tfoot>
-
 </table>
 <style>
     .switch {

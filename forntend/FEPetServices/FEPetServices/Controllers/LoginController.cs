@@ -68,8 +68,8 @@ namespace FEPetServices.Controllers
                             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                            HttpContext.Session.SetString("UserName", loginResponse.UserName);
-                            HttpContext.Session.SetString("UserImage", loginResponse.UserImage);
+                            HttpContext.Session.SetString("UserName", loginResponse.UserName == null ? "-a": loginResponse.UserName);
+                            HttpContext.Session.SetString("UserImage", loginResponse.UserImage == null ? "-a" : loginResponse.UserImage);
                             // Redirect based on the role
                             if (roleName == "MANAGER")
                             {
@@ -85,6 +85,11 @@ namespace FEPetServices.Controllers
                             {
                                 TempData["SuccessLoginToast"] = "Đăng nhập thành công.";
                                 return RedirectToAction("Index", "Information", new { area = "Partner" });
+                            }
+                            else if (roleName == "ADMIN")
+                            {
+                                TempData["SuccessLoginToast"] = "Đăng nhập thành công.";
+                                return RedirectToAction("Index", "Account", new { area = "Admin" });
                             }
                         }
                         else
