@@ -191,7 +191,8 @@ namespace PetServices.Controllers
                 await _context.Rooms.AddAsync(newRoom);
                 await _context.SaveChangesAsync();
 
-                return Ok(_mapper.Map<RoomDTO>(newRoom));
+                /*return Ok(_mapper.Map<RoomDTO>(newRoom));*/
+                return Ok("Thêm phòng thành công!");
             }
             catch (Exception ex)
             {

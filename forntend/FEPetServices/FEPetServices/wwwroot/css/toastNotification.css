@@ -73,6 +73,14 @@
     cursor: pointer;
 }
 
+.toast:not(.showing):not(.show) {
+    opacity: 1;
+}
+
+.toast:not(.show) {
+     display: flex; 
+}
+
 .toast--success {
     border-color: #47d864;
     opacity: 1;

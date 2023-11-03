@@ -9,8 +9,8 @@
     <title>HASH TECHIE OFFICIAL</title>
     <link href="~/css/Login.css" rel="stylesheet"/>
 </head>
-<body>
-    <section>
+<body id="login-page">
+    <div class="login-page">
         <div class="form-box">
             <div class="form-value">
                 <form class="login-form" method="post">
@@ -26,7 +26,7 @@
                         <label for="">Mật khẩu</label>
                     </div>
                     <div class="forget">
-                        <label for=""><input type="checkbox">Ghi nhớ tài khoản  </label>
+                        <label for=""><input type="checkbox" class="checkbox-memo">Ghi nhớ tài khoản  </label>
                         <label>
                             <a href="~/ForgotPassword/Index">Quên mật khẩu</a>
                             @*<a href="#">Quên mật khẩu</a>*@
@@ -44,6 +44,25 @@
             </div>
         </div>
     </section>
+
+        <div id="toast"></div>
+            @if (!string.IsNullOrEmpty(ViewBag.SuccessToast))
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    showSuccessToast();
+                });
+            </script>
+        }
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorToast))
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    showErrorToast();
+                });
+            </script>
+        }
+    </div>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://smtpjs.com/v3/smtp.js"></script>

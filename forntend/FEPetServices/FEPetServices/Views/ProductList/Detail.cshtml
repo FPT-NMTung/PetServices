@@ -1,0 +1,80 @@
+﻿@{
+        ViewData["Title"] = "Detail";
+}
+@*<head>
+    <div class="jumbotron jumbotron-bg text-center rounded-0" style="background-image: url('https://i0.wp.com/thatnhucuocsong.com.vn/wp-content/uploads/2022/01/Hinh-nen-Cho-1.jpg?ssl\u003d1');">
+    </div>
+</head>*@
+<link href="~/css/detailproduct.css" rel="stylesheet" />
+
+<body>
+    <div id="content-detail">
+        <div id="product">
+            <div id="product-name">
+                <h2>@Model.ProductName</h2>
+                <div class="row product-detail">
+                    <div class="col-sm-6 product-detail-left">
+                        <div>
+                            <div id="product-img" class="imga">
+                                <img id="mainImage" src="@Model.Picture" />
+                            </div>
+                            @*<div id="product-img-items">
+                                <div><a href="#"><img src="@Model.Picture" onclick="changeMainImage(this)" /></a></div>
+                                <div><a href="#"><img src="@Model.Picture" onclick="changeMainImage(this)" /></a></div>
+                                <div><a href="#"><img src="@Model.Picture" onclick="changeMainImage(this)" /></a></div>
+                                <div><a href="#"><img src="@Model.Picture" onclick="changeMainImage(this)" /></a></div>
+                            </div>*@
+                            <script src="~/js/changeimage.js"></script>
+                            
+                        </div>
+                    </div>
+                    <div class="col-sm-6 product-detail-right">
+                        <div>
+                            <div class="info-detail">
+                                <div id="info-detail-title">
+                                    <h2>Thông Tin Sản Phẩm</h2>
+                                    <div style="margin:10px auto;">
+                                        @Model.Desciption
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="product-detail-right-content">
+                                <div id="product-price">@Model.Price VND</div>
+                                <div id="product-status" style="font-size : 25px">
+                                    @if (Model.Status == false || Model.Quanlity <= 0)
+                                    {
+                                        <span style="color: red;">Hết hàng</span>
+                                    }
+                                    else if (Model.Status == true || Model.Quanlity > 0)
+                                    {
+                                        <span style="color: green;">Còn hàng</span>
+                                    }
+                                </div>
+                                <div id="product-detail-buttons">
+                                  
+                                    @if (Model.Status == false || Model.Quanlity <= 0)
+                                    {
+                                      <div id="product-detail-button" style=" text-align:center">
+                                        <a href="#"  ><input style="background-color:#fff ; color:red;" type="button" value="Hết Hàng"></a>
+                                    </div>  
+                                    }else{
+                                    <div id="product-detail-button">
+                                        <a asp-page="/Product/Cart" asp-page-handler="buynow" asp-route-id="@Model.ProductId"><input type="button" value="BUY NOW"></a>
+                                        <a asp-page="/Product/ProductDetail" asp-page-handler="addtocart" asp-route-id="@Model.ProductId"><input type="button" value="ADD TO CART" style="background-color: #fff; color:red;border: 1px solid gray;"></a>
+                                    </div>
+                                     @*   </div>*@
+                                    }
+                                
+                                    </div>
+                               
+                                </div>
+                                <span style="color:green">@ViewData["successmess"]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>

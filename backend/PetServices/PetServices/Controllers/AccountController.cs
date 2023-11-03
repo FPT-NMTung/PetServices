@@ -62,16 +62,17 @@ namespace PetServices.Controllers
 
             var result = await _context.Accounts
                 .Include(a => a.Role)
+                .Include(a => a.UserInfo)
                 .SingleOrDefaultAsync(x => x.Email == login.Email && x.Password == login.Password);
 
             if (result != null)
             {
                 var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, login.Email),
-                new Claim(ClaimTypes.Role, result.Role?.RoleName),
-                new Claim("RoleId", result.Role?.RoleId.ToString())
-            };
+                {
+                    new Claim(ClaimTypes.Name, login.Email),
+                    new Claim(ClaimTypes.Role, result.Role?.RoleName),
+                    new Claim("RoleId", result.Role?.RoleId.ToString()),
+                };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -84,7 +85,9 @@ namespace PetServices.Controllers
                     signingCredentials: creds
                 );
 
-                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName });
+                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName, Status= result.Status,
+                UserName = result?.UserInfo.FirstName +" " + result?.UserInfo.LastName, UserImage = result?.UserInfo.ImageUser
+                });
             }
             else
             {
@@ -363,7 +366,7 @@ namespace PetServices.Controllers
                 return BadRequest(errorMessage);
             }
             string commune = registerDto.Commune;
-            if (!Regex.IsMatch(district, "^[a-zA-ZÀ-Ỹà-ỹ ]+$"))
+            if (!Regex.IsMatch(commune, "^[a-zA-ZÀ-Ỹà-ỹ ]+$"))
             {
                 string errorMessage = "Xã chỉ chấp nhận các ký tự văn bản và không được chứa ký tự đặc biệt hoặc số.";
                 return BadRequest(errorMessage);

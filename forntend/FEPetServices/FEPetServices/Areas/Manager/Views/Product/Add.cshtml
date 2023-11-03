@@ -2,19 +2,8 @@
     ViewData["Title"] = "Thêm Sản Phẩm";
 }
 <h1 style="text-align:center">Thêm Sản Phẩm Mới</h1>
-@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-{
-    <div class="alert alert-danger" style="color:red">
-        @ViewBag.ErrorMessage
-    </div>
-}
-@if (!string.IsNullOrEmpty(TempData["SuccessMessage"]?.ToString()))
-{
-    <div class="alert alert-success" style="color:red">
-        @TempData["SuccessMessage"]
-    </div>
-}
 <link href="~/css/manager/product.css" rel="stylesheet" />
+<link href="~/css/toastNotification.css" rel="stylesheet" />
 <script src="~/js/manager/product.js"></script>
 <div class="container-add-new">
     <form asp-action="Add" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">

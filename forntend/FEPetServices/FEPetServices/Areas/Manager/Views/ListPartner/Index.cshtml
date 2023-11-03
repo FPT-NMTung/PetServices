@@ -14,7 +14,7 @@
         <h1>Dánh sách đối tác</h1>
     </div>
     <div>
-        <table id="orders">
+        <table id="lists">
             <thead>
                 <tr>
                     <th>No.</th>
@@ -43,14 +43,6 @@
                     }
                 }
             </tbody>
-            <tfoot>
-                @if (!string.IsNullOrEmpty(TempData["ErrorLoadingDataToast"] as string))
-                {
-                    <div class="alert alert-danger">
-                        <span style="color:red">@TempData["ErrorLoadingDataToast"]</span>
-                    </div>
-                }
-            </tfoot>
         </table>
     </div>
 </body>
@@ -67,7 +59,7 @@
     <script>
         $(document).ready(function () {
             // Khởi tạo DataTables
-        var table = $('#orders').DataTable({
+        var table = $('#lists').DataTable({
                 "paging": true,
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "searching": true,
