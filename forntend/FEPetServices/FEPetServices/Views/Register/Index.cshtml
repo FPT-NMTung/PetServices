@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="~/css/Register.css">
 </head>
 <body>
-    <section>
+    <div class="section-register">
         <div class="form-box">
             <div class="form-value">
                 <form asp-controller="Register" asp-action="Index" class="login-form" method="post">
@@ -39,7 +39,7 @@
                         <div class="inputbox">
                             <ion-icon name="lock-closed-outline"></ion-icon>
                             <input asp-for="Password" type="password" required>
-                        <label for="">Mật khẩu</label>
+                            <label for="">Mật khẩu</label>
                         </div>
                         <button id="registerButton">Đăng ký</button>
                         <div class="register">
@@ -48,6 +48,6 @@
                 </form>
             </div>
         </div>
-    </section>
+    </div>
 </body>
 </html>
