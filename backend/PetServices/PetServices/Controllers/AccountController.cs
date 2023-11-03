@@ -336,7 +336,7 @@ namespace PetServices.Controllers
             {
                 string errorMessage = "Tên chỉ chấp nhận các ký tự văn bản và không được chứa ký tự đặc biệt hoặc số.";
                 return BadRequest(errorMessage);
-            }        
+            }
             // check Tỉnh
             if (string.IsNullOrWhiteSpace(registerDto.Province))
             {
@@ -373,7 +373,7 @@ namespace PetServices.Controllers
                 string errorMessage = "Xã chỉ chấp nhận các ký tự văn bản và không được chứa ký tự đặc biệt hoặc số.";
                 return BadRequest(errorMessage);
             }
-            
+
             // trùng email
             if (_context.Accounts.Any(a => a.Email == registerDto.Email))
             {
