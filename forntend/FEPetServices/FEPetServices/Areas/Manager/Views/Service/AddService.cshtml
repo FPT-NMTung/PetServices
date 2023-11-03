@@ -32,7 +32,7 @@
         <label for="Price">Giá:</label>
       </div>
       <div class="col-75">
-        <input type="text" id="Price" name="Price" placeholder="Giá tiền" required>
+        <input type="number" id="Price" name="Price" placeholder="Giá tiền" required>
         <div style="color:red" class="error-message" id="price-error-message"></div> 
       </div>
     </div>
@@ -41,7 +41,7 @@
         <label for="SerCategoriesId">Loại Dịch Vụ</label>
       </div>
       <div class="col-75">
-          @if (ViewBag.Categories != null){
+         @if (ViewBag.Categories != null){
          <select id="SerCategoriesId" name="SerCategoriesId" required>
             <option value="">Select a Service Category</option>
             @foreach (var category in ViewBag.Categories)
@@ -64,11 +64,11 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-25">
-        <a type="submit" value="Cancel" href="/Manager/Service" class="cancel">Cancel</a>
+      <div class="btn-group col-2">
+         <a class="btn btn-primary btn_a" type="submit" value="Cancel" href="~/Manager/Service" class="cancel">Trở lại</a>
       </div>
-      <div class="col-75">
-        <input type="submit" value="Submit">
+      <div class="col-10">
+        <input class="btn btn-primary" type="submit" value="Thêm mới dịch vụ">
       </div>
     </div>
   </form>
