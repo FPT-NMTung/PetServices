@@ -390,7 +390,7 @@ namespace PetServices.Controllers
             await _context.Accounts.AddAsync(newAccount);
             await _context.SaveChangesAsync();
 
-            var partner = new PartnerInfo
+            newAccount.PartnerInfo = new PartnerInfo
             {
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
@@ -404,7 +404,7 @@ namespace PetServices.Controllers
 
             };
 
-             _context.PartnerInfos.Add(partner);
+            _context.Update(newAccount);
             await _context.SaveChangesAsync();
 
             return Ok("Đăng ký thành công! Vui lòng chờ đợi quản lý xác nhận tài khoản của bạn trước khi đăng nhập");
