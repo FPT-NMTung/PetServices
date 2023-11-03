@@ -270,7 +270,7 @@ namespace UnitTest
 
         [Fact]
         // 7. RoomCategories(không tồn tại)
-        public async Task Test_AddProduct_Price_NotExist()
+        public async Task Test_AddProduct_RoomCategories_NotExist()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
