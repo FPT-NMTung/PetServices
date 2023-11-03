@@ -1,122 +1,7 @@
-﻿<style>
-    h1 {
-        text-align: center;
-    }
-
-    #RoomCategory {
-        width: 100%;
-        margin-top: 30px;
-        border-collapse: collapse;
-        background-color: white;
-    }
-
-        #RoomCategory th,
-        #RoomCategory td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        #RoomCategory th {
-            background-color: #f2f2f2;
-        }
-
-    .future-status {
-        color: gray;
-    }
-
-    .complete-status {
-        color: green;
-    }
-
-    .dataTables_wrapper .dataTables_filter {
-        float: right;
-        margin-bottom: 10px;
-    }
-
-    .btn-add {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-        border-radius: 4px;
-        background-color: #E21033;
-        border: none;
-        color: white;
-        padding: 7px 10px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 0px 10px;
-        cursor: pointer;
-        float: right;
-        margin-right: 30px;
-        margin-bottom: 20px;
-    }
-
-        .btn-add:hover {
-            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-            background-color: #ff6347;
-        }
-
-    .dataTables_wrapper .dataTables_filter input[type="search"] {
-        margin-left: 10px;
-        background-color: white;
-    }
-
-    .dataTables_wrapper {
-        margin: 30px;
-    }
-
-    .btn-active {
-        background-color: #43e240;
-        color: white;
-        font-size: 13px;
-        width: 135px;
-        height: 40px;
-        border-radius: 5px;
-    }
-
-    .btn-inactive {
-        background-color: #f2110d;
-        color: white;
-        font-size: 13px;
-        width: 135px;
-        height: 40px;
-        border-radius: 5px;
-    }
-
-    .btn-detail {
-        text-align: center;
-        border-radius: 5px;
-        font-size: 15px;
-        color: white;
-        display: inline-block;
-        padding: 8px;
-        border: 1px solid ;
-        width: 100px;
-        height: 40px;
-        background-color: #E21033;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .btn-detail:hover{
-            color: black;
-        }
-
-    /*.bg {
-        background-color: #FFD6E4;
-        position: absolute;
-        top: 60px;
-        left: 0px;
-        right: 0px;
-    }*/
-</style>
-
+﻿<link href="~/css/toastNotification.css" rel="stylesheet" />
+<link href="~/css/datatable.css" rel="stylesheet" />
 <link href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
-<link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
-
-
-@section Scripts {
+<link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
     <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
@@ -129,7 +14,8 @@
 
     <script>
         $(document).ready(function () {
-            var table = $('#RoomCategory').DataTable({
+            // Khởi tạo DataTables
+            var table = $('#lists').DataTable({
                 "paging": true,
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "searching": true,
@@ -157,24 +43,26 @@
                 },
             });
 
-            var addRoomCategoryButton = $('<button id="addRoomCategoryButton" class="btn btn-add btn-primary">Thêm loại phòng</button>');
-            $('.dataTables_filter').append(addRoomCategoryButton);
+            // Thêm nút "Thêm dịch vụ" bên cạnh thanh tìm kiếm
+            var addServiceButton = $('<button id="addServiceButton" class="btn btn-primary">Thêm dịch vụ</button>');
+            $('.dataTables_filter').append(addServiceButton);
 
-            $('#addRoomCategoryButton').on('click', function () {
-                window.location.href = '/Manager/Blog/AddBlog';
+            // Đính kèm sự kiện click cho nút "Thêm dịch vụ"
+            $('#addServiceButton').on('click', function () {
+                // Navigate to the "addservicecategory" page
+                window.location.href = '/Manager/Blog/AddBlog'; // Update this URL as needed
             });
 
         });
     </script>
-}
-<div class="bg">
-<h1 style="font-size: 40px; font-weight: bold; margin-top: 10px">Danh sách các loại phòng cho thú cưng</h1>
 
-<table id="RoomCategory" class="display">
+<h1>Danh sách dịch vụ cho thú cưng</h1>
+
+<table id="lists" class="display">
     <thead>
         <tr>
-            <th>STT</th>
-            <th>Tiêu đề Bài Viết</th>
+            <th>No.</th>
+            <th>Tên bài viết</th>
             <th>Mô tả</th>
             <th>Ảnh</th>
             <th>Trạng thái</th>
@@ -182,27 +70,31 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model != null && Model.Count > 0)
+         @if (Model != null && Model.Count > 0)
         {
             int itemCount = 0;
-            foreach (var blog in Model)
+            foreach (var service in Model)
             {
                 itemCount++;
-                    string description = blog.Description;
+                string description = service.Description;
 
-                    if (description.Length > 100)
+                    if (description != null)
                     {
-                        int lastSpace = description.LastIndexOf(' ', 100);
+                        if (description.Length > 100)
+                        {
+                            int lastSpace = description.LastIndexOf(' ', 100);
 
-                        description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                            description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                        }
                     }
                 <tr>
                     <td>@itemCount</td>
-                    <td>@blog.PageTile</td>
+                    <td>@service.PageTile</td>
                     <td>@description</td>
-                    <td><img src="@blog.ImageUrl" width="50" height="50"></td>
-                   @* <td>
-                        @if (@roomCategory.Status)
+                    <td><img src="@service.ImageUrl" width="50" height="50"></td>
+                    <td></td>
+                    @*<td>
+                        @if (@service.Status)
                         {
                             <button class="btn btn-active" onclick="toggleStatus(this)">Đang hoạt động</button>
                         }
@@ -211,27 +103,31 @@
                             <button class="btn btn-inactive" onclick="toggleStatus(this)">Ngưng hoạt động</button>
                         }
                     </td>*@
-                    <td></td>
                     <td>
-                        <a class="btn-detail" href="/Manager/Blog/EditBlog?blogId=@blog.BlogId">Chi tiết</a>
+                        <a href="/Manager/Blog/EditBlog?blogId=@service.BlogId">Chi tiết</a>
                     </td>
+                    
                 </tr>
             }
         }
-        else
-        {
-            <tr>
-                <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
-            </tr>
-        }
     </tbody>
-    <tfoot>
-        @if (ViewBag.ErrorMessage != null)
-        {
-            <div class="alert alert-danger">
-                <span style="color:red">@ViewBag.ErrorMessage</span>
-            </div>
-        }
-    </tfoot>
 </table>
-</div>
+<style>
+    .btn-active {
+        background-color: #43e240;
+        color: white;
+        font-size: 13px;
+        width: 135px;
+        height: 40px;
+        border-radius: 5px;
+    }
+
+    .btn-inactive {
+        background-color: #f2110d;
+        color: white;
+        font-size: 13px;
+        width: 135px;
+        height: 40px;
+        border-radius: 5px;
+    }
+</style>
