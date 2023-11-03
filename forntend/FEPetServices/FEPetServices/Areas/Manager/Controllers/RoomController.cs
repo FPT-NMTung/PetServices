@@ -7,9 +7,11 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
+    [Authorize(Policy = "ManaOnly")]
     public class RoomController : Controller
     {
         private readonly HttpClient client = null;
@@ -50,6 +52,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     {
                         TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                         var roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(responseContent);
+
                         return View(roomList);
                     }
                     else

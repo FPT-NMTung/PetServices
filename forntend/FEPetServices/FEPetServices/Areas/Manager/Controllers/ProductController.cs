@@ -5,9 +5,11 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
+    [Authorize(Policy = "ManaOnly")]
     public class ProductController : Controller
     {
         private readonly HttpClient client = null;
@@ -56,7 +58,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
             }
             return View();
         }
@@ -64,7 +66,6 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-
                 HttpResponseMessage proCateResponse = await client.GetAsync("https://localhost:7255/api/ProductCategory/GetAll");
                 if (proCateResponse.IsSuccessStatusCode)
                 {
@@ -87,12 +88,12 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TempData["SuccessToast"] = "Thêm dịch vụ thành công!";
+                        TempData["SuccessToast"] = "Thêm sản phẩm thành công!";
                         return View(pro); // Chuyển hướng đến trang thành công hoặc trang danh sách
                     }
                     else
                     {
-                        ViewBag.ErrorToast = "Thêm dịch vụ thất bại. Vui lòng thử lại sau.";
+                        TempData["ErrorToast"] = "Thêm sản phẩm thất bại. Vui lòng thử lại sau.";
                         return View(pro); // Hiển thị lại biểu mẫu với dữ liệu đã điền
                     }
                 }
@@ -103,7 +104,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
                 return View(pro); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
         }
@@ -136,7 +137,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
                 else
                 {
-                    ViewBag.ErrorToast = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                    TempData["ErrorToast"] = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
                 }
                 if (Request.Form["Status"] == "on")
                 {
@@ -149,7 +150,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
             }
             return View();
         }

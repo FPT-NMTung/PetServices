@@ -1,14 +1,37 @@
-﻿/*body {
-    background-color: #FFD6E4;
-}*/
-
-.title {
-    font-size: 45px;
-    font-weight: bold;
-    padding-top: 20px;
-    padding-bottom: 30px;
+﻿.first {
+    background-color: #f6f6f6;
     text-align: center;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 50px;
 }
+
+    .first .title {
+        font-size: 45px;
+        font-weight: 400;
+        color: #666;
+        text-align: center;
+    }
+
+    .first .path {
+        display: flex;
+    }
+
+        .first .path a {
+            color: #666;
+            text-decoration: none;
+        }
+
+            .first .path a:hover {
+                color: limegreen;
+            }
+
+        .first .path p {
+            color: #9d9c9c;
+        }
 
 .checkbox-wrapper-12 {
     position: relative;
@@ -40,8 +63,8 @@
         }
 
     .checkbox-wrapper-12 .cbx {
-        width: 24px;
-        height: 24px;
+        width: 20px;
+        height: 20px;
         top: calc(100px - 12px);
         left: calc(100px - 12px);
     }
@@ -50,15 +73,15 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 24px;
-            height: 24px;
-            border: 2px solid #bfbfc0;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #bfbfc0;
             border-radius: 50%;
         }
 
         .checkbox-wrapper-12 .cbx label {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             background: none;
             border-radius: 50%;
             position: absolute;
@@ -70,8 +93,8 @@
 
         .checkbox-wrapper-12 .cbx svg {
             position: absolute;
-            top: 5px;
-            left: 4px;
+            top: 3px;
+            left: 3px;
             z-index: 1;
             pointer-events: none;
         }
@@ -81,8 +104,8 @@
                 stroke-width: 3;
                 stroke-linecap: round;
                 stroke-linejoin: round;
-                stroke-dasharray: 19;
-                stroke-dashoffset: 19;
+                stroke-dasharray: 16;
+                stroke-dashoffset: 10;
                 transition: stroke-dashoffset 0.3s ease;
                 transition-delay: 0.2s;
             }
@@ -95,51 +118,16 @@
                 stroke-dashoffset: 0;
             }
 
-@-moz-keyframes splash-12 {
-    40% {
-        background: #866efb;
-        box-shadow: 0 -18px 0 -8px #866efb, 16px -8px 0 -8px #866efb, 16px 8px 0 -8px #866efb, 0 18px 0 -8px #866efb, -16px 8px 0 -8px #866efb, -16px -8px 0 -8px #866efb;
-    }
-
-    100% {
-        background: #866efb;
-        box-shadow: 0 -36px 0 -10px transparent, 32px -16px 0 -10px transparent, 32px 16px 0 -10px transparent, 0 36px 0 -10px transparent, -32px 16px 0 -10px transparent, -32px -16px 0 -10px transparent;
-    }
-}
-
-@-webkit-keyframes splash-12 {
-    40% {
-        background: #866efb;
-        box-shadow: 0 -18px 0 -8px #866efb, 16px -8px 0 -8px #866efb, 16px 8px 0 -8px #866efb, 0 18px 0 -8px #866efb, -16px 8px 0 -8px #866efb, -16px -8px 0 -8px #866efb;
-    }
-
-    100% {
-        background: #866efb;
-        box-shadow: 0 -36px 0 -10px transparent, 32px -16px 0 -10px transparent, 32px 16px 0 -10px transparent, 0 36px 0 -10px transparent, -32px 16px 0 -10px transparent, -32px -16px 0 -10px transparent;
-    }
-}
-
-@-o-keyframes splash-12 {
-    40% {
-        background: #866efb;
-        box-shadow: 0 -18px 0 -8px #866efb, 16px -8px 0 -8px #866efb, 16px 8px 0 -8px #866efb, 0 18px 0 -8px #866efb, -16px 8px 0 -8px #866efb, -16px -8px 0 -8px #866efb;
-    }
-
-    100% {
-        background: #866efb;
-        box-shadow: 0 -36px 0 -10px transparent, 32px -16px 0 -10px transparent, 32px 16px 0 -10px transparent, 0 36px 0 -10px transparent, -32px 16px 0 -10px transparent, -32px -16px 0 -10px transparent;
-    }
-}
-
 @keyframes splash-12 {
     40% {
-        background: #866efb;
-        box-shadow: 0 -18px 0 -8px #866efb, 16px -8px 0 -8px #866efb, 16px 8px 0 -8px #866efb, 0 18px 0 -8px #866efb, -16px 8px 0 -8px #866efb, -16px -8px 0 -8px #866efb;
+        background: rgb(84,205,56);
+        box-shadow: rgb(116 251 110) 0px -18px 0px -8px, rgb(110 251 220) 16px -8px 0px -8px, rgb(251 230 110) 16px 8px 0px -8px, rgb(251 110 110) 0px 18px 0px -8px, rgb(134, 110, 251) -16px 8px 0px -8px, rgb(251 110 246) -16px -8px 0px -8px;
+        
     }
 
     100% {
-        background: #866efb;
-        box-shadow: 0 -36px 0 -10px transparent, 32px -16px 0 -10px transparent, 32px 16px 0 -10px transparent, 0 36px 0 -10px transparent, -32px 16px 0 -10px transparent, -32px -16px 0 -10px transparent;
+        background: rgb(84,205,56);
+        box-shadow: transparent 0px -36px 0px -10px, transparent 32px -16px 0px -10px, transparent 32px 16px 0px -10px, transparent 0px 36px 0px -10px, transparent -32px 16px 0px -10px, transparent -32px -16px 0px -10px;
     }
 }
 
@@ -175,7 +163,7 @@ button {
         text-align: center;
         text-decoration: none;
         width: 100%;
-        padding: 18px 25px;
+        padding: 18px 15px;
         color: #fffcfd;
         font-size: 1.125em;
         font-weight: 700;
@@ -186,12 +174,10 @@ button {
 
     button:hover span {
         animation: scaleUp 0.3s ease-in-out;
-        color: #fd1853;
+        color: black;
     }
 
-    button:hover {
-        animation: scaleUp 0.3s ease-in-out;
-    }
+    
 
 @keyframes scaleUp {
     0% {
@@ -338,15 +324,8 @@ button:hover .star-6 {
 }
 
     .image-container .image {
-        height: 200px;
-        width: 200px;
-        margin-left: 20px;
-    }
-
-    .image-container .frame {
         height: 250px;
         width: 250px;
-        margin-left: -225px;
     }
 
 .part {
@@ -364,83 +343,82 @@ button:hover .star-6 {
     }
 
 .part1-content {
-    width: 34%;
+    width: 85%;
 }
 
     .part1-content .part1-serviceTitle {
-        font-size: 30px;
-        font-weight: 500;
+        font-size: 20px;
+        text-transform: uppercase;
+        font-weight: 400;
     }
 
-    .part1-content .part1-serviceName .part1-serviceName-title img {
-        height: 30px;
-        width: 30px;
-    }
+.part1-serviceName{
+    display: flex;
+}
+
+.part1-content .part1-serviceName .part1-serviceName-title img {
+    width: 15%;
+    height: fit-content;
+    margin-right: 5px;
+}
 
     .part1-content .part1-serviceName .part1-serviceName-title p {
-        width: 120px;
-        font-size: 15px;
+        width: 85%;
+        font-size: 12px;
         color: #E21033;
-    }
-
-    .part1-content .part1-serviceName {
-        display: flex;
-        flex-wrap: wrap;
     }
 
         .part1-content .part1-serviceName .part1-serviceName-title {
             margin-right: 10px;
             display: flex;
+            width: 16%;
         }
 
-.part-content {
-    display: flex;
-}
-
 .part2-content {
-    width: 66%;
+    width: 90%;
 }
 
     .part2-content .part2-serviceTitle {
-        font-size: 30px;
-        font-weight: 500;
-    }
-
-    .part2-content .part2-serviceTitle {
-        font-size: 30px;
-        font-weight: 500;
+        font-size: 20px;
+        text-transform: uppercase;
+        font-weight: 400;
     }
 
     .part2-content .part2-serviceName .part2-serviceName-title img {
-        height: 30px;
-        width: 30px;
+        height: 20px;
+        width: 20px;
     }
 
     .part2-content .part2-serviceName .part2-serviceName-title p {
         width: 120px;
-        font-size: 15px;
+        font-size: 12px;
         color: #E21033;
+        margin-bottom: 0px;
     }
 
     .part2-content .part2-serviceName {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        margin-bottom: 20px;
     }
 
         .part2-content .part2-serviceName .part2-serviceName-title {
-            margin-right: 10px;
             display: flex;
+            width: 180px;
+            justify-content: space-between;
+            margin-right: 25px;
         }
 
 .part2-title {
-    font-size: 30px;
-    font-weight: 500;
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: 400;
 }
 
 .part3-title {
-    font-size: 30px;
-    font-weight: 500;
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: 400;
 }
 
 .part3 .part3-content {
@@ -449,6 +427,7 @@ button:hover .star-6 {
 
 .part3 .part3-content-child {
     display: flex;
+    width: 60%;
 }
 .part3 .part3-content input[type=datetime-local] {
     border: 1px solid #ccc;
@@ -456,16 +435,16 @@ button:hover .star-6 {
     padding-left: 10px;
     width: 215px;
 }
-.part3 .part3-content img{
+.part3 .part3-content img {
     margin: 12px;
     height: 20px;
     width: 20px;
+    margin-top: 30px;
 }
 
 .part3 .part3-content .price {
     margin-top: 9px;
-    width: 100%;
-    text-align: center;
+    width: 40%;
     color: #E21033;
 }
 
@@ -475,22 +454,142 @@ button:hover .star-6 {
 }
 
     .part4 .part4-price {
-        width: 50%;
+        width: 100%;
     }
         .part4 .part4-price .part4-title {
-            font-size: 30px;
-            font-weight: 500;
+            font-size: 20px;
+            text-transform: uppercase;
+            font-weight: 400;
         }
 
     .part4 .part4-description {
         width: 50%;
     }
 
-    .part4 .part4-description .part4-title {
-        font-size: 30px;
-        font-weight: 500;
+        .part4 .part4-description .part4-title {
+            font-size: 20px;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+
+
+.part5 a {
+    text-decoration: none;
+    color: cornflowerblue;
+}
+
+.part5 a:hover{
+    color: limegreen;
+}
+
+.part4 .part4-price .price-detail .service-price{
+    display: flex;
+}
+
+.part4 .part4-price .price-detail .date-price{
+    display: flex;
+}
+
+.part4 .part4-price .price-detail {
+    width: 60%;
+    right: 0;
+}
+
+    .part4 .part4-price .price-detail .name-priceDetail {
+        width: 60%;
+        float: right;
+        padding-left: 20%;
     }
 
-.part5 a:link {
-    color: blue;
+    .part4 .part4-price .price-detail .name1-priceDetail {
+        width: 60%;
+        float: right;
+        padding-left: 20%;
+    }
+
+    .part4 .part4-price .price-detail .price-priceDetail{
+        width: 30%;
+        padding-left: 10px;
+    }
+
+    .part4 .part4-price .price-detail .price1-priceDetail {
+        width: 30%;
+        padding-left: 10px;
+    }
+
+    .part4 .part4-price .price-detail .total-price {
+        float: right;
+        margin-right: 200px;
+    }
+
+    .part4 .part4-price .price-detail .service-price-title{
+        font-size: 18px;
+    }
+
+    .part4 .part4-price .price-detail .service-price p{
+        font-size: 16px;
+    }
+
+    .part4 .part4-price .price-detail .date-price p {
+        font-size: 16px;
+    }
+
+/*.part5 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;*/ /* Điều chỉnh chiều cao của div part5 tùy ý */
+/*}*/
+.part5 {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
+.part5 button {
+    border-radius: 5px;
+    background-color: #393939;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 17px;
+    width: 200px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+}
+
+    .part5 button span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+    }
+
+        .part5 button span:after {
+            content: '»';
+            position: absolute;
+            opacity: 0;
+            right: -15px;
+            transition: 0.5s;
+        }
+
+    .part5 button:hover span {
+        padding-right: 15px;
+    }
+
+        .part5 button:hover span:after {
+            opacity: 1;
+            right: 0;
+        }
+
+.part5 p{
+    font-size: 17px;
+    padding-bottom: 10px;
+}
+
+
+
+
