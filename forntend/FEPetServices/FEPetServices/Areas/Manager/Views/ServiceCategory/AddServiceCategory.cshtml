@@ -6,18 +6,6 @@
 <link href="~/css/toastNotification.css" rel="stylesheet" />
 </head>
 <body>
-@*@if (!string.IsNullOrEmpty( TempData["ErrorToast"]?.ToString()))
-{
-    <div class="alert alert-danger" style="color:red">
-        @TempData["ErrorToast"]
-    </div>
-}
-@if (!string.IsNullOrEmpty(TempData["SuccessToast"]?.ToString()))
-{
-    <div class="alert alert-success" style="color:red">
-        @TempData["SuccessToast"]
-    </div>
-}*@
 <h2>Thêm Loại Dịch Vụ Thú Cưng</h2>
 <div class="container">
   <form asp-action="AddServiceCategory" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
@@ -51,14 +39,14 @@
         <div style="color:red" class="error-message" id="subject-error-message"></div>
       </div>
     </div>
-<div class="row">
-    <div class="col-25">
-        <a type="submit" value="Cancal" href="/Manager/ServiceCategory" class="cancel">Cancel</a>
-      </div>
-    <div class="col-75">
-      <input type="submit" value="Submit">
-    </div>
- </div>
+    <div class="row">
+        <div class="btn-group col-2">
+                    <a class="btn btn-primary btn_a" type="submit" value="Cancal" href="/Manager/ServiceCategory">Trở lại</a>
+        </div>
+        <div class="col-10">
+            <input class="btn btn-primary" type="submit" value="Thêm mới loại dịch vụ">
+        </div>
+     </div>
   </form>
 </div>
 <script src="~/js/ServiceCategory.js"></script>
