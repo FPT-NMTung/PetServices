@@ -63,6 +63,7 @@ namespace PetServices.Controllers
             var result = await _context.Accounts
                 .Include(a => a.Role)
                 .Include(a => a.UserInfo)
+                .Include(a => a.PartnerInfo)
                 .SingleOrDefaultAsync(x => x.Email == login.Email && x.Password == login.Password);
 
             if (result != null)
@@ -85,8 +86,14 @@ namespace PetServices.Controllers
                     signingCredentials: creds
                 );
 
-                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName, Status= result.Status,
-                UserName = result?.UserInfo.FirstName +" " + result?.UserInfo.LastName, UserImage = result?.UserInfo.ImageUser
+                return Ok(new LoginResponse
+                {
+                    Successful = true,
+                    Token = new JwtSecurityTokenHandler().WriteToken(token),
+                    RoleName = result.Role?.RoleName,
+                    Status = result.Status,
+                    UserName = result.Role?.RoleName != "PARTNER" ? (result?.UserInfo.FirstName + " " + result?.UserInfo.LastName) : (result?.PartnerInfo.FirstName + " " + result?.PartnerInfo.LastName),
+                    UserImage = result.Role?.RoleName != "PARTNER" ? result?.UserInfo.ImageUser : result?.PartnerInfo.ImagePartner
                 });
             }
             else
@@ -334,7 +341,7 @@ namespace PetServices.Controllers
             {
                 string errorMessage = "Tên chỉ chấp nhận các ký tự văn bản và không được chứa ký tự đặc biệt hoặc số.";
                 return BadRequest(errorMessage);
-            }        
+            }
             // check Tỉnh
             if (string.IsNullOrWhiteSpace(registerDto.Province))
             {
@@ -371,7 +378,7 @@ namespace PetServices.Controllers
                 string errorMessage = "Xã chỉ chấp nhận các ký tự văn bản và không được chứa ký tự đặc biệt hoặc số.";
                 return BadRequest(errorMessage);
             }
-            
+
             // trùng email
             if (_context.Accounts.Any(a => a.Email == registerDto.Email))
             {
@@ -385,6 +392,9 @@ namespace PetServices.Controllers
                 Status = false,
                 RoleId = 4
             };
+            await _context.Accounts.AddAsync(newAccount);
+            await _context.SaveChangesAsync();
+
             var partner = new PartnerInfo
             {
                 FirstName = registerDto.FirstName,
@@ -398,8 +408,8 @@ namespace PetServices.Controllers
                 ImageCertificate = registerDto.ImageCertificate
 
             };
-            await _context.Accounts.AddAsync(newAccount);
-             _context.PartnerInfos.Add(partner);
+
+            _context.PartnerInfos.Add(partner);
             await _context.SaveChangesAsync();
 
             return Ok("Đăng ký thành công! Vui lòng chờ đợi quản lý xác nhận tài khoản của bạn trước khi đăng nhập");
