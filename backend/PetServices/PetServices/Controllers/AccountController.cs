@@ -63,6 +63,7 @@ namespace PetServices.Controllers
             var result = await _context.Accounts
                 .Include(a => a.Role)
                 .Include(a => a.UserInfo)
+                .Include(a => a.PartnerInfo)
                 .SingleOrDefaultAsync(x => x.Email == login.Email && x.Password == login.Password);
 
             if (result != null)
@@ -86,7 +87,8 @@ namespace PetServices.Controllers
                 );
 
                 return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName, Status= result.Status,
-                UserName = result?.UserInfo.FirstName +" " + result?.UserInfo.LastName, UserImage = result?.UserInfo.ImageUser
+                UserName = result.Role?.RoleName != "PARTNER" ? ( result?.UserInfo.FirstName +" " + result?.UserInfo.LastName) : (result?.PartnerInfo.FirstName + " " + result?.PartnerInfo.LastName), 
+                    UserImage = result.Role?.RoleName != "PARTNER" ? result?.UserInfo.ImageUser : result?.PartnerInfo.ImagePartner
                 });
             }
             else
@@ -385,6 +387,9 @@ namespace PetServices.Controllers
                 Status = false,
                 RoleId = 4
             };
+            await _context.Accounts.AddAsync(newAccount);
+            await _context.SaveChangesAsync();
+
             var partner = new PartnerInfo
             {
                 FirstName = registerDto.FirstName,
@@ -398,7 +403,7 @@ namespace PetServices.Controllers
                 ImageCertificate = registerDto.ImageCertificate
 
             };
-            await _context.Accounts.AddAsync(newAccount);
+
              _context.PartnerInfos.Add(partner);
             await _context.SaveChangesAsync();
 
