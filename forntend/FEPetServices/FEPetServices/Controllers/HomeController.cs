@@ -36,6 +36,7 @@ namespace FEPetServices.Controllers
             ApiUrlRoomDetail = "https://localhost:7255/api/Room/GetRoom/";
             DefaultApiUrlServiceCategoryList = "https://localhost:7255/api/ServiceCategory";
             DefaultApiUrlServiceCategoryDetail = "https://localhost:7255/api/ServiceCategory/ServiceCategorysID/";
+            DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
         }
 
         public async Task<ActionResult> Room(RoomDTO roomDTO, RoomSearchDTO searchDTO)
