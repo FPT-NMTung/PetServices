@@ -83,7 +83,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 TempData["ErrorToast"] = "Địa chỉ cụ thể không được để trống";
                 return RedirectToAction("Index");
             }
-            if (userInfo.Address.Length >= 10)
+            if (userInfo.Address.Length <= 10)
             {
                 TempData["ErrorToast"] = "Địa chỉ cụ thể phải lớn hơn 10 ký tự";
                 return RedirectToAction("Index");
