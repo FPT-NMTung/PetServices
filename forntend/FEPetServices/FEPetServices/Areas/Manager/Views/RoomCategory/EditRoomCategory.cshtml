@@ -15,7 +15,7 @@
                     <label for="RoomCategoriesName">Tên Loại Phòng:</label>
                 </div>
                 <div class="col-75">
-                    <input type="text" id="RoomCategoriesName" name="RoomCategoriesName" value="@Model?.RoomCategoriesName">
+                    <input type="text" id="RoomCategoriesName" name="RoomCategoriesName" value="@Model?.RoomCategoriesName" required>
                     <div style="color:red" class="error-message" id="fname-error-message"></div>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                     <label for="Desciptions">Mô Tả:</label>
                 </div>
                 <div class="col-75">
-                    <textarea id="Desciptions" name="Desciptions" placeholder="Nội Dung .." style="height:200px">@Model?.Desciptions</textarea>
+                    <textarea id="Desciptions" name="Desciptions" placeholder="Nội Dung ..." style="height:200px" required>@Model?.Desciptions</textarea>
                     <div style="color:red" class="error-message" id="subject-error-message"></div>
                 </div>
             </div>
@@ -63,45 +63,7 @@
             </div>
         </form>
 
-    </div>
-    <div id="toast"></div>
-    @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showSuccessToast();
-            });
-        </script>
-    }
-    @if (!string.IsNullOrEmpty(TempData["ErrorToast"] as string))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showErrorToast();
-            });
-        </script>
-    }
-    <script src="~/js/toastnotification.js"></script>
+    </div> 
     <script src="/js/RoomCategory.js"></script>
-
-    <script>
-        function showSuccessToast() {
-            toast({
-                title: 'Thành công',
-                message: '@TempData["SuccessToast"]',
-                type: 'success',
-                duration: 2000
-            });
-        }
-        function showErrorToast() {
-            toast({
-                title: 'Thất bại',
-                message: '@TempData["ErrorToast"]',
-                type: 'error',
-                duration: 2000
-            });
-        }
-    </script>
-
 </body>
 </html>

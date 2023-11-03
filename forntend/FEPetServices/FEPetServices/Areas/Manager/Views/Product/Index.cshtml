@@ -1,61 +1,6 @@
-﻿<style>
-    /* CSS for DataTable */
-    h1 {
-        text-align: center;
-    }
-
-    #productList {
-        width: 100%;
-        margin-top: 20px;
-        border-collapse: collapse;
-    }
-
-        #productList th,
-        #productList td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        #productList th {
-            background-color: #f2f2f2;
-        }
-
-    .future-status {
-        color: gray;
-    }
-
-    .complete-status {
-        color: green;
-    }
-
-    .dataTables_wrapper .dataTables_filter {
-        float: right;
-        margin-bottom: 10px;
-    }
-
-    /* Add this CSS to style the "Thêm dịch vụ" button */
-    #addButton {
-        float: left; /* Di chuyển nút sang bên phải */
-        margin-right: 10px; /* Khoảng cách từ nút "Thêm dịch vụ" đến thanh tìm kiếm */
-        width: 150px;
-        height: 25px;
-    }
-
-    /* Add this CSS to move the search input to the left and add 10px margin */
-    .dataTables_wrapper .dataTables_filter input[type="search"] {
-        margin-left: 10px;
-    }
-
-    .dataTables_wrapper {
-        margin: 30px;
-    }
-</style>
-
-<link href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
+﻿<link href="~/css/toastNotification.css" rel="stylesheet" />
+<link href="~/css/datatable.css" rel="stylesheet" />
 <link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
-
-@section Scripts {
     <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
@@ -63,13 +8,10 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
     <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
-    <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.excel.min.js"></script>
-    @*<script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>*@
-
     <script>
         $(document).ready(function () {
             // Khởi tạo DataTables
-            var table = $('#productList').DataTable({
+            var table = $('#lists').DataTable({
                 "paging": true,
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "searching": true,
@@ -109,11 +51,10 @@
 
         });
     </script>
-}
 
 <h1>Danh Sách Sản Phẩm Cho Thú Cưng</h1>
 
-<table id="productList" class="display">
+<table id="lists" class="display">
     <thead>
         <tr>
             <th>No.</th>
@@ -130,11 +71,19 @@
             int itemCount = 0;
             @foreach (var product in Model)
             {
+                string description = product.Desciption;
+
+                if (description.Length > 100)
+                {
+                    int lastSpace = description.LastIndexOf(' ', 100);
+
+                    description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                }
                 <tr>
                     <td>@product.ProductId</td>
                     <td><img src="@product.Picture" width="50" height="50"></td>
                     <td>@product.ProductName</td>
-                    <td>@product.Desciption</td>
+                    <td>@description</td>
                     <td>
                         <div class="switch">
                             <input type="checkbox" name="Status" class="toggle" @(product?.Status ? "checked" : "") />
@@ -155,19 +104,6 @@
             </tr>
         }
     </tbody>
-    <tfoot>
-        @if (ViewBag.ErrorMessage != null)
-        {
-            <div class="alert alert-danger">
-                <span style="color:red">@ViewBag.ErrorMessage</span>
-            </div>
-        }
-    </tfoot>
-
-
-
-    <!-- Your table and data display code -->
-
 </table>
 <style>
     .switch {

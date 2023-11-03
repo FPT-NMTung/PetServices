@@ -3,24 +3,6 @@
         text-align: center;
     }
 
-    #RoomCategory {
-        width: 100%;
-        margin-top: 30px;
-        border-collapse: collapse;
-        background-color: white;
-    }
-
-        #RoomCategory th,
-        #RoomCategory td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        #RoomCategory th {
-            background-color: #f2f2f2;
-        }
-
     .future-status {
         color: gray;
     }
@@ -85,12 +67,11 @@
             color: black;
         }
 </style>
-
+<link href="~/css/toastNotification.css" rel="stylesheet" />
 <link href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
 <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/css/datatable.css" rel="stylesheet" />
 
-
-@section Scripts {
     <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
@@ -103,7 +84,7 @@
 
     <script>
         $(document).ready(function () {
-            var table = $('#Room').DataTable({
+            var table = $('#lists').DataTable({
                 "paging": true,
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "searching": true,
@@ -141,11 +122,10 @@
             });
         });
     </script>
-}
 <div class="bg">
     <h1 style="font-size: 40px; font-weight: bold; margin-top: 10px">Danh sách các phòng cho thú cưng</h1>
 
-    <table id="Room" class="display">
+    <table id="lists" class="display">
         <thead>
             <tr>
                 <th>STT</th>
@@ -194,13 +174,5 @@
                 </tr>
             }
         </tbody>
-        <tfoot>
-            @if (ViewBag.ErrorMessage != null)
-            {
-                <div class="alert alert-danger">
-                    <span style="color:red">@ViewBag.ErrorMessage</span>
-                </div>
-            }
-        </tfoot>
     </table>
 </div>

@@ -117,7 +117,33 @@ namespace PetServices.Controllers
                         };
                     }
 
-                    else if (account.UserInfoId == null && RoleId != 4)
+                    if (account.PartnerInfoId != null && RoleId == 4)
+                    {
+                        account.PartnerInfo.FirstName = account.UserInfo?.FirstName ?? null;
+                        account.PartnerInfo.LastName = account.UserInfo?.LastName ?? null;
+                        account.PartnerInfo.Phone = account.UserInfo?.Phone ?? null;
+                        account.PartnerInfo.Province = account.UserInfo?.Province ?? null;
+                        account.PartnerInfo.District = account.UserInfo?.District ?? null;
+                        account.PartnerInfo.Commune = account.UserInfo?.Commune ?? null;
+                        account.PartnerInfo.Address = account.UserInfo?.Address ?? null;
+                        account.PartnerInfo.Descriptions = account.UserInfo?.Descriptions ?? null;
+                        account.PartnerInfo.ImagePartner = account.UserInfo?.ImageUser ?? null;
+                    }
+
+                    if (account.UserInfoId != null && RoleId != 4)
+                    {
+                        account.UserInfo.FirstName = account.PartnerInfo?.FirstName ?? null;
+                        account.UserInfo.LastName = account.UserInfo?.LastName ?? null;
+                        account.UserInfo.Phone = account.PartnerInfo?.Phone ?? null;
+                        account.UserInfo.Province = account.PartnerInfo?.Province ?? null;
+                        account.UserInfo.District = account.PartnerInfo?.District ?? null;
+                        account.UserInfo.Commune = account.PartnerInfo?.Commune ?? null;
+                        account.UserInfo.Address = account.PartnerInfo?.Address ?? null;
+                        account.UserInfo.Descriptions = account.PartnerInfo?.Descriptions ?? null;
+                        account.UserInfo.ImageUser = account.PartnerInfo?.ImagePartner ?? null;
+                    }
+
+                    if (account.UserInfoId == null && RoleId != 4)
                     {
                         account.UserInfo = new UserInfo
                         {

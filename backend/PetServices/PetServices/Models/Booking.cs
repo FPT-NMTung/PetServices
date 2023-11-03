@@ -7,8 +7,8 @@ namespace PetServices.Models
     {
         public Booking()
         {
-            Rooms = new HashSet<Room>();
-            Services = new HashSet<Service>();
+            BookingRoomDetails = new HashSet<BookingRoomDetail>();
+            BookingServicesDetails = new HashSet<BookingServicesDetail>();
         }
 
         public int BookingId { get; set; }
@@ -21,8 +21,7 @@ namespace PetServices.Models
         public string? Address { get; set; }
 
         public virtual UserInfo? UserInfo { get; set; }
-
-        public virtual ICollection<Room> Rooms { get; set; }
-        public virtual ICollection<Service> Services { get; set; }
+        public virtual ICollection<BookingRoomDetail> BookingRoomDetails { get; set; }
+        public virtual ICollection<BookingServicesDetail> BookingServicesDetails { get; set; }
     }
 }

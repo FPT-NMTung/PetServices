@@ -92,6 +92,29 @@
             </div>
             <div class="row">
                 <div class="col-25">
+                    <label for="Slot">Các dịch vụ có sẵn:</label>
+                </div>
+                <div class="col-75">
+                    <div class="service-container">
+                        @if (ViewBag.services != null)
+                        {
+                            @foreach (var service in ViewBag.services)
+                            {
+                                <input type="checkbox" id="@service.Value" name="SelectedServices" value="@service.Value" 
+                                @(Model.ServiceIds != null && service.Value != null && Model.ServiceIds.Contains(int.Parse(service.Value)) ? "checked" : "")>
+                                <label for="@service.Value">@service.Text</label>
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-danger">Lỗi: Dữ liệu không khả dụng.</span>
+                        }
+                    </div>
+                    <div style="color:red" class="error-message" id="slot-error-message"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
                     <label for="SerCategoriesId">Loại Phòng</label>
                 </div>
                 <div class="col-75">
@@ -146,44 +169,6 @@
         </form>
 
     </div>
-    <div id="toast"></div>
-    @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showSuccessToast();
-            });
-        </script>
-    }
-    @if (!string.IsNullOrEmpty(TempData["ErrorToast"] as string))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showErrorToast();
-            });
-        </script>
-    }
-    <script src="~/js/toastnotification.js"></script>
-    <script src="/js/Room.js"></script>
-
-    <script>
-        function showSuccessToast() {
-            toast({
-                title: 'Thành công',
-                message: '@TempData["SuccessToast"]',
-                type: 'success',
-                duration: 2000
-            });
-        }
-        function showErrorToast() {
-            toast({
-                title: 'Thất bại',
-                message: '@TempData["ErrorToast"]',
-                type: 'error',
-                duration: 2000
-            });
-        }
-    </script>
-
+    <script src="~/js/Room.js"></script>
 </body>
 </html>

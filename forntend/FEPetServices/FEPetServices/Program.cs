@@ -1,8 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +24,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ManaOnly", policy => policy.RequireRole("MANAGER"));
     options.AddPolicy("CusOnly", policy => policy.RequireRole("CUSTOMER"));
     options.AddPolicy("PartnerOnly", policy => policy.RequireRole("PARTNER"));
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("ADMIN"));
 });
 
 var app = builder.Build();
@@ -77,7 +74,7 @@ app.UseEndpoints(endpoints =>
 
     endpoints.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Login}/{action=Index}/{id?}"
+    pattern: "{controller=Home}/{action=Index}/{id?}"
     );
 });
 

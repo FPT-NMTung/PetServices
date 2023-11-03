@@ -14,12 +14,8 @@
                 <div class="card mb-4 mb-xl-0">
                     <div class="card-header">Hình ảnh cá nhân</div>
                     <div class="card-body text-center">
-                        Hình ảnh profile
-
-                        <img class="img-account-profile rounded-circle mb-2" src="@Model?.UserInfo.ImageUser" alt="">
-
-                        
-                        
+                        <img style="max-height:600px;height:100%;max-width:380px;width:100%"  
+                        class="img-account-profile mb-2" src="@Model?.UserInfo.ImageUser" alt="">
                         <!-- Profile picture help block-->
                         <div class="small font-italic text-muted mb-4">JPG hoặc PNG không vượt quá 5 MB</div>
                         @* Uploat ảnh*@
@@ -36,7 +32,7 @@
                         <form method="post" asp-controller="Infomation" asp-action="Index" enctype="multipart/form-data">
                             <div>
                                 <label for="image"></label>
-                                <input type="file" id="image" name="image" enctype="multipart/form-data"  required>
+                                <input type="file" id="image" name="image" enctype="multipart/form-data">
                             </div>
                             
                             <div class="row gx-3 mb-3">
@@ -103,62 +99,8 @@
             </div>
         </div>
     </div>
-
-    <div id="toast"></div>
-    @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showSuccessToast();
-            });
-        </script>
-    }
-    @if (!string.IsNullOrEmpty(TempData["ErrorToast"] as string))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showErrorToast();
-            });
-        </script>
-    }
-    @if (!string.IsNullOrEmpty(TempData["SuccessLoginToast"] as string))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showSuccessLoginToast();
-            });
-        </script>
-    }
 </body>
     <script src="~/js/takeAddress.js"></script>
-    <script src="~/js/toastnotification.js"></script>
-
-    <script>
-        function showSuccessToast() {
-            toast({
-                title: 'Thành công',
-                message: '@TempData["SuccessToast"]',
-                type: 'success',
-                duration: 2000
-            });
-        }
-        function showErrorToast() {
-            toast({
-                title: 'Thất bại',
-                message: '@TempData["ErrorToast"]',
-                type: 'error',
-                duration: 2000
-            });
-        }
-    function showSuccessLoginToast() {
-            toast({
-                title: 'Thành công',
-                message: '@TempData["SuccessLoginToast"]',
-                type: 'success',
-                duration: 2000
-            });
-        }
-    </script>
 </html>
 
 

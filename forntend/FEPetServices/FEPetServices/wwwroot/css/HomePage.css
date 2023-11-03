@@ -1,0 +1,225 @@
+﻿:root{
+    --pink-pastel: #FFD6E4;
+    --pink: #E21033;
+}
+#homepage{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    transition: 0.2s linear;
+}
+html {
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    overflow-x: hidden;
+}
+/*header*/
+header{
+    position: fixed;
+    top: 0;left: 0;right: 0;
+    background: #fff;
+    padding: 2rem 9%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .1);
+}
+header .logo{
+    text-decoration: none;
+    font-size: 3rem;
+    color: #333;
+    font-weight: bolder;
+}
+header .logo span{
+    color:var(--pink);
+}
+header .navbar a{
+    text-decoration: none;
+    font-size: 2rem;
+    padding: 0 1.5rem;
+    color: #666;
+}
+header .navbar a:hover{
+    color:var(--pink);
+}
+header #toggler{
+    display: none;
+}
+header .fa-bars{
+    font-size: 3rem;
+    color: #333;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+    border: 0.1rem solid rgba(0, 0, 0, .3);
+    display: none;
+}
+/*item user start*/
+header .icons .item{
+    display: flex;
+    float: left;
+    margin-left: 22px;
+}
+header .icons a{
+    text-decoration: none;
+    font-size: 2.5rem;
+    color: #333;
+}
+header .icons a:hover{
+    color: var(--pink);
+}
+header .icons .dropbtn {
+    border: none;
+    cursor: pointer;
+}
+header .icons .dropbtn:hover{
+    color:var(--pink);
+}
+header .icons .item .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+header .icons .item .dropdown .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 2;
+    white-space: nowrap;
+    left: 50%; /* Đặt vị trí ở giữa */
+    transform: translateX(-50%); /* Dịch chuyển về trái 50% của chiều rộng của dropdown-content */
+}
+
+header .icons .item .dropdown .dropdown-content a {
+    color: black;
+    font-size: 15px;
+    padding: 12px 24px;
+    text-decoration: none;
+    display: flex;
+}
+
+header .icons .item .dropdown .dropdown-content a:hover {
+    background-color: var(--pink-pastel);
+    color:var(--pink);
+}
+
+header .icons .item .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+header .icons .item .dropdown:hover .dropbtn {
+    color: var(--pink-red);
+}
+/*item user end*/
+footer {
+    padding: 2rem 9%;
+}
+
+/*footer*/
+/*.footer{
+    background: none;
+    display: block;
+}*/
+.footer .box-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+.footer .box-container .box{
+    flex: 1 1 25rem;
+}
+.footer .box-container .box h3{
+    color: #333;
+    font-size: 2.5rem;
+    padding: 1rem 0;
+}
+.footer .box-container .box a{
+    text-decoration: none;
+    display: block;
+    color: #666;
+    font-size: 1.5rem;
+    padding: 1rem 0;
+}
+.footer .box-container .box a:hover{
+    color: var(--pink);
+    text-decoration: underline;
+}
+.footer .credit{
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    padding-top: 2.5rem;
+    font-size: 2rem;
+    color: #333;
+    border-top: 0.1rem solid rgba(0, 0, 0, .1);
+}
+.footer .credit span{
+    color: var(--pink);
+}
+
+
+
+/* media queries */
+@media (max-width:991px) {
+    html{
+        font-size: 55%;
+    }
+    header{
+        padding: 2rem;
+    }
+    section{
+        padding: 2rem;
+    }
+    .home{
+        background-position: left;
+    }
+}
+@media (max-width:768px) {
+    header .fa-bars{
+        display: block;
+    }
+    header .navbar{
+        position: absolute;
+        top: 100%;left: 0;right: 0;
+        background: #eee;
+        border-top: 0.1rem solid rgba(0, 0, 0, .1);
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    }
+    header #toggler:checked~ .navbar{
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    header .navbar a{
+        margin: 1.5rem;
+        padding: 1.5rem;
+        background: #fff;
+        border: 0.1rem solid rgba(0, 0, 0, .1);
+        display: block;
+    }
+    .home .content h3{
+        font-size: 5rem;
+    }
+    .home .content span{
+        font-size: 2.5rem;
+    }
+    .icons-container .icons h3{
+        font-size: 2rem;
+    }
+    .icons-container .icons span{
+        font-size: 1.7rem;
+    }
+}
+@media (max-width:450px) {
+    html{
+        font-size: 50%;
+    }
+    .heading{
+        font-size: 3rem;
+    }
+}

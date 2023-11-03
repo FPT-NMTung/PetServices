@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Mail;
 using System.Xml.Linq;
+using static System.Net.WebRequestMethods;
 
 namespace FEPetServices.Controllers
 {
@@ -18,12 +19,6 @@ namespace FEPetServices.Controllers
         [HttpPost]
         public async Task<IActionResult> SendResetPasswordEmail(string email)
         {
-            if (string.IsNullOrEmpty(email))
-            {
-                ViewData["error"] = "Email is required.";
-                return View("Index");
-            }
-
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new System.Uri("https://localhost:7255/"); // Đổi URL của API theo cấu hình của bạn
@@ -41,7 +36,8 @@ namespace FEPetServices.Controllers
 
                     if (result.NewPass == "NotFound")
                     {
-                        ViewData["error"] = "Email không tồn tại.";
+                        ViewBag.ErrorToast = "Tài khoản không tồn tại.";
+                        return View("Index");
                     }
                     else
                     {
@@ -49,18 +45,16 @@ namespace FEPetServices.Controllers
 
                         // Gửi mật khẩu mới qua email
                         SendPasswordResetEmail(email, pass);
-
-                        ViewData["messageSuccess"] = "Yêu cầu đặt lại mật khẩu đã được gửi thành công. Vui lòng kiểm tra email của bạn.";
-                        ViewData["emailSent"] = true; // Đánh dấu rằng email đã được gửi thành công
+                        ViewBag.SuccessToast = "Yêu cầu đặt lại mật khẩu đã được gửi thành công. Vui lòng kiểm tra email của bạn.";
+                        return View("Index");
                     }
                 }
                 else
                 {
-                    ViewData["error"] = "Có lỗi xảy ra khi gửi yêu cầu đặt lại mật khẩu.";
+                    ViewBag.ErrorToast = "Có lỗi xảy ra khi gửi yêu cầu đặt lại mật khẩu hoặc tài khoản không tồn tại.";
+                    return View("Index");
                 }
             }
-
-            return View("Index");
         }
 
 
@@ -78,7 +72,123 @@ namespace FEPetServices.Controllers
                     var message = new MailMessage();
                     message.From = new MailAddress("psmsg65@gmail.com");
                     message.Subject = "Yêu cầu đặt lại mật khẩu";
-                    message.Body = "Mật khẩu mới của bạn: " + newPassword;
+                    message.Body = @"<body style=""padding: 0; margin: 0; background: #efefef"">
+    <table style=""height: 100%; width: 100%; background-color: #efefef;"" align=""center"">
+        <tbody>
+            <tr>
+                <td valign=""top"" id=""dbody"" data-version=""2.31"" style=""width: 100%; height: 100%; padding-top: 30px; padding-bottom: 30px; background-color: #efefef;"">
+                    <table class=""layer_1"" align=""center"" border=""0"" cellpadding=""0"" cellspacing=""0"" style=""max-width: 600px; box-sizing: border-box; width: 100%; margin: 0px auto;"">
+                        <tbody>
+                            <tr>
+                                <td class=""drow"" valign=""top"" align=""center"" style=""background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;"">
+                                    <div class=""layer_2"" style=""max-width: 600px; display: inline-block; vertical-align: top; width: 100%;"">
+                                        <table border=""0"" cellspacing=""0"" cellpadding=""0"" class=""edcontent"" style=""border-collapse: collapse; width: 100%;"">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign=""top"" class=""emptycell"" style=""padding: 10px;"">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class=""drow"" valign=""top"" align=""center"" style=""background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;"">
+                                    <div class=""layer_2"" style=""max-width: 600px; display: inline-block; vertical-align: top; width: 100%;"">
+                                        <table border=""0"" cellspacing=""0"" cellpadding=""0"" class=""edcontent"" style=""border-collapse: collapse; width: 100%;"">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign=""top"" class=""edimg"" style=""padding: 0px; box-sizing: border-box; text-align: center;"">
+                                                        <img src=""https://api.elasticemail.com/userfile/a18de9fc-4724-42f2-b203-4992ceddc1de/geometric_divider1.png"" alt=""Image"" width=""576"" style=""border-width: 0px; border-style: none; max-width: 576px; width: 100%;"">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class=""drow"" valign=""top"" align=""center"" style=""background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;"">
+                                    <div class=""layer_2"" style=""max-width: 600px; display: inline-block; vertical-align: top; width: 100%;"">
+                                        <table border=""0"" cellspacing=""0"" class=""edcontent"" style=""border-collapse: collapse; width: 100%;"">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign=""top"" class=""edtext"" style=""padding: 20px; text-align: left; color: #5f5f5f; font-size: 14px; font-family: Helvetica, Arial, sans-serif; word-break: break-word; direction: ltr; box-sizing: border-box;"">
+                                                        <p class=""style1 text-center"" style=""text-align: center; margin: 0px; padding: 0px; color: #f24656; font-size: 36px; font-family: Helvetica, Arial, sans-serif;"">
+                                                            <strong>
+                                                                Thông báo lấy lại mật khẩu.
+                                                            </strong>
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class=""drow"" valign=""top"" align=""center"" style=""background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;"">
+                                    <div class=""layer_2"" style=""max-width: 600px; display: inline-block; vertical-align: top; width: 100%;"">
+                                        <table border=""0"" cellspacing=""0"" class=""edcontent"" style=""border-collapse: collapse; width: 100%;"">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign=""top"" class=""edtext"" style=""padding: 20px; text-align: left; color: #5f5f5f; font-size: 14px; font-family: Helvetica, Arial, sans-serif; word-break: break-word; direction: ltr; box-sizing: border-box;"">
+                                                        <p style=""margin: 0px; padding: 0px;"">Lấy lại mật khẩu thành công ✨✨✨</p>
+                                                        <p style=""margin: 0px; padding: 0px;""><br></p>
+                                                        <p style=""margin: 0px; padding: 0px;"">Đây là mật khẩu mới của bạn !!!</p>
+                                                        <p style=""margin: 0px; padding: 0px; font-size: 17px; text-align: center;"">Mật khẩu của bạn là: " + newPassword + @"</p>
+                                                        <p class=""text-right"" style=""text-align: right; margin: 0px; padding: 0px;"">
+                                                            <a href=""#"" style=""color: #16c2d0; font-size: 14px; font-family: Helvetica, Arial, sans-serif; text-decoration: none;""><span><u>Đăng nhập ngay&gt;&gt;</u></span></a>
+                                                        </p>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td valign=""top"" class=""edimg"" style=""padding: 0px; box-sizing: border-box; text-align: center;"">
+                                                        <img src=""https://api.elasticemail.com/userfile/a18de9fc-4724-42f2-b203-4992ceddc1de/geometric_divider1.png"" alt=""Image"" width=""576"" style=""border-width: 0px; border-style: none; max-width: 576px; width: 100%;"">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class=""drow"" valign=""top"" align=""center"" style=""background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;"">
+                                    <div class=""layer_2"" style=""max-width: 600px; display: inline-block; vertical-align: top; width: 100%;"">
+                                        <table border=""0"" cellspacing=""0"" class=""edcontent"" style=""border-collapse: collapse; width: 100%;"">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign=""top"" class=""emptycell"" style=""padding: 10px;"">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class=""drow"" valign=""top"" align=""center"" style=""background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;"">
+                                    <div class=""layer_2"" style=""max-width: 600px; display: inline-block; vertical-align: top; width: 100%;"">
+                                        <table border=""0"" cellspacing=""0"" class=""edcontent"" style=""border-collapse: collapse; width: 100%;"">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign=""top"" class=""emptycell"" style=""padding: 10px;"">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>";
                     message.IsBodyHtml = true;
                     message.To.Add(email);
 

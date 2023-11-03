@@ -11,6 +11,7 @@
         public int? RoomCategoriesId { get; set; }
         public string? RoomCategoriesName { get; set; }
         public int? Slot { get; set; }
+        public List<int>? ServiceIds { get; set; }
 
     }
 }

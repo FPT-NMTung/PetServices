@@ -18,21 +18,21 @@
                     <form method="post" asp-controller="ListPartner" asp-action="DetailPartner" style="margin-right:10px">
                     <div class="card-body media align-items-center">
                             <div style="margin-bottom:1%" class="media-body">
-                                <label class="btn btn-outline-primary">
+                                <h3>
                                     Hình ảnh
-                                </label> &nbsp;
+                                </h3> &nbsp;
                             </div>
                         @*Chưa thêm ảnh*@
                         <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="d-block ui-w-80">
                     </div>
                         <div class="card-body media align-items-center">
                             <div style="margin-bottom:1%" class="media-body">
-                                <label class="btn btn-outline-primary">
+                                <h3>
                                     Hình ảnh giấy chứng nhận
-                                </label> &nbsp;
+                                </h3> &nbsp;
                             </div>
                             @*Chưa thêm ảnh*@
-                            <img style="width:100%;height:100%" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="d-block ui-w-80">
+                            <img style="width:100%;height:100%" src="@Model?.PartnerInfo.ImageCertificate" alt="" class="d-block ui-w-80">
                         </div>
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">

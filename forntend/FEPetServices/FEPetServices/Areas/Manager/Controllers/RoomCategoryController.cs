@@ -5,9 +5,11 @@ using PetServices.Models;
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
+    [Authorize(Policy = "ManaOnly")]
     public class RoomCategoryController : Controller
     {
         private readonly HttpClient client = null;
@@ -44,22 +46,23 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     if (!string.IsNullOrEmpty(responseContent))
                     {
+                        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                         var roomCategoryList = JsonConvert.DeserializeObject<List<RoomCategoryDTO>>(responseContent);
                         return View(roomCategoryList);
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
+                        ViewBag.ErrorToast = "API trả về dữ liệu rỗng.";
                     }
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                    ViewBag.ErrorToast = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
             }
             return View();
         }
@@ -72,8 +75,12 @@ namespace FEPetServices.Areas.Manager.Controllers
                 {
                     if (image != null && image.Length > 0)
                     {
-                        Console.WriteLine(image);
-                        roomCategoryDTO.Picture = "/img/" + image.FileName.ToString();
+                        string filename = GenerateRandomNumber(5) + image.FileName;
+                        filename = Path.GetFileName(filename);
+                        string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                        var stream = new FileStream(uploadfile, FileMode.Create);
+                        image.CopyToAsync(stream);
+                        roomCategoryDTO.Picture = "/img/" + filename;
                     }
 
                     roomCategoryDTO.Status = true;
@@ -85,12 +92,12 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TempData["SuccessMessage"] = "Thêm loại phòng thành công!";
+                        TempData["SuccessToast"] = "Thêm loại phòng thành công!";
                         return View(roomCategoryDTO);
                     }
                     else
                     {
-                        TempData["ErrorMessage"] = "Thêm loại phòng thất bại. Vui lòng thử lại sau!";
+                        TempData["ErrorToast"] = "Thêm loại phòng thất bại. Vui lòng thử lại sau!";
                         return View(roomCategoryDTO);
                     }
                 }
@@ -106,8 +113,20 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
         }
 
+        public static string GenerateRandomNumber(int length)
+        {
+            Random random = new Random();
+            const string chars = "0123456789";
+            char[] randomChars = new char[length];
 
-        
+            for (int i = 0; i < length; i++)
+            {
+                randomChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(randomChars);
+        }
+
         [HttpGet]
         public async Task<ActionResult> EditRoomCategory(int roomCategoryId)
         {

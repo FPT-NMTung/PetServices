@@ -6,10 +6,11 @@ using System.Text.Json;
 using PetServices.Models;
 using System.Security.Claims;
 using FEPetServices.Areas.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
-    /*[Authorize(Roles = "MANAGER")]*/
+    [Authorize(Policy = "ManaOnly")]
     public class ServiceCategoryController : Controller
     {
         private readonly HttpClient client = null;
@@ -47,21 +48,22 @@ namespace FEPetServices.Areas.Manager.Controllers
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var servicecategoryList = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseContent);
+                        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                         return View(servicecategoryList);
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
+                        ViewBag.ErrorToast = "API trả về dữ liệu rỗng.";
                     }
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                    ViewBag.ErrorToast = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
             }
 
             
@@ -148,7 +150,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     };
 
                     ServiceCategoryDTO managerInfos = System.Text.Json.JsonSerializer.Deserialize<ServiceCategoryDTO>(responseContent, options);
-
+                    TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                     return View(managerInfos);
                 }
                 else

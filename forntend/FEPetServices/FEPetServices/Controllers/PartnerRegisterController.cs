@@ -31,7 +31,14 @@ namespace FEPetServices.Controllers
                 registerInfo.ImageCertificate = "/img/" + filename;
             }
             try
-            {              
+            {
+               /* if (image != null && image.Length > 0)
+                {
+                    // Xử lý và lưu trữ ảnh
+                    Console.WriteLine(image);
+                    registerInfo.ImageCertificate = "/img/" + image.FileName.ToString();
+                }*/
+                // Chuyển thông tin đăng ký thành dạng JSON
                 var json = JsonConvert.SerializeObject(registerInfo);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -39,19 +46,23 @@ namespace FEPetServices.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    ViewBag.SuccessMessage = "Đăng ký thành công!";
+                    // Đăng ký thành công, bạn có thể xử lý kết quả ở đây (ví dụ: hiển thị thông báo thành công)
+                    TempData["SuccessRegisterSuccessToast"] = "Vui lòng chờ đợi quản trị viên xét duyệt thông tin tài khoản của bạn";
+                    return RedirectToAction("Index", "Login");
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Đăng ký không thành công. Mã lỗi HTTP: " + (int)response.StatusCode;
+                    // Đăng ký không thành công, bạn có thể xử lý kết quả ở đây (ví dụ: hiển thị thông báo lỗi)
+                    ViewBag.ErrorToast = "Đăng ký không thành công. Mã lỗi HTTP: " + (int)response.StatusCode;
+                    return View();
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                // Xử lý lỗi nếu có
+                ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
+                return View();
             }
-
-            return View();
         }
 
         public static string GenerateRandomNumber(int length)

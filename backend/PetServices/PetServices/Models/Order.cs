@@ -7,7 +7,10 @@ namespace PetServices.Models
     {
         public Order()
         {
+            BookingRoomDetails = new HashSet<BookingRoomDetail>();
+            BookingServicesDetails = new HashSet<BookingServicesDetail>();
             OrderProductDetails = new HashSet<OrderProductDetail>();
+            OrderTypes = new HashSet<OrderType>();
         }
 
         public int OrderId { get; set; }
@@ -20,6 +23,9 @@ namespace PetServices.Models
         public int? UserInfoId { get; set; }
 
         public virtual UserInfo? UserInfo { get; set; }
+        public virtual ICollection<BookingRoomDetail> BookingRoomDetails { get; set; }
+        public virtual ICollection<BookingServicesDetail> BookingServicesDetails { get; set; }
         public virtual ICollection<OrderProductDetail> OrderProductDetails { get; set; }
+        public virtual ICollection<OrderType> OrderTypes { get; set; }
     }
 }
