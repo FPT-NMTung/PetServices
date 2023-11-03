@@ -52,24 +52,83 @@ namespace FEPetServices.Areas.Customer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Information([FromForm] UserInfo userInfo)
+        public async Task<IActionResult> Information([FromForm] UserInfo userInfo, IFormFile image)
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
-            // Sử dụng HttpClient để gửi dữ liệu cập nhật lên API
-            if (userInfo.Address == null || userInfo.FirstName == null ||
-                userInfo.LastName == null)
+            if (userInfo.Phone == null)
             {
-                TempData["ErrorToast"] = "Vui lòng điền đầy đủ thông tin";
+                TempData["ErrorToast"] = "Số điện thoại không được để trống";
                 return RedirectToAction("Information");
+            }
+            if (userInfo.Phone.Length == 10 && userInfo.Phone.StartsWith("0"))
+            {
+
+            }
+            else
+            {
+                TempData["ErrorToast"] = "Số điện thoại phải bắt đầu bằng số 0 và có 10 chữ số";
+                return RedirectToAction("Information");
+            }
+
+            if (userInfo.Address == null)
+            {
+                TempData["ErrorToast"] = "Địa chỉ cụ thể không được để trống";
+                return RedirectToAction("Information");
+            }
+            if (userInfo.Address.Length <= 10)
+            {
+                TempData["ErrorToast"] = "Địa chỉ cụ thể phải lớn hơn 10 ký tự";
+                return RedirectToAction("Information");
+            }
+
+            if (image != null)
+            {
+                string filename = GenerateRandomNumber(5) + image.FileName;
+                filename = Path.GetFileName(filename);
+                string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                using (var stream = new FileStream(uploadfile, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
+                userInfo.ImageUser = "/img/" + filename;
+            }
+            else
+            {
+                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "/" + email);
+                if (responseUser.IsSuccessStatusCode)
+                {
+                    string responseContent = await responseUser.Content.ReadAsStringAsync();
+
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+
+                    AccountInfo managerInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
+                    userInfo.ImageUser = managerInfos.UserInfo.ImageUser;
+                }
             }
 
             if (userInfo.Province == null ||
                 userInfo.District == null || userInfo.Commune == null)
             {
-                TempData["ErrorToast"] = "Vui lòng cung cấp lại địa chỉ";
-                return RedirectToAction("Information");
+                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "/" + email);
+                if (responseUser.IsSuccessStatusCode)
+                {
+                    string responseContent = await responseUser.Content.ReadAsStringAsync();
+
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+
+                    AccountInfo managerInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
+                    userInfo.Province = managerInfos.UserInfo.Province;
+                    userInfo.District = managerInfos.UserInfo.District;
+                    userInfo.Commune = managerInfos.UserInfo.Province;
+                }
             }
 
             HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/updateInfo?email=" + email, userInfo);
@@ -85,7 +144,20 @@ namespace FEPetServices.Areas.Customer.Controllers
             }
         }
 
-        [HttpGet]
+        public static string GenerateRandomNumber(int length)
+        {
+            Random random = new Random();
+            const string chars = "0123456789"; // Chuỗi chứa các chữ số từ 0 đến 9
+            char[] randomChars = new char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                randomChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(randomChars);
+        }
+
         public async Task<IActionResult> ChangePassword([FromForm] ChangePassword changePassword)
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
@@ -98,7 +170,13 @@ namespace FEPetServices.Areas.Customer.Controllers
 
             if (changePassword.NewPassword != changePassword.ConfirmNewPassword)
             {
-                TempData["ErrorToast"] = "Mật khẩu mới và xác nhận lại mật khẩu không trùng khớp";
+                ViewBag.ErrorToast = "Mật khẩu mới và xác nhận lại mật khẩu không trùng khớp";
+                return View();
+            }
+
+            else if (changePassword.NewPassword.Length < 8)
+            {
+                ViewBag.ErrorToast = "Mật khẩu mới phải có ít nhất 8 ký tự";
                 return View();
             }
 

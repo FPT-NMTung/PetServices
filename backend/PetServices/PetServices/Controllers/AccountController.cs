@@ -86,13 +86,8 @@ namespace PetServices.Controllers
                     signingCredentials: creds
                 );
 
-                return Ok(new LoginResponse
-                {
-                    Successful = true,
-                    Token = new JwtSecurityTokenHandler().WriteToken(token),
-                    RoleName = result.Role?.RoleName,
-                    Status = result.Status,
-                    UserName = result.Role?.RoleName != "PARTNER" ? (result?.UserInfo.FirstName + " " + result?.UserInfo.LastName) : (result?.PartnerInfo.FirstName + " " + result?.PartnerInfo.LastName),
+                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName, Status= result.Status,
+                UserName = result.Role?.RoleName != "PARTNER" ? ( result?.UserInfo.FirstName +" " + result?.UserInfo.LastName) : (result?.PartnerInfo.FirstName + " " + result?.PartnerInfo.LastName), 
                     UserImage = result.Role?.RoleName != "PARTNER" ? result?.UserInfo.ImageUser : result?.PartnerInfo.ImagePartner
                 });
             }
@@ -409,7 +404,7 @@ namespace PetServices.Controllers
 
             };
 
-            _context.PartnerInfos.Add(partner);
+             _context.PartnerInfos.Add(partner);
             await _context.SaveChangesAsync();
 
             return Ok("Đăng ký thành công! Vui lòng chờ đợi quản lý xác nhận tài khoản của bạn trước khi đăng nhập");
