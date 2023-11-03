@@ -73,14 +73,14 @@ header .icons a{
     color: #333;
 }
 header .icons a:hover{
-    color:var(--pink);
+    color: var(--pink);
 }
 header .icons .dropbtn {
     border: none;
     cursor: pointer;
 }
 header .icons .dropbtn:hover{
-    color: var(--pink);
+    color:var(--pink);
 }
 header .icons .item .dropdown {
     position: relative;
@@ -100,6 +100,7 @@ header .icons .item .dropdown .dropdown-content {
 
 header .icons .item .dropdown .dropdown-content a {
     color: black;
+    font-size: 15px;
     padding: 12px 24px;
     text-decoration: none;
     display: flex;
@@ -107,6 +108,7 @@ header .icons .item .dropdown .dropdown-content a {
 
 header .icons .item .dropdown .dropdown-content a:hover {
     background-color: var(--pink-pastel);
+    color:var(--pink);
 }
 
 header .icons .item .dropdown:hover .dropdown-content {
