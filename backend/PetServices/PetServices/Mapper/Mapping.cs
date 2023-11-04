@@ -35,6 +35,15 @@ namespace PetServices.Mapper
 
             CreateMap<OrderProductDetail, OrderProductDetailDTO>()
                .ReverseMap();
+
+            CreateMap<BookingServicesDetail, BookingServicesDetailDTO>()
+               .ReverseMap();
+
+            CreateMap<BookingRoomDetail, BookingRoomDetailDTO>()
+               .ReverseMap();
+
+            CreateMap<OrderType, OrderTypeDTO>()
+               .ReverseMap();
             #endregion
 
             #region Account

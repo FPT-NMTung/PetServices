@@ -46,6 +46,7 @@ namespace PetServices.Controllers
                 Order order = await _context.Orders.Include(b => b.UserInfo).Include(b => b.OrderProductDetails)
                 .ThenInclude(o => o.Product).SingleOrDefaultAsync(b => b.OrderId == Id);
                 return Ok(_mapper.Map<OrdersDTO>(order));
+
             }
             catch (Exception ex)
             {
