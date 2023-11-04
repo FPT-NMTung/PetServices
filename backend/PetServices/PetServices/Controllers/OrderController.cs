@@ -99,16 +99,25 @@ namespace PetServices.Controllers
 
             var order = new Order
             {
-                // Các thuộc tính khác
+                OrderDate = orderDTO.OrderDate,
+                OrderStatus = orderDTO.OrderStatus,
+                Province = orderDTO.Province,
+                District = orderDTO.District,
+                Commune = orderDTO.Commune,
+                Address = orderDTO.Address,
+                UserInfoId = orderDTO.UserInfoId,
 
-                OrderProductDetails = orderDTO.OrderProductDetails?.Select(dto => new OrderProductDetail
+                // Sản phẩm
+                OrderProductDetails = orderDTO.OrderProductDetails != null 
+                  ? orderDTO.OrderProductDetails.Select(dto => new OrderProductDetail
                 {
                     Quantity = dto.Quantity,
                     Price = dto.Price,
                     ProductId = dto.ProductId,
-                }).ToList(),
+                }).ToList() 
+                : new List<OrderProductDetail>(),
 
-                // Kiểm tra và thêm BookingRoomDetails
+                // Phòng
                 BookingRoomDetails = orderDTO.BookingRoomDetails != null
                     ? orderDTO.BookingRoomDetails.Select(dto => new BookingRoomDetail
                     {
@@ -117,7 +126,7 @@ namespace PetServices.Controllers
                     }).ToList()
                     : new List<BookingRoomDetail>(),
 
-                // Kiểm tra và thêm BookingServicesDetails
+                // Dịch vụ
                 BookingServicesDetails = orderDTO.BookingServicesDetails != null
                     ? orderDTO.BookingServicesDetails.Select(dto => new BookingServicesDetail
                     {
@@ -125,11 +134,11 @@ namespace PetServices.Controllers
                         OrderId = dto.OrderId
                     }).ToList()
                     : new List<BookingServicesDetail>()
+                 
+                // Loại
 
-                // Các danh sách chi tiết khác
             };
 
-            // Lưu đơn hàng và các chi tiết vào cơ sở dữ liệu
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
