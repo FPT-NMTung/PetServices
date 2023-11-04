@@ -68,12 +68,7 @@ namespace PetServices.Controllers
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
                 return BadRequest(errorMessage);
             }
-            // check loại sản phẩm
-            if (productDTO.ProCategoriesId == null)
-            {
-                string errorMessage = "Loại sản phẩm không được để trống!";
-                return BadRequest(errorMessage);
-            }
+            // check loại sản phẩm            
             var proCategoriesId = _context.ProductCategories.FirstOrDefault(p => p.ProCategoriesId == productDTO.ProCategoriesId);
             if (proCategoriesId == null)
             {
