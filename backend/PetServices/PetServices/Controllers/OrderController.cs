@@ -39,12 +39,17 @@ namespace PetServices.Controllers
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> Get(int Id)
+        public async Task<IActionResult> GetOrder(int Id)
         {
             try
             {
                 Order order = await _context.Orders.Include(b => b.UserInfo).Include(b => b.OrderProductDetails)
-                .ThenInclude(o => o.Product).SingleOrDefaultAsync(b => b.OrderId == Id);
+                .ThenInclude(o => o.Product)
+                .Include(b => b.BookingServicesDetails)
+                .ThenInclude(bs => bs.Service)
+                .Include(b =>  b.BookingRoomDetails)
+                .ThenInclude(br => br.Room)
+                .SingleOrDefaultAsync(b => b.OrderId == Id);
                 return Ok(_mapper.Map<OrdersDTO>(order));
 
             }
@@ -83,5 +88,53 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOrder([FromBody] OrdersDTO orderDTO)
+        {
+            if (orderDTO == null)
+            {
+                return BadRequest("Invalid order data");
+            }
+
+            var order = new Order
+            {
+                // Các thuộc tính khác
+
+                OrderProductDetails = orderDTO.OrderProductDetails?.Select(dto => new OrderProductDetail
+                {
+                    Quantity = dto.Quantity,
+                    Price = dto.Price,
+                    ProductId = dto.ProductId,
+                }).ToList(),
+
+                // Kiểm tra và thêm BookingRoomDetails
+                BookingRoomDetails = orderDTO.BookingRoomDetails != null
+                    ? orderDTO.BookingRoomDetails.Select(dto => new BookingRoomDetail
+                    {
+                        RoomId = dto.RoomId,
+                        OrderId = dto.OrderId
+                    }).ToList()
+                    : new List<BookingRoomDetail>(),
+
+                // Kiểm tra và thêm BookingServicesDetails
+                BookingServicesDetails = orderDTO.BookingServicesDetails != null
+                    ? orderDTO.BookingServicesDetails.Select(dto => new BookingServicesDetail
+                    {
+                        ServiceId = dto.ServiceId,
+                        OrderId = dto.OrderId
+                    }).ToList()
+                    : new List<BookingServicesDetail>()
+
+                // Các danh sách chi tiết khác
+            };
+
+            // Lưu đơn hàng và các chi tiết vào cơ sở dữ liệu
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetOrder), new { Id = order.OrderId }, order);
+        }
+
     }
 }

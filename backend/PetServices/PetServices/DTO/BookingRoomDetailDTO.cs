@@ -6,6 +6,6 @@ namespace PetServices.DTO
     {
         public int RoomId { get; set; }
         public int OrderId { get; set; }
-        public virtual RoomDTO Room { get; set; } = null!;
+        public virtual RoomDTO? Room { get; set; } = null!;
     }
 }

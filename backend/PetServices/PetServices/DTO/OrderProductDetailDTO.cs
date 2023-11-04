@@ -7,7 +7,7 @@ namespace PetServices.DTO
         public int? Quantity { get; set; }
         public double? Price { get; set; }
         public int ProductId { get; set; }
-        public int BookingId { get; set; }
-        public virtual ProductDTO Product { get; set; } = null!;
+        public int OrderId { get; set; }
+        public virtual ProductDTO? Product { get; set; } = null!;
     }
 }
