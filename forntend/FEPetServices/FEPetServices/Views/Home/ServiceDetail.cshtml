@@ -7,23 +7,55 @@
     <!-- css -->
     <link rel="stylesheet" href="/css/ServiceDetail.css">
     <link rel="stylesheet" href="/css/Service/ServiceDetail.css"></link>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="/js/ServiceList.js"></script>
 </head>
 <body>
     <div class="pagination">
-        <a href="/Home">Home  </a> ><a href="">Dịch Vụ </a> ><p>Sản Phẩm </p> 
+        <a href="/Home">Home  </a> ><a href="/Home/ServiceList">Dịch Vụ </a> ><p>Sản Phẩm </p> 
     </div>
     <!-- product section -->
     <section class="product-container">
         <!-- left side -->
         <div class="img-card">
-            <img src="@Model?.Service.Picture" alt="" id="featured-image"  class="small-Img">
+            <img src="@Model?.Service.Picture" alt="" id="featured-image" class="small-Img">
             <!-- small img -->
-            @*<div class="small-Card">
-                <img src="img/image-1.png" alt="" class="small-Img">
-                <img src="img/small-img-2.png" alt="" class="small-Img">
-                <img src="img/small-img-3.png" alt="" class="small-Img">
-                <img src="img/image-1.png" alt="" class="small-Img">
-            </div>*@
+    
+            <div class="small-Card">
+                    <div class="Imgslider">
+                     <div class="card__container swiper">
+                        <div class="card__content anh">
+                           <div class="swiper-wrapper">
+                                @foreach(var sc in Model?.ServiceCategory.Services)
+                           {
+                                    @if (sc.Status)
+                                    {
+                                        <article class="card__article swiper-slide">
+                                            <div class="card__image">
+                                                <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sc.ServiceId"><img src="@sc.Picture" alt="image" class="card__img"></a>   
+                                                <div class="card__shadow"></div>
+                                            </div>
+                                        </article>
+                                    }
+                                }
+                           </div>
+                        </div>
+
+                        <!-- Navigation buttons -->
+                        <div class="swiper-button-next anh">
+                           <i class="ri-arrow-right-s-line"></i>
+                        </div>
+            
+                        <div class="swiper-button-prev anh" style="left:5px;">
+                           <i class="ri-arrow-left-s-line"></i>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="swiper-pagination anh"></div>
+                     </div>
+                  </div>
+            </div>
         </div>
         <!-- Right side -->
         <div class="product-info">
@@ -35,7 +67,13 @@
                 <p>Phân Loại:</p>
                  @foreach(var sr in Model?.ServiceCategory.Services)
                {
-                <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sr.ServiceId" class="size-option">@sr.ServiceName</a>
+                   @if(sr.Status){
+                        <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sr.ServiceId" class="size-option">@sr.ServiceName</a>
+                    }
+
+                    else{
+                        
+                    }
                }
             </div>
 
@@ -43,7 +81,6 @@
                 <button>Thêm vào giỏ</button>
                 <button>Mua ngay</button>
             </div>
-
          @*   <div>
                 <p>Delivery:</p>
                 <p>Free standard shipping on orders over $35 before tax, plus free returns.</p>
@@ -71,18 +108,124 @@
             </div>*@
        </div>
     </section>
+    <footer>
+      <div class="container">
+         <div class="card__container swiper">
+            <div class="card__content">
+               <div class="swiper-wrapper">
+               @foreach (var sc in Model.CaServices)
+                 @if(sc.Status){
+                                {
+                                    string description = sc.Desciptions; // Di chuyển khai báo vào đây
 
-    <!-- script tags -->
-    <script src="js/cart.js"></script>
+                                    if (description != null)
+                                    {
+                                        if (description.Length > 100)
+                                        {
+                                            int lastSpace = description.LastIndexOf(' ', 100);
+
+                                            description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                                        }
+                                    }
+                                    <article class="card__article swiper-slide">
+                                        <div class="card__image">
+                                            <img src="@sc.Picture" alt="image" class="card__img">
+                                            <div class="card__shadow"></div>
+                                        </div>
+                                        <div class="card__data">
+                                            <h3 class="card__name">@sc.SerCategoriesName</h3>
+                                            <p class="description">
+                                                @description
+                                            </p>
+                                            <a href="#" class="card__button">View More</a>
+                                        </div>
+                                    </article>
+                                }
+                            }
+
+               </div>
+            </div>
+
+            <!-- Navigation buttons -->
+            <div class="swiper-button-next" >
+               <i class="ri-arrow-right-s-line"></i>
+            </div>
+            
+            <div class="swiper-button-prev" style="left:5px;">
+               <i class="ri-arrow-left-s-line"></i>
+            </div>
+
+            <!-- Pagination -->
+            <div class="swiper-pagination"></div>
+         </div>
+      </div>
+    </footer>
+
+
+<script>
+    {
+    // Swiper cho danh sách sản phẩm
+    var swiperProducts = new Swiper(".card__content", {
+        loop: true,
+        spaceBetween: 32,
+        grabCursor: false,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+            dynamicBullets: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        breakpoints: {
+            600: {
+                slidesPerView: 2,
+            },
+            968: {
+                slidesPerView: 3,
+            },
+        },
+    });
+}
+{
+    // Swiper cho danh sách sản phẩm dự phòng
+    var swiperCardsimg = new Swiper(".card__content.anh", {
+        loop: true,
+        spaceBetween: 32,
+        grabCursor: true,
+        pagination: {
+            el: ".swiper-pagination.anh",
+            clickable: true,
+            dynamicBullets: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next.anh",
+            prevEl: ".swiper-button-prev.anh",
+        },
+        breakpoints: {
+            600: {
+                slidesPerView: 2,
+            },
+            968: {
+                slidesPerView: 4,
+            },
+        },
+    });
+}
+    // Đặt namespace riêng cho mỗi Swiper
+    swiperProducts.params.swiperNamespace = 'swiperProducts';
+    swiperCardsimg.params.swiperNamespace = 'swiperCardsimg';
+
+    // Xác định mối quan hệ giữa hai Swiper sử dụng namespace
+    swiperProducts.controller.control = swiperCardsimg;
+    swiperCardsimg.controller.control = swiperProducts;
+</script>
+
+
+
 </body>
+
 </html>
 
-@*<div>
-    <p>@Model.Service.ServiceId</p>
-</div>
-<div>
-    @foreach(var sr in Model.ServiceCategory.Services)
-    {
-        <a href="~/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sr.ServiceId">@sr.ServiceId</a>
-    }
-</div>*@
+
