@@ -38,12 +38,32 @@ namespace PetServices.Controllers
             }
         }
 
+        [HttpGet("email/{email}")]
+        public IActionResult GetOrderUser(string email)
+        {
+            try
+            {
+                Account orders = _context.Accounts
+                .Include(a => a.UserInfo)
+                .ThenInclude(u => u.Orders)
+                .FirstOrDefault(a => a.Email == email);
+
+                return Ok(_mapper.Map<AccountInfo>(orders));
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetOrder(int Id)
         {
             try
             {
-                Order order = await _context.Orders.Include(b => b.UserInfo).Include(b => b.OrderProductDetails)
+                Order order = await _context.Orders.Include(b => b.UserInfo)
+                .Include(b => b.OrderProductDetails)
                 .ThenInclude(o => o.Product)
                 .Include(b => b.BookingServicesDetails)
                 .ThenInclude(bs => bs.Service)
