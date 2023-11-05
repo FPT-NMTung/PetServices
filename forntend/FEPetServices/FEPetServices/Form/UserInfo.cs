@@ -1,4 +1,7 @@
-﻿namespace FEPetServices.Form
+﻿using FEPetServices.Form.BookingForm;
+using FEPetServices.Form.OrdersForm;
+
+namespace FEPetServices.Form
 {
     public class UserInfo
     {
@@ -11,6 +14,7 @@
         public string? Address { get; set; }
         public string? Descriptions { get; set; }
         public string? ImageUser { get; set; }
-        public virtual ICollection<PetInfo> PetInfos { get; set; }
+        public virtual ICollection<PetInfo> PetInfos { get; set; }  
+        public virtual ICollection<OrderForm> Orders { get; set; }
     }
 }

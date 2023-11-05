@@ -13,11 +13,11 @@ using Xunit;
 
 namespace UnitTest
 {
-    public class Test_AddRoom
+    public class Test_AddProduct
     {       
         [Fact]
         // 1. Add phòng thành công
-        public async Task Test_AddRoom_Success()
+        public async Task Test_AddProduct_Success()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -25,41 +25,40 @@ namespace UnitTest
 
             using (var context = new PetServicesContext(options))
             {
-                var roomCategory = new RoomCategory
+                var proCategory = new ProductCategory
                 {
-                    RoomCategoriesId = 1
+                    ProCategoriesId = 1
                 };
 
-                context.RoomCategories.Add(roomCategory);
+                context.ProductCategories.Add(proCategory);
                 context.SaveChanges();
 
                 var mockMapper = new Mock<IMapper>();
                 var mockConfiguration = new Mock<IConfiguration>();
 
-                var controller = new RoomController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
 
-                var testAddRoom = new RoomDTO
+                var testAddProduct = new ProductDTO
                 {
-                    RoomName = "Phòng cho Chó",
-                    Desciptions = "Phòng dành cho những chú chó đáng yêu",
+                    ProductName = "Phòng cho Chó",
+                    Desciption = "Phòng dành cho những chú chó đáng yêu",
                     Picture = "https://s.net.vn/NsSG",
                     Price = 10000,
-                    RoomCategoriesId = 1,
-                    Slot = 3,
-                    ServiceIds = new List<int>()
+                    ProCategoriesId = 1,
+                    Quantity = 3
                 };
 
-                var result = await controller.AddRoom(testAddRoom) as ObjectResult;
+                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
 
                 Assert.NotNull(result);
                 Assert.Equal(200, result.StatusCode);
-                Assert.Equal("Thêm phòng thành công!", result.Value);
+                Assert.Equal("Thêm sản phẩm thành công!", result.Value);
             }
         }
 
         [Fact]
-        // 2. RoomName(Null)
-        public async Task Test_AddRoom_RoomName_Null()
+        // 2. ProductName(Null)
+        public async Task Test_AddProduct_ProductName_Null()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -67,41 +66,40 @@ namespace UnitTest
 
             using (var context = new PetServicesContext(options))
             {
-                var roomCategory = new RoomCategory
+                var proCategory = new ProductCategory
                 {
-                    RoomCategoriesId = 1
+                    ProCategoriesId = 1
                 };
 
-                context.RoomCategories.Add(roomCategory);
+                context.ProductCategories.Add(proCategory);
                 context.SaveChanges();
 
                 var mockMapper = new Mock<IMapper>();
                 var mockConfiguration = new Mock<IConfiguration>();
 
-                var controller = new RoomController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
 
-                var testAddRoom = new RoomDTO
+                var testAddProduct = new ProductDTO
                 {
-                    RoomName = "",
-                    Desciptions = "Phòng dành cho những chú chó đáng yêu",
+                    ProductName = "",
+                    Desciption = "Phòng dành cho những chú chó đáng yêu",
                     Picture = "https://s.net.vn/NsSG",
                     Price = 10000,
-                    RoomCategoriesId = 1,
-                    Slot = 3,
-                    ServiceIds = new List<int>()
+                    ProCategoriesId = 1,
+                    Quantity = 3
                 };
 
-                var result = await controller.AddRoom(testAddRoom) as ObjectResult;
+                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
 
                 Assert.NotNull(result);
                 Assert.Equal(400, result.StatusCode);
-                Assert.Equal("Tên phòng không được để trống!", result.Value);
+                Assert.Equal("Tên sản phẩm không được để trống!", result.Value);
             }
         }
 
         [Fact]
-        // 3. RoomName(>500)
-        public async Task Test_AddRoom_RoomName_ToLong()
+        // 3. ProductName(>500)
+        public async Task Test_AddProduct_ProductName_ToLong()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -109,42 +107,41 @@ namespace UnitTest
 
             using (var context = new PetServicesContext(options))
             {
-                var roomCategory = new RoomCategory
+                var proCategory = new ProductCategory
                 {
-                    RoomCategoriesId = 1
+                    ProCategoriesId = 1
                 };
 
-                context.RoomCategories.Add(roomCategory);
+                context.ProductCategories.Add(proCategory);
                 context.SaveChanges();
 
                 var mockMapper = new Mock<IMapper>();
                 var mockConfiguration = new Mock<IConfiguration>();
 
-                var controller = new RoomController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
 
-                var longRoomName = new string('A', 501);
-                var testAddRoom = new RoomDTO
+                var longProductName = new string('A', 501);
+                var testAddProduct = new ProductDTO
                 {
-                    RoomName = longRoomName,
-                    Desciptions = "Phòng dành cho những chú chó đáng yêu",
+                    ProductName = longProductName,
+                    Desciption = "Phòng dành cho những chú chó đáng yêu",
                     Picture = "https://s.net.vn/NsSG",
                     Price = 10000,
-                    RoomCategoriesId = 1,
-                    Slot = 3,
-                    ServiceIds = new List<int>()
+                    ProCategoriesId = 1,
+                    Quantity = 3
                 };
 
-                var result = await controller.AddRoom(testAddRoom) as ObjectResult;
+                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
 
                 Assert.NotNull(result);
                 Assert.Equal(400, result.StatusCode);
-                Assert.Equal("Tên phòng vượt quá số ký tự. Tối đa 500 ký tự!", result.Value);
+                Assert.Equal("Tên sản phẩm vượt quá số ký tự. Tối đa 500 ký tự!", result.Value);
             }
         }
 
         [Fact]
         // 4. Desciptions(Null)
-        public async Task Test_AddRoom_Desciptions_Null()
+        public async Task Test_AddProduct_Desciptions_Null()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -152,31 +149,30 @@ namespace UnitTest
 
             using (var context = new PetServicesContext(options))
             {
-                var roomCategory = new RoomCategory
+                var proCategory = new ProductCategory
                 {
-                    RoomCategoriesId = 1
+                    ProCategoriesId = 1
                 };
 
-                context.RoomCategories.Add(roomCategory);
+                context.ProductCategories.Add(proCategory);
                 context.SaveChanges();
 
                 var mockMapper = new Mock<IMapper>();
                 var mockConfiguration = new Mock<IConfiguration>();
 
-                var controller = new RoomController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
 
-                var testAddRoom = new RoomDTO
+                var testAddProduct = new ProductDTO
                 {
-                    RoomName = "Phòng cho Chó",
-                    Desciptions = "",
+                    ProductName = "Phòng cho Chó",
+                    Desciption = "",
                     Picture = "https://s.net.vn/NsSG",
                     Price = 10000,
-                    RoomCategoriesId = 1,
-                    Slot = 3,
-                    ServiceIds = new List<int>()
+                    ProCategoriesId = 1,
+                    Quantity = 3
                 };
 
-                var result = await controller.AddRoom(testAddRoom) as ObjectResult;
+                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
 
                 Assert.NotNull(result);
                 Assert.Equal(400, result.StatusCode);
@@ -186,7 +182,7 @@ namespace UnitTest
 
         [Fact]
         // 5. Image(Null)
-        public async Task Test_AddRoom_Image_Null()
+        public async Task Test_AddProduct_Image_Null()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -194,31 +190,30 @@ namespace UnitTest
 
             using (var context = new PetServicesContext(options))
             {
-                var roomCategory = new RoomCategory
+                var proCategory = new ProductCategory
                 {
-                    RoomCategoriesId = 1
+                    ProCategoriesId = 1
                 };
 
-                context.RoomCategories.Add(roomCategory);
+                context.ProductCategories.Add(proCategory);
                 context.SaveChanges();
 
                 var mockMapper = new Mock<IMapper>();
                 var mockConfiguration = new Mock<IConfiguration>();
 
-                var controller = new RoomController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
 
-                var testAddRoom = new RoomDTO
+                var testAddProduct = new ProductDTO
                 {
-                    RoomName = "Phòng cho Chó",
-                    Desciptions = "Phòng dành cho những chú chó đáng yêu",
+                    ProductName = "Phòng cho Chó",
+                    Desciption = "Phòng dành cho những chú chó đáng yêu",
                     Picture = "",
                     Price = 10000,
-                    RoomCategoriesId = 1,
-                    Slot = 3,
-                    ServiceIds = new List<int>()
+                    ProCategoriesId = 1,
+                    Quantity = 3
                 };
 
-                var result = await controller.AddRoom(testAddRoom) as ObjectResult;
+                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
 
                 Assert.NotNull(result);
                 Assert.Equal(400, result.StatusCode);
@@ -228,7 +223,7 @@ namespace UnitTest
 
         [Fact]
         // 6. Image(WhiteSpace)
-        public async Task Test_AddRoom_Image_WhiteSpace()
+        public async Task Test_AddProduct_Image_WhiteSpace()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -236,31 +231,30 @@ namespace UnitTest
 
             using (var context = new PetServicesContext(options))
             {
-                var roomCategory = new RoomCategory
+                var proCategory = new ProductCategory
                 {
-                    RoomCategoriesId = 1
+                    ProCategoriesId = 1
                 };
 
-                context.RoomCategories.Add(roomCategory);
+                context.ProductCategories.Add(proCategory);
                 context.SaveChanges();
 
                 var mockMapper = new Mock<IMapper>();
                 var mockConfiguration = new Mock<IConfiguration>();
 
-                var controller = new RoomController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
 
-                var testAddRoom = new RoomDTO
+                var testAddProduct = new ProductDTO
                 {
-                    RoomName = "Phòng cho Chó",
-                    Desciptions = "Phòng dành cho những chú chó đáng yêu",
+                    ProductName = "Phòng cho Chó",
+                    Desciption = "Phòng dành cho những chú chó đáng yêu",
                     Picture = "https://s.net.vn/N sSG",
                     Price = 10000,
-                    RoomCategoriesId = 1,
-                    Slot = 3,
-                    ServiceIds = new List<int>()
+                    ProCategoriesId = 1,
+                    Quantity = 3
                 };
 
-                var result = await controller.AddRoom(testAddRoom) as ObjectResult;
+                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
 
                 Assert.NotNull(result);
                 Assert.Equal(400, result.StatusCode);
@@ -269,8 +263,8 @@ namespace UnitTest
         }
 
         [Fact]
-        // 7. RoomCategories(không tồn tại)
-        public async Task Test_AddRoom_RoomCategories_NotExist()
+        // 7. ProCategoriesId(không tồn tại)
+        public async Task Test_AddProduct_ProCategoriesId_NotExist()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -278,35 +272,34 @@ namespace UnitTest
 
             using (var context = new PetServicesContext(options))
             {
-                var roomCategory = new RoomCategory
+                var proCategory = new ProductCategory
                 {
-                    RoomCategoriesId = 1
+                    ProCategoriesId = 1
                 };
 
-                context.RoomCategories.Add(roomCategory);
+                context.ProductCategories.Add(proCategory);
                 context.SaveChanges();
 
                 var mockMapper = new Mock<IMapper>();
                 var mockConfiguration = new Mock<IConfiguration>();
 
-                var controller = new RoomController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
 
-                var testAddRoom = new RoomDTO
+                var testAddProduct = new ProductDTO
                 {
-                    RoomName = "Phòng cho Chó",
-                    Desciptions = "Phòng dành cho những chú chó đáng yêu",
+                    ProductName = "Phòng cho Chó",
+                    Desciption = "Phòng dành cho những chú chó đáng yêu",
                     Picture = "https://s.net.vn/NsSG",
                     Price = 10000,
-                    RoomCategoriesId = 2,
-                    Slot = 3,
-                    ServiceIds = new List<int>()
+                    ProCategoriesId = 2,
+                    Quantity = 3
                 };
 
-                var result = await controller.AddRoom(testAddRoom) as ObjectResult;
+                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
 
                 Assert.NotNull(result);
                 Assert.Equal(400, result.StatusCode);
-                Assert.Equal("Loại phòng không tồn tại!", result.Value);
+                Assert.Equal("Loại sản phẩm không tồn tại!", result.Value);
             }
         }       
     }

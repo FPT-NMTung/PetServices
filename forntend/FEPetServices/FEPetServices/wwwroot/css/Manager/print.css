@@ -101,18 +101,12 @@ h3 {
         background-color: #fff;
         visibility:hidden;
     }
-    .navigationx{
-        display:none;
-    }
-    .mainx {
-        width: calc(100% - 80px);
-        left: 80px;
-    }
-
     .print-container, .print-container * {
         visibility: visible;
     }
-
+    .sidebar{
+        display:none;
+    }
     .print-container{
         position : absolute;
         left:0;

@@ -1,6 +1,6 @@
 ﻿namespace FEPetServices.Form.BookingForm
 {
-    public class OrdersForm
+    public class OrderForm
     {
         public int OrderId { get; set; }
         public DateTime? OrderDate { get; set; }
