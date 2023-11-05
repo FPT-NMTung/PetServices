@@ -33,9 +33,9 @@
                         itemCount++;
                         <tr>
                             <td>@itemCount</td>
-                            <td>@orderLists.UserInfo.FirstName  @orderLists.UserInfo.LastName</td>
-                            <td>@orderLists.UserInfo.Phone</td>
-                            <td>@orderLists.OrderDate</td>
+                            <td>@orderLists?.UserInfo?.FirstName  @orderLists?.UserInfo?.LastName</td>
+                            <td>@orderLists?.UserInfo?.Phone</td>
+                            <td>@orderLists?.OrderDate</td>
                             <td>
                                 <a class="detail-button" href="~/Manager/OrderLists/OrderDetail?id=@orderLists.OrderId">Chi tiết</a>
                             </td>

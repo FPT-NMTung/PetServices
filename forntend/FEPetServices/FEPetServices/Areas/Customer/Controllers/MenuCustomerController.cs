@@ -1,5 +1,6 @@
 ﻿using FEPetServices.Form;
 using FEPetServices.Form.BookingForm;
+using FEPetServices.Form.OrdersForm;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -12,6 +13,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
         private string DefaultApiUrlPet = "";
+        private string DefaultApiUrlOrders = "";
 
         public MenuCustomerController()
         {
@@ -20,6 +22,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "https://localhost:7255/api/UserInfo";
             DefaultApiUrlPet = "https://localhost:7255/api/PetInfo";
+            DefaultApiUrlOrders = "https://localhost:7255/api/Order";
         }
         public IActionResult Index()
         {
@@ -213,8 +216,82 @@ namespace FEPetServices.Areas.Customer.Controllers
                 };
 
                 AccountInfo petInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
-
                 return View(petInfos);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MyOrders()
+        {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+            //https://localhost:7255/api/Order/email/cus%40gmail.com
+
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlOrders + "/email/" + email);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                AccountInfo orders = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
+                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                return View(orders);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> OrderDetail(int id)
+        {
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlOrders + "/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                OrderForm orderDetail = System.Text.Json.JsonSerializer.Deserialize<OrderForm>(responseContent, options);
+                double totalPrice = 0;
+                foreach (var od in orderDetail.OrderProductDetails)
+                {
+                    totalPrice = (double)(totalPrice + od.Price * od.Quantity);
+                }
+
+                ViewBag.TotalPrice = totalPrice;
+                return View(orderDetail);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> OrderDetail(int id, [FromForm] Status status)
+        {
+            //https://localhost:7255/api/Order/changeStatus?Id=1
+            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/changeStatus?Id=" + id, status);
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessToast"] = "Cập nhật thành công";
+                return RedirectToAction("OrderDetail", new { id = id });
             }
             else
             {
