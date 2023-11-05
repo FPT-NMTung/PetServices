@@ -45,7 +45,7 @@
                 </ol>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img class="d-block w-100" src="/img/banner/banner.webp" alt="Leopard">
+                        <img class="d-block" src="/img/banner/banner.webp" alt="Leopard">
                         <div class="carousel-caption">
                             <h3>Pet Services</h3>
                             <span> Thuận Tiện Với Người Dùng </span>
@@ -54,7 +54,7 @@
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img class="d-block w-100" src="~/img/banner/shop.png" alt="Cat"/>
+                        <img class="d-block" src="~/img/banner/shop.png" alt="Cat"/>
                         <div class="carousel-caption">
                             <h3>Pet Services</h3>
                             <span> Dễ Dàng Mua Sắm </span>
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img class="d-block w-100" src="/img/banner/spa.jpg" alt="Lion"/>
+                        <img class="d-block" src="/img/banner/spa.jpg" alt="Lion"/>
                         <div class="carousel-caption">
                             <h3>Pet Services</h3>
                             <span> Dễ Dàng Chăm Sóc Và Làm Đẹp </span>
@@ -84,16 +84,18 @@
             </div>
         </div>
         <div class="about" id="about">
-            <h1 class="heading"><span> Thông Tin Về </span> Chúng Tôi </h1>
-            <div class="row">
-                <div class="video-container">
-                    <img src="~/img/banner/room.jpg" />
-                </div>
-                <div class="content">
-                    <h3>Tại sao lại chọn trang web của chúng tôi?</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem provident ipsum autem non, eos ratione natus error iste maiores eius eligendi explicabo repudiandae nostrum asperiores omnis veritatis saepe illo? Nobis?</p>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laboriosam nesciunt a totam est ducimus reiciendis provident consequatur earum atque explicabo.</p>
-                    <a href="#" class="btn">Tìm Hiểu Thêm</a>
+            <div class="back-color">
+                <h1 class="heading"><span> Thông Tin Về </span> Chúng Tôi </h1>
+                <div class="row">
+                    <div class="video-container">
+                        <img src="~/img/banner/room.jpg" />
+                    </div>
+                    <div class="content">
+                        <h3>Tại sao lại chọn trang web của chúng tôi?</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem provident ipsum autem non, eos ratione natus error iste maiores eius eligendi explicabo repudiandae nostrum asperiores omnis veritatis saepe illo? Nobis?</p>
+                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laboriosam nesciunt a totam est ducimus reiciendis provident consequatur earum atque explicabo.</p>
+                        <a href="#" class="btn">Tìm Hiểu Thêm</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -121,126 +123,132 @@
             </div>
         </div>
         <div id="product">
-            <h1 class="heading"><span> Sản Phẩm </span> Của Chúng Tôi </h1>
-            <div class="container">
-                <div class="card__container swiper">
-                    <div class="card__content">
-                       <div class="swiper-wrapper">
-                           @foreach(var product in Model.ListProduct){
-                                <article class="card__article swiper-slide">
-                                    <div class="card__image">
-                                        <img src="@product?.Picture" alt="image" class="card__img">
-                                        <div class="card__shadow"></div>
-                                    </div>
+            <div class="back-color">
+                <h1 class="heading"><span href="/ProductList/Index"> Sản Phẩm </span> Của Chúng Tôi </h1>
+                <div class="container">
+                    <div class="card__container swiper">
+                        <div class="card__content">
+                           <div class="swiper-wrapper">
+                               @foreach(var product in Model.ListProduct){
+                                    <article class="card__article swiper-slide">
+                                        <div class="card__image">
+                                            <img src="@product?.Picture" alt="image" class="card__img">
+                                            <div class="card__shadow"></div>
+                                        </div>
 
-                                    <div class="card__data">
-                                        <h3 class="card__name">@product.ProductName</h3>
-                                        <p class="card__description">
-                                            @product.Price
-                                        </p>
+                                        <div class="card__data">
+                                            <h3 class="card__name">@product.ProductName</h3>
+                                            <p class="card__description">
+                                                @product.Price
+                                            </p>
 
-                                        <a href="#" class="card__button">view more</a>
-                                    </div>
-                                </article>
-                           }
+                                            <a href="#" class="card__button">view more</a>
+                                        </div>
+                                    </article>
+                               }
                   
-                       </div>
-                    </div>
+                           </div>
+                        </div>
 
-                    <!-- navigation buttons -->
-                    <div class="swiper-button-next">
-                       <i class="fa-solid fa-chevron-right"></i>
-                    </div>
+                        <!-- navigation buttons -->
+                        <div class="swiper-button-next">
+                           <i class="fa-solid fa-chevron-right"></i>
+                        </div>
             
-                    <div class="swiper-button-prev">
-                       <i class="fa-solid fa-chevron-left"></i>
-                    </div>
+                        <div class="swiper-button-prev">
+                           <i class="fa-solid fa-chevron-left"></i>
+                        </div>
 
-                    <!-- pagination -->
-                    <div class="swiper-pagination"></div>
+                        <!-- pagination -->
+                        <div class="swiper-pagination"></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div id="service-part">
-            <h1 class="heading"><span> Dịch Vụ </span> Của Chúng Tôi </h1>
-            <div class="container">
-                <div class="card__container swiper">
-                    <div class="service">
-                       <div class="swiper-wrapper">
-                           @foreach(var service in Model.ListServiceCategory){
-                                <article class="card__article swiper-slide">
-                                    <div class="card__image">
-                                    <img src="@service?.Picture" alt="image" class="card__img">
-                                        <div class="card__shadow"></div>
-                                    </div>
+            <div class="back-color">
+                <h1 class="heading"><span> Dịch Vụ </span> Của Chúng Tôi </h1>
+                <div class="container">
+                    <div class="card__container swiper">
+                        <div class="service">
+                           <div class="swiper-wrapper">
+                               @foreach(var service in Model.ListServiceCategory){
+                                    <article class="card__article swiper-slide">
+                                        <div class="card__image">
+                                        <img src="@service?.Picture" alt="image" class="card__img">
+                                            <div class="card__shadow"></div>
+                                        </div>
 
-                                    <div class="card__data">
-                                        <h3 class="card__name">@service.SerCategoriesName</h3>
-                                        <p class="card__description">
-                                            @service.Desciptions
-                                        </p>
+                                        <div class="card__data">
+                                            <h3 class="card__name">@service.SerCategoriesName</h3>
+                                            <p class="card__description">
+                                                @service.Desciptions
+                                            </p>
 
-                                        <a href="#" class="card__button">view more</a>
-                                    </div>
-                                </article>
-                           }
+                                            <a href="#" class="card__button">view more</a>
+                                        </div>
+                                    </article>
+                               }
                   
-                       </div>
-                    </div>
+                           </div>
+                        </div>
 
-                    <!-- navigation buttons -->
-                    <div class="swiper-button-next" onclick="logClickEvent()">
-                       <i class="fa-solid fa-chevron-right"></i>
+                        <!-- navigation buttons -->
+                        <div class="swiper-button-next" onclick="logClickEvent()">
+                           <i class="fa-solid fa-chevron-right"></i>
                        
-                    </div>
+                        </div>
             
-                    <div class="swiper-button-prev">
-                       <i class="fa-solid fa-chevron-left"></i>
-                    </div>
+                        <div class="swiper-button-prev">
+                           <i class="fa-solid fa-chevron-left"></i>
+                        </div>
 
-                    <!-- pagination -->
-                    <div class="swiper-pagination"></div>
+                        <!-- pagination -->
+                        <div class="swiper-pagination"></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div id="room">
-            <h1 class="heading"><span> Phòng Thú Cưng </span> Của Chúng Tôi </h1>
-            <div class="container">
-                <div class="card__container swiper">
-                    <div class="room-part">
-                       <div class="swiper-wrapper">
-                           @foreach(var room in Model.ListRoomCategory){
-                                <article class="card__article swiper-slide">
-                                    <div class="card__image">
-                                        <img src="@room?.Picture" alt="image" class="card__img">
-                                        <div class="card__shadow"></div>
-                                    </div>
+            <div class="back-color">
+                <h1 class="heading"><span> Phòng Thú Cưng </span> Của Chúng Tôi </h1>
+                <div class="container">
+                    <div class="card__container swiper">
+                        <div class="room-part">
+                           <div class="swiper-wrapper">
+                               @foreach(var room in Model.ListRoomCategory){
+                                    <article class="card__article swiper-slide">
+                                        <div class="card__image">
+                                            <img src="@room?.Picture" alt="image" class="card__img">
+                                            <div class="card__shadow"></div>
+                                        </div>
 
-                                    <div class="card__data">
-                                    <h3 class="card__name">@room.RoomCategoriesName</h3>
-                                        <p class="card__description">
-                                        @room.Desciptions
-                                        </p>
+                                        <div class="card__data">
+                                        <h3 class="card__name">@room.RoomCategoriesName</h3>
+                                            <p class="card__description">
+                                            @room.Desciptions
+                                            </p>
 
-                                        <a href="#" class="card__button">view more</a>
-                                    </div>
-                                </article>
-                           }
+                                            <a href="#" class="card__button">view more</a>
+                                        </div>
+                                    </article>
+                               }
                   
-                       </div>
-                    </div>
+                           </div>
+                        </div>
 
-                    <!-- navigation buttons -->
-                    <div class="swiper-button-next">
-                       <i class="fa-solid fa-chevron-right"></i>
-                    </div>
+                        <!-- navigation buttons -->
+                        <div class="swiper-button-next">
+                           <i class="fa-solid fa-chevron-right"></i>
+                        </div>
             
-                    <div class="swiper-button-prev">
-                       <i class="fa-solid fa-chevron-left"></i>
-                    </div>
+                        <div class="swiper-button-prev">
+                           <i class="fa-solid fa-chevron-left"></i>
+                        </div>
 
-                    <!-- pagination -->
-                    <div class="swiper-pagination"></div>
+                        <!-- pagination -->
+                        <div class="swiper-pagination"></div>
+                    </div>
                 </div>
             </div>
         </div>

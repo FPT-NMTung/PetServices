@@ -25,6 +25,7 @@ namespace FEPetServices.Controllers
         private string DefaultApiUrlServiceCategoryandService = "";
         private string DefaultApiUrlProductList = "";
         private string DefaultApiUrlRoomCategoryList = "";
+        private string DefaultApiUrlProductCategoryList = "";
 
         public HomeController()
         {
@@ -36,6 +37,7 @@ namespace FEPetServices.Controllers
             ApiUrlRoomCategoryList = "https://localhost:7255/api/Room/GetRoomCategory";
             ApiUrlRoomDetail = "https://localhost:7255/api/Room/GetRoom/";
             DefaultApiUrlServiceCategoryList = "https://localhost:7255/api/ServiceCategory";
+            DefaultApiUrlProductCategoryList = "https://localhost:7255/api/ServiceCategory";
             DefaultApiUrlServiceCategoryDetail = "https://localhost:7255/api/ServiceCategory/ServiceCategorysID/";
             DefaultApiUrlProductList = "https://localhost:7255/api/Product";
             DefaultApiUrlRoomCategoryList = "https://localhost:7255/api/Room";
@@ -371,7 +373,8 @@ namespace FEPetServices.Controllers
             public ServiceDTO Service { get; set; }
             public ServiceCategoryDTO ServiceCategory { get; set; }
         }
-        
+
+
 
 
         public IActionResult Test()
