@@ -1,5 +1,4 @@
 ﻿body{}
-
 .first {
     background-color: #f6f6f6;
     text-align: center;
@@ -8,29 +7,30 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    margin-top: 95px;
 }
 
-.first .title {
-    font-size: 45px;
-    font-weight: 400;
-    color: #666;
-}
-
-.first .path {
-    display: flex;
-}
-
-    .first .path a {
+    .first .title {
+        font-size: 45px;
+        font-weight: 400;
         color: #666;
     }
 
-        .first .path a:hover {
-            color: limegreen;
+    .first .path {
+        display: flex;
+    }
+
+        .first .path a {
+            color: #666;
         }
 
-    .first .path p {
-        color: #9d9c9c;
-    }
+            .first .path a:hover {
+                color: limegreen;
+            }
+
+        .first .path p {
+            color: #9d9c9c;
+        }
 
 .container {
     display: flex;
@@ -47,6 +47,7 @@
 
     .price-container .number-control p {
         width: 10%;
+        font-size: 15px;
     }
 
 .price-container .number-quantity {
@@ -73,9 +74,9 @@
         border: none;
         color: #FFFFFF;
         text-align: center;
-        font-size: 17px;
-        padding: 10px;
-        width: 35%;
+        font-size: 13px;
+        padding: 7px;
+        width: 90px;
         transition: all 0.5s;
         cursor: pointer;
         margin: 5px;
@@ -153,6 +154,11 @@
         margin-right: 10px;
         height: 20px;
         width: 20px;
+    }
+
+    .containerCate p {
+        margin-top: 4px;
+        font-size: 14px;
     }
 
 
@@ -325,7 +331,7 @@ a {
 
     .listRoom-grid .room .price {
         color: limegreen;
-        font-size: 23px;
+        font-size: 20px;
     }
 
     .listRoom-grid .room .name:hover {
@@ -462,4 +468,8 @@ a {
     color: #666;
     margin-right: 10px;
     font-size: 17px;
+}
+
+.first .path {
+    font-size: 20px;
 }

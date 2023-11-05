@@ -26,7 +26,7 @@ namespace PetServices.Controllers
         
 
         [HttpGet("GetAllService")]
-        public IActionResult Get()
+        public IActionResult GetServce()
         {
             List<Service> services = _context.Services.Include(s => s.SerCategories)
                .ToList();
@@ -36,7 +36,7 @@ namespace PetServices.Controllers
     
 
         [HttpGet("ServiceID/{id}")]
-        public IActionResult GetById(int id)
+        public IActionResult GetByIdServce(int id)
         {
             Service  service = _context.Services
                 .Include(s => s.SerCategories)
@@ -120,7 +120,7 @@ namespace PetServices.Controllers
 
         
         [HttpPut("UpdateServices")]
-        public IActionResult Update(ServiceDTO serviceDTO, int serviceId)
+        public IActionResult UpdateServce(ServiceDTO serviceDTO, int serviceId)
         {
             var service = _context.Services
                 .Include(a => a.SerCategories)
@@ -152,7 +152,7 @@ namespace PetServices.Controllers
 
         
         [HttpDelete]
-        public IActionResult Delete(int serviceId)
+        public IActionResult DeleteServce(int serviceId)
         {
             var service = _context.Services.FirstOrDefault(p => p.ServiceId == serviceId);
             if (service == null)

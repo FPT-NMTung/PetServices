@@ -104,18 +104,18 @@ namespace PetServices.Controllers
             return Ok(blog);
         }
 
-/*
+
         [HttpDelete]
-        public IActionResult Delete(int serviceId)
+        public IActionResult Delete(int blogId)
         {
-            var service = _context.Services.FirstOrDefault(p => p.ServiceId == serviceId);
+            var service = _context.Blogs.FirstOrDefault(p => p.BlogId == blogId);
             if (service == null)
             {
                 return NotFound();
             }
             try
             {
-                _context.Services.Remove(service);
+                _context.Blogs.Remove(service);
                 _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
@@ -123,7 +123,7 @@ namespace PetServices.Controllers
                 return Conflict();
             }
             return Ok(service);
-        }*/
+        }
     }
 }
 
