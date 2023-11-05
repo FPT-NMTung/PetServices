@@ -70,6 +70,8 @@ namespace FEPetServices.Controllers
 
                             HttpContext.Session.SetString("UserName", loginResponse.UserName == null ? "-a": loginResponse.UserName);
                             HttpContext.Session.SetString("UserImage", loginResponse.UserImage == null ? "-a" : loginResponse.UserImage);
+                            HttpContext.Session.SetString("Account", loginInfo.Email == null ? "-a" : loginInfo.Email);
+
                             // Redirect based on the role
                             if (roleName == "MANAGER")
                             {
