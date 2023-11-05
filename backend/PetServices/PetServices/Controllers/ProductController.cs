@@ -102,26 +102,68 @@ namespace PetServices.Controllers
         [HttpPut("Update")]
         public async Task<IActionResult> Update(ProductDTO productDTO, int proId)
         {
-            var product = _context.Products
-                .Include(a => a.ProCategories)
-                .FirstOrDefault(p => p.ProductId == proId);
-            if (product == null)
+            // check tên sản phẩm
+            if (string.IsNullOrWhiteSpace(productDTO.ProductName))
             {
-                return NotFound();
+                string errorMessage = "Tên sản phẩm không được để trống!";
+                return BadRequest(errorMessage);
             }
-            product.ProductName = productDTO.ProductName;
-            product.Desciption = productDTO.Desciption;
-            product.Picture = productDTO.Picture;
-            product.Status = productDTO.Status;
-            product.Price = productDTO.Price;
-            product.Quantity = productDTO.Quantity;
-            product.CreateDate = DateTime.Now;
-            product.ProCategoriesId = productDTO.ProCategoriesId;
-            _context.Update(product);
-            await _context.SaveChangesAsync();
+            if (productDTO.ProductName.Length > 500)
+            {
+                string errorMessage = "Tên sản phẩm vượt quá số ký tự. Tối đa 500 ký tự!";
+                return BadRequest(errorMessage);
+            }
+            // check mô tả
+            if (string.IsNullOrWhiteSpace(productDTO.Desciption))
+            {
+                string errorMessage = "Mô tả không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            // check ảnh
+            if (string.IsNullOrWhiteSpace(productDTO.Picture))
+            {
+                string errorMessage = "Ảnh phòng không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            else if (productDTO.Picture.Contains(" "))
+            {
+                string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            // check loại sản phẩm            
+            var proCategoriesId = _context.ProductCategories.FirstOrDefault(p => p.ProCategoriesId == productDTO.ProCategoriesId);
+            if (proCategoriesId == null)
+            {
+                string errorMessage = "Loại sản phẩm không tồn tại!";
+                return BadRequest(errorMessage);
+            }
+            try
+            {
+                var product = _context.Products
+                                .Include(a => a.ProCategories)
+                                .FirstOrDefault(p => p.ProductId == proId);
+                if (product == null)
+                {
+                    return BadRequest("Không tìm thấy sản phẩm bạn chọn.");
+                }
 
+                product.ProductName = productDTO.ProductName;
+                product.Desciption = productDTO.Desciption;
+                product.Picture = productDTO.Picture;
+                product.Status = productDTO.Status;
+                product.Price = productDTO.Price;
+                product.Quantity = productDTO.Quantity;
+                product.CreateDate = DateTime.Now;
+                product.ProCategoriesId = productDTO.ProCategoriesId;
+                _context.Update(product);
+                await _context.SaveChangesAsync();
 
-            return Ok(product);
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
+            }
         }
     }
 }
