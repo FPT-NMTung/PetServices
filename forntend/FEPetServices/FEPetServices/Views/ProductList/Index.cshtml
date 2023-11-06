@@ -1,7 +1,4 @@
-﻿@{
-    ViewData["Title"] = "Index";
-}
-<html>
+﻿<html>
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,17 +20,107 @@
     <link rel="stylesheet" href="script.js">
 </head>
 <body>
-    <div class="section-products">
-        <div class="row">
-            @*<div class="col-lg-2">
-                <h4>Lọc theo danh mục:</h4>
-                <button onclick="filterProducts('all')">Tất cả</button>
-                <button onclick="filterProducts('category1')">Danh mục 1</button>
-                <button onclick="filterProducts('category2')">Danh mục 2</button>
-            </div>*@
-            <div class="col-lg-12">
+    <div id="section-products">
+        <h1 class="heading"> <span>Sản Phẩm</span> </h1>
+        <div class="products-left">
+            <div class="left">
+                <div>
+                    <h3>Loại phòng:</h3>
+                    <div>
+                        <form method="get" id="myForm">
+                            <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom" />
+                            <input type="hidden" name="priceto" value="@ViewBag.priceto" />
+                            <input type="hidden" name="sortby" value="@ViewBag.sortby" />
+                            <input type="hidden" name="productname" value="@ViewBag.productname" />
+                            <input type="hidden" name="pagesize" value="@ViewBag.pagesize" />
+                            <input type="hidden" name="viewstyle" value="@ViewBag.viewstyle" />
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                                <a class="containerCate" href="javascript:void(0);" onclick="filterByCategory('@category.Value')">
+                                    <label>
+                                        <input type="checkbox" value="@category.Value" @(ViewBag.productcategory == category.Value ? "checked" : "")>
+                                        <p>@category.Text</p>
+                                    </label>
+                                </a>
+                            }
+                            <input type="hidden" id="productcategory" name="productcategory" value="" />
+                        </form>
+                    </div>
+                </div>
+                <div class="containerprice">
+                    <h3>Giá:</h3>
+                    <div>
+                        <form method="get">
+                            <input type="hidden" name="productcategory" value="@ViewBag.productcategory" />
+                            <input type="hidden" name="sortby" value="@ViewBag.sortby" />
+                            <input type="hidden" name="productname" value="@ViewBag.productname" />
+                            <input type="hidden" name="pagesize" value="@ViewBag.pagesize" />
+                            <input type="hidden" name="viewstyle" value="@ViewBag.viewstyle" />
+
+                            <div class="price-container">
+                                <div class="number-control">
+                                    <div style="display: flex;">
+                                        <p>Từ</p>
+                                        <input type="number" name="pricefrom" class="number-quantity" value="@ViewBag.pricefrom" min="0">
+                                        <p>đ</p>
+                                    </div>
+                                    <div style="display: flex;">
+                                        <p>Đến</p>
+                                        <input type="number" name="priceto" class="number-quantity" value="@ViewBag.priceto" min="0" style="text-transform: uppercase;">
+                                        <p>đ</p>
+                                    </div>
+                                </div>
+                                <button>
+                                    <span>Tìm kiếm</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div>
+                    <h3>Sắp xếp theo:</h3>
+                    <div>
+                        <form method="get" id="sortForm">
+                            <input type="hidden" name="roomcategory" value="@ViewBag.roomcategory" />
+                            <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom" />
+                            <input type="hidden" name="priceto" value="@ViewBag.priceto" />
+                            <input type="hidden" name="roomname" value="@ViewBag.roomname" />
+                            <input type="hidden" name="pagesize" value="@ViewBag.pagesize" />
+                            <input type="hidden" name="viewstyle" value="@ViewBag.viewstyle" />
+
+                            <div>
+                                <a class="containerCate" href="javascript:void(0);" onclick="sortBy('name_asc')">
+                                    <label>
+                                        <input type="checkbox" value="name_asc" @(ViewBag.sortby == "name_asc" ? "checked" : "")>
+                                        <p>Tên từ A-Z</p>
+                                    </label>
+                                </a>
+                                <a class="containerCate" href="javascript:void(0);" onclick="sortBy('name_desc')">
+                                    <label>
+                                        <input type="checkbox" value="name_desc" @(ViewBag.sortby == "name_desc" ? "checked" : "")>
+                                        <p>Tên từ Z-A</p>
+                                    </label>
+                                </a>
+                                <a class="containerCate" href="javascript:void(0);" onclick="sortBy('price')">
+                                    <label>
+                                        <input type="checkbox" value="price" @(ViewBag.sortby == "price" ? "checked" : "")>
+                                        <p>Giá từ thấp đến cao</p>
+                                    </label>
+                                </a>
+                                <a class="containerCate" href="javascript:void(0);" onclick="sortBy('price_desc')">
+                                    <label>
+                                        <input type="checkbox" value="price_desc" @(ViewBag.sortby == "price_desc" ? "checked" : "")>
+                                        <p>Giá từ cao đến thấp</p>
+                                    </label>
+                                </a>
+                            </div>
+                            <input type="hidden" id="sortby" name="sortby" value="" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="right">
                 <section class="products">
-                    <h1 class="heading"> <span>Sản Phẩm</span> </h1>
                     <div class="box-container">
                         @foreach (var product in Model)
                         {
@@ -41,8 +128,8 @@
                                 <div class="image">
                                     <img src="@product.Picture" />
                                     <div class="icons">
-                                        <a href="#" class="cart-btn"><i class="fa-solid fa-cart-plus"></i>Thêm Vào Giỏ Hàng</a>
-                                        <a href="#" class="cart-btn"><i class="fa-solid fa-bag-shopping"></i>Mua Ngay</a>
+                                        <a href="#" class="cart-btn"><i class="fa-solid fa-cart-plus"></i> Thêm Vào Giỏ Hàng</a>
+                                        <a href="#" class="cart-btn"><i class="fa-solid fa-bag-shopping"></i> Mua Ngay</a>
                                     </div>
                                 </div>
                                 <div class="content">
@@ -54,10 +141,73 @@
                     </div>
 
                 </section>
+                <div style="text-align:center;">
+                    <div class="pagination">
+                        @if (ViewBag.CurrentPage > 1)
+                        {
+                            <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, productcategory=ViewBag.productcategory, pricefrom=ViewBag.pricefrom, priceto=ViewBag.priceto, sortby=ViewBag.sortby, productname=ViewBag.productname, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">&laquo;</a>
+                        }
+
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            <a class="active" href="@Url.Action("Index", new { page = i, productcategory=ViewBag.productcategory, pricefrom=ViewBag.pricefrom, priceto=ViewBag.priceto, sortby=ViewBag.sortby, productname=ViewBag.productname, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">@i</a>
+                        }
+                        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                        {
+                            <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, productcategory=ViewBag.productcategory, pricefrom=ViewBag.pricefrom, priceto=ViewBag.priceto, sortby=ViewBag.sortby, productname=ViewBag.productname, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">&raquo;</a>
+                        }
+                    </div>
+                </div>
             </div>
+            
+
         </div>
     </div>
-    
 
+    <script>
+        document.querySelectorAll('#myForm input[type="checkbox"]').forEach(function (checkbox) {
+            checkbox.addEventListener('click', function () {
+                if (this.checked) {
+                    document.getElementById('productcategory').value = this.value;
+                } else {
+                    document.getElementById('productcategory').value = null;
+                }
+                document.getElementById('myForm').submit();
+            });
+        });
+
+        document.querySelectorAll('#sortForm input[type="checkbox"]').forEach(function (checkbox) {
+            checkbox.addEventListener('click', function () {
+                if (this.checked) {
+                    document.getElementById('sortby').value = this.value;
+                } else {
+                    document.getElementById('sortby').value = null;
+                }
+                document.getElementById('sortForm').submit();
+            });
+        });
+
+        // format url
+        var currentUrl = window.location.href;
+        var updatedUrl = currentUrl.replace(/&?(\w+)=(&|$)/g, '')
+            .replace(/&&/g, '&')
+            .replace(/\?&/, '?')
+            .replace(/\?$/, '');
+        window.history.replaceState({}, document.title, updatedUrl);
+    </script>
+    <script>
+        //format double
+        window.onload = function () {
+            var priceElements = document.querySelectorAll('.price');
+
+            priceElements.forEach(function (priceElement) {
+                var price = priceElement.textContent.split(' ')[0];
+                var formattedPrice = Number(price).toLocaleString().replace(/,/g, ".");
+                priceElement.textContent = formattedPrice + ' đ';
+            });
+        }
+    </script>
 </body>
+
 </html>
+
