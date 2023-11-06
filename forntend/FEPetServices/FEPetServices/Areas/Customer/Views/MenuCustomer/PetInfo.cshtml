@@ -5,9 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="~/css/toastNotification.css" rel="stylesheet" />
-    <link href="~/css/menucustomer.css" rel="stylesheet" />
-
-    <script src="~/js/takeAddress.js"></script>
 </head>
 <body>
     <div class="container light-style flex-grow-1 container-p-y">
@@ -23,6 +20,7 @@
                         <a class="list-group-item" href="~/Customer/MenuCustomer/Information">Thông tin cá nhân</a>
                         <a class="list-group-item" href="~/Customer/MenuCustomer/ChangePassword">Đổi mật khẩu</a>
                         <a class="list-group-item list-group-item-action active" href="#account-petinfo">Thông tin thú cưng</a>
+                        <a class="list-group-item" href="~/Customer/MenuCustomer/MyOrders">Đơn đặt hàng</a>
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -68,59 +66,6 @@
         </div>
     </div>
     </div>
-    <div id="toast"></div>
-    @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showSuccessToast();
-            });
-        </script>
-    }
-    @if (!string.IsNullOrEmpty(TempData["ErrorToast"] as string))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showErrorToast();
-            });
-        </script>
-    }
-    @if (!string.IsNullOrEmpty(TempData["SuccessLoginToast"] as string))
-    {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                showSuccessLoginToast();
-            });
-        </script>
-    }
 </body>
 <script src="~/js/toastnotification.js"></script>
-<script src="~/js/checkpassword.js"></script>
-<script>
-    function showSuccessToast() {
-        toast({
-            title: 'Thành công',
-            message: '@TempData["SuccessToast"]',
-            type: 'success',
-            duration: 2000
-        });
-    }
-    function showErrorToast() {
-        toast({
-            title: 'Thất bại',
-            message: '@TempData["ErrorToast"]',
-            type: 'error',
-            duration: 2000
-        });
-    }
-    function showSuccessLoginToast() {
-        toast({
-            title: 'Thành công',
-            message: '@TempData["SuccessLoginToast"]',
-            type: 'success',
-            duration: 2000
-        });
-    }
-
-</script>
 </html>

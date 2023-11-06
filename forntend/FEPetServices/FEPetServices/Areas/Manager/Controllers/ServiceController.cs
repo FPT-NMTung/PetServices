@@ -5,9 +5,11 @@ using PetServices.Models;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
+    [Authorize(Policy = "ManaOnly")]
     public class ServiceController : Controller
     {
         private readonly HttpClient client = null;
@@ -72,6 +74,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+               
                 HttpResponseMessage categoryResponse = await client.GetAsync("https://localhost:7255/api/ServiceCategory/GetAllServiceCategory");
 
                 if (categoryResponse.IsSuccessStatusCode)

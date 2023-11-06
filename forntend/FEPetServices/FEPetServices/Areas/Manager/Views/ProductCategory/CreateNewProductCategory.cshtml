@@ -6,7 +6,7 @@
 <link href="~/css/toastNotification.css" rel="stylesheet" />
 <script src="~/js/manager/productcategory.js"></script>
 
-<div class="container-add-new">
+<div class="container container-add-new">
     <form asp-action="CreateNewProductCategory" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
         <div class="noidung">
             <div class="anh-cate-product">
@@ -43,12 +43,13 @@
                 </div>
             </div>
         </div>
-        <div class="btn-cate">
-            <div class="btn-add-new">
-                <button type="submit" class="btn btn-primary" style="background: #FFD6E4; color: #E21033;">Thêm Mới</button>
+
+        <div class="row">
+            <div class="col-6" style="text-align:left">
+                <button type="submit" class="btn btn-primary">Cập nhật</button>
             </div>
-            <div class="btn-return-cateList">
-                <button type="button" style="background: #FFD6E4; color: #E21033;" onclick="returnProductCategory()">
+            <div class="col-6" style="text-align:right">
+                <button class="btn btn-primary" type="button" onclick="returnProductCategory()">
                     Quay lại Danh Sách
                 </button>
             </div>

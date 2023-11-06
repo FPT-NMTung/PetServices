@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="~/css/datatable.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container light-style flex-grow-1 container-p-y">
+        <h4 class="font-weight-bold py-3 mb-4">
+            Cài đặt tài khoản
+        </h4>
+
+        <div class="card overflow-hidden">
+            <div class="row no-gutters row-bordered row-border-light">
+                <div class="col-md-3 pt-0">
+                    <div class="list-group list-group-flush account-settings-links">
+                        <a class="list-group-item" href="~/Customer/MenuCustomer/Information">Thông tin cá nhân</a>
+                        <a class="list-group-item" href="#account-change-password">Đổi mật khẩu</a>
+                        <a class="list-group-item" href="~/Customer/MenuCustomer/PetInfo">Thông tin thú cưng</a>
+                        <a class="list-group-item list-group-item-action active" href="~/Customer/MenuCustomer/MyOrders">Đơn đặt hàng</a>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div>
+                        <h1>Dánh sách dặt hàng</h1>
+                    </div>
+                    <div>
+                        <table id="lists">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Ngày đặt đơn</th>
+                                    <th>Địa chỉ đặt hàng</th>
+                                    <th>Trạng thái</th>
+                                    <th>Chi tiết</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.UserInfo.Orders != null && Model.UserInfo.Orders.Count > 0)
+                                {
+                                    int itemCount = 0;
+                                    foreach (var orderLists in Model.UserInfo.Orders)
+                                    {
+                                        itemCount++;
+                                        <tr>
+                                            <td>@itemCount</td>
+                                            <td>@orderLists?.OrderDate</td>
+                                            <td>@orderLists?.Province @orderLists?.District @orderLists?.Commune</td>
+                                            <td>
+                                                @if (@orderLists?.OrderStatus?.Trim() == "Complete")
+                                                {
+                                                    <span style="background-color: green; color:#fff;border-radius:5px;padding:5px;">Đã nhận hàng</span>
+                                                }
+                                                else if (@orderLists?.OrderStatus?.Trim() == "Reject")
+                                                {
+                                                    <span style="OrderStatus-color: red; color:#fff;border-radius:5px;padding:5px;">Đơn hàng bị huỷ</span>
+                                                }
+                                                else if (@orderLists?.OrderStatus?.Trim() == "Waiting")
+                                                {
+                                                    <span style="background-color: yellow;color:green;border-radius:5px;padding:5px;">Giao hàng</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <a class="detail-button" href="~/Customer/MenuCustomer/OrderDetail?id=@orderLists.OrderId">Chi tiết</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="~/js/toastnotification.js"></script>
+<script src="~/js/checkpassword.js"></script>
+<script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.excel.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Khởi tạo DataTables
+        var table = $('#lists').DataTable({
+            "paging": true,
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "columnDefs": [
+                { "targets": [0], "width": "5%" },
+                { "targets": [1], "width": "20%" },
+                { "targets": [2], "width": "35%" },
+                { "targets": [3], "width": "25%" }, // Điều chỉnh cột này để khớp với số cột thực tế
+                { "targets": [4], "width": "15%" },
+            ],
+            "language": {
+                "lengthMenu": "Hiển thị _MENU_ dòng",
+                "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
+                "search": "Tìm kiếm:",
+                "paginate": {
+                    "first": "Đầu",
+                    "last": "Cuối",
+                    "next": "Tiếp",
+                    "previous": "Trước"
+                }
+            },
+        });
+    });
+</script>
+</html>

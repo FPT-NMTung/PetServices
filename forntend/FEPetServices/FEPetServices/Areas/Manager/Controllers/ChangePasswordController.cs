@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
+    [Authorize(Policy = "ManaOnly")]
     public class ChangePasswordController : Controller
     {
         private readonly HttpClient _client = null;
@@ -30,6 +32,11 @@ namespace FEPetServices.Areas.Manager.Controllers
             if (changePassword.NewPassword != changePassword.ConfirmNewPassword)
             {
                 ViewBag.ErrorToast = "Mật khẩu mới và xác nhận lại mật khẩu không trùng khớp";
+                return View();
+            }
+            else if (changePassword.NewPassword.Length < 8)
+            {
+                ViewBag.ErrorToast = "Mật khẩu mới phải có ít nhất 8 ký tự";
                 return View();
             }
 

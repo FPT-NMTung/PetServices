@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="~/css/Service.css">
+<link rel="stylesheet" href="/css/Service/Service.css">
 <link href="~/css/toastNotification.css" rel="stylesheet" />
 </head>
 <body>
@@ -24,7 +24,7 @@
       </div>
       <div class="col-75">
         <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" required>
-        <img src="/img/pngtree-add-vector-icon-png-image_470700.jpg" height="100px" width="100px" style="float: left;" id="imagePreview">
+        <img src="/img/pngtree-add-vector-icon-png-image_470700.jpg" style="float: left;" id="imagePreview">
       </div>
     </div>
     <div class="row">
@@ -32,7 +32,7 @@
         <label for="Price">Giá:</label>
       </div>
       <div class="col-75">
-        <input type="text" id="Price" name="Price" placeholder="Giá tiền" required>
+        <input type="number" id="Price" name="Price" placeholder="Giá tiền" required>
         <div style="color:red" class="error-message" id="price-error-message"></div> 
       </div>
     </div>
@@ -41,7 +41,7 @@
         <label for="SerCategoriesId">Loại Dịch Vụ</label>
       </div>
       <div class="col-75">
-          @if (ViewBag.Categories != null){
+         @if (ViewBag.Categories != null){
          <select id="SerCategoriesId" name="SerCategoriesId" required>
             <option value="">Select a Service Category</option>
             @foreach (var category in ViewBag.Categories)
@@ -64,14 +64,15 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-25">
-        <a type="submit" value="Cancel" href="/Manager/Service" class="cancel">Cancel</a>
+      <div class="btn-group col-2">
+         <a class="btn btn-primary btn_a" type="submit" value="Cancel" href="~/Manager/Service" class="cancel">Trở lại</a>
       </div>
-      <div class="col-75">
-        <input type="submit" value="Submit">
+      <div class="col-10">
+        <input class="btn btn-primary" type="submit" value="Thêm mới dịch vụ">
       </div>
     </div>
   </form>
 </div>
+<script src="~/js/Service.js"></script>
 </body>
 </html>

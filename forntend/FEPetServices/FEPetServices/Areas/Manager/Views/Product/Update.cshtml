@@ -3,7 +3,7 @@
 <link href="~/css/manager/product.css" rel="stylesheet" />
 <link href="~/css/toastNotification.css" rel="stylesheet" />
 <script src="~/js/manager/product.js"></script>
-<div class="container-add-new">
+<div class="container container-add-new">
     <form asp-action="Update" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
         <div class="noidung">
             <div class="anh-product">
@@ -12,7 +12,7 @@
                         <label for="image">Ảnh:</label>
                     </div>
                     <div class="typeinput">
-                        <input type="file" class="form-control" id="image" name="image" onchange="changeImageSource()" required>
+                        <input type="file" class="form-control" id="image" name="image" onchange="changeImageSource()" >
                         @if (!string.IsNullOrEmpty(Model?.Picture))
                         {
                             <img class="form-control-anh" src="@Model?.Picture" height="50%" width="50%" style="float: left;" id="imagePreview" />
@@ -103,12 +103,12 @@
                 </div>
             </div>
         </div>
-        <div class="btn-cate">
-            <div class="btn-add-new">
-                <button type="submit" class="btn btn-primary" style="background: #FFD6E4; color: #E21033;">Cập Nhập</button>
+        <div class="row">
+            <div class="col-6" style="text-align:left">
+                <button type="submit" class="btn btn-primary">Cập Nhập</button>
             </div>
-            <div class="btn-return-proList">
-                <button type="button" style="background: #FFD6E4; color: #E21033;" onclick="returnProduct()">
+            <div class="col-6" style="text-align:right">
+                <button class="btn btn-primary" type="button" onclick="returnProduct()">
                     Quay lại Danh Sách
                 </button>
             </div>

@@ -15,7 +15,7 @@
 
     $('.sidebar-toggle').click(function () {
         $('.sidebar').toggleClass('collapsed')
-
+    
         $('.sidebar.collapsed').mouseleave(function () {
             $('.sidebar-dropdown-menu').slideUp('fast')
             $('.sidebar-menu-item.has-dropdown, .sidebar-dropdown-menu-item.has-dropdown').removeClass('focused')

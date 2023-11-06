@@ -4,9 +4,11 @@ using FEPetServices.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using PetServices.Models;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
@@ -23,6 +25,7 @@ namespace FEPetServices.Controllers
         private string DefaultApiUrlServiceCategoryList = "";
         private string DefaultApiUrlServiceCategoryDetail = "";
         private string DefaultApiUrlServiceCategoryandService = "";
+        private string DefaultApiUrlBlogList = "";
         private string DefaultApiUrlProductList = "";
         private string DefaultApiUrlRoomCategoryList = "";
         private string DefaultApiUrlProductCategoryList = "";
@@ -39,11 +42,12 @@ namespace FEPetServices.Controllers
             DefaultApiUrlServiceCategoryList = "https://localhost:7255/api/ServiceCategory";
             DefaultApiUrlProductCategoryList = "https://localhost:7255/api/ServiceCategory";
             DefaultApiUrlServiceCategoryDetail = "https://localhost:7255/api/ServiceCategory/ServiceCategorysID/";
+            DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
             DefaultApiUrlProductList = "https://localhost:7255/api/Product";
             DefaultApiUrlRoomCategoryList = "https://localhost:7255/api/Room";
         }
 
-        public async Task<ActionResult> Room(RoomDTO roomDTO, int page = 1, int pagesize = 6, string roomcategory = "", string pricefrom = "", string priceto = "", string sortby = "", string roomname = "", string viewstyle = "grid")
+        public async Task<ActionResult> Room(RoomDTO roomDTO, RoomSearchDTO searchDTO)
         {
             try
             {
@@ -63,43 +67,46 @@ namespace FEPetServices.Controllers
 
                     var responseContent = await response.Content.ReadAsStringAsync();
 
+                    int page = searchDTO.page ?? 1; ;
+                    int pagesize = searchDTO.pagesize ?? 6;
+
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(responseContent);
 
-                        if (!string.IsNullOrEmpty(roomname))
+                        if (!string.IsNullOrEmpty(searchDTO.roomname))
                         {
-                            roomList = roomList.Where(r => r.RoomName.Contains(roomname, StringComparison.OrdinalIgnoreCase)).ToList();
+                            roomList = roomList.Where(r => r.RoomName.Contains(searchDTO.roomname, StringComparison.OrdinalIgnoreCase)).ToList();
                         }
 
-                        if (!string.IsNullOrEmpty(roomcategory))
+                        if (!string.IsNullOrEmpty(searchDTO.roomcategory))
                         {
-                            int roomCategoriesId = int.Parse(roomcategory);
+                            int roomCategoriesId = int.Parse(searchDTO.roomcategory);
                             roomList = roomList.Where(r => r.RoomCategoriesId == roomCategoriesId).ToList();
                         }
 
-                        if (!string.IsNullOrEmpty(pricefrom) || !string.IsNullOrEmpty(priceto))
+                        if (!string.IsNullOrEmpty(searchDTO.pricefrom) || !string.IsNullOrEmpty(searchDTO.priceto))
                         {
-                            if (string.IsNullOrEmpty(pricefrom))
+                            if (string.IsNullOrEmpty(searchDTO.pricefrom))
                             {
-                                int priceTo = int.Parse(priceto);
+                                int priceTo = int.Parse(searchDTO.priceto);
                                 roomList = roomList.Where(r => r.Price < priceTo).ToList();
                             }
-                            if (string.IsNullOrEmpty(priceto))
+                            if (string.IsNullOrEmpty(searchDTO.priceto))
                             {
-                                int priceFrom = int.Parse(pricefrom);
+                                int priceFrom = int.Parse(searchDTO.pricefrom);
                                 roomList = roomList.Where(r => r.Price > priceFrom).ToList();
                             }
-                            if (!string.IsNullOrEmpty(pricefrom) && !string.IsNullOrEmpty(priceto))
+                            if (!string.IsNullOrEmpty(searchDTO.pricefrom) && !string.IsNullOrEmpty(searchDTO.priceto))
                             {
-                                int PriceTo = int.Parse(priceto);
-                                int PriceFrom = int.Parse(pricefrom);
+                                int PriceTo = int.Parse(searchDTO.priceto);
+                                int PriceFrom = int.Parse(searchDTO.pricefrom);
 
                                 roomList = roomList.Where(r => r.Price > PriceFrom && r.Price < PriceTo).ToList();
                             }
                         }
 
-                        switch (sortby)
+                        switch (searchDTO.sortby)
                         {
                             case "name_desc":
                                 roomList = roomList.OrderByDescending(r => r.RoomName).ToList();
@@ -121,16 +128,16 @@ namespace FEPetServices.Controllers
                         List<RoomDTO> currentPageRoomList = roomList.Skip(startIndex).Take(pagesize).ToList();
 
                         ViewBag.TotalPages = totalPages;
-                        ViewBag.CurrentPage = page;
-                        ViewBag.PageSize = pagesize;
+                        ViewBag.CurrentPage = searchDTO.page;
+                        ViewBag.PageSize = searchDTO.pagesize;
 
-                        ViewBag.roomcategory = roomcategory;
-                        ViewBag.pricefrom = pricefrom;
-                        ViewBag.priceto = priceto;
-                        ViewBag.sortby = sortby;
-                        ViewBag.roomname = roomname;
-                        ViewBag.pagesize = pagesize;
-                        ViewBag.viewstyle = viewstyle;
+                        ViewBag.roomcategory = searchDTO.roomcategory;
+                        ViewBag.pricefrom = searchDTO.pricefrom;
+                        ViewBag.priceto = searchDTO.priceto;
+                        ViewBag.sortby = searchDTO.sortby;
+                        ViewBag.roomname = searchDTO.roomname;
+                        ViewBag.pagesize = searchDTO.pagesize;
+                        ViewBag.viewstyle = searchDTO.viewstyle;
 
                         return View(currentPageRoomList);
                     }
@@ -171,7 +178,7 @@ namespace FEPetServices.Controllers
                 {
                     var services = await serviceUnavailableResponse.Content.ReadFromJsonAsync<List<ServiceDTO>>();
 
-                    ViewBag.ServiceUnavailable = new SelectList(services, "ServiceId", "ServiceName");
+                    ViewBag.ServiceUnavailable = services;
                 }
 
                 HttpResponseMessage response = await client.GetAsync(ApiUrlRoomDetail + roomId);
@@ -195,9 +202,12 @@ namespace FEPetServices.Controllers
             }
 
             return View();
+            DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
+
+
         }
 
-        public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory, int page = 1, int pageSize = 4, string CategoriesName = "" )
+        public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory, int page = 1, int pagesize = 6, string CategoriesName = "" , string viewstyle = "grid", string sortby = "")
         {
             try
             {
@@ -225,15 +235,31 @@ namespace FEPetServices.Controllers
                             Console.WriteLine(1);
                         }
 
+                        switch (sortby)
+                        {
+                            case "name_desc":
+                                servicecategoryList = servicecategoryList.OrderByDescending(r => r.SerCategoriesName).ToList();
+                                break;
+                            default:
+                                servicecategoryList = servicecategoryList.OrderBy(r => r.SerCategoriesName).ToList();
+                                break;
+                        }
+
+
                         int totalItems = servicecategoryList.Count;
-                        int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-                        int startIndex = (page - 1) * pageSize;
-                        List<ServiceCategoryDTO> currentPageServicecategoryList = servicecategoryList.Skip(startIndex).Take(pageSize).ToList();
+                        int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
+                        int startIndex = (page - 1) * pagesize;
+                        List<ServiceCategoryDTO> currentPageServicecategoryList = servicecategoryList.Skip(startIndex).Take(pagesize).ToList();
 
                         ViewBag.TotalPages = totalPages;
                         ViewBag.CurrentPage = page;
-                        ViewBag.PageSize = pageSize;
+                        ViewBag.PageSize = pagesize;
+
                         ViewBag.CategoriesName =CategoriesName ;
+                        ViewBag.sortby = sortby;
+                        ViewBag.pagesize = pagesize;
+                        ViewBag.viewstyle = viewstyle;
+
                         return View(currentPageServicecategoryList);
                     }
                     else
@@ -315,22 +341,22 @@ namespace FEPetServices.Controllers
         public async Task<IActionResult> ServiceDetail(int serviceCategoryId, int serviceIds)
         {
             ServiceDetailModel model = new ServiceDetailModel();
-           
-                HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
-                if (response.IsSuccessStatusCode)
+
+            HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                if (!string.IsNullOrEmpty(responseContent))
                 {
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    ServiceCategoryDTO servicecategory = JsonConvert.DeserializeObject<ServiceCategoryDTO>(responseContent);
+                    int serviceId = 0;
 
-                    if (!string.IsNullOrEmpty(responseContent))
+                    foreach (var sr in servicecategory.Services)
                     {
-                        ServiceCategoryDTO servicecategory = JsonConvert.DeserializeObject<ServiceCategoryDTO>(responseContent);
-                        int serviceId = 0;
-
-                        foreach (var sr in servicecategory.Services)
-                        {
-                            serviceId = sr.ServiceId;
-                            break;
-                        }
+                        serviceId = sr.ServiceId;
+                        break;
+                    }
 
                     if (serviceIds == 0)
                     {
@@ -374,6 +400,82 @@ namespace FEPetServices.Controllers
             public ServiceCategoryDTO ServiceCategory { get; set; }
         }
 
+        public async Task<IActionResult> BlogList(BlogDTO blog, int page = 1, int pagesize = 6, string BlogName = "", string sortby = "")
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(blog);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrlBlogList + "/GetAllBlog");
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(responseContent))
+                    {
+                        var blogList = JsonConvert.DeserializeObject<List<BlogDTO>>(responseContent);
+
+
+
+                        if (!string.IsNullOrEmpty(BlogName) && blogList != null)
+                        {
+                            blogList = blogList
+                                .Where(c => c.PageTile != null && c.PageTile.Contains(BlogName, StringComparison.OrdinalIgnoreCase))
+                                .ToList();
+                            Console.WriteLine(1);
+                        }
+
+                        switch (sortby)
+                        {
+                            case "name_desc":
+                                blogList = blogList.OrderByDescending(r => r.PageTile).ToList();
+                                break;
+                            default:
+                                blogList = blogList.OrderBy(r => r.PageTile).ToList();
+                                break;
+                        }
+
+
+                        int totalItems = blogList.Count;
+                        int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
+                        int startIndex = (page - 1) * pagesize;
+                        List<BlogDTO> currentPageBlogList = blogList.Skip(startIndex).Take(pagesize).ToList();
+
+                        ViewBag.TotalPages = totalPages;
+                        ViewBag.CurrentPage = page;
+                        ViewBag.PageSize = pagesize;
+
+                        ViewBag.BlogName = BlogName;
+                        ViewBag.sortby = sortby;
+                        ViewBag.pagesize = pagesize;
+
+                        return View(currentPageBlogList);
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
+                    }
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+            }
+
+
+            return View();
+        }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
 
 

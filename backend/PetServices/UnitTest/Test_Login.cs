@@ -20,8 +20,8 @@ namespace UnitTest
         public async Task Test_Login_Success()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-                .Options;
+        .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+        .Options;
 
             using (var context = new PetServicesContext(options))
             {
@@ -29,7 +29,8 @@ namespace UnitTest
                 {
                     Email = "hungnvhe153434@fpt.edu.vn",
                     Password = "12345678",
-                    Role = new Role { RoleName = "CUSTOMER" }
+                    Role = new Role { RoleName = "CUSTOMER" },
+                    UserInfo = new UserInfo { FirstName = "Thị", LastName = "Nở" }
                 };
 
                 context.Accounts.Add(testUser);
@@ -59,8 +60,10 @@ namespace UnitTest
 
             var loginResponse = result.Value as LoginResponse;
             Assert.NotNull(loginResponse);
-            Assert.True(loginResponse.Successful);
             Assert.NotEmpty(loginResponse.Token);
+            Assert.Equal(true, loginResponse.Successful);
+            Assert.Equal("CUSTOMER", loginResponse.RoleName);
+            Assert.Equal("Thị Nở", loginResponse.UserName);
         }
 
          [Fact]

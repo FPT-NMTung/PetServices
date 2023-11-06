@@ -2,8 +2,6 @@
 <link href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
 <link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="~/css/toastNotification.css" rel="stylesheet" />
-
-@section Scripts {
     <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
@@ -43,7 +41,7 @@
             });
 
             // Thêm nút "Thêm dịch vụ" bên phải thanh tìm kiếm
-            var addButton = $('<button id="addButton" class="btn btn-primary">Thêm Loại Sản Phẩm</button>');
+            var addButton = $('<button  id="addButton" class="btn btn-primary">Thêm Loại Sản Phẩm</button>');
             $('.dataTables_filter').append(addButton);
 
             // Đính kèm sự kiện click cho nút "Thêm dịch vụ"
@@ -54,7 +52,6 @@
 
         });
     </script>
-}
 
 <h1>Danh Sách Loại Sản Phẩm Cho Thú Cưng</h1>
 
@@ -80,10 +77,14 @@
                     <td><img src="@pc.Picture" width="50" height="50"></td>
                     <td>@pc.ProCategoriesName</td>
                     <td>
-                        <div class="switch">
-                            <input type="checkbox" name="Status" class="toggle" @(pc?.Status ? "checked" : "") />
-                            <label class="label @(pc?.Status ? "active" : "inactive")"></label>
-                        </div>
+                        @if (@pc.Status)
+                        {
+                            <button class="btn btn-active" onclick="toggleStatus(this)">Đang hoạt động</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-inactive" onclick="toggleStatus(this)">Ngưng hoạt động</button>
+                        }
                     </td>
                     <td>
                         <a href="/Manager/ProductCategory/Update?procateId=@pc.ProCategoriesId">Chi tiết</a>
@@ -120,7 +121,23 @@
         height: 35px;
         margin-left: -7px;
     }
+    .btn-active {
+        background-color: #43e240;
+        color: white;
+        font-size: 13px;
+        width: 135px;
+        height: 40px;
+        border-radius: 5px;
+    }
 
+    .btn-inactive {
+        background-color: #f2110d;
+        color: white;
+        font-size: 13px;
+        width: 135px;
+        height: 40px;
+        border-radius: 5px;
+    }
     .toggle {
         position: absolute;
         top: 0;

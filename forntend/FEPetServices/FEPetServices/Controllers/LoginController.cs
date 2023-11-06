@@ -28,11 +28,6 @@ namespace FEPetServices.Controllers
             return View();
         }
 
-        public IActionResult Index1()
-        {
-            return View();
-        }
-
         [HttpPost]
         public async Task<IActionResult> Index([FromForm, Bind("Email", "Password")] LoginForm loginInfo)
         {
@@ -68,8 +63,8 @@ namespace FEPetServices.Controllers
                             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                            HttpContext.Session.SetString("UserName", loginResponse.UserName);
-                            HttpContext.Session.SetString("UserImage", loginResponse.UserImage);
+                            HttpContext.Session.SetString("UserName", loginResponse.UserName == null ? "aaa_a": loginResponse.UserName);
+                            HttpContext.Session.SetString("UserImage", loginResponse.UserImage == null ? "aaa_a" : loginResponse.UserImage);
                             // Redirect based on the role
                             if (roleName == "MANAGER")
                             {
@@ -86,6 +81,11 @@ namespace FEPetServices.Controllers
                                 TempData["SuccessLoginToast"] = "Đăng nhập thành công.";
                                 return RedirectToAction("Index", "Information", new { area = "Partner" });
                             }
+                            else if (roleName == "ADMIN")
+                            {
+                                TempData["SuccessLoginToast"] = "Đăng nhập thành công.";
+                                return RedirectToAction("Index", "Account", new { area = "Admin" });
+                            }
                         }
                         else
                         {
@@ -101,7 +101,7 @@ namespace FEPetServices.Controllers
                 }
                 else
                 {
-                    ViewBag.ErrorToast = "Đăng nhập không thành công. Tài khoản hoặc mật khẩu không chính xác";
+                    ViewBag.ErrorToast = "Lỗi hệ thống vui lòng thử lại sau hoặc tài khoản mật khẩu không chính xác";
                     return View();
                 }
                 return View();

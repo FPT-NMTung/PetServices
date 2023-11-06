@@ -10,7 +10,6 @@
     outline: none;
     border: none;
     text-decoration: none;
-    text-transform: capitalize;
     transition: 0.2s linear;
 }
 html {
@@ -122,6 +121,10 @@ header .icons .item .dropdown:hover .dropbtn {
 #home-page{
     background: pink;
 }
+#home-page .home-page{
+    background: #fff;
+    margin: 2rem 9%;
+}
 .back-color {
     background: #fff;
 }
@@ -175,9 +178,10 @@ header .icons .item .dropdown:hover .dropbtn {
     object-fit: cover; /* Điều này đảm bảo hình ảnh bao phủ toàn bộ container, duy trì tỷ lệ khung hình của nó */
     height: 80vh; /* Điều này đặt chiều cao của hình ảnh là chiều cao của viewport đầy đủ */
 }
-.about {
+/*.about {
     padding: 2rem 9%;
-}
+}*/
+
 .about .heading{
     text-align: center;
     font-size: 4rem;
@@ -198,10 +202,11 @@ header .icons .item .dropdown:hover .dropbtn {
     padding-bottom: 3rem;
 }
 .about .row .video-container{
-    flex: 1 1 40rem;
+    flex: 1 1 35rem;
     position: relative;
 }
-.about .row .video-container video{
+.about .row .video-container img{
+    margin-left: 10px;
     width: 100%;
     border: 1.5rem solid #fff;
     border-radius: 0.5rem;
@@ -390,9 +395,9 @@ footer {
 
 
 /*=============== Product slider ===============*/
-#product {
+/*#product {
     padding: 2rem 9%;
-}
+}*/
 #product h1{
     text-align:center;
     font-size: 4rem;
@@ -407,13 +412,30 @@ footer {
     justify-content: center;
     align-items: center;
 }
-#product .heading span{
+#product .heading a{
+    color:#333;
+}
+#product .heading a:hover {
+    text-decoration: none;
     color: var(--pink);
 }
-
-#service-part {
-    padding: 2rem 9%;
+#service-part .heading a {
+    color: #333;
 }
+#service-part .heading a:hover {
+    text-decoration: none;
+    color: var(--pink);
+}
+#room .heading a {
+    color: #333;
+}
+#room .heading a:hover {
+    text-decoration: none;
+    color: var(--pink);
+}
+/*#service-part {
+    padding: 2rem 9%;
+}*/
 #service-part h1 {
     text-align: center;
     font-size: 4rem;
@@ -431,9 +453,9 @@ footer {
     color: var(--pink);
 }
 
-#room {
+/*#room {
     padding: 2rem 9%;
-}
+}*/
 #room h1 {
     text-align: center;
     font-size: 4rem;
@@ -481,22 +503,23 @@ footer {
 .card__image {
     text-align:center;
     position: relative;
-    background-color: var(--first-color-light);
+    background-color: var(--pink-pastel);
     padding-top: 1.5rem;
     margin-bottom: -.75rem;
 }
 
 .card__data {
-    background-color: var(--container-color);
+    background-color: var(--pink-pastel);
     padding: 1.5rem 2rem;
     border-radius: 1rem;
     text-align: center;
     position: relative;
     z-index: 10;
+    font-size: 20px;
 }
 
 .card__img {
-    width: 180px;
+    width: 80%; 
     margin: 0 auto;
     position: relative;
     z-index: 5;
@@ -535,6 +558,11 @@ footer {
     cursor: pointer;
     font-size: 1.7rem;
     font-weight: 600;
+}
+.card__button:hover{
+    background: var(--pink);
+    color: var(--pink-pastel);
+    text-decoration: none;
 }
 
 /* Swiper class */

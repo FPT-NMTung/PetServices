@@ -36,13 +36,10 @@ namespace PetServices.Controllers
                 .FirstOrDefault(c => c.ProductId == id);
             return Ok(_mapper.Map<ProductDTO>(product));
         }
+
         [HttpPost("Add")]
         public async Task<IActionResult> CreateProduct(ProductDTO productDTO)
         {
-            if (productDTO == null)
-            {
-                return BadRequest("Sản phẩm không có!");
-            }
             // check tên sản phẩm
             if (string.IsNullOrWhiteSpace(productDTO.ProductName))
             {
@@ -70,61 +67,103 @@ namespace PetServices.Controllers
             {
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
                 return BadRequest(errorMessage);
-            }           
-            // check loại sản phẩm
+            }
+            // check loại sản phẩm            
             var proCategoriesId = _context.ProductCategories.FirstOrDefault(p => p.ProCategoriesId == productDTO.ProCategoriesId);
             if (proCategoriesId == null)
             {
                 string errorMessage = "Loại sản phẩm không tồn tại!";
                 return BadRequest(errorMessage);
-            }           
-
-            var product = new Product
-            {
-                ProductId = productDTO.ProductId,
-                ProductName = productDTO.ProductName,
-                Desciption = productDTO.Desciption,
-                Picture = productDTO.Picture,
-                Status = true,
-                Price = productDTO.Price,
-                Quantity = productDTO.Quantity,
-                CreateDate = DateTime.Now,
-                ProCategoriesId = productDTO.ProCategoriesId
-            };
-            _context.Products.Add(product);
+            }
             try
             {
+                var product = new Product
+                {
+                    ProductName = productDTO.ProductName,
+                    Desciption = productDTO.Desciption,
+                    Picture = productDTO.Picture,
+                    Status = true,
+                    Price = productDTO.Price,
+                    Quantity = productDTO.Quantity,
+                    CreateDate = DateTime.Now,
+                    ProCategoriesId = productDTO.ProCategoriesId
+                };
+
+                await _context.Products.AddAsync(product);
                 await _context.SaveChangesAsync();
                 return Ok("Thêm sản phẩm thành công!");
             }
-            catch (DbUpdateException ex)
+            catch (Exception ex)
             {
-                return StatusCode(500, ex.InnerException.Message);
+                return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
             }
         }
+
         [HttpPut("Update")]
         public async Task<IActionResult> Update(ProductDTO productDTO, int proId)
         {
-            var product = _context.Products
-                .Include(a => a.ProCategories)
-                .FirstOrDefault(p => p.ProductId == proId);
-            if (product == null)
+            // check tên sản phẩm
+            if (string.IsNullOrWhiteSpace(productDTO.ProductName))
             {
-                return NotFound();
+                string errorMessage = "Tên sản phẩm không được để trống!";
+                return BadRequest(errorMessage);
             }
-            product.ProductName = productDTO.ProductName;
-            product.Desciption = productDTO.Desciption;
-            product.Picture = productDTO.Picture;
-            product.Status = productDTO.Status;
-            product.Price = productDTO.Price;
-            product.Quantity = productDTO.Quantity;
-            product.CreateDate = DateTime.Now;
-            product.ProCategoriesId = productDTO.ProCategoriesId;
-            _context.Update(product);
-            await _context.SaveChangesAsync();
+            if (productDTO.ProductName.Length > 500)
+            {
+                string errorMessage = "Tên sản phẩm vượt quá số ký tự. Tối đa 500 ký tự!";
+                return BadRequest(errorMessage);
+            }
+            // check mô tả
+            if (string.IsNullOrWhiteSpace(productDTO.Desciption))
+            {
+                string errorMessage = "Mô tả không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            // check ảnh
+            if (string.IsNullOrWhiteSpace(productDTO.Picture))
+            {
+                string errorMessage = "Ảnh phòng không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            else if (productDTO.Picture.Contains(" "))
+            {
+                string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            // check loại sản phẩm            
+            var proCategoriesId = _context.ProductCategories.FirstOrDefault(p => p.ProCategoriesId == productDTO.ProCategoriesId);
+            if (proCategoriesId == null)
+            {
+                string errorMessage = "Loại sản phẩm không tồn tại!";
+                return BadRequest(errorMessage);
+            }
+            try
+            {
+                var product = _context.Products
+                                .Include(a => a.ProCategories)
+                                .FirstOrDefault(p => p.ProductId == proId);
+                if (product == null)
+                {
+                    return BadRequest("Không tìm thấy sản phẩm bạn chọn.");
+                }
 
+                product.ProductName = productDTO.ProductName;
+                product.Desciption = productDTO.Desciption;
+                product.Picture = productDTO.Picture;
+                product.Status = productDTO.Status;
+                product.Price = productDTO.Price;
+                product.Quantity = productDTO.Quantity;
+                product.CreateDate = DateTime.Now;
+                product.ProCategoriesId = productDTO.ProCategoriesId;
+                _context.Update(product);
+                await _context.SaveChangesAsync();
 
-            return Ok(product);
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
+            }
         }
     }
 }
