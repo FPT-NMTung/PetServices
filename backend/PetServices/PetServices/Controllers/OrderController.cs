@@ -28,7 +28,9 @@ namespace PetServices.Controllers
         {
             try
             {
-                List<Order> orders = _context.Orders.Include(b => b.UserInfo).ToList();
+                List<Order> orders = _context.Orders.Include(b => b.UserInfo)
+                    
+                .ToList();
                 return Ok(_mapper.Map<List<OrdersDTO>>(orders));
             }
             catch (Exception ex)
