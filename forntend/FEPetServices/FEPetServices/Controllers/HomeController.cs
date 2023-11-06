@@ -319,6 +319,15 @@ namespace FEPetServices.Controllers
             public ServiceCategoryDTO ServiceCategory { get; set; }
         }
 
+        public IActionResult Rules()
+        {
+            return View();
+        }
+
+        public IActionResult Introduce()
+        {
+            return View();
+        }
 
         public IActionResult Test()
         {
