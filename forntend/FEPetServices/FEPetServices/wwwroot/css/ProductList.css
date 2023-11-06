@@ -71,7 +71,7 @@
             line-height: 5rem;
             font-size: 2rem;
             width: 50%;
-            background: var(--pink);
+            background: #333;
             color: #fff;
             text-decoration: none;
         }
@@ -83,7 +83,8 @@
         }
 
         .products .box-container .box .image .icons a:hover {
-            background: #333;
+            background: var(--pink);
+            color:var(--pink-pastel);
         }
 
         .products .box-container .box .content {
@@ -94,6 +95,7 @@
             .products .box-container .box .content a {
                 font-size: 2.5rem;
                 color: #333;
+                text-decoration: none;
             }
 
             .products .box-container .box .content .price {
@@ -102,13 +104,15 @@
                 font-weight: bolder;
                 padding-top: 1rem;
             }
-
-                .products .box-container .box .content .price span {
-                    font-size: 1.5rem;
-                    color: #999;
-                    font-weight: lighter;
-                    text-decoration: line-through;
-                }
+            .products .box-container .box .content a:hover{
+                color:var(--pink);
+            }
+            .products .box-container .box .content .price span {
+                font-size: 1.5rem;
+                color: #999;
+                font-weight: lighter;
+                text-decoration: line-through;
+            }
 
 .products-left{
     display:flex;
@@ -170,8 +174,8 @@
     margin-right: 5px;
 }
 .price-container button:hover{
-    background: var(--pink-pastel);
-    color: var(--pink);
+    background: var(--pink);
+    color: var(--pink-pastel);
 }
 
 .left h3 {

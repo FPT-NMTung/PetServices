@@ -345,6 +345,18 @@ namespace FEPetServices.Controllers
             HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
             if (response.IsSuccessStatusCode)
             {
+                HttpResponseMessage responseCategory = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
+                if (responseCategory.IsSuccessStatusCode)
+                {
+                    var responseCategoryContent = await responseCategory.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(responseCategoryContent))
+                    {
+                        var serviceCategories = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
+                        model.CaServices = serviceCategories;
+                    }
+                }
+
                 var responseContent = await response.Content.ReadAsStringAsync();
 
                 if (!string.IsNullOrEmpty(responseContent))
@@ -390,15 +402,20 @@ namespace FEPetServices.Controllers
                     ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
                 }
             }
+                
 
-            return View();
+                return View();
+            
         }
 
         public class ServiceDetailModel
         {
             public ServiceDTO Service { get; set; }
             public ServiceCategoryDTO ServiceCategory { get; set; }
+            public List<ServiceCategoryDTO> CaServices { get; set; }
         }
+
+
 
         public async Task<IActionResult> BlogList(BlogDTO blog, int page = 1, int pagesize = 6, string BlogName = "", string sortby = "")
         {
@@ -472,12 +489,14 @@ namespace FEPetServices.Controllers
 
             return View();
         }
+        public async Task<IActionResult> BlogDetail()
+        {
+            return View();
+        }
         //public IActionResult Index()
         //{
         //    return View();
         //}
-
-
 
         public IActionResult Test()
         {

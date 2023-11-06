@@ -33,11 +33,11 @@ namespace FEPetServices.Areas.Manager.Controllers
             DefaultApiUrlServiceUpdate = "https://localhost:7255/api/Service/UpdateServices?serviceId=";
 
         }
-        public async Task<IActionResult> Index(ServiceDTO serviceCategory)
+        public async Task<IActionResult> Index(ServiceDTO service)
         {
             try
             {
-                var json = JsonConvert.SerializeObject(serviceCategory);
+                var json = JsonConvert.SerializeObject(service);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceList);

@@ -26,7 +26,7 @@ namespace PetServices.Controllers
 
         
         [HttpGet("GetAllServiceCategory")]
-        public IActionResult GetAll()
+        public IActionResult GetAllServiceCategory()
         {
             List<ServiceCategory> serviceCategories = _context.ServiceCategories.ToList();
             return Ok(_mapper.Map<List<ServiceCategoryDTO>>(serviceCategories));
@@ -34,7 +34,7 @@ namespace PetServices.Controllers
 
 
         [HttpGet("{ServiceCategorysName}")]
-        public IActionResult GetByName(string ServiceCategorysName)
+        public IActionResult GetByNameServiceCategory(string ServiceCategorysName)
         {
             List<ServiceCategory> serviceCategories = _context.ServiceCategories
                 .Where(c => c.SerCategoriesName == ServiceCategorysName)
@@ -44,7 +44,7 @@ namespace PetServices.Controllers
 
         /*[Authorize(Roles = "MANAGER")]*/
         [HttpGet("ServiceCategorysID/{id}")]
-        public IActionResult GetById(int id)
+        public IActionResult GetByIdServiceCategory(int id)
         {
             ServiceCategory serviceCategories = _context.ServiceCategories.Include(s => s.Services)
                 .FirstOrDefault(c => c.SerCategoriesId == id);
@@ -104,7 +104,7 @@ namespace PetServices.Controllers
 
         
         [HttpPut("EditServiceCategory")]
-        public IActionResult Update(ServiceCategoryDTO serviceCategoryDTO, int serCategoriesId)
+        public IActionResult UpdateServiceCategory(ServiceCategoryDTO serviceCategoryDTO, int serCategoriesId)
         {
             var servicecategorie = _context.ServiceCategories.FirstOrDefault(p => p.SerCategoriesId == serCategoriesId);
             if (servicecategorie == null)
@@ -130,7 +130,7 @@ namespace PetServices.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete(int serCategoriesId)
+        public IActionResult DeleteServiceCategory(int serCategoriesId)
         {
             var servicecategorie = _context.ServiceCategories.FirstOrDefault(p => p.SerCategoriesId == serCategoriesId);
             if (servicecategorie == null)
