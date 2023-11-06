@@ -6,6 +6,9 @@ namespace FEPetServices.Form.OrdersForm
     {
         public int ServiceId { get; set; }
         public int OrderId { get; set; }
+        public double? Price { get; set; }
+        public double? Weight { get; set; }
+        public double? PriceService { get; set; }
         public virtual ServiceDTO? Service { get; set; } = null!;
     }
 }
