@@ -23,6 +23,8 @@
     <Folder Include="Areas\Partner\Models\" />
     <Folder Include="wwwroot\img\banner\" />
     <Folder Include="wwwroot\img\about\" />
+    <Folder Include="wwwroot\img\ProductCategory\" />
+    <Folder Include="wwwroot\img\Product\" />
   </ItemGroup>
 
   <ItemGroup>

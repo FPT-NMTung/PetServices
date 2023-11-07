@@ -73,7 +73,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     {
                         // Xử lý và lưu trữ ảnh
                         Console.WriteLine(image);
-                        proCategory.Picture = "/img/" + image.FileName.ToString();
+                        proCategory.Picture = "/img/ProductCategory/" + image.FileName.ToString();
                     }
 
                     var json = JsonConvert.SerializeObject(proCategory);
@@ -158,11 +158,11 @@ namespace FEPetServices.Areas.Manager.Controllers
                     // An image file has been uploaded, so update the image path.
                     Console.WriteLine(image);
                     // Save the image to a location (e.g., a folder in your application)
-                    var imagePath = "/img/" + image.FileName;
+                    var imagePath = "/img/ProductCategory/" + image.FileName;
                     productCategoryDTO.Picture = imagePath;
 
                     // Save the image file to a folder on your server
-                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", image.FileName);
+                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "ProductCategory", image.FileName);
                     using (var stream = new FileStream(physicalImagePath, FileMode.Create))
                     {
                         await image.CopyToAsync(stream);
