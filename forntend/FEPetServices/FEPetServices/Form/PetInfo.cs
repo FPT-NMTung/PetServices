@@ -9,5 +9,6 @@
         public bool? Gender { get; set; }
         public string? Descriptions { get; set; }
         public int? UserInfoId { get; set; }
+        public double? Weight { get; set; }
     }
 }
