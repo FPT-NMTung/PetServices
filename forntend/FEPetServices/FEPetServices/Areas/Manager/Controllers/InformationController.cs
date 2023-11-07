@@ -93,12 +93,12 @@ namespace FEPetServices.Areas.Manager.Controllers
             {
                 string filename = GenerateRandomNumber(5) + image.FileName;
                 filename = Path.GetFileName(filename);
-                string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Profile/", filename);
                 using (var stream = new FileStream(uploadfile, FileMode.Create))
                 {
                     await image.CopyToAsync(stream);
                 }
-                userInfo.ImageUser = "/img/" + filename;
+                userInfo.ImageUser = "/img/Profile/" + filename;
             }
             else
             {
