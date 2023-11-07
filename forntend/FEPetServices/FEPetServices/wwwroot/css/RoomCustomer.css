@@ -30,7 +30,7 @@
 
 .filter-results #input {
     transition: outline 0.2s ease;
-    font-size: 1rem;
+    font-size: 15px;
     outline-color: var(--button-text);
     outline: unset;
     border: 2px solid var(--color-light);

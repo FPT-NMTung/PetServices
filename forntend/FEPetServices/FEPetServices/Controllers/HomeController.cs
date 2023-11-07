@@ -49,7 +49,7 @@ namespace FEPetServices.Controllers
 
         public async Task<ActionResult> Room(RoomDTO roomDTO, RoomSearchDTO searchDTO)
         {
-            /*try
+            try
             {
                 var json = JsonConvert.SerializeObject(roomDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -66,9 +66,6 @@ namespace FEPetServices.Controllers
                     }
 
                     var responseContent = await response.Content.ReadAsStringAsync();
-
-                    int page = searchDTO.page ?? 1; ;
-                    int pagesize = searchDTO.pagesize ?? 6;
 
                     if (!string.IsNullOrEmpty(responseContent))
                     {
@@ -122,24 +119,13 @@ namespace FEPetServices.Controllers
                                 break;
                         }
 
-                        int totalItems = roomList.Count;
-                        int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
-                        int startIndex = (page - 1) * pagesize;
-                        List<RoomDTO> currentPageRoomList = roomList.Skip(startIndex).Take(pagesize).ToList();
-
-                        ViewBag.TotalPages = totalPages;
-                        ViewBag.CurrentPage = searchDTO.page;
-                        ViewBag.PageSize = searchDTO.pagesize;
-
                         ViewBag.roomcategory = searchDTO.roomcategory;
                         ViewBag.pricefrom = searchDTO.pricefrom;
                         ViewBag.priceto = searchDTO.priceto;
                         ViewBag.sortby = searchDTO.sortby;
                         ViewBag.roomname = searchDTO.roomname;
-                        ViewBag.pagesize = searchDTO.pagesize;
-                        ViewBag.viewstyle = searchDTO.viewstyle;
 
-                        return View(currentPageRoomList);
+                        return View(roomList);
                     }
                     else
                     {
@@ -154,7 +140,7 @@ namespace FEPetServices.Controllers
             catch (Exception ex)
             {
                 ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
-            }*/
+            }
 
             return View();
         }
