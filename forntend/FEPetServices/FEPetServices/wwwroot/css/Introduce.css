@@ -68,34 +68,34 @@
 }
 
 
-        @media screen and (max-width: 768px) {
-            .main .container {
+@media screen and (max-width: 768px) {
+    .main .container {
         width: 80%;
         margin-left: 10%;
         margin-top: 30px;
     }
 
-            .first .title {
-                font-size: 30px;
-                font-weight: 400;
-                color: #666;
-            }
+    .first .title {
+        font-size: 30px;
+        font-weight: 400;
+        color: #666;
+    }
 
-            .main .container .title {
-                font-size: 18px;
-            }
+    .main .container .title {
+        font-size: 18px;
+    }
 
-            .title-content {
-                font-size: 15px;
-            }
+    .title-content {
+        font-size: 15px;
+    }
 
-            .main .container .content {
-                font-size: 13px;
-            }
+    .main .container .content {
+        font-size: 13px;
+    }
 
-            .first .path{
-                font-size: 13px;
-            }
+    .first .path {
+        font-size: 13px;
+    }
 }
 
 @media screen and (max-width: 500px) {
@@ -111,7 +111,7 @@
         color: #666;
     }
 
-    .title-content{
+    .title-content {
         font-size: 12px;
     }
 

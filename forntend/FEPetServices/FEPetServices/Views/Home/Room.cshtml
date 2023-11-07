@@ -43,7 +43,7 @@
                         </form>
                     </div>
                 </div>
-                <div class="containerprice">
+                @*<div class="containerprice">
                     <h3>Giá:</h3>
                     <div>
                         <form method="get">
@@ -72,7 +72,28 @@
                             </div>
                         </form>
                     </div>
+                </div>*@
+                <div class="containerprice">
+                    <div class="price-input">
+                        <div class="field">
+                            <span>Min</span>
+                            <input type="number" class="input-min" value="0">
+                        </div>
+                        <div class="separator">-</div>
+                        <div class="field">
+                            <span>Max</span>
+                            <input type="number" class="input-max" value="500000">
+                        </div>
+                    </div>
+                    <div class="slider">
+                        <div class="progress"></div>
+                    </div>
+                    <div class="range-input">
+                        <input type="range" class="range-min" min="0" max="500000" value="0" step="10000">
+                        <input type="range" class="range-max" min="0" max="500000" value="500000" step="10000">
+                    </div>
                 </div>
+
                 <div>
                     <h3>Sắp xếp theo:</h3>
                     <div>
@@ -193,7 +214,7 @@
                                                     <img src="@room.Picture" class="image">
                                                 </div>
                                                 <a class="name" href="/Home/RoomDetail?roomId=@room.RoomId">@room.RoomName</a>
-                                                <div class="price">@room.Price đ</div>
+                                                <div class="price">@room.Price vnd/h</div>
                                             </div>
                                         </div>
                                     </div>
@@ -233,7 +254,7 @@
                                                 <div class="text-container">
                                                     <div>
                                                         <a class="name" href="/Home/RoomDetail?roomId=@room.RoomId">@room.RoomName</a>
-                                                        <div class="price">@formattedPrice đ</div>
+                                                        <div class="price">@formattedPrice vnd/h</div>
                                                         <div class="description">@description</div>
                                                     </div>
                                                     <div>
@@ -279,6 +300,49 @@
         </div>
     </div>
     <script>
+        const rangeInput = document.querySelectorAll(".range-input input"),
+            priceInput = document.querySelectorAll(".price-input input"),
+            range = document.querySelector(".slider .progress");
+        let priceGap = 1000;
+
+        priceInput.forEach(input => {
+            input.addEventListener("input", e => {
+                let minPrice = parseInt(priceInput[0].value),
+                    maxPrice = parseInt(priceInput[1].value);
+
+                if ((maxPrice - minPrice >= priceGap) && maxPrice <= rangeInput[1].max) {
+                    if (e.target.className === "input-min") {
+                        rangeInput[0].value = minPrice;
+                        range.style.left = ((minPrice / rangeInput[0].max) * 100) + "%";
+                    } else {
+                        rangeInput[1].value = maxPrice;
+                        range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
+                    }
+                }
+            });
+        });
+
+        rangeInput.forEach(input => {
+            input.addEventListener("input", e => {
+                let minVal = parseInt(rangeInput[0].value),
+                    maxVal = parseInt(rangeInput[1].value);
+
+                if ((maxVal - minVal) < priceGap) {
+                    if (e.target.className === "range-min") {
+                        rangeInput[0].value = maxVal - priceGap
+                    } else {
+                        rangeInput[1].value = minVal + priceGap;
+                    }
+                } else {
+                    priceInput[0].value = minVal;
+                    priceInput[1].value = maxVal;
+                    range.style.left = ((minVal / rangeInput[0].max) * 100) + "%";
+                    range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+                }
+            });
+        });
+    </script>
+    <script>
         document.querySelectorAll('#myForm input[type="checkbox"]').forEach(function (checkbox) {
             checkbox.addEventListener('click', function () {
                 if (this.checked) {
@@ -301,6 +365,17 @@
             });
         });
 
+        //document.querySelectorAll('#sortprice input[type="range"]').forEach(function (range) {
+        //    range.addEventListener('change', function () {
+        //        document.getElementById('thumbMin').value = this.value;
+        //        document.getElementById('thumbMax').value = this.value;
+        //        document.getElementById('sortprice').submit();
+        //    });
+        //});
+
+        //search price
+        
+
         // format url
         var currentUrl = window.location.href;
         var updatedUrl = currentUrl.replace(/&?(\w+)=(&|$)/g, '')
@@ -317,7 +392,7 @@
             priceElements.forEach(function (priceElement) {
                 var price = priceElement.textContent.split(' ')[0];
                 var formattedPrice = Number(price).toLocaleString().replace(/,/g, ".");
-                priceElement.textContent = formattedPrice + ' đ';
+                priceElement.textContent = formattedPrice + ' vnd';
             });
         }
     </script>
