@@ -172,6 +172,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     productDTO.Picture = imagePath;
 
                     var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "Product", image.FileName);
+                    //add
                     using (var stream = new FileStream(physicalImagePath, FileMode.Create))
                     {
                         await image.CopyToAsync(stream);
