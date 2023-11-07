@@ -13,6 +13,7 @@ using Xunit;
 
 namespace UnitTest
 {
+    //fix
     public class Test_AddProduct
     {       
         [Fact]
