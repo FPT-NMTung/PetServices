@@ -38,11 +38,11 @@
                             <div class="product-detail-right-content">
                                 <div id="product-price">@Model.Price VND</div>
                                     <div id="product-status" style="font-size : 25px">
-                                        @if (Model.Status == false || Model.Quanlity <= 0)
+                                        @if (Model.Status == false || Model.Quantity <= 0)
                                         {
                                             <span style="color: red;">Hết hàng</span>
                                         }
-                                        else if (Model.Status == true || Model.Quanlity > 0)
+                                        else if (Model.Status == true || Model.Quantity > 0)
                                         {
                                             <span style="color: green;">Còn hàng</span>
                                         }
@@ -53,7 +53,7 @@
                         </div>
                         <div id="product-detail-buttons">
 
-                            @if (Model.Status == false || Model.Quanlity <= 0)
+                            @if (Model.Status == false || Model.Quantity <= 0)
                             {
                                 <div id="product-detail-button" style=" text-align:center">
                                     <a href="#"><input style="background-color:#fff ; color:red;" type="button" value="Hết Hàng"></a>
