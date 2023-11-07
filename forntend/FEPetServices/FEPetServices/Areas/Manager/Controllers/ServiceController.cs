@@ -88,10 +88,10 @@ namespace FEPetServices.Areas.Manager.Controllers
                 {
                     string filename = GenerateRandomNumber(5) + file.FileName;
                     filename = Path.GetFileName(filename);
-                    string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                    string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Service/", filename);
                     var stream = new FileStream(uploadfile, FileMode.Create);
                     file.CopyToAsync(stream);
-                    service.Picture = "/img/" + filename;
+                    service.Picture = "/img/Service" + filename;
                 }
 
                 service.Status = true;
@@ -191,10 +191,10 @@ namespace FEPetServices.Areas.Manager.Controllers
                 if (image != null && image.Length > 0)
                 {
                     // Handle the case when a new image is uploaded
-                    var imagePath = "/img/" + image.FileName;
+                    var imagePath = "/img/Service/" + image.FileName;
                     service.Picture = imagePath;
 
-                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", image.FileName);
+                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "Service",image.FileName);
                     using (var stream = new FileStream(physicalImagePath, FileMode.Create))
                     {
                         await image.CopyToAsync(stream);
