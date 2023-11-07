@@ -303,6 +303,10 @@ footer {
 .footer .box-container .box{
     flex: 1 1 25rem;
 }
+    .footer .box-container .box1 {
+        flex: 1 1 25rem;
+        text-align: center;
+    }
 .footer .box-container .box h3{
     color: #333;
     font-size: 2.5rem;
