@@ -7,8 +7,9 @@ namespace PetServices.Models
     {
         public int RoomId { get; set; }
         public int OrderId { get; set; }
-        public virtual Booking Order { get; set; } = null!;
-        public virtual Order OrderNavigation { get; set; } = null!;
+        public double? Price { get; set; }
+
+        public virtual Order Order { get; set; } = null!;
         public virtual Room Room { get; set; } = null!;
     }
 }

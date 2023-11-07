@@ -15,7 +15,7 @@ function returnProduct() {
 }
 function validateForm() {
     const fname = document.getElementById('ProductName');
-    const subject = document.getElementById('Desciption');
+    /*const subject = document.getElementById('Desciption');*/
     const fnameErrorMessage = document.getElementById('fnameErrorMessage');
     const subjectErrorMessage = document.getElementById('subjectErrorMessage');
 
@@ -35,10 +35,10 @@ function validateForm() {
         isValid = false;
     }
 
-    if (specialChars.test(subject.value)) {
+    /*if (specialChars.test(subject.value)) {
         subjectErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
         isValid = false;
-    }
+    }*/
 
     return isValid;
 }

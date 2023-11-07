@@ -32,12 +32,6 @@ namespace FEPetServices.Controllers
             }
             try
             {
-               /* if (image != null && image.Length > 0)
-                {
-                    // Xử lý và lưu trữ ảnh
-                    Console.WriteLine(image);
-                    registerInfo.ImageCertificate = "/img/" + image.FileName.ToString();
-                }*/
                 // Chuyển thông tin đăng ký thành dạng JSON
                 var json = JsonConvert.SerializeObject(registerInfo);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");

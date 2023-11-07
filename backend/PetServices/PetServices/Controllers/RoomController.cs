@@ -182,6 +182,7 @@ namespace PetServices.Controllers
         [HttpPut("UpdateRoom")]
         public async Task<ActionResult> UpdateRoom(RoomDTO roomDTO, int roomId)
         {
+            // check tên phòng
             if (string.IsNullOrWhiteSpace(roomDTO.RoomName))
             {
                 string errorMessage = "Tên phòng không được để trống!";
@@ -209,18 +210,7 @@ namespace PetServices.Controllers
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
                 return BadRequest(errorMessage);
             }
-            // check giá
-            if (roomDTO.Price == null)
-            {
-                string errorMessage = "Giá phòng không được để trống!";
-                return BadRequest(errorMessage);
-            }
-            if (roomDTO.RoomCategoriesId == null)
-            {
-                string errorMessage = "Loại phòng không được để trống!";
-                return BadRequest(errorMessage);
-            }
-
+            // check loại phòng           
             var roomcategory = _context.RoomCategories.FirstOrDefault(r => r.RoomCategoriesId == roomDTO.RoomCategoriesId);
 
             if (roomcategory == null)
@@ -258,7 +248,7 @@ namespace PetServices.Controllers
                 _context.Entry(room).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 await _context.SaveChangesAsync();
 
-                return Ok(room);
+                return Ok("Cập nhật phòng thành công!");
             }
             catch (Exception ex)
             {
@@ -282,7 +272,7 @@ namespace PetServices.Controllers
                 _context.Entry(room).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 await _context.SaveChangesAsync();
 
-                return Ok(room);
+                return Ok("Cập nhật phòng thành công!");
             }
             catch (Exception ex)
             {

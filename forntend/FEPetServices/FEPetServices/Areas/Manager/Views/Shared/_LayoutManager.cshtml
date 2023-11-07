@@ -25,7 +25,19 @@
 <body>
     <div class="sidebar position-fixed top-0 bottom-0 bg-white border-end">
         <div class="d-flex align-items-center p-3">
-            <a href="#" class="sidebar-logo text-uppercase fw-bold text-decoration-none text-indigo fs-3">Quản lý</a>
+            <div class="sidebar-logo text-uppercase fw-bold text-decoration-none text-indigo fs-3">
+            @{
+                string? userimagelogo = Context.Session.GetString("UserImage");
+                if (userimagelogo is not null)
+                {
+                    <img class="navbar-profile-image" src="@userimagelogo" alt="Image">
+                }
+                if (userimagelogo is null)
+                {
+                    <img class="navbar-profile-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPzVNWWirLZJ6H95_YOLsLkxju6ZNaSxdj37F7nXfd29TXvBVI9PeZWrTfYEin-XBDnkk&usqp=CAU" alt="Image">
+                }
+            }
+            </div>
             <i class="sidebar-toggle fa-regular fa-circle-left ms-auto fs-5 d-none d-md-block"></i>
         </div>
         <ul class="sidebar-menu p-3 m-0 mb-0">
@@ -38,7 +50,7 @@
             <li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">Quản lý tài khoản</li>
             <li class="sidebar-menu-item has-dropdown">
                 <a href="#">
-                    <i class="fa-regular fa-user sidebar-menu-item-icon"></i>
+                    <i class="fa-solid fa-user sidebar-menu-item-icon"></i>
                     Tài khoản
                     <i class="fa-solid fa-angle-down sidebar-menu-item-accordion ms-auto"></i>
                 </a>
@@ -149,6 +161,21 @@
                     </li>
                 </ul>
             </li>
+            <li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">Bài viết</li>
+            <li class="sidebar-menu-item has-dropdown">
+                <a href="#">
+                    <i class="fa-solid fa-blog sidebar-menu-item-icon"></i>
+                    Bài viết
+                    <i class="fa-solid fa-angle-down sidebar-menu-item-accordion ms-auto"></i>
+                </a>
+                <ul class="sidebar-dropdown-menu">
+                    <li class="sidebar-dropdown-menu-item">
+                        <a href="~/Manager/Blog">
+                            Danh sách bài viết
+                        </a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
 
@@ -161,22 +188,22 @@
                     <div class="d-flex align-items-center cursor-pointer dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         @{
                             string? username = Context.Session.GetString("UserName");
-                            if (username != "-a")
+                            if (username != "aaa_a")
                             {
                                 <span class="me-2 d-none d-sm-block">@username</span>
                             }
-                            else
+                            if(username is null)
                             {
                                 <span class="me-2 d-none d-sm-block">Xin Chào</span>
                             }
                         }
                         @{
                             string? userimage = Context.Session.GetString("UserImage");
-                            if (userimage != "-a")
+                            if (userimage is not null)
                             {
                                 <img class="navbar-profile-image" src="@userimage" alt="Image">
                             }
-                            else
+                            if (userimage is null)
                             {
                                 <img class="navbar-profile-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPzVNWWirLZJ6H95_YOLsLkxju6ZNaSxdj37F7nXfd29TXvBVI9PeZWrTfYEin-XBDnkk&usqp=CAU" alt="Image">
                             }

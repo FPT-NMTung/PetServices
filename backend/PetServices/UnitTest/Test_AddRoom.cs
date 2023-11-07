@@ -17,7 +17,7 @@ namespace UnitTest
     {       
         [Fact]
         // 1. Add phòng thành công
-        public async Task Test_AddProduct_Success()
+        public async Task Test_AddRoom_Success()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -59,7 +59,7 @@ namespace UnitTest
 
         [Fact]
         // 2. RoomName(Null)
-        public async Task Test_AddProduct_RoomName_Null()
+        public async Task Test_AddRoom_RoomName_Null()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -101,7 +101,7 @@ namespace UnitTest
 
         [Fact]
         // 3. RoomName(>500)
-        public async Task Test_AddProduct_RoomName_ToLong()
+        public async Task Test_AddRoom_RoomName_ToLong()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -144,7 +144,7 @@ namespace UnitTest
 
         [Fact]
         // 4. Desciptions(Null)
-        public async Task Test_AddProduct_Desciptions_Null()
+        public async Task Test_AddRoom_Desciptions_Null()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -186,7 +186,7 @@ namespace UnitTest
 
         [Fact]
         // 5. Image(Null)
-        public async Task Test_AddProduct_Image_Null()
+        public async Task Test_AddRoom_Image_Null()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -228,7 +228,7 @@ namespace UnitTest
 
         [Fact]
         // 6. Image(WhiteSpace)
-        public async Task Test_AddProduct_Image_WhiteSpace()
+        public async Task Test_AddRoom_Image_WhiteSpace()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -270,7 +270,7 @@ namespace UnitTest
 
         [Fact]
         // 7. RoomCategories(không tồn tại)
-        public async Task Test_AddProduct_Price_NotExist()
+        public async Task Test_AddRoom_RoomCategories_NotExist()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())

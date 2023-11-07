@@ -66,7 +66,12 @@
     --bs-code-color: #d63384;
     --bs-highlight-bg: #fff3cd;
 }
-
+a {
+    text-decoration:none;
+}
+.sidebar-logo {
+    padding-right: .8rem !important
+}
 .sidebar.collapsed:hover,
 .sidebar {
     width: 16rem;
@@ -222,18 +227,20 @@ nav {
 @media (min-width: 200px) {
     .d-md-block {
         display: block !important;
+
     }
 }
 
 @media (min-width: 768px) {
-    .sidebar.collapsed {
-        width: 4.75rem;
-        left: 0;
-    }
+        .sidebar.collapsed {
+            width: 4.75rem;
+            left: 0;
+        }
 
-        .sidebar.collapsed .sidebar-logo {
+/*        .sidebar.collapsed .sidebar-logo {
             display: none;
         }
+*/
 
         .sidebar.collapsed:hover .sidebar-logo {
             display: block;
@@ -258,8 +265,9 @@ nav {
         }
 
         .sidebar.collapsed .sidebar-menu-divider {
-            opacity: 0;
-            visibility: hidden;
+            opacity: 1;
+            visibility: visible;
+            font-size: 10px;
         }
 
     main {

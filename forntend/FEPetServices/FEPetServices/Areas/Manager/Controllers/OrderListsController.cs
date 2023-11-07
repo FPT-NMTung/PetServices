@@ -38,7 +38,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 };
 
                 TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
-                List<OrdersForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrdersForm>>(responseContent, options);
+                List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
                 return View(orderLists);
             }
             else
@@ -60,7 +60,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                OrdersForm orderDetail = System.Text.Json.JsonSerializer.Deserialize<OrdersForm>(responseContent, options);
+                OrderForm orderDetail = System.Text.Json.JsonSerializer.Deserialize<OrderForm>(responseContent, options);
                 double totalPrice = 0;
                 foreach(var od in orderDetail.OrderProductDetails)
                 {
@@ -81,7 +81,6 @@ namespace FEPetServices.Areas.Manager.Controllers
         public async Task<IActionResult> OrderDetail(int id, [FromForm] Status status)
         {
         //https://localhost:7255/api/Order/changeStatus?Id=1
-          https://localhost:7255/api/Order
             HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/changeStatus?Id=" + id, status);
             if (response.IsSuccessStatusCode)
             {
