@@ -80,10 +80,10 @@ namespace FEPetServices.Areas.Manager.Controllers
                     foreach(var file in image) {
                         string filename = GenerateRandomNumber(5) + file.FileName;
                         filename = Path.GetFileName(filename);
-                        string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                        string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/ServiceCategory/", filename);
                         var stream = new FileStream(uploadfile, FileMode.Create);
                         file.CopyToAsync(stream);
-                        serviceCategory.Picture = "/img/" +filename;
+                        serviceCategory.Picture = "/img/ServiceCategory/" + filename;
                      }
 
                     // mặc định status là true
@@ -178,11 +178,11 @@ namespace FEPetServices.Areas.Manager.Controllers
                     // An image file has been uploaded, so update the image path.
                     Console.WriteLine(image);
                     // Save the image to a location (e.g., a folder in your application)
-                    var imagePath = "/img/" + image.FileName;
+                    var imagePath = "/img/ServiceCategory/" + image.FileName;
                     serviceCategory.Picture = imagePath;
 
                     // Save the image file to a folder on your server
-                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", image.FileName);
+                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "ServiceCategory", image.FileName);
                     using (var stream = new FileStream(physicalImagePath, FileMode.Create))
                     {
                         await image.CopyToAsync(stream);
