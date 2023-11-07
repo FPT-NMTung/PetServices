@@ -13,11 +13,11 @@ using Xunit;
 
 namespace UnitTest
 {
-    public class Test_AddProduct
-    {       
+    public class Test_UpdateProduct
+    {
         [Fact]
-        // 1. Add sản phẩm thành công
-        public async Task Test_AddProduct_Success()
+        // 1. Update sản phẩm thành công
+        public async Task Test_UpdateProduct_Success()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -31,14 +31,9 @@ namespace UnitTest
                 };
 
                 context.ProductCategories.Add(proCategory);
-                context.SaveChanges();
+                context.SaveChanges();               
 
-                var mockMapper = new Mock<IMapper>();
-                var mockConfiguration = new Mock<IConfiguration>();
-
-                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
-
-                var testAddProduct = new ProductDTO
+                var Product = new Product
                 {
                     ProductName = "Sản phẩm cho Chó",
                     Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
@@ -48,17 +43,36 @@ namespace UnitTest
                     Quantity = 3
                 };
 
-                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
+                context.Products.Add(Product);
+
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var testUpdateProduct = new ProductDTO
+                {
+                    ProductName = "Sản phẩm cho Chó",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
+                    Picture = "https://s.net.vn/NsSG",
+                    Price = 12000,
+                    ProCategoriesId = 1,
+                    Quantity = 4
+                };
+
+                var result = await controller.Update(testUpdateProduct, 1) as ObjectResult;
 
                 Assert.NotNull(result);
                 Assert.Equal(200, result.StatusCode);
-                Assert.Equal("Thêm sản phẩm thành công!", result.Value);
+                Assert.Equal("Cập nhật sản phẩm thành công!", result.Value);
             }
         }
 
         [Fact]
         // 2. ProductName(Null)
-        public async Task Test_AddProduct_ProductName_Null()
+        public async Task Test_UpdateProduct_ProductName_Null()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -74,14 +88,9 @@ namespace UnitTest
                 context.ProductCategories.Add(proCategory);
                 context.SaveChanges();
 
-                var mockMapper = new Mock<IMapper>();
-                var mockConfiguration = new Mock<IConfiguration>();
-
-                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
-
-                var testAddProduct = new ProductDTO
+                var Product = new Product
                 {
-                    ProductName = "",
+                    ProductName = "Sản phẩm cho Chó",
                     Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
                     Picture = "https://s.net.vn/NsSG",
                     Price = 10000,
@@ -89,7 +98,26 @@ namespace UnitTest
                     Quantity = 3
                 };
 
-                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
+                context.Products.Add(Product);
+
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var testUpdateProduct = new ProductDTO
+                {
+                    ProductName = "",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
+                    Picture = "https://s.net.vn/NsSG",
+                    Price = 12000,
+                    ProCategoriesId = 1,
+                    Quantity = 4
+                };
+
+                var result = await controller.Update(testUpdateProduct, 1) as ObjectResult;
 
                 Assert.NotNull(result);
                 Assert.Equal(400, result.StatusCode);
@@ -99,7 +127,7 @@ namespace UnitTest
 
         [Fact]
         // 3. ProductName(>500)
-        public async Task Test_AddProduct_ProductName_ToLong()
+        public async Task Test_UpdateProduct_ProductName_ToLong()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -113,6 +141,20 @@ namespace UnitTest
                 };
 
                 context.ProductCategories.Add(proCategory);
+                context.SaveChanges();
+
+                var Product = new Product
+                {
+                    ProductName = "Sản phẩm cho Chó",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
+                    Picture = "https://s.net.vn/NsSG",
+                    Price = 10000,
+                    ProCategoriesId = 1,
+                    Quantity = 3
+                };
+
+                context.Products.Add(Product);
+
                 context.SaveChanges();
 
                 var mockMapper = new Mock<IMapper>();
@@ -121,17 +163,17 @@ namespace UnitTest
                 var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
 
                 var longProductName = new string('A', 501);
-                var testAddProduct = new ProductDTO
+                var testUpdateProduct = new ProductDTO
                 {
                     ProductName = longProductName,
                     Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
                     Picture = "https://s.net.vn/NsSG",
-                    Price = 10000,
+                    Price = 12000,
                     ProCategoriesId = 1,
-                    Quantity = 3
+                    Quantity = 4
                 };
 
-                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
+                var result = await controller.Update(testUpdateProduct, 1) as ObjectResult;
 
                 Assert.NotNull(result);
                 Assert.Equal(400, result.StatusCode);
@@ -140,8 +182,8 @@ namespace UnitTest
         }
 
         [Fact]
-        // 4. Desciptions(Null)
-        public async Task Test_AddProduct_Desciptions_Null()
+        // 4. Desciption(Null)
+        public async Task Test_UpdateProduct_Desciption_Null()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -157,22 +199,36 @@ namespace UnitTest
                 context.ProductCategories.Add(proCategory);
                 context.SaveChanges();
 
-                var mockMapper = new Mock<IMapper>();
-                var mockConfiguration = new Mock<IConfiguration>();
-
-                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
-
-                var testAddProduct = new ProductDTO
+                var Product = new Product
                 {
                     ProductName = "Sản phẩm cho Chó",
-                    Desciption = "",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
                     Picture = "https://s.net.vn/NsSG",
                     Price = 10000,
                     ProCategoriesId = 1,
                     Quantity = 3
                 };
 
-                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
+                context.Products.Add(Product);
+
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var testUpdateProduct = new ProductDTO
+                {
+                    ProductName = "Sản phẩm cho Chó",
+                    Desciption = "",
+                    Picture = "https://s.net.vn/NsSG",
+                    Price = 12000,
+                    ProCategoriesId = 1,
+                    Quantity = 4
+                };
+
+                var result = await controller.Update(testUpdateProduct, 1) as ObjectResult;
 
                 Assert.NotNull(result);
                 Assert.Equal(400, result.StatusCode);
@@ -181,8 +237,8 @@ namespace UnitTest
         }
 
         [Fact]
-        // 5. Image(Null)
-        public async Task Test_AddProduct_Image_Null()
+        // 5. Picture(Null)
+        public async Task Test_UpdateProduct_Picture_Null()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -198,22 +254,36 @@ namespace UnitTest
                 context.ProductCategories.Add(proCategory);
                 context.SaveChanges();
 
-                var mockMapper = new Mock<IMapper>();
-                var mockConfiguration = new Mock<IConfiguration>();
-
-                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
-
-                var testAddProduct = new ProductDTO
+                var Product = new Product
                 {
                     ProductName = "Sản phẩm cho Chó",
                     Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
-                    Picture = "",
+                    Picture = "https://s.net.vn/NsSG",
                     Price = 10000,
                     ProCategoriesId = 1,
                     Quantity = 3
                 };
 
-                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
+                context.Products.Add(Product);
+
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var testUpdateProduct = new ProductDTO
+                {
+                    ProductName = "Sản phẩm cho Chó",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
+                    Picture = "",
+                    Price = 12000,
+                    ProCategoriesId = 1,
+                    Quantity = 4
+                };
+
+                var result = await controller.Update(testUpdateProduct, 1) as ObjectResult;
 
                 Assert.NotNull(result);
                 Assert.Equal(400, result.StatusCode);
@@ -222,8 +292,8 @@ namespace UnitTest
         }
 
         [Fact]
-        // 6. Image(WhiteSpace)
-        public async Task Test_AddProduct_Image_WhiteSpace()
+        // 6. Picture(Null)
+        public async Task Test_UpdateProduct_Picture_WhiteSpace()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -239,22 +309,36 @@ namespace UnitTest
                 context.ProductCategories.Add(proCategory);
                 context.SaveChanges();
 
-                var mockMapper = new Mock<IMapper>();
-                var mockConfiguration = new Mock<IConfiguration>();
-
-                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
-
-                var testAddProduct = new ProductDTO
+                var Product = new Product
                 {
                     ProductName = "Sản phẩm cho Chó",
                     Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
-                    Picture = "https://s.net.vn/N sSG",
+                    Picture = "https://s.net.vn/NsSG",
                     Price = 10000,
                     ProCategoriesId = 1,
                     Quantity = 3
                 };
 
-                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
+                context.Products.Add(Product);
+
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var testUpdateProduct = new ProductDTO
+                {
+                    ProductName = "Sản phẩm cho Chó",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
+                    Picture = "https://s.net.v n/NsSG",
+                    Price = 12000,
+                    ProCategoriesId = 1,
+                    Quantity = 4
+                };
+
+                var result = await controller.Update(testUpdateProduct, 1) as ObjectResult;
 
                 Assert.NotNull(result);
                 Assert.Equal(400, result.StatusCode);
@@ -263,8 +347,8 @@ namespace UnitTest
         }
 
         [Fact]
-        // 7. ProCategoriesId(không tồn tại)
-        public async Task Test_AddProduct_ProCategoriesId_NotExist()
+        // 7. ProCategoriesId(Not exist)
+        public async Task Test_UpdateProduct_ProCategoriesId_NotExist()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -280,27 +364,104 @@ namespace UnitTest
                 context.ProductCategories.Add(proCategory);
                 context.SaveChanges();
 
-                var mockMapper = new Mock<IMapper>();
-                var mockConfiguration = new Mock<IConfiguration>();
-
-                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
-
-                var testAddProduct = new ProductDTO
+                var Product = new Product
                 {
                     ProductName = "Sản phẩm cho Chó",
                     Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
                     Picture = "https://s.net.vn/NsSG",
                     Price = 10000,
-                    ProCategoriesId = 2,
+                    ProCategoriesId = 1,
                     Quantity = 3
                 };
 
-                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
+                context.Products.Add(Product);
+
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var testUpdateProduct = new ProductDTO
+                {
+                    ProductName = "Sản phẩm cho Chó",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
+                    Picture = "https://s.net.vn/NsSG",
+                    Price = 12000,
+                    ProCategoriesId = 2,
+                    Quantity = 4
+                };
+
+                var result = await controller.Update(testUpdateProduct, 1) as ObjectResult;
 
                 Assert.NotNull(result);
                 Assert.Equal(400, result.StatusCode);
                 Assert.Equal("Loại sản phẩm không tồn tại!", result.Value);
             }
-        }       
+        }
+
+        [Fact]
+        // 8. Change product status for a non-existent product
+        public async Task Test_ChangeStatusProduct_ProductNotFound()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+        .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+        .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var newStatus = false;
+
+                var result = await controller.ChangeStatusProduct(2, newStatus) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Equal("Không tìm thấy sản phẩm cần thay đổi.", result.Value);
+            }
+        }
+
+        [Fact]
+        // 9. Change product status successfully
+        public async Task Test_ChangeStatusProduct_Success()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var Product = new Product
+                {
+                    ProductName = "Sản phẩm cho Chó",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
+                    Picture = "https://s.net.vn/NsSG",
+                    Price = 10000,
+                    ProCategoriesId = 1,
+                    Quantity = 3
+                };
+
+                context.Products.Add(Product);
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var newStatus = false;
+
+                var result = await controller.ChangeStatusProduct(1, newStatus) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(200, result.StatusCode);
+                Assert.Equal("Cập nhật sản phẩm thành công!", result.Value);
+            }
+        }
     }
 }
