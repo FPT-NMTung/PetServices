@@ -39,7 +39,7 @@ namespace FEPetServices.Controllers
 
         public async Task<ActionResult> Room(RoomDTO roomDTO, RoomSearchDTO searchDTO)
         {
-            try
+            /*try
             {
                 var json = JsonConvert.SerializeObject(roomDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -144,7 +144,7 @@ namespace FEPetServices.Controllers
             catch (Exception ex)
             {
                 ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
-            }
+            }*/
 
             return View();
         }

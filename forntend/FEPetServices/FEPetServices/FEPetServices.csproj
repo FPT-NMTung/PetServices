@@ -21,6 +21,7 @@
     <Folder Include="Areas\Manager\Models\" />
     <Folder Include="Areas\Partner\Data\" />
     <Folder Include="Areas\Partner\Models\" />
+    <Folder Include="wwwroot\img\room\" />
   </ItemGroup>
 
   <ItemGroup>

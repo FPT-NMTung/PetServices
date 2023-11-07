@@ -27,7 +27,7 @@
 
                 <div class="col-75">
                     <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px">
-                    <img src="@Model?.Picture" height="100px" width="100px" style="float: left;" id="imagePreview">
+                    <img src="@Model?.Picture" style="float: left; height:100px; width:100px;" id="imagePreview">
                 </div>
             </div>
             <div class="row">
@@ -36,7 +36,7 @@
                 </div>
                 <div class="col-75">
                     <div class="quantity-container">
-                        <input type="number" class="slot" id="Slot" name="Slot" placeholder="Số lượng" min="0" required>&ensp; đ
+                        <input type="number" class="slot" id="Slot" name="Slot" placeholder="Số lượng" value="@Model?.Price" min="0" required>&ensp; đ
                     </div>
                     <div style="color:red" class="error-message" id="price-error-message"></div>
                 </div>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="col-75">
                     <div class="quantity-container">
-                        <input type="number" class="slot" id="Slot" name="Slot" placeholder="Số lượng" min="0" required>&ensp; đ
+                        <input type="number" class="slot" id="Slot" name="Slot" placeholder="Số lượng" value="@Model?.Slot" min="0" required>&ensp; đ
                     </div>
                     <div style="color:red" class="error-message" id="slot-error-message"></div>
                 </div>
