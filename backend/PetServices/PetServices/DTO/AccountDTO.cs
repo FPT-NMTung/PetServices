@@ -9,5 +9,6 @@
         public int? UserInfoId { get; set; }
         public int? PartnerInfo { get; set; }
 
+
     }
 }

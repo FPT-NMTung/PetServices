@@ -1,10 +1,4 @@
-﻿.container-add-new {
-    border-radius: 5px;
-    padding: 20px;
-    padding-left: 10%;
-    padding-right: 10%;
-}
-.container {
+﻿.container {
     max-width: 1200px;
     margin: 0 auto;
     background-color: #fff;
@@ -12,6 +6,19 @@
     border: 1px solid #ddd;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    height: 100%;
+    max-width: 300px;
+}
+
+.col-6 {
+    height: 50px;
+}
+
+.row {
+    margin-top: .5%;
 }
 
 .title {

@@ -104,7 +104,9 @@ h3 {
     .print-container, .print-container * {
         visibility: visible;
     }
-
+    .sidebar{
+        display:none;
+    }
     .print-container{
         position : absolute;
         left:0;

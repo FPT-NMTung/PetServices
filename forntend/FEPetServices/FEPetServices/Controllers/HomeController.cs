@@ -1,4 +1,5 @@
 ﻿using FEPetServices.Areas.DTO;
+using FEPetServices.Form;
 using FEPetServices.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using PetServices.Models;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
 
 namespace FEPetServices.Controllers
@@ -24,6 +26,9 @@ namespace FEPetServices.Controllers
         private string DefaultApiUrlServiceCategoryDetail = "";
         private string DefaultApiUrlServiceCategoryandService = "";
         private string DefaultApiUrlBlogList = "";
+        private string DefaultApiUrlProductList = "";
+        private string DefaultApiUrlRoomCategoryList = "";
+        private string DefaultApiUrlProductCategoryList = "";
 
         public HomeController()
         {
@@ -35,8 +40,11 @@ namespace FEPetServices.Controllers
             ApiUrlRoomCategoryList = "https://localhost:7255/api/Room/GetRoomCategory";
             ApiUrlRoomDetail = "https://localhost:7255/api/Room/GetRoom/";
             DefaultApiUrlServiceCategoryList = "https://localhost:7255/api/ServiceCategory";
+            DefaultApiUrlProductCategoryList = "https://localhost:7255/api/ServiceCategory";
             DefaultApiUrlServiceCategoryDetail = "https://localhost:7255/api/ServiceCategory/ServiceCategorysID/";
             DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
+            DefaultApiUrlProductList = "https://localhost:7255/api/Product";
+            DefaultApiUrlRoomCategoryList = "https://localhost:7255/api/Room";
         }
 
         public async Task<ActionResult> Room(RoomDTO roomDTO, RoomSearchDTO searchDTO)
@@ -273,6 +281,63 @@ namespace FEPetServices.Controllers
             return View();
         }
 
+        public class HomeModel
+        {
+            public List<ServiceCategoryDTO> ListServiceCategory { get; set; }
+            public List<ProductDTO> ListProduct { get; set; }
+            public List<RoomCategoryDTO> ListRoomCategory { get; set; }
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            HomeModel homeModel = new HomeModel();
+            try
+            {
+                HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
+                if (responseProduct.IsSuccessStatusCode)
+                {
+                    HttpResponseMessage responseCategory = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
+                    if (responseCategory.IsSuccessStatusCode)
+                    {
+                        HttpResponseMessage responseRoomCategory = await client.GetAsync(DefaultApiUrlRoomCategoryList + "/GetAllRoomCustomer");
+                        if (responseCategory.IsSuccessStatusCode)
+                        {
+                            var responseRoomCategoryContent = await responseRoomCategory.Content.ReadAsStringAsync();
+
+                            if (!string.IsNullOrEmpty(responseRoomCategoryContent))
+                            {
+                                homeModel.ListRoomCategory = JsonConvert.DeserializeObject<List<RoomCategoryDTO>>(responseRoomCategoryContent);
+                            }
+                        }
+                        var responseCategoryContent = await responseCategory.Content.ReadAsStringAsync();
+
+                        if (!string.IsNullOrEmpty(responseCategoryContent))
+                        {
+                            homeModel.ListServiceCategory = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
+                        }
+                    }
+                    var rep = await responseProduct.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(rep))
+                    {
+                        homeModel.ListProduct = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng";
+                    }
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang!";
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+            }
+            return View(homeModel);
+        }
+        
         public async Task<IActionResult> ServiceDetail(int serviceCategoryId, int serviceIds)
         {
             ServiceDetailModel model = new ServiceDetailModel();
@@ -280,6 +345,18 @@ namespace FEPetServices.Controllers
             HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
             if (response.IsSuccessStatusCode)
             {
+                HttpResponseMessage responseCategory = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
+                if (responseCategory.IsSuccessStatusCode)
+                {
+                    var responseCategoryContent = await responseCategory.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(responseCategoryContent))
+                    {
+                        var serviceCategories = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
+                        model.CaServices = serviceCategories;
+                    }
+                }
+
                 var responseContent = await response.Content.ReadAsStringAsync();
 
                 if (!string.IsNullOrEmpty(responseContent))
@@ -325,15 +402,20 @@ namespace FEPetServices.Controllers
                     ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
                 }
             }
+                
 
-            return View();
+                return View();
+            
         }
 
         public class ServiceDetailModel
         {
             public ServiceDTO Service { get; set; }
             public ServiceCategoryDTO ServiceCategory { get; set; }
+            public List<ServiceCategoryDTO> CaServices { get; set; }
         }
+
+
 
         public async Task<IActionResult> BlogList(BlogDTO blog, int page = 1, int pagesize = 6, string BlogName = "", string sortby = "")
         {
@@ -407,10 +489,14 @@ namespace FEPetServices.Controllers
 
             return View();
         }
-        public IActionResult Index()
+        public async Task<IActionResult> BlogDetail()
         {
             return View();
         }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
         public IActionResult Test()
         {

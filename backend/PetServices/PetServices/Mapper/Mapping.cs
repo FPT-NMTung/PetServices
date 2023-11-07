@@ -35,6 +35,15 @@ namespace PetServices.Mapper
 
             CreateMap<OrderProductDetail, OrderProductDetailDTO>()
                .ReverseMap();
+
+            CreateMap<BookingServicesDetail, BookingServicesDetailDTO>()
+               .ReverseMap();
+
+            CreateMap<BookingRoomDetail, BookingRoomDetailDTO>()
+               .ReverseMap();
+
+            CreateMap<OrderType, OrderTypeDTO>()
+               .ReverseMap();
             #endregion
 
             #region Account
@@ -106,15 +115,6 @@ namespace PetServices.Mapper
                 .ReverseMap();
 
             CreateMap<Product, ProductDTO>()
-                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
-                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ProductName))
-                .ForMember(dest => dest.Desciption, opt => opt.MapFrom(src => src.Desciption))
-                .ForMember(dest => dest.Picture, opt => opt.MapFrom(src => src.Picture))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
-                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateDate))
-                .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
-                .ForMember(dest => dest.ProCategoriesId, opt => opt.MapFrom(src => src.ProCategoriesId))
                 .ForMember(dest => dest.ProCategoriesName, opt => opt.MapFrom(src => src.ProCategories.ProCategoriesName));
 
             CreateMap<ProductCategory, ProductCategoryDTO>()

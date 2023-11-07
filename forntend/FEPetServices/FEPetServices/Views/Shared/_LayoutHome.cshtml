@@ -26,6 +26,8 @@
     <link href="~/css/homepage.css" rel="stylesheet" />
     @*// Thư viện chung*@
 
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIkw2datIu4EYiyedKQJ08DmMJnboVSqs"></script>
+
     <link href="~/css/toastNotification.css" rel="stylesheet" />
 </head>
 <body>
@@ -33,14 +35,14 @@
         <header>
             <input type="checkbox" name="" id="toggler">
             <label for="toggler" class="fas fa-bars"></label>
-            <a href="#" class="logo">Pet Service<span>.</span></a>
+            <a href="/Home" class="logo">Pet Service<span>.</span></a>
             <nav class="navbar">
                 <a href="/Home">Trang Chủ</a>
                 <a href="#about">Thông Tin</a>
                 <a href="/ProductList">Sản Phẩm</a>
                 <a href="/Home/ServiceList">Dịch Vụ</a>
                 <a href="/Home/BlogList">Bài Viết</a>
-                <a href="#contact">Liên Hệ</a>
+                <a href="#footer">Liên Hệ</a>
             </nav>
             <div class="icons">
                 <div class="item">
@@ -60,7 +62,7 @@
         <div>
             @RenderBody()
         </div>
-        <footer class="footer">
+        <footer id="footer" class="footer">
             <div class="box-container">
                 <div class="box">
                     <h3>Quick Links</h3>
@@ -75,11 +77,34 @@
                     <a href="#">Tài Khoản Của Tôi</a>
                     <a href="#">Đơn Hàng Của Tôi</a>
                 </div>
-                <div class="box">
-                    <h3>Địa Chỉ</h3>
-                    <a href="#">Hà Nội</a>
-                    <a href="#">Hồ Chí Minh</a>
-                    <a href="#">Nha Trang</a>
+                <div class="box1">    
+                    <h3>Địa điểm</h3>
+                    @*<li class="nav-item">
+                        <a href="javascript:void(0);" class="nav-link" onclick="getLocation()">Lấy vị trí của tôi</a>
+                    </li>*@
+                    <div id="map" style="width: 400px; height: 300px;"></div>
+                    <script>
+                        function initMap() {
+                            // Tạo một đối tượng bản đồ với tọa độ cố định (ví dụ: Hà Nội)
+                            var map = new google.maps.Map(document.getElementById('map'), {
+                                center: { lat: 21.013569, lng: 105.525349 }, // Thay bằng tọa độ của địa điểm cố định
+                                zoom: 15
+                            });
+
+                            // Thêm đánh dấu (marker) cho địa điểm cố định
+                            var marker = new google.maps.Marker({
+                                position: { lat: 21.013569, lng: 105.525349 }, // Thay bằng tọa độ của địa điểm cố định
+                                map: map,
+                                title: 'Địa điểm cố định'
+                            });
+                        }
+
+                        // Gọi hàm initMap ngay sau khi trang web tải xong
+                        window.onload = initMap;
+                    </script>
+                    @*<div>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7448.911617902285!2d105.52508309999999!3d21.014440399999998!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135abc60e7d3f19%3A0x2be9d7d0b5abcbf4!2zVHLGsOG7nW5nIMSQ4bqhaSBI4buNYyBGUFQ!5e0!3m2!1svi!2s!4v1699341414412!5m2!1svi!2s" width="350" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>*@
                 </div>
                 <div class="box">
                     <h3>Thông Tin liên hệ</h3>
@@ -133,15 +158,15 @@
         </script>
     }
 </body>
-    <script src="~/js/toastnotification.js"></script>
-    <script>
-        function loading() {
-            @if (string.IsNullOrEmpty(ViewBag.ErrorToast) || string.IsNullOrEmpty(ViewBag.SuccessToast))
-            {
-                @:showWaitToast();
+<script src="~/js/toastnotification.js"></script>
+<script>
+    function loading() {
+    @if (string.IsNullOrEmpty(ViewBag.ErrorToast) || string.IsNullOrEmpty(ViewBag.SuccessToast))
+    {
+        @:showWaitToast();
+    }
             }
-        }
-        @*Common toast notification*@
+    @*Common toast notification*@
         function showSuccessToast() {
             toast({
                 title: 'Thành công',
@@ -150,24 +175,24 @@
                 duration: 2000
             });
         }
-        function showErrorToast(message = '') {
-            toast({
-                title: 'Thất bại',
-                message: '@ViewBag.ErrorToast',
-                type: 'error',
-                duration: 2000
-            });
-        }
-        function showWaitToast() {
-            toast({
-                title: 'Chờ đợi',
-                message: 'Vui lòng đợi ít phút hoặc điền đầy đủ thông tin',
-                type: 'wating',
-                duration: 2000
-            });
-        }
+    function showErrorToast(message = '') {
+        toast({
+            title: 'Thất bại',
+            message: '@ViewBag.ErrorToast',
+            type: 'error',
+            duration: 2000
+        });
+    }
+    function showWaitToast() {
+        toast({
+            title: 'Chờ đợi',
+            message: 'Vui lòng đợi ít phút hoặc điền đầy đủ thông tin',
+            type: 'wating',
+            duration: 2000
+        });
+    }
 
-       @*Register toast notification*@
+    @*Register toast notification*@
         function showSuccessRegisterToast() {
             toast({
                 title: 'Thành công',
@@ -176,13 +201,65 @@
                 duration: 2000
             });
         }
-        function showSuccessRegisterSuccessToast() {
-            toast({
-                title: 'Thành công',
-                message: '@TempData["SuccessRegisterSuccessToast"]',
-                type: 'success',
-                duration: 2000
-            });
+    function showSuccessRegisterSuccessToast() {
+        toast({
+            title: 'Thành công',
+            message: '@TempData["SuccessRegisterSuccessToast"]',
+            type: 'success',
+            duration: 2000
+        });
+    }
+</script>
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            alert("Trình duyệt của bạn không hỗ trợ Geolocation.");
         }
-    </script>
+    }
+
+    function showPosition(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+
+        // Hiển thị vị trí lấy được lên bản đồ (sử dụng Google Maps hoặc bản đồ khác)
+        initMap(latitude, longitude);
+    }
+
+    function showError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                alert("Truy cập vào vị trí bị từ chối bởi người dùng.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("Không thể lấy được vị trí của bạn.");
+                break;
+            case error.TIMEOUT:
+                alert("Yêu cầu lấy vị trí của bạn đã quá thời gian.");
+                break;
+            case error.UNKNOWN_ERROR:
+                alert("Đã xảy ra lỗi không xác định.");
+                break;
+        }
+    }
+
+    // Hàm này sẽ chạy khi có dữ liệu vị trí được trả về
+    function initMap(latitude, longitude) {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: latitude, lng: longitude },
+            zoom: 15
+        });
+
+        var marker = new google.maps.Marker({
+            position: { lat: latitude, lng: longitude },
+            map: map,
+            title: 'Vị trí của bạn'
+        });
+    }
+</script>
 </html>
+

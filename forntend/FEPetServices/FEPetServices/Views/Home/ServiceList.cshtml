@@ -1,9 +1,11 @@
-﻿﻿<html>
+﻿<html>
+
 <head>
     <meta charset=utf-8>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/Service/HomeService.css"></link>
+
+    <link rel="stylesheet" href="~/css/RoomCustomer.css">
 
 </head>
 
@@ -13,21 +15,12 @@
             <h1 class="title">Dịch vụ cho thú cưng</h1>
             <div class="path">
                 <a href="/home">Home &ensp;</a> /
-                @*<a href="/Home/ServiceList">&ensp; Dịch vụ</a>*@
-                <p href="">&ensp; Dịch vụ </p>
+                <p>&ensp; Dịch vụ </p>
             </div>
         </div>
         <div class="container">
             <div class="containerLeft">
                 <div class="containerprice">
-                    <div>
-                        <form method="get">
-                            <input type="hidden" name="sortby" value="@ViewBag.sortby" />
-                            <input type="hidden" name="CategoriesName" value="@ViewBag.CategoriesName" />
-                            <input type="hidden" name="pagesize" value="@ViewBag.pagesize" />
-                            <input type="hidden" name="viewstyle" value="@ViewBag.viewstyle" />
-                        </form>
-                    </div>
                 </div>
                 <div>
                     <h3>Sắp xếp theo:</h3>
@@ -50,18 +43,6 @@
                                         <p>Tên từ Z-A</p>
                                     </label>
                                 </a>
-                                <a class="containerCate" href="javascript:void(0);" onclick="sortBy('price')">
-                                    <label>
-                                        <input type="checkbox" value="price" @(ViewBag.sortby == "price" ? "checked" : "")>
-                                        <p>Giá từ thấp đến cao</p>
-                                    </label>
-                                </a>
-                                <a class="containerCate" href="javascript:void(0);" onclick="sortBy('price_desc')">
-                                    <label>
-                                        <input type="checkbox" value="price_desc" @(ViewBag.sortby == "price_desc" ? "checked" : "")>
-                                        <p>Giá từ cao đến thấp</p>
-                                    </label>
-                                </a>
                             </div>
                             <input type="hidden" id="sortby" name="sortby" value="" />
                         </form>
@@ -77,7 +58,7 @@
                             <input type="hidden" name="viewstyle" value="@ViewBag.viewstyle" />
 
                             <label for="search">
-                                <input class="input" name="CategoriesName" type="text" placeholder="Nhập tên phòng" value="@ViewBag.CategoriesName">
+                                <input class="input" name="CategoriesName" type="text" placeholder="Nhập tên dịch vụ" value="@ViewBag.CategoriesName" style="font-size: 15px;">
                                 <div class="fancy-bg"></div>
                                 <div class="search">
                                     <svg viewBox="0 0 24 24" aria-hidden="true" class="r-14j79pv r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-4wgw6l r-f727ji r-bnwqim r-1plcrui r-lrvibr">
@@ -93,15 +74,15 @@
                         <div class="container11-content">
                             <div class="name-search">Hiển thị: </div>
                             <form method="get">
-                                <input type="hidden" name="sortby" value="@ViewBag.sortby" />
                                 <input type="hidden" name="CategoriesName" value="@ViewBag.CategoriesName" />
+                                <input type="hidden" name="sortby" value="@ViewBag.sortby" />
                                 <input type="hidden" name="viewstyle" value="@ViewBag.viewstyle" />
 
                                 <select id="pageSize" name="pagesize" onchange="this.form.submit();">
-                                    <!option value="6" @(ViewBag.PageSize == 6 ? "selected" : "")>6 phòng</!option>
-                                    <!option value="9" @(ViewBag.PageSize == 9 ? "selected" : "")>9 phòng</!option>
-                                    <!option value="12" @(ViewBag.PageSize == 12 ? "selected" : "")>12 phòng</!option>
-                                    <!option value="24" @(ViewBag.PageSize == 24 ? "selected" : "")>24 phòng</!option>
+                                    <!option value="6" @(ViewBag.PageSize == 6 ? "selected" : "")>6 dịch vụ</!option>
+                                    <!option value="9" @(ViewBag.PageSize == 9 ? "selected" : "")>9 dịch vụ</!option>
+                                    <!option value="12" @(ViewBag.PageSize == 12 ? "selected" : "")>12 dịch vụ</!option>
+                                    <!option value="24" @(ViewBag.PageSize == 24 ? "selected" : "")>24 dịch vụ</!option>
                                 </select>
                             </form>
                         </div>
@@ -112,11 +93,11 @@
                                 <input type="hidden" name="CategoriesName" value="@ViewBag.CategoriesName" />
                                 <input type="hidden" name="pagesize" value="@ViewBag.pagesize" />
 
-                                <a class="a1" href="/home/ServiceList?CategoriesName=@ViewBag.CategoriesName&sortby=@ViewBag.sortby&pagesize=@ViewBag.pagesize&viewstyle=grid">
-                                    <i class="fa-solid fa-table-cells" style="width: 15px; height: 15px; color:black;"></i>
+                                <a class="a1" href="/home/servicelist?CategoriesName=@ViewBag.CategoriesName&sortby=@ViewBag.sortby&pagesize=@ViewBag.pagesize&viewstyle=grid">
+                                    <img src="~/img/listviewicon.png" style="width: 15px; height: 15px;"/>
                                 </a>
-                                <a href="/home/ServiceList?CategoriesName=@ViewBag.CategoriesName&sortby=@ViewBag.sortby&pagesize=@ViewBag.pagesize&viewstyle=listview">
-                                    <i class="fa-solid fa-list-ul" style="width: 24px; height: 24px; color:black;"></i>
+                                <a href="/home/servicelist?CategoriesName=@ViewBag.CategoriesName&sortby=@ViewBag.sortby&pagesize=@ViewBag.pagesize&viewstyle=listview">
+                                    <img src="~/img/gridviewicon.png" style="width: 24px; height: 24px;" />
                                 </a>
                             </form>
                         </div>
@@ -128,37 +109,38 @@
                         <div class="listRoom-grid">
                             @if (Model != null && Model.Count > 0)
                             {
-                                foreach (var room in Model)
+                                foreach (var service in Model)
                                 {
-                                    string description = room.Desciptions;
-
-                                    if (description != null)
+                                    @if (service.Status)
                                     {
-                                        if (description.Length > 100)
+                                        string description = service.Desciptions;
+                                        @if (service.Desciptions != null)
                                         {
-                                            int lastSpace = description.LastIndexOf(' ', 100);
-                                            description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+
+
+                                            if (description.Length > 300)
+                                            {
+                                                int lastSpace = description.LastIndexOf(' ', 300);
+
+                                                description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 300) + "...";
+                                            }
                                         }
-                                       
-                                    }
-                                    else
-                                    {
-                                        description = ""; // Trường hợp room.Descriptions là null, trả về chuỗi rỗng.
-                                    }
-
-
-                                    <div class="block">
-                                        <div>
-                                            <div class="room">
-                                                <div class="image-container">
-                                                    <img src="@room.Picture" class="image">
+                                        else
+                                        {
+                                            description = service.Desciptions;
+                                        }
+                                        <div class="block">
+                                            <div>
+                                                <div class="room">
+                                                    <div class="image-container">
+                                                        <img src="@service.Picture" class="image">
+                                                    </div>
+                                                    <a class="name" href="~/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId">@service.SerCategoriesName</a>
+                                                    <div >@description</div>
                                                 </div>
-                                                @*=@serviceCategory.SerCategoriesId*@
-                                                <a class="name" href="~/Home/ServiceDetail?serviceCategoryId=@room.SerCategoriesId">@room.SerCategoriesName</a>
-                                                <div class="description">@description</div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
                                 }
                             }
                             else
@@ -174,44 +156,49 @@
                         <div class="listRoom-listview">
                             @if (Model != null && Model.Count > 0)
                             {
-                                foreach (var room in Model)
+                                foreach (var service in Model)
                                 {
-                                    string description = room.Desciptions;
-
-                                        if (description != null)
+                                    @if (service.Status)
+                                    {
+                                        string description = service.Desciptions;
+                                        @if (service.Desciptions != null)
                                         {
-                                            if (description.Length > 100)
+
+
+                                            if (description.Length > 300)
                                             {
-                                                int lastSpace = description.LastIndexOf(' ', 100);
-                                                description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                                                int lastSpace = description.LastIndexOf(' ', 300);
+
+                                                description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 300) + "...";
                                             }
                                         }
                                         else
                                         {
-                                            description = ""; 
+                                            description = service.Desciptions;
                                         }
-                                    <div class="block">
-                                        <div>
-                                            <div class="room">
-                                                <div class="image-container">
-                                                    <img src="@room.Picture" class="image">
-                                                </div>
-                                                <div class="text-container">
-                                                    <div>
-                                                        <a class="name" href="~/Home/ServiceDetail?serviceCategoryId=@room.SerCategoriesId">@room.SerCategoriesName</a>
-                                                        <div class="description">@description</div>
+                                        <div class="block">
+                                            <div>
+                                                <div class="room">
+                                                    <div class="image-container">
+                                                        <img src="@service.Picture" class="image">
                                                     </div>
-                                                    <div>
-                                                        <a href="~/Home/ServiceDetail?serviceCategoryId=@room.SerCategoriesId">
-                                                            <button class="detail">
-                                                                <span>Xem chi tiết</span>
-                                                            </button>                      
-                                                        </a>
+                                                    <div class="text-container">
+                                                        <div>
+                                                            <a class="name" href="~/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId">@service.SerCategoriesName</a>
+                                                            <div class="description">@description</div>
+                                                        </div>
+                                                        <div>
+                                                            <a href="~/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId">
+                                                                <button class="detail">
+                                                                    <span>Xem chi tiết</span>
+                                                                </button>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
                                 }
                             }
                             else
@@ -227,16 +214,16 @@
                     <div class="pagination">
                         @if (ViewBag.CurrentPage > 1)
                         {
-                            <a href="@Url.Action("ServiceList", new { page = ViewBag.CurrentPage - 1, sortby=ViewBag.sortby, CategoriesName=ViewBag.CategoriesName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">&laquo;</a>
+                            <a href="@Url.Action("servicelist", new { page = ViewBag.CurrentPage - 1, CategoriesName=ViewBag.CategoriesName, sortby=ViewBag.sortby, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">&laquo;</a>
                         }
 
                         @for (int i = 1; i <= ViewBag.TotalPages; i++)
                         {
-                            <a class="active" href="@Url.Action("ServiceList", new { page = i, sortby=ViewBag.sortby, CategoriesName=ViewBag.CategoriesName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">@i</a>
+                            <a class="active" href="@Url.Action("servicelist", new { page = i, sortby=ViewBag.sortby, CategoriesName=ViewBag.CategoriesName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">@i</a>
                         }
                         @if (ViewBag.CurrentPage < ViewBag.TotalPages)
                         {
-                            <a href="@Url.Action("ServiceList", new { page = ViewBag.CurrentPage + 1, sortby=ViewBag.sortby,  CategoriesName=ViewBag.CategoriesName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">&raquo;</a>
+                            <a href="@Url.Action("servicelist", new { page = ViewBag.CurrentPage + 1, sortby=ViewBag.sortby, CategoriesName=ViewBag.CategoriesName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">&raquo;</a>
                         }
                     </div>
                 </div>
@@ -244,17 +231,6 @@
         </div>
     </div>
     <script>
-        document.querySelectorAll('#myForm input[type="checkbox"]').forEach(function (checkbox) {
-            checkbox.addEventListener('click', function () {
-                if (this.checked) {
-                    document.getElementById('roomcategory').value = this.value;
-                } else {
-                    document.getElementById('roomcategory').value = null;
-                }
-                document.getElementById('myForm').submit();
-            });
-        });
-
         document.querySelectorAll('#sortForm input[type="checkbox"]').forEach(function (checkbox) {
             checkbox.addEventListener('click', function () {
                 if (this.checked) {
@@ -266,6 +242,13 @@
             });
         });
 
+        // format url
+        var currentUrl = window.location.href;
+        var updatedUrl = currentUrl.replace(/&?(\w+)=(&|$)/g, '')
+            .replace(/&&/g, '&')
+            .replace(/\?&/, '?')
+            .replace(/\?$/, '');
+        window.history.replaceState({}, document.title, updatedUrl);
     </script>
 </body>
 </html>

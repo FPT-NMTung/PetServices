@@ -168,10 +168,10 @@ namespace FEPetServices.Areas.Manager.Controllers
                 if (image != null && image.Length > 0)
                 {
                     // Handle the case when a new image is uploaded
-                    var imagePath = "/img/" + image.FileName;
+                    var imagePath = "/img/Product/" + image.FileName;
                     productDTO.Picture = imagePath;
 
-                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", image.FileName);
+                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "Product", image.FileName);
                     using (var stream = new FileStream(physicalImagePath, FileMode.Create))
                     {
                         await image.CopyToAsync(stream);
