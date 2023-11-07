@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,12 +10,17 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddDbContext<PetServicesContext>(
-    opt => opt.UseSqlServer(
-        builder.Configuration.GetConnectionString("DbConnection"))
+builder.Services.AddDbContext<PetServicesContext>(options =>
+{
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DbConnection"),
+        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
+            maxRetryCount: 5, // Số lần thử lại tối đa
+            maxRetryDelay: TimeSpan.FromSeconds(30), // Thời gian chờ tối đa giữa các lần thử lại
+            errorNumbersToAdd: null // Danh sách mã lỗi cụ thể để thử lại (nếu cần)
+        )
     );
+});
 
 builder.Services.AddCors();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
