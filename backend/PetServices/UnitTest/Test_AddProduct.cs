@@ -17,7 +17,7 @@ namespace UnitTest
     public class Test_AddProduct
     {       
         [Fact]
-        // 1. Add phòng thành công
+        // 1. Add sản phẩm thành công
         public async Task Test_AddProduct_Success()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
@@ -41,8 +41,8 @@ namespace UnitTest
 
                 var testAddProduct = new ProductDTO
                 {
-                    ProductName = "Phòng cho Chó",
-                    Desciption = "Phòng dành cho những chú chó đáng yêu",
+                    ProductName = "Sản phẩm cho Chó",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
                     Picture = "https://s.net.vn/NsSG",
                     Price = 10000,
                     ProCategoriesId = 1,
@@ -83,7 +83,7 @@ namespace UnitTest
                 var testAddProduct = new ProductDTO
                 {
                     ProductName = "",
-                    Desciption = "Phòng dành cho những chú chó đáng yêu",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
                     Picture = "https://s.net.vn/NsSG",
                     Price = 10000,
                     ProCategoriesId = 1,
@@ -125,7 +125,7 @@ namespace UnitTest
                 var testAddProduct = new ProductDTO
                 {
                     ProductName = longProductName,
-                    Desciption = "Phòng dành cho những chú chó đáng yêu",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
                     Picture = "https://s.net.vn/NsSG",
                     Price = 10000,
                     ProCategoriesId = 1,
@@ -165,7 +165,7 @@ namespace UnitTest
 
                 var testAddProduct = new ProductDTO
                 {
-                    ProductName = "Phòng cho Chó",
+                    ProductName = "Sản phẩm cho Chó",
                     Desciption = "",
                     Picture = "https://s.net.vn/NsSG",
                     Price = 10000,
@@ -206,8 +206,8 @@ namespace UnitTest
 
                 var testAddProduct = new ProductDTO
                 {
-                    ProductName = "Phòng cho Chó",
-                    Desciption = "Phòng dành cho những chú chó đáng yêu",
+                    ProductName = "Sản phẩm cho Chó",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
                     Picture = "",
                     Price = 10000,
                     ProCategoriesId = 1,
@@ -218,7 +218,7 @@ namespace UnitTest
 
                 Assert.NotNull(result);
                 Assert.Equal(400, result.StatusCode);
-                Assert.Equal("Ảnh phòng không được để trống!", result.Value);
+                Assert.Equal("Ảnh sản phẩm không được để trống!", result.Value);
             }
         }
 
@@ -247,8 +247,8 @@ namespace UnitTest
 
                 var testAddProduct = new ProductDTO
                 {
-                    ProductName = "Phòng cho Chó",
-                    Desciption = "Phòng dành cho những chú chó đáng yêu",
+                    ProductName = "Sản phẩm cho Chó",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
                     Picture = "https://s.net.vn/N sSG",
                     Price = 10000,
                     ProCategoriesId = 1,
@@ -288,8 +288,8 @@ namespace UnitTest
 
                 var testAddProduct = new ProductDTO
                 {
-                    ProductName = "Phòng cho Chó",
-                    Desciption = "Phòng dành cho những chú chó đáng yêu",
+                    ProductName = "Sản phẩm cho Chó",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
                     Picture = "https://s.net.vn/NsSG",
                     Price = 10000,
                     ProCategoriesId = 2,

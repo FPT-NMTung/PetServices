@@ -1,0 +1,129 @@
+﻿.first {
+    background-color: #f6f6f6;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 95px;
+}
+
+    .first p {
+        margin: 0px;
+    }
+
+    .first .title {
+        font-size: 35px;
+        font-weight: 400;
+        color: #666;
+    }
+
+    .first .path {
+        display: flex;
+        justify-content: center;
+        color: #9d9c9c;
+        margin-top: 10px;
+        font-size: 15px;
+    }
+
+        .first .path a {
+            color: #666;
+            text-decoration: none;
+        }
+
+            .first .path a:hover {
+                color: limegreen;
+            }
+
+.main {
+    width: 100%;
+}
+
+    .main .container {
+        width: 60%;
+        margin-left: 20%;
+        margin-top: 30px;
+    }
+
+        .main .container h1 {
+            text-align: center;
+        }
+
+        .main .container ul {
+            list-style-image: url('../img/icon/pawicon.png');
+        }
+
+        .main .container .title {
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .main .container .content {
+            font-size: 15px;
+        }
+
+.title-content {
+    color: #9d9c9c;
+    font-size: 16px;
+}
+
+
+@media screen and (max-width: 768px) {
+    .main .container {
+        width: 80%;
+        margin-left: 10%;
+        margin-top: 30px;
+    }
+
+    .first .title {
+        font-size: 30px;
+        font-weight: 400;
+        color: #666;
+    }
+
+    .main .container .title {
+        font-size: 18px;
+    }
+
+    .title-content {
+        font-size: 15px;
+    }
+
+    .main .container .content {
+        font-size: 13px;
+    }
+
+    .first .path {
+        font-size: 13px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .main .container {
+        width: 90%;
+        margin-left: 5%;
+        margin-top: 30px;
+    }
+
+    .first .title {
+        font-size: 25px;
+        font-weight: 400;
+        color: #666;
+    }
+
+    .title-content {
+        font-size: 12px;
+    }
+
+    .first .path {
+        font-size: 12px;
+    }
+
+    .main .container .title {
+        font-size: 16px;
+    }
+
+    .main .container .content {
+        font-size: 12px;
+    }
+}
