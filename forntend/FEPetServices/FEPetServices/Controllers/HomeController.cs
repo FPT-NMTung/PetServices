@@ -286,6 +286,7 @@ namespace FEPetServices.Controllers
             public List<ServiceCategoryDTO> ListServiceCategory { get; set; }
             public List<ProductDTO> ListProduct { get; set; }
             public List<RoomCategoryDTO> ListRoomCategory { get; set; }
+            public List<ProductCategoryDTO> ListProductCategories { get; set; }
         }
 
         public async Task<IActionResult> Index()
@@ -293,8 +294,9 @@ namespace FEPetServices.Controllers
             HomeModel homeModel = new HomeModel();
             try
             {
+                HttpResponseMessage responseCategoryProduct = await client.GetAsync("https://localhost:7255/api/ProductCategory/GetAll");
                 HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
-                if (responseProduct.IsSuccessStatusCode)
+                if (responseProduct.IsSuccessStatusCode && responseCategoryProduct.IsSuccessStatusCode)
                 {
                     HttpResponseMessage responseCategory = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
                     if (responseCategory.IsSuccessStatusCode)
@@ -310,11 +312,18 @@ namespace FEPetServices.Controllers
                             }
                         }
                         var responseCategoryContent = await responseCategory.Content.ReadAsStringAsync();
+                        var responseCategoryProductContent = await responseCategoryProduct.Content.ReadAsStringAsync();
+
 
                         if (!string.IsNullOrEmpty(responseCategoryContent))
                         {
                             homeModel.ListServiceCategory = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
                         }
+                        if (!string.IsNullOrEmpty(responseCategoryProductContent))
+                        {
+                            homeModel.ListProductCategories = JsonConvert.DeserializeObject<List<ProductCategoryDTO>>(responseCategoryProductContent);
+                        }
+
                     }
                     var rep = await responseProduct.Content.ReadAsStringAsync();
                     if (!string.IsNullOrEmpty(rep))
