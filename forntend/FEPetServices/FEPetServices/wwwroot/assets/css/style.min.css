@@ -6049,6 +6049,7 @@ a.axil-btn.btn-size-md, button.axil-btn.btn-size-md {
     }
 }
 
+
 .testimonial-style-three-wrapper .heading-title {
     position: relative;
     margin-bottom: 45px;
@@ -20344,4 +20345,15 @@ body.open .closeMask {
         margin-bottom: 100px
     }
 }
-/*# sourceMappingURL=../maps/style.min.css.map */
+.img-cat {
+    width : 90px;
+    height: 80px;
+}
+.slick-single-layout a {
+    width: 100%;
+    height: 165px;
+}
+
+.slick-single-layout .categrie-product a {
+    padding: 20px 12px;
+}
