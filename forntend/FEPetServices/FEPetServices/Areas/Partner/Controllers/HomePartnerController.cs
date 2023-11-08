@@ -2,7 +2,7 @@
 
 namespace FEPetServices.Areas.Partner.Controllers
 {
-    public class InformationController : Controller
+    public class HomePartnerController : Controller
     {
         public IActionResult Index()
         {
