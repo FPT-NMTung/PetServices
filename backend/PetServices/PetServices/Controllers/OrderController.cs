@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
 using PetServices.Form;
 using PetServices.Models;
+using System.Numerics;
 
 namespace PetServices.Controllers
 {
@@ -118,6 +119,13 @@ namespace PetServices.Controllers
             {
                 return BadRequest("Invalid order data");
             }
+            var takeProduct = _context.Products.FirstOrDefault(p => orderDTO.OrderProductDetails.Select(dto => dto.ProductId).Contains(p.ProductId));
+            var takeService = _context.Services.FirstOrDefault(s => orderDTO.BookingServicesDetails.Select(dto => dto.ServiceId).Contains(s.ServiceId));
+            var takeRoom = _context.Rooms.FirstOrDefault(r => orderDTO.BookingRoomDetails.Select(dto => dto.RoomId).Contains(r.RoomId));
+
+            double priceProduct = (double)takeProduct.Price;
+            double priceService = (double)takeService.Price;
+            double priceRoom = (double)takeRoom.Price;
 
             var order = new Order
             {
@@ -134,7 +142,7 @@ namespace PetServices.Controllers
                   ? orderDTO.OrderProductDetails.Select(dto => new OrderProductDetail
                 {
                     Quantity = dto.Quantity,
-                    Price = dto.Price,
+                    Price = priceProduct,
                     ProductId = dto.ProductId,
                 }).ToList() 
                 : new List<OrderProductDetail>(),
@@ -144,6 +152,7 @@ namespace PetServices.Controllers
                     ? orderDTO.BookingRoomDetails.Select(dto => new BookingRoomDetail
                     {
                         RoomId = dto.RoomId,
+                        Price = priceRoom,
                         OrderId = dto.OrderId
                     }).ToList()
                     : new List<BookingRoomDetail>(),
@@ -153,6 +162,10 @@ namespace PetServices.Controllers
                     ? orderDTO.BookingServicesDetails.Select(dto => new BookingServicesDetail
                     {
                         ServiceId = dto.ServiceId,
+                        Price = dto.Price,
+                        Weight = dto.Weight,
+                        PriceService = priceService,
+                        PetInfoId = dto.PetInfoId,
                         OrderId = dto.OrderId
                     }).ToList()
                     : new List<BookingServicesDetail>()
