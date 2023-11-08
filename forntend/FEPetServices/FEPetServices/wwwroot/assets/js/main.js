@@ -1133,3 +1133,67 @@
     axilInit.i();
 
 })(window, document, jQuery);
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        alert("Trình duyệt của bạn không hỗ trợ Geolocation.");
+    }
+}
+
+function showPosition(position) {
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+
+    // Hiển thị vị trí lấy được lên bản đồ (sử dụng Google Maps hoặc bản đồ khác)
+    initMap(latitude, longitude);
+}
+
+function showError(error) {
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            alert("Truy cập vào vị trí bị từ chối bởi người dùng.");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Không thể lấy được vị trí của bạn.");
+            break;
+        case error.TIMEOUT:
+            alert("Yêu cầu lấy vị trí của bạn đã quá thời gian.");
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("Đã xảy ra lỗi không xác định.");
+            break;
+    }
+}
+
+// Hàm này sẽ chạy khi có dữ liệu vị trí được trả về
+function initMap(latitude, longitude) {
+    var map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: latitude, lng: longitude },
+        zoom: 15
+    });
+
+    var marker = new google.maps.Marker({
+        position: { lat: latitude, lng: longitude },
+        map: map,
+        title: 'Vị trí của bạn'
+    });
+}
+function initMap() {
+    // Tạo một đối tượng bản đồ với tọa độ cố định (ví dụ: Hà Nội)
+    var map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 21.013569, lng: 105.525349 }, // Thay bằng tọa độ của địa điểm cố định
+        zoom: 15
+    });
+
+    // Thêm đánh dấu (marker) cho địa điểm cố định
+    var marker = new google.maps.Marker({
+        position: { lat: 21.013569, lng: 105.525349 }, // Thay bằng tọa độ của địa điểm cố định
+        map: map,
+        title: 'Địa điểm cố định'
+    });
+}
+
+// Gọi hàm initMap ngay sau khi trang web tải xong
+window.onload = initMap;

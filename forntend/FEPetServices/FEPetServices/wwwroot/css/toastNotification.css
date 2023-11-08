@@ -107,3 +107,8 @@
     .toast--wating .toast_icon {
         color: #ffd43b;
     }
+
+h3{
+    padding-bottom:0px;
+    margin-bottom:0px;
+}

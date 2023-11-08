@@ -91,6 +91,13 @@ audio, canvas, video {
         height: 0
     }
 
+.navbar-profile-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
 [hidden] {
     display: none
 }
@@ -6042,6 +6049,7 @@ a.axil-btn.btn-size-md, button.axil-btn.btn-size-md {
     }
 }
 
+
 .testimonial-style-three-wrapper .heading-title {
     position: relative;
     margin-bottom: 45px;
@@ -6782,110 +6790,7 @@ a.axil-btn.btn-size-md, button.axil-btn.btn-size-md {
         display: none
     }
 
-.header-top-campaign {
-    background-image: url("../images/others/campaign-bg2.png");
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    padding: 8px 0;
-    position: relative
-}
 
-    .header-top-campaign .campaign-content {
-        text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        margin: 0 30px
-    }
-
-@media only screen and (max-width: 767px) {
-    .header-top-campaign .campaign-content {
-        display: block
-    }
-}
-
-.header-top-campaign .campaign-content p {
-    color: #eeb2ff;
-    font-size: 14px
-}
-
-    .header-top-campaign .campaign-content p a {
-        font-weight: 700;
-        color: var(--color-white);
-        text-decoration: underline;
-        transition: all .3s ease-in-out
-    }
-
-        .header-top-campaign .campaign-content p a:hover {
-            color: var(--color-secondary)
-        }
-
-.header-top-campaign .campaign-countdown {
-    display: flex;
-    align-items: center;
-    margin: 0 -5px;
-    padding-right: 30px
-}
-
-@media only screen and (max-width: 767px) {
-    .header-top-campaign .campaign-countdown {
-        justify-content: center;
-        padding-right: 0
-    }
-}
-
-.header-top-campaign .campaign-countdown .countdown-section {
-    margin: 0 5px;
-    position: relative
-}
-
-    .header-top-campaign .campaign-countdown .countdown-section::after {
-        content: "";
-        height: 14px;
-        width: 1px;
-        background-color: #c653e2;
-        position: absolute;
-        top: 50%;
-        right: -7px;
-        transform: translateY(-50%)
-    }
-
-    .header-top-campaign .campaign-countdown .countdown-section:last-child::after {
-        display: none
-    }
-
-    .header-top-campaign .campaign-countdown .countdown-section > div {
-        display: flex;
-        align-items: center
-    }
-
-    .header-top-campaign .campaign-countdown .countdown-section .countdown-number, .header-top-campaign .campaign-countdown .countdown-section .countdown-unit {
-        font-size: 14px;
-        font-weight: 700;
-        color: var(--color-white)
-    }
-
-.header-top-campaign .remove-campaign {
-    position: absolute;
-    top: 11px;
-    right: 30px;
-    background-color: rgba(0,0,0,0);
-    color: var(--color-white);
-    width: auto;
-    font-size: 14px
-}
-
-    .header-top-campaign .remove-campaign:hover {
-        color: var(--color-primary)
-    }
-
-@media only screen and (max-width: 991px) {
-    .header-top-campaign .remove-campaign {
-        right: 10px
-    }
-}
 
 .axil-header-top {
     padding: 8px 0
@@ -7007,22 +6912,14 @@ a.axil-btn.btn-size-md, button.axil-btn.btn-size-md {
 
     .header-top-link .quick-link li a {
         font-size: var(--font-size-b2);
-        color: var(--color-body);
         line-height: var(--line-height-b2);
         display: inline-block
     }
 
         .header-top-link .quick-link li a:hover {
-            color: var(--color-primary)
+            color: var(--color-border-light)
         }
 
-.header-style-1 .header-top-campaign {
-    background-image: url("../images/others/campaign-bg.png")
-}
-
-    .header-style-1 .header-top-campaign .campaign-content p {
-        color: var(--color-white)
-    }
 
 .header-style-2 .axil-header-top {
     padding: 25px 0
@@ -7139,26 +7036,6 @@ a.axil-btn.btn-size-md, button.axil-btn.btn-size-md {
         color: var(--color-primary)
     }
 
-.header-style-5 .header-top-campaign {
-    background-image: url("../images/others/campaign-bg3.png");
-    padding: 20px 0 18px
-}
-
-    .header-style-5 .header-top-campaign .campaign-content p {
-        font-size: 16px;
-        font-weight: 700;
-        color: var(--color-white)
-    }
-
-        .header-style-5 .header-top-campaign .campaign-content p a i {
-            margin-left: 15px
-        }
-
-@media only screen and (max-width: 479px) {
-    .header-style-5 .header-top-campaign .campaign-content p {
-        font-size: 12px
-    }
-}
 
 .header-style-7 .axil-header-top {
     background-color: var(--color-heading);
@@ -7806,7 +7683,7 @@ a.axil-btn.btn-size-md, button.axil-btn.btn-size-md {
     .header-action .my-account .my-account-dropdown {
         position: absolute;
         top: 100%;
-        right: 0;
+        left: -186px;
         background: #fff;
         z-index: -1;
         opacity: 0;
@@ -7842,7 +7719,7 @@ a.axil-btn.btn-size-md, button.axil-btn.btn-size-md {
 
     .header-action .my-account .my-account-dropdown li a {
         font-size: 16px;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.3);
         padding: 12px 0;
         display: block
     }
@@ -7886,7 +7763,7 @@ a.axil-btn.btn-size-md, button.axil-btn.btn-size-md {
 .header-action .my-account .my-account-dropdown.open {
     opacity: 1;
     visibility: visible;
-    z-index: 9;
+    z-index: 888;
     transform: translateY(0)
 }
 
@@ -9362,11 +9239,6 @@ body.open .closeMask {
         width: 100%;
         background-position-x: 95%
     }
-
-    .filter-results #input {
-        width: 100%;
-        padding-right: ;
-    }
 }
 
 .axil-product {
@@ -9417,7 +9289,7 @@ body.open .closeMask {
     }
 
         .axil-product > .thumbnail .label-block .product-badget {
-            background-color: var(--color-primary);
+            background-color: var(--color-danger);
             line-height: 1;
             padding: 6px 10px 5px;
             font-size: 12px;
@@ -20473,4 +20345,28 @@ body.open .closeMask {
         margin-bottom: 100px
     }
 }
-/*# sourceMappingURL=../maps/style.min.css.map */
+.img-cat {
+    width : 90px;
+    height: 80px;
+}
+.slick-single-layout a {
+    width: 100%;
+    height: 165px;
+}
+
+.slick-single-layout .categrie-product a {
+    padding: 20px 12px;
+}
+
+.product-price-variant .sold {
+    font-size:12px;
+}
+
+.service-category{
+    border-radius: 0%;
+    height: 200px;
+    width: 100%;
+}
+    .service-category img {
+        height:100%;
+    }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
 using PetServices.Form;
 using PetServices.Models;
+using System.Numerics;
 
 namespace PetServices.Controllers
 {
@@ -119,6 +120,40 @@ namespace PetServices.Controllers
                 return BadRequest("Invalid order data");
             }
 
+            double priceProduct = 0;
+            double priceService = 0;
+            double priceRoom = 0;
+
+            if (orderDTO.OrderProductDetails != null)
+            {
+                var productIds = orderDTO.OrderProductDetails.Where(dto => dto != null).Select(dto => dto.ProductId).ToList();
+                var takeProduct = _context.Products.FirstOrDefault(p => productIds.Contains(p.ProductId));
+                if (takeProduct != null)
+                {
+                    priceProduct = (double)takeProduct.Price;
+                }
+            }
+
+            if (orderDTO.BookingServicesDetails != null)
+            {
+                var serviceIds = orderDTO.BookingServicesDetails.Where(dto => dto != null).Select(dto => dto.ServiceId).ToList();
+                var takeService = _context.Services.FirstOrDefault(s => serviceIds.Contains(s.ServiceId));
+                if (takeService != null)
+                {
+                    priceService = (double)takeService.Price;
+                }
+            }
+
+            if (orderDTO.BookingRoomDetails != null)
+            {
+                var roomIds = orderDTO.BookingRoomDetails.Where(dto => dto != null).Select(dto => dto.RoomId).ToList();
+                var takeRoom = _context.Rooms.FirstOrDefault(r => roomIds.Contains(r.RoomId));
+                if (takeRoom != null)
+                {
+                    priceRoom = (double)takeRoom.Price;
+                }
+            }
+
             var order = new Order
             {
                 OrderDate = orderDTO.OrderDate,
@@ -134,7 +169,7 @@ namespace PetServices.Controllers
                   ? orderDTO.OrderProductDetails.Select(dto => new OrderProductDetail
                 {
                     Quantity = dto.Quantity,
-                    Price = dto.Price,
+                    Price = priceProduct,
                     ProductId = dto.ProductId,
                 }).ToList() 
                 : new List<OrderProductDetail>(),
@@ -144,6 +179,7 @@ namespace PetServices.Controllers
                     ? orderDTO.BookingRoomDetails.Select(dto => new BookingRoomDetail
                     {
                         RoomId = dto.RoomId,
+                        Price = priceRoom,
                         OrderId = dto.OrderId
                     }).ToList()
                     : new List<BookingRoomDetail>(),
@@ -153,6 +189,10 @@ namespace PetServices.Controllers
                     ? orderDTO.BookingServicesDetails.Select(dto => new BookingServicesDetail
                     {
                         ServiceId = dto.ServiceId,
+                        Price = dto.Price,
+                        Weight = dto.Weight,
+                        PriceService = priceService,
+                        PetInfoId = dto.PetInfoId,
                         OrderId = dto.OrderId
                     }).ToList()
                     : new List<BookingServicesDetail>()
