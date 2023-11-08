@@ -90,64 +90,126 @@ namespace PetServices.Controllers
         {
             if (serviceDTO == null)
             {
-                return BadRequest("Service data is missing.");
+                return BadRequest("Dịch vụ không có sẵn");
             }
-
-            var newServices = new Service
+            if (string.IsNullOrWhiteSpace(serviceDTO.ServiceName))
             {
-                ServiceId = serviceDTO.ServiceId,
-                ServiceName = serviceDTO.ServiceName,
-                Desciptions = serviceDTO.Desciptions,
-                Price = serviceDTO.Price,
-                Picture = serviceDTO.Picture,
-                Status = serviceDTO.Status,
-                SerCategoriesId= serviceDTO.SerCategoriesId
-
-            };
-
-            _context.Services.Add(newServices);
-
+                string errorMessage = "Tên dịch vụ không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (serviceDTO.ServiceName.Length > 500)
+            {
+                string errorMessage = "Tên dịch vụ vượt quá số ký tự. Tối đa 500 ký tự!";
+                return BadRequest(errorMessage);
+            }
+            if (string.IsNullOrWhiteSpace(serviceDTO.Desciptions))
+            {
+                string errorMessage = "Mô tả không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (string.IsNullOrWhiteSpace(serviceDTO.Picture))
+            {
+                string errorMessage = "Ảnh phòng không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            else if (serviceDTO.Picture.Contains(" "))
+            {
+                string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            var serviceCategory = _context.ServiceCategories.FirstOrDefault(s => s.SerCategoriesId == serviceDTO.SerCategoriesId);
+            if (serviceCategory == null)
+            {
+                string errorMessage = "Loại dịch vụ không tồn tại!";
+                return BadRequest(errorMessage);
+            }
             try
             {
-                await _context.SaveChangesAsync();  
-                return Ok(_mapper.Map<ServiceDTO>(newServices));
+                var newServices = new Service
+                {
+                    ServiceId = serviceDTO.ServiceId,
+                    ServiceName = serviceDTO.ServiceName,
+                    Desciptions = serviceDTO.Desciptions,
+                    Price = serviceDTO.Price,
+                    Picture = serviceDTO.Picture,
+                    Status = serviceDTO.Status,
+                    SerCategoriesId = serviceDTO.SerCategoriesId
+                };
+                
+                await _context.Services.AddAsync(newServices);
+                await _context.SaveChangesAsync();
+                return Ok("Thêm dịch vụ thành công!");
             }
-            catch (DbUpdateException ex)
+            catch (Exception ex)
             {
-                return StatusCode(500, ex.InnerException.Message);
+                return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
             }
+  
         }
 
         
         [HttpPut("UpdateServices")]
-        public IActionResult UpdateServce(ServiceDTO serviceDTO, int serviceId)
+        public async Task<IActionResult> UpdateServce(ServiceDTO serviceDTO, int serviceId)
         {
-            var service = _context.Services
+            if (string.IsNullOrWhiteSpace(serviceDTO.ServiceName))
+            {
+                string errorMessage = "Tên dịch vụ không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (serviceDTO.ServiceName.Length > 500)
+            {
+                string errorMessage = "Tên dịch vụ vượt quá số ký tự. Tối đa 500 ký tự!";
+                return BadRequest(errorMessage);
+            }
+            if (string.IsNullOrWhiteSpace(serviceDTO.Desciptions))
+            {
+                string errorMessage = "Mô tả không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (string.IsNullOrWhiteSpace(serviceDTO.Picture))
+            {
+                string errorMessage = "Ảnh phòng không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            else if (serviceDTO.Picture.Contains(" "))
+            {
+                string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            var serviceCategory = _context.ServiceCategories.FirstOrDefault(s => s.SerCategoriesId == serviceDTO.SerCategoriesId);
+            if (serviceCategory == null)
+            {
+                string errorMessage = "Loại dịch vụ không tồn tại!";
+                return BadRequest(errorMessage);
+            }
+            try
+            {
+                var service = _context.Services
                 .Include(a => a.SerCategories)
                 .FirstOrDefault(p => p.ServiceId == serviceId);
 
-            if (service == null)
-            {
-                return NotFound();
-            }
+                if (service == null)
+                {
+                    return BadRequest("Không tìm thấy dịch vụ bạn chọn.");
+                }
 
-            service.ServiceName = serviceDTO.ServiceName;
-            service.Desciptions = serviceDTO.Desciptions;
-            service.Price = serviceDTO.Price;
-            service.Picture = serviceDTO.Picture;
-            service.Status = serviceDTO.Status;
-            service.SerCategoriesId = serviceDTO.SerCategoriesId;
+                service.ServiceName = serviceDTO.ServiceName;
+                service.Desciptions = serviceDTO.Desciptions;
+                service.Price = serviceDTO.Price;
+                service.Picture = serviceDTO.Picture;
+                service.Status = serviceDTO.Status;
+                service.SerCategoriesId = serviceDTO.SerCategoriesId;
 
-            try
-            {
-                _context.Entry(service).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                _context.SaveChanges();
+                _context.Update(service);
+                await _context.SaveChangesAsync();
+                return Ok("Cập nhât dịch vụ thành công!");
             }
-            catch (DbUpdateConcurrencyException)
+            
+            catch (Exception ex)
             {
-                return Conflict();
+                return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
             }
-            return Ok(service);
+            
         }
 
         
