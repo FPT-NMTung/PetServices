@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
 using PetServices.Form;
 using PetServices.Models;
+using System.Numerics;
 
 namespace PetServices.Controllers
 {
@@ -118,6 +119,7 @@ namespace PetServices.Controllers
             {
                 return BadRequest("Invalid order data");
             }
+         
 
             var order = new Order
             {
@@ -134,7 +136,7 @@ namespace PetServices.Controllers
                   ? orderDTO.OrderProductDetails.Select(dto => new OrderProductDetail
                 {
                     Quantity = dto.Quantity,
-                    Price = dto.Price,
+                    Price = priceProduct,
                     ProductId = dto.ProductId,
                 }).ToList() 
                 : new List<OrderProductDetail>(),
@@ -144,6 +146,7 @@ namespace PetServices.Controllers
                     ? orderDTO.BookingRoomDetails.Select(dto => new BookingRoomDetail
                     {
                         RoomId = dto.RoomId,
+                        Price = priceRoom,
                         OrderId = dto.OrderId
                     }).ToList()
                     : new List<BookingRoomDetail>(),
@@ -153,6 +156,10 @@ namespace PetServices.Controllers
                     ? orderDTO.BookingServicesDetails.Select(dto => new BookingServicesDetail
                     {
                         ServiceId = dto.ServiceId,
+                        Price = dto.Price,
+                        Weight = dto.Weight,
+                        PriceService = priceService,
+                        PetInfoId = dto.PetInfoId,
                         OrderId = dto.OrderId
                     }).ToList()
                     : new List<BookingServicesDetail>()
