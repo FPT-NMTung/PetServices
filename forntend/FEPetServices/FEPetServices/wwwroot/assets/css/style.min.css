@@ -20346,10 +20346,14 @@ body.open .closeMask {
     }
 }
 .img-cat {
-    width : 65px;
-    height:65px;
+    width : 90px;
+    height: 80px;
 }
-    .slick-single-layout a {
-     width:100%;
-     height:160px;
-    }
+.slick-single-layout a {
+    width: 100%;
+    height: 165px;
+}
+
+.slick-single-layout .categrie-product a {
+    padding: 20px 12px;
+}
