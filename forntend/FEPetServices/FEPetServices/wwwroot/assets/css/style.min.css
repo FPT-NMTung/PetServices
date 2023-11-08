@@ -9289,7 +9289,7 @@ body.open .closeMask {
     }
 
         .axil-product > .thumbnail .label-block .product-badget {
-            background-color: var(--color-primary);
+            background-color: var(--color-danger);
             line-height: 1;
             padding: 6px 10px 5px;
             font-size: 12px;
@@ -20356,4 +20356,7 @@ body.open .closeMask {
 
 .slick-single-layout .categrie-product a {
     padding: 20px 12px;
+}
+.product-price-variant .sold {
+    font-size:12px;
 }

@@ -9,6 +9,7 @@ namespace PetServices.DTO
         public double? Price { get; set; }
         public double? Weight { get; set; }
         public double? PriceService { get; set; }
+        public int? PetInfoId { get; set; }
         public virtual PetInfoDTO? PetInfo { get; set; }
         public virtual ServiceDTO? Service { get; set; } = null!;
     }
