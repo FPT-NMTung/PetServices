@@ -258,15 +258,10 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="product-large-thumbnail-2 single-product-thumbnail axil-product slick-layout-wrapper--15 axil-slick-arrow arrow-both-side-3">
-                                        @foreach(var sc in Model?.ServiceCategory.Services)
-                                         {
-                                    @if (sc.Status)
-                                    {
                                         <div class="thumbnail">
-                                           <a href="href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sc.ServiceId""><img  src="@sc.Picture" alt="Product Images"></a> 
+                                           <img  src="@Model?.Service.Picture" alt="Images"  style="height:615px;">
                                         </div>
-                                    }
-                                         }
+
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
@@ -276,7 +271,7 @@
                                             @if (sc.Status)
                                             {
                                                 <div class="small-thumb-img ">
-                                                    <a href="href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sc.ServiceId""><img src="@sc.Picture" alt="samll-thumb"></a> 
+                                                    <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sc.ServiceId"><img src="@sc.Picture" style="width:60px; height:60px;" alt="samll-thumb"></a> 
                                                 </div>
                                             }
                                             }
@@ -327,8 +322,10 @@
                                             <p class="title" style="font-family: serif; font-size: 20px;">Dịch Vụ:</p>
                                             <ul class="range-variant" style="font-family: serif">
                                                  @foreach(var sr in Model?.ServiceCategory.Services) { @if(sr.Status){
-                                                    <li>@sr.ServiceName</li>
-                                                    } else{ } }
+                                                    <a  href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sr.ServiceId"><li style="font-size:13px;" >@sr.ServiceName</li></a>
+                                                    } 
+                                                    else{ } 
+                                                 }
                                             </ul>
                                         </div>
                                     </div>
@@ -382,19 +379,19 @@
                                 <ul class="pro-des-features">
                                     <li class="single-features">
                                         <div class="icon">
-                                            <img src="assets/images/icons/pet-care (1).png" alt="icon">
+                                            <img src="/img/icon/pet-care.png" alt="icon">
                                         </div>
                                         Chăm sóc tận tình
                                     </li>
                                     <li class="single-features">
                                         <div class="icon">
-                                            <img src="assets/images/product/product-thumb/icon-2.png" alt="icon">
+                                            <img src="/img/icon/icon-2.png" alt="icon">
                                         </div>
                                         Dịch vụ chất lượng
                                     </li>
                                     <li class="single-features">
                                         <div class="icon">
-                                            <img src="assets/images/product/product-thumb/icon-1.png" alt="icon">
+                                            <img src="/img/icon/icon-1.png" alt="icon">
                                         </div>
                                         tận tâm cho mọi dịch vụ
                                     </li>
@@ -532,7 +529,7 @@
                                         <div class="axil-product">
                                             <div class="thumbnail">
                                                 <a href="single-product.html">
-                                                    <img src="@sc.Picture" alt="Product Images">
+                                                    <img style="width:300px;height:150px;" src="@sc.Picture" alt="Product Images">
                                                 </a>
                                             </div>
                                             <div class="product-content">
