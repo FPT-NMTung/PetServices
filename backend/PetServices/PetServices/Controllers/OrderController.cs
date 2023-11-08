@@ -119,13 +119,40 @@ namespace PetServices.Controllers
             {
                 return BadRequest("Invalid order data");
             }
-            var takeProduct = _context.Products.FirstOrDefault(p => orderDTO.OrderProductDetails.Select(dto => dto.ProductId).Contains(p.ProductId));
-            var takeService = _context.Services.FirstOrDefault(s => orderDTO.BookingServicesDetails.Select(dto => dto.ServiceId).Contains(s.ServiceId));
-            var takeRoom = _context.Rooms.FirstOrDefault(r => orderDTO.BookingRoomDetails.Select(dto => dto.RoomId).Contains(r.RoomId));
 
-            double priceProduct = (double)takeProduct.Price;
-            double priceService = (double)takeService.Price;
-            double priceRoom = (double)takeRoom.Price;
+            double priceProduct = 0;
+            double priceService = 0;
+            double priceRoom = 0;
+
+            if (orderDTO.OrderProductDetails != null)
+            {
+                var productIds = orderDTO.OrderProductDetails.Where(dto => dto != null).Select(dto => dto.ProductId).ToList();
+                var takeProduct = _context.Products.FirstOrDefault(p => productIds.Contains(p.ProductId));
+                if (takeProduct != null)
+                {
+                    priceProduct = (double)takeProduct.Price;
+                }
+            }
+
+            if (orderDTO.BookingServicesDetails != null)
+            {
+                var serviceIds = orderDTO.BookingServicesDetails.Where(dto => dto != null).Select(dto => dto.ServiceId).ToList();
+                var takeService = _context.Services.FirstOrDefault(s => serviceIds.Contains(s.ServiceId));
+                if (takeService != null)
+                {
+                    priceService = (double)takeService.Price;
+                }
+            }
+
+            if (orderDTO.BookingRoomDetails != null)
+            {
+                var roomIds = orderDTO.BookingRoomDetails.Where(dto => dto != null).Select(dto => dto.RoomId).ToList();
+                var takeRoom = _context.Rooms.FirstOrDefault(r => roomIds.Contains(r.RoomId));
+                if (takeRoom != null)
+                {
+                    priceRoom = (double)takeRoom.Price;
+                }
+            }
 
             var order = new Order
             {
