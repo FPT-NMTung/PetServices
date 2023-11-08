@@ -1,52 +1,116 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+
+<html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - FEPetServices</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/FEPetServices.styles.css" asp-append-version="true" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @* Thư viện chung // *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/images/favicon.png">
+
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FEPetServices</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="~/Logout/Index"><i class="fa fa-power-off"></i> Đăng xuất @RenderSection("Logout", required: false)</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div>
+        @RenderBody()
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - FEPetServices - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @*@await RenderSectionAsync("Scripts", required: false)*@
+    @*Toast notification design*@
+    <div id="toast"></div>
+    @*Common toast notification*@
+    @if (!string.IsNullOrEmpty(ViewBag.SuccessToast))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showSuccessToast();
+            });
+        </script>
+    }
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorToast))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showErrorToast();
+            });
+        </script>
+    }
+
+    @*Register toast notification*@
+    @if (!string.IsNullOrEmpty(TempData["SuccessRegisterToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showSuccessRegisterToast();
+            });
+        </script>
+    }
+    @if (!string.IsNullOrEmpty(TempData["SuccessRegisterSuccessToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showSuccessRegisterSuccessToast();
+            });
+        </script>
+    }
 </body>
+
+<script src="~/js/toastnotification.js"></script>
+<script>
+    function loading() {
+    @if (string.IsNullOrEmpty(ViewBag.ErrorToast) || string.IsNullOrEmpty(ViewBag.SuccessToast))
+    {
+        @:showWaitToast();
+    }
+                }
+    @*Common toast notification*@
+        function showSuccessToast() {
+            toast({
+                title: 'Thành công',
+                message: '@ViewBag.SuccessToast',
+                type: 'success',
+                duration: 2000
+            });
+        }
+    function showErrorToast(message = '') {
+        toast({
+            title: 'Thất bại',
+            message: '@ViewBag.ErrorToast',
+            type: 'error',
+            duration: 2000
+        });
+    }
+    function showWaitToast() {
+        toast({
+            title: 'Chờ đợi',
+            message: 'Vui lòng đợi ít phút hoặc điền đầy đủ thông tin',
+            type: 'wating',
+            duration: 2000
+        });
+    }
+
+    @*Register toast notification*@
+        function showSuccessRegisterToast() {
+            toast({
+                title: 'Thành công',
+                message: '@TempData["SuccessRegisterToast"]',
+                type: 'success',
+                duration: 2000
+            });
+        }
+    function showSuccessRegisterSuccessToast() {
+        toast({
+            title: 'Thành công',
+            message: '@TempData["SuccessRegisterSuccessToast"]',
+            type: 'success',
+            duration: 2000
+        });
+    }
+</script>
+<!-- Main JS -->
+<script src="~/assets/js/main.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIkw2datIu4EYiyedKQJ08DmMJnboVSqs"></script>
 </html>
