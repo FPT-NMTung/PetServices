@@ -284,7 +284,8 @@ namespace FEPetServices.Controllers
         public class HomeModel
         {
             public List<ServiceCategoryDTO> ListServiceCategory { get; set; }
-            public List<ProductDTO> ListProduct { get; set; }
+            public List<ProductDTO> ListProductTop8 { get; set; }
+            public List<ProductDTO> ListProductSecond8 { get; set; }
             public List<RoomCategoryDTO> ListRoomCategory { get; set; }
             public List<ProductCategoryDTO> ListProductCategories { get; set; }
         }
@@ -328,7 +329,19 @@ namespace FEPetServices.Controllers
                     var rep = await responseProduct.Content.ReadAsStringAsync();
                     if (!string.IsNullOrEmpty(rep))
                     {
-                        homeModel.ListProduct = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
+                        homeModel.ListProductTop8 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
+
+                        int currentPage = 1; 
+                        int pageSize = 8; 
+
+                        var firstPageProducts = homeModel.ListProductTop8.OrderByDescending(p => p.QuantitySold).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+                        currentPage++;
+
+                        var secondPageProducts = homeModel.ListProductTop8.OrderByDescending(p => p.QuantitySold).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+                        homeModel.ListProductTop8 = firstPageProducts;
+                        homeModel.ListProductSecond8 = secondPageProducts;
                     }
                     else
                     {

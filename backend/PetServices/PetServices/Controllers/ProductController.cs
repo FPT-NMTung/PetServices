@@ -60,7 +60,7 @@ namespace PetServices.Controllers
             // check ảnh
             if (string.IsNullOrWhiteSpace(productDTO.Picture))
             {
-                string errorMessage = "Ảnh phòng không được để trống!";
+                string errorMessage = "Ảnh sản phẩm không được để trống!";
                 return BadRequest(errorMessage);
             }
             else if (productDTO.Picture.Contains(" "))
@@ -122,7 +122,7 @@ namespace PetServices.Controllers
             // check ảnh
             if (string.IsNullOrWhiteSpace(productDTO.Picture))
             {
-                string errorMessage = "Ảnh phòng không được để trống!";
+                string errorMessage = "Ảnh sản phẩm không được để trống!";
                 return BadRequest(errorMessage);
             }
             else if (productDTO.Picture.Contains(" "))
@@ -158,7 +158,31 @@ namespace PetServices.Controllers
                 _context.Update(product);
                 await _context.SaveChangesAsync();
 
-                return Ok(product);
+                return Ok("Cập nhật sản phẩm thành công!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
+            }
+        }
+
+        [HttpPut("ChangeStatusProduct")]
+        public async Task<ActionResult> ChangeStatusProduct(int ProductId, bool status)
+        {
+            try
+            {
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == ProductId);
+                if (product == null)
+                {
+                    return BadRequest("Không tìm thấy sản phẩm cần thay đổi.");
+                }
+
+                product.Status = status;
+
+                _context.Entry(product).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+                return Ok("Cập nhật sản phẩm thành công!");
             }
             catch (Exception ex)
             {

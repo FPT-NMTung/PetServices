@@ -208,7 +208,234 @@
         </div>
          @*End Categorie Product *@
 
+        @*Start Product*@
+        <div class="axil-product-area bg-color-white axil-section-gap">
+            <div class="container">
+                <div class="section-title-wrapper">
+                    <span class="title-highlighter highlighter-primary"> <i class="far fa-shopping-basket"></i>Sản phẩm</span>
+                    <h2 class="title">Sản phẩm bán chạy</h2>
+                </div>
 
+                <div class="explore-product-activation slick-layout-wrapper slick-layout-wrapper--15 axil-slick-arrow arrow-top-slide">
+                    <div class="slick-single-layout">
+                        <div class="row row--15">
+                            @foreach (var product in Model.ListProductTop8)
+                            {
+                                <div class="col-xl-3 col-lg-4 col-sm-6 col-12 mb--30">
+                                    <div class="axil-product product-style-one">
+                                        <div class="thumbnail">
+                                            <a href="single-product.html">
+                                                <img data-sal="zoom-out" data-sal-delay="200" data-sal-duration="800" loading="lazy" class="main-img" src="@product.Picture" alt="Product Images">
+                                                <img class="hover-img" src="@product.Picture" alt="Product Images">
+                                            </a>
+                                            <div class="label-block label-right">
+                                                <div class="product-badget">Hot</div>
+                                            </div>
+                                            <div class="product-hover-action">
+                                                <ul class="cart-action">
+                                                    <li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>
+                                                    <li class="select-option">
+                                                        <a href="single-product.html">
+                                                            Add to Cart
+                                                        </a>
+                                                    </li>
+                                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="product-content">
+                                            <div class="inner">
+                                                <div class="product-rating">
+                                                    <span class="icon">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                    </span>
+                                                    <span class="rating-number">(64)</span>
+                                                </div>
+                                                <div style="height:60px">
+                                                   <h5 class="title"><a href="single-product.html">@product.ProductName</a></h5>
+                                                </div>
+                                                <div class="product-price-variant">
+                                                    <span class="price current-price">@product.Price VNĐ</span>
+                                                    <p class="price sold">Đã bán: @product.QuantitySold</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="slick-single-layout">
+                        <div class="row row--15">
+                            @foreach (var product in Model.ListProductSecond8)
+                            {
+                                <div class="col-xl-3 col-lg-4 col-sm-6 col-12 mb--30">
+                                    <div class="axil-product product-style-one">
+                                        <div class="thumbnail">
+                                            <a href="single-product.html">
+                                                <img data-sal="zoom-out" data-sal-delay="200" data-sal-duration="800" loading="lazy" class="main-img" src="@product.Picture" alt="Product Images">
+                                                <img class="hover-img" src="@product.Picture" alt="Product Images">
+                                            </a>
+                                            <div class="label-block label-right">
+                                                <div class="product-badget">Hot</div>
+                                            </div>
+                                            <div class="product-hover-action">
+                                                <ul class="cart-action">
+                                                    <li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>
+                                                    <li class="select-option">
+                                                        <a href="single-product.html">
+                                                            Add to Cart
+                                                        </a>
+                                                    </li>
+                                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="product-content">
+                                            <div class="inner">
+                                                <div class="product-rating">
+                                                    <span class="icon">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                    </span>
+                                                    <span class="rating-number">(64)</span>
+                                                </div>
+                                                <div style="height:60px">
+                                                    <h5 class="title"><a href="single-product.html">@product.ProductName</a></h5>
+                                                </div>
+                                                <div class="product-price-variant">
+                                                    <span class="price current-price">@product.Price VNĐ</span>
+                                                    <p class="price sold">Đã bán: @product.QuantitySold</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 text-center mt--20 mt_sm--0">
+                        <a href="shop.html" class="axil-btn btn-bg-lighter btn-load-more">Xem tất cả sản phẩm</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        @*End Product*@
+
+        @*Start ServiceCategiry*@
+        <div class="axil-new-arrivals-product-area bg-color-white axil-section-gap pb--0">
+            <div class="container">
+                <div class="product-area pb--50">
+                    <div class="section-title-wrapper">
+                        <span class="title-highlighter highlighter-primary"><i class="far fa-shopping-basket"></i>Dịch vụ</span>
+                        <h2 class="title">Các loại dịch vụ</h2>
+                    </div>
+
+                    <div class="new-arrivals-product-activation slick-layout-wrapper--30 axil-slick-arrow  arrow-top-slide">
+                        @foreach (var services in Model.ListServiceCategory){
+                        <div class="slick-single-layout">
+                            <div class="axil-product product-style-two">
+                                <div class="service-category">
+                                    <a href="single-product.html">
+                                        <img data-sal="zoom-out" data-sal-delay="200" data-sal-duration="500" src="@services.Picture" alt="Product Images">
+                                    </a>
+                                </div>
+                                <div class="product-content">
+                                    <div class="inner">
+                                            <div class="product-rating">
+                                                <span class="icon">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </span>
+                                                <span class="rating-number">(64)</span>
+                                            </div>
+                                            <h5 style="height:60px" class="title"><a href="single-product.html">@services.SerCategoriesName</a></h5>
+                                        <div class="product-hover-action">
+                                            <ul class="cart-action">
+                                                <li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>
+                                                <li class="select-option"><a href="single-product.html">Xem chi tiết</a></li>
+                                                <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*End ServiceCategiry*@
+
+        @*Start End*@
+        <div class="axil-why-choose-area pb--50 pb_sm--30">
+            <div class="container">
+                <div class="section-title-wrapper section-title-center">
+                    <span class="title-highlighter highlighter-secondary"><i class="fal fa-thumbs-up"></i>Why Us</span>
+                    <h2 class="title">Why People Choose Us</h2>
+                </div>
+                <div class="row row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 row--20">
+                    <div class="col">
+                        <div class="service-box">
+                            <div class="icon">
+                                <img src="~/assets/images/icons/service6.png" alt="Service">
+                            </div>
+                            <h6 class="title">Fast &amp; Secure Delivery</h6>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="service-box">
+                            <div class="icon">
+                                <img src="~/assets/images/icons/service7.png" alt="Service">
+                            </div>
+                            <h6 class="title">100% Guarantee On Product</h6>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="service-box">
+                            <div class="icon">
+                                <img src="~/assets/images/icons/service8.png" alt="Service">
+                            </div>
+                            <h6 class="title">24 Hour Return Policy</h6>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="service-box">
+                            <div class="icon">
+                                <img src="~/assets/images/icons/service9.png" alt="Service">
+                            </div>
+                            <h6 class="title">24 Hour Return Policy</h6>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="service-box">
+                            <div class="icon">
+                                <img src="~/assets/images/icons/service10.png" alt="Service">
+                            </div>
+                            <h6 class="title">Next Level Pro Quality</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*End End*@
         </main>
     </body>
 </html>
