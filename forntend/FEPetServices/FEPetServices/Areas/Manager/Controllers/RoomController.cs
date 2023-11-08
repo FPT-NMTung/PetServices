@@ -99,10 +99,10 @@ namespace FEPetServices.Areas.Manager.Controllers
                 {
                     string filename = GenerateRandomNumber(5) + image.FileName;
                     filename = Path.GetFileName(filename);
-                    string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                    string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Room/", filename);
                     var stream = new FileStream(uploadfile, FileMode.Create);
                     image.CopyToAsync(stream);
-                    roomDTO.Picture = "/img/" + filename;
+                    roomDTO.Picture = "/img/Room/" + filename;
                 }
                 else
                 {
@@ -213,10 +213,10 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (image != null && image.Length > 0)
                 {
-                    var imagePath = "/img/" + image.FileName;
+                    var imagePath = "/img/Room/" + image.FileName;
                     roomDTO.Picture = imagePath;
 
-                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", image.FileName);
+                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img","Room", image.FileName);
                     using (var stream = new FileStream(physicalImagePath, FileMode.Create))
                     {
                         await image.CopyToAsync(stream);

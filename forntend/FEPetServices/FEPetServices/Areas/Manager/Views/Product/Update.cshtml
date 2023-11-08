@@ -81,7 +81,7 @@
                         <label for="CreateDate">Ngày Thêm Sản Phẩm: </label>
                     </div>
                     <div class="typeinput">
-                        <input type="date" class="form-control" id="CreateDate" name="CreateDate" value="@Model?.CreateDate.ToString("yyyy-MM-dd")" style="width:100%" disabled />
+                        <input type="date" class="form-control" id="CreateDate" name="CreateDate" value="@Model?.CreateDate?.ToString("yyyy-MM-dd")" style="width:100%" disabled />
                         <div style="color: red" class="error-message" id="fnameErrorMessage"></div>
                     </div>
 
