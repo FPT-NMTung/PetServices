@@ -36,15 +36,15 @@ namespace FEPetServices.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            ApiUrlRoomList = "https://localhost:7255/api/Room/GetAllRoomCustomer";
-            ApiUrlRoomCategoryList = "https://localhost:7255/api/Room/GetRoomCategory";
-            ApiUrlRoomDetail = "https://localhost:7255/api/Room/GetRoom/";
-            DefaultApiUrlServiceCategoryList = "https://localhost:7255/api/ServiceCategory";
-            DefaultApiUrlProductCategoryList = "https://localhost:7255/api/ServiceCategory";
-            DefaultApiUrlServiceCategoryDetail = "https://localhost:7255/api/ServiceCategory/ServiceCategorysID/";
-            DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
-            DefaultApiUrlProductList = "https://localhost:7255/api/Product";
-            DefaultApiUrlRoomCategoryList = "https://localhost:7255/api/Room";
+            ApiUrlRoomList = "https://pet-service-api.azurewebsites.net/api/Room/GetAllRoomCustomer";
+            ApiUrlRoomCategoryList = "https://pet-service-api.azurewebsites.net/api/Room/GetRoomCategory";
+            ApiUrlRoomDetail = "https://pet-service-api.azurewebsites.net/api/Room/GetRoom/";
+            DefaultApiUrlServiceCategoryList = "https://pet-service-api.azurewebsites.net/api/ServiceCategory";
+            DefaultApiUrlProductCategoryList = "https://pet-service-api.azurewebsites.net/api/ServiceCategory";
+            DefaultApiUrlServiceCategoryDetail = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/ServiceCategorysID/";
+            DefaultApiUrlBlogList = "https://pet-service-api.azurewebsites.net/api/Blog";
+            DefaultApiUrlProductList = "https://pet-service-api.azurewebsites.net/api/Product";
+            DefaultApiUrlRoomCategoryList = "https://pet-service-api.azurewebsites.net/api/Room";
         }
 
         public async Task<ActionResult> Room(RoomDTO roomDTO, RoomSearchDTO searchDTO)
@@ -149,7 +149,7 @@ namespace FEPetServices.Controllers
         {
             try
             {
-                HttpResponseMessage serviceAvailableResponse = await client.GetAsync("https://localhost:7255/api/Room/GetServiceInRoom?roomId=" + roomId);
+                HttpResponseMessage serviceAvailableResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/GetServiceInRoom?roomId=" + roomId);
 
                 if (serviceAvailableResponse.IsSuccessStatusCode)
                 {
@@ -158,7 +158,7 @@ namespace FEPetServices.Controllers
                     ViewBag.ServiceAvailable = new SelectList(services, "ServiceId", "ServiceName");
                 }
 
-                HttpResponseMessage serviceUnavailableResponse = await client.GetAsync("https://localhost:7255/api/Room/GetServiceOutRoom?roomId=" + roomId);
+                HttpResponseMessage serviceUnavailableResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/GetServiceOutRoom?roomId=" + roomId);
 
                 if (serviceUnavailableResponse.IsSuccessStatusCode)
                 {
@@ -188,7 +188,7 @@ namespace FEPetServices.Controllers
             }
 
             return View();
-            DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
+            DefaultApiUrlBlogList = "https://pet-service-api.azurewebsites.net/api/Blog";
 
 
         }
@@ -281,7 +281,7 @@ namespace FEPetServices.Controllers
             HomeModel homeModel = new HomeModel();
             try
             {
-                HttpResponseMessage responseCategoryProduct = await client.GetAsync("https://localhost:7255/api/ProductCategory/GetAll");
+                HttpResponseMessage responseCategoryProduct = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll");
                 HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
                 if (responseProduct.IsSuccessStatusCode && responseCategoryProduct.IsSuccessStatusCode)
                 {
@@ -350,7 +350,7 @@ namespace FEPetServices.Controllers
         {
             ServiceDetailModel model = new ServiceDetailModel();
 
-            HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
+            HttpResponseMessage response = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
             if (response.IsSuccessStatusCode)
             {
                 HttpResponseMessage responseCategory = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
@@ -380,7 +380,7 @@ namespace FEPetServices.Controllers
 
                     if (serviceIds == 0)
                     {
-                        HttpResponseMessage responseService = await client.GetAsync("https://localhost:7255/api/ServiceCategory/GetServiceByServiceCategoryAndServiceID/"
+                        HttpResponseMessage responseService = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetServiceByServiceCategoryAndServiceID/"
                         + "?serviceCategoryId=" + serviceCategoryId + "&serviceId=" + serviceId);
 
                         var responseContentService = await responseService.Content.ReadAsStringAsync();
@@ -392,7 +392,7 @@ namespace FEPetServices.Controllers
                     }
                     else
                     {
-                        HttpResponseMessage responseService = await client.GetAsync("https://localhost:7255/api/ServiceCategory/GetServiceByServiceCategoryAndServiceID/"
+                        HttpResponseMessage responseService = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetServiceByServiceCategoryAndServiceID/"
                      + "?serviceCategoryId=" + serviceCategoryId + "&serviceId=" + serviceIds);
                         if (response.IsSuccessStatusCode)
                         {

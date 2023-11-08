@@ -16,7 +16,7 @@ namespace FEPetServices.Controllers
         public RegisterController()
         {
             _client = new HttpClient();
-            _defaultApiUrl = "https://localhost:7255/api/Account/Register"; // URL của API Register
+            _defaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account/Register"; // URL của API Register
         }
 
         public IActionResult Index()

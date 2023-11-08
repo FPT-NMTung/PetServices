@@ -22,10 +22,10 @@ namespace FEPetServices.Areas.Manager.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "";
-            DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
-            DefaultApiUrlBlogDetail = "https://localhost:7255/api/Blog/BlogID";
-            DefaultApiUrlBlogAdd = "https://localhost:7255/api/Blog/CreateBlog";
-            DefaultApiUrlBlogUpdate = "https://localhost:7255/api/Blog/UpdateBlog?blogId=";
+            DefaultApiUrlBlogList = "https://pet-service-api.azurewebsites.net/api/Blog";
+            DefaultApiUrlBlogDetail = "https://pet-service-api.azurewebsites.net/api/Blog/BlogID";
+            DefaultApiUrlBlogAdd = "https://pet-service-api.azurewebsites.net/api/Blog/CreateBlog";
+            DefaultApiUrlBlogUpdate = "https://pet-service-api.azurewebsites.net/api/Blog/UpdateBlog?blogId=";
 
         }
 

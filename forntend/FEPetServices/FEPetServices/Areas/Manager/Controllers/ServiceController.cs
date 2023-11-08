@@ -26,11 +26,11 @@ namespace FEPetServices.Areas.Manager.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "";
-            DefaultApiUrlServiceList = "https://localhost:7255/api/Service/GetAllService";
-            DefaultApiUrlServiceAdd = "https://localhost:7255/api/Service/CreateService";
-            DefaultApiUrlServiceCategoryList = "https://localhost:7255/api/ServiceCategory/GetAllServiceCategory";
-            DefaultApiUrlServiceDetail = "https://localhost:7255/api/Service/ServiceID";
-            DefaultApiUrlServiceUpdate = "https://localhost:7255/api/Service/UpdateServices?serviceId=";
+            DefaultApiUrlServiceList = "https://pet-service-api.azurewebsites.net/api/Service/GetAllService";
+            DefaultApiUrlServiceAdd = "https://pet-service-api.azurewebsites.net/api/Service/CreateService";
+            DefaultApiUrlServiceCategoryList = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory";
+            DefaultApiUrlServiceDetail = "https://pet-service-api.azurewebsites.net/api/Service/ServiceID";
+            DefaultApiUrlServiceUpdate = "https://pet-service-api.azurewebsites.net/api/Service/UpdateServices?serviceId=";
 
         }
         public async Task<IActionResult> Index(ServiceDTO service)
@@ -75,7 +75,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             try
             {
                
-                HttpResponseMessage categoryResponse = await client.GetAsync("https://localhost:7255/api/ServiceCategory/GetAllServiceCategory");
+                HttpResponseMessage categoryResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory");
 
                 if (categoryResponse.IsSuccessStatusCode)
                 {
@@ -138,7 +138,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-                HttpResponseMessage categoryResponse = await client.GetAsync("https://localhost:7255/api/ServiceCategory/GetAllServiceCategory");
+                HttpResponseMessage categoryResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory");
 
                 if (categoryResponse.IsSuccessStatusCode)
                 {
@@ -180,7 +180,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             try
             {
 
-                HttpResponseMessage categoryResponse = await client.GetAsync("https://localhost:7255/api/ServiceCategory/GetAllServiceCategory");
+                HttpResponseMessage categoryResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory");
 
                 if (categoryResponse.IsSuccessStatusCode)
                 {

@@ -11,7 +11,7 @@ namespace FEPetServices.Controllers
         public PartnerRegisterController()
         {
             _client = new HttpClient();
-            _defaultApiUrl = "https://localhost:7255/api/Account/RegisterPartner"; 
+            _defaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account/RegisterPartner"; 
         }
         public IActionResult Index()
         {

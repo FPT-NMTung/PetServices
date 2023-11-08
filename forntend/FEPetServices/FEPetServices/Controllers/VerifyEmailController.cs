@@ -16,7 +16,7 @@ namespace FEPetServices.Controllers
         public VerifyEmailController()
         {
             _client = new HttpClient();
-            _defaultApiUrl = "https://localhost:7255/api/Account/VerifyOTPAndActivateAccount";
+            _defaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account/VerifyOTPAndActivateAccount";
         }
 
         public IActionResult Index()

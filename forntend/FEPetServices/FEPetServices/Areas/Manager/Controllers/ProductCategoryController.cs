@@ -23,10 +23,10 @@ namespace FEPetServices.Areas.Manager.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "";
-            DefaultApiUrlProductCategoryList = "https://localhost:7255/api/ProductCategory";
-            DefaultApiUrlProductCategoryDetail = "https://localhost:7255/api/ProductCategory/ProductCategorysID";
-            DefaultApiUrlProductCategoryAdd = "https://localhost:7255/api/ProductCategory/CreateNewProductCategory";
-            DefaultApiUrlProductCategoryUpdate = "https://localhost:7255/api/ProductCategory/Update?procateId=";
+            DefaultApiUrlProductCategoryList = "https://pet-service-api.azurewebsites.net/api/ProductCategory";
+            DefaultApiUrlProductCategoryDetail = "https://pet-service-api.azurewebsites.net/api/ProductCategory/ProductCategorysID";
+            DefaultApiUrlProductCategoryAdd = "https://pet-service-api.azurewebsites.net/api/ProductCategory/CreateNewProductCategory";
+            DefaultApiUrlProductCategoryUpdate = "https://pet-service-api.azurewebsites.net/api/ProductCategory/Update?procateId=";
         }
 
         public async Task<IActionResult> Index(ProductCategoryDTO productCategoryDTO)
