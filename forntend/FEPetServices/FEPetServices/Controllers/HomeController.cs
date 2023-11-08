@@ -401,7 +401,7 @@ namespace FEPetServices.Controllers
             public List<ServiceCategoryDTO> CaServices { get; set; }
         }
 
-        public IActionResult Rules()
+        public IActionResult Terms()
         {
             return View();
         }
