@@ -119,7 +119,13 @@ namespace PetServices.Controllers
             {
                 return BadRequest("Invalid order data");
             }
-         
+            var takeProduct = _context.Products.FirstOrDefault(p => orderDTO.OrderProductDetails.Select(dto => dto.ProductId).Contains(p.ProductId));
+            var takeService = _context.Services.FirstOrDefault(s => orderDTO.BookingServicesDetails.Select(dto => dto.ServiceId).Contains(s.ServiceId));
+            var takeRoom = _context.Rooms.FirstOrDefault(r => orderDTO.BookingRoomDetails.Select(dto => dto.RoomId).Contains(r.RoomId));
+
+            double priceProduct = (double)takeProduct.Price;
+            double priceService = (double)takeService.Price;
+            double priceRoom = (double)takeRoom.Price;
 
             var order = new Order
             {
