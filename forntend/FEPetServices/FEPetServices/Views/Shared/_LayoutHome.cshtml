@@ -2,194 +2,377 @@
 
 <html>
 <head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @* Thư viện chung // *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/images/favicon.png">
+
+    <!-- CSS
+    ============================================ -->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/assets/css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/font-awesome.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/flaticon/flaticon.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/slick.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/slick-theme.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/sal.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/magnific-popup.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/base.css">
+    <link rel="stylesheet" href="~/assets/css/style.min.css">
+
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
 </head>
-<body>
-    <div class="page-petservices-header">
-        <!--=============== Navbar ===============-->
-        <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-transparent" id="page-petservices-navigation">
-            <div class="container">
-                <!-- Navbar Brand -->
-                <a href="index.html" class="navbar-brand">
-                    <img src="assets/img/logo/logo.png" alt="">
-                </a>
-
-                <!-- Toggle Button -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarcollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarcollapse">
-                    <!-- Navbar Menu -->
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a href="shop.html" class="nav-link">Shop</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="register.html" class="nav-link">Register</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="login.html" class="nav-link">Login</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <div class="avatar-header"><img src="assets/img/logo/avatar.jpg"></div> John Doe
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="transaction.html">Transactions History</a>
-                                <a class="dropdown-item" href="setting.html">Settings</a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a href="javascript:void(0)" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-shopping-basket"></i> <span class="badge badge-primary">5</span>
-                            </a>
-                            <div class="dropdown-menu shopping-cart">
-                                <ul>
-                                    <li>
-                                        <div class="drop-title">Your Cart</div>
-                                    </li>
-                                    <li>
-                                        <div class="shopping-cart-list">
-                                            <div class="media">
-                                                <img class="d-flex mr-3" src="assets/img/logo/avatar.jpg" width="60">
-                                                <div class="media-body">
-                                                    <h5><a href="javascript:void(0)">Carrot</a></h5>
-                                                    <p class="price">
-                                                        <span class="discount text-muted">Rp. 700.000</span>
-                                                        <span>Rp. 100.000</span>
-                                                    </p>
-                                                    <p class="text-muted">Qty: 1</p>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <img class="d-flex mr-3" src="assets/img/logo/avatar.jpg" width="60">
-                                                <div class="media-body">
-                                                    <h5><a href="javascript:void(0)">Carrot</a></h5>
-                                                    <p class="price">
-                                                        <span class="discount text-muted">Rp. 700.000</span>
-                                                        <span>Rp. 100.000</span>
-                                                    </p>
-                                                    <p class="text-muted">Qty: 1</p>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <img class="d-flex mr-3" src="assets/img/logo/avatar.jpg" width="60">
-                                                <div class="media-body">
-                                                    <h5><a href="javascript:void(0)">Carrot</a></h5>
-                                                    <p class="price">
-                                                        <span class="discount text-muted">Rp. 700.000</span>
-                                                        <span>Rp. 100.000</span>
-                                                    </p>
-                                                    <p class="text-muted">Qty: 1</p>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <img class="d-flex mr-3" src="assets/img/logo/avatar.jpg" width="60">
-                                                <div class="media-body">
-                                                    <h5><a href="javascript:void(0)">Carrot</a></h5>
-                                                    <p class="price">
-                                                        <span class="discount text-muted">Rp. 700.000</span>
-                                                        <span>Rp. 100.000</span>
-                                                    </p>
-                                                    <p class="text-muted">Qty: 1</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="drop-title d-flex justify-content-between">
-                                            <span>Total:</span>
-                                            <span class="text-primary"><strong>Rp. 2000.000</strong></span>
-                                        </div>
-                                    </li>
-                                    <li class="d-flex justify-content-between pl-3 pr-3 pt-3">
-                                        <a href="cart.html" class="btn btn-default">View Cart</a>
-                                        <a href="checkout.html" class="btn btn-primary">Checkout</a>
-                                    </li>
+<body class="sticky-header newsletter-popup-modal">
+    <a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
+    <header class="header axil-header header-style-1">
+      @{
+            string? userimage = Context.Session.GetString("UserImage");
+            if (userimage is null)
+            {
+                <div class="axil-header-top">
+                    <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-sm-6">
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="header-top-link">
+                                <ul class="quick-link">
+                                    <li><a class="btn btn-outline-primary" href="~/Login">Đăng nhập</a></li>
+                                    <li><a style="padding: 4.5px 9px;" class="btn axil-btn btn-bg-primary" href="~/Register/Index">Đăng ký</a></li>
                                 </ul>
                             </div>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </nav>
-    </div>
-       
-    <div>
-        @RenderBody()
-    </div>
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <h5>About</h5>
-                    <p>Nisi esse dolor irure dolor eiusmod ex deserunt proident cillum eu qui enim occaecat sunt aliqua anim eiusmod qui ut voluptate.</p>
-                </div>
-                <div class="col-md-3">
-                    <h5>Links</h5>
-                    <ul>
-                        <li>
-                            <a href="about.html">About</a>
-                        </li>
-                        <li>
-                            <a href="contact.html">Contact Us</a>
-                        </li>
-                        <li>
-                            <a href="faq.html">FAQ</a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)">How it Works</a>
-                        </li>
-                        <li>
-                            <a href="terms.html">Terms</a>
-                        </li>
-                        <li>
-                            <a href="privacy.html">Privacy Policy</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5>Contact</h5>
-                    <ul>
-                        <li>
-                            <a href="tel:+620892738334"><i class="fa fa-phone"></i> 08272367238</a>
-                        </li>
-                        <li>
-                            <a href="mailto:hello@domain.com"><i class="fa fa-envelope"></i> hello@domain.com</a>
-                        </li>
-                    </ul>
-
-                    <h5>Follow Us</h5>
-                    <ul class="social">
-                        <li>
-                            <a href="javascript:void(0)" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" target="_blank"><i class="fab fa-instagram"></i></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" target="_blank"><i class="fab fa-youtube"></i></a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5>Get Our App</h5>
-                    <ul class="mb-0">
-                        <li class="download-app">
-                            <a href="#"><img src="assets/img/playstore.png"></a>
-                        </li>
-                        <li style="height: 200px">
-                            <div class="mockup">
-                                <img src="assets/img/mockup.png">
+            }
+            if (userimage is not null)
+            {
+                 <div class="axil-header-top">
+                    <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-sm-6">
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="header-top-link">
+                                <ul class="quick-link">
+                                    <li><a class="btn btn-outline-primary" href="~/Logout/Index">Đăng xuất</a></li>
+                                </ul>
                             </div>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        }
+        <!-- Start Mainmenu Area  -->
+        <div id="axil-sticky-placeholder"></div>
+        <div class="axil-mainmenu">
+            <div class="container">
+                <div class="header-navbar">
+                    <div class="header-brand">
+                        <a href="/Home" class="logo logo-dark">
+                            <img style="width: 138px;height: 100%;" src="https://bizweb.dktcdn.net/100/147/060/themes/880570/assets/logo.png?1687579687145" alt="Site Logo">
+                        </a>
+                        <a href="/Home" class="logo logo-light">
+                            <img style="width: 138px;height: 100%;" src="https://bizweb.dktcdn.net/100/147/060/themes/880570/assets/logo.png?1687579687145" alt="Site Logo">
+                        </a>
+                    </div>
+                    <div class="header-main-nav">
+                        <!-- Start Mainmanu Nav -->
+                        <nav class="mainmenu-nav">
+                            <button class="mobile-close-btn mobile-nav-toggler"><i class="fas fa-times"></i></button>
+                            <div class="mobile-nav-brand">
+                                <a href="/Home" class="logo">
+                                    <img style="width: 100px;height: 100%;" src="https://bizweb.dktcdn.net/100/147/060/themes/880570/assets/logo.png?1687579687145" alt="Site Logo">
+                                </a>
+                            </div>
+                            <ul class="mainmenu">
+                                <li>
+                                    <a href="/Home">Trang chủ</a>
+                                </li>
+                                <li>
+                                    <a href="/ProductList">Sản phẩm</a>
+                                </li>
+                                <li class="menu-item-has-children">
+                                    <a href="/Home/ServiceList">Dịch vụ</a>
+                                    <ul class="axil-submenu">
+                                        <li><a href="shop-sidebar.html">Shop With Sidebar</a></li>
+                                        <li><a href="shop.html">Shop no Sidebar</a></li>
+                                        <li><a href="single-product.html">Product Variation 1</a></li>
+                                        <li><a href="single-product-2.html">Product Variation 2</a></li>
+                                        <li><a href="single-product-3.html">Product Variation 3</a></li>
+                                        <li><a href="single-product-4.html">Product Variation 4</a></li>
+                                        <li><a href="single-product-5.html">Product Variation 5</a></li>
+                                        <li><a href="single-product-6.html">Product Variation 6</a></li>
+                                        <li><a href="single-product-7.html">Product Variation 7</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="/Home/BlogList">Blog</a></li>
+                                <li><a href="contact.html">Giới thiệu</a></li>
+                                <li><a href="contact.html">Liên hệ với chúng tôi</a></li>
+                            </ul>
+                        </nav>
+                        <!-- End Mainmanu Nav -->
+                    </div>
+                    <div class="header-action">
+                        <ul class="action-list">
+                            <li class="shopping-cart">
+                                <a href="#" class="cart-dropdown-btn">
+                                    <span class="cart-count">3</span>
+                                    <i class="flaticon-shopping-cart"></i>
+                                </a>
+                            </li>
+
+                            @{
+                                string? userimageuser = Context.Session.GetString("UserImage");
+                                if (userimageuser is not null)
+                                {
+                                    <li class="my-account">
+                                        <a href="javascript:void(0)">
+                                            <img class="navbar-profile-image" src="@userimage" alt="Image">
+                                        </a>
+                                        <div class="my-account-dropdown">
+                                            <ul>
+                                                <li>
+                                                    <a href="my-account.html">Thông tin cá nhân</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Đổi mật khẩu</a>
+                                                </li>
+                                                <li>
+                                                    <a style="border-bottom : none!important" href="#">Đăng xuất</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+
+                                }
+                                if (userimageuser is null)
+                                {
+                                    
+                                }
+                            }
+                            <li class="axil-mobile-toggle">
+                                <button class="menu-btn mobile-nav-toggler">
+                                    <i class="flaticon-menu-2"></i>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-        <p class="copyright">&copy; 2018 Freshcery | Groceries Organic Store. All rights reserved.</p>
+        <!-- End Mainmenu Area -->
+    </header>
+    <div>
+        @RenderBody()
+    </div>
+    <!-- Start Footer Area  -->
+    <footer class="axil-footer-area footer-style-2">
+        <!-- Start Footer Top Area  -->
+        <div class="footer-top separator-top">
+            <div class="container">
+                <div class="row">
+                    <!-- Start Single Widget  -->
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="axil-footer-widget">
+                            <h5 class="widget-title">Hỗ trợ</h5>
+                            <div class="inner">
+                                <p>
+                                    19 ngõ 93, phố Vũ Hữu, <br>
+                                    phường Thanh Xuân Bắc, <br>
+                                    quận Thanh Xuân, Hà nội.
+                                </p>
+                                <ul class="support-list-item">
+                                    <li><a href="mailto:example@domain.com"><i class="fal fa-envelope-open"></i> petservices@petpet.com</a></li>
+                                    <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> 0969886688</a></li>
+                                    <!-- <li><i class="fal fa-map-marker-alt"></i> 685 Market Street,  <br> Las Vegas, LA 95820, <br> United States.</li> -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Single Widget  -->
+                    <!-- Start Single Widget  -->
+                    <!-- End Single Widget  -->
+                    <!-- Start Single Widget  -->
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="axil-footer-widget">
+                            <h5 class="widget-title">Dịch vụ</h5>
+                            <div class="inner">
+                                <ul>
+                                    <li><a href="/ProductList">Sản phẩm</a></li>
+                                    <li><a href="/Home/ServiceList">Dịch vụ</a></li>
+                                    <li><a href="/Home/BlogList">Blog</a></li>
+                                    <li><a href="contact.html">Giới thiệu</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Single Widget  -->
+                    <!-- Start Single Widget  -->
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="axil-footer-widget">
+                            <h5 class="widget-title">Tải về </h5>
+                            <div class="inner">
+                                <div class="download-btn-group">
+                                    <div class="qr-code">
+                                        <img src="~/assets/images/others/qr.png" alt="Axilthemes">
+                                    </div>
+                                    <div class="app-link">
+                                        <a href="#">
+                                            <img src="~/assets/images/others/app-store.png" alt="App Store">
+                                        </a>
+                                        <a href="#">
+                                            <img src="~/assets/images/others/play-store.png" alt="Play Store">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="axil-footer-widget">
+                            <h5 class="widget-title">Địa điểm</h5>
+                            <div class="inner map-petservices">
+                                <div id="map" style="width: 100%; height: 180px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Single Widget  -->
+                </div>
+            </div>
+        </div>
+        <!-- End Footer Top Area  -->
+        <!-- Start Copyright Area  -->
+        <div class="copyright-area copyright-default separator-top">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-xl-4">
+                        <div class="social-share">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-discord"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-12">
+                    </div>
+                    <div class="col-xl-4 col-lg-12">
+                        <div class="copyright-right d-flex flex-wrap justify-content-xl-end justify-content-center align-items-center">
+                            <span class="card-text">Accept For</span>
+                            <ul class="payment-icons-bottom quick-link">
+                                <li><img src="~/assets/images/icons/cart/cart-1.png" alt="paypal cart"></li>
+                                <li><img src="~/assets/images/icons/cart/cart-2.png" alt="paypal cart"></li>
+                                <li><img src="~/assets/images/icons/cart/cart-5.png" alt="paypal cart"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Copyright Area  -->
     </footer>
+    <!-- End Footer Area  -->
+
+    <div class="cart-dropdown" id="cart-dropdown">
+        <div class="cart-content-wrap">
+            <div class="cart-header">
+                <h2 class="header-title">Cart review</h2>
+                <button class="cart-close sidebar-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="cart-body">
+                <ul class="cart-item-list">
+                    <li class="cart-item">
+                        <div class="item-img">
+                            <a href="single-product.html"><img src="~/assets/images/product/electric/product-01.png" alt="Commodo Blown Lamp"></a>
+                            <button class="close-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="item-content">
+                            <div class="product-rating">
+                                <span class="icon">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </span>
+                                <span class="rating-number">(64)</span>
+                            </div>
+                            <h3 class="item-title"><a href="single-product-3.html">Wireless PS Handler</a></h3>
+                            <div class="item-price"><span class="currency-symbol">$</span>155.00</div>
+                            <div class="pro-qty item-quantity">
+                                <input type="number" class="quantity-input" value="15">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="cart-item">
+                        <div class="item-img">
+                            <a href="single-product-2.html"><img src="~/assets/images/product/electric/product-02.png" alt="Commodo Blown Lamp"></a>
+                            <button class="close-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="item-content">
+                            <div class="product-rating">
+                                <span class="icon">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </span>
+                                <span class="rating-number">(4)</span>
+                            </div>
+                            <h3 class="item-title"><a href="single-product-2.html">Gradient Light Keyboard</a></h3>
+                            <div class="item-price"><span class="currency-symbol">$</span>255.00</div>
+                            <div class="pro-qty item-quantity">
+                                <input type="number" class="quantity-input" value="5">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="cart-item">
+                        <div class="item-img">
+                            <a href="single-product-3.html"><img src="~/assets/images/product/electric/product-03.png" alt="Commodo Blown Lamp"></a>
+                            <button class="close-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="item-content">
+                            <div class="product-rating">
+                                <span class="icon">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </span>
+                                <span class="rating-number">(6)</span>
+                            </div>
+                            <h3 class="item-title"><a href="single-product.html">HD CC Camera</a></h3>
+                            <div class="item-price"><span class="currency-symbol">$</span>200.00</div>
+                            <div class="pro-qty item-quantity">
+                                <input type="number" class="quantity-input" value="100">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="cart-footer">
+                <h3 class="cart-subtotal">
+                    <span class="subtotal-title">Subtotal:</span>
+                    <span class="subtotal-amount">$610.00</span>
+                </h3>
+                <div class="group-btn">
+                    <a href="cart.html" class="axil-btn btn-bg-primary viewcart-btn">View Cart</a>
+                    <a href="checkout.html" class="axil-btn btn-bg-secondary checkout-btn">Checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     @*Toast notification design*@
     <div id="toast"></div>
@@ -229,6 +412,7 @@
         </script>
     }
 </body>
+
 <script src="~/js/toastnotification.js"></script>
 <script>
     function loading() {
@@ -281,56 +465,26 @@
         });
     }
 </script>
+<script src="~/assets/js/vendor/modernizr.min.js"></script>
+<!-- jQuery JS -->
+<script src="~/assets/js/vendor/jquery.js"></script>
+<!-- Bootstrap JS -->
+<script src="~/assets/js/vendor/popper.min.js"></script>
+<script src="~/assets/js/vendor/bootstrap.min.js"></script>
+<script src="~/assets/js/vendor/slick.min.js"></script>
+<script src="~/assets/js/vendor/js.cookie.js"></script>
+<!-- <script src="~/assets/js/vendor/jquery.style.switcher.js"></script> -->
+<script src="~/assets/js/vendor/jquery-ui.min.js"></script>
+<script src="~/assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
+<script src="~/assets/js/vendor/jquery.countdown.min.js"></script>
+<script src="~/assets/js/vendor/sal.js"></script>
+<script src="~/assets/js/vendor/jquery.magnific-popup.min.js"></script>
+<script src="~/assets/js/vendor/imagesloaded.pkgd.min.js"></script>
+<script src="~/assets/js/vendor/isotope.pkgd.min.js"></script>
+<script src="~/assets/js/vendor/counterup.js"></script>
+<script src="~/assets/js/vendor/waypoints.min.js"></script>
 
-<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-<script>
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition, showError);
-        } else {
-            alert("Trình duyệt của bạn không hỗ trợ Geolocation.");
-        }
-    }
-
-    function showPosition(position) {
-        var latitude = position.coords.latitude;
-        var longitude = position.coords.longitude;
-
-        // Hiển thị vị trí lấy được lên bản đồ (sử dụng Google Maps hoặc bản đồ khác)
-        initMap(latitude, longitude);
-    }
-
-    function showError(error) {
-        switch (error.code) {
-            case error.PERMISSION_DENIED:
-                alert("Truy cập vào vị trí bị từ chối bởi người dùng.");
-                break;
-            case error.POSITION_UNAVAILABLE:
-                alert("Không thể lấy được vị trí của bạn.");
-                break;
-            case error.TIMEOUT:
-                alert("Yêu cầu lấy vị trí của bạn đã quá thời gian.");
-                break;
-            case error.UNKNOWN_ERROR:
-                alert("Đã xảy ra lỗi không xác định.");
-                break;
-        }
-    }
-
-    // Hàm này sẽ chạy khi có dữ liệu vị trí được trả về
-    function initMap(latitude, longitude) {
-        var map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: latitude, lng: longitude },
-            zoom: 15
-        });
-
-        var marker = new google.maps.Marker({
-            position: { lat: latitude, lng: longitude },
-            map: map,
-            title: 'Vị trí của bạn'
-        });
-    }
-</script>
+<!-- Main JS -->
+<script src="~/assets/js/main.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIkw2datIu4EYiyedKQJ08DmMJnboVSqs"></script>
 </html>
-
