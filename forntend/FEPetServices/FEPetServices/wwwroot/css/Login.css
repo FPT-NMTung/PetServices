@@ -1,14 +1,10 @@
-:root {
-    --pink-pastel: #FFD6E4;
-    --pink: #E21033;
-}
-#login-page {
+* {
     margin: 0;
     padding: 0;
     font-family: 'poppins', sans-serif;
 }
 
-#login-page .login-page {
+section {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,7 +15,7 @@
     background-size: cover;
 }
 
-#login-page .login-page .form-box {
+.form-box {
     position: relative;
     width: 400px;
     height: 450px;
@@ -33,19 +29,19 @@
 }
 
 
-#login-page .login-page .form-box .form-value .login-form h2 {
+h2 {
     font-size: 2em;
     color: #fff;
     text-align: center;
 }
 
-#login-page .login-page .form-box .form-value .login-form .inputbox {
+.inputbox {
     position: relative;
     margin: 30px 0;
     width: 310px;
 }
 
-    #login-page .login-page .form-box .form-value .login-form .inputbox label {
+    .inputbox label {
         position: absolute;
         top: 50%;
         left: 5px;
@@ -56,56 +52,55 @@
         transition: .5s;
     }
 
-#login-page .login-page .form-box .form-value .login-form input:focus ~ label,
-#login-page .login-page .form-box .form-value .login-form input:valid ~ label,
-#login-page .login-page .form-box .form-value .login-form input:not(:placeholder-shown) ~ label {
+input:focus ~ label,
+input:valid ~ label,
+input:not(:placeholder-shown) ~ label {
     top: -5px;
-    font-size: 1.5em;
+    font-size: 0.8em;
 }
 
-#login-page .login-page .form-box .form-value .login-form .inputbox input {
+.inputbox input {
     width: 90%;
     height: 50px;
     background: transparent;
     border: none;
     outline: none;
-    font-size: 1.8em;
+    font-size: 1em;
     padding: 0 35px 0 5px;
     color: #fff;
     border-bottom: 2px solid #fff;
 }
 
-#login-page .login-page .form-box .form-value .login-form .inputbox ion-icon {
+.inputbox ion-icon {
     position: absolute;
     right: 8px;
     color: #fff;
-    font-size: 2em;
+    font-size: 1.2em;
     top: 20px;
 }
 
-#login-page .login-page .form-box .form-value .login-form .forget {
+.forget {
     margin: -15px 0 15px;
-    font-size: 1.6em;
+    font-size: .9em;
     color: #fff;
     display: flex;
     justify-content: space-between;
 }
-    #login-page .login-page .form-box .form-value .login-form .forget label a:hover {
-        color: var(--pink);
-    }
-    #login-page .login-page .form-box .form-value .login-form .forget label input {
+
+    .forget label input {
         margin-right: 3px;
     }
-    #login-page .login-page .form-box .form-value .login-form .forget label a {
-        color: var(--pink-pastel);
+
+    .forget label a {
+        color: #fff;
         text-decoration: none;
     }
 
-        #login-page .login-page .form-box .form-value .login-form .forget label a:hover {
+        .forget label a:hover {
             text-decoration: underline;
         }
 
-#login-page .login-page .form-box .form-value .login-form button {
+button {
     width: 100%;
     height: 40px;
     border-radius: 40px;
@@ -113,27 +108,23 @@
     border: none;
     outline: none;
     cursor: pointer;
-    font-size: 1.7em;
+    font-size: 1em;
     font-weight: 600;
 }
-    #login-page .login-page .form-box .form-value .login-form button:hover{
-        background:var(--pink-pastel);
-        color:var(--pink);
-    }
-    #login-page .login-page .form-box .form-value .login-form .register {
-        font-size: 1.6em;
-        color: #fff;
-        text-align: center;
-        margin: 25px 0 10px;
-    }
 
-    #login-page .login-page .form-box .form-value .login-form .register p a {
+.register {
+    font-size: .9em;
+    color: #fff;
+    text-align: center;
+    margin: 25px 0 10px;
+}
+
+    .register p a {
         text-decoration: none;
-        color: #f3aabb;
+        color: blueviolet;
         font-weight: 600;
     }
 
-        #login-page .login-page .form-box .form-value .login-form .register p a:hover {
+        .register p a:hover {
             text-decoration: underline;
-            color: var(--pink);
         }
