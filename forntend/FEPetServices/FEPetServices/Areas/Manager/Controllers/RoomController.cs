@@ -113,6 +113,9 @@ namespace FEPetServices.Areas.Manager.Controllers
                 roomDTO.ServiceIds = Request.Form["SelectedServices"].ToString().Split(',').Select(int.Parse).ToList();
 
                 var json = JsonConvert.SerializeObject(roomDTO);
+                Console.WriteLine(roomDTO);
+                Console.WriteLine(json);
+
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await client.PostAsync(ApiUrlRoomAdd, content);
