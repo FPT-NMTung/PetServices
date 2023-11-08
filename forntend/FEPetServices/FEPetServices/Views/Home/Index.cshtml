@@ -335,7 +335,52 @@
         @*End Product*@
 
         @*Start ServiceCategiry*@
+        <div class="axil-new-arrivals-product-area bg-color-white axil-section-gap pb--0">
+            <div class="container">
+                <div class="product-area pb--50">
+                    <div class="section-title-wrapper">
+                        <span class="title-highlighter highlighter-primary"><i class="far fa-shopping-basket"></i>Dịch vụ</span>
+                        <h2 class="title">Các loại dịch vụ</h2>
+                    </div>
 
+                    <div class="new-arrivals-product-activation slick-layout-wrapper--30 axil-slick-arrow  arrow-top-slide">
+                        @foreach (var services in Model.ListServiceCategory){
+                        <div class="slick-single-layout">
+                            <div class="axil-product product-style-two">
+                                <div class="service-category">
+                                    <a href="single-product.html">
+                                        <img data-sal="zoom-out" data-sal-delay="200" data-sal-duration="500" src="@services.Picture" alt="Product Images">
+                                    </a>
+                                </div>
+                                <div class="product-content">
+                                    <div class="inner">
+                                            <div class="product-rating">
+                                                <span class="icon">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </span>
+                                                <span class="rating-number">(64)</span>
+                                            </div>
+                                            <h5 style="height:60px" class="title"><a href="single-product.html">@services.SerCategoriesName</a></h5>
+                                        <div class="product-hover-action">
+                                            <ul class="cart-action">
+                                                <li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>
+                                                <li class="select-option"><a href="single-product.html">Xem chi tiết</a></li>
+                                                <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
 
         @*End ServiceCategiry*@
 

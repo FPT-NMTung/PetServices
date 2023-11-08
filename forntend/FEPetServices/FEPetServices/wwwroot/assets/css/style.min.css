@@ -20357,6 +20357,16 @@ body.open .closeMask {
 .slick-single-layout .categrie-product a {
     padding: 20px 12px;
 }
+
 .product-price-variant .sold {
     font-size:12px;
 }
+
+.service-category{
+    border-radius: 0%;
+    height: 200px;
+    width: 100%;
+}
+    .service-category img {
+        height:100%;
+    }
