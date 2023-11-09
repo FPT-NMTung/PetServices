@@ -11,8 +11,10 @@ namespace PetServices.Models
         public double? Weight { get; set; }
         public double? PriceService { get; set; }
         public int? PetInfoId { get; set; }
+        public int? PartnerInfoId { get; set; }
 
         public virtual Order Order { get; set; } = null!;
+        public virtual PartnerInfo? PartnerInfo { get; set; }
         public virtual PetInfo? PetInfo { get; set; }
         public virtual Service Service { get; set; } = null!;
     }

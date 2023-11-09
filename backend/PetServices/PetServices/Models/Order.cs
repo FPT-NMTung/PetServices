@@ -21,9 +21,7 @@ namespace PetServices.Models
         public string? Commune { get; set; }
         public string? Address { get; set; }
         public int? UserInfoId { get; set; }
-        public int? PartnerInfoId { get; set; }
 
-        public virtual PartnerInfo? PartnerInfo { get; set; }
         public virtual UserInfo? UserInfo { get; set; }
         public virtual ICollection<BookingRoomDetail> BookingRoomDetails { get; set; }
         public virtual ICollection<BookingServicesDetail> BookingServicesDetails { get; set; }
