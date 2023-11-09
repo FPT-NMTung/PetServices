@@ -12,9 +12,7 @@ namespace PetServices.DTO
         public string? Commune { get; set; }
         public string? Address { get; set; }
         public int? UserInfoId { get; set; }
-        public int? PartnerInfoId { get; set; }
 
-        public virtual PartnerInfoDTO? PartnerInfo { get; set; }
         public virtual UserInfoDTO? UserInfo { get; set; }
         public virtual ICollection<OrderProductDetailDTO>? OrderProductDetails { get; set; }
         public virtual ICollection<BookingServicesDetailDTO>? BookingServicesDetails { get; set; }
