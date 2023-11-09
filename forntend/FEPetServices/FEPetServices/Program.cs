@@ -36,8 +36,9 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
 }
+app.UseStatusCodePagesWithRedirects("/Home/NotFound");
+
 app.UseCors(builder =>
 {
     builder.AllowAnyOrigin()
@@ -66,6 +67,11 @@ app.UseEndpoints(endpoints =>
     name: "customer",
     areaName: "Customer",
     pattern: "Customer/{controller=MenuCustomer}/{action=Index}/{id?}");
+
+    endpoints.MapAreaControllerRoute(
+    name: "partner",
+    areaName: "Partner",
+    pattern: "Partner/{controller=HomePartner}/{action=Index}/{id?}");
 
     endpoints.MapAreaControllerRoute(
     name: "admin",

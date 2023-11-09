@@ -1,271 +1,143 @@
-﻿<html>
+﻿<!doctype html>
+<html class="no-js" lang="en">
+
 <head>
-    <meta charset=utf-8>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="robots" content="noindex, follow" />
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 
-    <link rel="stylesheet" href="~/css/RoomDetailCustomer.css">
 </head>
-<body>
-    <div class="first">
-        <h1 class="title">Thông tin phòng</h1>
-        <div class="path">
-            <a href="/home">Home &ensp;</a> /
-            <a href="/home/room">&ensp; Room &ensp;</a> /
-            <p>&ensp; Rooms </p>
+
+<body class="sticky-header">
+    <div class="axil-breadcrumb-area">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-8">
+                    <div class="inner">
+                        <ul class="axil-breadcrumb">
+                            <li class="axil-breadcrumb-item"><a href="#">Trang chủ</a></li>
+                            <li class="separator"></li>
+                            <li class="axil-breadcrumb-item"><a href="/Home/Room">Phòng</a></li>
+                            <li class="separator"></li>
+                            <li class="axil-breadcrumb-item active" aria-current="page">@Model.RoomName</li>
+                        </ul>
+                        <h1 class="title">Dịch vụ đặt phòng cho thú cưng</h1>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-4">
+                    <div class="inner">
+                        <div class="bradcrumb-thumb">
+                            <img src="~/img/Room/imgroom.png" alt="Image">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="container">
-        <div class="part">
-            <div class="image-container">
-                <img src="@Model.Picture" class="image">
-            </div>
-            <div class="part-container">
-                <p class="roomName" style="padding-bottom: 20px;">@Model.RoomName</p>
-                <div class="part-content">
-                    <div class="part1-content">
-                        <p class="part1-serviceTitle">Dịch vụ hiện có:</p>
-                        <div class="part1-serviceName">
-                            @if (ViewBag.ServiceAvailable != null)
-                            {
-                                foreach (var service in ViewBag.ServiceAvailable)
-                                {
-                                    <div class="part1-serviceName-title">
-                                        <img src="/img/availableIcon.png" />
-                                        <p>@service.Text</p>
+    <div class="axil-single-product-area bg-color-white">
+        <div class="single-product-thumb axil-section-gap pb--30 pb_sm--20">
+            <div class="container">
+                <div class="row row--50">
+                    <div class="col-lg-6 mb--40">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="product-large-thumbnail-2 single-product-thumbnail axil-product slick-layout-wrapper--15 axil-slick-arrow arrow-both-side-3">
+                                    <div class="thumbnail">
+                                        <img src="@Model.Picture" alt="Product Images">
                                     </div>
-                                }
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div>
-            <div class="part2" style="margin-bottom: 20px; width: 92%;">
-                <div class="part4-description">
-                    <p class="part3-title">Mô tả phòng:</p>
-                    <p style="font-size: 15px;">@Model.Desciptions</p>
-                </div>
-            </div>
-        </div>
-        <div class="part2-content">
-            <p class="part2-serviceTitle">Dịch vụ muốn đặt thêm:</p>
-            <div class="part2-serviceName" id="serviceList">
-                @if (ViewBag.ServiceUnavailable != null)
-                {
-                    foreach (var service in ViewBag.ServiceUnavailable)
-                    {
-                        <div class="part2-serviceName-title">
-                            <img src="/img/unavailableIcon.png" style="width: 20px; height: 20px;" />
-                            <div>
-                                <p>@service.ServiceName</p>
-                                <p class="service-name-price">@service.Price đ</p>
-                            </div>
-                            <div class="checkbox-wrapper-12">
-                                <div class="cbx">
-                                    <input type="checkbox" id="cbx-12" class="service-checkbox" data-service-name="@service.ServiceName" data-service-price="@service.Price">
-                                    <label for="cbx-12"></label>
-                                    <svg fill="none" viewBox="0 0 15 14" height="14" width="15">
-                                        <path d="M2 8.36364L6.23077 12L13 2"></path>
-                                    </svg>
                                 </div>
-                                <svg>
-                                    <defs>
-                                        <filter id="goo-12">
-                                            <feGaussianBlur result="blur" stdDeviation="4" in="SourceGraphic"></feGaussianBlur>
-                                            <feColorMatrix result="goo-12" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" mode="matrix" in="blur"></feColorMatrix>
-                                            <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
-                                        </filter>
-                                    </defs>
-                                </svg>
                             </div>
                         </div>
-                    }
-                }
-            </div>
-        </div>
-        <div class="part3">
-            <p class="part3-title">Thời gian thuê phòng:</p>
-            <div class="part3-content">
-                <div class="part3-content-child">
-                    <div class="form-group">
-                        <label for='start-datetime'>Ngày và giờ bắt đầu:</label>
-                        <div class='input-group date' id='start-datetime'>
-                            <input type='text' class="form-control" />
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
                     </div>
-                    <img src="/img/icon-.png">
-                    <div class="form-group">
-                        <label for='end-datetime'>Ngày và giờ kết thúc:</label>
-                        <div class='input-group date' id='end-datetime'>
-                            <input type='text' class="form-control" />
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Giá thuê theo ngày:</label>
-                    <div>
-                        <p style="color: red; text-align: center;" id="timebook-price">@Model.Price đ/ngày</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="part4">
-            <div class="part4-price">
-                <p class="part4-title">Chi tiết giá:</p>
-                <div style="display: flex;">
-                    <div style="width: 30%;">
-                    </div>
-                    <div class="price-detail" id="priceDetail">
-                        <p class="service-price-title">Các dịch vụ đặt thêm:</p>
-                        <div class="service-price">
-                            <p class="name-priceDetail"></p>
-                            <p class="price-priceDetail"></p>
-                        </div>
-                        <p class="service-price-title">Ngày đặt phòng:</p>
-                        <div class="date-price">
-                            <p class="name1-priceDetail"></p>
-                            <p class="price1-priceDetail"></p>
-                        </div>
-                        <div>
-                            <p class="total-price-title">Tổng số tiền:</p>
-                            <p class="total-price">0 đ</p>
+                    <div class="col-lg-6 mb--40">
+                        <div class="single-product-content">
+                            <div class="inner">
+                                <h2 class="product-title">@Model.RoomName</h2>
+                                <div class="price-amount price-offer-amount">
+                                    <span class="price current-price">@Model.Price vnđ/h</span>
+                                </div>
+                                <div class="product-rating">
+                                    <div class="star-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div class="review-link">
+                                        <a href="#">(<span>2</span> customer reviews)</a>
+                                    </div>
+                                </div>
+                                <ul class="product-meta">
+                                    <h5 class="title">Dịch vụ có sẵn:</h5>
+                                    @if (ViewBag.ServiceAvailable != null)
+                                    {
+                                        foreach (var service in ViewBag.ServiceAvailable)
+                                        {
+                                            <li style="color: limegreen"><i class="fa fa-check-circle" style="color: limegreen"></i>@service.Text</li>
+                                        }
+                                    }
+                                </ul>
+                                <div class="product-desc-wrapper pt_sm--60">
+                                    <div class="single-desc mb--30">
+                                        <h5 class="title">Mô tả:</h5>
+                                        <p>@Model.Desciptions</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="part5">
-            <p>Khi nhấn vào nút này bạn công nhận mình đã đọc và đồng ý với các <a href="/">Điều khoản & điều kiện</a> và <a href="/">Chính sách quyền riêng tư</a> của chúng tôi.</p>
-            <button>
-                <span>Đặt phòng</span>
-            </button>
+        <!-- End .single-product-thumb -->
+
+        <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
+            <div class="container">
+                <h5 class="title">Dịch vụ bạn muốn đặt thêm:</h5>
+
+                <div class="product-desc-wrapper mb--30 mb_sm--10">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row row-cols-xl-4 row-cols-sm-2 row-cols-1 row--20">
+
+                                @if (ViewBag.ServiceUnavailable != null)
+                                {
+                                    foreach (var service in ViewBag.ServiceUnavailable)
+                                    {
+                                        <div class="col">
+                                            <div class="service-box service-style-2">
+                                                <div class="checkbox-wrapper">
+                                                    <input type="checkbox">
+                                                    <svg viewBox="0 0 35.6 35.6">
+                                                        <circle class="background" cx="12" cy="12" r="12"></circle>
+                                                        <circle class="stroke" cx="12" cy="12" r="10"></circle>
+                                                        <polyline class="check" points="8 12 10.5 15 17 8.7"></polyline>
+                                                    </svg>
+                                                </div>
+                                                <div class="icon">
+                                                    <img src="@service.Picture" style="width: 45px; height: 45px;">
+                                                </div>
+                                                <div class="content">
+                                                    <h6 class="title">@service.ServiceName</h6>
+                                                    <p>@service.Price vnđ</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <script>
-        var startDate, endDate;
-        var totalPrice = 0;
 
-        $(function () {
-            var minDate = new Date(new Date().getTime() + 3 * 60 * 60 * 1000);
-
-            $('#start-datetime').datetimepicker({
-                format: 'DD/MM/YYYY HH:mm',
-                stepping: 60,
-                minDate: minDate,
-                sideBySide: true,
-                enabledHours: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
-            }).on('dp.change', function (e) {
-                startDate = e.date;
-                $('#end-datetime').data("DateTimePicker").minDate(e.date.add(1, 'd'));
-                updateRentalPrice();
-            });
-
-            $('#end-datetime').datetimepicker({
-                format: 'DD/MM/YYYY HH:mm',
-                stepping: 60,
-                sideBySide: true,
-                enabledHours: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
-            }).on('dp.change', function (e) {
-                endDate = e.date;
-                updateRentalPrice();
-            });
-        });
-
-        function updateRentalPrice() {
-            // Tính số giờ thuê
-            var diffInHours = (endDate - startDate) / 1000 / 60 / 60;
-
-            // Tính số ngày và giờ dư
-            var days = Math.floor(diffInHours / 24) + 1;
-            var hours = diffInHours % 24;
-
-            // Tính tổng số tiền thuê
-            totalPrice = Math.floor((days + hours / 24) * @Model.Price);
-
-            // Cập nhật thông tin thuê và giá tiền thuê
-            document.querySelector('.name1-priceDetail').innerText = days + ' ngày, ' + hours + ' giờ :';
-            document.querySelector('.price1-priceDetail').innerText = totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đ';
-
-            updateTotalAmount();
-        }
-
-        function updateTotalAmount() {
-            var totalServicePrice = 0;
-            var nameDetails = '';
-            var priceDetails = '';
-            document.querySelectorAll('.service-checkbox:checked').forEach(function (checkedBox) {
-                var price = parseInt(checkedBox.dataset.servicePrice, 10);
-                totalServicePrice += price;
-
-                nameDetails += checkedBox.dataset.serviceName + ' :' + '<br>';
-                priceDetails += price + ' đ<br>';
-            });
-
-            document.querySelector('.name-priceDetail').innerHTML = nameDetails;
-            document.querySelector('.price-priceDetail').innerHTML = priceDetails;
-
-            var totalAmount = totalPrice + totalServicePrice; // Sử dụng totalPrice đã được cập nhật
-            document.querySelector('.total-price').textContent = 'Tổng số tiền: ' + totalAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đ';
-        }
-
-        document.querySelectorAll('.service-checkbox').forEach(function (checkbox) {
-            checkbox.addEventListener('change', function (e) {
-                var totalServicePrice = 0;
-                var nameDetails = '';
-                var priceDetails = '';
-                document.querySelectorAll('.service-checkbox:checked').forEach(function (checkedBox) {
-                    var price = parseInt(checkedBox.dataset.servicePrice, 10);
-                    totalServicePrice += price;
-
-                    nameDetails += checkedBox.dataset.serviceName + ' :' + '<br>';
-                    priceDetails += price + ' đ<br>';
-                });
-
-                document.querySelector('.name-priceDetail').innerHTML = nameDetails;
-                document.querySelector('.price-priceDetail').innerHTML = priceDetails.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
-                var totalAmount = totalPrice + totalServicePrice; // Sử dụng totalPrice đã được cập nhật
-                document.querySelector('.total-price').textContent = 'Tổng số tiền: ' + totalAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đ';
-            });
-        });
-    </script>
-
-    <script>
-        //format double
-        window.onload = function () {
-            // format giá dịch vụ 
-            var priceElements = document.querySelectorAll('.service-name-price');
-
-            priceElements.forEach(function (priceElement) {
-                var price = priceElement.textContent.split(' ')[0];
-                var formattedPrice = Number(price).toLocaleString().replace(/,/g, ".");
-                priceElement.textContent = formattedPrice + ' đ';
-            });
-
-            //format Giá thuê theo ngày
-            var priceElement2 = document.getElementById('timebook-price');
-
-            var price2 = priceElement2.textContent.split(' ')[0];
-            var formattedPrice2 = price2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            priceElement2.textContent = formattedPrice2 + ' đ/ngày';
-        }
-    </script>
 </body>
-</html>
 
+</html>

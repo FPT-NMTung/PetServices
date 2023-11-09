@@ -25,7 +25,6 @@
     <Folder Include="wwwroot\img\about\" />
     <Folder Include="wwwroot\img\Blog\" />
     <Folder Include="wwwroot\img\Profile\" />
-    <Folder Include="wwwroot\img\Room\" />
     <Folder Include="wwwroot\img\RoomCategory\" />
     <Folder Include="wwwroot\img\ServiceCategory\" />
     <Folder Include="wwwroot\img\Service\" />

@@ -70,9 +70,6 @@ namespace FEPetServices.Controllers
 
                     var responseContent = await response.Content.ReadAsStringAsync();
 
-                    int page = searchDTO.page ?? 1; ;
-                    int pagesize = searchDTO.pagesize ?? 6;
-
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(responseContent);
@@ -88,7 +85,7 @@ namespace FEPetServices.Controllers
                             roomList = roomList.Where(r => r.RoomCategoriesId == roomCategoriesId).ToList();
                         }
 
-                        if (!string.IsNullOrEmpty(searchDTO.pricefrom) || !string.IsNullOrEmpty(searchDTO.priceto))
+                        /*if (!string.IsNullOrEmpty(searchDTO.pricefrom) || !string.IsNullOrEmpty(searchDTO.priceto))
                         {
                             if (string.IsNullOrEmpty(searchDTO.pricefrom))
                             {
@@ -107,7 +104,7 @@ namespace FEPetServices.Controllers
 
                                 roomList = roomList.Where(r => r.Price > PriceFrom && r.Price < PriceTo).ToList();
                             }
-                        }
+                        }*/
 
                         switch (searchDTO.sortby)
                         {
@@ -125,24 +122,13 @@ namespace FEPetServices.Controllers
                                 break;
                         }
 
-                        int totalItems = roomList.Count;
-                        int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
-                        int startIndex = (page - 1) * pagesize;
-                        List<RoomDTO> currentPageRoomList = roomList.Skip(startIndex).Take(pagesize).ToList();
-
-                        ViewBag.TotalPages = totalPages;
-                        ViewBag.CurrentPage = searchDTO.page;
-                        ViewBag.PageSize = searchDTO.pagesize;
-
                         ViewBag.roomcategory = searchDTO.roomcategory;
-                        ViewBag.pricefrom = searchDTO.pricefrom;
-                        ViewBag.priceto = searchDTO.priceto;
+                        /*ViewBag.pricefrom = searchDTO.pricefrom;
+                        ViewBag.priceto = searchDTO.priceto;*/
                         ViewBag.sortby = searchDTO.sortby;
                         ViewBag.roomname = searchDTO.roomname;
-                        ViewBag.pagesize = searchDTO.pagesize;
-                        ViewBag.viewstyle = searchDTO.viewstyle;
 
-                        return View(currentPageRoomList);
+                        return View(roomList);
                     }
                     else
                     {
@@ -459,11 +445,11 @@ namespace FEPetServices.Controllers
 
         public class BlogModel
         {
-            public List<BlogDTO> Blog { get; set; }  
+            public List<BlogDTO> Blog { get; set; }
             public List<ProductDTO> ListProductTop3 { get; set; }
             public List<BlogDTO> ListBlogTop3 { get; set; }
-
         }
+
 
         public async Task<IActionResult> BlogList(BlogDTO blog, int page = 1, int pagesize = 6, string BlogName = "", string sortby = "")
         {
@@ -664,16 +650,30 @@ namespace FEPetServices.Controllers
         {
             return View();
         }
-
-        public IActionResult Privacy()
+        public IActionResult Terms()
         {
             return View();
         }
 
+        public IActionResult Introduce()
+        {
+            return View();
+        }
+
+    
+    public IActionResult Privacy()
+        {
+            return View();
+        }
+        public IActionResult NotFound()
+        {
+            return View();
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            // Thực hiện chuyển hướng đến trang 404 tùy chỉnh
+            return RedirectToAction("NotFound", "Home");
         }
     }
 }

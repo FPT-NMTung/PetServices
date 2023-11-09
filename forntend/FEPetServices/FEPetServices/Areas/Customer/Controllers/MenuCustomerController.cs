@@ -82,7 +82,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             }
             if (userInfo.Address.Length <= 10)
             {
-                TempData["ErrorToast"] = "Địa chỉ cụ thể phải lớn hơn 10 ký tự";
+                TempData["ErrorToast"] = "Địa chỉ cụ thể phải ít nhât 10 ký tự";
                 return RedirectToAction("Information");
             }
 
