@@ -79,7 +79,7 @@ namespace FEPetServices.Controllers
                             else if (roleName == "PARTNER")
                             {
                                 TempData["SuccessLoginToast"] = "Đăng nhập thành công.";
-                                return RedirectToAction("Index", "Information", new { area = "Partner" });
+                                return RedirectToAction("Index", "HomePartner", new { area = "Partner" });
                             }
                             else if (roleName == "ADMIN")
                             {
