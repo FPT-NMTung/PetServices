@@ -1,192 +1,4 @@
-﻿@*<html>
-
-<head>
-    <meta charset=utf-8>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="~/css/RoomCustomer.css">
-
-</head>
-
-<body>
-    <div class="bg">
-        <div class="first">
-            <h1 class="title">Bài viết cho thú cưng</h1>
-            <div class="path">
-                <a href="/home">Home &ensp;</a> /
-                <p>&ensp; Bài viết </p>
-            </div>
-        </div>
-        <div class="container">
-            <div class="containerLeft">
-                <div class="containerprice">
-                </div>
-                <div>
-                    <h3>Sắp xếp theo:</h3>
-                    <div>
-                        <form method="get" id="sortForm">
-                            <input type="hidden" name="BlogName" value="@ViewBag.BlogName" />
-                            <input type="hidden" name="pagesize" value="@ViewBag.pagesize" />
-
-                            <div>
-                                <a class="containerCate" href="javascript:void(0);" onclick="sortBy('name_asc')">
-                                    <label>
-                                        <input type="checkbox" value="name_asc" @(ViewBag.sortby == "name_asc" ? "checked" : "")>
-                                        <p>Tên từ A-Z</p>
-                                    </label>
-                                </a>
-                                <a class="containerCate" href="javascript:void(0);" onclick="sortBy('name_desc')">
-                                    <label>
-                                        <input type="checkbox" value="name_desc" @(ViewBag.sortby == "name_desc" ? "checked" : "")>
-                                        <p>Tên từ Z-A</p>
-                                    </label>
-                                </a>
-                            </div>
-                            <input type="hidden" id="sortby" name="sortby" value="" />
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="containerRight">
-                <div class="container1">
-                    <div class="container12">
-                        <form class="form" method="get">
-                            <input type="hidden" name="sortby" value="@ViewBag.sortby" />
-                            <input type="hidden" name="pagesize" value="@ViewBag.pagesize" />
-
-                            <label for="search">
-                                <input class="input" name="BlogName" type="text" placeholder="Nhập tên bài viết" value="@ViewBag.BlogName" style="font-size: 15px;">
-                                <div class="fancy-bg"></div>
-                                <div class="search">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true" class="r-14j79pv r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-4wgw6l r-f727ji r-bnwqim r-1plcrui r-lrvibr">
-                                        <g>
-                                            <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
-                                        </g>
-                                    </svg>
-                                </div>
-                            </label>
-                        </form>
-                    </div>
-                    <div class="container11">
-                        <div class="container11-content">
-                            <div class="name-search">Hiển thị: </div>
-                            <form method="get">
-                                <input type="hidden" name="BlogName" value="@ViewBag.BlogName" />
-                                <input type="hidden" name="sortby" value="@ViewBag.sortby" />
-                                <input type="hidden" name="viewstyle" value="@ViewBag.viewstyle" />
-
-                                <select id="pageSize" name="pagesize" onchange="this.form.submit();">
-                                    <!option value="6" @(ViewBag.PageSize == 6 ? "selected" : "")>6 bài viết</!option>
-                                    <!option value="9" @(ViewBag.PageSize == 9 ? "selected" : "")>9 bài viết</!option>
-                                    <!option value="12" @(ViewBag.PageSize == 12 ? "selected" : "")>12 bài viết</!option>
-                                    <!option value="24" @(ViewBag.PageSize == 24 ? "selected" : "")>24 bài viết</!option>
-                                </select>
-                            </form>
-                        </div>
-                        <div class="container11-content">
-                        </div>
-                    </div>
-                </div>
-                <div>
-                        <div class="listRoom-listview">
-                            @if (Model != null && Model.Count > 0)
-                            {
-                                foreach (var blog in Model)
-                                {
-                                    string description = blog.Description;
-                                    @if (blog.Description != null)
-                                    {
-                                       
-
-                                        if (description.Length > 300)
-                                        {
-                                            int lastSpace = description.LastIndexOf(' ', 300);
-
-                                            description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 300) + "...";
-                                        }
-                                    }
-                                    else
-                                    {
-                                       description = blog.Description;
-                                    }
-                                    <div class="block">
-                                        <div>
-                                            <div class="room">
-                                                <div class="image-container">
-                                                    <img src="@blog.ImageUrl" class="image">
-                                                </div>
-                                                <div class="text-container">
-                                                    <div>
-                                                        <a class="name" href="~/Home/ServiceDetail?serviceCategoryId=">@blog.PageTile</a>
-                                                        <div class="description">@description</div>
-                                                    </div>
-                                                    <div>
-                                                        <a href="~/Home/ServiceDetail?serviceCategoryId">
-                                                            <button class="detail">
-                                                                <span>Xem chi tiết</span>
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
-                                </tr>
-                            }
-                        </div>
-                    
-                </div>
-                <div style="text-align:center;">
-                    <div class="pagination">
-                        @if (ViewBag.CurrentPage > 1)
-                        {
-                            <a href="@Url.Action("Bloglist", new { page = ViewBag.CurrentPage - 1, BlogName=ViewBag.BlogName, sortby=ViewBag.sortby, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">&laquo;</a>
-                        }
-
-                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                        {
-                            <a class="active" href="@Url.Action("Bloglist", new { page = i, sortby=ViewBag.sortby, BlogName=ViewBag.BlogName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">@i</a>
-                        }
-                        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-                        {
-                            <a href="@Url.Action("servicelist", new { page = ViewBag.CurrentPage + 1, sortby=ViewBag.sortby, BlogName=ViewBag.BlogName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">&raquo;</a>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        document.querySelectorAll('#sortForm input[type="checkbox"]').forEach(function (checkbox) {
-            checkbox.addEventListener('click', function () {
-                if (this.checked) {
-                    document.getElementById('sortby').value = this.value;
-                } else {
-                    document.getElementById('sortby').value = null;
-                }
-                document.getElementById('sortForm').submit();
-            });
-        });
-
-        // format url
-        var currentUrl = window.location.href;
-        var updatedUrl = currentUrl.replace(/&?(\w+)=(&|$)/g, '')
-            .replace(/&&/g, '&')
-            .replace(/\?&/, '?')
-            .replace(/\?$/, '');
-        window.history.replaceState({}, document.title, updatedUrl);
-    </script>
-</body>
-</html>*@
-<!doctype html>
-<html class="no-js" lang="en">
+﻿<html class="no-js" lang="en">
 
 
 <!-- Mirrored from new.axilthemes.com/demo/template/etrade/blog-grid.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 10 Aug 2023 07:18:56 GMT -->
@@ -247,16 +59,14 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="row g-5">
-                             @if (Model != null && Model.Count > 0)
-                            {
-                                @foreach (var blog in Model)
+                                @foreach (var blog in Model.Blog)
                                 {
                                     <div class="col-md-6">
                                         <div class="content-blog blog-grid">
                                             <div class="inner">
                                                 <div class="thumbnail">
                                                     <a href="blog-details.html">
-                                                        <img src="@blog.ImageUrl" alt="Blog Images">
+                                                        <img src="@blog.ImageUrl" style="width:100%;height:200px;" alt="Blog Images">
                                                     </a>
                                                     <div class="blog-category">
                                                         <a href="#">@blog.PageTile</a>
@@ -273,7 +83,6 @@
                                         </div>
                                     </div>
                                 }
-                            }
                         </div>
                         <div class="post-pagination">
                             <nav class="navigation pagination" aria-label="Products">
@@ -372,59 +181,23 @@
                                 <h6 class="widget-title">Các sản phẩm bạn có thể tham khảo</h6>
                                 <ul class="product_list_widget recent-viewed-product">
                                     <!-- Start Single product_list  -->
-                                    <li>
+                                    @foreach (var product in Model.ListProductTop3)
+                                    { <li>
                                         <div class="thumbnail">
                                             <a href="blog-details.html">
-                                                <img src="assets/images/product/product-12.jpg" alt="Blog Images">
+                                                <img src="@product.Picture" alt="Blog Images">
                                             </a>
                                         </div>
                                         <div class="content">
-                                            <h6 class="title"><a href="blog-details.html">Men's Fashion Tshirt</a></h6>
+                                            <h6 class="title"><a href="blog-details.html">@product.ProductName</a></h6>
                                             <div class="product-meta-content">
-                                                <span class="woocommerce-Price-amount amount">
-                                                    <del>$30</del>
-                                                    $20
-                                                </span>
+                                                <span class="woocommerce-Price-amount amount">@product.Price VNĐ</span>
+                                                <p class="price sold">Đã bán: @product.QuantitySold</p>
                                             </div>
                                         </div>
                                     </li>
-                                    <!-- End Single product_list  -->
-                                    <!-- Start Single product_list  -->
-                                    <li>
-                                        <div class="thumbnail">
-                                            <a href="blog-details.html">
-                                                <img src="assets/images/product/product-10.jpg" alt="Blog Images">
-                                            </a>
-                                        </div>
-                                        <div class="content">
-                                            <h6 class="title"><a href="blog-details.html">Nike Shoes</a></h6>
-                                            <div class="product-meta-content">
-                                                <span class="woocommerce-Price-amount amount">
-                                                    <del>$200</del>
-                                                    $150
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- End Single product_list  -->
-                                    <!-- Start Single product_list  -->
-                                    <li>
-                                        <div class="thumbnail">
-                                            <a href="blog-details.html">
-                                                <img src="assets/images/product/product-11.jpg" alt="Blog Images">
-                                            </a>
-                                        </div>
-                                        <div class="content">
-                                            <h6 class="title"><a href="blog-details.html">Addidas Shoes</a></h6>
-                                            <div class="product-meta-content">
-                                                <span class="woocommerce-Price-amount amount">
-                                                        <del>$300</del>
-                                                        $200
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- End Single product_list  -->
+                                    }
+                                    <!-- End Single product_list  -->                                    
                                 </ul>
 
                             </div>

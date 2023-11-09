@@ -365,8 +365,23 @@ namespace FEPetServices.Controllers
             ServiceDetailModel model = new ServiceDetailModel();
 
             HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
+            HttpResponseMessage partnerResponse = await client.GetAsync("https://localhost:7255/api/Partner/GetAllPartner");
+                if (partnerResponse.IsSuccessStatusCode)
+                {
+                    var responsepartnerContent = await partnerResponse.Content.ReadAsStringAsync();
+
+                if (!string.IsNullOrEmpty(responsepartnerContent))
+                {
+                    var partners = JsonConvert.DeserializeObject<List<PartnerInfo>>(responsepartnerContent);
+                        ViewBag.Partners = new SelectList(partners, "PartnerInfoId", "LastName" );
+
+                }
+
+                }
+            
             if (response.IsSuccessStatusCode)
             {
+               
                 HttpResponseMessage responseCategory = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
                 if (responseCategory.IsSuccessStatusCode)
                 {
@@ -434,30 +449,53 @@ namespace FEPetServices.Controllers
         {
             public ServiceDTO Service { get; set; }
             public ServiceCategoryDTO ServiceCategory { get; set; }
+            public ProductDTO Product { get; set; }
             public List<ServiceCategoryDTO> CaServices { get; set; }
+            public List<PartnerInfo> Partners { get; set; }
         }
 
+        public class BlogModel
+        {
+            public List<BlogDTO> Blog { get; set; }  
+            public List<ProductDTO> ListProductTop3 { get; set; }
 
+        }
 
         public async Task<IActionResult> BlogList(BlogDTO blog, int page = 1, int pagesize = 6, string BlogName = "", string sortby = "")
         {
+            BlogModel blogModel = new BlogModel();
             try
             {
                 var json = JsonConvert.SerializeObject(blog);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrlBlogList + "/GetAllBlog");
-
-
+                
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
+                
+                    if (responseProduct.IsSuccessStatusCode)
+                    {
+                        var rep = await responseProduct.Content.ReadAsStringAsync();
+                        if (!string.IsNullOrEmpty(rep))
+                        {
+                            blogModel.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
 
+                            int currentPage = 1;
+                            int pageSize = 3;
+
+                            var firstPageProducts = blogModel.ListProductTop3.OrderByDescending(p => p.QuantitySold).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+                            currentPage++;
+
+                            blogModel.ListProductTop3 = firstPageProducts;
+                        }
+                    }
+                    var responseContent = await response.Content.ReadAsStringAsync();
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var blogList = JsonConvert.DeserializeObject<List<BlogDTO>>(responseContent);
-
-
 
                         if (!string.IsNullOrEmpty(BlogName) && blogList != null)
                         {
@@ -490,8 +528,10 @@ namespace FEPetServices.Controllers
                         ViewBag.BlogName = BlogName;
                         ViewBag.sortby = sortby;
                         ViewBag.pagesize = pagesize;
+                        blogModel.Blog = currentPageBlogList;
+                       
 
-                        return View(currentPageBlogList);
+                        return View(blogModel);
                     }
                     else
                     {

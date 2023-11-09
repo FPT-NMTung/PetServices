@@ -265,24 +265,6 @@
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
-
-    <!-- CSS
-    ============================================ -->
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="~/assets/css/vendor/bootstrap.min.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/font-awesome.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/flaticon/flaticon.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/slick.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/slick-theme.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/jquery-ui.min.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/sal.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/magnific-popup.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/base.css">
-    <link rel="stylesheet" href="~/assets/css/style.min.css">
-
 </head>
 
 
@@ -297,7 +279,7 @@
                             <ul class="axil-breadcrumb">
                                 <li class="axil-breadcrumb-item"><a href="index-2.html">Home</a></li>
                                 <li class="separator"></li>
-                                <li class="axil-breadcrumb-item active" aria-current="page">My Account</li>
+                                <li class="axil-breadcrumb-item active" aria-current="page">Dịch vụ</li>
                             </ul>
                             <h1 class="title">Danh sách dịch vụ</h1>
                         </div>
@@ -314,49 +296,20 @@
                         <div class="axil-shop-top">
                             <div class="row">
                                 <div class="col-lg-9">
-                                    <div class="category-select">
-
-                                        <!-- Start Single Select  -->
-                                        <select class="single-select">
-                                            <option>Categories</option>
-                                            <option>Fashion</option>
-                                            <option>Electronics</option>
-                                            <option>Furniture</option>
-                                            <option>Beauty</option>
-                                        </select>
-                                        <!-- End Single Select  -->
-
-                                        <!-- Start Single Select  -->
-                                        <select class="single-select">
-                                            <option>Color</option>
-                                            <option>Red</option>
-                                            <option>Blue</option>
-                                            <option>Green</option>
-                                            <option>Pink</option>
-                                        </select>
-                                        <!-- End Single Select  -->
-
-                                        <!-- Start Single Select  -->
-                                        <select class="single-select">
-                                            <option>Price Range</option>
-                                            <option>0 - 100</option>
-                                            <option>100 - 500</option>
-                                            <option>500 - 1000</option>
-                                            <option>1000 - 1500</option>
-                                        </select>
-                                        <!-- End Single Select  -->
-
-                                    </div>
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="category-select mt_md--10 mt_sm--10 justify-content-lg-end">
                                         <!-- Start Single Select  -->
-                                        <select class="single-select">
-                                            <option>Sort by Latest</option>
-                                            <option>Sort by Name</option>
-                                            <option>Sort by Price</option>
-                                            <option>Sort by Viewed</option>
+                                     <form method="get" id="sortForm">
+                                        <select class="single-select" onchange="sortBy(this.value)">
+                                            <option>sắp xếp theo tên</option>
+                                            <option value="name_asc">Tên từ A-Z</option>
+                                            <option value="name_desc">Tên từ Z-A</option>
                                         </select>
+                                        <input type="hidden" id="sortby" name="sortby" value="name_asc" />
+                                    </form>
+                                    
+
                                         <!-- End Single Select  -->
                                     </div>
                                 </div>
@@ -365,24 +318,38 @@
                     </div>
                 </div>
                 <div class="row row--15">
-                     @if (Model != null && Model.Count > 0)
-                    {
                         @foreach (var service in Model)
                         {
                             @if (service.Status)
                             {
+                                string description = service.Desciptions;
+                                        @if (service.Desciptions != null)
+                                        {
+
+
+                                            if (description.Length > 100)
+                                            {
+                                                int lastSpace = description.LastIndexOf(' ', 100);
+
+                                                description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 300) + "...";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            description = service.Desciptions;
+                                        }
                                 <div class="col-xl-3 col-lg-4 col-sm-6">
                                     <div class="axil-product product-style-one has-color-pick mt--40">
                                         <div class="thumbnail">
                                             <a href="~/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId">
-                                                <img src="@service.Picture" alt="Product Images">
+                                                <img src="@service.Picture" style="width:100%;height:200px;" alt="Product Images">
                                             </a>
                                         </div>
                                         <div class="product-content">
                                             <div class="inner">
-                                                <h5 class="title"><a href="~/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId">@service.SerCategoriesName</a></h5>
-                                                <div class="product-price-variant">
-                                                    <span class="price current-price">@service.SerCategoriesId</span>
+                                                <h2 class="title" style="color:black; "><a href="~/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId">@service.SerCategoriesName</a></h2>
+                                                <div class="product-price-variant" style=" margin-left:4px;">
+                                                    <span>@description</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -391,7 +358,6 @@
                             }
 
                         }
-                    }
                     <!-- End Single Product  -->
                 </div>
                 <div class="text-center pt--30">
@@ -402,7 +368,7 @@
         </div>
         <!-- End Shop Area  -->
         <!-- Start Axil Newsletter Area  -->
-        <div class="axil-newsletter-area axil-section-gap pt--0">
+       @* <div class="axil-newsletter-area axil-section-gap pt--0">
             <div class="container">
                 <div class="etrade-newsletter-wrapper bg_image bg_image--5">
                     <div class="newsletter-content">
@@ -417,8 +383,7 @@
                     </div>
                 </div>
             </div>
-            <!-- End .container -->
-        </div>
+        </div>*@
         <!-- End Axil Newsletter Area  -->
     </main>
 
@@ -473,35 +438,23 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function sortBy(value) {
+        // Check if the selected value is the default option (A-Z)
+        if (value === "name_asc") {
+            // Set the hidden input value to A-Z and clear the search input
+            document.getElementById('sortby').value = "name_asc";
+            document.getElementById('sortby').value = "";
+        } else {
+            // Set the hidden input value to the selected sorting option
+            document.getElementById('sortby').value = value;
+        }
 
-    <!-- JS
-============================================ -->
-    <!-- Modernizer JS -->
-    <script src="~/assets/js/vendor/modernizr.min.js"></script>
-    <!-- jQuery JS -->
-    <script src="~/assets/js/vendor/jquery.js"></script>
-    <!-- Bootstrap JS -->
-    <script src="~/assets/js/vendor/popper.min.js"></script>
-    <script src="~/assets/js/vendor/bootstrap.min.js"></script>
-    <script src="~/assets/js/vendor/slick.min.js"></script>
-    <script src="~/assets/js/vendor/js.cookie.js"></script>
-    <!-- <script src="assets/js/vendor/jquery.style.switcher.js"></script> -->
-    <script src="~/assets/js/vendor/jquery-ui.min.js"></script>
-    <script src="~/assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
-    <script src="~/assets/js/vendor/jquery.countdown.min.js"></script>
-    <script src="~/assets/js/vendor/sal.js"></script>
-    <script src="~/assets/js/vendor/jquery.magnific-popup.min.js"></script>
-    <script src="~/assets/js/vendor/imagesloaded.pkgd.min.js"></script>
-    <script src="~/assets/js/vendor/isotope.pkgd.min.js"></script>
-    <script src="~/assets/js/vendor/counterup.js"></script>
-    <script src="~/assets/js/vendor/waypoints.min.js"></script>
-
-    <!-- Main JS -->
-    <script src="~/assets/js/main.js"></script>
+        // Submit the form
+        document.getElementById('sortForm').submit();
+    }
+</script>
 
 </body>
-
-
-<!-- Mirrored from new.axilthemes.com/demo/template/etrade/shop.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 10 Aug 2023 07:18:21 GMT -->
-
 </html>

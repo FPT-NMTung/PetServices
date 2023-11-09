@@ -309,12 +309,16 @@
                                         <label class="containerbutton">
                                             <input type="checkbox" id="toggleSelect">
                                             <div class="checkmark"></div>
-                                            <select name="Size" id="size" class="size-option"  style="font-family: serif ; width: 200px;" disabled >
-                                                <option  value="Đối tác 1">Đối tác 1</option>
-                                                <option value="Đối tác 2">Đối tác 2</option>
-                                                <option value="Đối tác 3">Đối tác 3</option>
-                                                <option value="Đối tác 4">Đối tác 4</option>
-                                            </select>
+                                            @if (ViewBag.Partners != null)
+                                            {
+                                                <select name="PartnerInfoId" id="PartnerInfoId"  class="size-option"  style="font-family: serif ; width: 200px;" disabled >
+                                                    <option value="">Danh sách đối tác</option>
+                                                    @foreach (var category in ViewBag.Partners)
+                                                     {
+                                                    <option value="@category.Value">@category.Text</option>
+                                                     }
+                                                </select>
+                                            }
                                         </label>
                                     </div>
                                     <div class="product-variations-wrapper">
@@ -545,34 +549,10 @@
                 </div>
             </div>
     </main>
-    <!-- JS
-============================================ -->
-    <!-- Modernizer JS -->
-    <script src="~/assets/js/vendor/modernizr.min.js"></script>
-    <!-- jQuery JS -->
-    <script src="~/assets/js/vendor/jquery.js"></script>
-    <!-- Bootstrap JS -->
-    <script src="~/assets/js/vendor/popper.min.js"></script>
-    <script src="~/assets/js/vendor/bootstrap.min.js"></script>
-    <script src="~/assets/js/vendor/slick.min.js"></script>
-    <script src="~/assets/js/vendor/js.cookie.js"></script>
-    <!-- <script src="assets/js/vendor/jquery.style.switcher.js"></script> -->
-    <script src="~/assets/js/vendor/jquery-ui.min.js"></script>
-    <script src="~/assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
-    <script src="~/assets/js/vendor/jquery.countdown.min.js"></script>
-    <script src="~/assets/js/vendor/sal.js"></script>
-    <script src="~/assets/js/vendor/jquery.magnific-popup.min.js"></script>
-    <script src="~/assets/js/vendor/imagesloaded.pkgd.min.js"></script>
-    <script src="~/assets/js/vendor/isotope.pkgd.min.js"></script>
-    <script src="~/assets/js/vendor/counterup.js"></script>
-    <script src="~/assets/js/vendor/waypoints.min.js"></script>
-
-    <!-- Main JS -->
-    <script src="~/assets/js/main.js"></script>
     <script>
         // Lấy tham chiếu đến checkbox và select bằng cách sử dụng id
         var checkbox = document.getElementById('toggleSelect');
-        var select = document.getElementById('size');
+        var select = document.getElementById('PartnerInfoId');
 
         // Thêm sự kiện "change" cho checkbox
         checkbox.addEventListener('change', function() {
