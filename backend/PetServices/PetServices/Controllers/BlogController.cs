@@ -108,21 +108,21 @@ namespace PetServices.Controllers
         [HttpDelete]
         public IActionResult Delete(int blogId)
         {
-            var service = _context.Blogs.FirstOrDefault(p => p.BlogId == blogId);
-            if (service == null)
+            var blog = _context.Blogs.FirstOrDefault(p => p.BlogId == blogId);
+            if (blog == null)
             {
                 return NotFound();
             }
             try
             {
-                _context.Blogs.Remove(service);
+                _context.Blogs.Remove(blog);
                 _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
                 return Conflict();
             }
-            return Ok(service);
+            return Ok(blog);
         }
     }
 }
