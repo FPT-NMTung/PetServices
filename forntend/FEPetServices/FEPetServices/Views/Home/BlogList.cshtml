@@ -10,7 +10,7 @@
                     <div class="col-lg-6 col-md-8">
                         <div class="inner">
                             <ul class="axil-breadcrumb">
-                                <li class="axil-breadcrumb-item"><a href="index-2.html">Home</a></li>
+                                <li class="axil-breadcrumb-item"><a href="/Home">Home</a></li>
                                 <li class="separator"></li>
                                 <li class="axil-breadcrumb-item active" aria-current="page">Blogs</li>
                             </ul>
@@ -41,7 +41,7 @@
                                                     <h5 class="title"><a href="~/Home/BlogDetail?blogId=@blog.BlogId">@blog.PageTile</a></h5>
 
                                                     <div class="read-more-btn">
-                                                        <a class="axil-btn right-icon" href="~/Home/BlogDetail?blogId=@blog.BlogId">Tìm hiểu thêm <i class="fal fa-long-arrow-right"></i></a>
+                                                        <a class="axil-btn right-icon" href="~/Home/BlogDetail?blogId=@blog.BlogId">Xem thêm <i class="fal fa-long-arrow-right"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -69,11 +69,23 @@
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <!-- Start Sidebar Area  -->
+                        
+                        <!-- Start Single Widget  -->
+                            <div class="axil-single-widget mt--40 widget_search">
+                                <h6 class="widget-title">Tìm kiếm</h6>
+                                <form class="blog-search" method="get">
+                                    <button class="search-button"><i class="fal fa-search"></i></button>
+                                    <input type="text" name="BlogName" value="@ViewBag.BlogName" placeholder="Tìm kiếm">
+                                </form>
+                            </div>
+                            <!-- End Single Widget  -->
+
+                            <!-- Start Sidebar Area  -->
                         <aside class="axil-sidebar-area">
 
                             <!-- Start Single Widget  -->
                             <div class="axil-single-widget mt--40">
+                                <span class="title-highlighter highlighter-primary mb--10"> <i class="fal fa-bell"></i>Hot News</span>
                                 <h6 class="widget-title">Bài viết mới</h6>
 
                                 <!-- Start Single Post List  -->
@@ -103,7 +115,8 @@
                             <!-- End Single Widget  -->
                             <!-- Start Single Widget  -->
                             <div class="axil-single-widget mt--40">
-                                <h6 class="widget-title">Các sản phẩm bạn có thể tham khảo</h6>
+                                <span class="title-highlighter highlighter-primary mb--10"> <i class="fal fa-bell"></i>Sản Phẩm Hot</span>
+                                <h6 class="widget-title">Sản phẩm bán chạy nhất</h6>
                                 <ul class="product_list_widget recent-viewed-product">
                                     <!-- Start Single product_list  -->
                                     @foreach (var product in Model.ListProductTop3)
@@ -127,18 +140,6 @@
 
                             </div>
                             <!-- End Single Widget  -->
-
-                            <!-- Start Single Widget  -->
-                            <div class="axil-single-widget mt--40 widget_search">
-                                <h6 class="widget-title">Search</h6>
-                                <form class="blog-search" method="get">
-                                    <button class="search-button"><i class="fal fa-search"></i></button>
-                                    <input type="text" name="BlogName" value="@ViewBag.BlogName" placeholder="Search">
-                                </form>
-                            </div>
-                            <!-- End Single Widget  -->
-
-
                             <!-- Start Single Widget  -->
                             <div class="axil-single-widget mt--40 widget_tag_cloud">
                                 <h6 class="widget-title">Tags</h6>
