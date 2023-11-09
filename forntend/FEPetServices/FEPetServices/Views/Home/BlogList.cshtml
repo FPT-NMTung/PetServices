@@ -1,36 +1,4 @@
 ﻿<html class="no-js" lang="en">
-
-
-<!-- Mirrored from new.axilthemes.com/demo/template/etrade/blog-grid.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 10 Aug 2023 07:18:56 GMT -->
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>eTrade || Blog Grid</title>
-    <meta name="robots" content="noindex, follow" />
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="~/assets/images/favicon.png">
-
-    <!-- CSS
-    ============================================ -->
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="~/assets/css/vendor/bootstrap.min.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/font-awesome.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/flaticon/flaticon.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/slick.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/slick-theme.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/jquery-ui.min.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/sal.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/magnific-popup.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/base.css">
-    <link rel="stylesheet" href="~/assets/css/style.min.css">
-
-</head>
-
-
 <body class="sticky-header">
 
     <!-- End Header -->
@@ -65,18 +33,15 @@
                                         <div class="content-blog blog-grid">
                                             <div class="inner">
                                                 <div class="thumbnail">
-                                                    <a href="blog-details.html">
+                                                    <a href="~/Home/BlogDetail?blogId=@blog.BlogId">
                                                         <img src="@blog.ImageUrl" style="width:100%;height:200px;" alt="Blog Images">
                                                     </a>
-                                                    <div class="blog-category">
-                                                        <a href="#">@blog.PageTile</a>
-                                                    </div>
                                                 </div>
                                                 <div class="content">
-                                                    <h5 class="title"><a href="blog-details.html">@blog.Description</a></h5>
+                                                    <h5 class="title"><a href="~/Home/BlogDetail?blogId=@blog.BlogId">@blog.PageTile</a></h5>
 
                                                     <div class="read-more-btn">
-                                                        <a class="axil-btn right-icon" href="blog-details.html">Read More <i class="fal fa-long-arrow-right"></i></a>
+                                                        <a class="axil-btn right-icon" href="~/Home/BlogDetail?blogId=@blog.BlogId">Tìm hiểu thêm <i class="fal fa-long-arrow-right"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -112,66 +77,26 @@
                                 <h6 class="widget-title">Bài viết mới</h6>
 
                                 <!-- Start Single Post List  -->
+                                @foreach (var blog in Model.ListBlogTop3)
+                                    {
                                 <div class="content-blog post-list-view mb--20">
                                     <div class="thumbnail">
-                                        <a href="blog-details.html">
-                                            <img src="assets/images/blog/blog-04.png" alt="Blog Images">
+                                        <a href="~/Home/BlogDetail?blogId=@blog.BlogId">
+                                            <img src="@blog.ImageUrl" alt="Blog Images">
                                         </a>
                                     </div>
                                     <div class="content">
-                                        <h6 class="title"><a href="blog-details.html">Dubai’s FRAME Offers its Take on the</a></h6>
+                                        <h6 class="title"><a href="~/Home/BlogDetail?blogId=@blog.BlogId">@blog.PageTile</a></h6>
                                         <div class="axil-post-meta">
                                             <div class="post-meta-content">
                                                 <ul class="post-meta-list">
-                                                    <li>Mar 27, 2022</li>
-                                                    <li>300k Views</li>
+                                                    <li>@blog.PublisheDate</li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- End Single Post List  -->
-
-                                <!-- Start Single Post List  -->
-                                <div class="content-blog post-list-view mb--20">
-                                    <div class="thumbnail">
-                                        <a href="blog-details.html">
-                                            <img src="assets/images/blog/blog-05.png" alt="Blog Images">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="blog-details.html">Apple presents App Best of 2020 winners</a></h6>
-                                        <div class="axil-post-meta">
-                                            <div class="post-meta-content">
-                                                <ul class="post-meta-list">
-                                                    <li>Mar 20, 2022</li>
-                                                    <li>300k Views</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- End Single Post List  -->
-
-                                <!-- Start Single Post List  -->
-                                <div class="content-blog post-list-view">
-                                    <div class="thumbnail">
-                                        <a href="blog-details.html">
-                                            <img src="assets/images/blog/blog-06.png" alt="Blog Images">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="blog-details.html">Gallaudet University innovation in education</a></h6>
-                                        <div class="axil-post-meta">
-                                            <div class="post-meta-content">
-                                                <ul class="post-meta-list">
-                                                    <li>Mar 15, 2022</li>
-                                                    <li>300k Views</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                }
                                 <!-- End Single Post List  -->
 
                             </div>
@@ -240,38 +165,6 @@
         </div>
         <!-- End Blog Area  -->
     </main>
-
-
-
-
-
-    <!-- JS
-============================================ -->
-    <!-- Modernizer JS -->
-    <script src="~/assets/js/vendor/modernizr.min.js"></script>
-    <!-- jQuery JS -->
-    <script src="~/assets/js/vendor/jquery.js"></script>
-    <!-- Bootstrap JS -->
-    <script src="~/assets/js/vendor/popper.min.js"></script>
-    <script src="~/assets/js/vendor/bootstrap.min.js"></script>
-    <script src="~/assets/js/vendor/slick.min.js"></script>
-    <script src="~/assets/js/vendor/js.cookie.js"></script>
-    <!-- <script src="assets/js/vendor/jquery.style.switcher.js"></script> -->
-    <script src="~/assets/js/vendor/jquery-ui.min.js"></script>
-    <script src="~/assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
-    <script src="~/assets/js/vendor/jquery.countdown.min.js"></script>
-    <script src="~/assets/js/vendor/sal.js"></script>
-    <script src="~/assets/js/vendor/jquery.magnific-popup.min.js"></script>
-    <script src="~/assets/js/vendor/imagesloaded.pkgd.min.js"></script>
-    <script src="~/assets/js/vendor/isotope.pkgd.min.js"></script>
-    <script src="~/assets/js/vendor/counterup.js"></script>
-    <script src="~/assets/js/vendor/waypoints.min.js"></script>
-
-    <!-- Main JS -->
-    <script src="~/assets/js/main.js"></script>
 </body>
-
-
-<!-- Mirrored from new.axilthemes.com/demo/template/etrade/blog-grid.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 10 Aug 2023 07:18:56 GMT -->
 
 </html>

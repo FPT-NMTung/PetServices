@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 
 namespace FEPetServices.Controllers
 {
@@ -26,6 +27,7 @@ namespace FEPetServices.Controllers
         private string DefaultApiUrlServiceCategoryDetail = "";
         private string DefaultApiUrlServiceCategoryandService = "";
         private string DefaultApiUrlBlogList = "";
+        private string DefaultApiUrlBlogDetail = "";
         private string DefaultApiUrlProductList = "";
         private string DefaultApiUrlRoomCategoryList = "";
         private string DefaultApiUrlProductCategoryList = "";
@@ -45,6 +47,7 @@ namespace FEPetServices.Controllers
             DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
             DefaultApiUrlProductList = "https://localhost:7255/api/Product";
             DefaultApiUrlRoomCategoryList = "https://localhost:7255/api/Room";
+            DefaultApiUrlBlogDetail = "https://localhost:7255/api/Blog/BlogID/";
         }
 
         public async Task<ActionResult> Room(RoomDTO roomDTO, RoomSearchDTO searchDTO)
@@ -458,6 +461,7 @@ namespace FEPetServices.Controllers
         {
             public List<BlogDTO> Blog { get; set; }  
             public List<ProductDTO> ListProductTop3 { get; set; }
+            public List<BlogDTO> ListBlogTop3 { get; set; }
 
         }
 
@@ -492,19 +496,37 @@ namespace FEPetServices.Controllers
                             blogModel.ListProductTop3 = firstPageProducts;
                         }
                     }
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var rep = await response.Content.ReadAsStringAsync();
+                        if (!string.IsNullOrEmpty(rep))
+                        {
+                            blogModel.ListBlogTop3 = JsonConvert.DeserializeObject<List<BlogDTO>>(rep);
+
+                            int currentPage = 1;
+                            int pageSize = 3;
+                            var newestProducts = blogModel.ListBlogTop3
+                            .OrderByDescending(p => p.PublisheDate)
+                            .Skip((currentPage - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToList();
+                            currentPage++;
+
+                            blogModel.ListBlogTop3 = newestProducts;
+                        }
+                    }
                     var responseContent = await response.Content.ReadAsStringAsync();
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var blogList = JsonConvert.DeserializeObject<List<BlogDTO>>(responseContent);
-
+                        // tìm kiếm theo tên 
                         if (!string.IsNullOrEmpty(BlogName) && blogList != null)
                         {
                             blogList = blogList
                                 .Where(c => c.PageTile != null && c.PageTile.Contains(BlogName, StringComparison.OrdinalIgnoreCase))
                                 .ToList();
-                            Console.WriteLine(1);
                         }
-
+                        //tìm kiếm tên theo bảng chữ cái từ a-z và từ z-a
                         switch (sortby)
                         {
                             case "name_desc":
@@ -551,14 +573,92 @@ namespace FEPetServices.Controllers
 
             return View();
         }
-        public async Task<IActionResult> BlogDetail()
+        public class BlogDetailModel
         {
-            return View();
+            public BlogDTO BlogDetail { get; set; }
+            public List<BlogDTO> Blog { get; set; }
+            public List<ProductDTO> ListProductTop3 { get; set; }
+            public List<BlogDTO> ListBlogTop3 { get; set; }
+
         }
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
+        public async Task<IActionResult> BlogDetail(int blogId)
+        {
+            BlogDetailModel blog = new BlogDetailModel();
+            try
+            {
+                HttpResponseMessage responseBlogDetail = await client.GetAsync(DefaultApiUrlBlogDetail+blogId);
+                HttpResponseMessage responseBlogList = await client.GetAsync(DefaultApiUrlBlogList + "/GetAllBlog");
+                HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");     
+                if (responseBlogDetail.IsSuccessStatusCode)
+                {
+                    // list ra 3 sản phẩm bán chạy nhất 
+                    if (responseProduct.IsSuccessStatusCode)
+                    {
+                        var product = await responseProduct.Content.ReadAsStringAsync();
+                        if (!string.IsNullOrEmpty(product))
+                        {
+                            blog.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(product);
+
+                            int currentPage = 1;
+                            int pageSize = 3;
+
+                            var firstPageProducts = blog.ListProductTop3.OrderByDescending(p => p.QuantitySold).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+                            currentPage++;
+
+                            blog.ListProductTop3 = firstPageProducts;
+                        }
+                    }
+                    // List ra danh sách blog
+                    if (responseBlogList.IsSuccessStatusCode)
+                    {
+                        var Blog = await responseBlogList.Content.ReadAsStringAsync();
+                        if (!string.IsNullOrEmpty(Blog))
+                        {
+                            blog.Blog = JsonConvert.DeserializeObject<List<BlogDTO>>(Blog);
+                        }
+                    }
+                    // list ra detail của id đó 
+                    var BlogDetail = await responseBlogDetail.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(BlogDetail))
+                        {
+                            blog.BlogDetail = JsonConvert.DeserializeObject<BlogDTO>(BlogDetail);
+                        }
+                    if (responseBlogList.IsSuccessStatusCode)
+                    {
+                        var rep = await responseBlogList.Content.ReadAsStringAsync();
+                        if (!string.IsNullOrEmpty(rep))
+                        {
+                            blog.ListBlogTop3 = JsonConvert.DeserializeObject<List<BlogDTO>>(rep);
+
+                            int currentPage = 1;
+                            int pageSize = 3;
+                            var newestProducts = blog.ListBlogTop3
+                            .OrderByDescending(p => p.PublisheDate)
+                            .Skip((currentPage - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToList();
+                            currentPage++;
+
+                            blog.ListBlogTop3 = newestProducts;
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng";
+                    }
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang!";
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+            }
+            return View(blog);
+        }
 
         public IActionResult Test()
         {
