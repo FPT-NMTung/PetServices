@@ -168,7 +168,7 @@ namespace PetServices.Controllers
             }
             if (string.IsNullOrWhiteSpace(serviceDTO.Picture))
             {
-                string errorMessage = "Ảnh phòng không được để trống!";
+                string errorMessage = "Ảnh dịch vụ không được để trống!";
                 return BadRequest(errorMessage);
             }
             else if (serviceDTO.Picture.Contains(" "))
@@ -212,7 +212,30 @@ namespace PetServices.Controllers
             
         }
 
-        
+        [HttpPut("ChangeStatusService")]
+        public async Task<ActionResult> ChangeStatusService(int ServiceId, bool status)
+        {
+            try
+            {
+                var service = await _context.Services.FirstOrDefaultAsync(p => p.ServiceId == ServiceId);
+                if (service == null)
+                {
+                    return BadRequest("Không tìm thấy dịch vụ cần thay đổi.");
+                }
+
+                service.Status = status;
+
+                _context.Entry(service).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+                return Ok("Cập nhật dịch vụ thành công!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
+            }
+        }
+
         [HttpDelete]
         public IActionResult DeleteServce(int serviceId)
         {
