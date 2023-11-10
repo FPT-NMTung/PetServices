@@ -8,10 +8,12 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link rel="stylesheet" href="~/css/flatpickr.css">
+    <link rel="stylesheet" href="~/css/RoomDetailCustomer.css">
 
 </head>
 
-<body class="sticky-header">
+<body>
     <div class="axil-breadcrumb-area">
         <div class="container">
             <div class="row align-items-center">
@@ -98,7 +100,6 @@
         <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
             <div class="container">
                 <h5 class="title">Dịch vụ bạn muốn đặt thêm:</h5>
-
                 <div class="product-desc-wrapper mb--30 mb_sm--10">
                     <div class="row">
                         <div class="col-lg-12">
@@ -130,7 +131,18 @@
                                     }
                                 }
                             </div>
-
+                        </div>
+                    </div>
+                    <div class="part3">
+                        <h5>Thời gian thuê phòng:</h5>
+                        <div class="part3-content">
+                            <div class="part3-content-child">
+                                <div class="form-group col-lg-5 mb--30">
+                                    <div class='input-group date' id='datetime'>
+                                        <input type='datetime-local' class="form-control" style="z-index: auto;" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -138,6 +150,19 @@
         </div>
     </div>
 
+    
 </body>
+<script src="~/js/flatpickr.js"></script>
 
+<script>
+    window.onload = function () {
+        let time = document.querySelector("#datetime input");
+
+        let startPicker = flatpickr(time, {
+            minDate: new Date().fp_incr(1),
+            mode: "range",
+            dateFormat: "Y-m-d",
+        });
+    }
+</script>
 </html>

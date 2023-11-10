@@ -82,7 +82,7 @@ namespace FEPetServices.Controllers
                             roomList = roomList.Where(r => r.RoomCategoriesId == roomCategoriesId).ToList();
                         }
 
-                        /*if (!string.IsNullOrEmpty(searchDTO.pricefrom) || !string.IsNullOrEmpty(searchDTO.priceto))
+                        if (!string.IsNullOrEmpty(searchDTO.pricefrom) || !string.IsNullOrEmpty(searchDTO.priceto))
                         {
                             if (string.IsNullOrEmpty(searchDTO.pricefrom))
                             {
@@ -101,7 +101,7 @@ namespace FEPetServices.Controllers
 
                                 roomList = roomList.Where(r => r.Price > PriceFrom && r.Price < PriceTo).ToList();
                             }
-                        }*/
+                        }
 
                         switch (searchDTO.sortby)
                         {
@@ -120,8 +120,8 @@ namespace FEPetServices.Controllers
                         }
 
                         ViewBag.roomcategory = searchDTO.roomcategory;
-                        /*ViewBag.pricefrom = searchDTO.pricefrom;
-                        ViewBag.priceto = searchDTO.priceto;*/
+                        ViewBag.pricefrom = searchDTO.pricefrom;
+                        ViewBag.priceto = searchDTO.priceto;
                         ViewBag.sortby = searchDTO.sortby;
                         ViewBag.roomname = searchDTO.roomname;
 

@@ -1,4 +1,4 @@
-﻿.service-style-2 .checkbox-wrapper:hover .check {
+﻿﻿.service-style-2 .checkbox-wrapper:hover .check {
     stroke-dashoffset: 0;
 }
 
@@ -66,3 +66,11 @@
         .service-style-2 .checkbox-wrapper input[type=checkbox]:checked + svg .check {
             stroke-dashoffset: 0;
         }
+
+.form-group label {
+    background-color: #f9f3f0;
+}
+
+.form-control{
+    font-size: 25px;
+}
