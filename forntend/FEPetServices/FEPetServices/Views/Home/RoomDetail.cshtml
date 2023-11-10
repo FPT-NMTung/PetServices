@@ -62,11 +62,11 @@
                                     @{
                                         if (@Model.RoomCategoriesId == 4)
                                         {
-                                            <span class="price current-price">@Model.Price vnđ/ngày</span>
+                                            <span class="price current-price">@Model.Price vnđ/giờ</span>
                                         }
                                         else
                                         {
-                                            <span class="price current-price">@Model.Price vnđ/giờ</span>
+                                            <span class="price current-price">@Model.Price vnđ/ngày</span>
                                         }
                                     }
                                 </div>
@@ -142,15 +142,24 @@
                             </div>
                         </div>
                     </div>
-                    <div class="part3">
+                    <div class="part3" data-room-category="@Model.RoomCategoriesId">
                         <h5>Thời gian thuê phòng:</h5>
                         <div class="part3-content">
                             <div class="part3-content-child">
-                                <div class="form-group col-lg-5 mb--30">
-                                    <div class='input-group date' id='datetime'>
-                                        <input type='datetime-local' class="form-control" style="z-index: auto;" />
-                                    </div>
-                                </div>
+                                @{
+                                    if (Model.RoomCategoriesId == 4)
+                                    {
+                                        
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group col-lg-5 mb--30">
+                                            <div class='input-group date' id='datetime'>
+                                                <input type='datetime-local' class="form-control" style="z-index: auto;" />
+                                            </div>
+                                        </div>
+                                    }
+                                }
                             </div>
                         </div>
                     </div>
@@ -159,19 +168,25 @@
         </div>
     </div>
 
-    
+    <script>
+        window.onload = function () {
+            var roomCategory = document.querySelector('.part3').dataset.roomCategory;
+
+            if (roomCategory == 4) {
+                // Thực hiện các hành động khi roomCategory là 4
+            } else {
+                let time = document.querySelector("#datetime input");
+
+                let startPicker = flatpickr(time, {
+                    minDate: new Date().fp_incr(1),
+                    mode: "range",
+                    dateFormat: "Y-m-d",
+                });
+            }
+        };
+    </script>
 </body>
 <script src="~/js/flatpickr.js"></script>
 
-<script>
-    window.onload = function () {
-        let time = document.querySelector("#datetime input");
 
-        let startPicker = flatpickr(time, {
-            minDate: new Date().fp_incr(1),
-            mode: "range",
-            dateFormat: "Y-m-d",
-        });
-    }
-</script>
 </html>

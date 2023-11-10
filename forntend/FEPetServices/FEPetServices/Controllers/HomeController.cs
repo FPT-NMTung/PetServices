@@ -73,49 +73,49 @@ namespace FEPetServices.Controllers
 
                         if (!string.IsNullOrEmpty(searchDTO.roomname))
                         {
-                            roomList = roomList.Where(r => r.RoomName.Contains(searchDTO.roomname, StringComparison.OrdinalIgnoreCase)).ToList();
+                            roomList = roomList?.Where(r => r.RoomName.Contains(searchDTO.roomname, StringComparison.OrdinalIgnoreCase)).ToList();
                         }
 
                         if (!string.IsNullOrEmpty(searchDTO.roomcategory))
                         {
                             int roomCategoriesId = int.Parse(searchDTO.roomcategory);
-                            roomList = roomList.Where(r => r.RoomCategoriesId == roomCategoriesId).ToList();
+                            roomList = roomList?.Where(r => r.RoomCategoriesId == roomCategoriesId).ToList();
                         }
 
                         if (!string.IsNullOrEmpty(searchDTO.pricefrom) || !string.IsNullOrEmpty(searchDTO.priceto))
                         {
-                            if (string.IsNullOrEmpty(searchDTO.pricefrom))
+                            if (string.IsNullOrEmpty(searchDTO.pricefrom) && !string.IsNullOrEmpty(searchDTO.priceto))
                             {
                                 int priceTo = int.Parse(searchDTO.priceto);
-                                roomList = roomList.Where(r => r.Price < priceTo).ToList();
+                                roomList = roomList?.Where(r => r.Price < priceTo).ToList();
                             }
-                            if (string.IsNullOrEmpty(searchDTO.priceto))
+                            if (string.IsNullOrEmpty(searchDTO.priceto) && !string.IsNullOrEmpty(searchDTO.pricefrom))
                             {
                                 int priceFrom = int.Parse(searchDTO.pricefrom);
-                                roomList = roomList.Where(r => r.Price > priceFrom).ToList();
+                                roomList = roomList?.Where(r => r.Price > priceFrom).ToList();
                             }
                             if (!string.IsNullOrEmpty(searchDTO.pricefrom) && !string.IsNullOrEmpty(searchDTO.priceto))
                             {
                                 int PriceTo = int.Parse(searchDTO.priceto);
                                 int PriceFrom = int.Parse(searchDTO.pricefrom);
 
-                                roomList = roomList.Where(r => r.Price > PriceFrom && r.Price < PriceTo).ToList();
+                                roomList = roomList?.Where(r => r.Price > PriceFrom && r.Price < PriceTo).ToList();
                             }
                         }
 
                         switch (searchDTO.sortby)
                         {
                             case "name_desc":
-                                roomList = roomList.OrderByDescending(r => r.RoomName).ToList();
+                                roomList = roomList?.OrderByDescending(r => r.RoomName).ToList();
                                 break;
                             case "price":
-                                roomList = roomList.OrderBy(r => r.Price).ToList();
+                                roomList = roomList?.OrderBy(r => r.Price).ToList();
                                 break;
                             case "price_desc":
-                                roomList = roomList.OrderByDescending(r => r.Price).ToList();
+                                roomList = roomList?.OrderByDescending(r => r.Price).ToList();
                                 break;
                             default:
-                                roomList = roomList.OrderBy(r => r.RoomName).ToList();
+                                roomList = roomList?.OrderBy(r => r.RoomName).ToList();
                                 break;
                         }
 
