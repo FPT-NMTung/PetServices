@@ -13,7 +13,7 @@ using Xunit;
 
 namespace UnitTest
 {
-    public class Test_UpdateCategory
+    public class Test_UpdateService
     {
         [Fact]
         // 1. Update sản phẩm thành công
