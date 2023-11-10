@@ -165,20 +165,11 @@
                                                 <img src="@room.Picture" alt="Product Images">
                                             </a>
                                         </div>
-                                        <div class="product-content">
+                                        <div class="product-content" data-room-category="@room.RoomCategoriesId">
                                             <div class="inner">
                                                 <h5 class="title"><a href="/Home/RoomDetail?roomId=@room.RoomId">@room.RoomName</a></h5>
                                                 <div class="product-price-variant">
-                                                    @{
-                                                        if (room.RoomCategoriesId == 4)
-                                                        {
-                                                            <span class="price current-price">@room.Price vnđ/ngày</span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="price current-price">@room.Price vnđ/giờ</span>
-                                                        }
-                                                    }
+                                                    <span class="price current-price">@room.Price vnđ/h</span>
                                                 </div>
                                             </div>
                                         </div>

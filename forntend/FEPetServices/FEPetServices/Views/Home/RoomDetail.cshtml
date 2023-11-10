@@ -59,7 +59,16 @@
                             <div class="inner">
                                 <h2 class="product-title">@Model.RoomName</h2>
                                 <div class="price-amount price-offer-amount">
-                                    <span class="price current-price">@Model.Price vnđ/h</span>
+                                    @{
+                                        if (@Model.RoomCategoriesId == 4)
+                                        {
+                                            <span class="price current-price">@Model.Price vnđ/ngày</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="price current-price">@Model.Price vnđ/giờ</span>
+                                        }
+                                    }
                                 </div>
                                 <div class="product-rating">
                                     <div class="star-rating">

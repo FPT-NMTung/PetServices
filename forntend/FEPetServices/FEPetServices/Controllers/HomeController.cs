@@ -188,7 +188,6 @@ namespace FEPetServices.Controllers
             }
 
             return View();
-            DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
 
 
         }
