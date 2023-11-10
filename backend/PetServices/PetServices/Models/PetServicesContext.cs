@@ -133,6 +133,8 @@ namespace PetServices.Models
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
+                entity.Property(e => e.PartnerInfoId).HasColumnName("PartnerInfoID");
+
                 entity.Property(e => e.PetInfoId).HasColumnName("PetInfoID");
 
                 entity.HasOne(d => d.Order)
@@ -140,6 +142,11 @@ namespace PetServices.Models
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BookingServicesDetail_Orders");
+
+                entity.HasOne(d => d.PartnerInfo)
+                    .WithMany(p => p.BookingServicesDetails)
+                    .HasForeignKey(d => d.PartnerInfoId)
+                    .HasConstraintName("FK_BookingServicesDetail_PartnerInfo");
 
                 entity.HasOne(d => d.PetInfo)
                     .WithMany(p => p.BookingServicesDetails)
@@ -169,16 +176,9 @@ namespace PetServices.Models
                     .HasMaxLength(20)
                     .IsFixedLength();
 
-                entity.Property(e => e.PartnerInfoId).HasColumnName("PartnerInfoID");
-
                 entity.Property(e => e.Province).HasMaxLength(500);
 
                 entity.Property(e => e.UserInfoId).HasColumnName("UserInfoID");
-
-                entity.HasOne(d => d.PartnerInfo)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.PartnerInfoId)
-                    .HasConstraintName("FK_Orders_PartnerInfo");
 
                 entity.HasOne(d => d.UserInfo)
                     .WithMany(p => p.Orders)

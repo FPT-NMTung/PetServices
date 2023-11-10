@@ -91,7 +91,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Service/", filename);
                     var stream = new FileStream(uploadfile, FileMode.Create);
                     file.CopyToAsync(stream);
-                    service.Picture = "/img/Service" + filename;
+                    service.Picture = "/img/Service/" + filename;
                 }
 
                 service.Status = true;
