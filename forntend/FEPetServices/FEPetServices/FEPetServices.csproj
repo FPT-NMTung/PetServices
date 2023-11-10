@@ -23,6 +23,7 @@
     <Folder Include="Areas\Partner\Models\" />
     <Folder Include="wwwroot\img\banner\" />
     <Folder Include="wwwroot\img\about\" />
+    <Folder Include="wwwroot\img\Partner\" />
     <Folder Include="wwwroot\img\Profile\" />
     <Folder Include="wwwroot\img\RoomCategory\" />
     <Folder Include="wwwroot\img\ServiceCategory\" />
