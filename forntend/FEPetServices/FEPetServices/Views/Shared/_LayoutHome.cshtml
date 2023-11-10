@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+@using FEPetServices.Controllers
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -108,9 +112,18 @@
                     </div>
                     <div class="header-action">
                         <ul class="action-list">
+
                             <li class="shopping-cart">
                                 <a href="#" class="cart-dropdown-btn">
-                                    <span class="cart-count">3</span>
+                                    @{
+                                        var session = HttpContextAccessor.HttpContext.Session;
+                                        string jsoncart = session.GetString(FEPetServices.Controllers.ProductListController.CARTKEY);
+                                        if (jsoncart != null)
+                                        {
+                                            var cartItems = JsonConvert.DeserializeObject<List<FEPetServices.Controllers.ProductListController.CartItem>>(jsoncart);
+                                            <span class="cart-count">@cartItems.Count</span>
+                                        }
+                                    }
                                     <i class="flaticon-shopping-cart"></i>
                                 </a>
                             </li>
