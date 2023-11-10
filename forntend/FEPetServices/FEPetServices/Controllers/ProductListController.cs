@@ -3,6 +3,7 @@ using FEPetServices.Form;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using System.Drawing.Printing;
 using System.Net.Http.Headers;
@@ -159,6 +160,73 @@ namespace FEPetServices.Controllers
                 ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
             }
             return View();
+        }
+
+        public class CartItem
+        {
+            public int quantity { set; get; }
+            public ProductDTO product { set; get; }
+        }
+
+        public const string CARTKEY = "cart";
+        List<CartItem> GetCartItems()
+        {
+
+            var session = HttpContext.Session;
+            string jsoncart = session.GetString(CARTKEY);
+            if (jsoncart != null)
+            {
+                return JsonConvert.DeserializeObject<List<CartItem>>(jsoncart);
+            }
+            return new List<CartItem>();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(int ProductId)
+        {
+            ProductDTO product = null; // Declare product outside the if block
+
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductDetail + "/" + ProductId);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                var option = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                product = System.Text.Json.JsonSerializer.Deserialize<ProductDTO>(responseContent, option);
+            }
+
+            var cart = GetCartItems();
+            var cartitem = cart.Find(p => p.product.ProductId == ProductId);
+            if (cartitem != null)
+            {
+                // Đã tồn tại, tăng thêm 1
+                cartitem.quantity++;
+            }
+            else
+            {
+                // Thêm mới
+                cart.Add(new CartItem() { quantity = 1, product = product });
+            }
+
+            // Lưu cart vào Session
+            SaveCartSession(cart);
+
+            return RedirectToAction("Index", "Cart");
+        }
+
+        void ClearCart()
+        {
+            var session = HttpContext.Session;
+            session.Remove(CARTKEY);
+        }
+
+        void SaveCartSession(List<CartItem> ls)
+        {
+            var session = HttpContext.Session;
+            string jsoncart = JsonConvert.SerializeObject(ls);
+            session.SetString(CARTKEY, jsoncart);
         }
     }
 }

@@ -238,6 +238,11 @@
                                                         <a href="single-product.html">
                                                             Add to Cart
                                                         </a>
+                                                        <form method="post" action="@Url.Action("AddToCart", "ProductList")">
+                                                            @Html.AntiForgeryToken() <!-- Include anti-forgery token for security -->
+                                                            <input type="hidden" name="ProductId" value="@product.ProductId" /> <!-- Adjust based on your product ID property -->
+                                                            <button type="submit"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                                                        </form>
                                                     </li>
                                                     <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
                                                 </ul>
