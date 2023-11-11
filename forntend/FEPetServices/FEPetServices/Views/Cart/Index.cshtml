@@ -31,22 +31,40 @@
                         <tbody>
                             @foreach (var cartitem in Model)
                             {
-                                var thanhtien = (double)cartitem.quantityProduct * (double)cartitem.product.Price;
+                                var thanhtien = (double)cartitem.quantityProduct * (cartitem.product != null ? (double)cartitem.product.Price : (double)cartitem.service.Price);
                                 total += thanhtien;
                                 itemCount++;
                                 <tr>
                                     <td>@(itemCount)</td>
-                                    <td>@cartitem.product.ProductName</td>
-                                    <td>@(cartitem.product.Price.ToString("n0").Replace(",", ".")) VNĐ</td>
                                     <td>
-                                        <input style="height:20px" id="@($"quantity-{cartitem.product.ProductId}")" class="form-control" type="number" value="@cartitem.quantityProduct" />
+                                        @if (cartitem.product != null)
+                                        {
+                                            @cartitem.product.ProductName
+                                        }
+                                        else if (cartitem.service != null)
+                                        {
+                                            @cartitem.service.ServiceName
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (cartitem.product != null)
+                                        {
+                                            @(cartitem.product.Price.ToString("n0").Replace(",", "."))
+                                        }
+                                        else if (cartitem.service != null)
+                                        {
+                                            @(cartitem.service.Price.ToString("n0").Replace(",", "."))
+                                        }
+                                    </td>
+                                    <td>
+                                        <input style="height:20px" id="@($"quantity-{cartitem.product?.ProductId ?? cartitem.service?.ServiceId}")" class="form-control" type="number" value="@cartitem.quantityProduct" />
                                     </td>
                                     <td>@(thanhtien.ToString("n0").Replace(",", ".")) VNĐ</td>
                                     <td>
-                                        <button class="btn btn-outline-success updatecartitem" data-productid="@cartitem.product.ProductId">
+                                        <button class="btn btn-outline-success updatecartitem" data-productid="@cartitem.product?.ProductId" data-serviceid="@cartitem.service?.ServiceId">
                                             Cập nhật
                                         </button>
-                                        <button class="btn btn-outline-danger removecart" data-productid="@cartitem.product.ProductId">
+                                        <button class="btn btn-outline-danger removecart" data-productid="@cartitem.product?.ProductId" data-serviceid="@cartitem.service?.ServiceId">
                                             Xoá
                                         </button>
                                     </td>
@@ -66,14 +84,6 @@
                                 <div class="summery-table-wrap">
                                     <table class="table summery-table mb--30">
                                         <tbody>
-                                           @* <tr class="order-subtotal">
-                                                <td>Subtotal</td>
-                                                <td>$117.00</td>
-                                            </tr>
-                                            <tr class="order-tax">
-                                                <td>State Tax</td>
-                                                <td>$8.00</td>
-                                            </tr>*@
                                             <tr class="order-total">
                                                 <td>Tổng tiền cần thanh toán</td>
                                                 <td class="order-total-amount">@(total.ToString("n0").Replace(",", ".")) VNĐ</td>
@@ -94,23 +104,25 @@
         </div>
     </div>
 </body>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js" ></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     $(document).ready(function () {
         $(".updatecartitem").click(function (event) {
             event.preventDefault();
             var productid = $(this).attr("data-productid");
-            var quantity = $("#quantity-" + productid).val();
+            var serviceid = $(this).attr("data-serviceid");
+            var quantity = $("#quantity-" + (productid ?? serviceid)).val();
 
             $.ajax({
                 type: "POST",
-                url: "@Url.Action("UpdateCart", "Cart")", 
+                url: "@Url.Action("UpdateCart", "Cart")",
                 data: {
                     productid: productid,
+                    serviceid: serviceid,
                     quantity: quantity
                 },
                 success: function (result) {
-                    window.location.href = "@Url.Action("Index", "Cart")"; 
+                    window.location.href = "@Url.Action("Index", "Cart")";
                 },
                 error: function (error) {
                     console.error("Error updating cart:", error);
@@ -121,15 +133,17 @@
         $(".removecart").click(function (event) {
             event.preventDefault();
             var productid = $(this).attr("data-productid");
+            var serviceid = $(this).attr("data-serviceid");
 
             $.ajax({
                 type: "POST",
                 url: "@Url.Action("RemoveCart", "Cart")",
                 data: {
-                    productid: productid
+                    productid: productid,
+                    serviceid: serviceid
                 },
                 success: function (result) {
-                    window.location.href = "@Url.Action("Index", "Cart")"; 
+                    window.location.href = "@Url.Action("Index", "Cart")";
                 },
                 error: function (error) {
                     console.error("Error removing item from cart:", error);

@@ -9,9 +9,17 @@ namespace FEPetServices.Controllers
     {
         public class CartItem
         {
+            // Product
             public int quantityProduct { set; get; }
             public ProductDTO product { set; get; }
+
+            // Service
             public ServiceDTO service { set; get; }
+            public double? Weight { get; set; }
+            public double? PriceService { get; set; }
+            public int? PartnerInfoId { get; set; }
+
+            // Room
         }
 
         public const string CARTKEY = "cart";
@@ -46,7 +54,7 @@ namespace FEPetServices.Controllers
             return View(cartItems); // Pass cart items to the view
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public IActionResult UpdateCart([FromForm] int productid, [FromForm] int quantity)
         {
             // Cập nhật Cart thay đổi số lượng quantity ...
@@ -61,6 +69,7 @@ namespace FEPetServices.Controllers
             // Trả về mã thành công (không có nội dung gì - chỉ để Ajax gọi)
             return Ok();
         }
+
         [HttpPost]
         public IActionResult RemoveCart([FromForm] int productid)
         {
@@ -74,7 +83,6 @@ namespace FEPetServices.Controllers
 
             SaveCartSession(cart);
             return RedirectToAction("Index", "Cart");
-        }
-
+        }*/
     }
 }

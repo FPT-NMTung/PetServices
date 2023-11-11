@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
+using PetServices.Models;
 using System.Drawing.Printing;
 using System.Net.Http.Headers;
 using System.Text;
@@ -164,8 +165,17 @@ namespace FEPetServices.Controllers
 
         public class CartItem
         {
+            // Product
             public int quantityProduct { set; get; }
             public ProductDTO product { set; get; }
+
+            // Service
+            public ServiceDTO service { set; get; }
+            public double? Weight { get; set; }
+            public double? PriceService { get; set; }
+            public int? PartnerInfoId { get; set; }
+
+            // Room
         }
 
         public const string CARTKEY = "cart";
@@ -184,7 +194,7 @@ namespace FEPetServices.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToCart(int ProductId)
         {
-            ProductDTO product = null; // Declare product outside the if block
+            ProductDTO product = null;
 
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductDetail + "/" + ProductId);
             if (response.IsSuccessStatusCode)
@@ -197,24 +207,29 @@ namespace FEPetServices.Controllers
                 product = System.Text.Json.JsonSerializer.Deserialize<ProductDTO>(responseContent, option);
             }
 
-            var cart = GetCartItems();
-            var cartitem = cart.Find(p => p.product.ProductId == ProductId);
-            if (cartitem != null)
+            if (product != null)  // Check for null before adding to the cart
             {
-                // Đã tồn tại, tăng thêm 1
-                cartitem.quantityProduct++;
-            }
-            else
-            {
-                // Thêm mới
-                cart.Add(new CartItem() { quantityProduct = 1, product = product });
-            }
+                var cart = GetCartItems();
+                var cartitem = cart.Find(p => p.product != null && p.product.ProductId == ProductId);
 
-            // Lưu cart vào Session
-            SaveCartSession(cart);
+                if (cartitem != null)
+                {
+                    // Đã tồn tại, tăng thêm 1
+                    cartitem.quantityProduct++;
+                }
+                else
+                {
+                    // Thêm mới
+                    cart.Add(new CartItem() { quantityProduct = 1, product = product });
+                }
+
+                // Lưu cart vào Session
+                SaveCartSession(cart);
+            }
 
             return RedirectToAction("Index", "Cart");
         }
+
 
         void ClearCart()
         {
