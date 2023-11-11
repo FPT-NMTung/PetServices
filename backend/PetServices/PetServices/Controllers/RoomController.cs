@@ -282,7 +282,7 @@ namespace PetServices.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("CheckSlotInRoom")]
         public async Task<ActionResult> CheckSlotInRoom(int RoomId, DateTime startDate, DateTime endDate)
         {
             try
