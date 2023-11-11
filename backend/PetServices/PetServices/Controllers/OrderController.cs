@@ -182,7 +182,6 @@ namespace PetServices.Controllers
                         Weight = dto.Weight,
                         PriceService = dto.Price,
                         PetInfoId = dto.PetInfoId,
-                        PartnerInfoId = dto.PartnerInfoId,
                     }).ToList()
                     : new List<BookingServicesDetail>()
                  
