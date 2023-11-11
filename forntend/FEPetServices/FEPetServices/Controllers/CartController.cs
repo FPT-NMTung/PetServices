@@ -14,11 +14,13 @@ namespace FEPetServices.Controllers
             public ProductDTO product { set; get; }
 
             // Service
-            public ServiceDTO service { set; get; }
+            public int ServiceId { get; set; }
+            public double? Price { get; set; }
             public double? Weight { get; set; }
             public double? PriceService { get; set; }
             public int? PartnerInfoId { get; set; }
-
+            public PartnerInfo? PartnerInfo { get; set; }
+            public ServiceDTO service { set; get; }
             // Room
         }
 
