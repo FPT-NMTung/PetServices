@@ -16,6 +16,7 @@ namespace FEPetServices.Controllers
             // Service
             public ServiceDTO service { set; get; }
             public double? Weight { get; set; }
+            public double? Price { get; set; }
             public double? PriceService { get; set; }
             public int? PartnerInfoId { get; set; }
 

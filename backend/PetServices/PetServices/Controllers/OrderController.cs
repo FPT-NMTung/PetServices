@@ -121,7 +121,6 @@ namespace PetServices.Controllers
             }
 
             double priceProduct = 0;
-            double priceService = 0;
             double priceRoom = 0;
 
             if (orderDTO.OrderProductDetails != null)
@@ -131,16 +130,6 @@ namespace PetServices.Controllers
                 if (takeProduct != null)
                 {
                     priceProduct = (double)takeProduct.Price;
-                }
-            }
-
-            if (orderDTO.BookingServicesDetails != null)
-            {
-                var serviceIds = orderDTO.BookingServicesDetails.Where(dto => dto != null).Select(dto => dto.ServiceId).ToList();
-                var takeService = _context.Services.FirstOrDefault(s => serviceIds.Contains(s.ServiceId));
-                if (takeService != null)
-                {
-                    priceService = (double)takeService.Price;
                 }
             }
 
@@ -191,7 +180,7 @@ namespace PetServices.Controllers
                         ServiceId = dto.ServiceId,
                         Price = dto.Price,
                         Weight = dto.Weight,
-                        PriceService = priceService,
+                        PriceService = dto.Price,
                         PetInfoId = dto.PetInfoId,
                         PartnerInfoId = dto.PartnerInfoId,
                     }).ToList()
