@@ -432,5 +432,210 @@ namespace UnitTest
                 Assert.Equal("Số lượng sản phẩm không đủ", errorMessage);
             }
         }
+
+        [Fact]
+        // 9. Order Product - Address(>500 word)
+        public async Task Test_CreateOrder_Address_ToLong()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var product = new Product
+                {
+                    ProductId = 1,
+                    Price = 100,
+                };
+                context.Products.Add(product);
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new OrderController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var address = new string('A', 501);
+                var testOrder = new OrdersDTO
+                {
+                    OrderDate = DateTime.Now,
+                    OrderStatus = "Waiting",
+                    Province = "Hà Tĩnh",
+                    District = "Hà Tĩnh",
+                    Commune = "Thạch Linh",
+                    Address = address,
+                    UserInfoId = 1,
+
+                    OrderProductDetails = new List<OrderProductDetailDTO>
+                    {
+                        new OrderProductDetailDTO
+                        {
+                            Quantity = 2,
+                            ProductId = 1,
+                        }
+                    }
+                };
+                var result = await controller.CreateOrder(testOrder) as BadRequestObjectResult;
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                var errorMessage = result.Value as string;
+                Assert.Equal("Địa chỉ vượt quá số ký tự. Tối đa 500 ký tự!", errorMessage);
+            }
+        }
+
+        [Fact]
+        // 10. Order Product - Province(>number @)
+        public async Task Test_CreateOrder_Province_SpecialNumber()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var product = new Product
+                {
+                    ProductId = 1,
+                    Price = 100,
+                };
+                context.Products.Add(product);
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new OrderController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var testOrder = new OrdersDTO
+                {
+                    OrderDate = DateTime.Now,
+                    OrderStatus = "Waiting",
+                    Province = "Hà Tĩnh 123@",
+                    District = "Hà Tĩnh",
+                    Commune = "Thạch Linh",
+                    Address = "Thạch Linh-Hà Tĩnh",
+                    UserInfoId = 1,
+
+                    OrderProductDetails = new List<OrderProductDetailDTO>
+                    {
+                        new OrderProductDetailDTO
+                        {
+                            Quantity = 2,
+                            ProductId = 1,
+                        }
+                    }
+                };
+                var result = await controller.CreateOrder(testOrder) as BadRequestObjectResult;
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                var errorMessage = result.Value as string;
+                Assert.Equal("Tỉnh phải là ký tự chữ, không chấp nhận số hay ký tự đặc biệt!", errorMessage);
+            }
+        }
+
+        [Fact]
+        // 11. Order Product - District(123@)
+        public async Task Test_CreateOrder_District_NumberSpecial()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var product = new Product
+                {
+                    ProductId = 1,
+                    Price = 100,
+                };
+                context.Products.Add(product);
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new OrderController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var testOrder = new OrdersDTO
+                {
+                    OrderDate = DateTime.Now,
+                    OrderStatus = "Waiting",
+                    Province = "Hà Tĩnh",
+                    District = "Hà Tĩnh 123@",
+                    Commune = "Thạch Linh",
+                    Address = "Thạch Linh-Hà Tĩnh",
+                    UserInfoId = 1,
+
+                    OrderProductDetails = new List<OrderProductDetailDTO>
+                    {
+                        new OrderProductDetailDTO
+                        {
+                            Quantity = 2,
+                            ProductId = 1,
+                        }
+                    }
+                };
+                var result = await controller.CreateOrder(testOrder) as BadRequestObjectResult;
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                var errorMessage = result.Value as string;
+                Assert.Equal("Huyện/Thành phố phải là ký tự chữ, không chấp nhận số hay ký tự đặc biệt!", errorMessage);
+            }
+        }
+
+        [Fact]
+        // 12. Order Product - Commune(123@)
+        public async Task Test_CreateOrder_Commune_NumberSpecial()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var product = new Product
+                {
+                    ProductId = 1,
+                    Price = 100,
+                };
+                context.Products.Add(product);
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new OrderController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var testOrder = new OrdersDTO
+                {
+                    OrderDate = DateTime.Now,
+                    OrderStatus = "Waiting",
+                    Province = "Hà Tĩnh",
+                    District = "Hà Tĩnh",
+                    Commune = "Thạch Linh 123@",
+                    Address = "Thạch Linh-Hà Tĩnh",
+                    UserInfoId = 1,
+
+                    OrderProductDetails = new List<OrderProductDetailDTO>
+                    {
+                        new OrderProductDetailDTO
+                        {
+                            Quantity = 2,
+                            ProductId = 1,
+                        }
+                    }
+                };
+                var result = await controller.CreateOrder(testOrder) as BadRequestObjectResult;
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                var errorMessage = result.Value as string;
+                Assert.Equal("Phường/Xã phải là ký tự chữ, không chấp nhận số hay ký tự đặc biệt!", errorMessage);
+            }
+        }
     }
 }

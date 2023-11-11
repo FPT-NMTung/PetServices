@@ -6,6 +6,7 @@ using PetServices.DTO;
 using PetServices.Form;
 using PetServices.Models;
 using System.Numerics;
+using System.Text.RegularExpressions;
 
 namespace PetServices.Controllers
 {
@@ -124,19 +125,41 @@ namespace PetServices.Controllers
                 string errorMessage = "Tỉnh không được để trống!";
                 return BadRequest(errorMessage);
             }
+            if (!Regex.IsMatch(orderDTO.Province, @"^[\p{L}\s]+$"))
+            {
+                string errorMessage = "Tỉnh phải là ký tự chữ, không chấp nhận số hay ký tự đặc biệt!";
+                return BadRequest(errorMessage);
+            }
             if (string.IsNullOrWhiteSpace(orderDTO.District))
             {
                 string errorMessage = "Huyện/Thành Phố không được để trống!";
                 return BadRequest(errorMessage);
             }
+            if (!Regex.IsMatch(orderDTO.District, @"^[\p{L}\s]+$"))
+            {
+                string errorMessage = "Huyện/Thành phố phải là ký tự chữ, không chấp nhận số hay ký tự đặc biệt!";
+                return BadRequest(errorMessage);
+            }
+
             if (string.IsNullOrWhiteSpace(orderDTO.Commune))
             {
                 string errorMessage = "Phường/Xã không được để trống!";
                 return BadRequest(errorMessage);
             }
+            if (!Regex.IsMatch(orderDTO.Commune, @"^[\p{L}\s]+$"))
+            {
+                string errorMessage = "Phường/Xã phải là ký tự chữ, không chấp nhận số hay ký tự đặc biệt!";
+                return BadRequest(errorMessage);
+            }
+
             if (string.IsNullOrWhiteSpace(orderDTO.Address))
             {
                 string errorMessage = "Địa chỉ không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (orderDTO.Address.Length > 500)
+            {
+                string errorMessage = "Địa chỉ vượt quá số ký tự. Tối đa 500 ký tự!";
                 return BadRequest(errorMessage);
             }
 
