@@ -119,6 +119,61 @@ namespace PetServices.Controllers
             {
                 return BadRequest("Invalid order data");
             }
+            if (string.IsNullOrWhiteSpace(orderDTO.Province))
+            {
+                string errorMessage = "Tỉnh không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (string.IsNullOrWhiteSpace(orderDTO.District))
+            {
+                string errorMessage = "Huyện/Thành Phố không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (string.IsNullOrWhiteSpace(orderDTO.Commune))
+            {
+                string errorMessage = "Phường/Xã không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (string.IsNullOrWhiteSpace(orderDTO.Address))
+            {
+                string errorMessage = "Địa chỉ không được để trống!";
+                return BadRequest(errorMessage);
+            }
+
+            if (orderDTO.OrderProductDetails != null)
+            {
+                var invalidProducts = orderDTO.OrderProductDetails
+                    .Where(dto => dto.Quantity <= 0 || dto.ProductId == null || !_context.Products.Any(p => p.ProductId == dto.ProductId))
+                    .ToList();
+
+                if (invalidProducts.Any())
+                {
+                    var errorMessage = "Sản phẩm không hợp lệ. ";
+
+                    // Check for Quantity
+                    var quantityErrors = invalidProducts
+                        .Where(dto => dto.Quantity <= 0)
+                        .Select(dto => $"Số lượng không hợp lệ cho sản phẩm với ID {dto.ProductId}");
+
+                    // Check for ProductId
+                    var productIdErrors = invalidProducts
+                        .Where(dto => dto.ProductId == null || !_context.Products.Any(p => p.ProductId == dto.ProductId))
+                        .Select(dto => $"Sản phẩm với ID {dto.ProductId} không tồn tại");
+
+                    errorMessage += string.Join(". ", quantityErrors.Concat(productIdErrors));
+
+                    return BadRequest(errorMessage);
+                }
+
+                // Check if the entered quantity is greater than available quantity
+                var quantityExceedsAvailable = orderDTO.OrderProductDetails
+                    .Any(dto => dto.Quantity > _context.Products.FirstOrDefault(p => p.ProductId == dto.ProductId)?.Quantity);
+
+                if (quantityExceedsAvailable)
+                {
+                    return BadRequest("Số lượng sản phẩm không đủ");
+                }
+            }
 
             double priceProduct = 0;
             double priceService = 0;
@@ -196,7 +251,7 @@ namespace PetServices.Controllers
                         PartnerInfoId = dto.PartnerInfoId,
                     }).ToList()
                     : new List<BookingServicesDetail>()
-                 
+
                 // Loại
 
             };
@@ -204,8 +259,7 @@ namespace PetServices.Controllers
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetOrder), new { Id = order.OrderId }, order);
+            return Ok("Order thành công!");
         }
-
     }
 }
