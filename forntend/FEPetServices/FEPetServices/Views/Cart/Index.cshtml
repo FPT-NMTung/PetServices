@@ -1,70 +1,141 @@
-﻿<h2>GIỎ HÀNG</h2>
+﻿<!DOCTYPE html>
+<html class="no-js" lang="en">
 
-@if (Model.Count > 0)
-{
-    double total = 0;
-    int stt = 1;
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <!-- Add your additional head elements if needed -->
+</head>
 
-    <table class="table">
-        <tr>
-            <th>#</th>
-            <th>Sản phẩm</th>
-            <th>Giá</th>
-            <th>Số lượng</th>
-            <th>Thành tiền</th>
-            <th></th>
-        </tr>
-        @foreach (var cartitem in Model)
-        {
-            var thanhtien = (double)cartitem.quantity * (double)cartitem.product.Price;
-            total += thanhtien;
-            <tr>
-                <td>@(stt++)</td>
-                <td>@cartitem.product.ProductName</td>
-                <td>@(cartitem.product.Price.ToString("n0"))</td>
-                <td><input id="@($"quantity-{cartitem.product.ProductId}")" /></td>
-                <td>@(thanhtien.ToString("n0"))</td>
-                <td>
-                    <button class="btn btn-success updatecartitem"
-                            data-productid="@cartitem.product.ProductId">
-                        Cập nhật
-                    </button>
-                    <a asp-route="removecart" asp-route-productid="@cartitem.product.ProductId"
-                       class="btn btn-danger">Xóa</a>
-                </td>
-            </tr>
-        }
-        <tr>
-            <td colspan="4" class="text-right">Tổng tiền</td>
-            <td>@(total.ToString("n0"))</td>
-            <td></td>
-        </tr>
-    </table>
+<body class="sticky-header">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <h2 class="mb-4">GIỎ HÀNG</h2>
+                @if (Model.Count > 0)
+                {
+                    <h3 class="mb-4">Sản phẩm</h3>
+                    double total = 0;
+                    int itemCount = 0;
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Mặt hàng</th>
+                                <th scope="col">Giá</th>
+                                <th scope="col">Số lượng</th>
+                                <th scope="col">Thành tiền</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var cartitem in Model)
+                            {
+                                var thanhtien = (double)cartitem.quantityProduct * (double)cartitem.product.Price;
+                                total += thanhtien;
+                                itemCount++;
+                                <tr>
+                                    <td>@(itemCount)</td>
+                                    <td>@cartitem.product.ProductName</td>
+                                    <td>@(cartitem.product.Price.ToString("n0").Replace(",", ".")) VNĐ</td>
+                                    <td>
+                                        <input style="height:20px" id="@($"quantity-{cartitem.product.ProductId}")" class="form-control" type="number" value="@cartitem.quantityProduct" />
+                                    </td>
+                                    <td>@(thanhtien.ToString("n0").Replace(",", ".")) VNĐ</td>
+                                    <td>
+                                        <button class="btn btn-outline-success updatecartitem" data-productid="@cartitem.product.ProductId">
+                                            Cập nhật
+                                        </button>
+                                        <button class="btn btn-outline-danger removecart" data-productid="@cartitem.product.ProductId">
+                                            Xoá
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="4" class="text-right">Tổng tiền</td>
+                                <td>@(total.ToString("n0").Replace(",", ".")) VNĐ</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row" style="margin-bottom : 10px;">
+                        <div class="col-xl-5 col-lg-7 offset-xl-7 offset-lg-5">
+                            <div class="axil-order-summery mt--80">
+                                <h5 class="title mb--20">Hoá đơn</h5>
+                                <div class="summery-table-wrap">
+                                    <table class="table summery-table mb--30">
+                                        <tbody>
+                                           @* <tr class="order-subtotal">
+                                                <td>Subtotal</td>
+                                                <td>$117.00</td>
+                                            </tr>
+                                            <tr class="order-tax">
+                                                <td>State Tax</td>
+                                                <td>$8.00</td>
+                                            </tr>*@
+                                            <tr class="order-total">
+                                                <td>Tổng tiền cần thanh toán</td>
+                                                <td class="order-total-amount">@(total.ToString("n0").Replace(",", ".")) VNĐ</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <a href="checkout.html" class="axil-btn btn-bg-primary checkout-btn">Thanh toán</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <p class="alert alert-danger">Giỏ hàng trống</p>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" ></script>
+<script>
+    $(document).ready(function () {
+        $(".updatecartitem").click(function (event) {
+            event.preventDefault();
+            var productid = $(this).attr("data-productid");
+            var quantity = $("#quantity-" + productid).val();
 
-    <a asp-controller="Product" asp-action="Checkout" class="btn btn-success">Gửi đơn hàng</a>
-
-    <script>
-        $(document).ready(function () {
-            $(".updatecartitem").click(function (event) {
-                event.preventDefault();
-                var productid = $(this).attr("data-productid");
-                var quantity = $("#quantity-" + productid).val();
-                $.ajax({
-                    type: "POST",
-                    url:"@Url.RouteUrl("updatecart")",
-                    data: {
-                        productid: productid,
-                        quantity:quantity
-                    },
-                    success: function (result) {
-                        window.location.href = "@Url.RouteUrl("cart")";
-                    }
-                });
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateCart", "Cart")", 
+                data: {
+                    productid: productid,
+                    quantity: quantity
+                },
+                success: function (result) {
+                    window.location.href = "@Url.Action("Index", "Cart")"; 
+                },
+                error: function (error) {
+                    console.error("Error updating cart:", error);
+                }
             });
         });
-    </script>
-}
-else
-{
-    <p class="alert alert-danger">Giỏ hàng trống</p>
-}
+
+        $(".removecart").click(function (event) {
+            event.preventDefault();
+            var productid = $(this).attr("data-productid");
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("RemoveCart", "Cart")",
+                data: {
+                    productid: productid
+                },
+                success: function (result) {
+                    window.location.href = "@Url.Action("Index", "Cart")"; 
+                },
+                error: function (error) {
+                    console.error("Error removing item from cart:", error);
+                }
+            });
+        });
+    });
+</script>
+</html>

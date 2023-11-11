@@ -164,7 +164,7 @@ namespace FEPetServices.Controllers
 
         public class CartItem
         {
-            public int quantity { set; get; }
+            public int quantityProduct { set; get; }
             public ProductDTO product { set; get; }
         }
 
@@ -202,12 +202,12 @@ namespace FEPetServices.Controllers
             if (cartitem != null)
             {
                 // Đã tồn tại, tăng thêm 1
-                cartitem.quantity++;
+                cartitem.quantityProduct++;
             }
             else
             {
                 // Thêm mới
-                cart.Add(new CartItem() { quantity = 1, product = product });
+                cart.Add(new CartItem() { quantityProduct = 1, product = product });
             }
 
             // Lưu cart vào Session
