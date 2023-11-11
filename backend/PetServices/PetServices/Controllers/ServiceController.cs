@@ -133,6 +133,7 @@ namespace PetServices.Controllers
                     Price = serviceDTO.Price,
                     Picture = serviceDTO.Picture,
                     Status = serviceDTO.Status,
+                    Time= serviceDTO.Time,  
                     SerCategoriesId = serviceDTO.SerCategoriesId
                 };
                 
@@ -198,6 +199,7 @@ namespace PetServices.Controllers
                 service.Price = serviceDTO.Price;
                 service.Picture = serviceDTO.Picture;
                 service.Status = serviceDTO.Status;
+                service.Time = serviceDTO.Time;
                 service.SerCategoriesId = serviceDTO.SerCategoriesId;
 
                 _context.Update(service);
