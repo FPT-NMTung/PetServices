@@ -36,8 +36,9 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
 }
+app.UseStatusCodePagesWithRedirects("/Home/NotFound");
+
 app.UseCors(builder =>
 {
     builder.AllowAnyOrigin()

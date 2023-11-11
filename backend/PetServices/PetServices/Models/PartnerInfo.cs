@@ -8,7 +8,7 @@ namespace PetServices.Models
         public PartnerInfo()
         {
             Accounts = new HashSet<Account>();
-            Orders = new HashSet<Order>();
+            BookingServicesDetails = new HashSet<BookingServicesDetail>();
         }
 
         public int PartnerInfoId { get; set; }
@@ -25,6 +25,6 @@ namespace PetServices.Models
         public string? ImageCertificate { get; set; }
 
         public virtual ICollection<Account> Accounts { get; set; }
-        public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<BookingServicesDetail> BookingServicesDetails { get; set; }
     }
 }

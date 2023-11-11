@@ -43,7 +43,7 @@
       <div class="col-75">
          @if (ViewBag.Categories != null){
          <select id="SerCategoriesId" name="SerCategoriesId" required>
-            <option value="">Select a Service Category</option>
+            <option value="">Danh sách loại dịch vụ</option>
             @foreach (var category in ViewBag.Categories)
                 {
                     <option value="@category.Value">@category.Text</option>

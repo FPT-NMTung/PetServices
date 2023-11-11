@@ -26,16 +26,27 @@ namespace PetServices.Controllers
         public async Task<IActionResult> ListOrderPetTraining(int serCategoriesId)
         {
             List<Order> orders = await _context.Orders
-                .Include(x => x.BookingServicesDetails)
-                .ThenInclude(y => y.Service)
-                .Where(o => o.BookingServicesDetails.Any(b =>
-                    b.Service != null &&
-                    b.Service.Status == true &&
-                    b.Service.SerCategoriesId == serCategoriesId))
-                .ToListAsync();
+            .Include(x => x.BookingServicesDetails)
+            .ThenInclude(y => y.Service)
+            .Include(z => z.UserInfo)
+            .Where(o => o.BookingServicesDetails.Any(b => b.Service.SerCategories.SerCategoriesId == serCategoriesId))
+            .ToListAsync();
 
             return Ok(_mapper.Map<List<OrdersDTO>>(orders));
         }
+        [HttpGet("ListOrderPetTrainingSpecial")]
+        public async Task<IActionResult> ListOrderPetTrainingSpecial(int serCategoriesId, int partnerInfoId)
+        {
+            List<Order> orders = await _context.Orders
+                .Include(x => x.BookingServicesDetails)
+                .ThenInclude(y => y.Service)
+                .Include(z => z.UserInfo)
+                .Where(o =>
+                    o.BookingServicesDetails.Any(b => b.Service.SerCategories.SerCategoriesId == serCategoriesId) &&
+                    o.BookingServicesDetails.All(b => b.PartnerInfoId == partnerInfoId))
+                     .ToListAsync();
 
+            return Ok(_mapper.Map<List<OrdersDTO>>(orders));
+        }
     }
 }
