@@ -1,0 +1,196 @@
+﻿@model IEnumerable<FEPetServices.Controllers.CartController.CartItem>
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <!-- Add your additional head elements if needed -->
+</head>
+
+<body class="sticky-header">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <h2 class="mb-4">GIỎ HÀNG</h2>
+                @if (Model.Count() > 0)
+                {
+                    @if (Model.Any(c => c.product != null))
+                    {
+                        double total = 0;
+                        <h3 class="mb-4">Sản phẩm</h3>
+                        double productTotal = 0;
+                        int productItemCount = 0;
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Mặt hàng</th>
+                                    <th scope="col">Giá</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Thành tiền</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var cartitem in Model.Where(c => c.product != null))
+                                {
+                                    var thanhtien = (double)cartitem.quantityProduct * (double)cartitem.product.Price;
+                                    productTotal += thanhtien;
+                                    productItemCount++;
+                                    <tr>
+                                        <td>@(productItemCount)</td>
+                                        <td>@cartitem.product.ProductName</td>
+                                        <td>@($"{cartitem.product.Price:n0} VNĐ")</td>
+                                        <td>
+                                            <input style="height:20px" id="@($"quantity-{cartitem.product.ProductId}")" class="form-control" type="number" value="@cartitem.quantityProduct" />
+                                        </td>
+                                        <td>@(thanhtien.ToString("n0").Replace(",", ".")) VNĐ</td>
+                                        <td>
+                                            <button class="btn btn-outline-success updatecartitem" data-productid="@cartitem.product.ProductId">
+                                                Cập nhật
+                                            </button>
+                                            <button class="btn btn-outline-danger removecart" data-productid="@cartitem.product.ProductId">
+                                                Xoá
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td colspan="4" class="text-right">Tổng tiền</td>
+                                    <td>@(productTotal.ToString("n0").Replace(",", ".")) VNĐ</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    }
+
+                    @if (Model.Any(c => c.service != null))
+                    {
+                        <h3 class="mb-4">Dịch vụ</h3>
+                        double serviceTotal = 0;
+                        int serviceItemCount = 0;
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Dịch vụ</th>
+                                    <th scope="col">Giá</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Thành tiền</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var cartitem in Model.Where(c => c.service != null))
+                                {
+                                    var thanhtien = (double)cartitem.quantityProduct * (double)cartitem.service.Price;
+                                    serviceTotal += thanhtien;
+                                    serviceItemCount++;
+                                    <tr>
+                                        <td>@(serviceItemCount)</td>
+                                        <td>@cartitem.service.ServiceName</td>
+                                        <td>@($"{cartitem.service.Price:n0} VNĐ")</td>
+                                        <td>
+                                            <input style="height:20px" id="@($"quantity-{cartitem.service.ServiceId}")" class="form-control" type="number" value="@cartitem.quantityProduct" />
+                                        </td>
+                                        <td>@(thanhtien.ToString("n0").Replace(",", ".")) VNĐ</td>
+                                        <td>
+                                            <button class="btn btn-outline-success updatecartitem" data-serviceid="@cartitem.service.ServiceId">
+                                                Cập nhật
+                                            </button>
+                                            <button class="btn btn-outline-danger removecart" data-serviceid="@cartitem.service.ServiceId">
+                                                Xoá
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td colspan="4" class="text-right">Tổng tiền</td>
+                                    <td>@(serviceTotal.ToString("n0").Replace(",", ".")) VNĐ</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    }
+
+                    <div class="row" style="margin-bottom : 10px;">
+                        <div class="col-xl-5 col-lg-7 offset-xl-7 offset-lg-5">
+                            <div class="axil-order-summery mt--80">
+                                <h5 class="title mb--20">Hoá đơn</h5>
+                                <div class="summery-table-wrap">
+                                    <table class="table summery-table mb--30">
+                                        <tbody>
+                                            <tr class="order-total">
+                                                <td>Tổng tiền cần thanh toán</td>
+                                                <td class="order-total-amount"> VNĐ</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <a href="checkout.html" class="axil-btn btn-bg-primary checkout-btn">Thanh toán</a>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+                else
+                {
+                <p class="alert alert-danger">Giỏ hàng trống</p>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".updatecartitem").click(function (event) {
+            event.preventDefault();
+            var productid = $(this).attr("data-productid");
+            var serviceid = $(this).attr("data-serviceid");
+            var quantity = $("#quantity-" + (productid ?? serviceid)).val();
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateCart", "Cart")",
+                data: {
+                    productid: productid,
+                    serviceid: serviceid,
+                    quantity: quantity
+                },
+                success: function (result) {
+                    window.location.href = "@Url.Action("Index", "Cart")";
+                },
+                error: function (error) {
+                    console.error("Error updating cart:", error);
+                }
+            });
+        });
+
+        $(".removecart").click(function (event) {
+            event.preventDefault();
+            var productid = $(this).attr("data-productid");
+            var serviceid = $(this).attr("data-serviceid");
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("RemoveCart", "Cart")",
+                data: {
+                    productid: productid,
+                    serviceid: serviceid
+                },
+                success: function (result) {
+                    window.location.href = "@Url.Action("Index", "Cart")";
+                },
+                error: function (error) {
+                    console.error("Error removing item from cart:", error);
+                }
+            });
+        });
+    });
+</script>
+
+</html>

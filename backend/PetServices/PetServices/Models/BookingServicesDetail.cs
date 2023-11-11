@@ -14,6 +14,7 @@ namespace PetServices.Models
         public DateTime? BookingDay { get; set; }
 
         public virtual Order Order { get; set; } = null!;
+        public virtual PartnerInfo? PartnerInfo { get; set; }
         public virtual PetInfo? PetInfo { get; set; }
         public virtual Service Service { get; set; } = null!;
     }

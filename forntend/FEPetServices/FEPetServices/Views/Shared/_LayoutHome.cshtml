@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+@using FEPetServices.Controllers
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -92,25 +96,34 @@
                             </div>
                             <ul class="mainmenu">
                                 <li>
-                                    <a href="/Home">Trang chủ</a>
+                                    <a href="~/Home">Trang chủ</a>
                                 </li>
                                 <li>
-                                    <a href="/ProductList">Sản phẩm</a>
+                                    <a href="~/ProductList">Sản phẩm</a>
                                 </li>
                                 <li >
-                                    <a href="/Home/ServiceList">Dịch vụ</a>
+                                    <a href="~/Home/ServiceList">Dịch vụ</a>
                                 </li>
-                                <li><a href="/Home/BlogList">Blog</a></li>
-                                <li><a href="Home/Introduce">Giới thiệu</a></li>
+                                <li><a href="~/Home/BlogList">Blog</a></li>
+                                <li><a href="~/Home/Introduce">Giới thiệu</a></li>
                                 <li><a href="contact.html">Liên hệ với chúng tôi</a></li>
                             </ul>
                         </nav>
                     </div>
                     <div class="header-action">
                         <ul class="action-list">
+
                             <li class="shopping-cart">
                                 <a href="#" class="cart-dropdown-btn">
-                                    <span class="cart-count">3</span>
+                                    @{
+                                        var session = HttpContextAccessor.HttpContext.Session;
+                                        string jsoncart = session.GetString(FEPetServices.Controllers.ProductListController.CARTKEY);
+                                        if (jsoncart != null)
+                                        {
+                                            var cartItems = JsonConvert.DeserializeObject<List<FEPetServices.Controllers.ProductListController.CartItem>>(jsoncart);
+                                            <span class="cart-count">@cartItems.Count</span>
+                                        }
+                                    }
                                     <i class="flaticon-shopping-cart"></i>
                                 </a>
                             </li>

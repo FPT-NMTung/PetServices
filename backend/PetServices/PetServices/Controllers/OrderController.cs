@@ -180,7 +180,7 @@ namespace PetServices.Controllers
                     {
                         RoomId = dto.RoomId,
                         Price = priceRoom,
-                        OrderId = dto.OrderId
+
                     }).ToList()
                     : new List<BookingRoomDetail>(),
 
@@ -193,7 +193,6 @@ namespace PetServices.Controllers
                         Weight = dto.Weight,
                         PriceService = priceService,
                         PetInfoId = dto.PetInfoId,
-                        OrderId = dto.OrderId
                     }).ToList()
                     : new List<BookingServicesDetail>()
                  

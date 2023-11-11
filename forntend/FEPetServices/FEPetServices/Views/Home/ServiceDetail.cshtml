@@ -132,9 +132,15 @@
                                     <div class="product-action-wrapper d-flex-center">
 
                                         <!-- Start Product Action  -->
-                                        <ul class="product-action action-style-two d-flex-center mb--0">
-                                            <li class="add-to-cart" style="width: 544px;"><a href="" class="axil-btn btn-bg-primary">Thêm vào giỏ hàng</a></li>
-                                            <li class="add-to-cart" style="width: 300px;"><a href="" class="axil-btn btn-bg-primary">Mua ngay</a></li>
+                                        <ul class="product-action action-style-two d-flex-center mb--0" style="display:contents;">
+                                            @*<li class="add-to-cart" style="width: 544px;"><a href="" class="axil-btn btn-bg-primary">Thêm vào giỏ hàng</a></li>*@
+                                            <form method="post" action="@Url.Action("AddToCart", "Home")">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="ServiceId" value="@Model?.Service.ServiceId" />
+                                                <button class="axil-btn btn-bg-primary"  type="submit" ><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
+                                            </>
+                                            </form>
+                                            @*<li class="add-to-cart" style="width: 250px;">*@<button style="width:200px; margin-left: 5px;" href="" class="axil-btn btn-bg-primary">Mua ngay</button>@*</li>*@
                                         </ul>
                                         <!-- End Product Action  -->
 
