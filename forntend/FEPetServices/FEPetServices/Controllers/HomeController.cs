@@ -667,11 +667,13 @@ namespace FEPetServices.Controllers
             public ProductDTO product { set; get; }
 
             // Service
-            public ServiceDTO service { set; get; }
+            public int ServiceId { get; set; }
+            public double? Price { get; set; }
             public double? Weight { get; set; }
             public double? PriceService { get; set; }
             public int? PartnerInfoId { get; set; }
-
+            public PartnerInfo? PartnerInfo { get; set; }
+            public ServiceDTO service { set; get; }
             // Room
         }
 
@@ -689,9 +691,10 @@ namespace FEPetServices.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToCart(int ServiceId)
+        public async Task<IActionResult> AddToCart(int ServiceId, int PriceService, double Weight ,int PartnerId )
         {
             ServiceDTO service = null;
+            PartnerInfo partner = null; 
 
             HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Service/ServiceID/" + ServiceId);
             if (response.IsSuccessStatusCode)
@@ -702,6 +705,19 @@ namespace FEPetServices.Controllers
                     PropertyNameCaseInsensitive = true
                 };
                 service = System.Text.Json.JsonSerializer.Deserialize<ServiceDTO>(responseContent, option);
+            }
+            if (PartnerId != 0)
+            {
+                HttpResponseMessage responsePartner = await client.GetAsync("https://localhost:7255/api/Partner/PartnerInfoId?PartnerInfoId=" + PartnerId);
+                if (responsePartner.IsSuccessStatusCode)
+                {
+                    string responseContent = await responsePartner.Content.ReadAsStringAsync();
+                    var option = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+                    partner = System.Text.Json.JsonSerializer.Deserialize<PartnerInfo>(responseContent, option);
+                }
             }
 
             if (service != null)
@@ -716,7 +732,7 @@ namespace FEPetServices.Controllers
                 else
                 {
                     // Thêm mới
-                    cart.Add(new CartItem() { service = service, Weight = 0, PriceService = service.Price });
+                    cart.Add(new CartItem() { service = service, PartnerInfo = partner, Weight = Weight, PriceService = PriceService, PartnerInfoId = PartnerId != 0 ? PartnerId : null});
                 }
 
                 // Lưu cart vào Session
