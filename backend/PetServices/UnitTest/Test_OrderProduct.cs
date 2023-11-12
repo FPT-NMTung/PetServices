@@ -16,7 +16,7 @@ namespace UnitTest
     public class Test_OrderProduct
     {
         [Fact]
-        // 1. Order Product thành công.
+        // 1. Order Product thành công. Success
         public async Task Test_CreateOrder_Success()
         {
             // Arrange

@@ -18,7 +18,6 @@ namespace PetServices.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        //aaa
         private PetServicesContext _context;
         private IMapper _mapper;
         private readonly IConfiguration _configuration;
@@ -288,9 +287,10 @@ namespace PetServices.Controllers
             var newAccount = new Account
             {
                 Email = registerDto.Email,
+                CreateDate = DateTime.Now,
                 //Password = registerDto.Password,
                 //Password = MD5Hash(registerDto.Password),
-                Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password),
+                Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password), 
                 Status = false,
                 RoleId = 2
             };
@@ -482,7 +482,7 @@ namespace PetServices.Controllers
                 Email = registerDto.Email,
                 //Password = registerDto.Password,
                 //Password = MD5Hash(registerDto.Password),
-                Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password),
+                Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password), 
                 Status = false,
                 RoleId = 4
             };

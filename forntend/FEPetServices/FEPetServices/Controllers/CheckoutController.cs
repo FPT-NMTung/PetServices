@@ -100,6 +100,8 @@ namespace FEPetServices.Controllers
                     Commune = orderform.Commune,
                     Address = orderform.Address,
                     UserInfoId = orderform.UserInfoId,
+                    FullName = orderform.FullName,
+                    Phone = orderform.Phone,
                     OrderProductDetails = new List<OrderProductDetailForm>(),
                     BookingServicesDetails = new List<BookingServicesDetailForm>(),
                     BookingRoomDetails = new List<BookingRoomDetailForm>()
@@ -122,7 +124,10 @@ namespace FEPetServices.Controllers
                         var bookingServicesDetail = new BookingServicesDetailForm
                         {
                             ServiceId = cartItem.service.ServiceId,
-                            Price = cartItem.PriceService,
+                            Price = cartItem.Price,
+                            PriceService = cartItem.PriceService,
+                            Weight = cartItem.Weight,
+                            PartnerInfoId = cartItem.PartnerInfoId,
                         };
                         order.BookingServicesDetails.Add(bookingServicesDetail);
                     }
@@ -152,7 +157,6 @@ namespace FEPetServices.Controllers
 
             return View();
         }
-
 
         void ClearCart()
         {

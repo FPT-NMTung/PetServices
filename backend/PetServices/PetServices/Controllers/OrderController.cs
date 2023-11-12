@@ -244,6 +244,8 @@ namespace PetServices.Controllers
                 Commune = orderDTO.Commune,
                 Address = orderDTO.Address,
                 UserInfoId = orderDTO.UserInfoId,
+                Phone = orderDTO.Phone,
+                FullName = orderDTO.FullName,
 
                 // Sản phẩm
                 OrderProductDetails = orderDTO.OrderProductDetails != null 
@@ -270,15 +272,14 @@ namespace PetServices.Controllers
                     ? orderDTO.BookingServicesDetails.Select(dto => new BookingServicesDetail
                     {
                         ServiceId = dto.ServiceId,
-                       /* Price = dto.Price,
+                        Price = dto.Price,
                         Weight = dto.Weight,
-                        PriceService = dto.PriceService ,
+                        PriceService = dto.Price,
                         PetInfoId = dto.PetInfoId,
+                        StartTime = dto.StartTime,
+                        EndTime = dto.EndTime,
                     }).ToList()
                     : new List<BookingServicesDetail>()
-
-                // Loại
-
             };
 
             _context.Orders.Add(order);
