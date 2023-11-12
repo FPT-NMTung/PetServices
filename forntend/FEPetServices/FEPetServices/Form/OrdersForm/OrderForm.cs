@@ -1,6 +1,4 @@
-﻿using FEPetServices.Form.OrdersForm;
-
-namespace FEPetServices.Form.BookingForm
+﻿namespace FEPetServices.Form.OrdersForm
 {
     public class OrderForm
     {
@@ -11,6 +9,8 @@ namespace FEPetServices.Form.BookingForm
         public string? District { get; set; }
         public string? Commune { get; set; }
         public string? Address { get; set; }
+        public string? Phone { get; set; }
+        public string? FullName { get; set; }
         public int? UserInfoId { get; set; }
         public virtual UserInfo? UserInfo { get; set; }
         public virtual ICollection<OrderProductDetailForm> OrderProductDetails { get; set; }

@@ -7,6 +7,8 @@ namespace FEPetServices.Form.OrdersForm
         public int RoomId { get; set; }
         public int OrderId { get; set; }
         public double? Price { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public virtual RoomDTO? Room { get; set; } = null!;
     }
 }

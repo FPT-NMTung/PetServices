@@ -287,6 +287,7 @@ namespace PetServices.Controllers
             var newAccount = new Account
             {
                 Email = registerDto.Email,
+                CreateDate = DateTime.Now,
                 //Password = registerDto.Password,
                 //Password = MD5Hash(registerDto.Password),
                 Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password), 

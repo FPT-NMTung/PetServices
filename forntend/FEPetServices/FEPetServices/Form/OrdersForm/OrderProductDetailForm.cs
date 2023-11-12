@@ -1,4 +1,4 @@
-﻿namespace FEPetServices.Form.BookingForm
+﻿namespace FEPetServices.Form.OrdersForm
 {
     public class OrderProductDetailForm
     {
