@@ -3597,7 +3597,7 @@ a.axil-btn.btn-size-md, button.axil-btn.btn-size-md {
 }
 
 .ui-slider-range.ui-widget-header.ui-corner-all {
-    background: #dbdeff none repeat scroll 0 0;
+    background: #6c78fb none repeat scroll 0 0;
     border-radius: 0;
     height: 4px
 }
@@ -12826,7 +12826,7 @@ body.open .closeMask {
 }
 
 .axil-order-summery.order-checkout-summery .summery-table th {
-    font-size: 20px;
+    font-size: 16px;
     color: var(--color-heading);
     text-transform: capitalize;
     padding: 15px 0

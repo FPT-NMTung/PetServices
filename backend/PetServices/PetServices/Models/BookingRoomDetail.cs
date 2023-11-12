@@ -11,7 +11,8 @@ namespace PetServices.Models
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
 
-        public virtual Order Order { get; set; } = null!;
+        public virtual Booking Order { get; set; } = null!;
+        public virtual Order OrderNavigation { get; set; } = null!;
         public virtual Room Room { get; set; } = null!;
     }
 }
