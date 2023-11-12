@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 
 namespace FEPetServices.Controllers
 {
@@ -26,6 +27,7 @@ namespace FEPetServices.Controllers
         private string DefaultApiUrlServiceCategoryDetail = "";
         private string DefaultApiUrlServiceCategoryandService = "";
         private string DefaultApiUrlBlogList = "";
+        private string DefaultApiUrlBlogDetail = "";
         private string DefaultApiUrlProductList = "";
         private string DefaultApiUrlRoomCategoryList = "";
         private string DefaultApiUrlProductCategoryList = "";
@@ -36,15 +38,15 @@ namespace FEPetServices.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            ApiUrlRoomList = "https://localhost:7255/api/Room/GetAllRoomCustomer";
-            ApiUrlRoomCategoryList = "https://localhost:7255/api/Room/GetRoomCategory";
-            ApiUrlRoomDetail = "https://localhost:7255/api/Room/GetRoom/";
-            DefaultApiUrlServiceCategoryList = "https://localhost:7255/api/ServiceCategory";
-            DefaultApiUrlProductCategoryList = "https://localhost:7255/api/ServiceCategory";
-            DefaultApiUrlServiceCategoryDetail = "https://localhost:7255/api/ServiceCategory/ServiceCategorysID/";
-            DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
-            DefaultApiUrlProductList = "https://localhost:7255/api/Product";
-            DefaultApiUrlRoomCategoryList = "https://localhost:7255/api/Room";
+            ApiUrlRoomList = "https://pet-service-api.azurewebsites.net/api/Room/GetAllRoomCustomer";
+            ApiUrlRoomCategoryList = "https://pet-service-api.azurewebsites.net/api/Room/GetRoomCategory";
+            ApiUrlRoomDetail = "https://pet-service-api.azurewebsites.net/api/Room/GetRoom/";
+            DefaultApiUrlServiceCategoryList = "https://pet-service-api.azurewebsites.net/api/ServiceCategory";
+            DefaultApiUrlProductCategoryList = "https://pet-service-api.azurewebsites.net/api/ServiceCategory";
+            DefaultApiUrlServiceCategoryDetail = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/ServiceCategorysID/";
+            DefaultApiUrlBlogList = "https://pet-service-api.azurewebsites.net/api/Blog";
+            DefaultApiUrlProductList = "https://pet-service-api.azurewebsites.net/api/Product";
+            DefaultApiUrlRoomCategoryList = "https://pet-service-api.azurewebsites.net/api/Room";
         }
 
         public async Task<ActionResult> Room(RoomDTO roomDTO, RoomSearchDTO searchDTO)
@@ -149,7 +151,7 @@ namespace FEPetServices.Controllers
         {
             try
             {
-                HttpResponseMessage serviceAvailableResponse = await client.GetAsync("https://localhost:7255/api/Room/GetServiceInRoom?roomId=" + roomId);
+                HttpResponseMessage serviceAvailableResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/GetServiceInRoom?roomId=" + roomId);
 
                 if (serviceAvailableResponse.IsSuccessStatusCode)
                 {
@@ -158,7 +160,7 @@ namespace FEPetServices.Controllers
                     ViewBag.ServiceAvailable = new SelectList(services, "ServiceId", "ServiceName");
                 }
 
-                HttpResponseMessage serviceUnavailableResponse = await client.GetAsync("https://localhost:7255/api/Room/GetServiceOutRoom?roomId=" + roomId);
+                HttpResponseMessage serviceUnavailableResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/GetServiceOutRoom?roomId=" + roomId);
 
                 if (serviceUnavailableResponse.IsSuccessStatusCode)
                 {
@@ -188,7 +190,7 @@ namespace FEPetServices.Controllers
             }
 
             return View();
-            DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
+            DefaultApiUrlBlogList = "https://pet-service-api.azurewebsites.net/api/Blog";
 
 
         }
@@ -281,7 +283,7 @@ namespace FEPetServices.Controllers
             HomeModel homeModel = new HomeModel();
             try
             {
-                HttpResponseMessage responseCategoryProduct = await client.GetAsync("https://localhost:7255/api/ProductCategory/GetAll");
+                HttpResponseMessage responseCategoryProduct = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll");
                 HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
                 if (responseProduct.IsSuccessStatusCode && responseCategoryProduct.IsSuccessStatusCode)
                 {
@@ -350,9 +352,10 @@ namespace FEPetServices.Controllers
         {
             ServiceDetailModel model = new ServiceDetailModel();
 
-            HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
+            HttpResponseMessage response = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
             if (response.IsSuccessStatusCode)
             {
+               
                 HttpResponseMessage responseCategory = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
                 if (responseCategory.IsSuccessStatusCode)
                 {
@@ -380,7 +383,7 @@ namespace FEPetServices.Controllers
 
                     if (serviceIds == 0)
                     {
-                        HttpResponseMessage responseService = await client.GetAsync("https://localhost:7255/api/ServiceCategory/GetServiceByServiceCategoryAndServiceID/"
+                        HttpResponseMessage responseService = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetServiceByServiceCategoryAndServiceID/"
                         + "?serviceCategoryId=" + serviceCategoryId + "&serviceId=" + serviceId);
 
                         var responseContentService = await responseService.Content.ReadAsStringAsync();
@@ -392,7 +395,7 @@ namespace FEPetServices.Controllers
                     }
                     else
                     {
-                        HttpResponseMessage responseService = await client.GetAsync("https://localhost:7255/api/ServiceCategory/GetServiceByServiceCategoryAndServiceID/"
+                        HttpResponseMessage responseService = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetServiceByServiceCategoryAndServiceID/"
                      + "?serviceCategoryId=" + serviceCategoryId + "&serviceId=" + serviceIds);
                         if (response.IsSuccessStatusCode)
                         {
@@ -420,48 +423,81 @@ namespace FEPetServices.Controllers
         {
             public ServiceDTO Service { get; set; }
             public ServiceCategoryDTO ServiceCategory { get; set; }
+            public ProductDTO Product { get; set; }
             public List<ServiceCategoryDTO> CaServices { get; set; }
+            public List<PartnerInfo> Partners { get; set; }
         }
 
-        public IActionResult Terms()
+        public class BlogModel
         {
-            return View();
-        }
-
-        public IActionResult Introduce()
-        {
-            return View();
+            public List<BlogDTO> Blog { get; set; }
+            public List<ProductDTO> ListProductTop3 { get; set; }
+            public List<BlogDTO> ListBlogTop3 { get; set; }
         }
 
 
         public async Task<IActionResult> BlogList(BlogDTO blog, int page = 1, int pagesize = 6, string BlogName = "", string sortby = "")
         {
+            BlogModel blogModel = new BlogModel();
             try
             {
                 var json = JsonConvert.SerializeObject(blog);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrlBlogList + "/GetAllBlog");
-
-
+                
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
+                
+                    if (responseProduct.IsSuccessStatusCode)
+                    {
+                        var rep = await responseProduct.Content.ReadAsStringAsync();
+                        if (!string.IsNullOrEmpty(rep))
+                        {
+                            blogModel.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
 
+                            int currentPage = 1;
+                            int pageSize = 3;
+
+                            var firstPageProducts = blogModel.ListProductTop3.OrderByDescending(p => p.QuantitySold).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+                            currentPage++;
+
+                            blogModel.ListProductTop3 = firstPageProducts;
+                        }
+                    }
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var rep = await response.Content.ReadAsStringAsync();
+                        if (!string.IsNullOrEmpty(rep))
+                        {
+                            blogModel.ListBlogTop3 = JsonConvert.DeserializeObject<List<BlogDTO>>(rep);
+
+                            int currentPage = 1;
+                            int pageSize = 3;
+                            var newestProducts = blogModel.ListBlogTop3
+                            .OrderByDescending(p => p.PublisheDate)
+                            .Skip((currentPage - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToList();
+                            currentPage++;
+
+                            blogModel.ListBlogTop3 = newestProducts;
+                        }
+                    }
+                    var responseContent = await response.Content.ReadAsStringAsync();
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var blogList = JsonConvert.DeserializeObject<List<BlogDTO>>(responseContent);
-
-
-
+                        // tìm kiếm theo tên 
                         if (!string.IsNullOrEmpty(BlogName) && blogList != null)
                         {
                             blogList = blogList
                                 .Where(c => c.PageTile != null && c.PageTile.Contains(BlogName, StringComparison.OrdinalIgnoreCase))
                                 .ToList();
-                            Console.WriteLine(1);
                         }
-
+                        //tìm kiếm tên theo bảng chữ cái từ a-z và từ z-a
                         switch (sortby)
                         {
                             case "name_desc":
@@ -485,8 +521,10 @@ namespace FEPetServices.Controllers
                         ViewBag.BlogName = BlogName;
                         ViewBag.sortby = sortby;
                         ViewBag.pagesize = pagesize;
+                        blogModel.Blog = currentPageBlogList;
+                       
 
-                        return View(currentPageBlogList);
+                        return View(blogModel);
                     }
                     else
                     {
@@ -506,29 +544,216 @@ namespace FEPetServices.Controllers
 
             return View();
         }
-        public async Task<IActionResult> BlogDetail()
+        public class BlogDetailModel
         {
-            return View();
+            public BlogDTO BlogDetail { get; set; }
+            public List<BlogDTO> Blog { get; set; }
+            public List<ProductDTO> ListProductTop3 { get; set; }
+            public List<BlogDTO> ListBlogTop3 { get; set; }
+
         }
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
+        public async Task<IActionResult> BlogDetail(int blogId)
+        {
+            BlogDetailModel blog = new BlogDetailModel();
+            try
+            {
+                HttpResponseMessage responseBlogDetail = await client.GetAsync(DefaultApiUrlBlogDetail+blogId);
+                HttpResponseMessage responseBlogList = await client.GetAsync(DefaultApiUrlBlogList + "/GetAllBlog");
+                HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");     
+                if (responseBlogDetail.IsSuccessStatusCode)
+                {
+                    // list ra 3 sản phẩm bán chạy nhất 
+                    if (responseProduct.IsSuccessStatusCode)
+                    {
+                        var product = await responseProduct.Content.ReadAsStringAsync();
+                        if (!string.IsNullOrEmpty(product))
+                        {
+                            blog.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(product);
+
+                            int currentPage = 1;
+                            int pageSize = 3;
+
+                            var firstPageProducts = blog.ListProductTop3.OrderByDescending(p => p.QuantitySold).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+                            currentPage++;
+
+                            blog.ListProductTop3 = firstPageProducts;
+                        }
+                    }
+                    // List ra danh sách blog
+                    if (responseBlogList.IsSuccessStatusCode)
+                    {
+                        var Blog = await responseBlogList.Content.ReadAsStringAsync();
+                        if (!string.IsNullOrEmpty(Blog))
+                        {
+                            blog.Blog = JsonConvert.DeserializeObject<List<BlogDTO>>(Blog);
+                        }
+                    }
+                    // list ra detail của id đó 
+                    var BlogDetail = await responseBlogDetail.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(BlogDetail))
+                        {
+                            blog.BlogDetail = JsonConvert.DeserializeObject<BlogDTO>(BlogDetail);
+                        }
+                    if (responseBlogList.IsSuccessStatusCode)
+                    {
+                        var rep = await responseBlogList.Content.ReadAsStringAsync();
+                        if (!string.IsNullOrEmpty(rep))
+                        {
+                            blog.ListBlogTop3 = JsonConvert.DeserializeObject<List<BlogDTO>>(rep);
+
+                            int currentPage = 1;
+                            int pageSize = 3;
+                            var newestProducts = blog.ListBlogTop3
+                            .OrderByDescending(p => p.PublisheDate)
+                            .Skip((currentPage - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToList();
+                            currentPage++;
+
+                            blog.ListBlogTop3 = newestProducts;
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng";
+                    }
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang!";
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+            }
+            return View(blog);
+        }
 
         public IActionResult Test()
         {
             return View();
+        }
+        public IActionResult Terms()
+        {
+            return View();
+        }
+
+        public IActionResult Introduce()
+        {
+            return View();
+        }
+
+        public class CartItem
+        {
+            // Product
+            public int quantityProduct { set; get; }
+            public ProductDTO product { set; get; }
+
+            // Service
+            public int ServiceId { get; set; }
+            public double? Price { get; set; }
+            public double? Weight { get; set; }
+            public double? PriceService { get; set; }
+            public int? PartnerInfoId { get; set; }
+            public PartnerInfo? PartnerInfo { get; set; }
+            public ServiceDTO service { set; get; }
+            // Room
+        }
+
+        public const string CARTKEY = "cart";
+
+        List<CartItem> GetCartItems()
+        {
+            var session = HttpContext.Session;
+            string jsoncart = session.GetString(CARTKEY);
+            if (jsoncart != null)
+            {
+                return JsonConvert.DeserializeObject<List<CartItem>>(jsoncart);
+            }
+            return new List<CartItem>();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(int ServiceId, int PriceService, double Weight ,int PartnerId )
+        {
+            ServiceDTO service = null;
+            PartnerInfo partner = null; 
+
+            HttpResponseMessage response = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Service/ServiceID/" + ServiceId);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                var option = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                service = System.Text.Json.JsonSerializer.Deserialize<ServiceDTO>(responseContent, option);
+            }
+            if (PartnerId != 0)
+            {
+                HttpResponseMessage responsePartner = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Partner/PartnerInfoId?PartnerInfoId=" + PartnerId);
+                if (responsePartner.IsSuccessStatusCode)
+                {
+                    string responseContent = await responsePartner.Content.ReadAsStringAsync();
+                    var option = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+                    partner = System.Text.Json.JsonSerializer.Deserialize<PartnerInfo>(responseContent, option);
+                }
+            }
+
+            if (service != null)
+            {
+                var cart = GetCartItems();
+                var cartitem = cart.Find(s => s.service != null && s.service.ServiceId == ServiceId);
+
+                if (cartitem != null)
+                {
+
+                }
+                else
+                {
+                    // Thêm mới
+                    cart.Add(new CartItem() { service = service, PartnerInfo = partner, Weight = Weight, PriceService = PriceService, PartnerInfoId = PartnerId != 0 ? PartnerId : null});
+                }
+
+                // Lưu cart vào Session
+                SaveCartSession(cart);
+            }
+
+            return RedirectToAction("Index", "Cart");
+        }
+
+
+        void ClearCart()
+        {
+            var session = HttpContext.Session;
+            session.Remove(CARTKEY);
+        }
+
+        void SaveCartSession(List<CartItem> ls)
+        {
+            var session = HttpContext.Session;
+            string jsoncart = JsonConvert.SerializeObject(ls);
+            session.SetString(CARTKEY, jsoncart);
         }
 
         public IActionResult Privacy()
         {
             return View();
         }
-
+        public IActionResult NotFound()
+        {
+            return View();
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            // Thực hiện chuyển hướng đến trang 404 tùy chỉnh
+            return RedirectToAction("NotFound", "Home");
         }
     }
 }

@@ -29,6 +29,18 @@ namespace PetServices.Controllers
             List<Account> account = _context.Accounts.Include(a => a.Role).Include(a => a.PartnerInfo).Where(a => a.Role.RoleName == "PARTNER").ToList();
             return Ok(_mapper.Map<List<AccountInfo>>(account));
         }
+        [HttpGet("GetAllPartner")]
+        public IActionResult GetAllPartner()
+        {
+            List<PartnerInfo> PartnerInfo = _context.PartnerInfos.ToList();
+            return Ok(_mapper.Map<List<PartnerInfoDTO>>(PartnerInfo));
+        }
+        [HttpGet("PartnerInfoId")]
+        public IActionResult GetPartner(int PartnerInfoId)
+        {
+            PartnerInfo PartnerInfo = _context.PartnerInfos.FirstOrDefault(p => p.PartnerInfoId == PartnerInfoId);
+            return Ok(_mapper.Map<PartnerInfoDTO>(PartnerInfo));
+        }
 
         [HttpGet("accountNotActive")]
         public IActionResult GetAcountNotActive()

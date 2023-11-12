@@ -4,6 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddCors();
 
 // Add session and time
@@ -36,8 +37,9 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
 }
+app.UseStatusCodePagesWithRedirects("/Home/NotFound");
+
 app.UseCors(builder =>
 {
     builder.AllowAnyOrigin()

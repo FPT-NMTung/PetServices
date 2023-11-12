@@ -18,6 +18,7 @@
             <div class="form-box">
                 <div class="form-value">
                     <h2>Đăng ký làm đối tác</h2>
+                    <div class="input-group">
                         <div class="inputbox">
                             <ion-icon name="accessibility-outline"></ion-icon>
                             <input asp-for="FirstName" type="text" required>
@@ -28,31 +29,36 @@
                             <input asp-for="LastName" type="text" required>
                             <label for="">Tên</label>
                         </div>
-                        @*start - Địa chỉ *@
+                    </div>
+
+                    <div class="input-group">
                         <div class="inputbox">
-                            <ion-icon name="accessibility-outline"></ion-icon>
-                            <select style="background-color:rgb(0,0,0,0);" class="form-control" id="provinceDropdown" onchange="loadDistricts()">
-                                <option style="" value="" disabled></option>
+                            <select class="form-control" id="provinceDropdown" onchange="loadDistricts()" name="calc_shipping_provinces" required="">
+                                <option value="" disabled>Tỉnh / Thành phố</option>
                             </select>
                         </div>
+
                         <div class="inputbox">
-                            <ion-icon name="accessibility-outline"></ion-icon>
-                        <select style="background-color:rgb(0,0,0,0);" class="form-control" id="districtDropdown" onchange="loadWards()">
-                                <option value=""></option>
+                            <select class="form-control" id="districtDropdown" onchange="loadWards()" name="calc_shipping_district" required="">
+                                <option value="">Quận / Huyện</option>
                             </select>
                         </div>
+                    </div>
+                    <div class="input-group">
                         <div class="inputbox">
-                            <ion-icon name="accessibility-outline"></ion-icon>
-                        <select style="background-color:rgb(0,0,0,0);" class="form-control" id="wardDropdown">
-                                <option value=""></option>
+                            <select class="form-control" id="wardDropdown" name="calc_shipping_commune" required="">
+                                <option value="">Xã</option>
                             </select>
                         </div>
-                        @*end - Địa chỉ*@
+
                         <div class="inputbox">
                             <ion-icon name="call-outline"></ion-icon>
                             <input asp-for="Phone" type="tel" pattern="0\d{9}" title="Số điện thoại phải bắt đầu bằng số 0 và có tổng cộng 10 chữ số" required>
                             <label for="">Số điện thoại</label>
                         </div>
+                    </div>
+
+                    <div class="input-group">
                         <div class="inputbox">
                             <ion-icon name="mail-outline"></ion-icon>
                             <input asp-for="Email" type="email" required>
@@ -62,25 +68,22 @@
                             <ion-icon name="lock-closed-outline"></ion-icon>
                             <input asp-for="Password" type="password" required>
                             <label for="">Mật khẩu</label>
-                        </div>                       
-                        <div class="forget">
-                            <label for="">
-                                <input type="checkbox" id="agreeCheckbox">Tôi đồng ý với các
-                                <a id="showTerms" href="" style="color:blue">điều khoản</a>
-                                của hệ thống
-                            </label>
                         </div>
-                         <div class="image">
-                            <label for="image">Chọn ảnh:</label>
-                            <input type="file" id="image" name="image"  multiple>
-                        </div>
-                        <button id="registerButton">Đăng ký</button>
-                        <div class="register">
-                            <p>Quay trở lại <a href="~/Login/Index">Đăng nhập</a></p>
-                        </div>
-                        <input type="hidden" asp-for="Province" id="provinceNameInput" />
-                        <input type="hidden" asp-for="District" id="districtNameInput" />
-                        <input type="hidden" asp-for="Commune" id="wardsNameInput" />
+                    </div>
+                    <div class="forget">
+                        <label for="">
+                            <input type="checkbox" id="agreeCheckbox">Tôi đồng ý với các
+                            <a id="showTerms" href="" style="color:blue">điều khoản</a>
+                            của hệ thống
+                        </label>
+                    </div>
+                    <button id="registerButton">Đăng ký</button>
+                    <div class="register">
+                        <p>Quay trở lại <a href="~/Login/Index">Đăng nhập</a></p>
+                    </div>
+                    <input type="hidden" asp-for="Province" id="provinceNameInput" />
+                    <input type="hidden" asp-for="District" id="districtNameInput" />
+                    <input type="hidden" asp-for="Commune" id="wardsNameInput" />
                 </div>
             </div>
 
