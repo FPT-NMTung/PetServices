@@ -11,6 +11,8 @@ namespace PetServices.DTO
         public double? PriceService { get; set; }
         public int? PetInfoId { get; set; }
         public int? PartnerInfoId { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public virtual PartnerInfoDTO? PartnerInfo { get; set; }
         public virtual PetInfoDTO? PetInfo { get; set; }
         public virtual ServiceDTO? Service { get; set; } = null!;

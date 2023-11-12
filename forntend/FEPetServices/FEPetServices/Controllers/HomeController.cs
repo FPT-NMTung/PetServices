@@ -657,6 +657,8 @@ namespace FEPetServices.Controllers
             public double? Weight { get; set; }
             public double? PriceService { get; set; }
             public int? PartnerInfoId { get; set; }
+            public DateTime? StartTime { get; set; }
+            public DateTime? EndTime { get; set; }
             public PartnerInfo? PartnerInfo { get; set; }
             public ServiceDTO service { set; get; }
             // Room
@@ -717,7 +719,9 @@ namespace FEPetServices.Controllers
                 else
                 {
                     // Thêm mới
-                    cart.Add(new CartItem() { service = service, PartnerInfo = partner, Weight = Weight, PriceService = PriceService, PartnerInfoId = PartnerId != 0 ? PartnerId : null});
+                    cart.Add(new CartItem() { service = service, PartnerInfo = partner, 
+                        Weight = Weight, PriceService = PriceService, 
+                        PartnerInfoId = PartnerId != 0 ? PartnerId : null});
                 }
 
                 // Lưu cart vào Session

@@ -19,6 +19,8 @@ namespace FEPetServices.Controllers
             public double? Weight { get; set; }
             public double? PriceService { get; set; }
             public int? PartnerInfoId { get; set; }
+            public DateTime? StartTime { get; set; }
+            public DateTime? EndTime { get; set; }
             public PartnerInfo? PartnerInfo { get; set; }
             public ServiceDTO service { set; get; }
             // Room
@@ -56,7 +58,7 @@ namespace FEPetServices.Controllers
             return View(cartItems); // Pass cart items to the view
         }
 
-        /*[HttpPost]
+        [HttpPost]
         public IActionResult UpdateCart([FromForm] int productid, [FromForm] int quantity)
         {
             // Cập nhật Cart thay đổi số lượng quantity ...
@@ -85,6 +87,6 @@ namespace FEPetServices.Controllers
 
             SaveCartSession(cart);
             return RedirectToAction("Index", "Cart");
-        }*/
+        }
     }
 }
