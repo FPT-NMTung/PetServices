@@ -270,9 +270,9 @@ namespace PetServices.Controllers
                     ? orderDTO.BookingServicesDetails.Select(dto => new BookingServicesDetail
                     {
                         ServiceId = dto.ServiceId,
-                       /* Price = dto.Price,
+                        Price = dto.Price,
                         Weight = dto.Weight,
-                        PriceService = dto.PriceService ,
+                        PriceService = dto.Price,
                         PetInfoId = dto.PetInfoId,
                     }).ToList()
                     : new List<BookingServicesDetail>()

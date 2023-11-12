@@ -58,14 +58,6 @@
                                             {
                                                 url += (url.Contains("?") ? "&" : "?") + "roomname=" + ViewBag.roomname;
                                             }
-                                            if (!string.IsNullOrEmpty(ViewBag.priceto))
-                                            {
-                                                url += (url.Contains("?") ? "&" : "?") + "priceto=" + ViewBag.priceto;
-                                            }
-                                            if (!string.IsNullOrEmpty(ViewBag.pricefrom))
-                                            {
-                                                url += (url.Contains("?") ? "&" : "?") + "pricefrom=" + ViewBag.pricefrom;
-                                            }
                                             <li class="@(string.IsNullOrEmpty(ViewBag.roomcategory) ? "current-cat" : "")"><a href="@url">Tất cả</a></li>
                                             @foreach (var category in ViewBag.Categories)
                                             {
@@ -83,7 +75,7 @@
                                     <form id="search-price" action="#" class="mt--25">
                                         <div id="slider-range"></div>
                                         <div class="flex-center mt--20">
-                                            <span class="input-range"></span>
+                                            <span class="input-range">Giá: </span>
                                             <input type="text" id="amount" class="amount-range" readonly>
                                         </div>
                                     </form>
@@ -107,14 +99,6 @@
                                                     {
                                                         <input type="hidden" name="roomcategory" value="@ViewBag.roomcategory">
                                                     }
-                                                    if (!string.IsNullOrEmpty(ViewBag.priceto))
-                                                    {
-                                                        <input type="hidden" name="priceto" value="@ViewBag.priceto">
-                                                    }
-                                                    if (!string.IsNullOrEmpty(ViewBag.pricefrom))
-                                                    {
-                                                        <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
-                                                    }
                                                     <div class="relative">
                                                         <input class="input-cal input-base" value="@(ViewBag.roomname)" name="roomname" id="input" placeholder="" type="text">
                                                         <label id="label-input">Name</label>
@@ -131,14 +115,6 @@
                                                 if (!string.IsNullOrEmpty(ViewBag.roomcategory))
                                                 {
                                                     <input type="hidden" name="roomcategory" value="@ViewBag.roomcategory">
-                                                }
-                                                if (!string.IsNullOrEmpty(ViewBag.priceto))
-                                                {
-                                                    <input type="hidden" name="priceto" value="@ViewBag.priceto">
-                                                }
-                                                if (!string.IsNullOrEmpty(ViewBag.pricefrom))
-                                                {
-                                                    <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
                                                 }
                                                 <select id="sortby" name="sortby" class="single-select" onchange="this.form.submit();">
                                                     <!option value="name_asc" @(ViewBag.sortby == "name_asc" ? "selected" : "")>Tên từ A-Z</!option>
@@ -165,7 +141,7 @@
                                                 <img src="@room.Picture" alt="Product Images">
                                             </a>
                                         </div>
-                                        <div class="product-content" data-room-category="@room.RoomCategoriesId">
+                                        <div class="product-content">
                                             <div class="inner">
                                                 <h5 class="title"><a href="/Home/RoomDetail?roomId=@room.RoomId">@room.RoomName</a></h5>
                                                 <div class="product-price-variant">
@@ -182,15 +158,5 @@
             </div>
         </div>
     </main>
-
-    <script src="~/js/Roomcustomer.js"></script>
-
-    <script>
-        var roomcategory = "@(ViewBag.roomcategory)";
-        var sortby = "@(ViewBag.sortby)";
-        var roomname = "@(ViewBag.roomname)";
-        var pricefrom = "@(ViewBag.pricefrom)";
-        var priceto = "@(ViewBag.priceto)";
-    </script>
 </body>
 </html>

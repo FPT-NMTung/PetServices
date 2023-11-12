@@ -1,6 +1,6 @@
 ﻿using FEPetServices.Form.OrdersForm;
 
-namespace FEPetServices.Form.OrdersForm
+namespace FEPetServices.Form.BookingForm
 {
     public class OrderForm
     {
