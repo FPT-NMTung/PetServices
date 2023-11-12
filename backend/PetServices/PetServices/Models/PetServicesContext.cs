@@ -39,13 +39,10 @@ namespace PetServices.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            var conf = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             if (!optionsBuilder.IsConfigured)
             {
-                var conf = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-                if (!optionsBuilder.IsConfigured)
-                {
-                    optionsBuilder.UseSqlServer(conf.GetConnectionString("DbConnection"));
-                }
+                optionsBuilder.UseSqlServer(conf.GetConnectionString("DbConnection"));
             }
         }
 
@@ -145,11 +142,13 @@ namespace PetServices.Models
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.Property(e => e.BookingDay).HasColumnType("datetime");
+                entity.Property(e => e.EndTime).HasColumnType("datetime");
 
                 entity.Property(e => e.PartnerInfoId).HasColumnName("PartnerInfoID");
 
                 entity.Property(e => e.PetInfoId).HasColumnName("PetInfoID");
+
+                entity.Property(e => e.StartTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.BookingServicesDetails)
