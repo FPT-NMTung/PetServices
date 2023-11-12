@@ -41,8 +41,11 @@ namespace PetServices.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=localhost;database=PetServices;Integrated security=true");
+                var conf = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+                if (!optionsBuilder.IsConfigured)
+                {
+                    optionsBuilder.UseSqlServer(conf.GetConnectionString("DbConnection"));
+                }
             }
         }
 
@@ -200,11 +203,17 @@ namespace PetServices.Models
 
                 entity.Property(e => e.District).HasMaxLength(500);
 
+                entity.Property(e => e.FullName).HasMaxLength(500);
+
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
                 entity.Property(e => e.OrderStatus)
                     .HasMaxLength(20)
                     .IsFixedLength();
+
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Province).HasMaxLength(500);
 
