@@ -180,7 +180,7 @@ namespace PetServices.Controllers
                         ServiceId = dto.ServiceId,
                         Price = dto.Price,
                         Weight = dto.Weight,
-                        PriceService = dto.PriceService,
+                        PriceService = dto.PriceService ,
                         PetInfoId = dto.PetInfoId,
                     }).ToList()
                     : new List<BookingServicesDetail>()
@@ -192,7 +192,7 @@ namespace PetServices.Controllers
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetOrder), new { Id = order.OrderId }, order);
+            return Ok("Order thành công!");
         }
 
     }
