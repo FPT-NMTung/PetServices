@@ -190,3 +190,22 @@
 .rating-form .status {
     font-weight: 700;
 }
+
+.booking-room {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .booking-room button {
+        max-width: 200px;
+    }
+
+.booking-room-terms p{
+    color: black;
+}
+
+.booking-room-terms a{
+    color: dodgerblue;
+}
