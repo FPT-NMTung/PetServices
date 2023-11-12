@@ -681,7 +681,7 @@ namespace FEPetServices.Controllers
             ServiceDTO service = null;
             PartnerInfo partner = null; 
 
-            HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Service/ServiceID/" + ServiceId);
+            HttpResponseMessage response = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Service/ServiceID/" + ServiceId);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -693,7 +693,7 @@ namespace FEPetServices.Controllers
             }
             if (PartnerId != 0)
             {
-                HttpResponseMessage responsePartner = await client.GetAsync("https://localhost:7255/api/Partner/PartnerInfoId?PartnerInfoId=" + PartnerId);
+                HttpResponseMessage responsePartner = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Partner/PartnerInfoId?PartnerInfoId=" + PartnerId);
                 if (responsePartner.IsSuccessStatusCode)
                 {
                     string responseContent = await responsePartner.Content.ReadAsStringAsync();
