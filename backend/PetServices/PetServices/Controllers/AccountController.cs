@@ -28,6 +28,7 @@ namespace PetServices.Controllers
             _configuration = configuration;
         }
 
+        // mã hoá passs
         private static string MD5Hash(string text)
         {
             MD5 md5 = MD5.Create();
