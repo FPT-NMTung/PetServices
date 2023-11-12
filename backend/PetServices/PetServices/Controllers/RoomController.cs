@@ -110,7 +110,7 @@ namespace PetServices.Controllers
         [HttpPost("AddRoom")]
         public async Task<ActionResult> AddRoom(RoomDTO roomDTO)
         {
-                // check tên phòng
+            // check tên phòng
             if (string.IsNullOrWhiteSpace(roomDTO.RoomName))
             {
                 string errorMessage = "Tên phòng không được để trống!";
@@ -137,7 +137,7 @@ namespace PetServices.Controllers
             {
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
                 return BadRequest(errorMessage);
-            }                       
+            }
             // check loại phòng           
             var roomcategory = _context.RoomCategories.FirstOrDefault(r => r.RoomCategoriesId == roomDTO.RoomCategoriesId);
 
@@ -145,7 +145,7 @@ namespace PetServices.Controllers
             {
                 string errorMessage = "Loại phòng không tồn tại!";
                 return BadRequest(errorMessage);
-            }          
+            }
 
 
             try
@@ -288,10 +288,10 @@ namespace PetServices.Controllers
             try
             {
                 var room = await _context.Rooms.FirstOrDefaultAsync(p => p.RoomId == RoomId);
-                var orders = await _context.BookingRoomDetails.Where(o => o.RoomId == RoomId 
-                                            && (o.StartDate < startDate && o.EndDate < startDate) 
+                var orders = await _context.BookingRoomDetails.Where(o => o.RoomId == RoomId
+                                            && (o.StartDate < startDate && o.EndDate < startDate)
                                             && (o.StartDate > endDate && o.EndDate > endDate)).ToListAsync();
-                
+
                 if (room == null)
                 {
                     return BadRequest("Không tìm thấy phòng.");
@@ -320,16 +320,16 @@ namespace PetServices.Controllers
                             }
                         }
 
-                        if ( a > 0)
+                        if (a > 0)
                         {
                             return Ok("Còn phòng trống.");
                         }
 
                         foreach (var order in orders)
                         {
-                            foreach ( var order2 in orders)
+                            foreach (var order2 in orders)
                             {
-                                if ( order2 != order)
+                                if (order2 != order)
                                 {
                                     if (((order2.StartDate >= order.StartDate && order2.StartDate < order.EndDate)
                                 || (order2.EndDate > order.StartDate && order2.EndDate <= order.EndDate)
@@ -340,8 +340,7 @@ namespace PetServices.Controllers
                                     {
                                         a += 1;
                                         orders.Remove(order2);
-
-                                        if ( a > 0 )
+                                        if (a > 0)
                                         {
                                             return Ok("Còn phòng trống.");
                                         }

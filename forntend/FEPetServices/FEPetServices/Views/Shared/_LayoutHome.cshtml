@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+@using FEPetServices.Controllers
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -97,28 +101,18 @@
                                 <li>
                                     <a href="~/ProductList">Sản phẩm</a>
                                 </li>
-                                <li @*class="menu-item-has-children"*@>
-                                    <a href="/Home/ServiceList">Dịch vụ</a>
-                                    @*<ul class="axil-submenu">
-                                        <li><a href="shop-sidebar.html">Shop With Sidebar</a></li>
-                                        <li><a href="shop.html">Shop no Sidebar</a></li>
-                                        <li><a href="single-product.html">Product Variation 1</a></li>
-                                        <li><a href="single-product-2.html">Product Variation 2</a></li>
-                                        <li><a href="single-product-3.html">Product Variation 3</a></li>
-                                        <li><a href="single-product-4.html">Product Variation 4</a></li>
-                                        <li><a href="single-product-5.html">Product Variation 5</a></li>
-                                        <li><a href="single-product-6.html">Product Variation 6</a></li>
-                                        <li><a href="single-product-7.html">Product Variation 7</a></li>
-                                    </ul>*@
+                                <li>
+                                    <a href="~/Home/ServiceList">Dịch vụ</a>
                                 </li>
                                 <li><a href="~/Home/BlogList">Blog</a></li>
                                 <li><a href="~/Home/Introduce">Giới thiệu</a></li>
-                                @*<li><a href="contact.html">Liên hệ với chúng tôi</a></li>*@
+                                <li><a href="contact.html">Liên hệ với chúng tôi</a></li>
                             </ul>
                         </nav>
                     </div>
                     <div class="header-action">
                         <ul class="action-list">
+
                             <li class="shopping-cart">
                                 <a href="#" class="cart-dropdown-btn">
                                     @{
@@ -191,7 +185,7 @@
                                     quận Thanh Xuân, Hà nội.
                                 </p>
                                 <ul class="support-list-item">
-                                    <li><a href="mailto:psmsg65@gmail.com"><i class="fal fa-envelope-open"></i> psmsg65@gmail.com</a></li>
+                                    <li><a href="mailto:example@domain.com"><i class="fal fa-envelope-open"></i> petservices@petpet.com</a></li>
                                     <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> 0969886688</a></li>
                                     <!-- <li><i class="fal fa-map-marker-alt"></i> 685 Market Street,  <br> Las Vegas, LA 95820, <br> United States.</li> -->
                                 </ul>
@@ -295,7 +289,7 @@
                                         <div class="item-content">
                                             @if (item.product != null)
                                             {
-                                                <h3 class="item-title"><a >@item.product.ProductName</a></h3>
+                                                <h3 class="item-title"><a>@item.product.ProductName</a></h3>
                                                 <div class="item-price"><span class="currency-symbol"></span>@($"{item.product.Price:n0} VNĐ")</div>
                                                 <div class="pro-qty item-quantity">
                                                     <input type="number" class="quantity-input" value="@item.quantityProduct">
@@ -319,7 +313,7 @@
                 </ul>
             </div>
             <div class="cart-footer">
-                <h3 class="cart-subtotal">  
+                <h3 class="cart-subtotal">
                     <span class="subtotal-title">Thống kê</span>
                 </h3>
                 <div class="group-btn">
@@ -329,7 +323,7 @@
             </div>
         </div>
     </div>
-                    
+
     @*Toast notification design*@
     <div id="toast"></div>
     @*Common toast notification*@
@@ -435,7 +429,7 @@
 <script src="~/assets/js/vendor/jquery.countdown.min.js"></script>
 <script src="~/assets/js/vendor/sal.js"></script>
 <script src="~/assets/js/vendor/jquery.magnific-popup.min.js"></script>
-@*<script src="~/assets/js/vendor/imagesloaded.pkgd.min.js"></script>*@
+<script src="~/assets/js/vendor/imagesloaded.pkgd.min.js"></script>
 <script src="~/assets/js/vendor/isotope.pkgd.min.js"></script>
 <script src="~/assets/js/vendor/counterup.js"></script>
 <script src="~/assets/js/vendor/waypoints.min.js"></script>
