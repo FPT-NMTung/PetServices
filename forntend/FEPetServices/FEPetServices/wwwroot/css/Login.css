@@ -10,7 +10,8 @@ section {
     align-items: center;
     min-height: 100vh;
     width: 100%;
-    background: url('https://brunswick.ces.ncsu.edu/wp-content/uploads/2022/05/pets-g6fa575878_1920.jpg') no-repeat;
+    /*    background: url('https://brunswick.ces.ncsu.edu/wp-content/uploads/2022/05/pets-g6fa575878_1920.jpg') no-repeat;*/
+    background-image: url('../img/loginregister/background.png');
     background-position: center;
     background-size: cover;
 }

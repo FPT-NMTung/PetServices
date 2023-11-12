@@ -21,7 +21,7 @@ namespace FEPetServices.Controllers
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new System.Uri("https://localhost:7255/"); // Đổi URL của API theo cấu hình của bạn
+                client.BaseAddress = new System.Uri("https://pet-service-api.azurewebsites.net/"); // Đổi URL của API theo cấu hình của bạn
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

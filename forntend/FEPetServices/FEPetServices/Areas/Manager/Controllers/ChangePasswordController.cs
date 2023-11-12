@@ -17,7 +17,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://localhost:7255/api/Account";
+            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account";
         }
         public async Task<IActionResult> Index([FromForm] ChangePassword changePassword)
         {
@@ -40,7 +40,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 return View();
             }
 
-            string apiUrl = $"https://localhost:7255/api/Account/newpassword?email={email}&oldpassword={changePassword.OldPassword}&newpassword={changePassword.NewPassword}&confirmnewpassword={changePassword.ConfirmNewPassword}";
+            string apiUrl = $"https://pet-service-api.azurewebsites.net/api/Account/newpassword?email={email}&oldpassword={changePassword.OldPassword}&newpassword={changePassword.NewPassword}&confirmnewpassword={changePassword.ConfirmNewPassword}";
 
             HttpResponseMessage response = await _client.PutAsync(apiUrl, null);
 

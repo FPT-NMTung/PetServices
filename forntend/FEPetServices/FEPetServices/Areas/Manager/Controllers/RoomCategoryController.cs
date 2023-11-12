@@ -25,10 +25,10 @@ namespace FEPetServices.Areas.Manager.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "";
-            ApiUrlRoomCategoryList = "https://localhost:7255/api/RoomCategory/GetAllRoomCategory";
-            ApiUrlRoomCategoryDetail = "https://localhost:7255/api/RoomCategory/GetRoomCategory/";
-            ApiUrlRoomCategoryAdd = "https://localhost:7255/api/RoomCategory/AddRoomCategory";
-            ApiUrlRoomCategoryUpdate = "https://localhost:7255/api/RoomCategory/UpdateRoomCategory?roomCategoryId=";
+            ApiUrlRoomCategoryList = "https://pet-service-api.azurewebsites.net/api/RoomCategory/GetAllRoomCategory";
+            ApiUrlRoomCategoryDetail = "https://pet-service-api.azurewebsites.net/api/RoomCategory/GetRoomCategory/";
+            ApiUrlRoomCategoryAdd = "https://pet-service-api.azurewebsites.net/api/RoomCategory/AddRoomCategory";
+            ApiUrlRoomCategoryUpdate = "https://pet-service-api.azurewebsites.net/api/RoomCategory/UpdateRoomCategory?roomCategoryId=";
 
         }
 

@@ -4,8 +4,9 @@
     var pagesPartner = new List<string> { "PartnerRegister" };
     var pagesRegister = new List<string> { "Register" };
     var pagesForgotPassword = new List<string> { "ForgotPassword" };
+    var pagesVerifyEmail = new List<string> { "VerifyEmail" };
 
-    if (pages.Any(routeUrl.Contains) || pagesPartner.Any(routeUrl.Contains) || pagesRegister.Any(routeUrl.Contains) || pagesForgotPassword.Any(routeUrl.Contains))
+    if (pages.Any(routeUrl.Contains) || pagesPartner.Any(routeUrl.Contains) || pagesRegister.Any(routeUrl.Contains) || pagesForgotPassword.Any(routeUrl.Contains) || pagesVerifyEmail.Any(routeUrl.Contains))
     {
         Layout = "~/Views/Shared/_Layout.cshtml";
     }

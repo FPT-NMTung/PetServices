@@ -26,10 +26,10 @@ namespace FEPetServices.Areas.Manager.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "";
-            DefaultApiUrlServiceCategoryList = "https://localhost:7255/api/ServiceCategory";
-            DefaultApiUrlServiceCategoryDetail = "https://localhost:7255/api/ServiceCategory/ServiceCategorysID";
-            DefaultApiUrlServiceCategoryAdd = "https://localhost:7255/api/ServiceCategory/AddServiceCategory";
-            DefaultApiUrlServiceCategoryUpdate = "https://localhost:7255/api/ServiceCategory/EditServiceCategory?serCategoriesId=";
+            DefaultApiUrlServiceCategoryList = "https://pet-service-api.azurewebsites.net/api/ServiceCategory";
+            DefaultApiUrlServiceCategoryDetail = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/ServiceCategorysID";
+            DefaultApiUrlServiceCategoryAdd = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/AddServiceCategory";
+            DefaultApiUrlServiceCategoryUpdate = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/EditServiceCategory?serCategoriesId=";
 
     }
 

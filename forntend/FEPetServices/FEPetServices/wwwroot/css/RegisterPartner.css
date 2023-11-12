@@ -10,14 +10,13 @@ section {
     align-items: center;
     min-height: 100vh;
     width: 100%;
-    background: url('https://brunswick.ces.ncsu.edu/wp-content/uploads/2022/05/pets-g6fa575878_1920.jpg') no-repeat;
-    background-position: center;
     background-size: cover;
+    background-image: url('../img/loginregister/background.png');
 }
 
 .form-box {
     position: relative;
-    width: 450px;
+    width: 600px;
     height: 650px;
     background: transparent;
     border: 2px solid rgba(255, 255, 255, 0.5);
@@ -43,6 +42,7 @@ section {
     align-items: center;
     margin-left: 20px;
     margin-right: 20px;
+    margin-top: 100px;
 }
 
 .form-box2 {
@@ -60,6 +60,7 @@ h2 {
     position: relative;
     margin: 30px 0;
     width: 310px;
+    display: flex;
 }
 
     .inputbox label {
@@ -92,6 +93,17 @@ input:not(:placeholder-shown) ~ label {
     border-bottom: 2px solid #fff;
 }
 
+.form-control {
+    width: 90%;
+    height: 50px;
+    border: none;
+    font-size: 1em;
+    padding: 0 35px 0 5px;
+    color: #fff;
+    background-color: #FAB19C;
+    border-bottom: 2px solid #fff;
+}
+
 .inputbox ion-icon {
     position: absolute;
     right: 8px;
@@ -106,6 +118,7 @@ input:not(:placeholder-shown) ~ label {
     color: #fff;
     display: flex;
     justify-content: space-between;
+    justify-content: center;
 }
 
     .forget label input {
@@ -180,9 +193,24 @@ button {
     .image input {
         border: 2px solid rgba(255, 255, 255, 0.5);
         border-radius: 20px;
-        background-color: yellow;
+        background-color: FAB19C;
     }
 
 .login-form {
     display: flex;
+}
+
+form .user-details .input-box {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+
+.input-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.inputbox {
+    width: 45%; /* Để có khoảng trống giữa các nhóm */
 }
