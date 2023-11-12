@@ -28,7 +28,6 @@ namespace PetServices.Controllers
             _configuration = configuration;
         }
 
-        // mã hoá passs
         private static string MD5Hash(string text)
         {
             MD5 md5 = MD5.Create();
@@ -682,9 +681,12 @@ namespace PetServices.Controllers
                 return BadRequest("Mật khẩu xác nhận không chính xác");
             }
 
-            if (account.Password == oldpassword)
+            if (BCrypt.Net.BCrypt.Verify(oldpassword, account.Password))
             {
-                account.Password = newpassword;
+                // Hash the new password before storing it
+                string hashedNewPassword = BCrypt.Net.BCrypt.HashPassword(newpassword);
+
+                account.Password = hashedNewPassword;
 
                 _context.Accounts.Update(account);
                 await _context.SaveChangesAsync();
@@ -696,5 +698,6 @@ namespace PetServices.Controllers
                 return BadRequest("Mật khẩu cũ không chính xác");
             }
         }
+
     }
 }
