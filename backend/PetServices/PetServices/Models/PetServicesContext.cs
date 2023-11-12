@@ -42,15 +42,19 @@ namespace PetServices.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=localhost;database=PetServices;Integrated security=true");
+                optionsBuilder.UseSqlServer("Server=tcp:pet-services.database.windows.net,1433;Initial Catalog=PetServices;Persist Security Info=False;User ID=hungnv;Password=Hung@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.UseCollation("SQL_Latin1_General_CP1_CS_AS");
+
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.Property(e => e.AccountId).HasColumnName("AccountID");
+
+                entity.Property(e => e.CreateDate).HasColumnType("date");
 
                 entity.Property(e => e.Email)
                     .HasMaxLength(100)
@@ -110,6 +114,10 @@ namespace PetServices.Models
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
+                entity.Property(e => e.EndDate).HasColumnType("datetime");
+
+                entity.Property(e => e.StartDate).HasColumnType("datetime");
+
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.BookingRoomDetails)
                     .HasForeignKey(d => d.OrderId)
@@ -125,7 +133,8 @@ namespace PetServices.Models
 
             modelBuilder.Entity<BookingServicesDetail>(entity =>
             {
-                entity.HasKey(e => new { e.ServiceId, e.OrderId });
+                entity.HasKey(e => new { e.ServiceId, e.OrderId })
+                    .HasName("PK_BookingSerrvicesDetail");
 
                 entity.ToTable("BookingServicesDetail");
 
@@ -134,6 +143,8 @@ namespace PetServices.Models
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
                 entity.Property(e => e.BookingDay).HasColumnType("datetime");
+
+                entity.Property(e => e.PartnerInfoId).HasColumnName("PartnerInfoID");
 
                 entity.Property(e => e.PetInfoId).HasColumnName("PetInfoID");
 
@@ -144,7 +155,8 @@ namespace PetServices.Models
                     .HasConstraintName("FK_BookingServicesDetail_Orders");
 
                 entity.HasOne(d => d.PartnerInfo)
-                    .WithMany(p => p.BookingServicesDetails) 
+                    .WithMany(p => p.BookingServicesDetails)
+                    .HasForeignKey(d => d.PartnerInfoId)
                     .HasConstraintName("FK_BookingServicesDetail_PartnerInfo");
 
                 entity.HasOne(d => d.PetInfo)
@@ -161,11 +173,11 @@ namespace PetServices.Models
 
             modelBuilder.Entity<Feedback>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("Feedback");
 
-                entity.Property(e => e.FeedbackId).HasColumnName("FeedbackID");
+                entity.Property(e => e.FeedbackId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("FeedbackID");
 
                 entity.Property(e => e.PartnerId).HasColumnName("PartnerID");
 
@@ -231,7 +243,9 @@ namespace PetServices.Models
             {
                 entity.ToTable("OrderType");
 
-                entity.Property(e => e.OrderTypeId).HasColumnName("OrderTypeID");
+                entity.Property(e => e.OrderTypeId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("OrderTypeID");
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
@@ -259,6 +273,10 @@ namespace PetServices.Models
                 entity.Property(e => e.PartnerInfoId).HasColumnName("PartnerInfoID");
 
                 entity.Property(e => e.Address).HasMaxLength(1000);
+
+                entity.Property(e => e.CardName)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.CardNumber)
                     .HasMaxLength(100)
@@ -294,7 +312,9 @@ namespace PetServices.Models
             {
                 entity.ToTable("PetInfo");
 
-                entity.Property(e => e.PetInfoId).HasColumnName("PetInfoID");
+                entity.Property(e => e.PetInfoId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("PetInfoID");
 
                 entity.Property(e => e.Descriptions).IsUnicode(false);
 
@@ -409,8 +429,6 @@ namespace PetServices.Models
                 entity.Property(e => e.SerCategoriesId).HasColumnName("SerCategoriesID");
 
                 entity.Property(e => e.ServiceName).HasMaxLength(500);
-
-                entity.Property(e => e.Time).HasColumnName("time");
 
                 entity.HasOne(d => d.SerCategories)
                     .WithMany(p => p.Services)

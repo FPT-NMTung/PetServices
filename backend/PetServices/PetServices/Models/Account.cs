@@ -13,6 +13,7 @@ namespace PetServices.Models
         public int? PartnerInfoId { get; set; }
         public int? RoleId { get; set; }
         public int? Otpid { get; set; }
+        public DateTime? CreateDate { get; set; }
 
         public virtual Otp? Otp { get; set; }
         public virtual PartnerInfo? PartnerInfo { get; set; }

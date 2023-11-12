@@ -12,7 +12,7 @@ namespace PetServices.Models
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
         public DateTime? PublisheDate { get; set; }
-        public int? TagId { get; set; }
         public bool? Status { get; set; }
+        public int? TagId { get; set; }
     }
 }
