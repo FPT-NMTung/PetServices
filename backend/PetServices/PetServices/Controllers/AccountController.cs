@@ -289,7 +289,7 @@ namespace PetServices.Controllers
                 Email = registerDto.Email,
                 //Password = registerDto.Password,
                 //Password = MD5Hash(registerDto.Password),
-                Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password), 
+                Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password),
                 Status = false,
                 RoleId = 2
             };
@@ -481,7 +481,7 @@ namespace PetServices.Controllers
                 Email = registerDto.Email,
                 //Password = registerDto.Password,
                 //Password = MD5Hash(registerDto.Password),
-                Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password), 
+                Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password),
                 Status = false,
                 RoleId = 4
             };
@@ -681,9 +681,12 @@ namespace PetServices.Controllers
                 return BadRequest("Mật khẩu xác nhận không chính xác");
             }
 
-            if (account.Password == oldpassword)
+            if (BCrypt.Net.BCrypt.Verify(oldpassword, account.Password))
             {
-                account.Password = newpassword;
+                // Hash the new password before storing it
+                string hashedNewPassword = BCrypt.Net.BCrypt.HashPassword(newpassword);
+
+                account.Password = hashedNewPassword;
 
                 _context.Accounts.Update(account);
                 await _context.SaveChangesAsync();
@@ -695,5 +698,6 @@ namespace PetServices.Controllers
                 return BadRequest("Mật khẩu cũ không chính xác");
             }
         }
+
     }
 }
