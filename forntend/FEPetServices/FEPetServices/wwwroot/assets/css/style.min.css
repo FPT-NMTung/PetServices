@@ -9063,7 +9063,7 @@ a.axil-btn.btn-size-md, button.axil-btn.btn-size-md {
     }
 
 .cart-dropdown .cart-item .item-title {
-    font-size: 16px;
+    font-size: 13px;
     color: var(--color-black);
     margin-bottom: 10px;
     overflow: hidden;
@@ -9075,7 +9075,7 @@ a.axil-btn.btn-size-md, button.axil-btn.btn-size-md {
 
 @media only screen and (max-width: 767px) {
     .cart-dropdown .cart-item .item-title {
-        font-size: 16px;
+        font-size: 13px;
         margin-bottom: 15px
     }
 }

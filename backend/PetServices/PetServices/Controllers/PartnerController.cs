@@ -35,6 +35,12 @@ namespace PetServices.Controllers
             List<PartnerInfo> PartnerInfo = _context.PartnerInfos.ToList();
             return Ok(_mapper.Map<List<PartnerInfoDTO>>(PartnerInfo));
         }
+        [HttpGet("PartnerInfoId")]
+        public IActionResult GetPartner(int PartnerInfoId)
+        {
+            PartnerInfo PartnerInfo = _context.PartnerInfos.FirstOrDefault(p => p.PartnerInfoId == PartnerInfoId);
+            return Ok(_mapper.Map<PartnerInfoDTO>(PartnerInfo));
+        }
 
         [HttpGet("accountNotActive")]
         public IActionResult GetAcountNotActive()

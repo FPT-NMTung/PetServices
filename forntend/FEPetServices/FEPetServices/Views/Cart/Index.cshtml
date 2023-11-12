@@ -16,6 +16,7 @@
                 <h2 class="mb-4">GIỎ HÀNG</h2>
                 @if (Model.Count() > 0)
                 {
+                    double allCartPrice = 0;
                     @if (Model.Any(c => c.product != null))
                     {
                         double total = 0;
@@ -39,6 +40,7 @@
                                     var thanhtien = (double)cartitem.quantityProduct * (double)cartitem.product.Price;
                                     productTotal += thanhtien;
                                     productItemCount++;
+                                    allCartPrice = allCartPrice + (double)cartitem.quantityProduct * (double)cartitem.product.Price;
                                     <tr>
                                         <td>@(productItemCount)</td>
                                         <td>@cartitem.product.ProductName</td>
@@ -77,7 +79,8 @@
                                     <th scope="col">#</th>
                                     <th scope="col">Dịch vụ</th>
                                     <th scope="col">Giá</th>
-                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Cân nặng thú cưng</th>
+                                    <th scope="col">Nhân viên được thuê</th>
                                     <th scope="col">Thành tiền</th>
                                     <th scope="col"></th>
                                 </tr>
@@ -85,15 +88,22 @@
                             <tbody>
                                 @foreach (var cartitem in Model.Where(c => c.service != null))
                                 {
-                                    var thanhtien = (double)cartitem.quantityProduct * (double)cartitem.service.Price;
+                                    var thanhtien = (double)cartitem.PriceService;
                                     serviceTotal += thanhtien;
+                                    allCartPrice = allCartPrice + thanhtien;
                                     serviceItemCount++;
                                     <tr>
                                         <td>@(serviceItemCount)</td>
                                         <td>@cartitem.service.ServiceName</td>
                                         <td>@($"{cartitem.service.Price:n0} VNĐ")</td>
                                         <td>
-                                            <input style="height:20px" id="@($"quantity-{cartitem.service.ServiceId}")" class="form-control" type="number" value="@cartitem.quantityProduct" />
+                                            <div style="display:flex;justify-content:space-between">
+                                                <input style="height:20px" class="form-control" type="number" value="@cartitem.Weight" /> 
+                                                <span>Kg</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @cartitem.PartnerInfo?.FirstName @cartitem.PartnerInfo?.LastName
                                         </td>
                                         <td>@(thanhtien.ToString("n0").Replace(",", ".")) VNĐ</td>
                                         <td>
@@ -124,12 +134,12 @@
                                         <tbody>
                                             <tr class="order-total">
                                                 <td>Tổng tiền cần thanh toán</td>
-                                                <td class="order-total-amount"> VNĐ</td>
+                                                <td class="order-total-amount">@(allCartPrice.ToString("n0").Replace(",", ".")) VNĐ</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                <a href="checkout.html" class="axil-btn btn-bg-primary checkout-btn">Thanh toán</a>
+                                <a href="checkout.html" class="axil-btn btn-bg-primary checkout-btn">Thủ tục thành toán</a>
                             </div>
                         </div>
                     </div>
