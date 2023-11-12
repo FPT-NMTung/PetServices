@@ -19,7 +19,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://localhost:7255/api/Partner";
+            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Partner";
         }
 
         [HttpGet]

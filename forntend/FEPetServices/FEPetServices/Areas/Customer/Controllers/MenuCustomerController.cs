@@ -19,9 +19,9 @@ namespace FEPetServices.Areas.Customer.Controllers
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://localhost:7255/api/UserInfo";
-            DefaultApiUrlPet = "https://localhost:7255/api/PetInfo";
-            DefaultApiUrlOrders = "https://localhost:7255/api/Order";
+            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
+            DefaultApiUrlPet = "https://pet-service-api.azurewebsites.net/api/PetInfo";
+            DefaultApiUrlOrders = "https://pet-service-api.azurewebsites.net/api/Order";
         }
         public IActionResult Index()
         {
@@ -182,7 +182,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                 return View();
             }
 
-            string apiUrl = $"https://localhost:7255/api/Account/newpassword?email={email}&oldpassword={changePassword.OldPassword}&newpassword={changePassword.NewPassword}&confirmnewpassword={changePassword.ConfirmNewPassword}";
+            string apiUrl = $"https://pet-service-api.azurewebsites.net/api/Account/newpassword?email={email}&oldpassword={changePassword.OldPassword}&newpassword={changePassword.NewPassword}&confirmnewpassword={changePassword.ConfirmNewPassword}";
 
             HttpResponseMessage response = await _client.PutAsync(apiUrl, null);
 
@@ -229,7 +229,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
-            //https://localhost:7255/api/Order/email/cus%40gmail.com
+            //https://pet-service-api.azurewebsites.net/api/Order/email/cus%40gmail.com
 
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlOrders + "/email/" + email);
             if (response.IsSuccessStatusCode)
@@ -285,7 +285,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> OrderDetail(int id, [FromForm] Status status)
         {
-            //https://localhost:7255/api/Order/changeStatus?Id=1
+            //https://pet-service-api.azurewebsites.net/api/Order/changeStatus?Id=1
             HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/changeStatus?Id=" + id, status);
             if (response.IsSuccessStatusCode)
             {

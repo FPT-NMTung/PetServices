@@ -19,6 +19,8 @@ namespace FEPetServices.Controllers
             public double? Weight { get; set; }
             public double? PriceService { get; set; }
             public int? PartnerInfoId { get; set; }
+            public DateTime? StartTime { get; set; }
+            public DateTime? EndTime { get; set; }
             public PartnerInfo? PartnerInfo { get; set; }
             public ServiceDTO service { set; get; }
             // Room

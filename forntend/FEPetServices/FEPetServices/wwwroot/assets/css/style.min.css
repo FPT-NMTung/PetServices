@@ -12826,7 +12826,7 @@ body.open .closeMask {
 }
 
 .axil-order-summery.order-checkout-summery .summery-table th {
-    font-size: 16px;
+    font-size: 20px;
     color: var(--color-heading);
     text-transform: capitalize;
     padding: 15px 0

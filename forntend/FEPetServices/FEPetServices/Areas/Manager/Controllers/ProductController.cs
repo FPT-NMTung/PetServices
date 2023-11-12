@@ -24,10 +24,10 @@ namespace FEPetServices.Areas.Manager.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "";
-            DefaultApiUrlProductList = "https://localhost:7255/api/Product";
-            DefaultApiUrlProductDetail = "https://localhost:7255/api/Product/ProductID";
-            DefaultApiUrlProductAdd = "https://localhost:7255/api/Product/Add";
-            DefaultApiUrlProductUpdate = "https://localhost:7255/api/Product/Update?proId=";
+            DefaultApiUrlProductList = "https://pet-service-api.azurewebsites.net/api/Product";
+            DefaultApiUrlProductDetail = "https://pet-service-api.azurewebsites.net/api/Product/ProductID";
+            DefaultApiUrlProductAdd = "https://pet-service-api.azurewebsites.net/api/Product/Add";
+            DefaultApiUrlProductUpdate = "https://pet-service-api.azurewebsites.net/api/Product/Update?proId=";
         }
         public async Task<IActionResult> Index(ProductDTO productDTO)
         {
@@ -66,7 +66,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-                HttpResponseMessage proCateResponse = await client.GetAsync("https://localhost:7255/api/ProductCategory/GetAll");
+                HttpResponseMessage proCateResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll");
                 if (proCateResponse.IsSuccessStatusCode)
                 {
                     var proCategories = await proCateResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
@@ -115,7 +115,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             {
                 //goi api de lay thong tin can sua
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductDetail + "/" + proId);
-                HttpResponseMessage proCateResponse = await client.GetAsync("https://localhost:7255/api/ProductCategory/GetAll");
+                HttpResponseMessage proCateResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll");
                 if (proCateResponse.IsSuccessStatusCode)
                 {
                     var proCategories = await proCateResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
@@ -159,7 +159,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-                HttpResponseMessage proCateResponse = await client.GetAsync("https://localhost:7255/api/ProductCategory/GetAll");
+                HttpResponseMessage proCateResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll");
                 if (proCateResponse.IsSuccessStatusCode)
                 {
                     var proCategories = await proCateResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
