@@ -84,6 +84,7 @@ namespace PetServices.Mapper
                 .ForMember(dest => dest.Picture, opt => opt.MapFrom(src => src.Picture))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.Time, opt => opt.MapFrom(src => src.Time))
                 .ForMember(dest => dest.SerCategoriesId, opt => opt.MapFrom(src => src.SerCategoriesId))
                 .ForMember(dest => dest.SerCategoriesName, opt => opt.MapFrom(src => src.SerCategories.SerCategoriesName));
                 

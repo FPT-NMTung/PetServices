@@ -645,8 +645,103 @@ namespace FEPetServices.Controllers
             return View();
         }
 
-    
-    public IActionResult Privacy()
+        public class CartItem
+        {
+            // Product
+            public int quantityProduct { set; get; }
+            public ProductDTO product { set; get; }
+
+            // Service
+            public int ServiceId { get; set; }
+            public double? Price { get; set; }
+            public double? Weight { get; set; }
+            public double? PriceService { get; set; }
+            public int? PartnerInfoId { get; set; }
+            public PartnerInfo? PartnerInfo { get; set; }
+            public ServiceDTO service { set; get; }
+            // Room
+        }
+
+        public const string CARTKEY = "cart";
+
+        List<CartItem> GetCartItems()
+        {
+            var session = HttpContext.Session;
+            string jsoncart = session.GetString(CARTKEY);
+            if (jsoncart != null)
+            {
+                return JsonConvert.DeserializeObject<List<CartItem>>(jsoncart);
+            }
+            return new List<CartItem>();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(int ServiceId, int PriceService, double Weight ,int PartnerId )
+        {
+            ServiceDTO service = null;
+            PartnerInfo partner = null; 
+
+            HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Service/ServiceID/" + ServiceId);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                var option = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                service = System.Text.Json.JsonSerializer.Deserialize<ServiceDTO>(responseContent, option);
+            }
+            if (PartnerId != 0)
+            {
+                HttpResponseMessage responsePartner = await client.GetAsync("https://localhost:7255/api/Partner/PartnerInfoId?PartnerInfoId=" + PartnerId);
+                if (responsePartner.IsSuccessStatusCode)
+                {
+                    string responseContent = await responsePartner.Content.ReadAsStringAsync();
+                    var option = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+                    partner = System.Text.Json.JsonSerializer.Deserialize<PartnerInfo>(responseContent, option);
+                }
+            }
+
+            if (service != null)
+            {
+                var cart = GetCartItems();
+                var cartitem = cart.Find(s => s.service != null && s.service.ServiceId == ServiceId);
+
+                if (cartitem != null)
+                {
+
+                }
+                else
+                {
+                    // Thêm mới
+                    cart.Add(new CartItem() { service = service, PartnerInfo = partner, Weight = Weight, PriceService = PriceService, PartnerInfoId = PartnerId != 0 ? PartnerId : null});
+                }
+
+                // Lưu cart vào Session
+                SaveCartSession(cart);
+            }
+
+            return RedirectToAction("Index", "Cart");
+        }
+
+
+        void ClearCart()
+        {
+            var session = HttpContext.Session;
+            session.Remove(CARTKEY);
+        }
+
+        void SaveCartSession(List<CartItem> ls)
+        {
+            var session = HttpContext.Session;
+            string jsoncart = JsonConvert.SerializeObject(ls);
+            session.SetString(CARTKEY, jsoncart);
+        }
+
+        public IActionResult Privacy()
         {
             return View();
         }

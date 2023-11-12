@@ -1,211 +1,4 @@
-﻿@*<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Single Product Page</title>
-    <!-- css -->
-    <link rel="stylesheet" href="/css/ServiceDetail.css">
-    <link rel="stylesheet" href="/css/Service/ServiceDetail.css"></link>
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script src="/js/ServiceList.js"></script>
-</head>
-<body>
-    <div class="pagination">
-        <a href="/Home">Home  </a> ><a href="/Home/ServiceList">Dịch Vụ </a> ><p>Sản Phẩm </p> 
-    </div>
-    <!-- product section -->
-    <section class="product-container">
-        <!-- left side -->
-        <div class="img-card">
-            <img src="@Model?.Service.Picture" alt="" id="featured-image" class="small-Img">
-            <!-- small img -->
-    
-            <div class="small-Card">
-                    <div class="Imgslider">
-                     <div class="card__container swiper">
-                        <div class="card__content anh">
-                           <div class="swiper-wrapper">
-                                @foreach(var sc in Model?.ServiceCategory.Services)
-                           {
-                                    @if (sc.Status)
-                                    {
-                                        <article class="card__article swiper-slide">
-                                            <div class="card__image">
-                                                <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sc.ServiceId"><img src="@sc.Picture" alt="image" class="card__img"></a>   
-                                                <div class="card__shadow"></div>
-                                            </div>
-                                        </article>
-                                    }
-                                }
-                           </div>
-                        </div>
-
-                        <!-- Navigation buttons -->
-                        <div class="swiper-button-next anh">
-                           <i class="ri-arrow-right-s-line"></i>
-                        </div>
-            
-                        <div class="swiper-button-prev anh" style="left:5px;">
-                           <i class="ri-arrow-left-s-line"></i>
-                        </div>
-
-                        <!-- Pagination -->
-                        <div class="swiper-pagination anh"></div>
-                     </div>
-                  </div>
-            </div>
-        </div>
-        <!-- Right side -->
-        <div class="product-info">
-            <h3>@Model?.Service.ServiceName</h3>
-            <h5>Giá:@Model?.Service.Price</h5>
-            <p>@Model?.Service.Desciptions</p>
-
-            <div class="sizes">
-                <p>Phân Loại:</p>
-                 @foreach(var sr in Model?.ServiceCategory.Services)
-               {
-                   @if(sr.Status){
-                        <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sr.ServiceId" class="size-option">@sr.ServiceName</a>
-                    }
-
-                    else{
-                        
-                    }
-               }
-            </div>
-
-            <div class="quantity">
-                <button>Thêm vào giỏ</button>
-                <button>Mua ngay</button>
-            </div>
-       </div>
-    </section>
-    <footer>
-      <div class="container">
-         <div class="card__container swiper">
-            <div class="card__content">
-               <div class="swiper-wrapper">
-               @foreach (var sc in Model.CaServices)
-                 @if(sc.Status){
-                                {
-                                    string description = sc.Desciptions; // Di chuyển khai báo vào đây
-
-                                    if (description != null)
-                                    {
-                                        if (description.Length > 100)
-                                        {
-                                            int lastSpace = description.LastIndexOf(' ', 100);
-
-                                            description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
-                                        }
-                                    }
-                                    <article class="card__article swiper-slide">
-                                        <div class="card__image">
-                                            <img src="@sc.Picture" alt="image" class="card__img">
-                                            <div class="card__shadow"></div>
-                                        </div>
-                                        <div class="card__data">
-                                            <h3 class="card__name">@sc.SerCategoriesName</h3>
-                                            <p class="description">
-                                                @description
-                                            </p>
-                                            <a href="#" class="card__button">View More</a>
-                                        </div>
-                                    </article>
-                                }
-                            }
-
-               </div>
-            </div>
-
-            <!-- Navigation buttons -->
-            <div class="swiper-button-next" >
-               <i class="ri-arrow-right-s-line"></i>
-            </div>
-            
-            <div class="swiper-button-prev" style="left:5px;">
-               <i class="ri-arrow-left-s-line"></i>
-            </div>
-
-            <!-- Pagination -->
-            <div class="swiper-pagination"></div>
-         </div>
-      </div>
-    </footer>
-
-
-<script>
-    {
-    // Swiper cho danh sách sản phẩm
-    var swiperProducts = new Swiper(".card__content", {
-        loop: true,
-        spaceBetween: 32,
-        grabCursor: false,
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-            dynamicBullets: true,
-        },
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
-        breakpoints: {
-            600: {
-                slidesPerView: 2,
-            },
-            968: {
-                slidesPerView: 3,
-            },
-        },
-    });
-}
-{
-    // Swiper cho danh sách sản phẩm dự phòng
-    var swiperCardsimg = new Swiper(".card__content.anh", {
-        loop: true,
-        spaceBetween: 32,
-        grabCursor: true,
-        pagination: {
-            el: ".swiper-pagination.anh",
-            clickable: true,
-            dynamicBullets: true,
-        },
-        navigation: {
-            nextEl: ".swiper-button-next.anh",
-            prevEl: ".swiper-button-prev.anh",
-        },
-        breakpoints: {
-            600: {
-                slidesPerView: 2,
-            },
-            968: {
-                slidesPerView: 4,
-            },
-        },
-    });
-}
-    // Đặt namespace riêng cho mỗi Swiper
-    swiperProducts.params.swiperNamespace = 'swiperProducts';
-    swiperCardsimg.params.swiperNamespace = 'swiperCardsimg';
-
-    // Xác định mối quan hệ giữa hai Swiper sử dụng namespace
-    swiperProducts.controller.control = swiperCardsimg;
-    swiperCardsimg.controller.control = swiperProducts;
-</script>
-
-
-
-</body>
-
-</html>
-
-
-*@
-<!doctype html>
+﻿<!doctype html>
 <html class="no-js" lang="en">
 
 
@@ -218,23 +11,8 @@
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
-
-    <!-- CSS
-    ============================================ -->
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="~/assets/css/vendor/bootstrap.min.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/font-awesome.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/flaticon/flaticon.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/slick.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/slick-theme.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/jquery-ui.min.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/sal.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/magnific-popup.css">
-    <link rel="stylesheet" href="~/assets/css/vendor/base.css">
-    <link rel="stylesheet" href="~/assets/css/style.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="/css/Service/ServiceDetail.css"></linh>
 
 </head>
 
@@ -278,13 +56,16 @@
                                      </div>
                                 </div>
                             </div>
+                            <div class="total-amount-section" style="margin-top:10px;   ">
+                                <span id="totalAmountDisplay">0 VNĐ</span>
+                            </div>
                         </div>
                         <div class="col-lg-6 mb--40">
                             <div class="single-product-content">
                                 <div class="inner">
                                     <h2 class="product-title">@Model?.Service.ServiceName</h2>
                                     <div class="price-amount price-offer-amount">
-                                        <span class="price current-price">@Model?.Service.Price</span>
+                                        <span class="price current-price">@Model?.Service.Price VNĐ</span>
                                         <!-- <span class="price old-price">$155.00</span> -->
                                     </div>
                                     <div class="product-rating">
@@ -304,14 +85,15 @@
                                         <li><i class="fal fa-check"></i>Nhân viên tận tình chu đáo</li>
                                     </ul>
                                     <p class="description mb--40">@Model?.Service.Desciptions</p>
-                                    <div style="margin: 30px 30px 30px 0;">
-                                        <p style="font-family: serif;font-size: 20px; ">Đối tác:</p>
-                                        <label class="containerbutton">
+                                    <div style="margin-bottom:10px;">
+                                        <p class="title" style="font-family: serif;font-size: 15px; height:1px;">Đối tác:</p>
+                                        <label class="containerbutton" >
                                             <input type="checkbox" id="toggleSelect">
                                             <div class="checkmark"></div>
+                                        
                                             @if (ViewBag.Partners != null)
                                             {
-                                                <select name="PartnerInfoId" id="PartnerInfoId"  class="size-option"  style="font-family: serif ; width: 200px;" disabled >
+                                                <select name="PartnerInfoId" id="PartnerInfoId"  class="size-option"  style="font-family: serif ; width: 200px; height:30px;" disabled >
                                                     <option value="">Danh sách đối tác</option>
                                                     @foreach (var category in ViewBag.Partners)
                                                      {
@@ -323,23 +105,45 @@
                                     </div>
                                     <div class="product-variations-wrapper">
                                         <div class="product-variation product-size-variation">
-                                            <p class="title" style="font-family: serif; font-size: 20px;">Dịch Vụ:</p>
+                                             <p class="title" style="font-family: serif; font-size: 15px;">Dịch vụ:</p>
                                             <ul class="range-variant" style="font-family: serif">
-                                                 @foreach(var sr in Model?.ServiceCategory.Services) { @if(sr.Status){
-                                                    <a  href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sr.ServiceId"><li style="font-size:13px;" >@sr.ServiceName</li></a>
+                                                 @foreach(var sr in Model?.ServiceCategory.Services) { 
+                                                    @if(sr.Status){
+                                                    <a  href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sr.ServiceId"><li style="font-size:15px;font-family: serif;" >@sr.ServiceName</li></a>
                                                     } 
                                                     else{ } 
                                                  }
-                                            </ul>
+                                            </ul> 
                                         </div>
+                                    </div>
+                                    <div style="margin-top:5px">
+                                        <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ bắt đầu:</p>
+                                        <input id="datetimeStart" type="text" placeholder="Thời gian bắt đầu">
+                                    </div>
+                                    <div style="margin-top:5px">
+                                        <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ kết thúc:</p>
+                                        <input id="datetimeEnd" type="text" placeholder="Thời gian kết thúc"> 
+                                    </div>
+                                    <div style="margin-top:5px">
+                                        <p style="font-family: serif; font-size: 15px; height:1px;">Cân nặng của thú cưng:</p>
+                                        <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" required>
                                     </div>
                                     <!-- Start Product Action Wrapper  -->
                                     <div class="product-action-wrapper d-flex-center">
 
                                         <!-- Start Product Action  -->
-                                        <ul class="product-action action-style-two d-flex-center mb--0">
-                                            <li class="add-to-cart" style="width: 544px;"><a href="" class="axil-btn btn-bg-primary">Thêm vào giỏ hàng</a></li>
-                                            <li class="add-to-cart" style="width: 300px;"><a href="" class="axil-btn btn-bg-primary">Mua ngay</a></li>
+                                        <ul class="product-action action-style-two d-flex-center mb--0" style="display:contents;">
+                                            @*<li class="add-to-cart" style="width: 544px;"><a href="" class="axil-btn btn-bg-primary">Thêm vào giỏ hàng</a></li>*@
+                                            <form method="post" action="@Url.Action("AddToCart", "Home")">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="ServiceId" value="@Model?.Service.ServiceId" />
+                                                <input type="hidden" name="PriceService" id="totalPriceService" value="" />
+                                                <input type="hidden" name="Weight" id="Weight" value="" />
+                                                <input type="hidden" name="PartnerId" id="PartnerId" value="" />
+                                                <button class="axil-btn btn-bg-primary"  type="submit" ><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
+                                            </>
+                                            </form>
+                                            @*<li class="add-to-cart" style="width: 250px;">*@<button style="width:200px; margin-left: 5px;" href="" class="axil-btn btn-bg-primary">Mua ngay</button>@*</li>*@
                                         </ul>
                                         <!-- End Product Action  -->
 
@@ -351,6 +155,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- End .single-product-thumb -->
 
             <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
@@ -549,6 +354,8 @@
                 </div>
             </div>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <script>
         // Lấy tham chiếu đến checkbox và select bằng cách sử dụng id
         var checkbox = document.getElementById('toggleSelect');
@@ -562,67 +369,99 @@
                 select.setAttribute('disabled', 'disabled');
             }
         });
-    </script>
-    <style>
-        /* Hide the default checkbox */
-        
-        .containerbutton input {
-            display: none;
-        }
-        
-        .containerbutton {
-            display: block;
-            position: relative;
-            cursor: pointer;
-            font-size: 20px;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-        /* Create a custom checkbox */
-        
-        .checkmark {
-            position: relative;
-            top: 0;
-            left: 0;
-            height: 1.3em;
-            width: 1.3em;
-            background-color: #2196F300;
-            border-radius: 0.25em;
-            transition: all 0.25s;
-        }
-        /* When the checkbox is checked, add a blue background */
-        
-        .containerbutton input:checked~.checkmark {
-            background-color: #2196F3;
-        }
-        /* Create the checkmark/indicator (hidden when not checked) */
-        
-        .checkmark:after {
-            content: "";
-            position: absolute;
-            transform: rotate(0deg);
-            border: 0.1em solid black;
-            left: 0;
-            top: 0;
-            width: 1.05em;
-            height: 1.05em;
-            border-radius: 0.25em;
-            transition: all 0.25s, border-width 0.1s;
-        }
-        /* Show the checkmark when checked */
-        
-        .containerbutton input:checked~.checkmark:after {
-            left: 0.45em;
-            top: 0.25em;
-            width: 0.25em;
-            height: 0.5em;
-            border-color: #fff0 white white #fff0;
-            border-width: 0 0.15em 0.15em 0;
-            border-radius: 0em;
-            transform: rotate(45deg);
-        }
-    </style>
+        const input = document.getElementById('petWeight');
+        input.addEventListener('change', function() {
+            if (input.value && !input.value.endsWith('kg')) {
+                input.value += ' kg';
+            }
+        });
 
+    </script>
+  <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const fpStart = flatpickr("#datetimeStart", {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                minTime: "07:30",
+                onClose: function(selectedDates, dateStr, instance) {
+                    const selectedTime = new Date(dateStr);
+                    const serviceType = instance.input.id;
+                    
+                    // Thay thế giờ đóng cửa trực tiếp trong onClose function
+                    let closingTime = new Date(selectedTime.toDateString() + " " + "19:00");
+                    if (selectedTime.getHours() >= 19) {
+                        const nextDay = new Date(selectedTime);
+                        nextDay.setDate(selectedTime.getDate() + 1);
+                        nextDay.setHours(7);
+                        nextDay.setMinutes(30);
+                        selectedTime.setDate(nextDay.getDate());
+                        selectedTime.setHours(nextDay.getHours());
+                        selectedTime.setMinutes(nextDay.getMinutes());
+                        closingTime = new Date(selectedTime.toDateString() + " " + "19:00");
+                    }
+                    
+                    const serviceTime = @Model.Service.Time*60 * 60 * 1000;
+                    let endTime = new Date(selectedTime.getTime() + serviceTime);
+                    if (endTime > closingTime) {
+                        endTime = closingTime;
+                    }
+
+                    document.getElementById("datetimeStart").value = selectedTime.toLocaleString();
+                    document.getElementById("datetimeEnd").value = endTime.toLocaleString();
+                }
+            });
+        });
+    </script>
+    <script>
+// Function to calculate total amount
+function calculateTotal() {
+    var petWeight = parseFloat(document.getElementById('petWeight').value);
+    var servicePrice = parseFloat(document.querySelector('.price.current-price').textContent);
+
+    var additionalCost = 0;
+    var additional =0;
+
+    if (document.getElementById('toggleSelect').checked) {
+        additional += 50000;
+    }
+
+    if (petWeight <= 5) {
+        additionalCost += 0;
+    } else if (petWeight > 5 && petWeight <= 10) {
+        additionalCost += 50000;
+    } else if (petWeight > 10 && petWeight <= 20) {
+        additionalCost += 100000;
+    } else if (petWeight > 20 && petWeight <= 40) {
+        additionalCost += 200000;
+    } else if(petWeight > 40) {
+        additionalCost += 400000;
+    }
+     var PartnerInfoId = document.getElementById("PartnerInfoId");
+            var selectedPartnerId = PartnerInfoId.options[PartnerInfoId.selectedIndex];
+
+            var PartnerId = document.getElementById("PartnerId");
+            PartnerId.value = selectedPartnerId.value;
+
+    var totalAmount = servicePrice + additional+ additionalCost;
+
+            var totalPriceService = document.getElementById("totalPriceService");
+            var Weight = document.getElementById("Weight");
+            totalPriceService.value = totalAmount;
+            Weight.value = petWeight;
+            document.getElementById('totalPriceService').textContent = totalPriceService.value;
+
+    // Display the total amount in the HTML
+    document.getElementById('totalAmountDisplay').textContent = servicePrice+ "  (dịch vụ) + " +additionalCost+ " (cân nặng) + " +additional+ "  (đối tác) " + "=" +totalAmount + " VNĐ";
+}
+
+// Trigger the initial calculation
+calculateTotal();
+
+// This function is to trigger the calculation on checkbox change and input change
+document.getElementById('toggleSelect').addEventListener('change', calculateTotal);
+document.getElementById('petWeight').addEventListener('input', calculateTotal);
+
+   </script>
 </body>
 
 </html>
