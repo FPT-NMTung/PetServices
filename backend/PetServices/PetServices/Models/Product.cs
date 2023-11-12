@@ -19,7 +19,6 @@ namespace PetServices.Models
         public DateTime? CreateDate { get; set; }
         public int? ProCategoriesId { get; set; }
         public int? Quantity { get; set; }
-        public int? QuantitySold { get; set; }
 
         public virtual ProductCategory? ProCategories { get; set; }
         public virtual ICollection<OrderProductDetail> OrderProductDetails { get; set; }

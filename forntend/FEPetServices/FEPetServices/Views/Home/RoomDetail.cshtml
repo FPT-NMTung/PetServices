@@ -8,10 +8,12 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link rel="stylesheet" href="~/css/flatpickr.css">
+    <link rel="stylesheet" href="~/css/RoomDetailCustomer.css">
 
 </head>
 
-<body class="sticky-header">
+<body>
     <div class="axil-breadcrumb-area">
         <div class="container">
             <div class="row align-items-center">
@@ -72,7 +74,7 @@
                                     </div>
                                 </div>
                                 <ul class="product-meta">
-                                    <h5 class="title">Dịch vụ có sẵn:</h5>
+                                    <h5 class="title">Dịch vụ có sẵn</h5>
                                     @if (ViewBag.ServiceAvailable != null)
                                     {
                                         foreach (var service in ViewBag.ServiceAvailable)
@@ -83,7 +85,7 @@
                                 </ul>
                                 <div class="product-desc-wrapper pt_sm--60">
                                     <div class="single-desc mb--30">
-                                        <h5 class="title">Mô tả:</h5>
+                                        <h5 class="title">Mô tả</h5>
                                         <p>@Model.Desciptions</p>
                                     </div>
                                 </div>
@@ -97,8 +99,7 @@
 
         <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
             <div class="container">
-                <h5 class="title">Dịch vụ bạn muốn đặt thêm:</h5>
-
+                <h5 class="title">Dịch vụ bạn muốn đặt thêm</h5>
                 <div class="product-desc-wrapper mb--30 mb_sm--10">
                     <div class="row">
                         <div class="col-lg-12">
@@ -130,7 +131,99 @@
                                     }
                                 }
                             </div>
-
+                        </div>
+                    </div>
+                </div>
+                <div class="part3">
+                    <h5>Thời gian thuê phòng</h5>
+                    <div class="part3-content">
+                        <div class="part3-content-fa col-lg-12">
+                            <div class="part3-content-child col-lg-7">
+                                <div class="form-group col-lg-5">
+                                    <label for='start-datetime'>Ngày và giờ bắt đầu</label>
+                                    <div class='input-group date'>
+                                        <input type='text' id='start-datetime' class="form-control" style="z-index: auto;" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-5">
+                                    <label for='end-datetime'>Ngày và giờ kết thúc</label>
+                                    <div class='input-group date'>
+                                        <input type='text' id='end-datetime' class="form-control" style="z-index: auto;" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="rating col-lg-5 check-valid">
+                                <form class="rating-form">
+                                    <label>Trạng thái phòng: &emsp;&emsp; <q class="status"></q></label>
+                                    <div id="status-icon">
+                                        <label for="super-happy" class="lb" style="display: none;">
+                                            <input type="radio" name="rating" class="super-happy" id="super-happy" value="super-happy" checked>
+                                            <svg class="svg" viewBox="0 0 24 24"><path d="M12,17.5C14.33,17.5 16.3,16.04 17.11,14H6.89C7.69,16.04 9.67,17.5 12,17.5M8.5,11A1.5,1.5 0 0,0 10,9.5A1.5,1.5 0 0,0 8.5,8A1.5,1.5 0 0,0 7,9.5A1.5,1.5 0 0,0 8.5,11M15.5,11A1.5,1.5 0 0,0 17,9.5A1.5,1.5 0 0,0 15.5,8A1.5,1.5 0 0,0 14,9.5A1.5,1.5 0 0,0 15.5,11M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg>
+                                        </label>
+                                        <label for="super-sad" class="lb" style="display: none;">
+                                            <input type="radio" name="rating" class="super-sad" id="super-sad" value="super-sad" checked>
+                                            <svg class="svg" viewBox="0 0 24 24"><path d="M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M16.18,7.76L15.12,8.82L14.06,7.76L13,8.82L14.06,9.88L13,10.94L14.06,12L15.12,10.94L16.18,12L17.24,10.94L16.18,9.88L17.24,8.82L16.18,7.76M7.82,12L8.88,10.94L9.94,12L11,10.94L9.94,9.88L11,8.82L9.94,7.76L8.88,8.82L7.82,7.76L6.76,8.82L7.82,9.88L6.76,10.94L7.82,12M12,14C9.67,14 7.69,15.46 6.89,17.5H17.11C16.31,15.46 14.33,14 12,14Z"></path></svg>
+                                        </label>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <h5 style="margin-bottom: -10px;">Chi tiết giá</h5>
+                    <div class="axil-order-summery order-checkout-summery">
+                        <div class="summery-table-wrap">
+                            <table class="table summery-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tên dịch vụ</th>
+                                        <th>Giá</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="order-shipping">
+                                        <td colspan="2">
+                                            <div class="shipping-amount">
+                                                <span class="title">Các dịch vụ đặt thêm</span>
+                                            </div>
+                                            <div class="input-group" style="justify-content: space-between;">
+                                                <label class="name-service"></label>
+                                                <span class="amount price-service"></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="order-shipping">
+                                        <td colspan="2">
+                                            <div class="shipping-amount">
+                                                <span class="title">Thời gian thuê phòng</span>
+                                            </div>
+                                            <div class="input-group" style="justify-content: space-between;">
+                                                <label class="time-booking"></label>
+                                                <span class="amount price-time-booking"></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="order-total">
+                                        <td>Tổng</td>
+                                        <td class="order-total-amount"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-lg-12" style="display: flex;">
+                            <div class="col-lg-8 booking-room-terms">
+                                <p>Nhấn "Đặt phòng" đồng nghĩa với việc bạn công nhận mình đã đọc và đồng ý với các <a href="/Home/Terms">Điều khoản sử dụng</a> và <a href="/Home/Privacy">Chính sách quyền riêng tư</a> của chúng tôi.</p>
+                            </div>
+                            <div class="col-lg-4 booking-room">
+                                <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Đặt phòng</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -138,6 +231,191 @@
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+        window.onload = function () {
+            let startDateTime = document.getElementById("start-datetime");
+            let endDateTime = document.getElementById("end-datetime");
+            let status = document.querySelector(".status");
+
+            var priceElements = document.querySelectorAll('.current-price');
+            priceElements.forEach(function (priceElement) {
+                var priceText = priceElement.textContent.trim();
+                var price = parseFloat(priceText.replace(/\s/g, '').replace('vnđ/h', ''));
+                var formattedPrice = price.toLocaleString('vi-VN');
+                priceElement.textContent = formattedPrice + ' vnđ/giờ';
+
+            });
+
+            var priceElements = document.querySelectorAll('.content p');
+            priceElements.forEach(function (priceElement) {
+                var priceText = priceElement.textContent.trim();
+                var price = parseFloat(priceText.replace(/\s/g, '').replace('vnđ', ''));
+                var formattedPrice = price.toLocaleString('vi-VN');
+                priceElement.textContent = formattedPrice + ' vnđ';
+
+            });
+
+            let startPicker = flatpickr(startDateTime, {
+                minDate: "today",
+                enableTime: true,
+                time_24hr: true,
+                minTime: new Date().getHours() + 1 + ":00", // Giờ hiện tại + 1 giờ
+                maxTime: "17:00",
+                dateFormat: "m-d-Y H:i",
+                onChange: function (selectedDates, dateStr, instance) {
+                    let currentDate = new Date();
+                    let tomorrow = new Date(currentDate);
+
+                    tomorrow.setDate(currentDate.getDate() + 1);
+                    tomorrow.setHours(8, 0, 0, 0);
+
+                    if (currentDate.getHours() >= 16) {
+                        startPicker.set("minDate", tomorrow);
+                    }
+
+                    if (selectedDates[0] > currentDate) {
+                        startPicker.set("minTime", "08:00");
+                    } else {
+                        startPicker.set("minTime", currentDate.getHours() + 1 + ":00");
+                    }
+
+                    endPicker.set("minDate", selectedDates[0]);
+                    updateStatus();
+                },
+            });
+
+            let endPicker = flatpickr(endDateTime, {
+                enableTime: true,
+                time_24hr: true,
+                minTime: new Date().getHours() + 1 + ":00", // Giờ hiện tại + 1 giờ
+                maxTime: "17:00",
+                dateFormat: "m-d-Y H:i",
+                onChange: function (selectedDates, dateStr, instance) {
+                    let startDate = startPicker.selectedDates[0];
+
+                    if (startDate && selectedDates[0].getDate() === startDate.getDate()
+                        && selectedDates[0].getMonth() === startDate.getMonth()
+                        && selectedDates[0].getFullYear() === startDate.getFullYear()) {
+                        if (startDate.getHours() >= 16) {
+                            startPicker.set("minDate", tomorrow);
+                        }
+                        endPicker.set("minTime", startDate.getHours() + 1 + ":00");
+                    } else {
+                        endPicker.set("minTime", "8:00");
+                    }
+
+                    updateStatus();
+                },
+            });
+
+            $(document).ready(function () {
+                $('input[type="checkbox"]').change(function () {
+                    updateServices();
+                    updateTotal();
+                });
+
+                function updateServices() {
+                    $('.name-service').text('');
+                    $('.price-service').text('');
+
+                    $('input[type="checkbox"]').each(function () {
+                        if ($(this).is(':checked')) {
+                            var serviceName = $(this).closest('.service-box').find('.title').text();
+                            var price = $(this).closest('.service-box').find('p').text();
+
+                            $('.name-service').append(serviceName + '<br>');
+
+                            var formattedPriceservice = parseFloat(price.replace(' vnđ', '').replace('.', '')).toLocaleString('vi-VN') + ' vnđ';
+                            $('.price-service').append(formattedPriceservice + '<br>');
+                        }
+                    });
+                }
+            });
+
+            function updateStatus() {
+                let startValue = startPicker.input.value;
+                let endValue = endPicker.input.value;
+
+                if (startValue && endValue) {
+                    let startDate = startPicker.parseDate(startValue);
+                    let endDate = endPicker.parseDate(endValue);
+                    let roomId = @Model.RoomId;
+
+                    let apiURL = `https://localhost:7255/api/Room/CheckSlotInRoom?RoomId=${roomId}&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
+                    console.log(apiURL);
+                    fetch(apiURL)
+                        .then(response => {
+                            if (response.status === 200) {
+                                status.textContent = "Còn phòng";
+                                status.style.color = "#00cc4f";
+                                document.getElementById("super-happy").checked = true;
+                                document.querySelector('label[for="super-happy"]').style.display = 'block';
+
+                                let duration = calculateDuration(startDate, endDate);
+                                let totalPrice = duration * @Model.Price;
+                                let timeduration = parseInt(duration / 24) + " ngày" + duration % 24 + " giờ";
+                                let timeBookingLabel = `${startDate.toLocaleString()} - ${endDate.toLocaleString()} (${timeduration})`;
+                                let priceTimeBooking = totalPrice.toLocaleString('vi-VN') + ' vnđ';
+
+                                $('.time-booking').text(timeBookingLabel);
+                                $('.price-time-booking').text(priceTimeBooking);
+
+                                updateTotal();
+                            } else {
+                                status.textContent = "Không còn phòng";
+                                status.style.color = "#e76555";
+                                document.getElementById("super-sad").checked = true;
+                                document.querySelector('label[for="super-sad"]').style.display = 'block';
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error fetching API:", error);
+                            status.textContent = "Lỗi kết nối API";
+                            hideLabels();
+                        });
+                } else {
+                    status.textContent = "";
+                }
+            }
+
+            function updateTotal() {
+                let total = 0;
+
+                $('input[type="checkbox"]').each(function () {
+                    if ($(this).is(':checked')) {
+                        var priceText = $(this).closest('.service-box').find('p').text();
+
+                        var price = priceText ? parseInt(priceText.replace(/,/g, '').replace(/\D/g, '')) : 0;
+                        total += price;
+                    }
+                });
+
+                var timeBookingText = $('.price-time-booking').text();
+                var timeBookingPrice = timeBookingText ? parseInt(timeBookingText.replace(/,/g, '').replace(/\D/g, '')) : 0;
+                total += timeBookingPrice;
+
+                $('.order-total-amount').text(total.toLocaleString('vi-VN') + ' vnđ');
+            }
+
+            function calculateDuration(startDate, endDate) {
+                const oneDayInMillis = 24 * 60 * 60 * 1000;
+                const millisecondsDiff = endDate - startDate;
+                const days = Math.floor(millisecondsDiff / oneDayInMillis);
+                const hours = Math.floor((millisecondsDiff % oneDayInMillis) / (60 * 60 * 1000));
+                const totalhours = days * 24 + hours;
+                return totalhours;
+            }
+
+            function hideLabels() {
+                document.querySelector('label[for="super-happy"]').style.display = 'none';
+                document.querySelector('label[for="super-sad"]').style.display = 'none';
+            }
+        }
+    </script>
 </body>
+<script src="~/js/flatpickr.js"></script>
+
 
 </html>

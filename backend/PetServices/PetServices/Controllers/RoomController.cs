@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
+using PetServices.Form;
 using PetServices.Models;
 
 namespace PetServices.Controllers
@@ -273,6 +275,84 @@ namespace PetServices.Controllers
                 await _context.SaveChangesAsync();
 
                 return Ok("Cập nhật phòng thành công!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
+            }
+        }
+
+        [HttpGet("CheckSlotInRoom")]
+        public async Task<ActionResult> CheckSlotInRoom(int RoomId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var room = await _context.Rooms.FirstOrDefaultAsync(p => p.RoomId == RoomId);
+                var orders = await _context.BookingRoomDetails.Where(o => o.RoomId == RoomId 
+                                            && (o.StartDate < startDate && o.EndDate < startDate) 
+                                            && (o.StartDate > endDate && o.EndDate > endDate)).ToListAsync();
+                
+                if (room == null)
+                {
+                    return BadRequest("Không tìm thấy phòng.");
+                }
+                else
+                {
+                    int a = room.Slot ?? 0;
+
+                    if (orders == null && a != 0)
+                    {
+                        return Ok("Còn phòng trống.");
+                    }
+                    else if (a == 0)
+                    {
+                        return BadRequest("Không tìm thấy phòng hợp lệ!");
+                    }
+                    else
+                    {
+                        foreach (var order in orders)
+                        {
+                            if ((startDate >= order.StartDate && startDate < order.EndDate)
+                                || (endDate > order.StartDate && endDate <= order.EndDate)
+                                || (startDate <= order.StartDate && endDate >= order.EndDate))
+                            {
+                                a -= 1;
+                            }
+                        }
+
+                        if ( a > 0)
+                        {
+                            return Ok("Còn phòng trống.");
+                        }
+
+                        foreach (var order in orders)
+                        {
+                            foreach ( var order2 in orders)
+                            {
+                                if ( order2 != order)
+                                {
+                                    if (((order2.StartDate >= order.StartDate && order2.StartDate < order.EndDate)
+                                || (order2.EndDate > order.StartDate && order2.EndDate <= order.EndDate)
+                                || (order2.StartDate <= order.StartDate && order2.EndDate >= order.EndDate)))
+                                    {
+                                    }
+                                    else
+                                    {
+                                        a += 1;
+                                        orders.Remove(order2);
+
+                                        if ( a > 0 )
+                                        {
+                                            return Ok("Còn phòng trống.");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return BadRequest("Không tìm thấy phòng hợp lệ!");
+                    }
+                }
             }
             catch (Exception ex)
             {

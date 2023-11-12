@@ -206,13 +206,88 @@
                 range: true,
                 min: 0,
                 max: 100000,
-                values: [0, 100000],
-                slide: function(event, ui) {
-                    $('#amount').val(ui.values[0] + "  -  " + ui.values[1]);
+                values: [parseInt(pricefrom) ? pricefrom : 0, parseInt(priceto) ? priceto : 100000],
+                slide: function (event, ui) {
+                    var fromprice = ui.values[0].toLocaleString('vi-VN') + 'vnđ';
+                    var toprice = ui.values[1].toLocaleString('vi-VN') + 'vnđ';
+
+                    $('#amount').val("Giá:" + fromprice + " - " + toprice);
+                },
+
+                stop: function (event, ui) {
+                    var fromprice = ui.values[0];
+                    var toprice = ui.values[1];
+
+
+                    var url = "/Home/Room";
+                    if (sortby) {
+                        url += "?sortby=" + sortby;
+                    }
+                    if (roomname) {
+                        url += (url.includes("?") ? "&" : "?") + "roomname=" + roomname;
+                    }
+                    if (roomcategory) {
+                        url += (url.includes("?") ? "&" : "?") + "roomcategory=" + roomcategory;
+                    }
+
+                    var newurl = url + (url.includes("?") ? "&" : "?") + "pricefrom=" + fromprice + "&priceto=" + toprice;
+
+                    window.location.href = newurl;
                 }
             });
-            $('#amount').val($('#slider-range').slider('values', 0) + "  -  " +
-                $('#slider-range').slider('values', 1));
+            var fromprice;
+            var toprice;
+
+            var handle = $('.ui-slider-handle.ui-state-default.ui-corner-all');
+
+
+            if (pricefrom) {
+                var handleFrom = handle.eq(0);
+                var percentageFrom = (parseInt(pricefrom) / 100000) * 100;
+
+                if (priceto) {
+                    var percentageTo = (parseInt(priceto) / 100000) * 100;
+                    var percentageCenter = percentageTo - percentageFrom;
+                }
+                else {
+                    var percentageCenter = 100 - percentageFrom;
+                }
+
+                var handleCenter = $('.ui-slider-range.ui-widget-header.ui-corner-all');
+
+                handleFrom.css('left', percentageFrom + '%');
+                handleCenter.css('left', percentageFrom + '%');
+                handleCenter.css('width', percentageCenter + '%');
+
+                fromprice = parseInt(pricefrom).toLocaleString('vi-VN') + 'vnđ';
+            }
+            else {
+                fromprice = $('#slider-range').slider('values', 0).toLocaleString('vi-VN') + 'vnđ';
+            }
+
+            if (priceto) {
+                var handleTo = handle.eq(1);
+                var percentageTo = (parseInt(priceto) / 100000) * 100;
+
+                if (pricefrom) {
+                    var percentageFrom = (parseInt(pricefrom) / 100000) * 100;
+                    var percentageCenter = percentageTo - percentageFrom;
+                }
+                else {
+                    var percentageCenter = percentageTo;
+                }
+
+                var handleCenter = $('.ui-slider-range.ui-widget-header.ui-corner-all');
+
+                handleTo.css('left', percentageTo + '%');
+                handleCenter.css('width', percentageCenter + '%');
+
+                toprice = parseInt(priceto).toLocaleString('vi-VN') + 'vnđ';
+            }
+            else {
+                toprice = $('#slider-range').slider('values', 1).toLocaleString('vi-VN') + 'vnđ';
+            }
+            $('#amount').val("Giá:" + fromprice + " - " + toprice);
         },
 
         quantityRanger: function() {

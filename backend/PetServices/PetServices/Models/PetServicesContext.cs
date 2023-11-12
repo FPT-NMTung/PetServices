@@ -18,6 +18,7 @@ namespace PetServices.Models
 
         public virtual DbSet<Account> Accounts { get; set; } = null!;
         public virtual DbSet<Blog> Blogs { get; set; } = null!;
+        public virtual DbSet<Booking> Bookings { get; set; } = null!;
         public virtual DbSet<BookingRoomDetail> BookingRoomDetails { get; set; } = null!;
         public virtual DbSet<BookingServicesDetail> BookingServicesDetails { get; set; } = null!;
         public virtual DbSet<Feedback> Feedbacks { get; set; } = null!;
@@ -42,7 +43,10 @@ namespace PetServices.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=localhost;database=PetServices;Integrated security=true");
+                optionsBuilder.UseSqlServer("server=localhost\\SQLEXPRESS; Database=PetServices;Integrated security=true");
+            }
+        }
+                }
             }
         }
 
@@ -100,6 +104,34 @@ namespace PetServices.Models
                 entity.Property(e => e.TagId).HasColumnName("TagID");
             });
 
+            modelBuilder.Entity<Booking>(entity =>
+            {
+                entity.ToTable("Booking");
+
+                entity.Property(e => e.BookingId).HasColumnName("BookingID");
+
+                entity.Property(e => e.Address).HasMaxLength(500);
+
+                entity.Property(e => e.BookingDate).HasColumnType("date");
+
+                entity.Property(e => e.BookingStatus)
+                    .HasMaxLength(20)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Commune).HasMaxLength(500);
+
+                entity.Property(e => e.District).HasMaxLength(500);
+
+                entity.Property(e => e.Province).HasMaxLength(500);
+
+                entity.Property(e => e.UserInfoId).HasColumnName("UserInfoID");
+
+                entity.HasOne(d => d.UserInfo)
+                    .WithMany(p => p.Bookings)
+                    .HasForeignKey(d => d.UserInfoId)
+                    .HasConstraintName("FK_Booking_UserInfo");
+            });
+
             modelBuilder.Entity<BookingRoomDetail>(entity =>
             {
                 entity.HasKey(e => new { e.RoomId, e.OrderId });
@@ -110,7 +142,17 @@ namespace PetServices.Models
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
+                entity.Property(e => e.EndDate).HasColumnType("datetime");
+
+                entity.Property(e => e.StartDate).HasColumnType("datetime");
+
                 entity.HasOne(d => d.Order)
+                    .WithMany(p => p.BookingRoomDetails)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookingRoomDetail_Booking");
+
+                entity.HasOne(d => d.OrderNavigation)
                     .WithMany(p => p.BookingRoomDetails)
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -133,24 +175,19 @@ namespace PetServices.Models
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.Property(e => e.BookingDay).HasColumnType("datetime");
-
                 entity.Property(e => e.PetInfoId).HasColumnName("PetInfoID");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.BookingServicesDetails)
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_BookingServicesDetail_Orders");
-
-                entity.HasOne(d => d.PartnerInfo)
-                    .WithMany(p => p.BookingServicesDetails) 
-                    .HasConstraintName("FK_BookingServicesDetail_PartnerInfo");
+                    .HasConstraintName("FK_BookingServicesDetail_Booking");
 
                 entity.HasOne(d => d.PetInfo)
                     .WithMany(p => p.BookingServicesDetails)
-                    .HasForeignKey(d => d.PetInfoId)
-                    .HasConstraintName("FK_BookingServicesDetail_PetInfo");
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookingServicesDetail_Orders");
 
                 entity.HasOne(d => d.Service)
                     .WithMany(p => p.BookingServicesDetails)
@@ -188,7 +225,7 @@ namespace PetServices.Models
 
                 entity.Property(e => e.District).HasMaxLength(500);
 
-                entity.Property(e => e.OrderDate).HasColumnType("datetime");
+                entity.Property(e => e.OrderDate).HasColumnType("date");
 
                 entity.Property(e => e.OrderStatus)
                     .HasMaxLength(20)
