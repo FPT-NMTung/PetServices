@@ -1,231 +1,467 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿<!doctype html>
+<html class="no-js" lang="en">
+
+
+<!-- Mirrored from new.axilthemes.com/demo/template/etrade/single-product-5.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 10 Aug 2023 07:18:31 GMT -->
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Single Product Page</title>
-    <!-- css -->
-    <link rel="stylesheet" href="/css/ServiceDetail.css">
-    <link rel="stylesheet" href="/css/Service/ServiceDetail.css"></link>
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script src="/js/ServiceList.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Service Detail</title>
+    <meta name="robots" content="noindex, follow" />
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="/css/Service/ServiceDetail.css"></linh>
+
 </head>
-<body>
-    <div class="pagination">
-        <a href="/Home">Home  </a> ><a href="/Home/ServiceList">Dịch Vụ </a> ><p>Sản Phẩm </p> 
-    </div>
-    <!-- product section -->
-    <section class="product-container">
-        <!-- left side -->
-        <div class="img-card">
-            <img src="@Model?.Service.Picture" alt="" id="featured-image" class="small-Img">
-            <!-- small img -->
-    
-            <div class="small-Card">
-                    <div class="Imgslider">
-                     <div class="card__container swiper">
-                        <div class="card__content anh">
-                           <div class="swiper-wrapper">
-                                @foreach(var sc in Model?.ServiceCategory.Services)
-                           {
-                                    @if (sc.Status)
-                                    {
-                                        <article class="card__article swiper-slide">
-                                            <div class="card__image">
-                                                <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sc.ServiceId"><img src="@sc.Picture" alt="image" class="card__img"></a>   
-                                                <div class="card__shadow"></div>
+
+
+<body class="sticky-header">
+    <!--[if lte IE 9]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+<![endif]-->
+    <a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
+    <!-- Start Header -->
+
+    <!-- End Header -->
+
+    <main class="main-wrapper">
+        <!-- Start Shop Area  -->
+        <div class="axil-single-product-area bg-color-white">
+            <div class="single-product-thumb axil-section-gap pb--30 pb_sm--20">
+                <div class="container">
+                    <div class="row row--50">
+                        <div class="col-lg-6 mb--40">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="product-large-thumbnail-2 single-product-thumbnail axil-product slick-layout-wrapper--15 axil-slick-arrow arrow-both-side-3">
+                                        <div class="thumbnail">
+                                           <img  src="@Model?.Service.Picture" alt="Images"  style="height:615px;">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="small-thumb-wrapper product-small-thumb-2 small-thumb-style-two small-thumb-style-three">
+                                         @foreach(var sc in Model?.ServiceCategory.Services)
+                                         {
+                                            @if (sc.Status)
+                                            {
+                                                <div class="small-thumb-img ">
+                                                    <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sc.ServiceId"><img src="@sc.Picture" style="width:60px; height:60px;" alt="samll-thumb"></a> 
+                                                </div>
+                                            }
+                                            }
+                                     </div>
+                                </div>
+                            </div>
+                            <div class="total-amount-section" style="margin-top:10px;   ">
+                                <span id="totalAmountDisplay">0 VNĐ</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb--40">
+                            <div class="single-product-content">
+                                <div class="inner">
+                                    <h2 class="product-title">@Model?.Service.ServiceName</h2>
+                                    <div class="price-amount price-offer-amount">
+                                        <span class="price current-price">@Model?.Service.Price VNĐ</span>
+                                        <!-- <span class="price old-price">$155.00</span> -->
+                                    </div>
+                                    <div class="product-rating">
+                                        <div class="star-rating">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <div class="review-link">
+                                            <a href="#">(<span>2</span> customer reviews)</a>
+                                        </div>
+                                    </div>
+                                    <ul class="product-meta">
+                                        <li><i class="fal fa-check"></i>Dịch vụ chất lượng</li>
+                                        <li><i class="fal fa-check"></i>Nhân viên tận tình chu đáo</li>
+                                    </ul>
+                                    <p class="description mb--40">@Model?.Service.Desciptions</p>
+                                    <div style="margin-bottom:10px;">
+                                        <p class="title" style="font-family: serif;font-size: 15px; height:1px;">Đối tác:</p>
+                                        <label class="containerbutton" >
+                                            <input type="checkbox" id="toggleSelect">
+                                            <div class="checkmark"></div>
+                                        
+                                            @if (ViewBag.Partners != null)
+                                            {
+                                                <select name="PartnerInfoId" id="PartnerInfoId"  class="size-option"  style="font-family: serif ; width: 200px; height:30px;" disabled >
+                                                    <option value="">Danh sách đối tác</option>
+                                                    @foreach (var category in ViewBag.Partners)
+                                                     {
+                                                    <option value="@category.Value">@category.Text</option>
+                                                     }
+                                                </select>
+                                            }
+                                        </label>
+                                    </div>
+                                    <div class="product-variations-wrapper">
+                                        <div class="product-variation product-size-variation">
+                                             <p class="title" style="font-family: serif; font-size: 15px;">Dịch vụ:</p>
+                                            <ul class="range-variant" style="font-family: serif">
+                                                 @foreach(var sr in Model?.ServiceCategory.Services) { 
+                                                    @if(sr.Status){
+                                                    <a  href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sr.ServiceId"><li style="font-size:15px;font-family: serif;" >@sr.ServiceName</li></a>
+                                                    } 
+                                                    else{ } 
+                                                 }
+                                            </ul> 
+                                        </div>
+                                    </div>
+                                    <div style="margin-top:5px">
+                                        <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ bắt đầu:</p>
+                                        <input id="datetimeStart" type="text" placeholder="Thời gian bắt đầu">
+                                    </div>
+                                    <div style="margin-top:5px">
+                                        <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ kết thúc:</p>
+                                        <input id="datetimeEnd" type="text" placeholder="Thời gian kết thúc"> 
+                                    </div>
+                                    <div style="margin-top:5px">
+                                        <p style="font-family: serif; font-size: 15px; height:1px;">Cân nặng của thú cưng:</p>
+                                        <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" required>
+                                    </div>
+                                    <!-- Start Product Action Wrapper  -->
+                                    <div class="product-action-wrapper d-flex-center">
+
+                                        <!-- Start Product Action  -->
+                                        <ul class="product-action action-style-two d-flex-center mb--0" style="display:contents;">
+                                            @*<li class="add-to-cart" style="width: 544px;"><a href="" class="axil-btn btn-bg-primary">Thêm vào giỏ hàng</a></li>*@
+                                            <form method="post" action="@Url.Action("AddToCart", "Home")">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="ServiceId" value="@Model?.Service.ServiceId" />
+                                                <input type="hidden" name="PriceService" id="totalPriceService" value="" />
+                                                <input type="hidden" name="Weight" id="Weight" value="" />
+                                                <input type="hidden" name="PartnerId" id="PartnerId" value="" />
+                                                <button class="axil-btn btn-bg-primary"  type="submit" ><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
+                                            </>
+                                            </form>
+                                            @*<li class="add-to-cart" style="width: 250px;">*@<button style="width:200px; margin-left: 5px;" href="" class="axil-btn btn-bg-primary">Mua ngay</button>@*</li>*@
+                                        </ul>
+                                        <!-- End Product Action  -->
+
+                                    </div>
+                                    <!-- End Product Action Wrapper  -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- End .single-product-thumb -->
+
+            <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
+                <div class="container">
+                    <div class="product-desc-wrapper mb--30 mb_sm--10">
+                        <h4 class="mb--60 desc-heading">Giới thiệu</h4>
+                        <div class="row mb--15">
+                            <div class="col-lg-6 mb--30">
+                                <div class="single-desc">
+                                    <h5 class="title">Nhân viên:</h5>
+                                    <p>Nhân viên chăm sóc thú cưng là những chuyên gia hoặc người làm việc tại cửa hàng hoặc trung tâm thú cưng, đảm bảo rằng thú cưng của khách hàng được chăm sóc và đối xử tốt. Công việc của họ bao gồm chăm sóc cơ bản, kiểm
+                                        tra sức khỏe, tư vấn về chăm sóc và dinh dưỡng, quản lý lịch trình, tư vấn sản phẩm và dịch vụ, và đối xử yêu thương với thú cưng. Đây là công việc yêu động vật, đòi hỏi kiến thức về thú cưng và kỹ năng giao tiếp
+                                        tốt.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- End .col-lg-6 -->
+                            <div class="col-lg-6 mb--30">
+                                <div class="single-desc">
+                                    <h5 class="title">Dịch vụ:</h5>
+                                    <p>Dịch vụ chăm sóc thú cưng cho cửa hàng là ngành kinh doanh cung cấp các dịch vụ chăm sóc thú cưng như tắm rửa, cắt tỉa lông, kiểm tra sức khỏe, và nhiều dịch vụ thú vị khác. Cửa hàng giới thiệu và mô tả chi tiết về
+                                        các dịch vụ, nhân viên chăm sóc thú cưng, lịch trình, và các chương trình giảm giá để thu hút khách hàng.</p>
+                                </div>
+                            </div>
+                            <!-- End .col-lg-6 -->
+                        </div>
+                        <!-- End .row -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul class="pro-des-features">
+                                    <li class="single-features">
+                                        <div class="icon">
+                                            <img src="/img/icon/pet-care.png" alt="icon">
+                                        </div>
+                                        Chăm sóc tận tình
+                                    </li>
+                                    <li class="single-features">
+                                        <div class="icon">
+                                            <img src="/img/icon/icon-2.png" alt="icon">
+                                        </div>
+                                        Dịch vụ chất lượng
+                                    </li>
+                                    <li class="single-features">
+                                        <div class="icon">
+                                            <img src="/img/icon/icon-1.png" alt="icon">
+                                        </div>
+                                        tận tâm cho mọi dịch vụ
+                                    </li>
+                                </ul>
+                                <!-- End .pro-des-features -->
+                            </div>
+                        </div>
+                        <!-- End .row -->
+                    </div>
+
+                    <div class="reviews-wrapper">
+                        <h4 class="mb--60">Đánh giá</h4>
+                        <div class="row">
+                            <div class="col-lg-6 mb--40">
+                                <div class="axil-comment-area pro-desc-commnet-area">
+                                    <h5 class="title">03 đánh giá cho sản phẩm này</h5>
+                                    <ul class="comment-list">
+                                        <!-- Start Single Comment  -->
+                                        <li class="comment">
+                                            <div class="comment-body">
+                                                <div class="single-comment">
+                                                    <div class="comment-img">
+                                                        <img src="assets/images/blog/author-image-4.png" alt="Author Images">
+                                                    </div>
+                                                    <div class="comment-inner">
+                                                        <h6 class="commenter">
+                                                            <a class="hover-flip-item-wrapper" href="#">
+                                                                <span class="hover-flip-item">
+                                                                    <span data-text="Cameron Williamson">Eleanor Pena</span>
+                                                                </span>
+                                                            </a>
+                                                            <span class="commenter-rating ratiing-four-star">
+                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                                <a href="#"><i class="fas fa-star empty-rating"></i></a>
+                                                            </span>
+                                                        </h6>
+                                                        <div class="comment-text">
+                                                            <p>“We’ve created a full-stack structure for our working workflow processes, were from the funny the century initial all the made, have spare to negatives. ” </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </article>
-                                    }
-                                }
-                           </div>
+                                        </li>
+                                        <!-- End Single Comment  -->
+
+                                        <!-- Start Single Comment  -->
+                                        <li class="comment">
+                                            <div class="comment-body">
+                                                <div class="single-comment">
+                                                    <div class="comment-img">
+                                                        <img src="assets/images/blog/author-image-4.png" alt="Author Images">
+                                                    </div>
+                                                    <div class="comment-inner">
+                                                        <h6 class="commenter">
+                                                            <a class="hover-flip-item-wrapper" href="#">
+                                                                <span class="hover-flip-item">
+                                                                    <span data-text="Rahabi Khan">Courtney Henry</span>
+                                                                </span>
+                                                            </a>
+                                                            <span class="commenter-rating ratiing-four-star">
+                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                            </span>
+                                                        </h6>
+                                                        <div class="comment-text">
+                                                            <p>“We’ve created a full-stack structure for our working workflow processes, were from the funny the century initial all the made, have spare to negatives. ”</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <!-- End Single Comment  -->
+
+                                        <!-- Start Single Comment  -->
+                                        <li class="comment">
+                                            <div class="comment-body">
+                                                <div class="single-comment">
+                                                    <div class="comment-img">
+                                                        <img src="assets/images/blog/author-image-5.png" alt="Author Images">
+                                                    </div>
+                                                    <div class="comment-inner">
+                                                        <h6 class="commenter">
+                                                            <a class="hover-flip-item-wrapper" href="#">
+                                                                <span class="hover-flip-item">
+                                                                    <span data-text="Rahabi Khan">Devon Lane</span>
+                                                                </span>
+                                                            </a>
+                                                            <span class="commenter-rating ratiing-four-star">
+                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                            </span>
+                                                        </h6>
+                                                        <div class="comment-text">
+                                                            <p>“We’ve created a full-stack structure for our working workflow processes, were from the funny the century initial all the made, have spare to negatives. ” </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <!-- End Single Comment  -->
+                                    </ul>
+                                </div>
+                                <!-- End .axil-commnet-area -->
+                            </div>
                         </div>
+                        <!-- End .reviews-wrapper -->
+                    </div>
+                </div>
+                <!-- woocommerce-tabs -->
 
-                        <!-- Navigation buttons -->
-                        <div class="swiper-button-next anh">
-                           <i class="ri-arrow-right-s-line"></i>
-                        </div>
-            
-                        <div class="swiper-button-prev anh" style="left:5px;">
-                           <i class="ri-arrow-left-s-line"></i>
-                        </div>
-
-                        <!-- Pagination -->
-                        <div class="swiper-pagination anh"></div>
-                     </div>
-                  </div>
             </div>
-        </div>
-        <!-- Right side -->
-        <div class="product-info">
-            <h3>@Model?.Service.ServiceName</h3>
-            <h5>Giá:@Model?.Service.Price</h5>
-            <p>@Model?.Service.Desciptions</p>
+            <!-- End Shop Area  -->
 
-            <div class="sizes">
-                <p>Phân Loại:</p>
-                 @foreach(var sr in Model?.ServiceCategory.Services)
-               {
-                   @if(sr.Status){
-                        <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sr.ServiceId" class="size-option">@sr.ServiceName</a>
-                    }
-
-                    else{
-                        
-                    }
-               }
-            </div>
-
-            <div class="quantity">
-                <button>Thêm vào giỏ</button>
-                <button>Mua ngay</button>
-            </div>
-         @*   <div>
-                <p>Delivery:</p>
-                <p>Free standard shipping on orders over $35 before tax, plus free returns.</p>
-                <div class="delivery">
-                    <p>TYPE</p> <p>HOW LONG</p> <p>HOW MUCH</p>
-                </div>
-                <hr>
-                <div class="delivery">
-                    <p>Standard delivery</p> 
-                    <p>1-4 business days</p> 
-                    <p>$4.50</p>
-                </div>
-                <hr>
-                <div class="delivery">
-                    <p>Express delivery</p> 
-                    <p>1 business day</p> 
-                    <p>$10.00</p>
-                </div>
-                <hr>
-                <div class="delivery">
-                    <p>Pick up in store</p> 
-                    <p>1-3 business days</p> 
-                    <p>Free</p>
-                </div>
-            </div>*@
-       </div>
-    </section>
-    <footer>
-      <div class="container">
-         <div class="card__container swiper">
-            <div class="card__content">
-               <div class="swiper-wrapper">
-               @foreach (var sc in Model.CaServices)
-                 @if(sc.Status){
+            <!-- Start Recently Viewed Product Area  -->
+            <div class="axil-product-area bg-color-white axil-section-gap pb--50 pb_sm--30">
+                <div class="container">
+                    <div class="section-title-wrapper">
+                        <h2 class="title">Các dịch vụ bạn có thể tham khảo</h2>
+                    </div>
+                    <div class="recent-product-activation slick-layout-wrapper--15 axil-slick-arrow arrow-top-slide">
+                           @foreach (var sc in Model.CaServices)
+                            @if (sc.Status)
+                            {
                                 {
-                                    string description = sc.Desciptions; // Di chuyển khai báo vào đây
-
-                                    if (description != null)
-                                    {
-                                        if (description.Length > 100)
-                                        {
-                                            int lastSpace = description.LastIndexOf(' ', 100);
-
-                                            description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
-                                        }
-                                    }
-                                    <article class="card__article swiper-slide">
-                                        <div class="card__image">
-                                            <img src="@sc.Picture" alt="image" class="card__img">
-                                            <div class="card__shadow"></div>
+                                    <div class="slick-single-layout">
+                                        <div class="axil-product">
+                                            <div class="thumbnail">
+                                                <a href="~/Home/ServiceDetail?serviceCategoryId=@sc.SerCategoriesId">
+                                                    <img style="width:300px;height:150px;" src="@sc.Picture" alt="Product Images">
+                                                </a>
+                                            </div>
+                                            <div class="product-content">
+                                                <div class="inner">
+                                                    <h5 class="title"><a href="~/Home/ServiceDetail?serviceCategoryId=@sc.SerCategoriesId">@sc.SerCategoriesName</a></h5>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="card__data">
-                                            <h3 class="card__name">@sc.SerCategoriesName</h3>
-                                            <p class="description">
-                                                @description
-                                            </p>
-                                            <a href="#" class="card__button">View More</a>
-                                        </div>
-                                    </article>
+                                    </div>
                                 }
                             }
-
-               </div>
+                    </div>
+                </div>
             </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-            <!-- Navigation buttons -->
-            <div class="swiper-button-next" >
-               <i class="ri-arrow-right-s-line"></i>
-            </div>
-            
-            <div class="swiper-button-prev" style="left:5px;">
-               <i class="ri-arrow-left-s-line"></i>
-            </div>
+    <script>
+        // Lấy tham chiếu đến checkbox và select bằng cách sử dụng id
+        var checkbox = document.getElementById('toggleSelect');
+        var select = document.getElementById('PartnerInfoId');
 
-            <!-- Pagination -->
-            <div class="swiper-pagination"></div>
-         </div>
-      </div>
-    </footer>
+        // Thêm sự kiện "change" cho checkbox
+        checkbox.addEventListener('change', function() {
+            if (checkbox.checked) {
+                select.removeAttribute('disabled');
+            } else {
+                select.setAttribute('disabled', 'disabled');
+            }
+        });
+        const input = document.getElementById('petWeight');
+        input.addEventListener('change', function() {
+            if (input.value && !input.value.endsWith('kg')) {
+                input.value += ' kg';
+            }
+        });
 
+    </script>
+  <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const fpStart = flatpickr("#datetimeStart", {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                minTime: "07:30",
+                onClose: function(selectedDates, dateStr, instance) {
+                    const selectedTime = new Date(dateStr);
+                    const serviceType = instance.input.id;
+                    
+                    // Thay thế giờ đóng cửa trực tiếp trong onClose function
+                    let closingTime = new Date(selectedTime.toDateString() + " " + "19:00");
+                    if (selectedTime.getHours() >= 19) {
+                        const nextDay = new Date(selectedTime);
+                        nextDay.setDate(selectedTime.getDate() + 1);
+                        nextDay.setHours(7);
+                        nextDay.setMinutes(30);
+                        selectedTime.setDate(nextDay.getDate());
+                        selectedTime.setHours(nextDay.getHours());
+                        selectedTime.setMinutes(nextDay.getMinutes());
+                        closingTime = new Date(selectedTime.toDateString() + " " + "19:00");
+                    }
+                    
+                    const serviceTime = @Model.Service.Time*60 * 60 * 1000;
+                    let endTime = new Date(selectedTime.getTime() + serviceTime);
+                    if (endTime > closingTime) {
+                        endTime = closingTime;
+                    }
 
-<script>
-    {
-    // Swiper cho danh sách sản phẩm
-    var swiperProducts = new Swiper(".card__content", {
-        loop: true,
-        spaceBetween: 32,
-        grabCursor: false,
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-            dynamicBullets: true,
-        },
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
-        breakpoints: {
-            600: {
-                slidesPerView: 2,
-            },
-            968: {
-                slidesPerView: 3,
-            },
-        },
-    });
+                    document.getElementById("datetimeStart").value = selectedTime.toLocaleString();
+                    document.getElementById("datetimeEnd").value = endTime.toLocaleString();
+                }
+            });
+        });
+    </script>
+    <script>
+// Function to calculate total amount
+function calculateTotal() {
+    var petWeight = parseFloat(document.getElementById('petWeight').value);
+    var servicePrice = parseFloat(document.querySelector('.price.current-price').textContent);
+
+    var additionalCost = 0;
+    var additional =0;
+
+    if (document.getElementById('toggleSelect').checked) {
+        additional += 50000;
+    }
+
+    if (petWeight <= 5) {
+        additionalCost += 0;
+    } else if (petWeight > 5 && petWeight <= 10) {
+        additionalCost += 50000;
+    } else if (petWeight > 10 && petWeight <= 20) {
+        additionalCost += 100000;
+    } else if (petWeight > 20 && petWeight <= 40) {
+        additionalCost += 200000;
+    } else if(petWeight > 40) {
+        additionalCost += 400000;
+    }
+     var PartnerInfoId = document.getElementById("PartnerInfoId");
+            var selectedPartnerId = PartnerInfoId.options[PartnerInfoId.selectedIndex];
+
+            var PartnerId = document.getElementById("PartnerId");
+            PartnerId.value = selectedPartnerId.value;
+
+    var totalAmount = servicePrice + additional+ additionalCost;
+
+            var totalPriceService = document.getElementById("totalPriceService");
+            var Weight = document.getElementById("Weight");
+            totalPriceService.value = totalAmount;
+            Weight.value = petWeight;
+            document.getElementById('totalPriceService').textContent = totalPriceService.value;
+
+    // Display the total amount in the HTML
+    document.getElementById('totalAmountDisplay').textContent = servicePrice+ "  (dịch vụ) + " +additionalCost+ " (cân nặng) + " +additional+ "  (đối tác) " + "=" +totalAmount + " VNĐ";
 }
-{
-    // Swiper cho danh sách sản phẩm dự phòng
-    var swiperCardsimg = new Swiper(".card__content.anh", {
-        loop: true,
-        spaceBetween: 32,
-        grabCursor: true,
-        pagination: {
-            el: ".swiper-pagination.anh",
-            clickable: true,
-            dynamicBullets: true,
-        },
-        navigation: {
-            nextEl: ".swiper-button-next.anh",
-            prevEl: ".swiper-button-prev.anh",
-        },
-        breakpoints: {
-            600: {
-                slidesPerView: 2,
-            },
-            968: {
-                slidesPerView: 4,
-            },
-        },
-    });
-}
-    // Đặt namespace riêng cho mỗi Swiper
-    swiperProducts.params.swiperNamespace = 'swiperProducts';
-    swiperCardsimg.params.swiperNamespace = 'swiperCardsimg';
 
-    // Xác định mối quan hệ giữa hai Swiper sử dụng namespace
-    swiperProducts.controller.control = swiperCardsimg;
-    swiperCardsimg.controller.control = swiperProducts;
-</script>
+// Trigger the initial calculation
+calculateTotal();
 
+// This function is to trigger the calculation on checkbox change and input change
+document.getElementById('toggleSelect').addEventListener('change', calculateTotal);
+document.getElementById('petWeight').addEventListener('input', calculateTotal);
 
-
+   </script>
 </body>
 
 </html>
-
-

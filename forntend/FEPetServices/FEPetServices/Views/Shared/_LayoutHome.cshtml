@@ -1,5 +1,4 @@
-﻿﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html>
 <head>
@@ -98,8 +97,19 @@
                                 <li>
                                     <a href="~/ProductList">Sản phẩm</a>
                                 </li>
-                                <li>
-                                    <a href="~/Home/ServiceList">Dịch vụ</a>
+                                <li @*class="menu-item-has-children"*@>
+                                    <a href="/Home/ServiceList">Dịch vụ</a>
+                                    @*<ul class="axil-submenu">
+                                        <li><a href="shop-sidebar.html">Shop With Sidebar</a></li>
+                                        <li><a href="shop.html">Shop no Sidebar</a></li>
+                                        <li><a href="single-product.html">Product Variation 1</a></li>
+                                        <li><a href="single-product-2.html">Product Variation 2</a></li>
+                                        <li><a href="single-product-3.html">Product Variation 3</a></li>
+                                        <li><a href="single-product-4.html">Product Variation 4</a></li>
+                                        <li><a href="single-product-5.html">Product Variation 5</a></li>
+                                        <li><a href="single-product-6.html">Product Variation 6</a></li>
+                                        <li><a href="single-product-7.html">Product Variation 7</a></li>
+                                    </ul>*@
                                 </li>
                                 <li><a href="~/Home/BlogList">Blog</a></li>
                                 <li><a href="~/Home/Introduce">Giới thiệu</a></li>
@@ -111,7 +121,15 @@
                         <ul class="action-list">
                             <li class="shopping-cart">
                                 <a href="#" class="cart-dropdown-btn">
-                                    <span class="cart-count">3</span>
+                                    @{
+                                        var session = HttpContextAccessor.HttpContext.Session;
+                                        string jsoncart = session.GetString(FEPetServices.Controllers.ProductListController.CARTKEY);
+                                        if (jsoncart != null)
+                                        {
+                                            var cartItems = JsonConvert.DeserializeObject<List<FEPetServices.Controllers.ProductListController.CartItem>>(jsoncart);
+                                            <span class="cart-count">@cartItems.Count</span>
+                                        }
+                                    }
                                     <i class="flaticon-shopping-cart"></i>
                                 </a>
                             </li>
@@ -173,7 +191,7 @@
                                     quận Thanh Xuân, Hà nội.
                                 </p>
                                 <ul class="support-list-item">
-                                    <li><a href="mailto:example@domain.com"><i class="fal fa-envelope-open"></i> petservices@petpet.com</a></li>
+                                    <li><a href="mailto:psmsg65@gmail.com"><i class="fal fa-envelope-open"></i> psmsg65@gmail.com</a></li>
                                     <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> 0969886688</a></li>
                                     <!-- <li><i class="fal fa-map-marker-alt"></i> 685 Market Street,  <br> Las Vegas, LA 95820, <br> United States.</li> -->
                                 </ul>
@@ -247,95 +265,71 @@
     <div class="cart-dropdown" id="cart-dropdown">
         <div class="cart-content-wrap">
             <div class="cart-header">
-                <h2 class="header-title">Cart review</h2>
+                <h2 class="header-title">Thông tin chi tiết giỏ hàng</h2>
                 <button class="cart-close sidebar-close"><i class="fas fa-times"></i></button>
             </div>
             <div class="cart-body">
                 <ul class="cart-item-list">
-                    <li class="cart-item">
-                        <div class="item-img">
-                            <a href="single-product.html"><img src="~/assets/images/product/electric/product-01.png" alt="Commodo Blown Lamp"></a>
-                            <button class="close-btn"><i class="fas fa-times"></i></button>
-                        </div>
-                        <div class="item-content">
-                            <div class="product-rating">
-                                <span class="icon">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span>
-                                <span class="rating-number">(64)</span>
-                            </div>
-                            <h3 class="item-title"><a href="single-product-3.html">Wireless PS Handler</a></h3>
-                            <div class="item-price"><span class="currency-symbol">$</span>155.00</div>
-                            <div class="pro-qty item-quantity">
-                                <input type="number" class="quantity-input" value="15">
-                            </div>
-                        </div>
-                    </li>
-                    <li class="cart-item">
-                        <div class="item-img">
-                            <a href="single-product-2.html"><img src="~/assets/images/product/electric/product-02.png" alt="Commodo Blown Lamp"></a>
-                            <button class="close-btn"><i class="fas fa-times"></i></button>
-                        </div>
-                        <div class="item-content">
-                            <div class="product-rating">
-                                <span class="icon">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span>
-                                <span class="rating-number">(4)</span>
-                            </div>
-                            <h3 class="item-title"><a href="single-product-2.html">Gradient Light Keyboard</a></h3>
-                            <div class="item-price"><span class="currency-symbol">$</span>255.00</div>
-                            <div class="pro-qty item-quantity">
-                                <input type="number" class="quantity-input" value="5">
-                            </div>
-                        </div>
-                    </li>
-                    <li class="cart-item">
-                        <div class="item-img">
-                            <a href="single-product-3.html"><img src="~/assets/images/product/electric/product-03.png" alt="Commodo Blown Lamp"></a>
-                            <button class="close-btn"><i class="fas fa-times"></i></button>
-                        </div>
-                        <div class="item-content">
-                            <div class="product-rating">
-                                <span class="icon">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span>
-                                <span class="rating-number">(6)</span>
-                            </div>
-                            <h3 class="item-title"><a href="single-product.html">HD CC Camera</a></h3>
-                            <div class="item-price"><span class="currency-symbol">$</span>200.00</div>
-                            <div class="pro-qty item-quantity">
-                                <input type="number" class="quantity-input" value="100">
-                            </div>
-                        </div>
-                    </li>
+                    @{
+                        var sessions = HttpContextAccessor.HttpContext.Session;
+                        string jsoncarts = sessions.GetString(FEPetServices.Controllers.ProductListController.CARTKEY);
+                        if (jsoncarts != null)
+                        {
+                            var cartItems = JsonConvert.DeserializeObject<List<FEPetServices.Controllers.ProductListController.CartItem>>(jsoncarts);
+                            if (cartItems != null)
+                            {
+                                foreach (var item in cartItems)
+                                {
+                                    <li class="cart-item">
+                                        <div class="item-img">
+                                            @if (item.product != null)
+                                            {
+                                                <a><img src="@item.product.Picture" alt="@item.product.ProductName"></a>
+                                            }
+                                            @if (item.service != null)
+                                            {
+                                                <a><img src="@item.service.Picture" alt="@item.service.ServiceName"></a>
+                                            }
+                                            <button class="close-btn"><i class="fas fa-times"></i></button>
+                                        </div>
+                                        <div class="item-content">
+                                            @if (item.product != null)
+                                            {
+                                                <h3 class="item-title"><a >@item.product.ProductName</a></h3>
+                                                <div class="item-price"><span class="currency-symbol"></span>@($"{item.product.Price:n0} VNĐ")</div>
+                                                <div class="pro-qty item-quantity">
+                                                    <input type="number" class="quantity-input" value="@item.quantityProduct">
+                                                </div>
+                                            }
+                                            @if (item.service != null)
+                                            {
+                                                <h3 class="item-title">@item.service.ServiceName</h3>
+                                                <div class="item-price"><span class="currency-symbol"></span>@($"{item.PriceService:n0} VNĐ")</div>
+                                            }
+                                        </div>
+                                    </li>
+                                }
+                            }
+                            if (cartItems == null)
+                            {
+                                <li class="cart-item"> Giỏ hàng trống</li>
+                            }
+                        }
+                    }
                 </ul>
             </div>
             <div class="cart-footer">
-                <h3 class="cart-subtotal">
-                    <span class="subtotal-title">Subtotal:</span>
-                    <span class="subtotal-amount">$610.00</span>
+                <h3 class="cart-subtotal">  
+                    <span class="subtotal-title">Thống kê</span>
                 </h3>
                 <div class="group-btn">
-                    <a href="cart.html" class="axil-btn btn-bg-primary viewcart-btn">View Cart</a>
-                    <a href="checkout.html" class="axil-btn btn-bg-secondary checkout-btn">Checkout</a>
+                    <a href="~/Cart" class="axil-btn btn-bg-primary viewcart-btn">Xem chi tiết</a>
+                    <a href="checkout.html" class="axil-btn btn-bg-secondary checkout-btn">Thủ tục thành toán</a>
                 </div>
             </div>
         </div>
     </div>
-
+                    
     @*Toast notification design*@
     <div id="toast"></div>
     @*Common toast notification*@

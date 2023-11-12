@@ -20,15 +20,17 @@ namespace UnitTest
         public async Task Test_Login_Success()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()
-        .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-        .Options;
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
 
             using (var context = new PetServicesContext(options))
             {
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword("12345678");
+
                 var testUser = new Account
                 {
                     Email = "hungnvhe153434@fpt.edu.vn",
-                    Password = "12345678",
+                    Password = hashedPassword,
                     Role = new Role { RoleName = "CUSTOMER" },
                     UserInfo = new UserInfo { FirstName = "Thị", LastName = "Nở" }
                 };
@@ -50,7 +52,7 @@ namespace UnitTest
             var loginForm = new LoginForm
             {
                 Email = "hungnvhe153434@fpt.edu.vn",
-                Password = "12345678"
+                Password = "12345678" 
             };
 
             var result = await controller.Login(loginForm) as ObjectResult;
@@ -66,7 +68,7 @@ namespace UnitTest
             Assert.Equal("Thị Nở", loginResponse.UserName);
         }
 
-         [Fact]
+        [Fact]
         // 2. Email + Pass(sai)
         public async Task Test_Login_Fail_wrongPassword()
         {
@@ -76,10 +78,11 @@ namespace UnitTest
 
             using (var context = new PetServicesContext(options))
             {
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword("12345678");
                 var testUser = new Account
                 {
                     Email = "hungnvhe153434@fpt.edu.vn",
-                    Password = "12345678",
+                    Password = hashedPassword,
                     Role = new Role { RoleName = "CUSTOMER" }
                 };
 
@@ -120,10 +123,11 @@ namespace UnitTest
 
             using (var context = new PetServicesContext(options))
             {
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword("12345678");
                 var testUser = new Account
                 {
                     Email = "hungnvhe153434@fpt.edu.vn",
-                    Password = "12345678",
+                    Password = hashedPassword,
                     Role = new Role { RoleName = "CUSTOMER" }
                 };
 
@@ -164,10 +168,11 @@ namespace UnitTest
 
             using (var context = new PetServicesContext(options))
             {
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword("12345678");
                 var testUser = new Account
                 {
                     Email = "hungnvhe153434@fpt.edu.vn",
-                    Password = "12345678",
+                    Password = hashedPassword,
                     Role = new Role { RoleName = "CUSTOMER" }
                 };
 
@@ -208,10 +213,11 @@ namespace UnitTest
 
             using (var context = new PetServicesContext(options))
             {
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword("12345678");
                 var testUser = new Account
                 {
                     Email = "hungnvhe153434@fpt.edu.vn",
-                    Password = "12345678",
+                    Password = hashedPassword,
                     Role = new Role { RoleName = "CUSTOMER" }
                 };
 
@@ -252,10 +258,11 @@ namespace UnitTest
 
             using (var context = new PetServicesContext(options))
             {
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword("12345678");
                 var testUser = new Account
                 {
                     Email = "hungnvhe153434@fpt.edu.vn",
-                    Password = "12345678",
+                    Password = hashedPassword,
                     Role = new Role { RoleName = "CUSTOMER" }
                 };
 
