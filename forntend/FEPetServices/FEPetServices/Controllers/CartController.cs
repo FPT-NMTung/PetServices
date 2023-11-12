@@ -56,7 +56,7 @@ namespace FEPetServices.Controllers
             return View(cartItems); // Pass cart items to the view
         }
 
-        /*[HttpPost]
+        [HttpPost]
         public IActionResult UpdateCart([FromForm] int productid, [FromForm] int quantity)
         {
             // Cập nhật Cart thay đổi số lượng quantity ...
@@ -85,6 +85,6 @@ namespace FEPetServices.Controllers
 
             SaveCartSession(cart);
             return RedirectToAction("Index", "Cart");
-        }*/
+        }
     }
 }

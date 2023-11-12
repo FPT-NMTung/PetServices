@@ -153,7 +153,6 @@ namespace FEPetServices.Controllers
             return View();
         }
 
-
         void ClearCart()
         {
             var session = HttpContext.Session;
