@@ -637,5 +637,161 @@ namespace UnitTest
                 Assert.Equal("Phường/Xã phải là ký tự chữ, không chấp nhận số hay ký tự đặc biệt!", errorMessage);
             }
         }
+
+        [Fact]
+        // 13. Order Product - Province(>50 word)
+        public async Task Test_CreateOrder_Province_ToLong()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var product = new Product
+                {
+                    ProductId = 1,
+                    Price = 100,
+                };
+                context.Products.Add(product);
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new OrderController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var province = new string('A', 51);
+                var testOrder = new OrdersDTO
+                {
+                    OrderDate = DateTime.Now,
+                    OrderStatus = "Waiting",
+                    Province = province,
+                    District = "Hà Tĩnh",
+                    Commune = "Thạch Linh",
+                    Address = "Thạch Linh-Hà Tĩnh",
+                    UserInfoId = 1,
+
+                    OrderProductDetails = new List<OrderProductDetailDTO>
+                    {
+                        new OrderProductDetailDTO
+                        {
+                            Quantity = 2,
+                            ProductId = 1,
+                        }
+                    }
+                };
+                var result = await controller.CreateOrder(testOrder) as BadRequestObjectResult;
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                var errorMessage = result.Value as string;
+                Assert.Equal("Tỉnh vượt quá số ký tự. Tối đa 50 ký tự!", errorMessage);
+            }
+        }
+
+        [Fact]
+        // 14. Order Product - District(>50 word)
+        public async Task Test_CreateOrder_District_ToLong()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var product = new Product
+                {
+                    ProductId = 1,
+                    Price = 100,
+                };
+                context.Products.Add(product);
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new OrderController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var disrict = new string('A', 51);
+                var testOrder = new OrdersDTO
+                {
+                    OrderDate = DateTime.Now,
+                    OrderStatus = "Waiting",
+                    Province = "Hà Tĩnh",
+                    District = disrict,
+                    Commune = "Thạch Linh",
+                    Address = "Thạch Linh-Hà Tĩnh",
+                    UserInfoId = 1,
+
+                    OrderProductDetails = new List<OrderProductDetailDTO>
+                    {
+                        new OrderProductDetailDTO
+                        {
+                            Quantity = 2,
+                            ProductId = 1,
+                        }
+                    }
+                };
+                var result = await controller.CreateOrder(testOrder) as BadRequestObjectResult;
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                var errorMessage = result.Value as string;
+                Assert.Equal("Huyện/Thành Phố vượt quá số ký tự. Tối đa 50 ký tự!", errorMessage);
+            }
+        }
+
+        [Fact]
+        // 15. Order Product - Commune(>50 word)
+        public async Task Test_CreateOrder_Commune_ToLong()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var product = new Product
+                {
+                    ProductId = 1,
+                    Price = 100,
+                };
+                context.Products.Add(product);
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new OrderController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var commune = new string('A', 51);
+                var testOrder = new OrdersDTO
+                {
+                    OrderDate = DateTime.Now,
+                    OrderStatus = "Waiting",
+                    Province = "Hà Tĩnh",
+                    District = "Hà Tĩnh",
+                    Commune = commune,
+                    Address = "Thạch Linh-Hà Tĩnh",
+                    UserInfoId = 1,
+
+                    OrderProductDetails = new List<OrderProductDetailDTO>
+                    {
+                        new OrderProductDetailDTO
+                        {
+                            Quantity = 2,
+                            ProductId = 1,
+                        }
+                    }
+                };
+                var result = await controller.CreateOrder(testOrder) as BadRequestObjectResult;
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                var errorMessage = result.Value as string;
+                Assert.Equal("Phường/Xã vượt quá số ký tự. Tối đa 50 ký tự!", errorMessage);
+            }
+        }
     }
 }

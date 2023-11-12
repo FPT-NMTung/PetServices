@@ -130,6 +130,11 @@ namespace PetServices.Controllers
                 string errorMessage = "Tỉnh phải là ký tự chữ, không chấp nhận số hay ký tự đặc biệt!";
                 return BadRequest(errorMessage);
             }
+            if (orderDTO.Province.Length > 50)
+            {
+                string errorMessage = "Tỉnh vượt quá số ký tự. Tối đa 50 ký tự!";
+                return BadRequest(errorMessage);
+            }
             if (string.IsNullOrWhiteSpace(orderDTO.District))
             {
                 string errorMessage = "Huyện/Thành Phố không được để trống!";
@@ -140,7 +145,11 @@ namespace PetServices.Controllers
                 string errorMessage = "Huyện/Thành phố phải là ký tự chữ, không chấp nhận số hay ký tự đặc biệt!";
                 return BadRequest(errorMessage);
             }
-
+            if (orderDTO.District.Length > 50)
+            {
+                string errorMessage = "Huyện/Thành Phố vượt quá số ký tự. Tối đa 50 ký tự!";
+                return BadRequest(errorMessage);
+            }
             if (string.IsNullOrWhiteSpace(orderDTO.Commune))
             {
                 string errorMessage = "Phường/Xã không được để trống!";
@@ -149,6 +158,11 @@ namespace PetServices.Controllers
             if (!Regex.IsMatch(orderDTO.Commune, @"^[\p{L}\s]+$"))
             {
                 string errorMessage = "Phường/Xã phải là ký tự chữ, không chấp nhận số hay ký tự đặc biệt!";
+                return BadRequest(errorMessage);
+            }
+            if (orderDTO.Commune.Length > 50)
+            {
+                string errorMessage = "Phường/Xã vượt quá số ký tự. Tối đa 50 ký tự!";
                 return BadRequest(errorMessage);
             }
 
