@@ -10407,13 +10407,28 @@ body.open .closeMask {
     font-weight: 500
 }
 
+.product_list_widget li .woocommerce-Price-amount.amount1 {
+    font-size: 17px;
+    line-height: 28px;
+    color: var(--color-heading);
+    font-weight: 500
+}
+
 @media only screen and (max-width: 767px) {
     .product_list_widget li .woocommerce-Price-amount.amount {
+        font-size: 18px
+    }
+    .product_list_widget li .woocommerce-Price-amount.amount1 {
         font-size: 18px
     }
 }
 
 .product_list_widget li .woocommerce-Price-amount.amount del {
+    padding-right: 8px;
+    color: #d6d6d6
+}
+
+.product_list_widget li .woocommerce-Price-amount.amount1 del {
     padding-right: 8px;
     color: #d6d6d6
 }

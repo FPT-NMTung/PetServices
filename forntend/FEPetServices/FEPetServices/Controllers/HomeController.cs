@@ -1,4 +1,4 @@
-﻿using FEPetServices.Areas.DTO;
+﻿    using FEPetServices.Areas.DTO;
 using FEPetServices.Form;
 using FEPetServices.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -75,55 +75,55 @@ namespace FEPetServices.Controllers
 
                         if (!string.IsNullOrEmpty(searchDTO.roomname))
                         {
-                            roomList = roomList.Where(r => r.RoomName.Contains(searchDTO.roomname, StringComparison.OrdinalIgnoreCase)).ToList();
+                            roomList = roomList?.Where(r => r.RoomName.Contains(searchDTO.roomname, StringComparison.OrdinalIgnoreCase)).ToList();
                         }
 
                         if (!string.IsNullOrEmpty(searchDTO.roomcategory))
                         {
                             int roomCategoriesId = int.Parse(searchDTO.roomcategory);
-                            roomList = roomList.Where(r => r.RoomCategoriesId == roomCategoriesId).ToList();
+                            roomList = roomList?.Where(r => r.RoomCategoriesId == roomCategoriesId).ToList();
                         }
 
-                        /*if (!string.IsNullOrEmpty(searchDTO.pricefrom) || !string.IsNullOrEmpty(searchDTO.priceto))
+                        if (!string.IsNullOrEmpty(searchDTO.pricefrom) || !string.IsNullOrEmpty(searchDTO.priceto))
                         {
-                            if (string.IsNullOrEmpty(searchDTO.pricefrom))
+                            if (string.IsNullOrEmpty(searchDTO.pricefrom) && !string.IsNullOrEmpty(searchDTO.priceto))
                             {
                                 int priceTo = int.Parse(searchDTO.priceto);
-                                roomList = roomList.Where(r => r.Price < priceTo).ToList();
+                                roomList = roomList?.Where(r => r.Price < priceTo).ToList();
                             }
-                            if (string.IsNullOrEmpty(searchDTO.priceto))
+                            if (string.IsNullOrEmpty(searchDTO.priceto) && !string.IsNullOrEmpty(searchDTO.pricefrom))
                             {
                                 int priceFrom = int.Parse(searchDTO.pricefrom);
-                                roomList = roomList.Where(r => r.Price > priceFrom).ToList();
+                                roomList = roomList?.Where(r => r.Price > priceFrom).ToList();
                             }
                             if (!string.IsNullOrEmpty(searchDTO.pricefrom) && !string.IsNullOrEmpty(searchDTO.priceto))
                             {
                                 int PriceTo = int.Parse(searchDTO.priceto);
                                 int PriceFrom = int.Parse(searchDTO.pricefrom);
 
-                                roomList = roomList.Where(r => r.Price > PriceFrom && r.Price < PriceTo).ToList();
+                                roomList = roomList?.Where(r => r.Price > PriceFrom && r.Price < PriceTo).ToList();
                             }
-                        }*/
+                        }
 
                         switch (searchDTO.sortby)
                         {
                             case "name_desc":
-                                roomList = roomList.OrderByDescending(r => r.RoomName).ToList();
+                                roomList = roomList?.OrderByDescending(r => r.RoomName).ToList();
                                 break;
                             case "price":
-                                roomList = roomList.OrderBy(r => r.Price).ToList();
+                                roomList = roomList?.OrderBy(r => r.Price).ToList();
                                 break;
                             case "price_desc":
-                                roomList = roomList.OrderByDescending(r => r.Price).ToList();
+                                roomList = roomList?.OrderByDescending(r => r.Price).ToList();
                                 break;
                             default:
-                                roomList = roomList.OrderBy(r => r.RoomName).ToList();
+                                roomList = roomList?.OrderBy(r => r.RoomName).ToList();
                                 break;
                         }
 
                         ViewBag.roomcategory = searchDTO.roomcategory;
-                        /*ViewBag.pricefrom = searchDTO.pricefrom;
-                        ViewBag.priceto = searchDTO.priceto;*/
+                        ViewBag.pricefrom = searchDTO.pricefrom;
+                        ViewBag.priceto = searchDTO.priceto;
                         ViewBag.sortby = searchDTO.sortby;
                         ViewBag.roomname = searchDTO.roomname;
 
@@ -190,10 +190,8 @@ namespace FEPetServices.Controllers
             }
 
             return View();
-            DefaultApiUrlBlogList = "https://pet-service-api.azurewebsites.net/api/Blog";
-
-
         }
+
 
         public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory, int page = 1, int pagesize = 6, string CategoriesName = "" , string viewstyle = "grid", string sortby = "")
         {
