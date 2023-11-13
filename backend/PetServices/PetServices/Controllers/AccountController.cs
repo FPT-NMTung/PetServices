@@ -8,6 +8,7 @@ using PetServices.Models;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -27,6 +28,21 @@ namespace PetServices.Controllers
             _configuration = configuration;
         }
 
+        private static string MD5Hash(string text)
+        {
+            MD5 md5 = MD5.Create();
+            /*Chuyen string ve byte*/
+            byte[] inputBytes = Encoding.ASCII.GetBytes(text);
+            /*ma hoa byte*/
+            byte[] result = md5.ComputeHash(inputBytes);
+            StringBuilder strBuilder = new StringBuilder();
+            for (int i = 0; i < result.Length; i++)
+            {
+                strBuilder.Append(result[i].ToString("x2"));
+            }
+            return strBuilder.ToString();
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
@@ -40,6 +56,79 @@ namespace PetServices.Controllers
             List<Account> accounts = _context.Accounts.Include(a => a.Role).Where(a => a.Email == email).ToList();
             return Ok(_mapper.Map<List<AccountInfo>>(accounts));
         }
+
+        /* [HttpPost("Login")]
+         public async Task<IActionResult> Login([FromBody] LoginForm login)
+         {
+             if (string.IsNullOrWhiteSpace(login.Email))
+             {
+                 string errorMessage = "Email không được để trống!";
+                 return BadRequest(errorMessage);
+             }
+             else if (login.Email.Contains(" "))
+             {
+                 string errorMessage = "Email không chứa khoảng trắng!";
+                 return BadRequest(errorMessage);
+             }
+             if (!IsValidEmail(login.Email))
+             {
+                 ModelState.AddModelError("Email không hợp lệ", "Email cần có @");
+                 return BadRequest(ModelState);
+             }
+
+             var result = await _context.Accounts
+                 .Include(a => a.Role)
+                 .Include(a => a.UserInfo)
+                 .Include(a => a.PartnerInfo)
+                 .SingleOrDefaultAsync(x => x.Email == login.Email && x.Password == MD5Hash(login.Password));
+
+             if (result != null)
+             {
+                 var claims = new List<Claim>
+                 {
+                     new Claim(ClaimTypes.Name, login.Email),
+                     new Claim(ClaimTypes.Role, result.Role?.RoleName),
+                     new Claim("RoleId", result.Role?.RoleId.ToString()),
+                 };
+
+                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                 var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["Jwt:ExpiryInDays"]));
+                 var token = new JwtSecurityToken(
+                     _configuration["Jwt:Issuer"],
+                     _configuration["Jwt:Audience"],
+                     claims,
+                     expires: expiry,
+                     signingCredentials: creds
+                 );
+
+                 return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName, Status= result.Status,
+                 UserName = result.Role?.RoleName != "PARTNER" ? ( result?.UserInfo.FirstName +" " + result?.UserInfo.LastName) : (result?.PartnerInfo.FirstName + " " + result?.PartnerInfo.LastName), 
+                     UserImage = result.Role?.RoleName != "PARTNER" ? result?.UserInfo.ImageUser : result?.PartnerInfo.ImagePartner
+                 });
+             }
+             else
+             {
+                 string errorMessage = "Đăng nhập không hợp lệ.";
+                 if (string.IsNullOrWhiteSpace(login.Password))
+                 {
+                     errorMessage = "Mật khẩu không được để trống!";
+                 }
+                 else if (login.Password.Length < 8)
+                 {
+                     errorMessage = "Mật khẩu phải có ít nhất 8 ký tự.";
+                 }
+                 else if (login.Password.Contains(" "))
+                 {
+                     errorMessage = "Mật khẩu không được chứa khoảng trắng.";
+                 }
+                 else if (Regex.IsMatch(login.Password, @"[^a-zA-Z0-9]"))
+                 {
+                     errorMessage = "Mật khẩu không được chứa ký tự đặc biệt.";
+                 }
+                 return BadRequest(errorMessage);
+             }
+         }*/
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginForm login)
@@ -64,16 +153,16 @@ namespace PetServices.Controllers
                 .Include(a => a.Role)
                 .Include(a => a.UserInfo)
                 .Include(a => a.PartnerInfo)
-                .SingleOrDefaultAsync(x => x.Email == login.Email && x.Password == login.Password);
+                .SingleOrDefaultAsync(x => x.Email == login.Email);
 
-            if (result != null)
+            if (result != null && BCrypt.Net.BCrypt.Verify(login.Password, result.Password))
             {
                 var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, login.Email),
-                    new Claim(ClaimTypes.Role, result.Role?.RoleName),
-                    new Claim("RoleId", result.Role?.RoleId.ToString()),
-                };
+            {
+                new Claim(ClaimTypes.Name, login.Email),
+                new Claim(ClaimTypes.Role, result.Role?.RoleName),
+                new Claim("RoleId", result.Role?.RoleId.ToString()),
+            };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -86,8 +175,13 @@ namespace PetServices.Controllers
                     signingCredentials: creds
                 );
 
-                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token), RoleName = result.Role?.RoleName, Status= result.Status,
-                UserName = result.Role?.RoleName != "PARTNER" ? ( result?.UserInfo.FirstName +" " + result?.UserInfo.LastName) : (result?.PartnerInfo.FirstName + " " + result?.PartnerInfo.LastName), 
+                return Ok(new LoginResponse
+                {
+                    Successful = true,
+                    Token = new JwtSecurityTokenHandler().WriteToken(token),
+                    RoleName = result.Role?.RoleName,
+                    Status = result.Status,
+                    UserName = result.Role?.RoleName != "PARTNER" ? (result?.UserInfo.FirstName + " " + result?.UserInfo.LastName) : (result?.PartnerInfo.FirstName + " " + result?.PartnerInfo.LastName),
                     UserImage = result.Role?.RoleName != "PARTNER" ? result?.UserInfo.ImageUser : result?.PartnerInfo.ImagePartner
                 });
             }
@@ -193,7 +287,10 @@ namespace PetServices.Controllers
             var newAccount = new Account
             {
                 Email = registerDto.Email,
-                Password = registerDto.Password,
+                CreateDate = DateTime.Now,
+                //Password = registerDto.Password,
+                //Password = MD5Hash(registerDto.Password),
+                Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password), 
                 Status = false,
                 RoleId = 2
             };
@@ -383,7 +480,9 @@ namespace PetServices.Controllers
             var newAccount = new Account
             {
                 Email = registerDto.Email,
-                Password = registerDto.Password,
+                //Password = registerDto.Password,
+                //Password = MD5Hash(registerDto.Password),
+                Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password), 
                 Status = false,
                 RoleId = 4
             };
@@ -411,7 +510,7 @@ namespace PetServices.Controllers
         }
 
 
-        [HttpPost("ForgotPassword")]
+        /*[HttpPost("ForgotPassword")]
         public async Task<ActionResult> ForgotPassword([FromBody] string email)
         {
             try
@@ -442,6 +541,47 @@ namespace PetServices.Controllers
                     _context.Entry(account).State = EntityState.Modified;
                     _context.SaveChanges();
                     var json = new { Gmail = account.Email, NewPass = pass };
+                    return Ok(json);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("An error occurred.");
+            }
+        }*/
+
+        [HttpPost("ForgotPassword")]
+        public async Task<ActionResult> ForgotPassword([FromBody] string email)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(email))
+                {
+                    return BadRequest("Email is required.");
+                }
+
+                var result = await _context.Accounts
+                    .Where(i => i.Email == email)
+                    .Select(i => new { i.AccountId })
+                    .FirstOrDefaultAsync();
+
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    string guid = Guid.NewGuid().ToString();
+                    string convert = Convert.ToBase64String(Encoding.UTF8.GetBytes(guid));
+                    string newPass = convert.Substring(0, 15);
+
+                    Account account = await _context.Accounts.SingleAsync(i => i.AccountId == result.AccountId);
+                    account.Password = BCrypt.Net.BCrypt.HashPassword(newPass);
+
+                    _context.Entry(account).State = EntityState.Modified;
+                    _context.SaveChanges();
+
+                    var json = new { Email = account.Email, NewPassword = newPass };
                     return Ok(json);
                 }
             }
@@ -542,9 +682,12 @@ namespace PetServices.Controllers
                 return BadRequest("Mật khẩu xác nhận không chính xác");
             }
 
-            if (account.Password == oldpassword)
+            if (BCrypt.Net.BCrypt.Verify(oldpassword, account.Password))
             {
-                account.Password = newpassword;
+                // Hash the new password before storing it
+                string hashedNewPassword = BCrypt.Net.BCrypt.HashPassword(newpassword);
+
+                account.Password = hashedNewPassword;
 
                 _context.Accounts.Update(account);
                 await _context.SaveChangesAsync();
@@ -556,5 +699,6 @@ namespace PetServices.Controllers
                 return BadRequest("Mật khẩu cũ không chính xác");
             }
         }
+
     }
 }

@@ -25,9 +25,9 @@ namespace FEPetServices.Areas.Admin.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "";
-            ApiUrlAccountList = "https://localhost:7255/api/Admin/GetAllAccountByAdmin";
-            ApiUrlAddAccount = "https://localhost:7255/api/Admin/AddAccount";
-            ApiUrlUpdateAccount = "https://localhost:7255/api/Admin/UpdateAccount";
+            ApiUrlAccountList = "https://pet-service-api.azurewebsites.net/api/Admin/GetAllAccountByAdmin";
+            ApiUrlAddAccount = "https://pet-service-api.azurewebsites.net/api/Admin/AddAccount";
+            ApiUrlUpdateAccount = "https://pet-service-api.azurewebsites.net/api/UpdateAccount";
         }
 
         public async Task<IActionResult> Index()

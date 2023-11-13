@@ -30,7 +30,7 @@ namespace PetServices.Controllers
             try
             {
                 List<Order> orders = _context.Orders.Include(b => b.UserInfo)
-                    
+
                 .ToList();
                 return Ok(_mapper.Map<List<OrdersDTO>>(orders));
             }
@@ -70,7 +70,7 @@ namespace PetServices.Controllers
                 .ThenInclude(o => o.Product)
                 .Include(b => b.BookingServicesDetails)
                 .ThenInclude(bs => bs.Service)
-                .Include(b =>  b.BookingRoomDetails)
+                .Include(b => b.BookingRoomDetails)
                 .ThenInclude(br => br.Room)
                 .SingleOrDefaultAsync(b => b.OrderId == Id);
                 return Ok(_mapper.Map<OrdersDTO>(order));
@@ -90,12 +90,12 @@ namespace PetServices.Controllers
             {
                 Order order = await _context.Orders.SingleOrDefaultAsync(b => b.OrderId == Id);
                 // Kiểm tra booking có tồn tại hay không
-                if(order == null)
+                if (order == null)
                 {
                     return NotFound("Booking không tồn tài");
                 }
                 // Kiểm tra xem trạng thái cũ có chính xác hay không
-                if(order.OrderStatus.Trim() != status.oldStatus)
+                if (order.OrderStatus.Trim() != status.oldStatus)
                 {
                     return BadRequest("Trạng thái cũ không hợp lệ");
                 }
@@ -152,15 +152,17 @@ namespace PetServices.Controllers
                 Commune = orderDTO.Commune,
                 Address = orderDTO.Address,
                 UserInfoId = orderDTO.UserInfoId,
+                Phone = orderDTO.Phone,
+                FullName = orderDTO.FullName,
 
                 // Sản phẩm
-                OrderProductDetails = orderDTO.OrderProductDetails != null 
+                OrderProductDetails = orderDTO.OrderProductDetails != null
                   ? orderDTO.OrderProductDetails.Select(dto => new OrderProductDetail
-                {
-                    Quantity = dto.Quantity,
-                    Price = priceProduct,
-                    ProductId = dto.ProductId,
-                }).ToList() 
+                  {
+                      Quantity = dto.Quantity,
+                      Price = priceProduct,
+                      ProductId = dto.ProductId,
+                  }).ToList()
                 : new List<OrderProductDetail>(),
 
                 // Phòng
@@ -180,19 +182,18 @@ namespace PetServices.Controllers
                         ServiceId = dto.ServiceId,
                         Price = dto.Price,
                         Weight = dto.Weight,
-                        PriceService = dto.Price,
+                        PriceService = dto.PriceService ,
                         PetInfoId = dto.PetInfoId,
+                        StartTime = dto.StartTime,
+                        EndTime = dto.EndTime,
                     }).ToList()
                     : new List<BookingServicesDetail>()
-                 
-                // Loại
-
             };
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetOrder), new { Id = order.OrderId }, order);
+            return Ok("Order thành công!");
         }
 
     }

@@ -11,7 +11,7 @@ namespace FEPetServices.Controllers
         public PartnerRegisterController()
         {
             _client = new HttpClient();
-            _defaultApiUrl = "https://localhost:7255/api/Account/RegisterPartner"; 
+            _defaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account/RegisterPartner"; 
         }
         public IActionResult Index()
         {
@@ -25,10 +25,10 @@ namespace FEPetServices.Controllers
             {
                 string filename = GenerateRandomNumber(5) + file.FileName;
                 filename = Path.GetFileName(filename);
-                string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/", filename);
+                string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Partner/", filename);
                 var stream = new FileStream(uploadfile, FileMode.Create);
                 file.CopyToAsync(stream);
-                registerInfo.ImageCertificate = "/img/" + filename;
+                registerInfo.ImageCertificate = "/img/Partner/" + filename;
             }
             try
             {
