@@ -46,8 +46,6 @@
             axilInit.scrollSmoth();
             axilInit.onLoadClassAdd();
             axilInit.dropdownMenuSlide();
-           
-           
         },
 
         w: function(e) {
