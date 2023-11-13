@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link rel="stylesheet" href="~/css/flatpickr.css">
     <link rel="stylesheet" href="~/css/RoomCustomer.css">
 
 </head>
@@ -24,7 +25,7 @@
                                 <li class="axil-breadcrumb-item active" aria-current="page">Phòng</li>
                             </ul>
                             <h1 class="title">Dịch vụ đặt phòng cho thú cưng</h1>
-                        </div>VNĐ
+                        </div>
                     </div>
                     <div class="col-lg-6 col-md-4">
                         <div class="inner">
@@ -66,6 +67,14 @@
                                             {
                                                 url += (url.Contains("?") ? "&" : "?") + "pricefrom=" + ViewBag.pricefrom;
                                             }
+                                            if (!string.IsNullOrEmpty(ViewBag.startdate))
+                                            {
+                                                url += (url.Contains("?") ? "&" : "?") + "startdate=" + ViewBag.startdate;
+                                            }
+                                            if (!string.IsNullOrEmpty(ViewBag.enddate))
+                                            {
+                                                url += (url.Contains("?") ? "&" : "?") + "enddate=" + ViewBag.enddate;
+                                            }
                                             <li class="@(string.IsNullOrEmpty(ViewBag.roomcategory) ? "current-cat" : "")"><a href="@url">Tất cả</a></li>
                                             @foreach (var category in ViewBag.Categories)
                                             {
@@ -86,6 +95,52 @@
                                             <span class="input-range"></span>
                                             <input type="text" id="amount" class="amount-range" readonly>
                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="toggle-list product-price-range active">
+                                <h6 class="title">Thời gian thuê</h6>
+                                <div class="shop-submenu">
+                                    <form method="get">
+                                        @{
+                                            if (!string.IsNullOrEmpty(ViewBag.sortby))
+                                            {
+                                                <input type="hidden" name="sortby" value="@ViewBag.sortby">
+                                            }
+                                            if (!string.IsNullOrEmpty(ViewBag.roomcategory))
+                                            {
+                                                <input type="hidden" name="roomcategory" value="@ViewBag.roomcategory">
+                                            }
+                                            if (!string.IsNullOrEmpty(ViewBag.priceto))
+                                            {
+                                                <input type="hidden" name="priceto" value="@ViewBag.priceto">
+                                            }
+                                            if (!string.IsNullOrEmpty(ViewBag.pricefrom))
+                                            {
+                                                <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
+                                            }
+                                            <div class="part3-content-child col-lg-12">
+                                                <div class="form-group">
+                                                    <label for='start-datetime'>Bắt đầu</label>
+                                                    <div class='input-group date'>
+                                                        <input value="@(ViewBag.startdate)" name="startdate" type='text' id='start-datetime' class="form-control" style="z-index: auto;" required/>
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for='end-datetime'>Kết thúc</label>
+                                                    <div class='input-group date'>
+                                                        <input value="@(ViewBag.enddate)" name="enddate" type='text' id='end-datetime' class="form-control" style="z-index: auto;" required />
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Tìm kiếm</button>
+                                            </div>
+                                        }
                                     </form>
                                 </div>
                             </div>
@@ -115,6 +170,14 @@
                                                     {
                                                         <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
                                                     }
+                                                    if (!string.IsNullOrEmpty(ViewBag.startdate))
+                                                    {
+                                                        <input type="hidden" name="startdate" value="@ViewBag.startdate">
+                                                    }
+                                                    if (!string.IsNullOrEmpty(ViewBag.enddate))
+                                                    {
+                                                        <input type="hidden" name="enddate" value="@ViewBag.enddate">
+                                                    }
                                                     <div class="relative">
                                                         <input class="input-cal input-base" value="@(ViewBag.roomname)" name="roomname" id="input" placeholder="" type="text">
                                                         <label id="label-input">Name</label>
@@ -140,6 +203,14 @@
                                                 {
                                                     <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
                                                 }
+                                                if (!string.IsNullOrEmpty(ViewBag.startdate))
+                                            {
+                                                <input type="hidden" name="startdate" value="@ViewBag.startdate">
+                                            }
+                                            if (!string.IsNullOrEmpty(ViewBag.enddate))
+                                            {
+                                                <input type="hidden" name="enddate" value="@ViewBag.enddate">
+                                            }
                                                 <select id="sortby" name="sortby" class="single-select" onchange="this.form.submit();">
                                                     <!option value="name_asc" @(ViewBag.sortby == "name_asc" ? "selected" : "")>Tên từ A-Z</!option>
                                                     <!option value="name_desc" @(ViewBag.sortby == "name_desc" ? "selected" : "")>Tên từ Z-A</!option>
@@ -182,6 +253,7 @@
             </div>
         </div>
     </main>
+    
     <script>
         var roomcategory = "@(ViewBag.roomcategory)";
         var sortby = "@(ViewBag.sortby)";
@@ -200,7 +272,10 @@
             });
         });
     </script>
+    
 </body>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 <script src="~/assets/js/vendor/modernizr.min.js"></script>
 <!-- jQuery JS -->
 <script src="~/assets/js/vendor/jquery.js"></script>
@@ -220,5 +295,65 @@
 <script src="~/assets/js/vendor/counterup.js"></script>
 <script src="~/assets/js/vendor/waypoints.min.js"></script>
 <!-- Main JS -->
+
 <script src="~/js/RoomCustomer.js"></script>
+<script src="~/js/flatpickr.js"></script>
+
+<script>
+    window.onload = function () {
+        let startDateTime = document.getElementById("start-datetime");
+        let endDateTime = document.getElementById("end-datetime");
+        let status = document.querySelector(".status");
+
+        let startPicker = flatpickr(startDateTime, {
+            minDate: "today",
+            enableTime: true,
+            time_24hr: true,
+            minTime: new Date().getHours() + 1 + ":00", // Giờ hiện tại + 1 giờ
+            maxTime: "17:00",
+            dateFormat: "m-d-Y H:i",
+            onChange: function (selectedDates, dateStr, instance) {
+                let currentDate = new Date();
+                let tomorrow = new Date(currentDate);
+
+                tomorrow.setDate(currentDate.getDate() + 1);
+                tomorrow.setHours(8, 0, 0, 0);
+
+                if (currentDate.getHours() >= 16) {
+                    startPicker.set("minDate", tomorrow);
+                }
+
+                if (selectedDates[0] > currentDate) {
+                    startPicker.set("minTime", "08:00");
+                } else {
+                    startPicker.set("minTime", currentDate.getHours() + 1 + ":00");
+                }
+
+                endPicker.set("minDate", selectedDates[0]);
+            },
+        });
+
+        let endPicker = flatpickr(endDateTime, {
+            enableTime: true,
+            time_24hr: true,
+            minTime: new Date().getHours() + 1 + ":00", // Giờ hiện tại + 1 giờ
+            maxTime: "17:00",
+            dateFormat: "m-d-Y H:i",
+            onChange: function (selectedDates, dateStr, instance) {
+                let startDate = startPicker.selectedDates[0];
+
+                if (startDate && selectedDates[0].getDate() === startDate.getDate()
+                    && selectedDates[0].getMonth() === startDate.getMonth()
+                    && selectedDates[0].getFullYear() === startDate.getFullYear()) {
+                    if (startDate.getHours() >= 16) {
+                        startPicker.set("minDate", tomorrow);
+                    }
+                    endPicker.set("minTime", startDate.getHours() + 1 + ":00");
+                } else {
+                    endPicker.set("minTime", "8:00");
+                }
+            },
+        });
+    }
+</script>
 </html>

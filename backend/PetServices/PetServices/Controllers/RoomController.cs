@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
 using PetServices.Models;
+using System.Collections.Generic;
 
 namespace PetServices.Controllers
 {
@@ -280,15 +281,114 @@ namespace PetServices.Controllers
             }
         }
 
+        [HttpGet("SearchRoomByDate")]
+        public async Task<ActionResult> SearchRoomByDate(DateTime startDate, DateTime endDate)
+        {
+            var listroom = await _context.Rooms.ToListAsync();
+
+            List<Room> room = new List<Room>();
+
+            foreach (var r in listroom)
+            {
+                //tìm các hóa đơn của phòng được đặt trong khoảng thời gian 
+                var orders = await _context.BookingRoomDetails.Where(o => o.RoomId == r.RoomId
+                                            && ((startDate >= o.StartDate && startDate < o.EndDate) // time bắt đầu khách đặt nằm trong khoảng thời gian trong hóa đơn
+                                            || (endDate > o.StartDate && endDate <= o.EndDate) // time kết thúc khách đặt nằm trong khoảng thời gian trong hóa đơn
+                                            || (startDate <= o.StartDate && endDate >= o.EndDate))) // thời gian trong hóa đơn nằm trong khoảng thời gian khách đặt
+                                                                .ToListAsync();
+
+                int a = r.Slot ?? 0;
+
+                if (a < 0) //Nếu số phòng = 0 đồng nghĩa với phòng đó chưa đi vào hoạt động
+                {
+                    continue;
+                }
+                else if (orders == null) // Nếu ko thấy hóa đơn nào thì đồng nghĩa với trong khoảng thời gian đó chưa có phòng nào được đặt
+                {
+                    room.Add(r);
+                    continue;
+                }
+                else if (orders.Count() < a)
+                { // small check nếu số hóa đơn nhỏ hơn số phòng thì giả sử mỗi hóa đơn 1 phòng thì vẫn còn phòng trống 
+                    room.Add(r);
+                    continue;
+                }
+                else
+                {
+                    // tạo room ảo lưu trữ và gán hóa đơn cho các phòng ( áp dụng thuật toán greedy algorithm )
+                    List<List<BookingRoomDetail>> rooms = new List<List<BookingRoomDetail>>();
+
+                    // Sắp xếp các hóa đơn theo thời gian bắt đầu tăng dần
+                    orders = orders.OrderBy(order => order.StartDate).ToList();
+
+                    foreach (var order in orders)
+                    {
+                        bool added = false;
+
+                        // Thử xếp vào các lớp đã có
+                        foreach (var timeClass in rooms)
+                        {
+                            if (timeClass.All(o => order.EndDate <= o.StartDate || order.StartDate >= o.EndDate)) //kiểm tra xem hóa đơn order có thể được thêm vào lớp timeClass hay không.
+                            {
+                                timeClass.Add(order);
+                                added = true; // nếu thời gian hoàn toàn phù hợp thì được add vào phòng
+                                break;
+                            }
+                        }
+
+                        // Nếu không thể xếp vào phòng nào đã có, tạo phòng mới
+                        if (!added)
+                        {
+                            rooms.Add(new List<BookingRoomDetail> { order });
+                        }
+
+                        if (rooms.Count >= a) // trong trường hợp manager đổi lại số slot của phòng thì có thể phòng cũ sẽ bị dư ra.
+                        {
+                            continue;
+                        }
+                    }
+
+                    bool addtoroom = false;
+
+                    foreach (var timeClass in rooms)
+                    {
+                        if (timeClass.All(o => endDate <= o.StartDate || startDate >= o.EndDate)) // Kiểm tra xem khung giờ có thể được thêm vào lớp không
+                        {
+                            addtoroom = true;
+                            break;
+                        }
+                    }
+
+                    if (addtoroom)
+                    {
+                        room.Add(r);
+                        continue;
+
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+
+            return Ok(_mapper.Map<List<RoomDTO>>(room)); ;
+        }
+
         [HttpGet("CheckSlotInRoom")]
         public async Task<ActionResult> CheckSlotInRoom(int RoomId, DateTime startDate, DateTime endDate)
         {
             try
             {
+                //tìm phòng theo id
                 var room = await _context.Rooms.FirstOrDefaultAsync(p => p.RoomId == RoomId);
-                var orders = await _context.BookingRoomDetails.Where(o => o.RoomId == RoomId
-                                            && (o.StartDate < startDate && o.EndDate < startDate)
-                                            && (o.StartDate > endDate && o.EndDate > endDate)).ToListAsync();
+
+                //tìm các hóa đơn của phòng được đặt trong khoảng thời gian 
+                var orders = await _context.BookingRoomDetails.Where(o => o.RoomId == RoomId 
+                                            && ((startDate >= o.StartDate && startDate < o.EndDate) // time bắt đầu khách đặt nằm trong khoảng thời gian trong hóa đơn
+                                            || (endDate > o.StartDate && endDate <= o.EndDate) // time kết thúc khách đặt nằm trong khoảng thời gian trong hóa đơn
+                                            || (startDate <= o.StartDate && endDate >= o.EndDate))) // thời gian trong hóa đơn nằm trong khoảng thời gian khách đặt
+                                                                .ToListAsync();
 
                 if (room == null)
                 {
@@ -298,56 +398,73 @@ namespace PetServices.Controllers
                 {
                     int a = room.Slot ?? 0;
 
-                    if (orders == null && a != 0)
+                    if (a < 0) //Nếu số phòng = 0 đồng nghĩa với phòng đó chưa đi vào hoạt động
+                    {
+                        return BadRequest("Không tìm thấy phòng hợp lệ!");
+                    }
+                    else if ( orders == null) // Nếu ko thấy hóa đơn nào thì đồng nghĩa với trong khoảng thời gian đó chưa có phòng nào được đặt
                     {
                         return Ok("Còn phòng trống.");
                     }
-                    else if (a == 0)
-                    {
-                        return BadRequest("Không tìm thấy phòng hợp lệ!");
+                    else if (orders.Count() < a){ // small check nếu số hóa đơn nhỏ hơn số phòng thì giả sử mỗi hóa đơn 1 phòng thì vẫn còn phòng trống 
+                        return Ok("Còn phòng trống.");
                     }
                     else
                     {
-                        foreach (var order in orders)
-                        {
-                            if ((startDate >= order.StartDate && startDate < order.EndDate)
-                                || (endDate > order.StartDate && endDate <= order.EndDate)
-                                || (startDate <= order.StartDate && endDate >= order.EndDate))
-                            {
-                                a -= 1;
-                            }
-                        }
+                        // tạo room ảo lưu trữ và gán hóa đơn cho các phòng ( áp dụng thuật toán greedy algorithm )
+                        List<List<BookingRoomDetail>> rooms  = new List<List<BookingRoomDetail>>();
 
-                        if (a > 0)
-                        {
-                            return Ok("Còn phòng trống.");
-                        }
+                        // Sắp xếp các hóa đơn theo thời gian bắt đầu tăng dần
+                        orders = orders.OrderBy(order => order.StartDate).ToList();
 
                         foreach (var order in orders)
                         {
-                            foreach (var order2 in orders)
+                            bool added = false;
+
+                            // Thử xếp vào các lớp đã có
+                            foreach (var timeClass in rooms)
                             {
-                                if (order2 != order)
+                                if (timeClass.All(o => order.EndDate <= o.StartDate || order.StartDate >= o.EndDate)) //kiểm tra xem hóa đơn order có thể được thêm vào lớp timeClass hay không.
                                 {
-                                    if (((order2.StartDate >= order.StartDate && order2.StartDate < order.EndDate)
-                                || (order2.EndDate > order.StartDate && order2.EndDate <= order.EndDate)
-                                || (order2.StartDate <= order.StartDate && order2.EndDate >= order.EndDate)))
-                                    {
-                                    }
-                                    else
-                                    {
-                                        a += 1;
-                                        orders.Remove(order2);
-                                        if (a > 0)
-                                        {
-                                            return Ok("Còn phòng trống.");
-                                        }
-                                    }
+                                    timeClass.Add(order);
+                                    added = true; // nếu thời gian hoàn toàn phù hợp thì được add vào phòng
+                                    break;
                                 }
                             }
+
+                            // Nếu không thể xếp vào phòng nào đã có, tạo phòng mới
+                            if (!added)
+                            {
+                                rooms.Add(new List<BookingRoomDetail> { order });
+                            }
+
+                            if (rooms.Count >= a) // trong trường hợp manager đổi lại số slot của phòng thì có thể phòng cũ sẽ bị dư ra.
+                            {
+                                return BadRequest("Không tìm thấy phòng hợp lệ!");
+                            }
                         }
 
-                        return BadRequest("Không tìm thấy phòng hợp lệ!");
+                        bool addtoroom = false;
+
+                        foreach (var timeClass in rooms)
+                        {
+                            if (timeClass.All(o => endDate <= o.StartDate || startDate >= o.EndDate)) // Kiểm tra xem khung giờ có thể được thêm vào lớp không
+                            {
+                                addtoroom = true;
+                                break;
+                            }
+                        }
+
+                        if (addtoroom)
+                        {
+                            return Ok("Còn phòng trống.");
+
+                        }
+                        else
+                        {
+                            return BadRequest("Không tìm thấy phòng hợp lệ!");
+                        }
+
                     }
                 }
             }
@@ -356,5 +473,7 @@ namespace PetServices.Controllers
                 return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
             }
         }
+
+
     }
 }
