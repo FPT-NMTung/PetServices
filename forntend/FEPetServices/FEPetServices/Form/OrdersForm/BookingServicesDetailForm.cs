@@ -9,7 +9,10 @@ namespace FEPetServices.Form.OrdersForm
         public double? Price { get; set; }
         public double? Weight { get; set; }
         public double? PriceService { get; set; }
+        public int? PetInfoId { get; set; }
         public int? PartnerInfoId { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public virtual PartnerInfo? PartnerInfo { get; set; }
         public virtual ServiceDTO? Service { get; set; } = null!;
     }

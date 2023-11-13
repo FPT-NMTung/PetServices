@@ -31,7 +31,7 @@ namespace PetServices.Controllers
             try
             {
                 List<Order> orders = _context.Orders.Include(b => b.UserInfo)
-                    
+
                 .ToList();
                 return Ok(_mapper.Map<List<OrdersDTO>>(orders));
             }
@@ -71,7 +71,7 @@ namespace PetServices.Controllers
                 .ThenInclude(o => o.Product)
                 .Include(b => b.BookingServicesDetails)
                 .ThenInclude(bs => bs.Service)
-                .Include(b =>  b.BookingRoomDetails)
+                .Include(b => b.BookingRoomDetails)
                 .ThenInclude(br => br.Room)
                 .SingleOrDefaultAsync(b => b.OrderId == Id);
                 return Ok(_mapper.Map<OrdersDTO>(order));
@@ -91,12 +91,12 @@ namespace PetServices.Controllers
             {
                 Order order = await _context.Orders.SingleOrDefaultAsync(b => b.OrderId == Id);
                 // Kiểm tra booking có tồn tại hay không
-                if(order == null)
+                if (order == null)
                 {
                     return NotFound("Booking không tồn tài");
                 }
                 // Kiểm tra xem trạng thái cũ có chính xác hay không
-                if(order.OrderStatus.Trim() != status.oldStatus)
+                if (order.OrderStatus.Trim() != status.oldStatus)
                 {
                     return BadRequest("Trạng thái cũ không hợp lệ");
                 }
@@ -120,12 +120,13 @@ namespace PetServices.Controllers
             {
                 return BadRequest("Invalid order data");
             }
+            // check tỉnh
             if (string.IsNullOrWhiteSpace(orderDTO.Province))
             {
                 string errorMessage = "Tỉnh không được để trống!";
                 return BadRequest(errorMessage);
             }
-            if (!Regex.IsMatch(orderDTO.Province, @"^[\p{L}\s]+$"))
+            if (!Regex.IsMatch(orderDTO.Province, "^[a-zA-ZÀ-Ỹà-ỹ ]+$"))
             {
                 string errorMessage = "Tỉnh phải là ký tự chữ, không chấp nhận số hay ký tự đặc biệt!";
                 return BadRequest(errorMessage);
@@ -135,12 +136,13 @@ namespace PetServices.Controllers
                 string errorMessage = "Tỉnh vượt quá số ký tự. Tối đa 50 ký tự!";
                 return BadRequest(errorMessage);
             }
+            // check huyện
             if (string.IsNullOrWhiteSpace(orderDTO.District))
             {
                 string errorMessage = "Huyện/Thành Phố không được để trống!";
                 return BadRequest(errorMessage);
             }
-            if (!Regex.IsMatch(orderDTO.District, @"^[\p{L}\s]+$"))
+            if (!Regex.IsMatch(orderDTO.District, "^[a-zA-ZÀ-Ỹà-ỹ ]+$"))
             {
                 string errorMessage = "Huyện/Thành phố phải là ký tự chữ, không chấp nhận số hay ký tự đặc biệt!";
                 return BadRequest(errorMessage);
@@ -150,12 +152,13 @@ namespace PetServices.Controllers
                 string errorMessage = "Huyện/Thành Phố vượt quá số ký tự. Tối đa 50 ký tự!";
                 return BadRequest(errorMessage);
             }
+            // check xã
             if (string.IsNullOrWhiteSpace(orderDTO.Commune))
             {
                 string errorMessage = "Phường/Xã không được để trống!";
                 return BadRequest(errorMessage);
             }
-            if (!Regex.IsMatch(orderDTO.Commune, @"^[\p{L}\s]+$"))
+            if (!Regex.IsMatch(orderDTO.Commune, "^[a-zA-ZÀ-Ỹà-ỹ ]+$"))
             {
                 string errorMessage = "Phường/Xã phải là ký tự chữ, không chấp nhận số hay ký tự đặc biệt!";
                 return BadRequest(errorMessage);
@@ -165,7 +168,7 @@ namespace PetServices.Controllers
                 string errorMessage = "Phường/Xã vượt quá số ký tự. Tối đa 50 ký tự!";
                 return BadRequest(errorMessage);
             }
-
+            // check địa chỉ
             if (string.IsNullOrWhiteSpace(orderDTO.Address))
             {
                 string errorMessage = "Địa chỉ không được để trống!";
@@ -176,7 +179,45 @@ namespace PetServices.Controllers
                 string errorMessage = "Địa chỉ vượt quá số ký tự. Tối đa 500 ký tự!";
                 return BadRequest(errorMessage);
             }
-
+            // chech sđt
+            if (string.IsNullOrWhiteSpace(orderDTO.Phone))
+            {
+                string errorMessage = "Số điện thoại không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            if (orderDTO.Phone.Length != 10)
+            {
+                string errorMessage = "Số điện thoại phải có 10 ký tự!";
+                return BadRequest(errorMessage);
+            }
+            if (orderDTO.Phone.Contains(" "))
+            {
+                string errorMessage = "Số điện thoại không được chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            if (!orderDTO.Phone.StartsWith("0"))
+            {
+                string errorMessage = "Số điện thoại phải bắt đầu bằng số 0!";
+                return BadRequest(errorMessage);
+            }
+            if (!int.TryParse(orderDTO.Phone, out int phoneNumber))
+            {
+                string errorMessage = "Số điện thoại không phải là số! Bạn cần nhập số điện thoại ở dạng số!";
+                return BadRequest(errorMessage);
+            }
+            // check FullName
+            if (string.IsNullOrWhiteSpace(orderDTO.FullName))
+            {
+                string errorMessage = "Tên liên hệ không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            string fullName = orderDTO.FullName;
+            if (!Regex.IsMatch(fullName, "^[a-zA-ZÀ-Ỹà-ỹ ]+$"))
+            {
+                string errorMessage = "Tên liên hệ chỉ chấp nhận các ký tự văn bản và không được chứa ký tự đặc biệt hoặc số.";
+                return BadRequest(errorMessage);
+            }
+            // check quantity và product
             if (orderDTO.OrderProductDetails != null)
             {
                 var invalidProducts = orderDTO.OrderProductDetails
@@ -187,12 +228,12 @@ namespace PetServices.Controllers
                 {
                     var errorMessage = "Sản phẩm không hợp lệ. ";
 
-                    // Check for Quantity
+                    // check quantity = 0
                     var quantityErrors = invalidProducts
                         .Where(dto => dto.Quantity <= 0)
                         .Select(dto => $"Số lượng không hợp lệ cho sản phẩm với ID {dto.ProductId}");
 
-                    // Check for ProductId
+                    // Check product k tồn tại
                     var productIdErrors = invalidProducts
                         .Where(dto => dto.ProductId == null || !_context.Products.Any(p => p.ProductId == dto.ProductId))
                         .Select(dto => $"Sản phẩm với ID {dto.ProductId} không tồn tại");
@@ -202,7 +243,7 @@ namespace PetServices.Controllers
                     return BadRequest(errorMessage);
                 }
 
-                // Check if the entered quantity is greater than available quantity
+                // check quantity mua > quantity có sẵn
                 var quantityExceedsAvailable = orderDTO.OrderProductDetails
                     .Any(dto => dto.Quantity > _context.Products.FirstOrDefault(p => p.ProductId == dto.ProductId)?.Quantity);
 
@@ -211,6 +252,7 @@ namespace PetServices.Controllers
                     return BadRequest("Số lượng sản phẩm không đủ");
                 }
             }
+
 
             double priceProduct = 0;
             double priceRoom = 0;
@@ -244,15 +286,17 @@ namespace PetServices.Controllers
                 Commune = orderDTO.Commune,
                 Address = orderDTO.Address,
                 UserInfoId = orderDTO.UserInfoId,
+                Phone = orderDTO.Phone,
+                FullName = orderDTO.FullName,
 
                 // Sản phẩm
-                OrderProductDetails = orderDTO.OrderProductDetails != null 
+                OrderProductDetails = orderDTO.OrderProductDetails != null
                   ? orderDTO.OrderProductDetails.Select(dto => new OrderProductDetail
-                {
-                    Quantity = dto.Quantity,
-                    Price = priceProduct,
-                    ProductId = dto.ProductId,
-                }).ToList() 
+                  {
+                      Quantity = dto.Quantity,
+                      Price = priceProduct,
+                      ProductId = dto.ProductId,
+                  }).ToList()
                 : new List<OrderProductDetail>(),
 
                 // Phòng
@@ -272,13 +316,12 @@ namespace PetServices.Controllers
                         ServiceId = dto.ServiceId,
                         Price = dto.Price,
                         Weight = dto.Weight,
-                        PriceService = dto.Price,
+                        PriceService = dto.PriceService ,
                         PetInfoId = dto.PetInfoId,
+                        StartTime = dto.StartTime,
+                        EndTime = dto.EndTime,
                     }).ToList()
                     : new List<BookingServicesDetail>()
-
-                // Loại
-
             };
 
             _context.Orders.Add(order);
@@ -286,5 +329,6 @@ namespace PetServices.Controllers
 
             return Ok("Order thành công!");
         }
+
     }
 }
