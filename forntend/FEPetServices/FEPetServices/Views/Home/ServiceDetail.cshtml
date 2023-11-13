@@ -12,7 +12,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="/css/Service/ServiceDetail.css"></linh>
+    @*<link rel="stylesheet" href="/css/Service/ServiceDetail.css"></link>*@
 
 </head>
 
@@ -48,7 +48,7 @@
                                          {
                                             @if (sc.Status)
                                             {
-                                                <div class="small-thumb-img ">
+                                                <div class="small-thumb-img " style="display:flex;">
                                                     <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sc.ServiceId"><img src="@sc.Picture" style="width:60px; height:60px;" alt="samll-thumb"></a> 
                                                 </div>
                                             }
@@ -477,7 +477,28 @@ calculateTotal();
 document.getElementById('toggleSelect').addEventListener('change', calculateTotal);
 document.getElementById('petWeight').addEventListener('input', calculateTotal);
 
-   </script>
+</script>
+<script src="~/assets/js/vendor/modernizr.min.js"></script>
+<!-- jQuery JS -->
+<script src="~/assets/js/vendor/jquery.js"></script>
+<!-- Bootstrap JS -->
+<script src="~/assets/js/vendor/popper.min.js"></script>
+<script src="~/assets/js/vendor/bootstrap.min.js"></script>
+<script src="~/assets/js/vendor/slick.min.js"></script>
+<script src="~/assets/js/vendor/js.cookie.js"></script>
+<!-- <script src="~/assets/js/vendor/jquery.style.switcher.js"></script> -->
+<script src="~/assets/js/vendor/jquery-ui.min.js"></script>
+<script src="~/assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
+<script src="~/assets/js/vendor/jquery.countdown.min.js"></script>
+<script src="~/assets/js/vendor/sal.js"></script>
+<script src="~/assets/js/vendor/jquery.magnific-popup.min.js"></script>
+<script src="~/assets/js/vendor/imagesloaded.pkgd.min.js"></script>
+<script src="~/assets/js/vendor/isotope.pkgd.min.js"></script>
+<script src="~/assets/js/vendor/counterup.js"></script>
+<script src="~/assets/js/vendor/waypoints.min.js"></script>
+
+<!-- Main JS -->
+<script src="~/assets/js/main.js"></script>
 </body>
 
 </html>
