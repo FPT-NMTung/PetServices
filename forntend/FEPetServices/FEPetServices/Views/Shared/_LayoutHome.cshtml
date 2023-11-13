@@ -56,21 +56,21 @@
             }
             if (userimage is not null)
             {
-                 <div class="axil-header-top">
+                <div class="axil-header-top">
                     <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-sm-6">
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="header-top-link">
-                                <ul class="quick-link">
-                                    <li><a class="btn btn-outline-primary" href="~/Logout/Index">Đăng xuất</a></li>
-                                </ul>
+                        <div class="row align-items-center">
+                            <div class="col-sm-6">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="header-top-link">
+                                    <ul class="quick-link">
+                                        <li><a class="btn btn-outline-primary" href="~/Logout/Index">Đăng xuất</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             }
         }
 
@@ -115,6 +115,7 @@
                                         <li><a href="single-product-7.html">Product Variation 7</a></li>
                                     </ul>*@
                                 </li>
+                                <li><a href="/Home/Room">Phòng</a></li>
                                 <li><a href="/Home/BlogList">Blog</a></li>
                                 <li><a href="Home/Introduce">Giới thiệu</a></li>
                                 @*<li><a href="contact.html">Liên hệ với chúng tôi</a></li>*@
@@ -196,7 +197,7 @@
                                     quận Thanh Xuân, Hà nội.
                                 </p>
                                 <ul class="support-list-item">
-                                    <li><a href="mailto:psmsg65@gmail.com"><i class="fal fa-envelope-open"></i> psmsg65@gmail.com</a></li>
+                                    <li><a href="mailto:example@domain.com"><i class="fal fa-envelope-open"></i> petservices@petpet.com</a></li>
                                     <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> 0969886688</a></li>
                                     <!-- <li><i class="fal fa-map-marker-alt"></i> 685 Market Street,  <br> Las Vegas, LA 95820, <br> United States.</li> -->
                                 </ul>
@@ -300,7 +301,7 @@
                                         <div class="item-content">
                                             @if (item.product != null)
                                             {
-                                                <h3 class="item-title"><a >@item.product.ProductName</a></h3>
+                                                <h3 class="item-title"><a>@item.product.ProductName</a></h3>
                                                 <div class="item-price"><span class="currency-symbol"></span>@($"{item.product.Price:n0} VNĐ")</div>
                                                 <div class="pro-qty item-quantity">
                                                     <input type="number" class="quantity-input" value="@item.quantityProduct">
@@ -324,7 +325,7 @@
                 </ul>
             </div>
             <div class="cart-footer">
-                <h3 class="cart-subtotal">  
+                <h3 class="cart-subtotal">
                     <span class="subtotal-title">Thống kê</span>
                 </h3>
                 <div class="group-btn">
@@ -334,7 +335,7 @@
             </div>
         </div>
     </div>
-                    
+
     @*Toast notification design*@
     <div id="toast"></div>
     @*Common toast notification*@
@@ -426,26 +427,5 @@
         });
     }
 </script>
-<script src="~/assets/js/vendor/modernizr.min.js"></script>
-<!-- jQuery JS -->
-<script src="~/assets/js/vendor/jquery.js"></script>
-<!-- Bootstrap JS -->
-<script src="~/assets/js/vendor/popper.min.js"></script>
-<script src="~/assets/js/vendor/bootstrap.min.js"></script>
-<script src="~/assets/js/vendor/slick.min.js"></script>
-<script src="~/assets/js/vendor/js.cookie.js"></script>
-<!-- <script src="~/assets/js/vendor/jquery.style.switcher.js"></script> -->
-<script src="~/assets/js/vendor/jquery-ui.min.js"></script>
-<script src="~/assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
-<script src="~/assets/js/vendor/jquery.countdown.min.js"></script>
-<script src="~/assets/js/vendor/sal.js"></script>
-<script src="~/assets/js/vendor/jquery.magnific-popup.min.js"></script>
-<script src="~/assets/js/vendor/imagesloaded.pkgd.min.js"></script>
-<script src="~/assets/js/vendor/isotope.pkgd.min.js"></script>
-<script src="~/assets/js/vendor/counterup.js"></script>
-<script src="~/assets/js/vendor/waypoints.min.js"></script>
-
-<!-- Main JS -->
-<script src="~/assets/js/main.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIkw2datIu4EYiyedKQJ08DmMJnboVSqs"></script>
 </html>

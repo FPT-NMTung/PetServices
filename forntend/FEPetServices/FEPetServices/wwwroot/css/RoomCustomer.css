@@ -45,3 +45,7 @@
 .filter-results .relative {
     position: relative;
 }
+
+.main-wrapper{
+    margin-top: -30px;
+}

@@ -141,8 +141,18 @@ namespace FEPetServices.Controllers
 
                 if (responseOrder.IsSuccessStatusCode)
                 {
+                    foreach (var cartItem in cartItems)
+                    {
+                        if (cartItem.product != null)
+                        {
+                            //https://localhost:7255/api/Product/ChangeProduct?ProductId=1&Quantity=50
+                            HttpResponseMessage response = await _client.PutAsync("https://localhost:7255/api/Product/ChangeProduct" 
+                                + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct,null);
+                        }
+                    }
                     // Xoá giỏ hàng
                     ClearCart();
+                    TempData["SuccessToast"] = "Đặt hàng thành công. Vui lòng kiểm tra lại giỏ hàng.";
                     return RedirectToAction("Index", "Home");
                 }
                 else
