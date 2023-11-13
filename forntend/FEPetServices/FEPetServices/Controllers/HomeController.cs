@@ -668,7 +668,7 @@ namespace FEPetServices.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToCart(int ServiceId, int PriceService, double Weight ,int PartnerId )
+        public async Task<IActionResult> AddToCart(int ServiceId, int PriceService, double Weight ,int PartnerId, DateTime StartTime, DateTime EndTime)
         {
             ServiceDTO service = null;
             PartnerInfo partner = null; 
@@ -710,7 +710,8 @@ namespace FEPetServices.Controllers
                 {
                     // Thêm mới
                     cart.Add(new CartItem() { service = service, PartnerInfo = partner, 
-                        Weight = Weight, PriceService = PriceService, 
+                        Weight = Weight, PriceService = PriceService,
+                        StartTime = StartTime, EndTime = EndTime,
                         PartnerInfoId = PartnerId != 0 ? PartnerId : null});
                 }
 

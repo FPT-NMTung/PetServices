@@ -52,10 +52,9 @@ namespace FEPetServices.Controllers
         }
         public IActionResult Index()
         {
-            // Assuming you have a method to get cart items
             var cartItems = GetCartItems();
 
-            return View(cartItems); // Pass cart items to the view
+            return View(cartItems); 
         }
 
         [HttpPost]

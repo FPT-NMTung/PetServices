@@ -80,6 +80,7 @@
                                     <th scope="col">Dịch vụ</th>
                                     <th scope="col">Giá</th>
                                     <th scope="col">Cân nặng thú cưng</th>
+                                    <th scope="col">Thời gian</th>
                                     <th scope="col">Nhân viên được thuê</th>
                                     <th scope="col">Thành tiền</th>
                                     <th scope="col"></th>
@@ -103,6 +104,22 @@
                                             </div>
                                         </td>
                                         <td>
+                                            <div>
+                                                <div>
+                                                    Thời gian bắt đầu :  @cartitem.StartTime
+                                                </div>
+                                                <div>
+                                                    Thời gian kết thúc : @cartitem.EndTime
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @if (cartitem.PartnerInfo?.FirstName == null && cartitem.PartnerInfo?.LastName == null)
+                                            {
+                                               <div>
+                                                    <p style="color:red">Không</p>
+                                               </div>
+                                            }
                                             @cartitem.PartnerInfo?.FirstName @cartitem.PartnerInfo?.LastName
                                         </td>
                                         <td>@(thanhtien.ToString("n0").Replace(",", ".")) VNĐ</td>
@@ -117,7 +134,7 @@
                                     </tr>
                                 }
                                 <tr>
-                                    <td colspan="4" class="text-right">Tổng tiền</td>
+                                    <td colspan="6" class="text-right">Tổng tiền</td>
                                     <td>@(serviceTotal.ToString("n0").Replace(",", ".")) VNĐ</td>
                                     <td></td>
                                 </tr>
