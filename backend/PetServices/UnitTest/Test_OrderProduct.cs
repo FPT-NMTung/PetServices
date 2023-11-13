@@ -102,6 +102,8 @@ namespace UnitTest
                     District = "Hà Tĩnh",
                     Commune = "Thạch Linh",
                     Address = "Thạch Linh-Hà Tĩnh",
+                    FullName = "Nguyễn Văn Hùng",
+                    Phone = "0987654321",
                     UserInfoId = 1,
 
                     OrderProductDetails = new List<OrderProductDetailDTO>
