@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
 using PetServices.Models;
+using System;
 using System.Collections.Generic;
 
 namespace PetServices.Controllers
@@ -318,9 +319,6 @@ namespace PetServices.Controllers
                     // tạo room ảo lưu trữ và gán hóa đơn cho các phòng ( áp dụng thuật toán greedy algorithm )
                     List<List<BookingRoomDetail>> rooms = new List<List<BookingRoomDetail>>();
 
-                    // Sắp xếp các hóa đơn theo thời gian bắt đầu tăng dần
-                    orders = orders.OrderBy(order => order.StartDate).ToList();
-
                     foreach (var order in orders)
                     {
                         bool added = false;
@@ -392,7 +390,7 @@ namespace PetServices.Controllers
 
                 if (room == null)
                 {
-                    return BadRequest("Không tìm thấy phòng.");
+                    return NotFound("Không tìm thấy phòng.");
                 }
                 else
                 {
@@ -400,7 +398,7 @@ namespace PetServices.Controllers
 
                     if (a < 0) //Nếu số phòng = 0 đồng nghĩa với phòng đó chưa đi vào hoạt động
                     {
-                        return BadRequest("Không tìm thấy phòng hợp lệ!");
+                        return NotFound("Không tìm thấy phòng hợp lệ!");
                     }
                     else if ( orders == null) // Nếu ko thấy hóa đơn nào thì đồng nghĩa với trong khoảng thời gian đó chưa có phòng nào được đặt
                     {
@@ -414,9 +412,6 @@ namespace PetServices.Controllers
                         // tạo room ảo lưu trữ và gán hóa đơn cho các phòng ( áp dụng thuật toán greedy algorithm )
                         List<List<BookingRoomDetail>> rooms  = new List<List<BookingRoomDetail>>();
 
-                        // Sắp xếp các hóa đơn theo thời gian bắt đầu tăng dần
-                        orders = orders.OrderBy(order => order.StartDate).ToList();
-
                         foreach (var order in orders)
                         {
                             bool added = false;
@@ -427,6 +422,7 @@ namespace PetServices.Controllers
                                 if (timeClass.All(o => order.EndDate <= o.StartDate || order.StartDate >= o.EndDate)) //kiểm tra xem hóa đơn order có thể được thêm vào lớp timeClass hay không.
                                 {
                                     timeClass.Add(order);
+
                                     added = true; // nếu thời gian hoàn toàn phù hợp thì được add vào phòng
                                     break;
                                 }
@@ -440,21 +436,20 @@ namespace PetServices.Controllers
 
                             if (rooms.Count >= a) // trong trường hợp manager đổi lại số slot của phòng thì có thể phòng cũ sẽ bị dư ra.
                             {
-                                return BadRequest("Không tìm thấy phòng hợp lệ!");
+                                return NotFound("Không tìm thấy phòng hợp lệ!");
                             }
                         }
 
                         bool addtoroom = false;
 
-                        foreach (var timeClass in rooms)
+                        foreach (var time in rooms)
                         {
-                            if (timeClass.All(o => endDate <= o.StartDate || startDate >= o.EndDate)) // Kiểm tra xem khung giờ có thể được thêm vào lớp không
+                            if (time.All(o => endDate <= o.StartDate || startDate >= o.EndDate)) // Kiểm tra xem khung giờ có thể được thêm vào lớp không
                             {
                                 addtoroom = true;
                                 break;
                             }
                         }
-
                         if (addtoroom)
                         {
                             return Ok("Còn phòng trống.");
@@ -462,7 +457,37 @@ namespace PetServices.Controllers
                         }
                         else
                         {
-                            return BadRequest("Không tìm thấy phòng hợp lệ!");
+                            var optimaltime = (startDate, endDate);
+                            var timeduration = TimeSpan.MinValue;
+
+                            foreach (var time in rooms)
+                            {
+                                var sortedtime = time.OrderBy(o => o.StartDate).ToList();
+
+                                sortedtime.Insert(0, new BookingRoomDetail { EndDate = startDate }); // tạo booking ảo (0, startDate) để tính trường hợp ngày bắt đầu khách muốn thuê tới ngày đầu tiên phòng bận.
+                                sortedtime.Add(new BookingRoomDetail { StartDate = endDate }); // tạo booking ảo (EndDate, ...) để tính trường hợp ngày cuối cùng phòng bận tới ngày kết thúc khách muốn thuê.
+
+                                for (int i = 0; i < sortedtime.Count - 1; i++)
+                                {
+                                    var gap = sortedtime[i + 1].StartDate - sortedtime[i].EndDate; // khoảng thời gian trống giữa 2 đơn đặt phòng liên tiếp
+
+                                    if (gap > timeduration) // Nếu khoảng thời gian này lớn hơn khoảng thời gian lớn nhất đã tìm được
+                                    {
+                                        timeduration = (TimeSpan)gap;
+
+                                        optimaltime = ((DateTime)sortedtime[i].EndDate, (DateTime)sortedtime[i + 1].StartDate);
+                                    }
+                                }
+                            }
+
+                            if (timeduration != TimeSpan.MinValue)
+                            {
+                                return BadRequest("Bạn có thể đặt phòng trong khoảng thời gian: " + optimaltime.startDate + " - " + optimaltime.endDate);
+                            }
+                            else
+                            {
+                                return NotFound("Không tìm thấy phòng hợp lệ!");
+                            }
                         }
 
                     }
@@ -470,7 +495,7 @@ namespace PetServices.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
+                return NotFound($"Đã xảy ra lỗi: {ex.Message}");
             }
         }
 
