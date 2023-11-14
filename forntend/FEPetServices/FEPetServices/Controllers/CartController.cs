@@ -74,18 +74,34 @@ namespace FEPetServices.Controllers
         }
 
         [HttpPost]
-        public IActionResult RemoveCart([FromForm] int productid)
+        public IActionResult RemoveCart([FromForm] int productid, [FromForm] int serviceid)
         {
             var cart = GetCartItems();
-            var cartitem = cart.Find(p => p.product.ProductId == productid);
-            if (cartitem != null)
+
+            if (productid > 0)
             {
-                // Đã tồn tại, tăng thêm 1
-                cart.Remove(cartitem);
+                var productCartItem = cart.Find(p => p.product != null && p.product.ProductId == productid);
+
+                if (productCartItem != null)
+                {
+                    cart.Remove(productCartItem);
+                    SaveCartSession(cart);
+                }
             }
 
-            SaveCartSession(cart);
+            if (serviceid > 0)
+            {
+                var serviceCartItem = cart.Find(s => s.service != null && s.service.ServiceId == serviceid);
+
+                if (serviceCartItem != null)
+                {
+                    cart.Remove(serviceCartItem);
+                    SaveCartSession(cart);
+                }
+            }
+
             return RedirectToAction("Index", "Cart");
         }
+
     }
 }

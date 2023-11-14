@@ -99,7 +99,7 @@
                                         <td>@($"{cartitem.service.Price:n0} VNĐ")</td>
                                         <td>
                                             <div style="display:flex;justify-content:space-between">
-                                                <input style="height:20px" class="form-control" type="number" value="@cartitem.Weight" /> 
+                                                <p>@cartitem.Weight</p>
                                                 <span>Kg</span>
                                             </div>
                                         </td>
@@ -124,9 +124,6 @@
                                         </td>
                                         <td>@(thanhtien.ToString("n0").Replace(",", ".")) VNĐ</td>
                                         <td>
-                                            <button class="btn btn-outline-success updatecartitem" data-serviceid="@cartitem.service.ServiceId">
-                                                Cập nhật
-                                            </button>
                                             <button class="btn btn-outline-danger removecart" data-serviceid="@cartitem.service.ServiceId">
                                                 Xoá
                                             </button>
@@ -218,5 +215,4 @@
         });
     });
 </script>
-
 </html>
