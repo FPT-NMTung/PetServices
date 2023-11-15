@@ -44,7 +44,7 @@
                                     <tr>
                                         <td>@(productItemCount)</td>
                                         <td>@cartitem.product.ProductName</td>
-                                        <td>@($"{cartitem.product.Price:n0} VNĐ")</td>
+                                        <td>@($"{cartitem.product.Price:#,##0} VNĐ".Replace(",", "."))</td>
                                         <td>
                                             <input style="height:20px" id="@($"quantity-{cartitem.product.ProductId}")" class="form-control" type="number" value="@cartitem.quantityProduct" />
                                         </td>
@@ -96,7 +96,7 @@
                                     <tr>
                                         <td>@(serviceItemCount)</td>
                                         <td>@cartitem.service.ServiceName</td>
-                                        <td>@($"{cartitem.service.Price:n0} VNĐ")</td>
+                                        <td>@($"{cartitem.service.Price:#,##0} VNĐ".Replace(",", "."))</td>
                                         <td>
                                             <div style="display:flex;justify-content:space-between">
                                                 <p>@cartitem.Weight</p>
