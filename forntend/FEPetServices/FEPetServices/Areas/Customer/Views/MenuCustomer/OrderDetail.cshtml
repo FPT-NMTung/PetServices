@@ -39,7 +39,7 @@
                                 <div class="col-sm-9" style="padding-top:8px">
                                     @if (Model.OrderStatus.Trim() == "Complete")
                                     {
-                                        <span style="background-color: green; color:#fff">Đã nhận hàng</span>
+                                    <span style="background-color: green; color:#fff">Đang giao</span>
                                     }
                                     else if (Model.OrderStatus.Trim() == "Reject")
                                     {
@@ -47,7 +47,7 @@
                                     }
                                     else if (Model.OrderStatus.Trim() == "Waiting")
                                     {
-                                        <span style="background-color: yellow;color:green">Giao hàng</span>
+                                    <span style="background-color: yellow;color:green">Đơn hàng đang chờ xử lý</span>
                                     }
                                 </div>
                             </div>
