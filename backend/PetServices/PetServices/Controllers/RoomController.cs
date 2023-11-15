@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
 using PetServices.Models;
+using System;
+using System.Collections.Generic;
 
 namespace PetServices.Controllers
 {
@@ -108,7 +110,7 @@ namespace PetServices.Controllers
         [HttpPost("AddRoom")]
         public async Task<ActionResult> AddRoom(RoomDTO roomDTO)
         {
-                // check tên phòng
+            // check tên phòng
             if (string.IsNullOrWhiteSpace(roomDTO.RoomName))
             {
                 string errorMessage = "Tên phòng không được để trống!";
@@ -135,7 +137,7 @@ namespace PetServices.Controllers
             {
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
                 return BadRequest(errorMessage);
-            }                       
+            }
             // check loại phòng           
             var roomcategory = _context.RoomCategories.FirstOrDefault(r => r.RoomCategoriesId == roomDTO.RoomCategoriesId);
 
@@ -143,7 +145,7 @@ namespace PetServices.Controllers
             {
                 string errorMessage = "Loại phòng không tồn tại!";
                 return BadRequest(errorMessage);
-            }          
+            }
 
 
             try
@@ -279,5 +281,224 @@ namespace PetServices.Controllers
                 return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
             }
         }
+
+        [HttpGet("SearchRoomByDate")]
+        public async Task<ActionResult> SearchRoomByDate(DateTime startDate, DateTime endDate)
+        {
+            var listroom = await _context.Rooms.ToListAsync();
+
+            List<Room> room = new List<Room>();
+
+            foreach (var r in listroom)
+            {
+                //tìm các hóa đơn của phòng được đặt trong khoảng thời gian 
+                var orders = await _context.BookingRoomDetails.Where(o => o.RoomId == r.RoomId
+                                            && ((startDate >= o.StartDate && startDate < o.EndDate) // time bắt đầu khách đặt nằm trong khoảng thời gian trong hóa đơn
+                                            || (endDate > o.StartDate && endDate <= o.EndDate) // time kết thúc khách đặt nằm trong khoảng thời gian trong hóa đơn
+                                            || (startDate <= o.StartDate && endDate >= o.EndDate))) // thời gian trong hóa đơn nằm trong khoảng thời gian khách đặt
+                                                                .ToListAsync();
+
+                int a = r.Slot ?? 0;
+
+                if (a < 0) //Nếu số phòng = 0 đồng nghĩa với phòng đó chưa đi vào hoạt động
+                {
+                    continue;
+                }
+                else if (orders == null) // Nếu ko thấy hóa đơn nào thì đồng nghĩa với trong khoảng thời gian đó chưa có phòng nào được đặt
+                {
+                    room.Add(r);
+                    continue;
+                }
+                else if (orders.Count() < a)
+                { // small check nếu số hóa đơn nhỏ hơn số phòng thì giả sử mỗi hóa đơn 1 phòng thì vẫn còn phòng trống 
+                    room.Add(r);
+                    continue;
+                }
+                else
+                {
+                    // tạo room ảo lưu trữ và gán hóa đơn cho các phòng ( áp dụng thuật toán greedy algorithm )
+                    List<List<BookingRoomDetail>> rooms = new List<List<BookingRoomDetail>>();
+
+                    foreach (var order in orders)
+                    {
+                        bool added = false;
+
+                        // Thử xếp vào các lớp đã có
+                        foreach (var timeClass in rooms)
+                        {
+                            if (timeClass.All(o => order.EndDate <= o.StartDate || order.StartDate >= o.EndDate)) //kiểm tra xem hóa đơn order có thể được thêm vào lớp timeClass hay không.
+                            {
+                                timeClass.Add(order);
+                                added = true; // nếu thời gian hoàn toàn phù hợp thì được add vào phòng
+                                break;
+                            }
+                        }
+
+                        // Nếu không thể xếp vào phòng nào đã có, tạo phòng mới
+                        if (!added)
+                        {
+                            rooms.Add(new List<BookingRoomDetail> { order });
+                        }
+
+                        if (rooms.Count >= a) // trong trường hợp manager đổi lại số slot của phòng thì có thể phòng cũ sẽ bị dư ra.
+                        {
+                            continue;
+                        }
+                    }
+
+                    bool addtoroom = false;
+
+                    foreach (var timeClass in rooms)
+                    {
+                        if (timeClass.All(o => endDate <= o.StartDate || startDate >= o.EndDate)) // Kiểm tra xem khung giờ có thể được thêm vào lớp không
+                        {
+                            addtoroom = true;
+                            break;
+                        }
+                    }
+
+                    if (addtoroom)
+                    {
+                        room.Add(r);
+                        continue;
+
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+
+            return Ok(_mapper.Map<List<RoomDTO>>(room)); ;
+        }
+
+        [HttpGet("CheckSlotInRoom")]
+        public async Task<ActionResult> CheckSlotInRoom(int RoomId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                //tìm phòng theo id
+                var room = await _context.Rooms.FirstOrDefaultAsync(p => p.RoomId == RoomId);
+
+                //tìm các hóa đơn của phòng được đặt trong khoảng thời gian 
+                var orders = await _context.BookingRoomDetails.Where(o => o.RoomId == RoomId 
+                                            && ((startDate >= o.StartDate && startDate < o.EndDate) // time bắt đầu khách đặt nằm trong khoảng thời gian trong hóa đơn
+                                            || (endDate > o.StartDate && endDate <= o.EndDate) // time kết thúc khách đặt nằm trong khoảng thời gian trong hóa đơn
+                                            || (startDate <= o.StartDate && endDate >= o.EndDate))) // thời gian trong hóa đơn nằm trong khoảng thời gian khách đặt
+                                                                .ToListAsync();
+
+                if (room == null)
+                {
+                    return NotFound("Không tìm thấy phòng.");
+                }
+                else
+                {
+                    int a = room.Slot ?? 0;
+
+                    if (a < 0) //Nếu số phòng = 0 đồng nghĩa với phòng đó chưa đi vào hoạt động
+                    {
+                        return NotFound("Không tìm thấy phòng hợp lệ!");
+                    }
+                    else if ( orders == null) // Nếu ko thấy hóa đơn nào thì đồng nghĩa với trong khoảng thời gian đó chưa có phòng nào được đặt
+                    {
+                        return Ok("Còn phòng trống.");
+                    }
+                    else if (orders.Count() < a){ // small check nếu số hóa đơn nhỏ hơn số phòng thì giả sử mỗi hóa đơn 1 phòng thì vẫn còn phòng trống 
+                        return Ok("Còn phòng trống.");
+                    }
+                    else
+                    {
+                        // tạo room ảo lưu trữ và gán hóa đơn cho các phòng ( áp dụng thuật toán greedy algorithm )
+                        List<List<BookingRoomDetail>> rooms  = new List<List<BookingRoomDetail>>();
+
+                        foreach (var order in orders)
+                        {
+                            bool added = false;
+
+                            // Thử xếp vào các lớp đã có
+                            foreach (var timeClass in rooms)
+                            {
+                                if (timeClass.All(o => order.EndDate <= o.StartDate || order.StartDate >= o.EndDate)) //kiểm tra xem hóa đơn order có thể được thêm vào lớp timeClass hay không.
+                                {
+                                    timeClass.Add(order);
+
+                                    added = true; // nếu thời gian hoàn toàn phù hợp thì được add vào phòng
+                                    break;
+                                }
+                            }
+
+                            // Nếu không thể xếp vào phòng nào đã có, tạo phòng mới
+                            if (!added)
+                            {
+                                rooms.Add(new List<BookingRoomDetail> { order });
+                            }
+
+                            if (rooms.Count >= a) // trong trường hợp manager đổi lại số slot của phòng thì có thể phòng cũ sẽ bị dư ra.
+                            {
+                                return NotFound("Không tìm thấy phòng hợp lệ!");
+                            }
+                        }
+
+                        bool addtoroom = false;
+
+                        foreach (var time in rooms)
+                        {
+                            if (time.All(o => endDate <= o.StartDate || startDate >= o.EndDate)) // Kiểm tra xem khung giờ có thể được thêm vào lớp không
+                            {
+                                addtoroom = true;
+                                break;
+                            }
+                        }
+                        if (addtoroom)
+                        {
+                            return Ok("Còn phòng trống.");
+
+                        }
+                        else
+                        {
+                            var optimaltime = (startDate, endDate);
+                            var timeduration = TimeSpan.MinValue;
+
+                            foreach (var time in rooms)
+                            {
+                                var sortedtime = time.OrderBy(o => o.StartDate).ToList();
+
+                                sortedtime.Insert(0, new BookingRoomDetail { EndDate = startDate }); // tạo booking ảo (0, startDate) để tính trường hợp ngày bắt đầu khách muốn thuê tới ngày đầu tiên phòng bận.
+                                sortedtime.Add(new BookingRoomDetail { StartDate = endDate }); // tạo booking ảo (EndDate, ...) để tính trường hợp ngày cuối cùng phòng bận tới ngày kết thúc khách muốn thuê.
+
+                                for (int i = 0; i < sortedtime.Count - 1; i++)
+                                {
+                                    var gap = sortedtime[i + 1].StartDate - sortedtime[i].EndDate; // khoảng thời gian trống giữa 2 đơn đặt phòng liên tiếp
+
+                                    if (gap > timeduration) // Nếu khoảng thời gian này lớn hơn khoảng thời gian lớn nhất đã tìm được
+                                    {
+                                        timeduration = (TimeSpan)gap;
+
+                                        optimaltime = ((DateTime)sortedtime[i].EndDate, (DateTime)sortedtime[i + 1].StartDate);
+                                    }
+                                }
+                            }
+
+                            if (timeduration != TimeSpan.MinValue)
+                            {
+                                return BadRequest("Bạn có thể đặt phòng trong khoảng thời gian: " + optimaltime.startDate + " - " + optimaltime.endDate);
+                            }
+                            else
+                            {
+                                return NotFound("Không tìm thấy phòng hợp lệ!");
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return NotFound($"Đã xảy ra lỗi: {ex.Message}");
+            }
+        }
+
+
     }
 }

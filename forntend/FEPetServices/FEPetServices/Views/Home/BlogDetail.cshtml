@@ -29,13 +29,18 @@
                                     <div class="post-details__social-share">
                                         <span class="share-on-text">Share on:</span>
                                         <div class="social-share">
-                                            <a href="https://www.facebook.com/" class="share-button" data-network="facebook"><i class="fab fa-facebook-f"></i></a>
+                                            <a href="#" class="share-button" data-network="facebook"><i class="fab fa-facebook-f"></i></a>
                                             <a href="#" class="share-button" data-network="instagram"><i class="fab fa-instagram"></i></a>
                                             <a href="#" class="share-button" data-network="twitter"><i class="fab fa-twitter"></i></a>
                                             <a href="#" class="share-button" data-network="linkedin"><i class="fab fa-linkedin-in"></i></a>
                                             <a href="#" class="share-button" data-network="discord"><i class="fab fa-discord"></i></a>
-
                                         </div>
+                                        <!-- Thêm thẻ a cho mỗi mạng xã hội -->
+                                        <a href="#" class="share-link" data-network="facebook" target="_blank"></a>
+                                        <a href="#" class="share-link" data-network="instagram" target="_blank"></a>
+                                        <a href="#" class="share-link" data-network="twitter" target="_blank"></a>
+                                        <a href="#" class="share-link" data-network="linkedin" target="_blank"></a>
+                                        <a href="#" class="share-link" data-network="discord" target="_blank"></a>
 
                                     </div>
                                 </div>
@@ -176,6 +181,58 @@
             </div>
         </div>
     </main>
+    <script>
+    document.querySelectorAll('.share-button').forEach(function(button) {
+    button.addEventListener('click', function(event) {
+        event.preventDefault();
+        var network = button.getAttribute('data-network');
+        var shareURL = 'https://localhost:7247/Home/BlogDetail?blogId=6'; // Đường link của bài viết
 
+        // Tùy chỉnh URL chia sẻ cho từng mạng xã hội
+        var shareLinks = {
+            facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareURL),
+            instagram: 'URL_INSTAGRAM', // Thay thế bằng URL Instagram thực tế
+            twitter: 'https://twitter.com/intent/tweet?url=' + encodeURIComponent(shareURL),
+            linkedin: 'URL_LINKEDIN', // Thay thế bằng URL LinkedIn thực tế
+            discord: 'URL_DISCORD' // Thay thế bằng URL Discord thực tế
+        };
+
+        if (shareLinks[network]) {
+            // Tìm thẻ a tương ứng và thiết lập giá trị href
+            var shareLinkElement = document.querySelector('.share-link[data-network="' + network + '"]');
+            if (shareLinkElement) {
+                shareLinkElement.href = shareLinks[network];
+                window.open(shareLinkElement.href, '_blank');
+            }
+        } else {
+            alert('Mạng xã hội không được hỗ trợ.');
+        }
+    });
+});
+
+
+
+    </script>
 </body>
+<script src="~/assets/js/vendor/modernizr.min.js"></script>
+<!-- jQuery JS -->
+<script src="~/assets/js/vendor/jquery.js"></script>
+<!-- Bootstrap JS -->
+<script src="~/assets/js/vendor/popper.min.js"></script>
+<script src="~/assets/js/vendor/bootstrap.min.js"></script>
+<script src="~/assets/js/vendor/slick.min.js"></script>
+<script src="~/assets/js/vendor/js.cookie.js"></script>
+<!-- <script src="~/assets/js/vendor/jquery.style.switcher.js"></script> -->
+<script src="~/assets/js/vendor/jquery-ui.min.js"></script>
+<script src="~/assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
+<script src="~/assets/js/vendor/jquery.countdown.min.js"></script>
+<script src="~/assets/js/vendor/sal.js"></script>
+<script src="~/assets/js/vendor/jquery.magnific-popup.min.js"></script>
+<script src="~/assets/js/vendor/imagesloaded.pkgd.min.js"></script>
+<script src="~/assets/js/vendor/isotope.pkgd.min.js"></script>
+<script src="~/assets/js/vendor/counterup.js"></script>
+<script src="~/assets/js/vendor/waypoints.min.js"></script>
+
+<!-- Main JS -->
+<script src="~/assets/js/main.js"></script>
 </html>

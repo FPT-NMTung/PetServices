@@ -9063,7 +9063,7 @@ a.axil-btn.btn-size-md, button.axil-btn.btn-size-md {
     }
 
 .cart-dropdown .cart-item .item-title {
-    font-size: 16px;
+    font-size: 13px;
     color: var(--color-black);
     margin-bottom: 10px;
     overflow: hidden;
@@ -9075,7 +9075,7 @@ a.axil-btn.btn-size-md, button.axil-btn.btn-size-md {
 
 @media only screen and (max-width: 767px) {
     .cart-dropdown .cart-item .item-title {
-        font-size: 16px;
+        font-size: 13px;
         margin-bottom: 15px
     }
 }
@@ -10407,13 +10407,28 @@ body.open .closeMask {
     font-weight: 500
 }
 
+.product_list_widget li .woocommerce-Price-amount.amount1 {
+    font-size: 17px;
+    line-height: 28px;
+    color: var(--color-heading);
+    font-weight: 500
+}
+
 @media only screen and (max-width: 767px) {
     .product_list_widget li .woocommerce-Price-amount.amount {
+        font-size: 18px
+    }
+    .product_list_widget li .woocommerce-Price-amount.amount1 {
         font-size: 18px
     }
 }
 
 .product_list_widget li .woocommerce-Price-amount.amount del {
+    padding-right: 8px;
+    color: #d6d6d6
+}
+
+.product_list_widget li .woocommerce-Price-amount.amount1 del {
     padding-right: 8px;
     color: #d6d6d6
 }
@@ -20370,3 +20385,44 @@ body.open .closeMask {
     .service-category img {
         height:100%;
     }
+
+.axil-product .cart-action li.select-option button {
+    position: relative;
+    height: 40px;
+    line-height: 39px;
+    padding: 0 18px;
+    display: block;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--color-white);
+    background-color: var(--color-secondary);
+    transition: .3s;
+    box-shadow: 0 16px 32px 0 rgba(0,0,0,.06);
+    position: relative;
+    z-index: 1
+}
+
+    .axil-product .cart-action li.select-option button:before {
+        content: "";
+        height: 100%;
+        width: 100%;
+        background-color: var(--color-secondary);
+        border-radius: 4px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: -1;
+        transition: transform .5s cubic-bezier(0.165, 0.84, 0.44, 1)
+    }
+
+    .axil-product .cart-action li.select-option button:hover {
+        background-color: var(--color-secondary);
+        color: var(--color-white)
+    }
+
+        .axil-product .cart-action li.select-option button:hover:before {
+            transform: scale(1.1)
+        }

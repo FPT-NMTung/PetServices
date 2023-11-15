@@ -20,7 +20,7 @@ namespace FEPetServices.Controllers
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://localhost:7255/api/Account";
+            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account";
         }
 
         public IActionResult Index()
@@ -29,7 +29,7 @@ namespace FEPetServices.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index([FromForm, Bind("Email", "Password")] LoginForm loginInfo)
+        public async Task<IActionResult> Index([FromForm, Bind("Email", "Password")] LoginForm loginInfo,string returnUrl)
         {
             try
             {
@@ -44,9 +44,9 @@ namespace FEPetServices.Controllers
                     var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
 
                     if (loginResponse.Successful)
-                    {                       
+                    {
                         var roleName = loginResponse.RoleName;
-                        if(loginResponse.Status != true)
+                        if (loginResponse.Status != true)
                         {
                             ViewBag.ErrorToast = "Tài khoản chưa được kích hoạt";
                             return View();
@@ -63,26 +63,43 @@ namespace FEPetServices.Controllers
                             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                            HttpContext.Session.SetString("UserName", loginResponse.UserName == null ? "aaa_a": loginResponse.UserName);
+                            HttpContext.Session.SetString("UserName", loginResponse.UserName == null ? "aaa_a" : loginResponse.UserName);
                             HttpContext.Session.SetString("UserImage", loginResponse.UserImage == null ? "aaa_a" : loginResponse.UserImage);
                             // Redirect based on the role
+
                             if (roleName == "MANAGER")
                             {
+                                if (!string.IsNullOrEmpty(returnUrl))
+                                {
+                                    return LocalRedirect(returnUrl);
+                                }
                                 TempData["SuccessLoginToast"] = "Đăng nhập thành công.";
                                 return RedirectToAction("Index", "Information", new { area = "Manager" });
                             }
                             else if (roleName == "CUSTOMER")
                             {
+                                if (!string.IsNullOrEmpty(returnUrl))
+                                {
+                                    return LocalRedirect(returnUrl);
+                                }
                                 TempData["SuccessLoginToast"] = "Đăng nhập thành công.";
                                 return RedirectToAction("Index", "Home");
                             }
                             else if (roleName == "PARTNER")
                             {
+                                if (!string.IsNullOrEmpty(returnUrl))
+                                {
+                                    return LocalRedirect(returnUrl);
+                                }
                                 TempData["SuccessLoginToast"] = "Đăng nhập thành công.";
                                 return RedirectToAction("Index", "HomePartner", new { area = "Partner" });
                             }
                             else if (roleName == "ADMIN")
                             {
+                                if (!string.IsNullOrEmpty(returnUrl))
+                                {
+                                    return LocalRedirect(returnUrl);
+                                }
                                 TempData["SuccessLoginToast"] = "Đăng nhập thành công.";
                                 return RedirectToAction("Index", "Account", new { area = "Admin" });
                             }

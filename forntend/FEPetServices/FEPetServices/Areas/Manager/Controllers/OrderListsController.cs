@@ -1,5 +1,4 @@
 ﻿using FEPetServices.Form;
-using FEPetServices.Form.BookingForm;
 using FEPetServices.Form.OrdersForm;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +19,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://localhost:7255/api/Order";
+            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Order";
 
         }
 
@@ -80,7 +79,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpPost]
         public async Task<IActionResult> OrderDetail(int id, [FromForm] Status status)
         {
-        //https://localhost:7255/api/Order/changeStatus?Id=1
+            //https://pet-service-api.azurewebsites.net/api/Order/changeStatus?Id=1
             HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/changeStatus?Id=" + id, status);
             if (response.IsSuccessStatusCode)
             {

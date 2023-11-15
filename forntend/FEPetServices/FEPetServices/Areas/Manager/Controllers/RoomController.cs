@@ -28,12 +28,12 @@ namespace FEPetServices.Areas.Manager.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            ApiUrlRoomList = "https://localhost:7255/api/Room/GetAllRoom";
-            ApiUrlRoomAdd = "https://localhost:7255/api/Room/AddRoom";
-            ApiUrlRoomCategoryList = "https://localhost:7255/api/Room/GetRoomCategory";
-            ApiUrlRoomDetail = "https://localhost:7255/api/Room/GetRoom/";
-            ApiUrlRoomUpdate = "https://localhost:7255/api/Room/UpdateRoom?roomId=";
-            ApiUrlServiceList = "https://localhost:7255/api/Room/GetAllService";
+            ApiUrlRoomList = "https://pet-service-api.azurewebsites.net/api/Room/GetAllRoom";
+            ApiUrlRoomAdd = "https://pet-service-api.azurewebsites.net/api/Room/AddRoom";
+            ApiUrlRoomCategoryList = "https://pet-service-api.azurewebsites.net/api/Room/GetRoomCategory";
+            ApiUrlRoomDetail = "https://pet-service-api.azurewebsites.net/api/Room/GetRoom/";
+            ApiUrlRoomUpdate = "https://pet-service-api.azurewebsites.net/api/Room/UpdateRoom?roomId=";
+            ApiUrlServiceList = "https://pet-service-api.azurewebsites.net/api/Room/GetAllService";
         }
 
         public async Task<ActionResult> Index(RoomDTO roomDTO)
