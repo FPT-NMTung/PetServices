@@ -85,7 +85,7 @@
                         <td>@pc.UserInfo.Phone</td>
                         <td>
                             @pc.OrderStatus
-                            @*@if (@pc.Status)
+                            @*@if (@pc.OrderStatus)
                             {
                             <button class="btn btn-active" onclick="toggleStatus(this)">Đang hoạt động</button>
                             }
@@ -98,8 +98,7 @@
                             <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
                         </td>
                         <td>
-                            <a href="/Partner/HomePartner/Detail?orderId=@pc.OrderId">Nhận Đơn</a>
-                            <a href="/Partner/HomePartner/Detail?orderId=@pc.OrderId">Hủy Đơn</a>
+                            <button>Đã Hoàn Thành</button>
                         </td>
 
                     </tr>
