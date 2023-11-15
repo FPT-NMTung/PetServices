@@ -6,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @*<link href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">*@
     <link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
+    <script src="~/js/map.js"></script>
     <link href="~/css/toastNotification.css" rel="stylesheet" />
     <link href="~/css/datatable.css" rel="stylesheet" />
+    <link href="~/css/map.css" rel="stylesheet" />
 </head>
 <body>
     <div>
@@ -38,10 +40,13 @@
                             <td>@listAccounts.PartnerInfo.Phone</td>
                             <td>@listAccounts.PartnerInfo.Descriptions</td>
                             <td>
-                                <li class="nav-item">
-                                    <a href="javascript:void(0);" class="nav-link" onclick="getLocation(@listAccounts.PartnerInfo.Lat, @listAccounts.PartnerInfo.Lng)">Lấy vị trí của tôi</a>
-                                </li>
+                                <button type="button" class="map-button"
+                                        data-lat="@listAccounts.PartnerInfo.Lat"
+                                        data-lng="@listAccounts.PartnerInfo.Lng">
+                                    Xem vị trí
+                                </button>
                             </td>
+
                             <td>
                                 <a class="detail-button" href="~/Manager/ListPartner/DetailPartner?email=@listAccounts.Email">Chi tiết</a>
                             </td>
@@ -51,6 +56,15 @@
             </tbody>
         </table>
     </div>
+
+    <div id="mapModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMapModal()">&times;</span>
+            <div id="map" style="width: 100%; height: 400px;"></div>
+        </div>
+        <div id="directionsPanel"></div>
+    </div>
+    
 </body>
     <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
@@ -61,6 +75,7 @@
     <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
     <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.excel.min.js"></script>
     <script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM"></script>
 
     <script>
         $(document).ready(function () {
@@ -91,19 +106,45 @@
                     }
                 },
             });
-        });
-    </script>
-</html>
+            $(".map-button").click(function () {
+                var latitude = parseFloat($(this).data("lat"));
+                var longitude = parseFloat($(this).data("lng"));
 
-<html>
-<head>
-    <title>Google Maps Example</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIkw2datIu4EYiyedKQJ08DmMJnboVSqs"></script>
-</head>
-<body>
-    <div id="map" style="width: 100%; height: 400px;"></div>
-    <script>
-        function initMap(latitude, longitude) {
+            var myLatitude = 21.013569;
+            var myLongitude = 105.525349;
+
+            showPosition(latitude, longitude, myLatitude, myLongitude);
+            });
+
+            $(".close").click(function () {
+                closeMapModal();
+            });
+
+            $(window).click(function (event) {
+                if (event.target.id === "mapModal") {
+                    closeMapModal();
+                }
+            });
+        });
+
+        function showPosition(partnerLatitude, partnerLongitude, myLatitude, myLongitude) {
+            initMap(partnerLatitude, partnerLongitude, myLatitude, myLongitude);
+            openMapModal();
+            calculateAndDisplayRoute(directionsService, directionsDisplay, { lat: myLatitude, lng: myLongitude }, { lat: partnerLatitude, lng: partnerLongitude });
+        }
+
+        function openMapModal() {
+            $("#mapModal").css("display", "block");
+        }
+
+        function closeMapModal() {
+            $("#mapModal").css("display", "none");
+        }
+
+        function initMap(latitude, longitude, myLatitude, myLongitude) {
+            var directionsService = new google.maps.DirectionsService();
+            var directionsDisplay = new google.maps.DirectionsRenderer();
+
             var map = new google.maps.Map(document.getElementById('map'), {
                 center: { lat: latitude, lng: longitude },
                 zoom: 15
@@ -112,21 +153,33 @@
             var marker = new google.maps.Marker({
                 position: { lat: latitude, lng: longitude },
                 map: map,
-                title: 'Vị trí của bạn'
+                title: 'Vị trí đối tác',
+                icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+            });
+
+            var myMarker = new google.maps.Marker({
+                position: { lat: myLatitude, lng: myLongitude },
+                map: map,
+                title: 'Vị trí của tôi',
+                icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+            });
+
+            directionsDisplay.setMap(map);
+            calculateAndDisplayRoute(directionsService, directionsDisplay, { lat: myLatitude, lng: myLongitude }, { lat: latitude, lng: longitude });
+        }
+
+        function calculateAndDisplayRoute(directionsService, directionsDisplay, start, end) {
+            directionsService.route({
+                origin: start,
+                destination: end,
+                travelMode: 'DRIVING'
+            }, function (response, status) {
+                if (status === 'OK') {
+                    directionsDisplay.setDirections(response);
+                } else {
+                    window.alert('Không thể hiển thị tuyến đường do: ' + status);
+                }
             });
         }
     </script>
-</body>
 </html>
-
-<script>
-    function getLocation(lat, lng) {
-        // Gọi hàm showPosition khi vị trí được lấy thành công
-        showPosition(lat, lng);
-    }
-
-    function showPosition(latitude, longitude) {
-        // Hiển thị vị trí lên bản đồ
-        initMap(latitude, longitude);
-    }
-</script>
