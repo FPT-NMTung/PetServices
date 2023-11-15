@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="~/css/flatpickr.css">
     <link rel="stylesheet" href="~/css/RoomCustomer.css">
-
+    <link href="~/css/productlist.css" rel="stylesheet" />
 </head>
 
 <body class="sticky-header">
@@ -179,6 +179,23 @@
                                 </div>
                             }
                         </div>
+                        <div style="text-align:center;">
+                            <div class="pagination">
+                                @if (ViewBag.CurrentPage > 1)
+                                {
+                                    <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, productcategory=ViewBag.productcategory, pricefrom=ViewBag.pricefrom, priceto=ViewBag.priceto, sortby=ViewBag.sortby, productname=ViewBag.productname, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">&laquo;</a>
+                                }
+
+                                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                {
+                                    <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("Index", new { page = i, productcategory=ViewBag.productcategory, pricefrom=ViewBag.pricefrom, priceto=ViewBag.priceto, sortby=ViewBag.sortby, productname=ViewBag.productname, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">@i</a>
+                                }
+                                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                                {
+                                    <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, productcategory=ViewBag.productcategory, pricefrom=ViewBag.pricefrom, priceto=ViewBag.priceto, sortby=ViewBag.sortby, productname=ViewBag.productname, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">&raquo;</a>
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -191,6 +208,7 @@
         var productname = "@(ViewBag.productname)";
         var pricefrom = "@(ViewBag.pricefrom)";
         var priceto = "@(ViewBag.priceto)";
+        var CurrentPage = "@(ViewBag.CurrentPage)";
 
         document.addEventListener("DOMContentLoaded", function () {
             var priceElements = document.querySelectorAll('.current-price');

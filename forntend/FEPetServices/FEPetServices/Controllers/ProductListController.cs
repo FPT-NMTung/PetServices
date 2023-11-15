@@ -51,6 +51,11 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(rep))
                     {
                         var productList = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
+
+                        if (!string.IsNullOrEmpty(searchDTO.productname))
+                        {
+                            productList = productList.Where(r => r.ProductName.Contains(searchDTO.productname, StringComparison.OrdinalIgnoreCase)).ToList();
+                        }
                         if (!string.IsNullOrEmpty(searchDTO.productcategory))
                         {
                             int productCategoriesId = int.Parse(searchDTO.productcategory);
@@ -91,17 +96,17 @@ namespace FEPetServices.Controllers
                                 productList = productList.OrderBy(r => r.ProductName).ToList();
                                 break;
                         }
-                        /*int page = searchDTO.page ?? 1; ;
+                        int page = searchDTO.page ?? 1; ;
                         int pagesize = searchDTO.pagesize ?? 6;
 
                         int totalItems = productList.Count;
                         int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
                         int startIndex = (page - 1) * pagesize;
-                        List<ProductDTO> currentPageProductList = productList.Skip(startIndex).Take(pagesize).ToList();*/
+                        List<ProductDTO> currentPageProductList = productList.Skip(startIndex).Take(pagesize).ToList();
 
-                        /*ViewBag.TotalPages = totalPages;
-                        ViewBag.CurrentPage = searchDTO.page;
-                        ViewBag.PageSize = searchDTO.pagesize;*/
+                        ViewBag.TotalPages = totalPages;
+                        ViewBag.CurrentPage = searchDTO.page ?? 1;
+                        ViewBag.PageSize = searchDTO.pagesize;
 
                         ViewBag.productcategory = searchDTO.productcategory;
                         ViewBag.pricefrom = searchDTO.pricefrom;
@@ -109,7 +114,7 @@ namespace FEPetServices.Controllers
                         ViewBag.sortby = searchDTO.sortby;
                         ViewBag.productname = searchDTO.productname;
                         ViewBag.pagesize = searchDTO.pagesize;
-                        return View(productList);
+                        return View(currentPageProductList);
                     }
                     else
                     {
