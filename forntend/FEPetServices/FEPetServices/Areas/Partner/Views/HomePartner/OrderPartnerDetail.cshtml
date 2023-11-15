@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Partner Detail</title>
+    <link href="~/css/manager/print.css" rel="stylesheet" />
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container print-container">
+        <h2>Chi tiết đơn hàng</h2>
+        @*Thông tin đơn hàng*@
+        @*<form method="post" asp-controller="HomePartner" asp-action="OrderDetail">*@
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Ngày mua hàng :</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext" value="@Model.OrderDate">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Trạng thái :</label>
+                <div class="col-sm-9" style="padding-top:8px">
+                    @if (Model.OrderStatus.Trim() == "Complete")
+                    {
+                        <span style="background-color: green; color:#fff">Đã hoàn thành</span>
+                    }
+                    else if (Model.OrderStatus.Trim() == "Reject")
+                    {
+                        <span style="background-color: red; color:#fff">Đơn hàng bị huỷ</span>
+                    }
+                    else if (Model.OrderStatus.Trim() == "Waiting")
+                    {
+                        <span style="background-color: yellow;color:green">Đang chờ xác nhận</span>
+                    }
+                    else if (Model.OrderStatus.Trim() == "Received")
+                    {
+                        <span style="background-color: pink;color:deeppink">Đang chờ xác nhận</span>
+                    }
+                </div>
+            </div>
+            @*Thông tin khách hàng*@
+            <h3>Thông tin khách hàng</h3>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Tên Khách Hàng :</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext" value="@Model.UserInfo.FirstName @Model.UserInfo.LastName">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Địa chỉ :</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext"
+                           value="@Model.Province , @Model.District , @Model.Commune">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Địa chỉ cụ thể :</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext" value="@Model.Address">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Thông tin liên hệ :</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext" value="@Model.UserInfo.Phone">
+                </div>
+            </div>
+            @*Thông tin sản phẩm*@
+            @*<h3>Thông tin sản phẩm đã được đặt hàng</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Giá từng sản phẩm</th>
+                        <th>Tổng giá</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var productDetail in Model.OrderProductDetails)
+                    {
+                        <tr>
+                            <td>@productDetail.Product.ProductName</td>
+                            <td>@productDetail.Price VNĐ</td>
+                            <td>@productDetail.Quantity</td>
+                            <td>@(productDetail.Quantity * productDetail.Price) VNĐ</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="3" style="text-align: right;"><strong>Tổng tiền:</strong></td>
+                        <td><strong>@ViewBag.TotalPrice VNĐ</strong></td>
+                    </tr>
+                </tbody>
+            </table>*@
+            <h3>Thông tin dịch vụ</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Tên dịch vụ</th>
+                        <th>Số lượng</th>
+                        <th>Giá từng sản phẩm</th>
+                        <th>Tổng giá</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var serviceDetail in Model.BookingServicesDetails)
+                    {
+                        <tr>
+                            <td>@serviceDetail.Service.ServiceName</td>
+                            <td>@serviceDetail.Weight</td>
+                            <td>@serviceDetail.Price VNĐ</td>
+                            <td>@(serviceDetail.Price * serviceDetail.Weight)VNĐ</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+
+            @if (Model.OrderStatus.Trim() == "Waiting")
+            {
+                <input type="hidden" name="Id" value="@Model?.OrderId" />
+                <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
+                <select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
+                    <option style="background-color: green; color:#fff" value="Confirm">Nhận Đơn</option>
+                    <option style="background-color: red; color:#fff" value="Reject">Hủy Đơn</option>
+                </select>
+                <button class="btn btn-primary" type="submit">Xác nhận</button>
+            }
+        @*</form>*@
+        @*<button class="btn btn-primary" onclick="window.print()">In hoá đơn</button>*@
+        <div class="btn-group">
+            <a class="btn btn-primary" href="~/HomePartner/ListOrderPetTraining">Trở lại</a>
+        </div>
+    </div>
+</body>
+</html>
