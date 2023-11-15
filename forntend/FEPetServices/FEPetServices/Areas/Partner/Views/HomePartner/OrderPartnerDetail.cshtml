@@ -19,11 +19,11 @@
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Trạng thái :</label>
                 <div class="col-sm-9" style="padding-top:8px">
-                    @if (Model.OrderStatus.Trim() == "Complete")
+                    @if (Model.OrderStatus.Trim() == "Completed")
                     {
                         <span style="background-color: green; color:#fff">Đã hoàn thành</span>
                     }
-                    else if (Model.OrderStatus.Trim() == "Reject")
+                    else if (Model.OrderStatus.Trim() == "Rejected")
                     {
                         <span style="background-color: red; color:#fff">Đơn hàng bị huỷ</span>
                     }
