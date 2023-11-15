@@ -122,6 +122,7 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
         [HttpPut("updateInfo")]
         public async Task<IActionResult> EditProfile(string email, [FromBody] EditPartnerInfo updateInfo)
         {
