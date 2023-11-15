@@ -74,6 +74,12 @@ namespace FEPetServices.Controllers
                     {
                         var roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(responseContent);
 
+                        if (searchDTO.startdate != null && searchDTO.enddate != null)
+                        {
+                            HttpResponseMessage roomvalidResponse = await client.GetAsync("https://localhost:7255/api/Room/SearchRoomByDate?startDate=" + searchDTO.startdate + "&endDate=" + searchDTO.enddate);
+                            roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(responseContent);
+                        }
+
                         if (!string.IsNullOrEmpty(searchDTO.roomname))
                         {
                             roomList = roomList?.Where(r => r.RoomName.Contains(searchDTO.roomname, StringComparison.OrdinalIgnoreCase)).ToList();
@@ -127,6 +133,8 @@ namespace FEPetServices.Controllers
                         ViewBag.priceto = searchDTO.priceto;
                         ViewBag.sortby = searchDTO.sortby;
                         ViewBag.roomname = searchDTO.roomname;
+                        ViewBag.startdate = searchDTO.startdate.ToString();
+                        ViewBag.enddate = searchDTO.enddate.ToString();
 
                         return View(roomList);
                     }

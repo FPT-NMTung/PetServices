@@ -302,6 +302,10 @@ namespace PetServices.Models
 
                 entity.Property(e => e.LastName).HasMaxLength(100);
 
+                entity.Property(e => e.Lat).HasMaxLength(500);
+
+                entity.Property(e => e.Lng).HasMaxLength(500);
+
                 entity.Property(e => e.Phone)
                     .HasMaxLength(10)
                     .IsUnicode(false);

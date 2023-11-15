@@ -14,5 +14,7 @@
         public string? CardNumber { get; set; }
         public string? ImagePartner { get; set; }
         public string? ImageCertificate { get; set; }
+        public string? Lat { get; set; }
+        public string? Lng { get; set; }
     }
 }
