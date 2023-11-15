@@ -21,11 +21,6 @@ namespace PetServices.Controllers
             _mapper = mapper;
             _configuration = configuration;
         }
-        [HttpGet("GetAllFeedback")]
-        public IActionResult Get()
-        {
-            List<Feedback> blogs = _context.Feedbacks.ToList();
-            return Ok(_mapper.Map<List<FeedbackDTO>>(blogs));
-        }
+       
     }
 }
