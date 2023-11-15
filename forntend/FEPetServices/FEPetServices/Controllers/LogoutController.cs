@@ -14,12 +14,10 @@ namespace FEPetServices.Controllers
                 // Đăng xuất khỏi hệ thống
                 HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-                // Xóa thông tin phiên làm việc (session)
                 HttpContext.Session.Clear();
             }
 
-            // Chuyển hướng đến trang đăng nhập
-            return RedirectToAction("Index", "Login");
+            return RedirectToAction("Index", "Home");
         }
     }
 }
