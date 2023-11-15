@@ -80,6 +80,7 @@
                                     <th scope="col">Dịch vụ</th>
                                     <th scope="col">Giá</th>
                                     <th scope="col">Cân nặng thú cưng</th>
+                                    <th scope="col">Thời gian</th>
                                     <th scope="col">Nhân viên được thuê</th>
                                     <th scope="col">Thành tiền</th>
                                     <th scope="col"></th>
@@ -98,18 +99,31 @@
                                         <td>@($"{cartitem.service.Price:n0} VNĐ")</td>
                                         <td>
                                             <div style="display:flex;justify-content:space-between">
-                                                <input style="height:20px" class="form-control" type="number" value="@cartitem.Weight" /> 
+                                                <p>@cartitem.Weight</p>
                                                 <span>Kg</span>
                                             </div>
                                         </td>
                                         <td>
+                                            <div>
+                                                <div>
+                                                    Thời gian bắt đầu :  @cartitem.StartTime
+                                                </div>
+                                                <div>
+                                                    Thời gian kết thúc : @cartitem.EndTime
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @if (cartitem.PartnerInfo?.FirstName == null && cartitem.PartnerInfo?.LastName == null)
+                                            {
+                                               <div>
+                                                    <p style="color:red">Không</p>
+                                               </div>
+                                            }
                                             @cartitem.PartnerInfo?.FirstName @cartitem.PartnerInfo?.LastName
                                         </td>
                                         <td>@(thanhtien.ToString("n0").Replace(",", ".")) VNĐ</td>
                                         <td>
-                                            <button class="btn btn-outline-success updatecartitem" data-serviceid="@cartitem.service.ServiceId">
-                                                Cập nhật
-                                            </button>
                                             <button class="btn btn-outline-danger removecart" data-serviceid="@cartitem.service.ServiceId">
                                                 Xoá
                                             </button>
@@ -117,7 +131,7 @@
                                     </tr>
                                 }
                                 <tr>
-                                    <td colspan="4" class="text-right">Tổng tiền</td>
+                                    <td colspan="6" class="text-right">Tổng tiền</td>
                                     <td>@(serviceTotal.ToString("n0").Replace(",", ".")) VNĐ</td>
                                     <td></td>
                                 </tr>
@@ -201,5 +215,4 @@
         });
     });
 </script>
-
 </html>
