@@ -1,6 +1,6 @@
 ﻿@model FEPetServices.Form.LoginForm
 @{
-    ViewData["Title"] = "Login";
+    string returnUrl = Context.Request.Query["ReturnUrl"];
 }
 
 <!DOCTYPE html>
@@ -36,7 +36,7 @@
                         </label>
 
                     </div>
-                    <button>Đăng nhập</button>
+                    <button asp-route-returnUrl="@returnUrl">Đăng nhập</button>
                     <div class="register">
                         <p>Nếu bạn chưa có tài khoản hãy <a href="~/Register/Index">Đăng ký</a></p>
                     </div>
