@@ -15,6 +15,7 @@ namespace FEPetServices.Areas.Partner.Controllers
     {
         private readonly HttpClient client = null;
         private string DefaultApiUrl = "";
+        private string DefaultApiUrlOrderPartner = "";
         private string DefaultApiUrlOrderListOfPetTraining = "";
         private string DefaultApiUrlOrderListOfPetTrainingSpecial = "";
         public HomePartnerController()
@@ -23,6 +24,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "https://localhost:7255/api/Partner";
+            DefaultApiUrlOrderPartner = "https://localhost:7255/api/OrderPartner";
             DefaultApiUrlOrderListOfPetTraining = "https://localhost:7255/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4";
             DefaultApiUrlOrderListOfPetTrainingSpecial = "https://localhost:7255/api/OrderPartner/ListOrderPetTrainingSpecial";
         }
@@ -32,7 +34,10 @@ namespace FEPetServices.Areas.Partner.Controllers
         }
         public async Task<IActionResult> ListOrderPetTraining()
         {
+            //orderStatus = "Waiting";
+            //https://localhost:7255/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
+            //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -70,11 +75,11 @@ namespace FEPetServices.Areas.Partner.Controllers
 
                 account = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseAccContent, options);
             }
-
             int serCategoriesId = 4;
             int partnerInfoId = account?.PartnerInfoId ?? 0; // Use the null-conditional operator to provide a default value
-            //https://localhost:7255/api/OrderPartner/ListOrderPetTrainingSpecial?serCategoriesId=4&partnerInfoId=1
+           
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId);
+            //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId + "&orderStatus" + orderStatus);
 
             if (response.IsSuccessStatusCode)
             {
@@ -95,44 +100,242 @@ namespace FEPetServices.Areas.Partner.Controllers
                 return View();
             }
         }
+        //Complete
+        public async Task<IActionResult> ListOrderPetTrainingComplete()
+        {
+            //orderStatus = "Waiting";
+            //https://localhost:7255/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
+            //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
 
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
 
-        //private async Task<List<OrderForm>> GetPetTrainingOrdersAsync()
-        //{
-        //    List<OrderForm> petTrainingOrders = new List<OrderForm>();
+                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
+                return View(orderLists);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
+        public async Task<IActionResult> ListOrderPetTrainingSpecialComplete()
+        {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+            HttpResponseMessage repId = await client.GetAsync(DefaultApiUrl + "/" + email);
+            AccountInfo account = null; // Initialize with null or a default value
 
-        //    try
-        //    {
-        //        // Gọi API để lấy danh sách đơn đặt hàng dựa trên pet training
-        //        HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
+            if (repId.IsSuccessStatusCode)
+            {
+                string responseAccContent = await repId.Content.ReadAsStringAsync();
 
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            // Chuyển đổi nội dung response thành danh sách đơn đặt hàng
-        //            petTrainingOrders = await response.Content.ReadFromJsonAsync<List<OrderForm>>();
-        //        }
-        //        else
-        //        {
-        //            // Xử lý lỗi nếu cần
-        //            ModelState.AddModelError(string.Empty, "Error retrieving pet training orders.");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Xử lý lỗi nếu cần
-        //        ModelState.AddModelError(string.Empty, "An error occurred while processing your request.");
-        //    }
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
 
-        //    return petTrainingOrders;
-        //}
-        //public List<OrderForm> GetOrdersByServiceCategory(string serviceCategory)
-        //{
-        //    var orders = new List<OrderForm>();
-        //    // Lấy danh sách đơn hàng
-        //    // ...
-        //    // Lọc danh sách đơn hàng theo danh mục dịch vụ
-        //    var filteredOrders = orders.Where(order => order.BookingServicesDetails.Any(service => service.Service.SerCategoriesName == serviceCategory)).ToList();
-        //    return filteredOrders;
-        //}
+                account = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseAccContent, options);
+            }
+            int serCategoriesId = 4;
+            int partnerInfoId = account?.PartnerInfoId ?? 0; // Use the null-conditional operator to provide a default value
+           
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId);
+            //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId + "&orderStatus" + orderStatus);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
+                return View(orderLists);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
+        //Reject
+        public async Task<IActionResult> ListOrderPetTrainingReject()
+        {
+            //orderStatus = "Waiting";
+            //https://localhost:7255/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
+            //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
+                return View(orderLists);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
+        public async Task<IActionResult> ListOrderPetTrainingSpecialReject()
+        {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+            HttpResponseMessage repId = await client.GetAsync(DefaultApiUrl + "/" + email);
+            AccountInfo account = null; // Initialize with null or a default value
+
+            if (repId.IsSuccessStatusCode)
+            {
+                string responseAccContent = await repId.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                account = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseAccContent, options);
+            }
+            int serCategoriesId = 4;
+            int partnerInfoId = account?.PartnerInfoId ?? 0; // Use the null-conditional operator to provide a default value
+           
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId);
+            //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId + "&orderStatus" + orderStatus);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
+                return View(orderLists);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
+        //Received
+        public async Task<IActionResult> ListOrderPetTrainingReceived()
+        {
+            //orderStatus = "Waiting";
+            //https://localhost:7255/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
+            //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
+                return View(orderLists);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
+        public async Task<IActionResult> ListOrderPetTrainingSpecialReceived()
+        {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+            HttpResponseMessage repId = await client.GetAsync(DefaultApiUrl + "/" + email);
+            AccountInfo account = null; // Initialize with null or a default value
+
+            if (repId.IsSuccessStatusCode)
+            {
+                string responseAccContent = await repId.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                account = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseAccContent, options);
+            }
+            int serCategoriesId = 4;
+            int partnerInfoId = account?.PartnerInfoId ?? 0; // Use the null-conditional operator to provide a default value
+           
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId);
+            //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId + "&orderStatus" + orderStatus);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
+                return View(orderLists);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> OrderPartnerDetail(int orderId)
+        {
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderPartner + "/" + orderId);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                OrderForm orderDetail = System.Text.Json.JsonSerializer.Deserialize<OrderForm>(responseContent, options);
+                double totalPrice = 0;
+                foreach (var od in orderDetail.OrderProductDetails)
+                {
+                    totalPrice = (double)(totalPrice + od.Price * od.Quantity);
+                }
+
+                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                ViewBag.TotalPrice = totalPrice;
+                return View(orderDetail);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
     }
 }

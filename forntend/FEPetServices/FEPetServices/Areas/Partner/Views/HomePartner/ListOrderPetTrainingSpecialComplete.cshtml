@@ -2,48 +2,48 @@
 <link href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
 <link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="~/css/toastNotification.css" rel="stylesheet" />
-    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-    <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
-    <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
+<script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            // Khởi tạo DataTables
-            var table = $('#lists').DataTable({
-                "paging": true,
-                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "columnDefs": [
-                    { "targets": [0], "width": "5%" },
-                    { "targets": [1], "width": "15%" },
-                    { "targets": [2], "width": "25%" },
-                    { "targets": [3], "width": "10%" }, // Điều chỉnh cột này để khớp với số cột thực tế
-                    { "targets": [4], "width": "15%" },
-                    { "targets": [5], "width": "10%" },
-                    { "targets": [6], "width": "10%" },
-                    { "targets": [7], "width": "10%" },
-                ],
-                "language": {
-                    "lengthMenu": "Hiển thị _MENU_ dòng",
-                    "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
-                    "search": "Tìm kiếm:",
-                    "paginate": {
-                        "first": "Đầu",
-                        "last": "Cuối",
-                        "next": "Tiếp",
-                        "previous": "Trước"
-                    }
-                },
-            });
+<script>
+    $(document).ready(function () {
+        // Khởi tạo DataTables
+        var table = $('#lists').DataTable({
+            "paging": true,
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "columnDefs": [
+                { "targets": [0], "width": "5%" },
+                { "targets": [1], "width": "15%" },
+                { "targets": [2], "width": "25%" },
+                { "targets": [3], "width": "10%" }, // Điều chỉnh cột này để khớp với số cột thực tế
+                { "targets": [4], "width": "15%" },
+                { "targets": [5], "width": "10%" },
+                { "targets": [6], "width": "10%" },
+                { "targets": [7], "width": "10%" },
+            ],
+            "language": {
+                "lengthMenu": "Hiển thị _MENU_ dòng",
+                "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
+                "search": "Tìm kiếm:",
+                "paginate": {
+                    "first": "Đầu",
+                    "last": "Cuối",
+                    "next": "Tiếp",
+                    "previous": "Trước"
+                }
+            },
         });
-    </script>
+    });
+</script>
 
 <h1>Danh Sách Đơn Hàng Của Đối Tác</h1>
 
@@ -67,7 +67,7 @@
             foreach (var pc in Model)
             {
                 itemCount++;
-                if (pc.OrderStatus.Trim() == "Waiting")
+                if (pc.OrderStatus.Trim() == "Complete")
                 {
                     <tr>
                         <td>@itemCount</td>
@@ -86,13 +86,13 @@
                         <td>
                             @pc.OrderStatus
                             @*@if (@pc.Status)
-                            {
-                            <button class="btn btn-active" onclick="toggleStatus(this)">Đang hoạt động</button>
-                            }
-                            else
-                            {
-                            <button class="btn btn-inactive" onclick="toggleStatus(this)">Ngưng hoạt động</button>
-                            }*@
+                {
+                <button class="btn btn-active" onclick="toggleStatus(this)">Đang hoạt động</button>
+                }
+                else
+                {
+                <button class="btn btn-inactive" onclick="toggleStatus(this)">Ngưng hoạt động</button>
+                }*@
                         </td>
                         <td>
                             <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
@@ -101,11 +101,10 @@
                             <a href="/Partner/HomePartner/Detail?orderId=@pc.OrderId">Nhận Đơn</a>
                             <a href="/Partner/HomePartner/Detail?orderId=@pc.OrderId">Hủy Đơn</a>
                         </td>
-
                     </tr>
                 }
-                
-                
+
+
             }
         }
         @*        else
@@ -136,6 +135,7 @@
         height: 35px;
         margin-left: -7px;
     }
+
     .btn-active {
         background-color: #43e240;
         color: white;
@@ -153,6 +153,7 @@
         height: 40px;
         border-radius: 5px;
     }
+
     .toggle {
         position: absolute;
         top: 0;

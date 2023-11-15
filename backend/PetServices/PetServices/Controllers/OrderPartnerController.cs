@@ -22,6 +22,23 @@ namespace PetServices.Controllers
             _mapper = mapper;
             _configuration = configuration;
         }
+        [HttpGet]
+        public IActionResult Get()
+        {
+            try
+            {
+                List<Order> orders = _context.Orders.Include(b => b.UserInfo)
+                    .Include(x => x.BookingServicesDetails)
+                    .ThenInclude(y => y.Service)
+                    .ToList();
+                return Ok(_mapper.Map<List<OrdersDTO>>(orders));
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
+                return StatusCode(500, ex.Message);
+            }
+        }
         [HttpGet("ListOrderPetTraining")]
         public async Task<IActionResult> ListOrderPetTraining(int serCategoriesId)
         {
@@ -30,6 +47,7 @@ namespace PetServices.Controllers
             .ThenInclude(y => y.Service)
             .Include(z => z.UserInfo)
             .Where(o => o.BookingServicesDetails.Any(b => b.Service.SerCategories.SerCategoriesId == serCategoriesId))
+            //&& (string.IsNullOrEmpty(orderStatus) || o.OrderStatus == orderStatus))
             .ToListAsync();
 
             return Ok(_mapper.Map<List<OrdersDTO>>(orders));
@@ -44,9 +62,29 @@ namespace PetServices.Controllers
                 .Where(o =>
                     o.BookingServicesDetails.Any(b => b.Service.SerCategories.SerCategoriesId == serCategoriesId) &&
                     o.BookingServicesDetails.All(b => b.PartnerInfoId == partnerInfoId))
+                //&& (string.IsNullOrEmpty(orderStatus) || o.OrderStatus == orderStatus))
                      .ToListAsync();
 
             return Ok(_mapper.Map<List<OrdersDTO>>(orders));
+        }
+        [HttpGet("{orderId}")]
+        public async Task<IActionResult> OrderDetail(int orderId)
+        {
+            try
+            {
+                Order order = await _context.Orders
+                    .Include(b => b.UserInfo)
+                    .Include(b => b.BookingServicesDetails)
+                    .ThenInclude(bs => bs.Service)
+                    .SingleOrDefaultAsync(b => b.OrderId == orderId);
+                return Ok(_mapper.Map<OrdersDTO>(order));
+
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }
