@@ -122,5 +122,40 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpPut("updateInfo")]
+        public async Task<IActionResult> EditProfile(string email, [FromBody] EditPartnerInfo updateInfo)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var existingAccount = await _context.Accounts.Include(a => a.PartnerInfo).SingleOrDefaultAsync(a => a.Email == email);
+                if (existingAccount == null)
+                {
+                    return NotFound("Tài khoản không tồn tài");
+                }
+                existingAccount.PartnerInfo.LastName = updateInfo.LastName;
+                existingAccount.PartnerInfo.FirstName = updateInfo.FirstName;
+                existingAccount.PartnerInfo.Phone = updateInfo.Phone;
+                existingAccount.PartnerInfo.Province = updateInfo.Province;
+                existingAccount.PartnerInfo.District = updateInfo.District;
+                existingAccount.PartnerInfo.Commune = updateInfo.Commune;
+                existingAccount.PartnerInfo.Address = updateInfo.Address;
+                existingAccount.PartnerInfo.Descriptions = updateInfo.Descriptions;
+                existingAccount.PartnerInfo.ImagePartner = updateInfo.ImagePartner;
+
+                _context.Accounts.Update(existingAccount);
+                await _context.SaveChangesAsync();
+
+                return Ok("Profile updated successfully!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
