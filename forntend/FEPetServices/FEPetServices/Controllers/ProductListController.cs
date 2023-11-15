@@ -91,26 +91,25 @@ namespace FEPetServices.Controllers
                                 productList = productList.OrderBy(r => r.ProductName).ToList();
                                 break;
                         }
-                        int page = searchDTO.page ?? 1; ;
+                        /*int page = searchDTO.page ?? 1; ;
                         int pagesize = searchDTO.pagesize ?? 6;
 
                         int totalItems = productList.Count;
                         int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
                         int startIndex = (page - 1) * pagesize;
-                        List<ProductDTO> currentPageProductList = productList.Skip(startIndex).Take(pagesize).ToList();
+                        List<ProductDTO> currentPageProductList = productList.Skip(startIndex).Take(pagesize).ToList();*/
 
-                        ViewBag.TotalPages = totalPages;
+                        /*ViewBag.TotalPages = totalPages;
                         ViewBag.CurrentPage = searchDTO.page;
-                        ViewBag.PageSize = searchDTO.pagesize;
+                        ViewBag.PageSize = searchDTO.pagesize;*/
 
                         ViewBag.productcategory = searchDTO.productcategory;
                         ViewBag.pricefrom = searchDTO.pricefrom;
                         ViewBag.priceto = searchDTO.priceto;
                         ViewBag.sortby = searchDTO.sortby;
-                        ViewBag.roomname = searchDTO.productname;
+                        ViewBag.productname = searchDTO.productname;
                         ViewBag.pagesize = searchDTO.pagesize;
-                        ViewBag.viewstyle = searchDTO.viewstyle;
-                        return View(currentPageProductList);
+                        return View(productList);
                     }
                     else
                     {
