@@ -1,232 +1,4 @@
-﻿:root {
-    --pink-pastel: #FFD6E4;
-    --pink: #E21033;
-}
-
-#section-products {
-    margin-top: 4%;
-    padding: 1rem 9%;
-}
-
-.heading {
-    text-align: center;
-    font-size: 4rem;
-    color: #333;
-    padding: 1rem;
-    margin: 2rem 0;
-    background: rgba(255, 51, 153, 0.05);
-}
-
-    .heading span {
-        color: var(--pink);
-    }
-
-.products .box-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-}
-
-    .products .box-container .box {
-        flex: 1 1 30rem;
-        /*max-width: 300px;
-        width: 100%;
-        max-height: 450px;
-        height: 450px;*/
-        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, .1);
-        border-radius: 0.5rem;
-        border: 0.1rem solid rgba(0, 0, 0, .1);
-        position: relative;
-    }
-
-        .products .box-container .box .image {
-            position: relative;
-            text-align: center;
-            padding-top: 2rem;
-            overflow: hidden;
-        }
-
-            .products .box-container .box .image img {
-                height: 25rem;
-            }
-
-        .products .box-container .box:hover .image img {
-            transform: scale(1.1);
-        }
-
-        .products .box-container .box .image .icons {
-            position: absolute;
-            bottom: -7rem;
-            left: 0;
-            right: 0;
-            display: flex;
-        }
-
-        .products .box-container .box:hover .image .icons {
-            bottom: 0;
-        }
-
-        .products .box-container .box .image .icons a {
-            height: 5rem;
-            line-height: 5rem;
-            font-size: 2rem;
-            width: 50%;
-            background: #333;
-            color: #fff;
-            text-decoration: none;
-        }
-
-        .products .box-container .box .image .icons .cart-btn {
-            border-left: 0.1rem solid #fff7;
-            border-right: 0.1rem solid #fff7;
-            width: 100%;
-        }
-
-        .products .box-container .box .image .icons a:hover {
-            background: var(--pink);
-            color:var(--pink-pastel);
-        }
-
-        .products .box-container .box .content {
-            padding: 2rem;
-            text-align: center;
-        }
-
-            .products .box-container .box .content a {
-                font-size: 2.5rem;
-                color: #333;
-                text-decoration: none;
-            }
-
-            .products .box-container .box .content .price {
-                font-size: 2.5rem;
-                color: var(--pink);
-                font-weight: bolder;
-                padding-top: 1rem;
-            }
-            .products .box-container .box .content a:hover{
-                color:var(--pink);
-            }
-            .products .box-container .box .content .price span {
-                font-size: 1.5rem;
-                color: #999;
-                font-weight: lighter;
-                text-decoration: line-through;
-            }
-
-.products-left{
-    display:flex;
-}
-
-.products-left .left {
-    width: 25%;
-}
-.right {
-    width: 75%;
-}
-.products-left .left #myForm{
-    font-size: 25px;
-}
-.containerCate {
-    text-decoration: none;
-    color: black;
-}
-
-    .containerCate:hover {
-        color: var(--pink);
-        text-decoration: none;
-    }
-
-    .containerCate label {
-        display: flex;
-    }
-
-    .containerCate input {
-        margin-top: 5px;
-        margin-right: 10px;
-        height: 20px;
-        width: 20px;
-        /*background-color: var(--pink);*/ /* Màu nền của checkbox */
-        /*border: 1px solid var(--pink);*/ /* Viền của checkbox */
-        /*color: var(--pink);*/
-    }
-
-    .containerCate p{
-        margin-top: 4px;
-        font-size: 14px;
-    }
-
-.price-container .number-control {
-    align-items: center;
-}
-
-    .price-container .number-control p {
-        width: 10%;
-        font-size: 15px;
-    }
-
-.price-container .number-quantity {
-    padding: 0.25rem;
-    border: 1px solid black;
-    width: 50%;
-    height: 100%;
-    margin-left: 10px;
-    margin-right: 5px;
-}
-.price-container button:hover{
-    background: var(--pink);
-    color: var(--pink-pastel);
-}
-
-.left h3 {
-    color: var(--pink);
-}
-
-.containerprice {
-    margin-bottom: 20px;
-}
-
-    .containerprice button {
-        display: inline-block;
-        border-radius: 4px;
-        background-color: #393939;
-        border: none;
-        color: #FFFFFF;
-        text-align: center;
-        font-size: 13px;
-        padding: 7px;
-        width: 90px;
-        transition: all 0.5s;
-        cursor: pointer;
-        margin: 5px;
-    }
-
-
-        .containerprice button span {
-            cursor: pointer;
-            display: inline-block;
-            position: relative;
-            transition: 0.5s;
-        }
-
-            .containerprice button span:after {
-                content: '»';
-                position: absolute;
-                opacity: 0;
-                top: 0;
-                right: -15px;
-                transition: 0.5s;
-            }
-
-        .containerprice button:hover span {
-            padding-right: 15px;
-        }
-
-            .containerprice button:hover span:after {
-                opacity: 1;
-                right: 0;
-            }
-.pagination {
+﻿.pagination {
     display: inline-block;
     padding-top: 20px;
     padding-bottom: 30px;
@@ -234,35 +6,37 @@
 
     .pagination a {
         font-size:20px;
-        color: black;
         float: left;
-        padding: 8px 16px;
+        width: 50px;
+        height: 50px;
+        padding: 8px;
         text-decoration: none;
         transition: background-color .3s;
         border: 1px solid #ddd;
         margin: 0 4px;
+        border-radius:50%;
+        border: none;
+        background-color: #d5d5d5;
     }
 
+        .pagination a.active:hover {
+            background-color: lightskyblue;
+            color: whitesmoke;
+        }
+
         .pagination a.active {
-            background-color: var(--pink-pastel);
             color: black;
-            border: 1px solid black;
+            background-color: #d5d5d5;
         }
 
-        .pagination a:hover:not(.active) {
-            background-color: #ddd;
-        }
+            .pagination a.active1 {
+                background-color: lightskyblue;
+                color: whitesmoke;
+            }
 
-.sort {
-    display: flex;
-}
+            .pagination a:hover:not(.active) {
+                background-color: lightskyblue;
+                color: whitesmoke;
+            }
 
-.name-search {
-    color: #666;
-    margin-right: 10px;
-    font-size: 17px;
-}
 
-.first .path {
-    font-size: 20px;
-}

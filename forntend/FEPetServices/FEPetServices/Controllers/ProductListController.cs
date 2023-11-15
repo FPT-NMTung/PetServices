@@ -51,6 +51,11 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(rep))
                     {
                         var productList = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
+
+                        if (!string.IsNullOrEmpty(searchDTO.productname))
+                        {
+                            productList = productList.Where(r => r.ProductName.Contains(searchDTO.productname, StringComparison.OrdinalIgnoreCase)).ToList();
+                        }
                         if (!string.IsNullOrEmpty(searchDTO.productcategory))
                         {
                             int productCategoriesId = int.Parse(searchDTO.productcategory);
@@ -100,16 +105,15 @@ namespace FEPetServices.Controllers
                         List<ProductDTO> currentPageProductList = productList.Skip(startIndex).Take(pagesize).ToList();
 
                         ViewBag.TotalPages = totalPages;
-                        ViewBag.CurrentPage = searchDTO.page;
+                        ViewBag.CurrentPage = searchDTO.page ?? 1;
                         ViewBag.PageSize = searchDTO.pagesize;
 
                         ViewBag.productcategory = searchDTO.productcategory;
                         ViewBag.pricefrom = searchDTO.pricefrom;
                         ViewBag.priceto = searchDTO.priceto;
                         ViewBag.sortby = searchDTO.sortby;
-                        ViewBag.roomname = searchDTO.productname;
+                        ViewBag.productname = searchDTO.productname;
                         ViewBag.pagesize = searchDTO.pagesize;
-                        ViewBag.viewstyle = searchDTO.viewstyle;
                         return View(currentPageProductList);
                     }
                     else
