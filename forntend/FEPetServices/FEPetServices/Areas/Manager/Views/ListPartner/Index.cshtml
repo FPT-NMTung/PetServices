@@ -62,7 +62,9 @@
             <span class="close" onclick="closeMapModal()">&times;</span>
             <div id="map" style="width: 100%; height: 400px;"></div>
         </div>
+        <div id="directionsPanel"></div>
     </div>
+    
 </body>
     <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
@@ -73,7 +75,7 @@
     <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
     <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.excel.min.js"></script>
     <script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIkw2datIu4EYiyedKQJ08DmMJnboVSqs"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM"></script>
 
     <script>
         $(document).ready(function () {
@@ -128,6 +130,7 @@
         function showPosition(partnerLatitude, partnerLongitude, myLatitude, myLongitude) {
             initMap(partnerLatitude, partnerLongitude, myLatitude, myLongitude);
             openMapModal();
+            calculateAndDisplayRoute(directionsService, directionsDisplay, { lat: myLatitude, lng: myLongitude }, { lat: partnerLatitude, lng: partnerLongitude });
         }
 
         function openMapModal() {
@@ -139,6 +142,9 @@
         }
 
         function initMap(latitude, longitude, myLatitude, myLongitude) {
+            var directionsService = new google.maps.DirectionsService();
+            var directionsDisplay = new google.maps.DirectionsRenderer();
+
             var map = new google.maps.Map(document.getElementById('map'), {
                 center: { lat: latitude, lng: longitude },
                 zoom: 15
@@ -156,7 +162,24 @@
                 map: map,
                 title: 'Vị trí của tôi',
                 icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
-            })
+            });
+
+            directionsDisplay.setMap(map);
+            calculateAndDisplayRoute(directionsService, directionsDisplay, { lat: myLatitude, lng: myLongitude }, { lat: latitude, lng: longitude });
+        }
+
+        function calculateAndDisplayRoute(directionsService, directionsDisplay, start, end) {
+            directionsService.route({
+                origin: start,
+                destination: end,
+                travelMode: 'DRIVING'
+            }, function (response, status) {
+                if (status === 'OK') {
+                    directionsDisplay.setDirections(response);
+                } else {
+                    window.alert('Không thể hiển thị tuyến đường do: ' + status);
+                }
+            });
         }
     </script>
 </html>
