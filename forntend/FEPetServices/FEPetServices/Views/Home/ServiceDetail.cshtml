@@ -147,6 +147,8 @@
                                                 <input type="hidden" name="PriceService" id="totalPriceService" value="" />
                                                 <input type="hidden" name="Weight" id="Weight" value="" />
                                                 <input type="hidden" name="PartnerId" id="PartnerId" value="" />
+                                                <input type="hidden" name="StartTime" id="StartTime" value="" />
+                                                <input type="hidden" name="EndTime" id="EndTime" value="" />
                                                 <button class="axil-btn btn-bg-primary"  type="submit" ><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
                                             </>
                                             </form>
@@ -415,6 +417,12 @@
 
                     document.getElementById("datetimeStart").value = selectedTime.toLocaleString();
                     document.getElementById("datetimeEnd").value = endTime.toLocaleString();
+
+                    var stratDate = document.getElementById("StartTime");
+                    var endDate = document.getElementById("EndTime");
+
+                    stratDate.value = selectedTime.toLocaleString();
+                    endDate.value = endTime.toLocaleString();
                 }
             });
         });

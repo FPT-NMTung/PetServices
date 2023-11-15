@@ -189,5 +189,36 @@ namespace PetServices.Controllers
                 return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
             }
         }
+
+        [HttpPut("ChangeProduct")]
+        public async Task<ActionResult> ChangeProduct(int ProductId, int Quantity)
+        {
+            try
+            {
+                if (ProductId <= 0 || Quantity < 0 )
+                {
+                    return BadRequest("Invalid input parameters.");
+                }
+
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == ProductId);
+                if (product == null)
+                {
+                    return BadRequest("Không tìm thấy sản phẩm cần thay đổi.");
+                }
+
+                _context.Entry(product).OriginalValues["Quantity"] = product.Quantity;
+
+                product.Quantity -= Quantity;
+                product.QuantitySold += Quantity;
+
+
+                await _context.SaveChangesAsync();
+                return Ok("Cập nhật sản phẩm thành công!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
+            }
+        }
     }
 }

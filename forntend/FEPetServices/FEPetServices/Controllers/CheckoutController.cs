@@ -24,7 +24,7 @@ namespace FEPetServices.Controllers
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://localhost:7255/api/UserInfo";
+            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
             DefaultApiUrlUserInfo = "https://localhost:7255/api/UserInfo";
         }
 
@@ -34,7 +34,7 @@ namespace FEPetServices.Controllers
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlUserInfo + "/" + email);
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "/" + email);
 
             if (response.IsSuccessStatusCode)
             {
@@ -85,8 +85,30 @@ namespace FEPetServices.Controllers
         [HttpPost]
         public async Task<IActionResult> Index([FromForm] OrderForm orderform)
         {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             try
             {
+                if (orderform.Province == null ||
+                    orderform.District == null || orderform.Commune == null)
+                {
+                    HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "/" + email);
+                    if (responseUser.IsSuccessStatusCode)
+                    {
+                        string responseContent = await responseUser.Content.ReadAsStringAsync();
+
+                        var options = new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        };
+
+                        AccountInfo Infos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
+                        orderform.Province = Infos.UserInfo.Province;
+                        orderform.District = Infos.UserInfo.District;
+                        orderform.Commune = Infos.UserInfo.Province;
+                    }
+                }
+
                 // Lấy thông tin CartItems từ Session
                 List<CartItem> cartItems = GetCartItems();
 
@@ -141,8 +163,18 @@ namespace FEPetServices.Controllers
 
                 if (responseOrder.IsSuccessStatusCode)
                 {
+                    foreach (var cartItem in cartItems)
+                    {
+                        if (cartItem.product != null)
+                        {
+                            //https://localhost:7255/api/Product/ChangeProduct?ProductId=1&Quantity=50
+                            HttpResponseMessage response = await _client.PutAsync("https://localhost:7255/api/Product/ChangeProduct" 
+                                + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct,null);
+                        }
+                    }
                     // Xoá giỏ hàng
                     ClearCart();
+                    TempData["SuccessToast"] = "Đặt hàng thành công. Vui lòng kiểm tra lại giỏ hàng.";
                     return RedirectToAction("Index", "Home");
                 }
                 else

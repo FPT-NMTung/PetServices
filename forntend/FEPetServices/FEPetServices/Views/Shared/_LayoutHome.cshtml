@@ -151,13 +151,13 @@
                                         <div class="my-account-dropdown">
                                             <ul>
                                                 <li>
-                                                    <a href="my-account.html">Thông tin cá nhân</a>
+                                                    <a href="~/Customer/MenuCustomer/Information">Thông tin cá nhân</a>
                                                 </li>
                                                 <li>
-                                                    <a href="#">Đổi mật khẩu</a>
+                                                    <a href="~/Customer/MenuCustomer/ChangePasssword">Đổi mật khẩu</a>
                                                 </li>
                                                 <li>
-                                                    <a style="border-bottom : none!important" href="#">Đăng xuất</a>
+                                                    <a href="~/Logout/Index" style="border-bottom : none!important">Đăng xuất  @RenderSection("Logout", required: false)</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -338,8 +338,8 @@
 
     @*Toast notification design*@
     <div id="toast"></div>
-    @*Common toast notification*@
-    @if (!string.IsNullOrEmpty(ViewBag.SuccessToast))
+    @*Start - Base TempData*@
+    @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))
     {
         <script>
             document.addEventListener("DOMContentLoaded", function () {
@@ -347,7 +347,7 @@
             });
         </script>
     }
-    @if (!string.IsNullOrEmpty(ViewBag.ErrorToast))
+    @if (!string.IsNullOrEmpty(TempData["ErrorToast"] as string))
     {
         <script>
             document.addEventListener("DOMContentLoaded", function () {
@@ -355,36 +355,112 @@
             });
         </script>
     }
-
-    @*Register toast notification*@
-    @if (!string.IsNullOrEmpty(TempData["SuccessRegisterToast"] as string))
+    @*End - Base *@
+    @*-------------------------------------------------------*@
+    @*Start - Loading data TempData*@
+    @if (!string.IsNullOrEmpty(TempData["SuccessLoadingDataToast"] as string))
     {
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                showSuccessRegisterToast();
+                showSuccessLoadingDataToast();
             });
         </script>
     }
-    @if (!string.IsNullOrEmpty(TempData["SuccessRegisterSuccessToast"] as string))
+    @if (!string.IsNullOrEmpty(TempData["ErrorLoadingDataToast"] as string))
     {
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                showSuccessRegisterSuccessToast();
+                showErrorLoadingDataToast();
             });
         </script>
     }
+    @*End - Loading data TempData*@
+    @*-------------------------------------------------------*@
+    @*Start - Login TempData*@
+    @if (!string.IsNullOrEmpty(TempData["SuccessLoginToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showSuccessLoginToast();
+            });
+        </script>
+    }
+    @*End - Login TempData*@
+    @*-------------------------------------------------------*@
+    @*Start - Base ViewBag*@
+    @if (!string.IsNullOrEmpty(ViewBag.SuccessToast))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showSuccessToastViewBag();
+            });
+        </script>
+    }
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorToast))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showErrorToastViewBag();
+            });
+        </script>
+    }
+    @*End - Base ViewBag*@
+    @*-------------------------------------------------------*@
 </body>
 
 <script src="~/js/toastnotification.js"></script>
 <script>
-    function loading() {
-    @if (string.IsNullOrEmpty(ViewBag.ErrorToast) || string.IsNullOrEmpty(ViewBag.SuccessToast))
-    {
-        @:showWaitToast();
-    }
-            }
-    @*Common toast notification*@
+    @*Start - Base TempData*@
         function showSuccessToast() {
+            toast({
+                title: 'Thành công',
+                message: '@TempData["SuccessToast"]',
+                type: 'success',
+                duration: 2000
+            });
+        }
+    function showErrorToast() {
+        toast({
+            title: 'Thất bại',
+            message: '@TempData["ErrorToast"]',
+            type: 'error',
+            duration: 2000
+        });
+    }
+    @*End - Base *@
+    @*-------------------------------------------------------*@
+    @*Start - LoadingData TempData*@
+        function showSuccessLoadingDataToast() {
+            toast({
+                title: 'Thành công',
+                message: '@TempData["SuccessLoadingDataToast"]',
+                type: 'success',
+                duration: 2000
+            });
+        }
+    function showErrorLoadingDataToast() {
+        toast({
+            title: 'Thất bại',
+            message: '@TempData["ErrorLoadingDataToast"]',
+            type: 'error',
+            duration: 2000
+        });
+    }
+    @*End - LoadingData *@
+    @*-------------------------------------------------------*@
+    @*Start - Login TempData*@
+        function showSuccessLoginToast() {
+            toast({
+                title: 'Thành công',
+                message: '@TempData["SuccessLoginToast"]',
+                type: 'success',
+                duration: 2000
+            });
+        }
+    @*End - Login TempData*@
+    @*-------------------------------------------------------*@
+    @*Start - Base ViewBag*@
+        function showSuccessToastViewBag() {
             toast({
                 title: 'Thành công',
                 message: '@ViewBag.SuccessToast',
@@ -392,7 +468,8 @@
                 duration: 2000
             });
         }
-    function showErrorToast(message = '') {
+
+    function showErrorToastViewBag() {
         toast({
             title: 'Thất bại',
             message: '@ViewBag.ErrorToast',
@@ -400,32 +477,9 @@
             duration: 2000
         });
     }
-    function showWaitToast() {
-        toast({
-            title: 'Chờ đợi',
-            message: 'Vui lòng đợi ít phút hoặc điền đầy đủ thông tin',
-            type: 'wating',
-            duration: 2000
-        });
-    }
-
-    @*Register toast notification*@
-        function showSuccessRegisterToast() {
-            toast({
-                title: 'Thành công',
-                message: '@TempData["SuccessRegisterToast"]',
-                type: 'success',
-                duration: 2000
-            });
-        }
-    function showSuccessRegisterSuccessToast() {
-        toast({
-            title: 'Thành công',
-            message: '@TempData["SuccessRegisterSuccessToast"]',
-            type: 'success',
-            duration: 2000
-        });
-    }
+    @*End - Base ViewBag*@
+    @*-------------------------------------------------------*@
 </script>
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIkw2datIu4EYiyedKQJ08DmMJnboVSqs"></script>
 </html>
