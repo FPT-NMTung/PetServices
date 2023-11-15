@@ -49,3 +49,7 @@
 .main-wrapper{
     margin-top: -30px;
 }
+
+.ui-slider-range.ui-widget-header.ui-corner-all {
+    background: #4454fc none repeat scroll 0 0;
+}
