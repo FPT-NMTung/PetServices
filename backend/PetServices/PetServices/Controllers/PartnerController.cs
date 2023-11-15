@@ -94,12 +94,33 @@ namespace PetServices.Controllers
         }
 
         //
+        [HttpPut("UpdateLocation")]
+        public IActionResult UpdateLocation([FromBody] PartnerInfoDTO partnerDTO, string email)
+        {
+            try
+            {
+                // Find the account with the given email and role as "PARTNER"
+                var partnerAccount = _context.Accounts
+                    .Include(a => a.PartnerInfo)
+                    .Include(a => a.Role)
+                    .FirstOrDefault(a => a.Email == email && a.Role.RoleName == "PARTNER");
 
+                if (partnerAccount == null)
+                {
+                    return NotFound("Tài khoản không tồn tại hoặc không phải là đối tác");
+                }
 
+                partnerAccount.PartnerInfo.Lat = partnerDTO.Lat;
+                partnerAccount.PartnerInfo.Lng = partnerDTO.Lng;
 
+                _context.SaveChanges();
 
-
-
-
+                return Ok(_mapper.Map<PartnerInfoDTO>(partnerAccount.PartnerInfo));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
