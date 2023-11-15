@@ -24,6 +24,8 @@ namespace PetServices.Models
         public string? ImagePartner { get; set; }
         public string? ImageCertificate { get; set; }
         public string? CardName { get; set; }
+        public string? Lat { get; set; }
+        public string? Lng { get; set; }
 
         public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<BookingServicesDetail> BookingServicesDetails { get; set; }
