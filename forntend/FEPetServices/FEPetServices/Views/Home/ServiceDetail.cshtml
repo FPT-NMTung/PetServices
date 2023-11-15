@@ -1,4 +1,4 @@
-﻿<!doctype html>
+﻿﻿<!doctype html>
 <html class="no-js" lang="en">
 
 
@@ -12,7 +12,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="/css/Service/ServiceDetail.css"></linh>
+    @*<link rel="stylesheet" href="/css/Service/ServiceDetail.css"></link>*@
 
 </head>
 
@@ -48,7 +48,7 @@
                                          {
                                             @if (sc.Status)
                                             {
-                                                <div class="small-thumb-img ">
+                                                <div class="small-thumb-img " style="display:flex;">
                                                     <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sc.ServiceId"><img src="@sc.Picture" style="width:60px; height:60px;" alt="samll-thumb"></a> 
                                                 </div>
                                             }
@@ -56,8 +56,16 @@
                                      </div>
                                 </div>
                             </div>
-                            <div class="total-amount-section" style="margin-top:10px;   ">
+                           @* <div class="total-amount-section" style="margin-top:10px;   ">
                                 <span id="totalAmountDisplay">0 VNĐ</span>
+                            </div>*@
+                            <div class="row">
+                                <div class="axil-order-summery">
+                                  <div class="summery-table-wrap">
+                                    <h5 style="color:red">Tổng tiền cần thanh toán</h5>
+                                    <span class="order-total-amount" id="totalAmountDisplay">0 VNĐ</span>
+                                  </div>
+                               </div>
                             </div>
                         </div>
                         <div class="col-lg-6 mb--40">
@@ -117,12 +125,12 @@
                                         </div>
                                     </div>
                                     <div style="margin-top:5px">
-                                        <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ bắt đầu:</p>
-                                        <input id="datetimeStart" type="text" placeholder="Thời gian bắt đầu">
+                                        <p style="font-family: serif; font-size: 15px; height:1px;" >Chọn giờ bắt đầu:</p>
+                                        <input id="datetimeStart" type="text" placeholder="Thời gian bắt đầu" required>
                                     </div>
                                     <div style="margin-top:5px">
-                                        <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ kết thúc:</p>
-                                        <input id="datetimeEnd" type="text" placeholder="Thời gian kết thúc"> 
+                                        <p style="font-family: serif; font-size: 15px; height:1px;" >Chọn giờ kết thúc:</p>
+                                        <input id="datetimeEnd" type="text" placeholder="Thời gian kết thúc" required> 
                                     </div>
                                     <div style="margin-top:5px">
                                         <p style="font-family: serif; font-size: 15px; height:1px;">Cân nặng của thú cưng:</p>
@@ -133,7 +141,6 @@
 
                                         <!-- Start Product Action  -->
                                         <ul class="product-action action-style-two d-flex-center mb--0" style="display:contents;">
-                                            @*<li class="add-to-cart" style="width: 544px;"><a href="" class="axil-btn btn-bg-primary">Thêm vào giỏ hàng</a></li>*@
                                             <form method="post" action="@Url.Action("AddToCart", "Home")">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="ServiceId" value="@Model?.Service.ServiceId" />
@@ -143,7 +150,7 @@
                                                 <button class="axil-btn btn-bg-primary"  type="submit" ><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
                                             </>
                                             </form>
-                                            @*<li class="add-to-cart" style="width: 250px;">*@<button style="width:200px; margin-left: 5px;" href="" class="axil-btn btn-bg-primary">Mua ngay</button>@*</li>*@
+                                             <button style="width:200px; margin-left: 5px;" href="" class="axil-btn btn-bg-primary">Mua ngay</button>
                                         </ul>
                                         <!-- End Product Action  -->
 
@@ -449,9 +456,18 @@ function calculateTotal() {
             totalPriceService.value = totalAmount;
             Weight.value = petWeight;
             document.getElementById('totalPriceService').textContent = totalPriceService.value;
+   
 
+   function formatNumberToString(number) {
+    return number.toLocaleString('en-US').replace(/,/g, '.');
+}
     // Display the total amount in the HTML
-    document.getElementById('totalAmountDisplay').textContent = servicePrice+ "  (dịch vụ) + " +additionalCost+ " (cân nặng) + " +additional+ "  (đối tác) " + "=" +totalAmount + " VNĐ";
+    @*document.getElementById('totalAmountDisplay').textContent = servicePrice+ "  (dịch vụ) + " +additionalCost+ " (cân nặng) + " +additional+ "  (đối tác) " + "=" +totalAmount + " VNĐ";*@
+    document.getElementById('totalAmountDisplay').textContent = 
+    formatNumberToString(servicePrice) + "  (dịch vụ) + " +
+    formatNumberToString(additionalCost) + " (cân nặng) + " +
+    formatNumberToString(additional) + "  (đối tác) " +
+    "=" + formatNumberToString(totalAmount) + " VNĐ";
 }
 
 // Trigger the initial calculation
@@ -461,8 +477,7 @@ calculateTotal();
 document.getElementById('toggleSelect').addEventListener('change', calculateTotal);
 document.getElementById('petWeight').addEventListener('input', calculateTotal);
 
-   </script>
-</body>
+</script>
 <script src="~/assets/js/vendor/modernizr.min.js"></script>
 <!-- jQuery JS -->
 <script src="~/assets/js/vendor/jquery.js"></script>
@@ -484,4 +499,6 @@ document.getElementById('petWeight').addEventListener('input', calculateTotal);
 
 <!-- Main JS -->
 <script src="~/assets/js/main.js"></script>
+</body>
+
 </html>
