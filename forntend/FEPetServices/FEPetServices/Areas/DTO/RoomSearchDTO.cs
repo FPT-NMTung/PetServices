@@ -7,6 +7,8 @@
         public string? priceto { get; set; }
         public string? sortby { get; set; }
         public string? roomname { get; set; }
+        public DateTime? startdate { get; set; }
+        public DateTime? enddate { get; set;}
 
     }
 }
