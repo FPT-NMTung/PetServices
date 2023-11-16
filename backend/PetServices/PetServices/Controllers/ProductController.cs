@@ -36,6 +36,38 @@ namespace PetServices.Controllers
                 .FirstOrDefault(c => c.ProductId == id);
             return Ok(_mapper.Map<ProductDTO>(product));
         }
+        [HttpGet("GetByCategory/{categoryId}")]
+        public IActionResult GetByCategory(int categoryId)
+        {
+            try
+            {
+                // Kiểm tra xem categoryId có tồn tại trong danh sách loại sản phẩm hay không
+                var category = _context.ProductCategories.FirstOrDefault(c => c.ProCategoriesId == categoryId);
+                if (category == null)
+                {
+                    return BadRequest("Loại sản phẩm không tồn tại.");
+                }
+
+                // Lấy danh sách sản phẩm thuộc loại categoryId
+                List<Product> products = _context.Products
+                    .Include(s => s.ProCategories)
+                    .Where(p => p.ProCategoriesId == categoryId)
+                    .ToList();
+
+                // Kiểm tra xem có sản phẩm nào thuộc loại đó hay không
+                if (products.Count == 0)
+                {
+                    return NotFound("Không tìm thấy sản phẩm thuộc loại này.");
+                }
+
+                return Ok(_mapper.Map<List<ProductDTO>>(products));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
+            }
+        }
+
 
         [HttpPost("Add")]
         public async Task<IActionResult> CreateProduct(ProductDTO productDTO)
