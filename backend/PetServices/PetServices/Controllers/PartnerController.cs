@@ -147,6 +147,8 @@ namespace PetServices.Controllers
                 existingAccount.PartnerInfo.Address = updateInfo.Address;
                 existingAccount.PartnerInfo.Descriptions = updateInfo.Descriptions;
                 existingAccount.PartnerInfo.ImagePartner = updateInfo.ImagePartner;
+                existingAccount.PartnerInfo.Lat = updateInfo.Lat;
+                existingAccount.PartnerInfo.Lng = updateInfo.Lng;
 
                 _context.Accounts.Update(existingAccount);
                 await _context.SaveChangesAsync();
