@@ -25,10 +25,10 @@ namespace FEPetServices.Areas.Partner.Controllers
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://localhost:7255/api/Partner";
-            DefaultApiUrlOrderPartner = "https://localhost:7255/api/OrderPartner";
-            DefaultApiUrlOrderListOfPetTraining = "https://localhost:7255/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4";
-            DefaultApiUrlOrderListOfPetTrainingSpecial = "https://localhost:7255/api/OrderPartner/ListOrderPetTrainingSpecial";
+            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Partner";
+            DefaultApiUrlOrderPartner = "https://pet-service-api.azurewebsites.net/api/OrderPartner";
+            DefaultApiUrlOrderListOfPetTraining = "https://pet-service-api.azurewebsites.net/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4";
+            DefaultApiUrlOrderListOfPetTrainingSpecial = "https://pet-service-api.azurewebsites.net/api/OrderPartner/ListOrderPetTrainingSpecial";
         }
         public async Task<IActionResult> Index()
         {
@@ -37,7 +37,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         public async Task<IActionResult> ListOrderPetTraining()
         {
             //orderStatus = "Waiting";
-            //https://localhost:7255/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
+            //https://pet-service-api.azurewebsites.net/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
             if (response.IsSuccessStatusCode)
@@ -106,7 +106,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         public async Task<IActionResult> ListOrderPetTrainingComplete()
         {
             //orderStatus = "Waiting";
-            //https://localhost:7255/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
+            //https://pet-service-api.azurewebsites.net/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
             if (response.IsSuccessStatusCode)
@@ -175,7 +175,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         public async Task<IActionResult> ListOrderPetTrainingReject()
         {
             //orderStatus = "Waiting";
-            //https://localhost:7255/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
+            //https://pet-service-api.azurewebsites.net/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
             if (response.IsSuccessStatusCode)
@@ -244,7 +244,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         public async Task<IActionResult> ListOrderPetTrainingReceived()
         {
             //orderStatus = "Waiting";
-            //https://localhost:7255/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
+            //https://pet-service-api.azurewebsites.net/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
             if (response.IsSuccessStatusCode)

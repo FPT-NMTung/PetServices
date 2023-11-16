@@ -25,7 +25,7 @@ namespace FEPetServices.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
-            DefaultApiUrlUserInfo = "https://localhost:7255/api/UserInfo";
+            DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";
         }
 
         [HttpGet]
@@ -159,7 +159,7 @@ namespace FEPetServices.Controllers
                 var jsonOrder = System.Text.Json.JsonSerializer.Serialize(order);
 
                 var content = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
-                var responseOrder = await _client.PostAsync("https://localhost:7255/api/Order", content);
+                var responseOrder = await _client.PostAsync("https://pet-service-api.azurewebsites.net/api/Order", content);
 
                 if (responseOrder.IsSuccessStatusCode)
                 {
@@ -167,8 +167,8 @@ namespace FEPetServices.Controllers
                     {
                         if (cartItem.product != null)
                         {
-                            //https://localhost:7255/api/Product/ChangeProduct?ProductId=1&Quantity=50
-                            HttpResponseMessage response = await _client.PutAsync("https://localhost:7255/api/Product/ChangeProduct" 
+                            //https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct?ProductId=1&Quantity=50
+                            HttpResponseMessage response = await _client.PutAsync("https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct"
                                 + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct,null);
                         }
                     }
