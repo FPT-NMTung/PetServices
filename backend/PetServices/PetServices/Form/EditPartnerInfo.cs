@@ -11,5 +11,7 @@
         public string? Address { get; set; }
         public string? Descriptions { get; set; }
         public string? ImagePartner { get; set; }
+        public string? Lat { get; set; }
+        public string? Lng { get; set; }
     }
 }
