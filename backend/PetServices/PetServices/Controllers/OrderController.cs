@@ -306,6 +306,7 @@ namespace PetServices.Controllers
                         RoomId = dto.RoomId,
                         Price = priceRoom,
 
+
                     }).ToList()
                     : new List<BookingRoomDetail>(),
 

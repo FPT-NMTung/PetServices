@@ -14,6 +14,7 @@ namespace PetServices.DTO
         public string? Phone { get; set; }
         public string? FullName { get; set; }
         public int? UserInfoId { get; set; }
+        public bool? StatusPayment { get; set; }
 
         public virtual UserInfoDTO? UserInfo { get; set; }
         public virtual ICollection<OrderProductDetailDTO>? OrderProductDetails { get; set; }

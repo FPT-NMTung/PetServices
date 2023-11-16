@@ -13,5 +13,6 @@ namespace PetServices.Models
         public int? PartnerId { get; set; }
         public int? ProductId { get; set; }
         public int? UserId { get; set; }
+        public int? OrderId { get; set; }
     }
 }
