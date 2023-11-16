@@ -65,6 +65,10 @@ namespace FEPetServices.Areas.Manager.Controllers
                 {
                     totalPrice = (double)(totalPrice + od.Price * od.Quantity); 
                 }
+                foreach (var ob in orderDetail.BookingServicesDetails)
+                {
+                    totalPrice = (double)(totalPrice + ob.PriceService);
+                }
 
                 TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 ViewBag.TotalPrice = totalPrice;
