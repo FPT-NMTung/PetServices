@@ -51,6 +51,11 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(rep))
                     {
                         var productList = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
+
+                        if (!string.IsNullOrEmpty(searchDTO.productname))
+                        {
+                            productList = productList.Where(r => r.ProductName.Contains(searchDTO.productname, StringComparison.OrdinalIgnoreCase)).ToList();
+                        }
                         if (!string.IsNullOrEmpty(searchDTO.productcategory))
                         {
                             int productCategoriesId = int.Parse(searchDTO.productcategory);
@@ -100,16 +105,15 @@ namespace FEPetServices.Controllers
                         List<ProductDTO> currentPageProductList = productList.Skip(startIndex).Take(pagesize).ToList();
 
                         ViewBag.TotalPages = totalPages;
-                        ViewBag.CurrentPage = searchDTO.page;
+                        ViewBag.CurrentPage = searchDTO.page ?? 1;
                         ViewBag.PageSize = searchDTO.pagesize;
 
                         ViewBag.productcategory = searchDTO.productcategory;
                         ViewBag.pricefrom = searchDTO.pricefrom;
                         ViewBag.priceto = searchDTO.priceto;
                         ViewBag.sortby = searchDTO.sortby;
-                        ViewBag.roomname = searchDTO.productname;
+                        ViewBag.productname = searchDTO.productname;
                         ViewBag.pagesize = searchDTO.pagesize;
-                        ViewBag.viewstyle = searchDTO.viewstyle;
                         return View(currentPageProductList);
                     }
                     else
@@ -129,27 +133,45 @@ namespace FEPetServices.Controllers
             return View();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Detail(int proId, ProductDTO productDTO)
+        
+        public async Task<IActionResult> Detail(int proId)
         {
+            ProductDetailModel model = new ProductDetailModel();
             try
             {
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductDetail + "/" + proId);
-                HttpResponseMessage proCateResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll");
-                if (proCateResponse.IsSuccessStatusCode)
-                {
-                    var proCategories = await proCateResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
-                    ViewBag.ProCategories = new SelectList(proCategories, "ProCategoriesId", "ProCategoriesName");
-                }
+                HttpResponseMessage listResponse = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
                 if (response.IsSuccessStatusCode)
                 {
+                    
+                    if (listResponse.IsSuccessStatusCode)
+                    {
+                        var responseproductContent = await listResponse.Content.ReadAsStringAsync();
+
+                        if (!string.IsNullOrEmpty(responseproductContent))
+                        {
+                            var product = JsonConvert.DeserializeObject<List<ProductDTO>>(responseproductContent);
+                            model.products = product;
+                        }
+                    }
                     string responseContent = await response.Content.ReadAsStringAsync();
                     var option = new JsonSerializerOptions
                     {
                         PropertyNameCaseInsensitive = true
                     };
-                    ProductDTO managerInfos = System.Text.Json.JsonSerializer.Deserialize<ProductDTO>(responseContent, option);
-                    return View(managerInfos);
+                    model.Product  = System.Text.Json.JsonSerializer.Deserialize<ProductDTO>(responseContent, option);
+                    HttpResponseMessage listCateProductResponse = await client.GetAsync("https://localhost:7255/api/Product/GetByCategory/" + model.Product.ProCategoriesId);
+                    if (listCateProductResponse.IsSuccessStatusCode)
+                    {
+                        var responseCateProductContent = await listCateProductResponse.Content.ReadAsStringAsync();
+
+                        if (!string.IsNullOrEmpty(responseCateProductContent))
+                        {
+                            var product = JsonConvert.DeserializeObject<List<ProductDTO>>(responseCateProductContent);
+                            model.CateProduct = product;
+                        }
+                    }
+                    return View(model);
                 }
                 else
                 {
@@ -161,6 +183,12 @@ namespace FEPetServices.Controllers
                 ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
             }
             return View();
+        }
+        public class ProductDetailModel
+        {
+            public ProductDTO Product { get; set; }
+            public List<ProductDTO> products { get; set; }
+            public List<ProductDTO> CateProduct { get; set; }
         }
 
         public class CartItem

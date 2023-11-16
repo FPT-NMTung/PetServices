@@ -177,9 +177,7 @@ namespace PetServices.Models
             {
                 entity.ToTable("Feedback");
 
-                entity.Property(e => e.FeedbackId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("FeedbackID");
+                entity.Property(e => e.FeedbackId).HasColumnName("FeedbackID");
 
                 entity.Property(e => e.PartnerId).HasColumnName("PartnerID");
 
@@ -324,11 +322,7 @@ namespace PetServices.Models
             {
                 entity.ToTable("PetInfo");
 
-                entity.Property(e => e.PetInfoId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("PetInfoID");
-
-                entity.Property(e => e.Descriptions).IsUnicode(false);
+                entity.Property(e => e.PetInfoId).HasColumnName("PetInfoID");
 
                 entity.Property(e => e.ImagePet).IsUnicode(false);
 

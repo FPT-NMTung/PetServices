@@ -20,7 +20,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
-            DefaultApiUrlPartner = "https://localhost:7255/api/Partner/updateInfo";
+            DefaultApiUrlPartner = "https://pet-service-api.azurewebsites.net/api/Partner/updateInfo";
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -125,6 +125,17 @@ namespace FEPetServices.Areas.Partner.Controllers
                 return RedirectToAction("Index");
             }
 
+            if (partnerInfo.Lat != null && partnerInfo.Lng != null)
+            {
+                double? lat = TempData["Lat"] as double?;
+                double? lng = TempData["Lng"] as double?;
+                if (lat.HasValue && lng.HasValue)
+                {
+                    partnerInfo.Lat = lat.ToString();
+                    partnerInfo.Lng = lng.ToString();
+                }
+            }
+
             if (partnerInfo.Province == null || partnerInfo.District == null || partnerInfo.Commune == null)
             {
                 HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "/" + email);
@@ -158,5 +169,13 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult SaveLocation(double lat, double lng)
+        {
+            TempData["Lat"] = lat;
+            TempData["Lng"] = lng;
+
+            return Ok();
+        }
     }
 }
