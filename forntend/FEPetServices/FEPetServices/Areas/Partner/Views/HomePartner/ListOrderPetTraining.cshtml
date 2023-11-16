@@ -67,7 +67,9 @@
                 var button_received = $('#received');
                 var button_rejected;
                 button_received.click(function () {
-                    let url = 'https://localhost:7255/api/OrderPartner/UpdateOrderStatusReceived?orderId=2';
+                    //var orderId = $(this).data('orderid');  
+                    //let url = 'https://localhost:7255/api/OrderPartner/UpdateOrderStatusReceived?orderId=' + orderId;
+                    let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusReceived?orderId=2';
                     fetch(url).then(response => {
                         if(response.status == 200){
                             console.log("Nhận đơn thành công!");
@@ -108,8 +110,8 @@
                             <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
                         </td>
                         <td>
-                            <button id="received" onclick="">Nhận Đơn</button>
-                            <button id="rejected">Hủy Đơn</button>
+                            <button id="received" data-orderid="@pc.OrderId">Nhận Đơn</button>
+                            <button id="rejected" data-orderid="@pc.OrderId">Hủy Đơn</button>
                         </td>
 
                     </tr>

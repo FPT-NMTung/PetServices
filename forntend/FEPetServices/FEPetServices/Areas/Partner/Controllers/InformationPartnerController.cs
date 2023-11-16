@@ -20,7 +20,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
-            DefaultApiUrlPartner = "https://localhost:7255/api/Partner/updateInfo";
+            DefaultApiUrlPartner = "https://pet-service-api.azurewebsites.net/api/Partner/updateInfo";
         }
         [HttpGet]
         public async Task<IActionResult> Index()
