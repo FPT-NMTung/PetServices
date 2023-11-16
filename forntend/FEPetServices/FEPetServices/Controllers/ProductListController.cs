@@ -160,7 +160,7 @@ namespace FEPetServices.Controllers
                         PropertyNameCaseInsensitive = true
                     };
                     model.Product  = System.Text.Json.JsonSerializer.Deserialize<ProductDTO>(responseContent, option);
-                    HttpResponseMessage listCateProductResponse = await client.GetAsync("https://localhost:7255/api/Product/GetByCategory/" + model.Product.ProCategoriesId);
+                    HttpResponseMessage listCateProductResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Product/GetByCategory/" + model.Product.ProCategoriesId);
                     if (listCateProductResponse.IsSuccessStatusCode)
                     {
                         var responseCateProductContent = await listCateProductResponse.Content.ReadAsStringAsync();
