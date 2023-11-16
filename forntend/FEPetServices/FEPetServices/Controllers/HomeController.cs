@@ -76,7 +76,7 @@ namespace FEPetServices.Controllers
 
                         if (searchDTO.startdate != null && searchDTO.enddate != null)
                         {
-                            HttpResponseMessage roomvalidResponse = await client.GetAsync("https://localhost:7255/api/Room/SearchRoomByDate?startDate=" + searchDTO.startdate + "&endDate=" + searchDTO.enddate);
+                            HttpResponseMessage roomvalidResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/SearchRoomByDate?startDate=" + searchDTO.startdate + "&endDate=" + searchDTO.enddate);
                             roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(responseContent);
                         }
 

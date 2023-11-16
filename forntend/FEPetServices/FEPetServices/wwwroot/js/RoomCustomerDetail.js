@@ -107,7 +107,7 @@ window.onload = function () {
             let endDate = endPicker.parseDate(endValue);
             let roomId = @Model.RoomId;
 
-            let apiURL = `https://localhost:7255/api/Room/CheckSlotInRoom?RoomId=${roomId}&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
+            let apiURL = `https://pet-service-api.azurewebsites.net/api/Room/CheckSlotInRoom?RoomId=${roomId}&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
             console.log(apiURL);
             fetch(apiURL)
                 .then(response => {
