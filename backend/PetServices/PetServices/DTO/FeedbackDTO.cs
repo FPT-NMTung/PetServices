@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PetServices.Models
+﻿namespace PetServices.DTO
 {
-    public partial class Feedback
+    public class FeedbackDTO
     {
         public int FeedbackId { get; set; }
         public string? Content { get; set; }

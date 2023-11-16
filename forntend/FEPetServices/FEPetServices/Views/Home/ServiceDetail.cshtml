@@ -1,4 +1,4 @@
-﻿﻿<!doctype html>
+﻿﻿﻿<!doctype html>
 <html class="no-js" lang="en">
 
 
@@ -12,7 +12,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    @*<link rel="stylesheet" href="/css/Service/ServiceDetail.css"></link>*@
+    <link rel="stylesheet" href="/css/Service/ServiceDetail.css"></link>
 
 </head>
 
@@ -48,7 +48,7 @@
                                          {
                                             @if (sc.Status)
                                             {
-                                                <div class="small-thumb-img " style="display:flex;">
+                                                <div class="small-thumb-img">
                                                     <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sc.ServiceId"><img src="@sc.Picture" style="width:60px; height:60px;" alt="samll-thumb"></a> 
                                                 </div>
                                             }
@@ -73,7 +73,7 @@
                                 <div class="inner">
                                     <h2 class="product-title">@Model?.Service.ServiceName</h2>
                                     <div class="price-amount price-offer-amount">
-                                        <span class="price current-price">@Model?.Service.Price VNĐ</span>
+                                        <span class="price current-price">@Model?.Service.Price </span>
                                         <!-- <span class="price old-price">$155.00</span> -->
                                     </div>
                                     <div class="product-rating">
@@ -101,7 +101,7 @@
                                         
                                             @if (ViewBag.Partners != null)
                                             {
-                                                <select name="PartnerInfoId" id="PartnerInfoId"  class="size-option"  style="font-family: serif ; width: 200px; height:30px;" disabled >
+                                                <select name="PartnerInfoId" id="PartnerInfoId"  class="size-option"  style="font-family: serif ; width: 200px; height:30px; border:2px solid black" disabled >
                                                     <option value="">Danh sách đối tác</option>
                                                     @foreach (var category in ViewBag.Partners)
                                                      {
@@ -113,28 +113,34 @@
                                     </div>
                                     <div class="product-variations-wrapper">
                                         <div class="product-variation product-size-variation">
-                                             <p class="title" style="font-family: serif; font-size: 15px;">Dịch vụ:</p>
+                                            <p class="title" style="font-family: serif; font-size: 15px;">Dịch vụ:</p>
                                             <ul class="range-variant" style="font-family: serif">
-                                                 @foreach(var sr in Model?.ServiceCategory.Services) { 
-                                                    @if(sr.Status){
-                                                    <a  href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sr.ServiceId"><li style="font-size:15px;font-family: serif;" >@sr.ServiceName</li></a>
-                                                    } 
-                                                    else{ } 
-                                                 }
+                                               @foreach(var sr in Model?.ServiceCategory.Services) { 
+                                                    if(sr.Status){
+                                                        var request = Context.Request;
+                                                        var currentPageURL = request.Path + request.QueryString;
+                                                        var linkURL = "/Home/ServiceDetail?serviceCategoryId=" + Model.ServiceCategory.SerCategoriesId + "&serviceIds=" + sr.ServiceId;
+                                                        var activeClass = currentPageURL.Equals(linkURL, System.StringComparison.InvariantCultureIgnoreCase) ? "active" : "";
+
+                                                        <a  href="@linkURL" class="service-link" style=" ">
+                                                            <li class="page-item @(activeClass)" style="font-size:12px;font-family: serif;">@sr.ServiceName</li>
+                                                        </a>
+                                                    } else { } 
+                                                }
                                             </ul> 
                                         </div>
                                     </div>
                                     <div style="margin-top:5px">
                                         <p style="font-family: serif; font-size: 15px; height:1px;" >Chọn giờ bắt đầu:</p>
-                                        <input id="datetimeStart" type="text" placeholder="Thời gian bắt đầu" required>
+                                        <input id="datetimeStart" type="text" placeholder="Thời gian bắt đầu" style="border:2px solid black" required>
                                     </div>
                                     <div style="margin-top:5px">
                                         <p style="font-family: serif; font-size: 15px; height:1px;" >Chọn giờ kết thúc:</p>
-                                        <input id="datetimeEnd" type="text" placeholder="Thời gian kết thúc" required> 
+                                        <input id="datetimeEnd" type="text" placeholder="Thời gian kết thúc" style="border:2px solid black" required> 
                                     </div>
-                                    <div style="margin-top:5px">
+                                    <div style="margin-top:5px;margin-bottom:10px;">
                                         <p style="font-family: serif; font-size: 15px; height:1px;">Cân nặng của thú cưng:</p>
-                                        <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" required>
+                                        <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border:2px solid black"" required>
                                     </div>
                                     <!-- Start Product Action Wrapper  -->
                                     <div class="product-action-wrapper d-flex-center">
@@ -150,7 +156,6 @@
                                                 <input type="hidden" name="StartTime" id="StartTime" value="" />
                                                 <input type="hidden" name="EndTime" id="EndTime" value="" />
                                                 <button class="axil-btn btn-bg-primary"  type="submit" ><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
-                                            </>
                                             </form>
                                              <button style="width:200px; margin-left: 5px;" href="" class="axil-btn btn-bg-primary">Mua ngay</button>
                                         </ul>
@@ -428,10 +433,11 @@
         });
     </script>
     <script>
-// Function to calculate total amount
-function calculateTotal() {
+     // Function to calculate total amount
+    function calculateTotal() {
     var petWeight = parseFloat(document.getElementById('petWeight').value);
-    var servicePrice = parseFloat(document.querySelector('.price.current-price').textContent);
+    var servicePrice = parseFloat(document.querySelector('.price.current-price').textContent.replace(/,/g, '').replace(/\D/g, ''));
+    @*var price = priceText ? parseInt(priceText.replace(/,/g, '').replace(/\D/g, '')) : 0;*@
 
     var additionalCost = 0;
     var additional =0;
@@ -467,10 +473,9 @@ function calculateTotal() {
    
 
    function formatNumberToString(number) {
-    return number.toLocaleString('en-US').replace(/,/g, '.');
+    return number.toLocaleString('vi-VN').replace(/\s/g, '');
 }
     // Display the total amount in the HTML
-    @*document.getElementById('totalAmountDisplay').textContent = servicePrice+ "  (dịch vụ) + " +additionalCost+ " (cân nặng) + " +additional+ "  (đối tác) " + "=" +totalAmount + " VNĐ";*@
     document.getElementById('totalAmountDisplay').textContent = 
     formatNumberToString(servicePrice) + "  (dịch vụ) + " +
     formatNumberToString(additionalCost) + " (cân nặng) + " +
@@ -485,6 +490,17 @@ calculateTotal();
 document.getElementById('toggleSelect').addEventListener('change', calculateTotal);
 document.getElementById('petWeight').addEventListener('input', calculateTotal);
 
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+            var priceElements = document.querySelectorAll('.current-price');
+            priceElements.forEach(function (priceElement) {
+                var priceText = priceElement.textContent.trim();
+                var price = parseFloat(priceText.replace(/\s/g, '').replace('VNĐ', ''));
+                var formattedPrice = price.toLocaleString('vi-VN');
+                priceElement.textContent = formattedPrice + ' VNĐ';
+});
+        });
 </script>
 <script src="~/assets/js/vendor/modernizr.min.js"></script>
 <!-- jQuery JS -->
@@ -507,6 +523,7 @@ document.getElementById('petWeight').addEventListener('input', calculateTotal);
 
 <!-- Main JS -->
 <script src="~/assets/js/main.js"></script>
+
 </body>
 
 </html>
