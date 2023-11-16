@@ -109,7 +109,7 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpPut("UpdateOrderStatusRejected")]
+        [HttpGet("UpdateOrderStatusRejected")]
         public async Task<IActionResult> UpdateOrderStatusRejected(int orderId)
         {
             try
@@ -131,7 +131,7 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpPut("UpdateOrderStatusCompleted")]
+        [HttpGet("UpdateOrderStatusCompleted")]
         public async Task<IActionResult> UpdateOrderStatusCompleted(int orderId)
         {
             try
