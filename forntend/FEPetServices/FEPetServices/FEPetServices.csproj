@@ -30,7 +30,6 @@
     <Folder Include="wwwroot\img\ServiceCategory\" />
     <Folder Include="wwwroot\img\Service\" />
     <Folder Include="wwwroot\img\ProductCategory\" />
-    <Folder Include="wwwroot\img\Product\" />
   </ItemGroup>
 
   <ItemGroup>
