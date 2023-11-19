@@ -65,15 +65,30 @@
             // Hàm JavaScript để cập nhật trạng thái đơn hàng
             $(document).ready(function () {
                 var button_received = $('#received');
-                var button_rejected;
+                var button_rejected = $('#rejected');
                 button_received.click(function () {
-                    let url = 'https://localhost:7255/api/OrderPartner/UpdateOrderStatusReceived?orderId=2';
+                    var orderId = $(this).data('orderid');
+                    let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusReceived?orderId=' + orderId;
+                    //var orderId = $(this).data('orderid');  
+                    //let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusReceived?orderId=' + orderId;
+                    let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusReceived?orderId=2';
                     fetch(url).then(response => {
                         if(response.status == 200){
                             console.log("Nhận đơn thành công!");
                             location.reload();
                         }
                         else console.log("Nhận đơn thất bại!");
+                    });
+                });
+                button_rejected.click(function () {
+                    var orderId = $(this).data('orderid');
+                    let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusRejected?orderId=' + orderId;
+                    fetch(url).then(response => {
+                        if(response.status == 200){
+                            console.log("Hủy đơn thành công!");
+                            location.reload();
+                        }
+                        else console.log("Hủy đơn thất bại!");
                     });
                 });
             });
@@ -102,14 +117,25 @@
                         <td>@pc.OrderDate</td>
                         <td>@pc.UserInfo.Phone</td>
                         <td id="orderStatus_@pc.OrderId">
-                            @pc.OrderStatus
+                            if(@pc.OrderStatus.Trim() == "Waiting"){
+                                Đang Chờ Nhận Đơn
+                            }
+                            else if(@pc.OrderStatus.Trim() == "Completed"){
+                                Đã Hoàn Thành
+                            }
+                            else if(@pc.OrderStatus.Trim() == "Received"){
+                                Đã Nhận Đơn
+                            }
+                            else if(@pc.OrderStatus.Trim() == "Rejected"){
+                                Đã Hủy Đơn
+                            }
                         </td>
                         <td>
                             <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
                         </td>
                         <td>
-                            <button id="received" onclick="">Nhận Đơn</button>
-                            <button id="rejected">Hủy Đơn</button>
+                            <button id="received" data-orderid="@pc.OrderId">Nhận Đơn</button>
+                            <button id="rejected" data-orderid="@pc.OrderId">Hủy Đơn</button>
                         </td>
 
                     </tr>

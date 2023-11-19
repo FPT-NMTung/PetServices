@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM"></script>
+</head>
+<body>
+    <div class="container-xl px-4 mt-4">
+        <hr class="mt-0 mb-4">
+        <div class="row">
+            <div class="col-xl-4">
+                <div class="card mb-4 mb-xl-0">
+                    <div class="card-header">Hình ảnh cá nhân</div>
+                    <div class="card-body text-center">
+                        <img style="max-height:600px;height:100%;max-width:380px;width:100%"
+                             class="img-account-profile mb-2" src="@Model?.PartnerInfo.ImagePartner" alt="">
+                        <!-- Profile picture help block-->
+                        <div class="small font-italic text-muted mb-4">JPG hoặc PNG không vượt quá 5 MB</div>                      
+                    </div>
+                </div>
+                <div style="margin-top: 20px">
+                    <button class="btn btn-primary" onclick="getLocation()">Lấy vị trí</button>
+                </div>
+                <div id="map" style="width: 100%; height: 400px;"></div>               
+            </div>
+            <div class="col-xl-8">
+                <div class="card mb-4">
+                    <div class="card-header">Thông tin người dùng</div>
+                    <div class="card-body">
+                        <form method="post" asp-controller="InformationPartner" asp-action="Index" enctype="multipart/form-data">
+                            <div>
+                                <label for="image"></label>
+                                <input type="file" id="image" name="image" enctype="multipart/form-data">
+                            </div>
+
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputFirstName">Họ</label>
+                                    <input class="form-control" name="FirstName" id="inputFirstName" type="text" placeholder="Nhập họ hoặc tên đệm của bạn" value="@Model?.PartnerInfo.FirstName" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputLastName">Tên</label>
+                                    <input class="form-control" name="LastName" id="inputLastName" type="text" placeholder="Nhập tên của bạn" value="@Model?.PartnerInfo.LastName" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputEmailAddress">Email</label>
+                                <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="@Model?.Email" disabled>
+                            </div>
+
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputProvince">Tỉnh</label>
+                                    <select class="form-control" id="provinceDropdown" onchange="loadDistricts()">
+                                        <option value="" selected disabled>@Model?.PartnerInfo.Province</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputDistrict">Huyện/Thành Phố</label>
+                                    <select class="form-control" id="districtDropdown" onchange="loadWards()">
+                                        <option value="" selected disabled>@Model?.PartnerInfo.District</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputWard">Xã/Quận</label>
+                                    <select class="form-control" id="wardDropdown">
+                                        <option value="" selected disabled>@Model?.PartnerInfo.Commune</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputAddress">Địa chỉ cụ thể</label>
+                                    <input class="form-control" name="Address" id="inputAddress" type="text" placeholder="Nhập địa chỉ" value="@Model?.PartnerInfo.Address" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputPhone">Số điện thoại </label>
+                                <input class="form-control" name="Phone" id="inputPhone" type="text" placeholder="Nhập số điện thoại của bạn" value="@Model?.PartnerInfo.Phone" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputDescriptions">Mô tả </label>
+                                <textarea class="form-control" name="Descriptions" id="inputDesciptions" placeholder="Mô tả về bạn">@Model?.PartnerInfo.Descriptions</textarea>
+                            </div>
+                            <input type="hidden" name="Province" id="provinceNameInput" />
+                            <input type="hidden" name="District" id="districtNameInput" />
+                            <input type="hidden" name="Commune" id="wardsNameInput" />
+                            <input type="hidden" name="Lat" id="inputLat" />
+                            <input type="hidden" name="Lng" id="inputLng" />
+
+                            <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
+                            <a href="~/Partner/ChangePasswordPartner" class="btn btn-primary">
+                                Đổi mật khẩu
+                            </a>
+                        </form>
+                    </div>
+
+                    <script>
+                        function getLocation() {
+                            if (navigator.geolocation) {
+                                navigator.geolocation.getCurrentPosition(
+                                    function (position) {
+                                        var latitude = position.coords.latitude;
+                                        var longitude = position.coords.longitude;
+
+                                        // Show position on the map
+                                        initMap(latitude, longitude);
+
+                                        // Update hidden input fields with latitude and longitude
+                                        document.getElementById("inputLat").value = latitude;
+                                        document.getElementById("inputLng").value = longitude;
+                                    },
+                                    function (error) {
+                                        showError(error);
+                                    }
+                                );
+                            } else {
+                                alert("Trình duyệt của bạn không hỗ trợ Geolocation.");
+                            }
+                        }
+
+                        function initMap(latitude, longitude) {
+                            var map = new google.maps.Map(document.getElementById('map'), {
+                                center: { lat: latitude, lng: longitude },
+                                zoom: 15
+                            });
+
+                            var marker = new google.maps.Marker({
+                                position: { lat: latitude, lng: longitude },
+                                map: map,
+                                title: 'Vị trí của bạn'
+                            });
+                        }
+
+                        function showError(error) {
+                            // Handle error messages as needed
+                            switch (error.code) {
+                                case error.PERMISSION_DENIED:
+                                    alert("Truy cập vào vị trí bị từ chối bởi người dùng.");
+                                    break;
+                                case error.POSITION_UNAVAILABLE:
+                                    alert("Không thể lấy được vị trí của bạn.");
+                                    break;
+                                case error.TIMEOUT:
+                                    alert("Yêu cầu lấy vị trí của bạn đã quá thời gian.");
+                                    break;
+                                case error.UNKNOWN_ERROR:
+                                    alert("Đã xảy ra lỗi không xác định.");
+                                    break;
+                            }
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>   
+</body>
+<script src="~/js/takeAddress.js"></script>
+</html>

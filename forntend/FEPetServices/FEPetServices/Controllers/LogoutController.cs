@@ -21,8 +21,7 @@ namespace FEPetServices.Controllers
 
             }
 
-            // Chuyển hướng đến trang đăng nhập
-            return RedirectToAction("Index", "Login");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

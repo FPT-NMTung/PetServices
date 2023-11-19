@@ -52,7 +52,6 @@ namespace PetServices.Controllers
         [HttpGet("{email}")]
         public IActionResult Get(string email)
         {
-            //Account roles partner
             Account account = _context.Accounts.Include(a => a.PartnerInfo).Include(a => a.Role).FirstOrDefault(a => a.Email == email && a.Role.RoleName == "PARTNER");
             if (account == null)
             {
@@ -66,40 +65,30 @@ namespace PetServices.Controllers
         {
             try
             {
-                // Tìm tài khoản dựa trên địa chỉ email
                 var existingAccount = await _context.Accounts
                     .Include(a => a.PartnerInfo)
                     .SingleOrDefaultAsync(a => a.Email == email);
 
                 if (existingAccount == null)
                 {
-                    // Trả về lỗi 404 nếu tài khoản không tồn tại
                     return NotFound("Tài khoản không tồn tại");
                 }
-
-                // Đảm bảo thay đổi trạng thái tài khoản (kích hoạt/bỏ kích hoạt)
                 existingAccount.Status = !existingAccount.Status;
-
-                // Lưu thay đổi vào cơ sở dữ liệu
                 _context.SaveChanges();
-
-                // Trả về thông tin tài khoản đã được cập nhật
                 return Ok(existingAccount);
             }
             catch (Exception ex)
             {
-                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
                 return StatusCode(500, ex.Message);
             }
         }
 
-        //
+        
         [HttpPut("UpdateLocation")]
         public IActionResult UpdateLocation([FromBody] PartnerInfoDTO partnerDTO, string email)
         {
             try
             {
-                // Find the account with the given email and role as "PARTNER"
                 var partnerAccount = _context.Accounts
                     .Include(a => a.PartnerInfo)
                     .Include(a => a.Role)
@@ -116,6 +105,44 @@ namespace PetServices.Controllers
                 _context.SaveChanges();
 
                 return Ok(_mapper.Map<PartnerInfoDTO>(partnerAccount.PartnerInfo));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut("updateInfo")]
+        public async Task<IActionResult> EditProfile(string email, [FromBody] EditPartnerInfo updateInfo)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var existingAccount = await _context.Accounts.Include(a => a.PartnerInfo).SingleOrDefaultAsync(a => a.Email == email);
+                if (existingAccount == null)
+                {
+                    return NotFound("Tài khoản không tồn tài");
+                }
+                existingAccount.PartnerInfo.LastName = updateInfo.LastName;
+                existingAccount.PartnerInfo.FirstName = updateInfo.FirstName;
+                existingAccount.PartnerInfo.Phone = updateInfo.Phone;
+                existingAccount.PartnerInfo.Province = updateInfo.Province;
+                existingAccount.PartnerInfo.District = updateInfo.District;
+                existingAccount.PartnerInfo.Commune = updateInfo.Commune;
+                existingAccount.PartnerInfo.Address = updateInfo.Address;
+                existingAccount.PartnerInfo.Descriptions = updateInfo.Descriptions;
+                existingAccount.PartnerInfo.ImagePartner = updateInfo.ImagePartner;
+                existingAccount.PartnerInfo.Lat = updateInfo.Lat;
+                existingAccount.PartnerInfo.Lng = updateInfo.Lng;
+
+                _context.Accounts.Update(existingAccount);
+                await _context.SaveChangesAsync();
+
+                return Ok("Profile updated successfully!");
             }
             catch (Exception ex)
             {
