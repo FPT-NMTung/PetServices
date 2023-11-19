@@ -305,10 +305,19 @@ namespace PetServices.Controllers
                     {
                         RoomId = dto.RoomId,
                         Price = priceRoom,
-
-
+                        StartDate = dto.StartDate,
+                        EndDate = dto.EndDate,
                     }).ToList()
                     : new List<BookingRoomDetail>(),
+
+                BookingRoomServices = orderDTO.BookingRoomServices != null 
+                    ? orderDTO.BookingRoomServices.Select(dto => new BookingRoomService
+                    {
+                        RoomId = dto.RoomId,
+                        ServiceId = dto.ServiceId,
+                        PriceService = dto.PriceService,
+                    }).ToList()
+                    : new List<BookingRoomService>(),
 
                 // Dịch vụ
                 BookingServicesDetails = orderDTO.BookingServicesDetails != null
