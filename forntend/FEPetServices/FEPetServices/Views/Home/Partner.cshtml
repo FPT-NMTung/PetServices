@@ -42,7 +42,7 @@
                     <div class="col-lg-6 col-md-8">
                         <div class="inner">
                             <ul class="axil-breadcrumb">
-                                <li class="axil-breadcrumb-item"><a href="/Home">Home</a></li>
+                                <li class="axil-breadcrumb-item"><a href="/Home">Trang chủ</a></li>
                                 <li class="separator"></li>
                                 <li class="axil-breadcrumb-item active" aria-current="page">Đối tác</li>
                             </ul>
@@ -72,15 +72,15 @@
                                 <div class="content-blog blog-grid">
                                     <div class="inner">
                                         <div class="thumbnail">
-                                            <a href="blog-details.html" style="text-align:center;">
+                                            <a href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId" style="text-align:center;">
                                                 <img src="@partner?.ImagePartner" alt="Blog Images" style="border-radius:50%; width:300px;height:300px;">
                                             </a>
                                         </div>
                                         <div class="content" >
-                                            <h5 class="title"style="text-align:center;"><a href="blog-details.html">@partner.FirstName @partner.LastName </a></h5>
+                                            <h5 class="title"style="text-align:center;"><a href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId">@partner.FirstName @partner.LastName </a></h5>
 
                                             <div class="read-more-btn">
-                                                <a class="axil-btn right-icon" href="blog-details.html">Tìm hiểu thêm <i class="fal fa-long-arrow-right"></i></a>
+                                                <a class="axil-btn right-icon" href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId">Tìm hiểu thêm <i class="fal fa-long-arrow-right"></i></a>
                                             </div>
                                         </div>
                                     </div>

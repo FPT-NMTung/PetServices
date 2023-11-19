@@ -643,7 +643,16 @@ namespace FEPetServices.Controllers
             return View(blog);
         }
         public class PartModel {
+            public List<PartnerInfo> partner { set; get; }
+            public List<ProductDTO> ListProductTop3 { get; set; }
+            public List<ServiceCategoryDTO> CaServices { get; set; }
 
+
+
+        }
+        public class PartDeatilModel
+        {
+            public PartnerInfo Partner { get; set; }
             public List<PartnerInfo> partner { set; get; }
             public List<ProductDTO> ListProductTop3 { get; set; }
             public List<ServiceCategoryDTO> CaServices { get; set; }
@@ -736,7 +745,80 @@ namespace FEPetServices.Controllers
 
             return View();
         }
-    
+        public async Task<IActionResult> PartnerDetail(int partnerID)
+        {
+            PartDeatilModel partModel = new PartDeatilModel();
+                try
+                {
+                    HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
+                    HttpResponseMessage responsedetail = await client.GetAsync("https://localhost:7255/api/Partner/PartnerInfoId?PartnerInfoId=" + partnerID);
+                    if (responsedetail.IsSuccessStatusCode)
+                    {
+                        if (responseProduct.IsSuccessStatusCode)
+                        {
+                            var rep = await responseProduct.Content.ReadAsStringAsync();
+                            if (!string.IsNullOrEmpty(rep))
+                            {
+                                partModel.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
+
+                                int currentPage = 1;
+                                int pageSize = 3;
+
+                                var firstPageProducts = partModel.ListProductTop3.OrderByDescending(p => p.QuantitySold).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+                                currentPage++;
+
+                                partModel.ListProductTop3 = firstPageProducts;
+                            }
+                        }
+                        HttpResponseMessage responseCategoryService = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
+                        if (responseCategoryService.IsSuccessStatusCode)
+                        {
+                            var responseCategoryContent = await responseCategoryService.Content.ReadAsStringAsync();
+
+                            if (!string.IsNullOrEmpty(responseCategoryContent))
+                            {
+                                var serviceCategories = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
+                                partModel.CaServices = serviceCategories;
+                            }
+                        }
+                        HttpResponseMessage response = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Partner/GetAllPartner");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var responsePartContent = await response.Content.ReadAsStringAsync();
+
+                            if (!string.IsNullOrEmpty(responsePartContent))
+                            {
+                            partModel.partner = JsonConvert.DeserializeObject<List<PartnerInfo>>(responsePartContent);
+                            }
+                        }
+
+                    var Partnerdetail = await responsedetail.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(Partnerdetail))
+                    {
+                        partModel.Partner = JsonConvert.DeserializeObject<PartnerInfo>(Partnerdetail);
+                        return View(partModel);
+                    }else
+                    {
+                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
+                    }
+
+
+                }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                }
+
+
+                return View();
+            }
+
 
         public class CartItem
         {
