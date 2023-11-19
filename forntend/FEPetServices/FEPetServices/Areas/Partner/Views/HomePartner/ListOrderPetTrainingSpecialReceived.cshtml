@@ -98,8 +98,7 @@
                             <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
                         </td>
                         <td>
-                            <a href="/Partner/HomePartner/Detail?orderId=@pc.OrderId">Nhận Đơn</a>
-                            <a href="/Partner/HomePartner/Detail?orderId=@pc.OrderId">Hủy Đơn</a>
+                            <button class="completed-button" data-orderid="@pc.OrderId">Hoàn thành</button>
                         </td>
                     </tr>
                 }
@@ -107,12 +106,26 @@
 
             }
         }
-        @*        else
-        {
-        <tr>
-        <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
-        </tr>
-        }*@
+        <script>
+            // Hàm JavaScript để cập nhật trạng thái đơn hàng
+            $(document).ready(function () {
+                // Sử dụng class để chọn button
+                var buttons_received = $('.completed-button');
+
+                buttons_received.click(function () {
+                    var orderId = $(this).data('orderid');
+                    let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusCompleted?orderId=' + orderId;
+                    fetch(url).then(response => {
+                        if (response.status == 200) {
+                            console.log("Hoàn thành đơn thành công!");
+                            location.reload();
+                        } else {
+                            console.log("Hoàn thành đơn thất bại!");
+                        }
+                    });
+                });
+            });
+        </script>
     </tbody>
     <tfoot>
         @if (ViewBag.ErrorMessage != null)
