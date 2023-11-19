@@ -822,9 +822,20 @@ namespace FEPetServices.Controllers
                 SaveCartSession(cart);
             }
 
-            return RedirectToAction("Index", "Cart");
-        }
+            // Kiểm tra xem đây có phải là yêu cầu Ajax không
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                var cartItems = GetCartItems();
+                int totalQuantity = cartItems.Select(item => item.service.ServiceId).Distinct().Count();
 
+                return Json(new { success = true, message = "Dịch vụ đã được thêm vào giỏ hàng.", totalQuantity });
+            }
+            else
+            {
+                // Nếu không phải Ajax, chuyển hướng như trước
+                return RedirectToAction("Index", "Cart");
+            }
+        }
 
         void ClearCart()
         {

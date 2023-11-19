@@ -128,19 +128,20 @@
 
                             <li class="shopping-cart">
                                 <a href="#" class="cart-dropdown-btn">
-                                    @{
-                                        var session = HttpContextAccessor.HttpContext.Session;
-                                        string jsoncart = session.GetString(FEPetServices.Controllers.ProductListController.CARTKEY);
-                                        if (jsoncart != null)
-                                        {
-                                            var cartItems = JsonConvert.DeserializeObject<List<FEPetServices.Controllers.ProductListController.CartItem>>(jsoncart);
-                                            <span class="cart-count">@cartItems.Count</span>
+                                    <span id="cart-count" class="cart-count">
+                                        @{
+                                            var session = HttpContextAccessor.HttpContext.Session;
+                                            string jsoncart = session.GetString(FEPetServices.Controllers.ProductListController.CARTKEY);
+                                            if (jsoncart != null)
+                                            {
+                                                var cartItems = JsonConvert.DeserializeObject<List<FEPetServices.Controllers.ProductListController.CartItem>>(jsoncart);
+                                                @cartItems.Count
+                                            }
                                         }
-                                    }
+                                    </span>
                                     <i class="flaticon-shopping-cart"></i>
                                 </a>
                             </li>
-
                             @{
                                 string? userimageuser = Context.Session.GetString("UserImage");
                                 if (userimageuser is not null)
@@ -274,6 +275,9 @@
             <div class="cart-header">
                 <h2 class="header-title">Thông tin chi tiết giỏ hàng</h2>
                 <button class="cart-close sidebar-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="cart-header">
+                <button type="button" class="btn btn-outline-primary" onclick="reloadPage()">Cập nhật giỏ hàng</button>
             </div>
             <div class="cart-body">
                 <ul class="cart-item-list">
@@ -481,6 +485,16 @@
     @*End - Base ViewBag*@
     @*-------------------------------------------------------*@
 </script>
-
+<script>
+    function updateCartCount(totalQuantity) {
+        $('#cart-count').text(totalQuantity);
+    }
+</script>
+<script>
+    function reloadPage() {
+        location.reload();
+    }
+</script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM"></script>
+<script src="~/js/order/cartproduct.js"></script>
 </html>

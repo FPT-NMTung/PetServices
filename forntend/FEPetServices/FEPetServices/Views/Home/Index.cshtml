@@ -7,7 +7,6 @@
 </head>
     <body>
         <main class="main-wrapper">
-
         @*Start - Banner*@
         <div class="axil-main-slider-area main-slider-style-1">
             <div class="container">
@@ -238,7 +237,7 @@
                                                         <form method="post" action="@Url.Action("AddToCart", "ProductList")">
                                                             @Html.AntiForgeryToken()
                                                             <input type="hidden" name="ProductId" value="@product.ProductId" />
-                                                            <button class="add-to-card" type="submit"><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
+                                                            <button class="add-to-card" type="button" onclick="addToCart('@product.ProductId')"><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
                                                         </form>
                                                     </li>
                                                     <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
@@ -258,7 +257,7 @@
                                                     <span class="rating-number">(64)</span>
                                                 </div>
                                                 <div style="height:60px">
-                                                   <h5 class="title"><a href="single-product.html">@product.ProductName</a></h5>
+                                                    <h5 class="title"><a href="single-product.html">@product.ProductName</a></h5>
                                                 </div>
                                                 <div class="product-price-variant">
                                                     <span class="price current-price">@product.Price.ToString("n0").Replace(",", ".") VNĐ</span>
@@ -385,7 +384,6 @@
                 </div>
             </div>
         </div>
-
         @*End ServiceCategiry*@
 
         @*Start End*@
@@ -441,6 +439,22 @@
         </div>
         @*End End*@
         </main>
+        <div class="modal" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">  
+                        <h5 class="modal-title" id="successModalLabel">Thông báo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Thêm vào giỏ hàng thành công!
+                    </div>
+                    <div class="modal-footer">
+                    <button  type="button" style="padding:5px;font-size:15px" class="btn btn-success" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 <script src="~/assets/js/vendor/modernizr.min.js"></script>
 <!-- jQuery JS -->
@@ -460,7 +474,6 @@
 <script src="~/assets/js/vendor/isotope.pkgd.min.js"></script>
 <script src="~/assets/js/vendor/counterup.js"></script>
 <script src="~/assets/js/vendor/waypoints.min.js"></script>
-
 <!-- Main JS -->
 <script src="~/assets/js/main.js"></script>
 </html>
