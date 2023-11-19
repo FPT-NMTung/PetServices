@@ -155,9 +155,18 @@
                                                 <input type="hidden" name="PartnerId" id="PartnerId" value="" />
                                                 <input type="hidden" name="StartTime" id="StartTime" value="" />
                                                 <input type="hidden" name="EndTime" id="EndTime" value="" />
-                                                <button class="axil-btn btn-bg-primary"  type="submit" ><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
+                                                <button class="axil-btn btn-bg-primary" type="button" onclick="addToCartService('@Model?.Service.ServiceId')"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
                                             </form>
-                                             <button style="width:200px; margin-left: 5px;" href="" class="axil-btn btn-bg-primary">Mua ngay</button>
+                                            <form method="post" action="@Url.Action("AddToCart", "Home")">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="ServiceId" value="@Model?.Service.ServiceId" />
+                                                <input type="hidden" name="PriceService" id="totalPriceService" value="" />
+                                                <input type="hidden" name="Weight" id="Weight" value="" />
+                                                <input type="hidden" name="PartnerId" id="PartnerId" value="" />
+                                                <input type="hidden" name="StartTime" id="StartTime" value="" />
+                                                <input type="hidden" name="EndTime" id="EndTime" value="" />
+                                                <button class="axil-btn btn-bg-primary" style="margin-left: 5px;" type="submit"><i class="fas fa-cart-plus"></i>Mua ngay</button>
+                                            </form>
                                         </ul>
                                         <!-- End Product Action  -->
 

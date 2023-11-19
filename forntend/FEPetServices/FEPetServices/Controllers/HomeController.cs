@@ -826,9 +826,12 @@ namespace FEPetServices.Controllers
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 var cartItems = GetCartItems();
-                int totalQuantity = cartItems.Select(item => item.service.ServiceId).Distinct().Count();
+                int totalQuantity = cartItems.Select(item => item?.service?.ServiceId ?? 0)
+                                              .Union(cartItems.Where(item => item?.product != null)
+                                                              .Select(item => item.product.ProductId))
+                                              .Count();
 
-                return Json(new { success = true, message = "Dịch vụ đã được thêm vào giỏ hàng.", totalQuantity });
+                return Json(new { success = true, message = "Sản phẩm đã được thêm vào giỏ hàng.", totalQuantity });    
             }
             else
             {

@@ -307,7 +307,8 @@
                                             @if (item.product != null)
                                             {
                                                 <h3 class="item-title"><a>@item.product.ProductName</a></h3>
-                                                <div class="item-price"><span class="currency-symbol"></span>@($"{item.product.Price:n0} VNĐ")</div>
+                                                <div class="item-price"><span class="currency-symbol"></span>@($"{item.product.Price:n0}".Replace(",", ".")) VNĐ</div>
+                                                      //@($"{(item.product.Price * item.quantityProduct):n0}".Replace(",", ".")) VNĐ
                                                 <div class="pro-qty item-quantity">
                                                     <input type="number" class="quantity-input" value="@item.quantityProduct">
                                                 </div>
@@ -315,7 +316,7 @@
                                             @if (item.service != null)
                                             {
                                                 <h3 class="item-title">@item.service.ServiceName</h3>
-                                                <div class="item-price"><span class="currency-symbol"></span>@($"{item.PriceService:n0} VNĐ")</div>
+                                                <div class="item-price"><span class="currency-symbol"></span>@($"{item.PriceService:n0}".Replace(",", ".")) VNĐ</div>
                                             }
                                         </div>
                                     </li>
@@ -340,7 +341,22 @@
             </div>
         </div>
     </div>
-
+        <div class="modal" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">  
+                        <h5 class="modal-title" id="successModalLabel">Thông báo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Thêm vào giỏ hàng thành công!
+                    </div>
+                    <div class="modal-footer">
+                    <button  type="button" style="padding:5px;font-size:15px" class="btn btn-success" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     @*Toast notification design*@
     <div id="toast"></div>
     @*Start - Base TempData*@
@@ -496,5 +512,5 @@
     }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM"></script>
-<script src="~/js/order/cartproduct.js"></script>
+<script src="~/js/order/cart.js"></script>
 </html>
