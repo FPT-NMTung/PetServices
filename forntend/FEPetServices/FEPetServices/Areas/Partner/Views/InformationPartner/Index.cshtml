@@ -165,6 +165,7 @@
         window.addEventListener("load", function () {
             // Gọi action để lấy và hiển thị bản đồ với vị trí từ hàm Index của controller
             showPartnerLocation(@Model?.PartnerInfo.Lat, @Model?.PartnerInfo.Lng);
+            startWatchingLocation(); // gọi hàm theo dõi vị trí
         });
 
         function showPartnerLocation(latitude, longitude) {
@@ -173,6 +174,26 @@
                 initMap(latitude, longitude);
             } else {
                 document.getElementById("map").innerHTML = "<div style='text-align: center;'>Bạn chưa cập nhật dữ liệu về vị trí</div>";
+            }
+        }
+
+        // add mới, theo dõi vị trí khi di chuyển
+        function startWatchingLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(
+                    function (position) {
+                        var newLatitude = position.coords.latitude;
+                        var newLongitude = position.coords.longitude;
+                        initMap(newLatitude, newLongitude);
+                        document.getElementById("inputLat").value = newLatitude;
+                        document.getElementById("inputLng").value = newLongitude;
+                    },
+                    function (error) {
+                        showError(error);
+                    }
+                );
+            } else {
+                alert("Trình duyệt của bạn không hỗ trợ Geolocation.");
             }
         }
     </script>
