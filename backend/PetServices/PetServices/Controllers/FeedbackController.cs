@@ -60,6 +60,32 @@ namespace PetServices.Controllers
             return Ok(Convert.ToInt32(averageStars));
         }
 
+        [HttpGet("GetAllFeedbackInProduct")]
+        public async Task<ActionResult> GetAllFeedbackInProduct(int productID)
+        {
+            var feedbacks = await _context.Feedbacks.Where(f => f.ProductId == productID).ToListAsync();
+
+            var listFeedback = _mapper.Map<List<FeedbackDTO>>(feedbacks);
+
+            foreach (var feedback in listFeedback)
+            {
+                var user = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserInfoId == feedback.UserId);
+
+                feedback.UserName = user?.LastName + user?.FirstName;
+                feedback.UserImage = user?.ImageUser;
+            }
+
+            return Ok(listFeedback);
+        }
+
+        [HttpGet("GetProductStar")]
+        public async Task<ActionResult> GetProductStar(int productID)
+        {
+            var averageStars = _context.Feedbacks.Where(f => f.ProductId == productID).Average(f => f.NumberStart);
+
+            return Ok(Convert.ToInt32(averageStars));
+        }
+
         [HttpPost("AddFeedBack")]
         public async Task<ActionResult> AddFeedBack(FeedbackDTO feedbackDTO)
         {
