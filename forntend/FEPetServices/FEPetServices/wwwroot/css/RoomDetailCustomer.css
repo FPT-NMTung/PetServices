@@ -131,6 +131,12 @@
     }
 }
 
+@media only screen and (min-width: 1400px) {
+    .datetime-fixsize{
+        width: 41%;
+    }
+}
+
 .rating-form {
     display: flex;
     flex-wrap: wrap;

@@ -139,7 +139,7 @@
                     <div class="part3-content">
                         <div class="part3-content-fa col-lg-12">
                             <div class="part3-content-child col-lg-7">
-                                <div class="form-group col-lg-5">
+                                <div class="form-group col-lg-5 datetime-fixsize">
                                     <label for='start-datetime'>Ngày và giờ bắt đầu</label>
                                     <div class='input-group date'>
                                         <input type='text' id='start-datetime' class="form-control" style="z-index: auto;" />
@@ -148,7 +148,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="form-group col-lg-5">
+                                <div class="form-group col-lg-5 datetime-fixsize">
                                     <label for='end-datetime'>Ngày và giờ kết thúc</label>
                                     <div class='input-group date'>
                                         <input type='text' id='end-datetime' class="form-control" style="z-index: auto;" />
@@ -414,6 +414,7 @@
             });
 
             let endPicker = flatpickr(endDateTime, {
+                minDate: startPicker.selectedDates[0] || "today",
                 enableTime: true,
                 time_24hr: true,
                 minTime: new Date().getHours() + 1 + ":00", // Giờ hiện tại + 1 giờ
