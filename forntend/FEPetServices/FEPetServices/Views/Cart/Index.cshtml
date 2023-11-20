@@ -46,7 +46,13 @@
                                         <td>@cartitem.product.ProductName</td>
                                         <td>@($"{cartitem.product.Price:#,##0} VNĐ".Replace(",", "."))</td>
                                         <td>
-                                            <input style="height:20px" id="@($"quantity-{cartitem.product.ProductId}")" class="form-control" type="number" value="@cartitem.quantityProduct" />
+                                            <input style="height: 20px"
+                                                   id="@($"quantity-{cartitem.product.ProductId}")"
+                                                   class="form-control"
+                                                   type="number"
+                                                   value="@cartitem.quantityProduct"
+                                                   min="1"
+                                                   oninput="validity.valid||(value='1');" />
                                         </td>
                                         <td>@(thanhtien.ToString("n0").Replace(",", ".")) VNĐ</td>
                                         <td>

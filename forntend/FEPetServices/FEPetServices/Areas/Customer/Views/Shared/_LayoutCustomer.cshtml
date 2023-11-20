@@ -28,10 +28,29 @@
     <link href="~/css/toastNotification.css" rel="stylesheet" />
     <link href="~/css/menuCustomer.css" rel="stylesheet" />
 </head>
-<body >
-    <div>
-        @RenderBody()
+<body>
+    <div class="container light-style flex-grow-1 container-p-y">
+        <a style="margin:2% 0;" href="~/Home">Trở về trang chủ</a>
+        <h4 class="font-weight-bold py-3 mb-4">
+            Cài đặt tài khoản
+        </h4>
+        <div class="card overflow-hidden">
+            <div class="row no-gutters row-bordered row-border-light">
+                <div class="col-md-3 pt-0">
+                    <div class="list-group list-group-flush account-settings-links">
+                        <a class="list-group-item" href="~/Customer/MenuCustomer/Information">Thông tin cá nhân</a>
+                        <a class="list-group-item" href="~/Customer/MenuCustomer/ChangePassword">Đổi mật khẩu</a>
+                        <a class="list-group-item" href="~/Customer/MenuCustomer/PetInfo">Thông tin thú cưng</a>
+                        <a class="list-group-item" href="~/Customer/MenuCustomer/MyOrders">Đơn đặt hàng</a>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
     </div>
+
     <div id="toast"></div>
     @*Start - Base TempData*@
     @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))

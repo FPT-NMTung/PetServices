@@ -9,115 +9,97 @@
     <link href="~/css/datatable.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container light-style flex-grow-1 container-p-y">
-        <h4 class="font-weight-bold py-3 mb-4">
-            Cài đặt tài khoản
-        </h4>
-
-        <div class="card overflow-hidden">
-            <div class="row no-gutters row-bordered row-border-light">
-                <div class="col-md-3 pt-0">
-                    <div class="list-group list-group-flush account-settings-links">
-                        <a class="list-group-item" href="~/Customer/MenuCustomer/Information">Thông tin cá nhân</a>
-                        <a class="list-group-item" href="#account-change-password">Đổi mật khẩu</a>
-                        <a class="list-group-item" href="~/Customer/MenuCustomer/PetInfo">Thông tin thú cưng</a>
-                        <a class="list-group-item list-group-item-action active" href="~/Customer/MenuCustomer/MyOrders">Đơn đặt hàng</a>
-                    </div>
-                </div>
-                <div class="col-md-9">
-                        <h2>Chi tiết đơn hàng</h2>
-                        @*Thông tin đơn hàng*@
-                        <form method="post" asp-controller="OrderLists" asp-action="OrderDetail">
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Ngày mua hàng :</label>
-                                <div class="col-sm-9">
-                                    <input type="text" readonly class="form-control-plaintext" value="@Model.OrderDate">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Trạng thái :</label>
-                                <div class="col-sm-9" style="padding-top:8px">
-                                    @if (Model.OrderStatus.Trim() == "Complete")
-                                    {
-                                    <span style="background-color: green; color:#fff">Đang giao</span>
-                                    }
-                                    else if (Model.OrderStatus.Trim() == "Reject")
-                                    {
-                                        <span style="background-color: red; color:#fff">Đơn hàng bị huỷ</span>
-                                    }
-                                    else if (Model.OrderStatus.Trim() == "Waiting")
-                                    {
-                                    <span style="background-color: yellow;color:green">Đơn hàng đang chờ xử lý</span>
-                                    }
-                                </div>
-                            </div>
-                            @*Thông tin khách hàng*@
-                            <h3>Thông tin khách hàng</h3>
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Tên Khách Hàng :</label>
-                                <div class="col-sm-9">
-                                    <input type="text" readonly class="form-control-plaintext" value="@Model.FullName">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Địa chỉ :</label>
-                                <div class="col-sm-9">
-                                    <input type="text" readonly class="form-control-plaintext"
-                                           value="@Model.Province , @Model.District , @Model.Commune">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Địa chỉ cụ thể :</label>
-                                <div class="col-sm-9">
-                                    <input type="text" readonly class="form-control-plaintext" value="@Model.Address">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Thông tin liên hệ :</label>
-                                <div class="col-sm-9">
-                                <input type="text" readonly class="form-control-plaintext" value="@Model.Phone">
-                                </div>
-                            </div>
-                            @*Thông tin sản phẩm*@
-                            <h3>Thông tin sản phẩm đã được đặt hàng</h3>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Tên sản phẩm</th>
-                                        <th>Số lượng</th>
-                                        <th>Giá từng sản phẩm</th>
-                                        <th>Tổng giá</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var productDetail in Model.OrderProductDetails)
-                                    {
-                                        <tr>
-                                            <td>@productDetail.Product.ProductName</td>
-                                            <td>@productDetail.Price VNĐ</td>
-                                            <td>@productDetail.Quantity</td>
-                                            <td>@(productDetail.Quantity * productDetail.Price) VNĐ</td>
-                                        </tr>
-                                    }
-                                    <tr>
-                                        <td colspan="3" style="text-align: right;"><strong>Tổng tiền:</strong></td>
-                                        <td><strong>@ViewBag.TotalPrice VNĐ</strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            @if (Model.OrderStatus.Trim() == "Waiting")
-                            {
-                                <input type="hidden" name="Id" value="@Model?.OrderId" />
-                                <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
-                                <input type="hidden" name="newStatus" value="Reject" />
-                                <button class="btn btn-primary" type="submit">Huỷ đơn</button>
-                            }
-                        </form>
-                    <div class="btn-group" style="margin-bottom:2%;">
-                        <a class="btn btn-primary" href="~/Customer/MenuCustomer/MyOrders">Trở lại</a>
-                        </div>
+    <div class="col-md-9">
+        <h2>Chi tiết đơn hàng</h2>
+        @*Thông tin đơn hàng*@
+        <form method="post" asp-controller="OrderLists" asp-action="OrderDetail">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Ngày mua hàng :</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext" value="@Model.OrderDate">
                 </div>
             </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Trạng thái :</label>
+                <div class="col-sm-9" style="padding-top:8px">
+                    @if (Model.OrderStatus.Trim() == "Complete")
+                    {
+                        <span style="background-color: green; color:#fff">Đang giao</span>
+                    }
+                    else if (Model.OrderStatus.Trim() == "Reject")
+                    {
+                        <span style="background-color: red; color:#fff">Đơn hàng bị huỷ</span>
+                    }
+                    else if (Model.OrderStatus.Trim() == "Waiting")
+                    {
+                        <span style="background-color: yellow;color:green">Đơn hàng đang chờ xử lý</span>
+                    }
+                </div>
+            </div>
+            @*Thông tin khách hàng*@
+            <h3>Thông tin khách hàng</h3>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Tên Khách Hàng :</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext" value="@Model.FullName">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Địa chỉ :</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext"
+                           value="@Model.Province , @Model.District , @Model.Commune">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Địa chỉ cụ thể :</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext" value="@Model.Address">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Thông tin liên hệ :</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext" value="@Model.Phone">
+                </div>
+            </div>
+            @*Thông tin sản phẩm*@
+            <h3>Thông tin sản phẩm đã được đặt hàng</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Giá từng sản phẩm</th>
+                        <th>Tổng giá</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var productDetail in Model.OrderProductDetails)
+                    {
+                        <tr>
+                            <td>@productDetail.Product.ProductName</td>
+                            <td>@productDetail.Price VNĐ</td>
+                            <td>@productDetail.Quantity</td>
+                            <td>@(productDetail.Quantity * productDetail.Price) VNĐ</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="3" style="text-align: right;"><strong>Tổng tiền:</strong></td>
+                        <td><strong>@ViewBag.TotalPrice VNĐ</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            @if (Model.OrderStatus.Trim() == "Waiting")
+            {
+                <input type="hidden" name="Id" value="@Model?.OrderId" />
+                <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
+                <input type="hidden" name="newStatus" value="Reject" />
+                <button class="btn btn-primary" type="submit">Huỷ đơn</button>
+            }
+        </form>
+        <div class="btn-group" style="margin-bottom:2%;">
+            <a class="btn btn-primary" href="~/Customer/MenuCustomer/MyOrders">Trở lại</a>
         </div>
     </div>
 </body>
