@@ -158,6 +158,8 @@ namespace FEPetServices.Controllers
 
         public async Task<ActionResult> RoomDetail(int roomId)
         {
+            var viewModel = new HomeModel();
+
             try
             {
                 HttpResponseMessage serviceAvailableResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/GetServiceInRoom?roomId=" + roomId);
@@ -169,6 +171,15 @@ namespace FEPetServices.Controllers
                     ViewBag.ServiceAvailable = new SelectList(services, "ServiceId", "ServiceName");
                 }
 
+                HttpResponseMessage feedbackResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetAllFeedbackInRoom?roomID=" + roomId);
+
+                if (feedbackResponse.IsSuccessStatusCode)
+                {
+                    var feedback = await feedbackResponse.Content.ReadFromJsonAsync<List<FeedbackDTO>>();
+
+                    viewModel.Feedback = feedback;
+                }
+
                 HttpResponseMessage serviceUnavailableResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/GetServiceOutRoom?roomId=" + roomId);
 
                 if (serviceUnavailableResponse.IsSuccessStatusCode)
@@ -176,6 +187,18 @@ namespace FEPetServices.Controllers
                     var services = await serviceUnavailableResponse.Content.ReadFromJsonAsync<List<ServiceDTO>>();
 
                     ViewBag.ServiceUnavailable = services;
+                }
+
+                HttpResponseMessage roomStarResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetRoomStar?roomID=" + roomId);
+
+                if (roomStarResponse.IsSuccessStatusCode)
+                {
+                    var content = await roomStarResponse.Content.ReadAsStringAsync();
+
+                    if (int.TryParse(content, out int roomStar))
+                    {
+                        ViewBag.RoomStar = roomStar;
+                    }
                 }
 
                 HttpResponseMessage response = await client.GetAsync(ApiUrlRoomDetail + roomId);
@@ -186,7 +209,9 @@ namespace FEPetServices.Controllers
 
                     var roomDto = JsonConvert.DeserializeObject<RoomDTO>(responseContent);
 
-                    return View(roomDto);
+                    viewModel.Room = roomDto;
+
+                    return View(viewModel);
                 }
                 else
                 {
@@ -278,6 +303,8 @@ namespace FEPetServices.Controllers
 
         public class HomeModel
         {
+            public List<FeedbackDTO> Feedback { get; set; }
+            public RoomDTO Room { get; set; }
             public List<ServiceCategoryDTO> ListServiceCategory { get; set; }
             public List<ProductDTO> ListProductTop8 { get; set; }
             public List<ProductDTO> ListProductSecond8 { get; set; }

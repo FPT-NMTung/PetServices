@@ -1,4 +1,4 @@
-﻿namespace PetServices.DTO
+﻿namespace FEPetServices.Areas.DTO
 {
     public class FeedbackDTO
     {
