@@ -203,7 +203,7 @@ namespace PetServices.Controllers
             var newAcc = new Account
             {
                 Email = email,
-                Password = password,
+                Password = BCrypt.Net.BCrypt.HashPassword(password),
                 Status = true,
                 RoleId = roleId
             };

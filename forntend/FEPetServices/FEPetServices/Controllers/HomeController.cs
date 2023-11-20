@@ -227,7 +227,7 @@ namespace FEPetServices.Controllers
         }
 
 
-        public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory, int page = 1, int pagesize = 6, string CategoriesName = "" , string viewstyle = "grid", string sortby = "")
+        public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory, int page = 1, int pagesize = 6, string CategoriesName = "", string viewstyle = "grid", string sortby = "")
         {
             try
             {
@@ -235,7 +235,7 @@ namespace FEPetServices.Controllers
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
-                
+
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -245,7 +245,7 @@ namespace FEPetServices.Controllers
                     {
                         var servicecategoryList = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseContent);
 
-             
+
 
                         if (!string.IsNullOrEmpty(CategoriesName) && servicecategoryList != null)
                         {
@@ -275,7 +275,7 @@ namespace FEPetServices.Controllers
                         ViewBag.CurrentPage = page;
                         ViewBag.PageSize = pagesize;
 
-                        ViewBag.CategoriesName =CategoriesName ;
+                        ViewBag.CategoriesName = CategoriesName;
                         ViewBag.sortby = sortby;
                         ViewBag.pagesize = pagesize;
                         ViewBag.viewstyle = viewstyle;
@@ -353,8 +353,8 @@ namespace FEPetServices.Controllers
                     {
                         homeModel.ListProductTop8 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
 
-                        int currentPage = 1; 
-                        int pageSize = 8; 
+                        int currentPage = 1;
+                        int pageSize = 8;
 
                         var firstPageProducts = homeModel.ListProductTop8.OrderByDescending(p => p.QuantitySold).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
 
@@ -484,11 +484,11 @@ namespace FEPetServices.Controllers
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrlBlogList + "/GetAllBlog");
-                
+
                 if (response.IsSuccessStatusCode)
                 {
                     HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
-                
+
                     if (responseProduct.IsSuccessStatusCode)
                     {
                         var rep = await responseProduct.Content.ReadAsStringAsync();
@@ -561,7 +561,7 @@ namespace FEPetServices.Controllers
                         ViewBag.sortby = sortby;
                         ViewBag.pagesize = pagesize;
                         blogModel.Blog = currentPageBlogList;
-                       
+
 
                         return View(blogModel);
                     }
@@ -669,6 +669,101 @@ namespace FEPetServices.Controllers
             }
             return View(blog);
         }
+        public class PartModel {
+
+            public List<PartnerInfo> partner { set; get; }
+            public List<ProductDTO> ListProductTop3 { get; set; }
+            public List<ServiceCategoryDTO> CaServices { get; set; }
+
+
+
+        }
+        public async Task<IActionResult> Partner( int page = 1, int pagesize = 6, string PartName = "")
+        {
+            PartModel partModel = new PartModel();
+            try
+            {
+                HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
+
+                if (responseProduct.IsSuccessStatusCode)
+                {
+                    var rep = await responseProduct.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(rep))
+                    {
+                        partModel.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
+
+                        int currentPage = 1;
+                        int pageSize = 3;
+
+                        var firstPageProducts = partModel.ListProductTop3.OrderByDescending(p => p.QuantitySold).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+                        currentPage++;
+
+                        partModel.ListProductTop3 = firstPageProducts;
+                    }
+                }
+                HttpResponseMessage responseCategoryService = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
+                if (responseCategoryService.IsSuccessStatusCode)
+                {
+                    var responseCategoryContent = await responseCategoryService.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(responseCategoryContent))
+                    {
+                        var serviceCategories = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
+                        partModel.CaServices = serviceCategories;
+                    }
+                }
+                HttpResponseMessage response = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Partner/GetAllPartner");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(responseContent))
+                    {
+                        var partList = JsonConvert.DeserializeObject<List<PartnerInfo>>(responseContent);
+                        // tìm kiếm theo tên 
+                        if (!string.IsNullOrEmpty(PartName) && partList != null)
+                        {
+                            partList = partList
+                                .Where(c => c.FirstName != null && c.FirstName.Contains(PartName, StringComparison.OrdinalIgnoreCase))
+                                .ToList();
+                        }
+
+
+                        int totalItems = partList.Count;
+                        int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
+                        int startIndex = (page - 1) * pagesize;
+                        List<PartnerInfo> currentPagePartnerList = partList.Skip(startIndex).Take(pagesize).ToList();
+
+                        ViewBag.TotalPages = totalPages;
+                        ViewBag.CurrentPage = page;
+                        ViewBag.PageSize = pagesize;
+
+                        ViewBag.PartName = PartName;
+                        ViewBag.pagesize = pagesize;
+                        partModel.partner = currentPagePartnerList;
+
+                        return View(partModel);
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
+                    }
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+            }
+
+
+            return View();
+        }
+    
 
         public class CartItem
         {
@@ -770,7 +865,8 @@ namespace FEPetServices.Controllers
             string jsoncart = JsonConvert.SerializeObject(ls);
             session.SetString(CARTKEY, jsoncart);
         }
-        public IActionResult NotFound()
+      
+            public IActionResult NotFound()
         {
             return View();
         }
