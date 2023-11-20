@@ -43,20 +43,43 @@ namespace PetServices.Controllers
         }
 
         [HttpGet("email/{email}")]
-        public IActionResult GetOrderUser(string email)
+        public IActionResult GetOrderUser(string email, string orderstatus)
         {
             try
             {
-                Account orders = _context.Accounts
-                .Include(a => a.UserInfo)
-                .ThenInclude(u => u.Orders)
-                .FirstOrDefault(a => a.Email == email);
+                IQueryable<Order> query = _context.Orders
+                    .Include(o => o.UserInfo)
+                    .ThenInclude(u => u.Accounts)
+                     .Include(b => b.OrderProductDetails)
+                    .ThenInclude(o => o.Product)
+                    .Include(b => b.BookingServicesDetails)
+                    .ThenInclude(bs => bs.Service)
+                    .Include(b => b.BookingRoomDetails)
+                    .ThenInclude(br => br.Room)
+                    .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email));
 
-                return Ok(_mapper.Map<AccountInfo>(orders));
+                if (!string.IsNullOrEmpty(orderstatus) && orderstatus.ToLower() != "all")
+                {
+                    query = query.Where(o => o.OrderStatus == orderstatus);
+                }
+
+                List<Order> orders = query.ToList();
+
+                bool hasOrders = orders.Any();
+
+                if (hasOrders)
+                {
+                    List<OrdersDTO> ordersDTOList = _mapper.Map<List<OrdersDTO>>(orders);
+
+                    return Ok(ordersDTOList);
+                }
+                else
+                {
+                    return NotFound("No orders found with the specified status");
+                }
             }
             catch (Exception ex)
             {
-                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
                 return StatusCode(500, ex.Message);
             }
         }

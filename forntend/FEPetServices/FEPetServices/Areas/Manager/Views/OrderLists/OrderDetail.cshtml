@@ -60,53 +60,77 @@
             <input type="text" readonly class="form-control-plaintext" value="@Model.UserInfo.Phone">
             </div>
         </div>
-        @*Thông tin sản phẩm*@
-        <h3>Thông tin sản phẩm đã được đặt hàng</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Tên sản phẩm</th>
-                    <th>Giá từng sản phẩm</th>
-                    <th>Số lượng</th>
-                    <th>Tổng giá</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach (var productDetail in Model.OrderProductDetails)
+
+            @if (Model.OrderProductDetails != null && Model.OrderProductDetails.Count > 0)
             {
+                @*Thông tin sản phẩm*@
+                <h3>Thông tin sản phẩm đã được đặt hàng</h3>
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td>@productDetail.Product.ProductName</td>
-                            <td>@($"{productDetail.Price:n0}".Replace(",", ".")) VNĐ</td>
-                            <td>@productDetail.Quantity</td>
-                            <td>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</td>
+                            <th>Tên sản phẩm</th>
+                            <th>Giá từng sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Tổng giá</th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var productDetail in Model.OrderProductDetails)
+                        {
+                            <tr>
+                                <td>@productDetail.Product.ProductName</td>
+                                <td>
+                                    @(
+                                        $"{productDetail.Price:n0}".Replace(",", ".")
+                                        ) VNĐ
+                                </td>
+                                <td>@productDetail.Quantity</td>
+                                <td>
+                                    @(
+                                        $"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")
+                                        ) VNĐ
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             }
-            </tbody>
-        </table>
-            <h3>Thông tin dịch vụ</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Tên dịch vụ</th>
-                        <th>Giá</th>
-                        <th>Cân nặng thú cưng</th>
-                        <th>Thông tin nhân viên</th>
-                        <th>Tổng giá</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var serviceDetail in Model.BookingServicesDetails)
-                    {
+
+            @if (Model.BookingServicesDetails != null && Model.BookingServicesDetails.Count > 0)
+            {
+                <h3>Thông tin dịch vụ</h3>
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td>@serviceDetail.Service.ServiceName</td>
-                            <td>@($"{serviceDetail.Price:n0}".Replace(",", ".")) VNĐ</td>
-                            <td>@serviceDetail.Weight</td>
-                            <td>@serviceDetail.Weight</td>
-                            <td>@($"{serviceDetail.PriceService:n0}".Replace(",", ".")) VNĐ</td>
+                            <th>Tên dịch vụ</th>
+                            <th>Giá</th>
+                            <th>Cân nặng thú cưng</th>
+                            <th>Thông tin nhân viên</th>
+                            <th>Tổng giá</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var serviceDetail in Model.BookingServicesDetails)
+                        {
+                            <tr>
+                                <td>@serviceDetail.Service.ServiceName</td>
+                                <td>
+                                    @(
+                                        $"{serviceDetail.Price:n0}".Replace(",", ".")
+                                        ) VNĐ
+                                </td>
+                                <td>@serviceDetail.Weight</td>
+                                <td>@serviceDetail.Weight</td>
+                                <td>
+                                    @(
+                                        $"{serviceDetail.PriceService:n0}".Replace(",", ".")
+                                        ) VNĐ
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
         <table>
             <thead>
                 <tr>
@@ -120,7 +144,7 @@
             </thead>
             <tbody>
                     <tr>
-                        <td colspan="5"><strong>#</strong></td>
+                        <td colspan="4"><strong>#</strong></td>
                         <td><strong>@($"{ViewBag.TotalPrice:n0}".Replace(",", ".")) VNĐ</strong></td>
                     </tr>
             </tbody>
