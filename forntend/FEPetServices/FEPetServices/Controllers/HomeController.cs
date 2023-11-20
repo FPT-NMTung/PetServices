@@ -396,6 +396,28 @@ namespace FEPetServices.Controllers
                     ViewBag.Partners = new SelectList(partners, "PartnerInfoId", "LastName");
                 }
             }
+
+            HttpResponseMessage ServiceStarResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetServiceStar?serviceID=" + serviceIds);
+
+            if (ServiceStarResponse.IsSuccessStatusCode)
+            {
+                var content = await ServiceStarResponse.Content.ReadAsStringAsync();
+
+                if (int.TryParse(content, out int serviceStar))
+                {
+                    ViewBag.serviceStar = serviceStar;
+                }
+            }
+
+            HttpResponseMessage feedbackResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetAllFeedbackInService?serviceID=" + serviceIds);
+
+            if (feedbackResponse.IsSuccessStatusCode)
+            {
+                var feedback = await feedbackResponse.Content.ReadFromJsonAsync<List<FeedbackDTO>>();
+
+                model.Feedback = feedback;
+            }
+
             if (response.IsSuccessStatusCode)
             {
                 HttpResponseMessage responseCategory = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
@@ -460,6 +482,7 @@ namespace FEPetServices.Controllers
 
         public class ServiceDetailModel
         {
+            public List<FeedbackDTO> Feedback { get; set; }
             public ServiceDTO Service { get; set; }
             public ServiceCategoryDTO ServiceCategory { get; set; }
             public ProductDTO Product { get; set; }

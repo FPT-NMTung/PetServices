@@ -97,7 +97,7 @@ namespace PetServices.Controllers
             {
                 var user = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserInfoId == feedback.UserId);
 
-                feedback.UserName = user?.LastName + user?.FirstName;
+                feedback.UserName = user?.FirstName + " " + user?.LastName;
                 feedback.UserImage = user?.ImageUser;
             }
 
@@ -110,6 +110,17 @@ namespace PetServices.Controllers
             var averageStars = _context.Feedbacks.Where(f => f.ServiceId == serviceID).Average(f => f.NumberStart);
 
             return Ok(Convert.ToInt32(averageStars));
+        }
+
+        [HttpDelete("del")]
+        public async Task<ActionResult> del(int feedbackId)
+        {
+            var feedback = _context.Feedbacks.Where(f => f.FeedbackId == feedbackId).FirstOrDefault();
+
+            _context.Remove(feedback);
+            _context.SaveChanges();
+
+            return Ok();
         }
 
         [HttpPost("AddFeedBack")]

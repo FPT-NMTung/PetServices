@@ -97,7 +97,7 @@ namespace FEPetServices.Controllers
                                 break;
                         }
                         int page = searchDTO.page ?? 1; ;
-                        int pagesize = searchDTO.pagesize ?? 6;
+                        int pagesize = searchDTO.pagesize ?? 9;
 
                         int totalItems = productList.Count;
                         int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
