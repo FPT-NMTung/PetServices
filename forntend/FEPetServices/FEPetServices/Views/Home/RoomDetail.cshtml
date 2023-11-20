@@ -76,7 +76,7 @@
                                         }
                                     </div>
                                     <div class="review-link">
-                                        <a href="#">(<span>2</span> customer reviews)</a>
+                                        <a href="#">(<span>@Model.Feedback.Count</span> đánh giá của khách hàng )</a>
                                     </div>
                                 </div>
                                 <ul class="product-meta">
@@ -243,7 +243,7 @@
                     <div class="row">
                         <div class="col-lg-12 mb--40">
                             <div class="axil-comment-area pro-desc-commnet-area">
-                                @if (Model.Feedback != null)
+                                @if (Model.Feedback != null && Model.Feedback.Count > 0)
                                 {
                                     <h5 class="title">Có @Model.Feedback.Count đánh giá cho phòng này</h5>
                                     <ul class="comment-list">

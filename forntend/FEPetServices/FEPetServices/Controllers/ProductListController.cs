@@ -171,6 +171,28 @@ namespace FEPetServices.Controllers
                             model.CateProduct = product;
                         }
                     }
+
+                    HttpResponseMessage productStarResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetProductStar?productID=" + proId);
+
+                    if (productStarResponse.IsSuccessStatusCode)
+                    {
+                        var content = await productStarResponse.Content.ReadAsStringAsync();
+
+                        if (int.TryParse(content, out int productStar))
+                        {
+                            ViewBag.productStar = productStar;
+                        }
+                    }
+
+                    HttpResponseMessage feedbackResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetAllFeedbackInProduct?productID=" + proId);
+
+                    if (feedbackResponse.IsSuccessStatusCode)
+                    {
+                        var feedback = await feedbackResponse.Content.ReadFromJsonAsync<List<FeedbackDTO>>();
+
+                        model.Feedback = feedback;
+                    }
+
                     return View(model);
                 }
                 else
@@ -186,6 +208,7 @@ namespace FEPetServices.Controllers
         }
         public class ProductDetailModel
         {
+            public List<FeedbackDTO> Feedback { get; set; }
             public ProductDTO Product { get; set; }
             public List<ProductDTO> products { get; set; }
             public List<ProductDTO> CateProduct { get; set; }
