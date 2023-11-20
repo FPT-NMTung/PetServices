@@ -189,6 +189,18 @@ namespace FEPetServices.Controllers
                     ViewBag.ServiceUnavailable = services;
                 }
 
+                HttpResponseMessage roomStarResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetRoomStar?roomID=" + roomId);
+
+                if (roomStarResponse.IsSuccessStatusCode)
+                {
+                    var content = await roomStarResponse.Content.ReadAsStringAsync();
+
+                    if (int.TryParse(content, out int roomStar))
+                    {
+                        ViewBag.RoomStar = roomStar;
+                    }
+                }
+
                 HttpResponseMessage response = await client.GetAsync(ApiUrlRoomDetail + roomId);
 
                 if (response.IsSuccessStatusCode)

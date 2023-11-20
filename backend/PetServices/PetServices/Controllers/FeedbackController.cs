@@ -52,6 +52,14 @@ namespace PetServices.Controllers
             return Ok(listFeedback);
         }
 
+        [HttpGet("GetRoomStar")]
+        public async Task<ActionResult> GetRoomStar(int roomID)
+        {
+            var averageStars = _context.Feedbacks.Where(f => f.RoomId == roomID).Average(f => f.NumberStart);
+
+            return Ok(Convert.ToInt32(averageStars));
+        }
+
         [HttpPost("AddFeedBack")]
         public async Task<ActionResult> AddFeedBack(FeedbackDTO feedbackDTO)
         {

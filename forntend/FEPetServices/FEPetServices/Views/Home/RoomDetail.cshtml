@@ -63,11 +63,17 @@
                                 </div>
                                 <div class="product-rating">
                                     <div class="star-rating">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= (ViewBag.RoomStar ?? 5))
+                                            {
+                                                <i class="fas fa-star"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="far fa-star"></i>
+                                            }
+                                        }
                                     </div>
                                     <div class="review-link">
                                         <a href="#">(<span>2</span> customer reviews)</a>
