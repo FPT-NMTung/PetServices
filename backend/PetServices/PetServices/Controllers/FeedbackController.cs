@@ -34,6 +34,24 @@ namespace PetServices.Controllers
             return Ok();
         }
 
+        [HttpGet("GetAllFeedbackInRoom")]
+        public async Task<ActionResult> GetAllFeedbackInRoom(int roomID)
+        {
+            var feedbacks = await _context.Feedbacks.Where(f => f.RoomId == roomID).ToListAsync();
+
+            var listFeedback = _mapper.Map<List<FeedbackDTO>>(feedbacks);
+
+            foreach (var feedback in listFeedback)
+            {
+                var user = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserInfoId == feedback.UserId);
+
+                feedback.UserName = user?.LastName + user?.FirstName;
+                feedback.UserImage = user?.ImageUser;
+            }
+
+            return Ok(listFeedback);
+        }
+
         [HttpPost("AddFeedBack")]
         public async Task<ActionResult> AddFeedBack(FeedbackDTO feedbackDTO)
         {
@@ -42,7 +60,7 @@ namespace PetServices.Controllers
                 string errorMessage = "Nội dung không được để trống!";
                 return BadRequest(errorMessage);
             }
-            if (feedbackDTO.Content.Length > 500)
+            if (feedbackDTO.Content.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length < 20)
             {
                 string errorMessage = "Nội dung không được viết dưới 20 kí tự!";
                 return BadRequest(errorMessage);
