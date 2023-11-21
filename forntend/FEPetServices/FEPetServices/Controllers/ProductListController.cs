@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using PetServices.Models;
 using System.Drawing.Printing;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -198,11 +199,15 @@ namespace FEPetServices.Controllers
             public ProductDTO product { set; get; }
 
             // Service
-            public ServiceDTO service { set; get; }
+            public int ServiceId { get; set; }
+            public double? Price { get; set; }
             public double? Weight { get; set; }
             public double? PriceService { get; set; }
             public int? PartnerInfoId { get; set; }
-
+            public DateTime? StartTime { get; set; }
+            public DateTime? EndTime { get; set; }
+            public PartnerInfo? PartnerInfo { get; set; }
+            public ServiceDTO service { set; get; }
             // Room
         }
 
@@ -220,7 +225,7 @@ namespace FEPetServices.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToCart(int ProductId)
+        public async Task<IActionResult> AddToCart([FromForm] int ProductId)
         {
             ProductDTO product = null;
 
@@ -235,29 +240,39 @@ namespace FEPetServices.Controllers
                 product = System.Text.Json.JsonSerializer.Deserialize<ProductDTO>(responseContent, option);
             }
 
-            if (product != null)  // Check for null before adding to the cart
+            if (product != null)
             {
                 var cart = GetCartItems();
                 var cartitem = cart.Find(p => p.product != null && p.product.ProductId == ProductId);
 
                 if (cartitem != null)
                 {
-                    // Đã tồn tại, tăng thêm 1
                     cartitem.quantityProduct++;
                 }
                 else
                 {
-                    // Thêm mới
                     cart.Add(new CartItem() { quantityProduct = 1, product = product });
                 }
 
-                // Lưu cart vào Session
                 SaveCartSession(cart);
             }
 
-            return RedirectToAction("Index", "Cart");
+            // Kiểm tra xem đây có phải là yêu cầu Ajax không
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                var cartItems = GetCartItems();
+                int totalQuantity = cartItems.Select(item => item?.product?.ProductId ?? 0)
+                                             .Union(cartItems.Where(item => item?.service != null)
+                                                             .Select(item => item.service.ServiceId))
+                                             .Count();
+                return Json(new { success = true, message = "Sản phẩm đã được thêm vào giỏ hàng.", totalQuantity });
+            }
+            else
+            {
+                // Nếu không phải Ajax, chuyển hướng như trước
+                return RedirectToAction("Index", "Cart");
+            }
         }
-
 
         void ClearCart()
         {

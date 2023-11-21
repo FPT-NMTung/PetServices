@@ -99,15 +99,27 @@
                                     </div>
                                     <!-- Start Product Action Wrapper  -->
                                     <div class="product-action-wrapper d-flex-center">
-
                                         <!-- Start Product Action  -->
                                         <ul class="product-action action-style-two d-flex-center mb--0" >
-                                            <button class="axil-btn btn-bg-primary" type="submit" style="width:300px;"><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
-                                            <button style="width:200px; margin-left: 5px;" href="" class="axil-btn btn-bg-primary">Mua ngay</button>
-
+                                            @if (@Model.Product.Quantity > 0)
+                                            {
+                                                <form method="post" action="@Url.Action("AddToCart", "ProductList")">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="ProductId" value="@Model.Product.ProductId" />
+                                                    <button class="axil-btn btn-bg-primary" type="button" style="width:300px;" onclick="addToCart('@Model.Product.ProductId')"><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
+                                                </form>
+                                                <form method="post" action="@Url.Action("AddToCart", "ProductList")">
+                                                    @Html.AntiForgeryToken()
+                                                <input type="hidden" name="ProductId" value="@Model.Product.ProductId" />
+                                                <button style="width:200px; margin-left: 5px;" href="" class="axil-btn btn-bg-primary" type="submit"><i class="fas fa-cart-plus"></i>Mua ngay</button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-danger" style="padding:5px; font-size:20px;" type="button">Hết hàng</button>
+                                            }
                                         </ul>
                                         <!-- End Product Action  -->
-
                                     </div>
                                     <!-- End Product Action Wrapper  -->
                                 </div>
@@ -364,7 +376,6 @@
 
     <!-- Main JS -->
     <script src="/assets/js/main.js"></script>
-
 </body>
 
 

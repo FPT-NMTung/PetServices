@@ -90,8 +90,8 @@
                             <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
                         </td>
                         <td>
-                            <button id="received">Nhận Đơn</button>
-                            <button id="reject">Hủy Đơn</button>
+                            <button class="received-button" data-orderid="@pc.OrderId">Nhận Đơn</button>
+                            <button class="rejected-button" data-orderid="@pc.OrderId">Hủy Đơn</button>
                         </td>
                     </tr>
                 }
@@ -99,6 +99,40 @@
 
             }
         }
+        <script>
+            // Hàm JavaScript để cập nhật trạng thái đơn hàng
+            $(document).ready(function () {
+                // Sử dụng class để chọn button
+                var buttons_received = $('.received-button');
+                var buttons_rejected = $('.rejected-button');
+
+                buttons_received.click(function () {
+                    var orderId = $(this).data('orderid');
+                    let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusReceived?orderId=' + orderId;
+                    fetch(url).then(response => {
+                        if (response.status == 200) {
+                            console.log("Nhận đơn thành công!");
+                            location.reload();
+                        } else {
+                            console.log("Nhận đơn thất bại!");
+                        }
+                    });
+                });
+
+                buttons_rejected.click(function () {
+                    var orderId = $(this).data('orderid');
+                    let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusRejected?orderId=' + orderId;
+                    fetch(url).then(response => {
+                        if (response.status == 200) {
+                            console.log("Hủy đơn thành công!");
+                            location.reload();
+                        } else {
+                            console.log("Hủy đơn thất bại!");
+                        }
+                    });
+                });
+            });
+        </script>
     </tbody>
     <tfoot>
         @if (ViewBag.ErrorMessage != null)

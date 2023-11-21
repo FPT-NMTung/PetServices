@@ -236,5 +236,29 @@ namespace PetServices.Controllers
         {
             return !string.IsNullOrWhiteSpace(password) && password.Length >= 8 && !password.Contains(" ");
         }
+
+        [HttpGet("UpdateOrderStatusReceived")]
+        public async Task<IActionResult> UpdateOrderStatusReceived(int orderId)
+        {
+            try
+            {
+                Order order = await _context.Orders
+                    .Include(b => b.UserInfo)
+                    .Include(b => b.BookingServicesDetails)
+                    .ThenInclude(bs => bs.Service)
+                    .SingleOrDefaultAsync(b => b.OrderId == orderId);
+                order.OrderStatus = "Received";
+                _context.Update(order);
+                await _context.SaveChangesAsync();
+
+                return Ok(_mapper.Map<OrdersDTO>(order));
+
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
