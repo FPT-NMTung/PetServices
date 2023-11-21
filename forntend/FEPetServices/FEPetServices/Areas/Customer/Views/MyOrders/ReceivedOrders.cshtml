@@ -86,7 +86,9 @@
                                                         </div>
                                                         <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
-
+                                                    <div class="btn-content-detail">
+                                                        <button class="btn btn-primary">Hello Trung</button>
+                                                    </div>
                                                 }
                                             </div>
                                         }
@@ -108,10 +110,12 @@
                                                         </div>
                                                         <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
+                                                    <div class="btn-content-detail">
+                                                        <button class="btn btn-outline-primary">Hello Trung</button>
+                                                    </div>
                                                 }
                                             </div>
                                         }
-
                                         <div class="headel-content">
                                             <p>Tổng giá : </p>
                                             <p>@(totalPrice.ToString("n0").Replace(",", ".")) VNĐ</p>

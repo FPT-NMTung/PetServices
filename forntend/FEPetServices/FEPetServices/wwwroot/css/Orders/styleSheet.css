@@ -171,9 +171,20 @@ span.badge {
         color: black;
         margin-bottom: .5rem;
     }
-    /* Responsive Styles */
-    @media (max-width: 768px) {
-        .timeline-icon {
+.btn-content-detail {
+    display: flex;
+    flex-direction: column;
+    margin-bottom:.5rem;
+}
+
+    .btn-content-detail button {
+        height:38px;
+        align-self: flex-end; 
+    }
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .timeline-icon {
         top: 10px;
     }
 }
