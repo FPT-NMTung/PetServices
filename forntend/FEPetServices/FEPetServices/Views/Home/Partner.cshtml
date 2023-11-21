@@ -129,12 +129,12 @@
                                 {
                                 <div class="content-blog post-list-view mb--20">
                                     <div class="thumbnail">
-                                        <a href="blog-details.html">
+                                        <a href="~/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId">
                                             <img src="@service.Picture" alt="Blog Images">
                                         </a>
                                     </div>
                                     <div class="content">
-                                        <h6 class="title"><a href="blog-details.html">@service.SerCategoriesName</a></h6>
+                                        <h6 class="title"><a href="~/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId">@service.SerCategoriesName</a></h6>
                                     </div>
                                 </div>
                                 }
@@ -149,12 +149,12 @@
                                     @foreach (var product in Model.ListProductTop3)
                                     { <li>
                                         <div class="thumbnail">
-                                            <a href="blog-details.html">
+                                            <a href="/ProductList/Detail?proId=@product.ProductId">
                                                 <img src="@product.Picture" alt="Blog Images">
                                             </a>
                                         </div>
                                         <div class="content">
-                                            <h6 class="title"><a href="blog-details.html">@product.ProductName</a></h6>
+                                            <h6 class="title"><a href="/ProductList/Detail?proId=@product.ProductId">@product.ProductName</a></h6>
                                             <div class="product-meta-content">
                                                 <span class="woocommerce-Price-amount amount">@product.Price VNĐ</span>
                                                 <p class="price sold">Đã bán: @product.QuantitySold</p>

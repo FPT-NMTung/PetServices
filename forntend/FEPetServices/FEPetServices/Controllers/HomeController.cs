@@ -44,7 +44,7 @@ namespace FEPetServices.Controllers
             DefaultApiUrlServiceCategoryList = "https://pet-service-api.azurewebsites.net/api/ServiceCategory";
             DefaultApiUrlProductCategoryList = "https://pet-service-api.azurewebsites.net/api/ServiceCategory";
             DefaultApiUrlServiceCategoryDetail = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/ServiceCategorysID/";
-            DefaultApiUrlBlogList = "https://pet-service-api.azurewebsites.net/api/Blog";
+            DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
             DefaultApiUrlProductList = "https://pet-service-api.azurewebsites.net/api/Product";
             DefaultApiUrlRoomCategoryList = "https://pet-service-api.azurewebsites.net/api/Room";
             DefaultApiUrlBlogDetail = "https://pet-service-api.azurewebsites.net/api/Blog/BlogID/";

@@ -27,8 +27,10 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="row g-5">
-                                @foreach (var blog in Model.Blog)
-                                {
+                              
+                                 @foreach (var blog in Model.Blog)
+                                { 
+                                    @if(blog.Status){
                                     <div class="col-md-6">
                                         <div class="content-blog blog-grid">
                                             <div class="inner">
@@ -47,6 +49,8 @@
                                             </div>
                                         </div>
                                     </div>
+                                   
+                                }
                                 }
                         </div>
                         <div class="post-pagination">
@@ -70,7 +74,7 @@
                     </div>
                     <div class="col-lg-4">
                         
-                        <!-- Start Single Widget  -->
+                        <!-- bắt đầu Thanh tìm kiếm  -->
                             <div class="axil-single-widget mt--40 widget_search">
                                 <h6 class="widget-title">Tìm kiếm</h6>
                                 <form class="blog-search" method="get">
@@ -78,7 +82,7 @@
                                     <input type="text" name="BlogName" value="@ViewBag.BlogName" placeholder="Tìm kiếm">
                                 </form>
                             </div>
-                            <!-- End Single Widget  -->
+                         <!-- Kết thúc Thanh tìm kiếm -->
 
                             <!-- Start Sidebar Area  -->
                         <aside class="axil-sidebar-area">
@@ -122,12 +126,12 @@
                                     @foreach (var product in Model.ListProductTop3)
                                     { <li>
                                         <div class="thumbnail">
-                                            <a href="blog-details.html">
+                                            <a href="/ProductList/Detail?proId=@product.ProductId">
                                                 <img src="@product.Picture" alt="Blog Images">
                                             </a>
                                         </div>
                                         <div class="content">
-                                            <h6 class="title"><a href="blog-details.html">@product.ProductName</a></h6>
+                                            <h6 class="title"><a href="/ProductList/Detail?proId=@product.ProductId">@product.ProductName</a></h6>
                                             <div class="product-meta-content">
                                                 <span class="woocommerce-Price-amount amount">@product.Price VNĐ</span>
                                                 <p class="price sold">Đã bán: @product.QuantitySold</p>
