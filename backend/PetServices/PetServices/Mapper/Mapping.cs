@@ -15,6 +15,8 @@ namespace PetServices.Mapper
 
             CreateMap<PartnerInfo, PartnerInfoDTO>()
                 .ReverseMap();
+            CreateMap<PartnerInfo, PartnerLocationDTO>()
+                .ReverseMap();
 
             CreateMap<PetInfo, PetInfoDTO>()
                 .ReverseMap();
@@ -41,6 +43,9 @@ namespace PetServices.Mapper
 
             CreateMap<BookingRoomDetail, BookingRoomDetailDTO>()
                .ReverseMap();
+
+            CreateMap<BookingRoomService, BookingRoomServiceDTO>()
+              .ReverseMap();
 
             CreateMap<OrderType, OrderTypeDTO>()
                .ReverseMap();

@@ -2,11 +2,36 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PetServices.Models;
+using System.Net.Http.Headers;
+using FEPetServices.Areas.DTO;
+using FEPetServices.Form;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis;
+using Newtonsoft.Json;
+using PetServices.Models;
+using System.Drawing.Printing;
+using System.Linq;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 
 namespace FEPetServices.Controllers
 {
     public class CartController : Controller
     {
+        private readonly HttpClient client = null;
+        private string DefaultApiUrl = "";
+        private string DefaultApiUrlProductDetail = "";
+
+        public CartController()
+        {
+            client = new HttpClient();
+            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
+            DefaultApiUrl = "";
+            DefaultApiUrlProductDetail = "https://pet-service-api.azurewebsites.net/api/Product";
+        }
         public class CartItem
         {
             // Product
@@ -58,9 +83,28 @@ namespace FEPetServices.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateCart([FromForm] int productid, [FromForm] int quantity)
+        public async Task<IActionResult> UpdateCart([FromForm] int productid, [FromForm] int quantity)
         {
+            ProductDTO product = null;
             // Cập nhật Cart thay đổi số lượng quantity ...
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductDetail + "/" + productid);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                var option = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                product = System.Text.Json.JsonSerializer.Deserialize<ProductDTO>(responseContent, option);
+            }
+
+/*
+            if (product.Quantity < quantity)
+            {
+                ViewBag.ErrorToast = "Số lượng đặt hàng vượt quá số lượng sản phẩm còn lại";
+                return Error();
+            }*/
+
             var cart = GetCartItems();
             var cartitem = cart.Find(p => p.product.ProductId == productid);
             if (cartitem != null)
@@ -99,7 +143,6 @@ namespace FEPetServices.Controllers
                     SaveCartSession(cart);
                 }
             }
-
             return RedirectToAction("Index", "Cart");
         }
 

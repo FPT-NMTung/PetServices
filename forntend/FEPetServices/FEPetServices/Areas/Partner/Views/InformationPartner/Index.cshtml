@@ -18,13 +18,15 @@
                         <img style="max-height:600px;height:100%;max-width:380px;width:100%"
                              class="img-account-profile mb-2" src="@Model?.PartnerInfo.ImagePartner" alt="">
                         <!-- Profile picture help block-->
-                        <div class="small font-italic text-muted mb-4">JPG hoặc PNG không vượt quá 5 MB</div>                      
+                        <div class="small font-italic text-muted mb-4">JPG hoặc PNG không vượt quá 5 MB</div>
                     </div>
                 </div>
                 <div style="margin-top: 20px">
                     <button class="btn btn-primary" onclick="getLocation()">Lấy vị trí</button>
                 </div>
-                <div id="map" style="width: 100%; height: 400px;"></div>               
+                <div id="map" style="width: 100%; height: 400px;"></div>
+                <input type="hidden" name="Lat" id="inputLat" value="@Model?.PartnerInfo.Lat" />
+                <input type="hidden" name="Lng" id="inputLng" value="@Model?.PartnerInfo.Lng" />
             </div>
             <div class="col-xl-8">
                 <div class="card mb-4">
@@ -33,7 +35,7 @@
                         <form method="post" asp-controller="InformationPartner" asp-action="Index" enctype="multipart/form-data">
                             <div>
                                 <label for="image"></label>
-                                <input type="file" id="image" name="image" enctype="multipart/form-data">
+                                <input type="file" id="image" name="image" value="@Model?.PartnerInfo.ImagePartner" enctype="multipart/form-data">
                             </div>
 
                             <div class="row gx-3 mb-3">
@@ -89,8 +91,7 @@
                             <input type="hidden" name="Province" id="provinceNameInput" />
                             <input type="hidden" name="District" id="districtNameInput" />
                             <input type="hidden" name="Commune" id="wardsNameInput" />
-                            <input type="hidden" name="Lat" id="inputLat" />
-                            <input type="hidden" name="Lng" id="inputLng" />
+
 
                             <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
                             <a href="~/Partner/ChangePasswordPartner" class="btn btn-primary">
@@ -100,6 +101,13 @@
                     </div>
 
                     <script>
+                        window.addEventListener("load", function () {
+                            // Gọi action để lấy và hiển thị bản đồ với vị trí từ hàm Index của controller
+                            getLocation();
+                            showPartnerLocation(@Model?.PartnerInfo.Lat, @Model?.PartnerInfo.Lng);
+                            startWatchingLocation(); // gọi hàm theo dõi vị trí
+                        });
+
                         function getLocation() {
                             if (navigator.geolocation) {
                                 navigator.geolocation.getCurrentPosition(
@@ -113,6 +121,9 @@
                                         // Update hidden input fields with latitude and longitude
                                         document.getElementById("inputLat").value = latitude;
                                         document.getElementById("inputLng").value = longitude;
+
+                                        // Call the API to update the location in the database
+                                        updateLocation(latitude, longitude);
                                     },
                                     function (error) {
                                         showError(error);
@@ -120,6 +131,26 @@
                                 );
                             } else {
                                 alert("Trình duyệt của bạn không hỗ trợ Geolocation.");
+                            }
+                        }
+
+                        async function updateLocation(latitude, longitude) {
+                            try {
+                                const response = await fetch('/InformationPartner/UpdateLocation', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ lat: latitude, lng: longitude })
+                                });
+
+                                if (response.ok) {
+                                    console.log('Location updated successfully.');
+                                } else {
+                                    console.error('Failed to update location.');
+                                }
+                            } catch (error) {
+                                console.error('Error updating location:', error);
                             }
                         }
 
@@ -153,13 +184,35 @@
                                     break;
                             }
                         }
+
+                        // add mới, theo dõi vị trí khi di chuyển
+                        function startWatchingLocation() {
+                            if (navigator.geolocation) {
+                                navigator.geolocation.watchPosition(
+                                    function (position) {
+                                        var newLatitude = position.coords.latitude;
+                                        var newLongitude = position.coords.longitude;
+                                        initMap(newLatitude, newLongitude);
+
+                                        // Cập nhật giá trị của inputLat và inputLng
+                                        document.getElementById("inputLat").value = newLatitude;
+                                        document.getElementById("inputLng").value = newLongitude;
+                                    },
+                                    function (error) {
+                                        showError(error);
+                                    }
+                                );
+                            } else {
+                                alert("Trình duyệt của bạn không hỗ trợ Geolocation.");
+                            }
+                        }
                     </script>
                 </div>
             </div>
         </div>
     </div>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>   
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="~/js/takeAddress.js"></script>
 </body>
-<script src="~/js/takeAddress.js"></script>
 </html>
