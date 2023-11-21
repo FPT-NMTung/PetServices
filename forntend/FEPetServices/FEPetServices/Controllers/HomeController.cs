@@ -3,6 +3,7 @@ using FEPetServices.Form;
 using FEPetServices.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
@@ -436,7 +437,7 @@ namespace FEPetServices.Controllers
             return View(homeModel);
         }
 
-        public async Task<IActionResult> ServiceDetail(int serviceCategoryId, int serviceIds)
+        public async Task<IActionResult> ServiceDetail(int serviceCategoryId, int serviceIds, string sortby, int? page)
         {
             ServiceDetailModel model = new ServiceDetailModel();
             HttpResponseMessage response = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
@@ -463,13 +464,61 @@ namespace FEPetServices.Controllers
                 }
             }
 
+            HttpResponseMessage voteNumberResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetServiceVoteNumber?serviceID=" + serviceIds);
+
+            if (voteNumberResponse.IsSuccessStatusCode)
+            {
+                var voteNumber = await voteNumberResponse.Content.ReadFromJsonAsync<VoteNumberDTO>();
+
+                model.VoteNumberas = voteNumber;
+            }
+
             HttpResponseMessage feedbackResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetAllFeedbackInService?serviceID=" + serviceIds);
 
             if (feedbackResponse.IsSuccessStatusCode)
             {
                 var feedback = await feedbackResponse.Content.ReadFromJsonAsync<List<FeedbackDTO>>();
 
-                model.Feedback = feedback;
+                ViewBag.FeedbackCount = feedback?.Count();
+
+                switch (sortby)
+                {
+                    case "5star":
+                        feedback = feedback?.Where(f => f.NumberStart == 5).ToList();
+                        break;
+                    case "4star":
+                        feedback = feedback?.Where(f => f.NumberStart == 4).ToList();
+                        break;
+                    case "3star":
+                        feedback = feedback?.Where(f => f.NumberStart == 3).ToList();
+                        break;
+                    case "2star":
+                        feedback = feedback?.Where(f => f.NumberStart == 2).ToList();
+                        break;
+                    case "1star":
+                        feedback = feedback?.Where(f => f.NumberStart == 1).ToList();
+                        break;
+                    default:
+                        break;
+                }
+                ViewBag.sortby = sortby;
+
+                ViewBag.FeedbacksCount = feedback?.Count();
+                page = page ?? 1;
+
+                HttpResponseMessage paggingResponse = await client.GetAsync("https://localhost:7255/api/Feedback/PaginationInService?serviceID=" + serviceIds + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
+
+                ViewBag.CurrentPage = page;
+
+                if (paggingResponse.IsSuccessStatusCode)
+                {
+                    var feedbacks = await paggingResponse.Content.ReadFromJsonAsync<List<FeedbackDTO>>();
+                    model.Feedback = feedbacks;
+                }
+                else
+                {
+                    model.Feedback = feedback;
+                }
             }
 
             if (response.IsSuccessStatusCode)
@@ -537,6 +586,7 @@ namespace FEPetServices.Controllers
         public class ServiceDetailModel
         {
             public List<FeedbackDTO> Feedback { get; set; }
+            public VoteNumberDTO VoteNumberas { get; set; }
             public ServiceDTO Service { get; set; }
             public ServiceCategoryDTO ServiceCategory { get; set; }
             public ProductDTO Product { get; set; }
