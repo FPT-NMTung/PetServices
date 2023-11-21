@@ -14,6 +14,7 @@ namespace PetServices.DTO
         public string? Address { get; set; }
         public string? Descriptions { get; set; }
         public string? ImageUser { get; set; }
+        public DateTime? Dob { get; set; }
         public virtual ICollection<PetInfoDTO> PetInfos { get; set; }
         public virtual ICollection<OrdersDTO> Orders { get; set; }
     }
