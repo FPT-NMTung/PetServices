@@ -215,11 +215,11 @@
                                                 <input type="hidden" name="serviceIds" value="@Model.Service.ServiceId">
                                                 <select name="sortby" onchange="this.form.submit();">
                                                     <!option style="color: black" value="" @(ViewBag.sortby == null ? "selected" : "")>Tất cả</!option>
-                                                    <!option class="option" style="color: gold" value="5star" @(ViewBag.sortby == "5star" ? "selected" : "")>&#9733;&#9733;&#9733;&#9733;&#9733;&ensp; @Model.VoteNumberas.number5s</!option>
-                                                    <!option class="option" style="color: gold" value="4star" @(ViewBag.sortby == "4star" ? "selected" : "")>&#9733;&#9733;&#9733;&#9733;&#9734;&ensp; @Model.VoteNumberas.number4s</!option>
-                                                    <!option class="option" style="color: gold" value="3star" @(ViewBag.sortby == "3star" ? "selected" : "")>&#9733;&#9733;&#9733;&#9734;&#9734;&ensp; @Model.VoteNumberas.number3s</!option>
-                                                    <!option class="option" style="color: gold" value="2star" @(ViewBag.sortby == "2star" ? "selected" : "")>&#9733;&#9733;&#9734;&#9734;&#9734;&ensp; @Model.VoteNumberas.number2s</!option>
-                                                    <!option class="option" style="color: gold" value="1star" @(ViewBag.sortby == "1star" ? "selected" : "")>&#9733;&#9734;&#9734;&#9734;&#9734;&ensp; @Model.VoteNumberas.number1s</!option>
+                                                    <!option class="option" style="color: gold" value="5star" @(ViewBag.sortby == "5star" ? "selected" : "") @(Model.VoteNumberas.number5s == 0 ? "disabled" : "")>&#9733;&#9733;&#9733;&#9733;&#9733;&ensp; @Model.VoteNumberas.number5s</!option>
+                                                    <!option class="option" style="color: gold" value="4star" @(ViewBag.sortby == "4star" ? "selected" : "") @(Model.VoteNumberas.number4s == 0 ? "disabled" : "")>&#9733;&#9733;&#9733;&#9733;&#9734;&ensp; @Model.VoteNumberas.number4s</!option>
+                                                    <!option class="option" style="color: gold" value="3star" @(ViewBag.sortby == "3star" ? "selected" : "") @(Model.VoteNumberas.number3s == 0 ? "disabled" : "")>&#9733;&#9733;&#9733;&#9734;&#9734;&ensp; @Model.VoteNumberas.number3s</!option>
+                                                    <!option class="option" style="color: gold" value="2star" @(ViewBag.sortby == "2star" ? "selected" : "") @(Model.VoteNumberas.number2s == 0 ? "disabled" : "")>&#9733;&#9733;&#9734;&#9734;&#9734;&ensp; @Model.VoteNumberas.number2s</!option>
+                                                    <!option class="option" style="color: gold" value="1star" @(ViewBag.sortby == "1star" ? "selected" : "") @(Model.VoteNumberas.number1s == 0 ? "disabled" : "")>&#9733;&#9734;&#9734;&#9734;&#9734;&ensp; @Model.VoteNumberas.number1s</!option>
                                                 </select>
                                             </form>
                                         </div>
