@@ -21,7 +21,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
             DefaultApiUrlPet = "https://pet-service-api.azurewebsites.net/api/PetInfo";
-            DefaultApiUrlOrders = "https://pet-service-api.azurewebsites.net/api/Order";
+            DefaultApiUrlOrders = "https://localhost:7255/api/Order";
         }
         public IActionResult Index()
         {
@@ -216,34 +216,6 @@ namespace FEPetServices.Areas.Customer.Controllers
 
                 AccountInfo petInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
                 return View(petInfos);
-            }
-            else
-            {
-                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
-                return View();
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> MyOrders()
-        {
-            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
-            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
-            //https://pet-service-api.azurewebsites.net/api/Order/email/cus%40gmail.com
-
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlOrders + "/email/" + email);
-            if (response.IsSuccessStatusCode)
-            {
-                string responseContent = await response.Content.ReadAsStringAsync();
-
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                };
-
-                AccountInfo orders = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
-                return View(orders);
             }
             else
             {

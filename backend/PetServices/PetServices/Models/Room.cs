@@ -8,6 +8,7 @@ namespace PetServices.Models
         public Room()
         {
             BookingRoomDetails = new HashSet<BookingRoomDetail>();
+            BookingRoomServices = new HashSet<BookingRoomService>();
             Services = new HashSet<Service>();
         }
 
@@ -22,6 +23,7 @@ namespace PetServices.Models
 
         public virtual RoomCategory? RoomCategories { get; set; }
         public virtual ICollection<BookingRoomDetail> BookingRoomDetails { get; set; }
+        public virtual ICollection<BookingRoomService> BookingRoomServices { get; set; }
 
         public virtual ICollection<Service> Services { get; set; }
     }
