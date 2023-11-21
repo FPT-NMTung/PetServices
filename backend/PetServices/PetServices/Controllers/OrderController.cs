@@ -43,20 +43,82 @@ namespace PetServices.Controllers
         }
 
         [HttpGet("email/{email}")]
-        public IActionResult GetOrderUser(string email)
+        public IActionResult GetOrderUser(string email, string orderstatus, int page = 1, int pageSize = 5)
         {
             try
             {
-                Account orders = _context.Accounts
-                .Include(a => a.UserInfo)
-                .ThenInclude(u => u.Orders)
-                .FirstOrDefault(a => a.Email == email);
+                IQueryable<Order> query = _context.Orders
+                    .Include(o => o.UserInfo)
+                    .ThenInclude(u => u.Accounts)
+                    .Include(b => b.OrderProductDetails)
+                    .ThenInclude(o => o.Product)
+                    .Include(b => b.BookingServicesDetails)
+                    .ThenInclude(bs => bs.Service)
+                    .Include(b => b.BookingRoomDetails)
+                    .ThenInclude(br => br.Room)
+                    .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email));
 
-                return Ok(_mapper.Map<AccountInfo>(orders));
+                if (!string.IsNullOrEmpty(orderstatus) && orderstatus.ToLower() != "all")
+                {
+                    query = query.Where(o => o.OrderStatus == orderstatus);
+                }
+
+                query = query.OrderByDescending(o => o.OrderDate);
+
+                var paginatedOrders = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+                bool hasOrders = paginatedOrders.Any();
+
+                if (hasOrders)
+                {
+                    List<OrdersDTO> ordersDTOList = _mapper.Map<List<OrdersDTO>>(paginatedOrders);
+                    return Ok(ordersDTOList);
+                }
+                else
+                {
+                    return NotFound("No orders found with the specified status");
+                }
             }
             catch (Exception ex)
             {
-                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("orderstatus/{orderstatus}")]
+        public IActionResult CheckStatusOrder(string email, string orderstatus)
+        {
+            try
+            {
+                if (orderstatus != "All")
+                {
+                    List<Order> orders = _context.Orders
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) && o.OrderStatus == orderstatus)
+                                         .ToList();
+
+                    if (orders.Count == 0)
+                    {
+                        return NotFound("No orders found with the specified status");
+                    }
+                    else
+                    {
+                        return Ok();
+                    }
+                }
+                else
+                {
+                    List<Order> orders = _context.Orders
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email))
+                                         .ToList();
+                    if (orders.Count == 0)
+                    {
+                        return NotFound("No orders found with the specified status");
+                    }
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
                 return StatusCode(500, ex.Message);
             }
         }
@@ -305,9 +367,19 @@ namespace PetServices.Controllers
                     {
                         RoomId = dto.RoomId,
                         Price = priceRoom,
-
+                        StartDate = dto.StartDate,
+                        EndDate = dto.EndDate,
                     }).ToList()
                     : new List<BookingRoomDetail>(),
+
+                BookingRoomServices = orderDTO.BookingRoomServices != null 
+                    ? orderDTO.BookingRoomServices.Select(dto => new BookingRoomService
+                    {
+                        RoomId = dto.RoomId,
+                        ServiceId = dto.ServiceId,
+                        PriceService = dto.PriceService,
+                    }).ToList()
+                    : new List<BookingRoomService>(),
 
                 // Dịch vụ
                 BookingServicesDetails = orderDTO.BookingServicesDetails != null

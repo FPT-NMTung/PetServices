@@ -1,0 +1,230 @@
+﻿.rating:not(:checked) > input {
+    position: absolute;
+    appearance: none;
+}
+
+.rating:not(:checked) > label {
+    float: right;
+    cursor: pointer;
+    font-size: 27px;
+    color: #666;
+}
+
+    .rating:not(:checked) > label:before {
+        content: '★';
+    }
+
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+    color: #e58e09;
+}
+
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+    color: #ff9e0b;
+}
+
+.rating > input:checked ~ label {
+    color: #ffa723;
+}
+
+.form-submit button {
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+.form-submit .back:hover {
+    color: white;
+    background-color: grey;
+}
+
+.form-submit .done {
+    color: white;
+    background-color: rgb(72, 102, 255);
+}
+
+    .form-submit .done:hover {
+        color: rgb(72, 102, 255);
+        background-color: rgb(188, 199, 255);
+    }
+
+    .rate-all{
+        display: flex;
+    }
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999999;
+}
+
+/* Style for the popup container */
+.popup-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px;
+    height: 450px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    z-index: 99999999; /* Ensure the popup is above the overlay */
+}
+
+/* Style for the close button */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.popup .popup-container {
+    max-width: 700px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+    .popup .popup-container .comment-respond .vote-star p {
+        font-size: 15px;
+        padding-top: 10px;
+    }
+
+    .popup .popup-container .comment-respond .vote-star {
+        padding-bottom: 20px;
+        display: flex;
+    }
+
+        .popup .popup-container .comment-respond .vote-star .rating {
+            padding-left: 50px;
+        }
+
+    .popup .popup-container .comment-respond .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .popup .popup-container .comment-respond .form-group label {
+            color: rgb(139, 139, 139);
+            font-size: 15px;
+            position: absolute;
+            left: 38px;
+            pointer-events: none;
+            z-index: 4;
+            background: #fff;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-top: -10px;
+        }
+
+        .popup .popup-container .comment-respond .form-group textarea {
+            border-radius: 5px;
+            border: 1px solid rgb(139, 139, 139);
+            font-size: 14px;
+            padding: 20px;
+            resize: none;
+        }
+
+    .popup .popup-container .comment-respond .form-submit {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+
+        .popup .popup-container .comment-respond .form-submit .back {
+            margin-right: 20px;
+        }
+
+.popup .information{
+    display: flex;
+}
+    .popup .information p {
+        margin-left: 10px;
+        font-size: 16px;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .popup-container {
+        width: 80%;
+    }
+
+    .rating:not(:checked) > label {
+        float: right;
+        cursor: pointer;
+        font-size: 25px;
+        color: #666;
+    }
+}
+
+@media only screen and (max-width: 508px){
+    .popup .popup-container .comment-respond .vote-star {
+        flex-wrap: wrap;
+    }
+
+    .popup-container{
+        height: 480px;
+    }
+
+    .rating:not(:checked) > label {
+        float: right;
+        cursor: pointer;
+        font-size: 23px;
+        color: #666;
+    }
+}
+
+.svg {
+    fill: rgb(242, 242, 242);
+    height: 2rem;
+    width: 2rem;
+    margin: 0.2rem;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.super-happy, [type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.lb-super-happy {
+    color: rgb(0, 204, 79);
+}
+
+.lb-neutral {
+    color: rgb(232, 214, 0);
+}
+
+.lb-super-sad {
+    color: rgb(239, 42, 16);
+}
+
+.super-happy[class="super-happy"] + svg,
+.super-happy[class="super-happy"] + svg {
+    fill: rgb(0, 204, 79);
+}
+
+.neutral[class="neutral"] + svg,
+.neutral[class="neutral"] + svg {
+    fill: rgb(232, 214, 0);
+}
+
+.super-sad[class="super-sad"] + svg,
+.super-sad[class="super-sad"] + svg {
+    fill: rgb(239, 42, 16);
+}
+
+
+

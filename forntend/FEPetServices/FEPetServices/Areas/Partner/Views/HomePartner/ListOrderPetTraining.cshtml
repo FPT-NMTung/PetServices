@@ -71,6 +71,9 @@
                 buttons_received.click(function () {
                     var orderId = $(this).data('orderid');
                     let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusReceived?orderId=' + orderId;
+                    //var orderId = $(this).data('orderid');  
+                    //let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusReceived?orderId=' + orderId;
+                    let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusReceived?orderId=2';
                     fetch(url).then(response => {
                         if (response.status == 200) {
                             console.log("Nhận đơn thành công!");

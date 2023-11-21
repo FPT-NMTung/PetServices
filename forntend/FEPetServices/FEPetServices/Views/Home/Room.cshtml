@@ -101,7 +101,7 @@
                             <div class="toggle-list product-price-range active">
                                 <h6 class="title">Thời gian thuê</h6>
                                 <div class="shop-submenu">
-                                    <form method="get">
+                                    <form id="form-date" method="get">
                                         @{
                                             if (!string.IsNullOrEmpty(ViewBag.sortby))
                                             {
@@ -260,6 +260,8 @@
         var roomname = "@(ViewBag.roomname)";
         var pricefrom = "@(ViewBag.pricefrom)";
         var priceto = "@(ViewBag.priceto)";
+        var startdate = "@(ViewBag.startdate)";
+        var enddate = "@(ViewBag.enddate)";
 
         document.addEventListener("DOMContentLoaded", function () {
             var priceElements = document.querySelectorAll('.current-price');
@@ -269,6 +271,22 @@
                 var formattedPrice = price.toLocaleString('vi-VN');
                 priceElement.textContent = formattedPrice + ' VNĐ/giờ';
 
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var submitButton = document.querySelector('.checkout-btn');
+
+            submitButton.addEventListener('click', function (event) {
+                var startDateValue = document.getElementById('start-datetime').value;
+
+                if (!startDateValue) {
+                    event.preventDefault();
+
+                    alert('Vui lòng chọn ngày bắt đầu trước khi tìm kiếm!');
+                }
             });
         });
     </script>
@@ -334,6 +352,7 @@
         });
 
         let endPicker = flatpickr(endDateTime, {
+            minDate: startPicker.selectedDates[0] || "today",
             enableTime: true,
             time_24hr: true,
             minTime: new Date().getHours() + 1 + ":00", // Giờ hiện tại + 1 giờ
