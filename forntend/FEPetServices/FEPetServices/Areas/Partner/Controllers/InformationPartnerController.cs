@@ -179,7 +179,7 @@ namespace FEPetServices.Areas.Partner.Controllers
 
                 // Update the location in the database
                 var updateLocationModel = new PartnerLocationDTO { Lat = locationUpdate.Lat.ToString(), Lng = locationUpdate.Lng.ToString() };
-                HttpResponseMessage response = await _client.PutAsJsonAsync($"https://localhost:7255/api/Partner/UpdateLocation?email={email}", updateLocationModel);
+                HttpResponseMessage response = await _client.PutAsJsonAsync($"https://pet-service-api.azurewebsites.net/api/Partner/UpdateLocation?email={email}", updateLocationModel);
 
                 if (response.IsSuccessStatusCode)
                 {
