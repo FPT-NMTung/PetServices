@@ -208,7 +208,8 @@
                                 <div class="axil-comment-area pro-desc-commnet-area">
                                         @if (Model.Feedback != null && Model.Feedback.Count > 0)
                                         {
-                                        <h5 class="title">Có @Model.Feedback.Count đánh giá cho phòng này</h5>
+                                        <h5 class="title">Có @Model.Feedback.Count đánh giá cho dịch vụ này</h5>
+                                        
                                         <ul class="comment-list">
                                                 @foreach (var feedback in Model.Feedback)
                                                 {
@@ -252,7 +253,7 @@
                                         }
                                         else
                                         {
-                                        <h5 class="title">Hiện chưa có đánh giá cho căn phòng này.</h5>
+                                        <h5 class="title">Hiện chưa có đánh giá cho dịch vụ này.</h5>
                                         }
                                 </div>
                             </div>

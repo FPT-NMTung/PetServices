@@ -6,8 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
+using PetServices.DTO;
 using PetServices.Models;
 using System.Diagnostics;
+using System.Drawing.Printing;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -156,7 +159,7 @@ namespace FEPetServices.Controllers
             return View();
         }
 
-        public async Task<ActionResult> RoomDetail(int roomId)
+        public async Task<ActionResult> RoomDetail(int roomId, string sortby, int? page)
         {
             var viewModel = new HomeModel();
 
@@ -177,7 +180,48 @@ namespace FEPetServices.Controllers
                 {
                     var feedback = await feedbackResponse.Content.ReadFromJsonAsync<List<FeedbackDTO>>();
 
-                    viewModel.Feedback = feedback;
+                    ViewBag.FeedbackCount = feedback?.Count();
+
+                    switch (sortby)
+                    {
+                        case "5star":
+                            feedback = feedback?.Where(f => f.NumberStart == 5).ToList();
+                            break;
+                        case "4star":
+                            feedback = feedback?.Where(f => f.NumberStart == 4).ToList();
+                            break;
+                        case "3star":
+                            feedback = feedback?.Where(f => f.NumberStart == 3).ToList();
+                            break;
+                        case "2star":
+                            feedback = feedback?.Where(f => f.NumberStart == 2).ToList();
+                            break;
+                        case "1star":
+                            feedback = feedback?.Where(f => f.NumberStart == 1).ToList();
+                            break;
+                        default:
+                            break;
+                    }
+                    ViewBag.sortby = sortby;
+
+                    ViewBag.FeedbacksCount = feedback?.Count();
+
+                    page = page ?? 1;
+
+                    HttpResponseMessage paggingResponse = await client.GetAsync("https://localhost:7255/api/Feedback/PaginationInRoom?roomID=" + roomId + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
+                    
+                    ViewBag.CurrentPage = page;
+
+                    if (paggingResponse.IsSuccessStatusCode)
+                    {
+                        var feedbacks = await paggingResponse.Content.ReadFromJsonAsync<List<FeedbackDTO>>();
+                        viewModel.Feedback = feedbacks;
+
+                    }
+                    else
+                    {
+                        viewModel.Feedback = feedback;
+                    }
                 }
 
                 HttpResponseMessage serviceUnavailableResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/GetServiceOutRoom?roomId=" + roomId);
@@ -187,6 +231,15 @@ namespace FEPetServices.Controllers
                     var services = await serviceUnavailableResponse.Content.ReadFromJsonAsync<List<ServiceDTO>>();
 
                     ViewBag.ServiceUnavailable = services;
+                }
+
+                HttpResponseMessage voteNumberResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetRoomVoteNumber?roomID=" + roomId);
+
+                if (voteNumberResponse.IsSuccessStatusCode)
+                {
+                    var voteNumber = await voteNumberResponse.Content.ReadFromJsonAsync<VoteNumberDTO>();
+
+                    viewModel.VoteNumberas = voteNumber;
                 }
 
                 HttpResponseMessage roomStarResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetRoomStar?roomID=" + roomId);
@@ -304,6 +357,7 @@ namespace FEPetServices.Controllers
         public class HomeModel
         {
             public List<FeedbackDTO> Feedback { get; set; }
+            public VoteNumberDTO VoteNumberas { get; set; }
             public RoomDTO Room { get; set; }
             public List<ServiceCategoryDTO> ListServiceCategory { get; set; }
             public List<ProductDTO> ListProductTop8 { get; set; }
