@@ -22,6 +22,7 @@ namespace PetServices.Models
         public string? Address { get; set; }
         public string? Descriptions { get; set; }
         public string? ImageUser { get; set; }
+        public DateTime? Dob { get; set; }
 
         public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
