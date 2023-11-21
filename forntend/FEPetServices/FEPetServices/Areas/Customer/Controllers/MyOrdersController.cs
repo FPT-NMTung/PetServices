@@ -47,6 +47,10 @@ namespace FEPetServices.Areas.Customer.Controllers
             }
         }
 
-
+        [HttpGet]
+        public async Task<IActionResult> DeliveryOrder(string orderStatus)
+        {
+            return View();
+        }
     }
 }

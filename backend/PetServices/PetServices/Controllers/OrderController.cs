@@ -56,13 +56,14 @@ namespace PetServices.Controllers
                     .ThenInclude(bs => bs.Service)
                     .Include(b => b.BookingRoomDetails)
                     .ThenInclude(br => br.Room)
-                    .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email));
+                    .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email))
+                    ;
 
                 if (!string.IsNullOrEmpty(orderstatus) && orderstatus.ToLower() != "all")
                 {
                     query = query.Where(o => o.OrderStatus == orderstatus);
                 }
-
+                query = query.OrderByDescending(o => o.OrderDate);
                 List<Order> orders = query.ToList();
 
                 bool hasOrders = orders.Any();
@@ -70,7 +71,6 @@ namespace PetServices.Controllers
                 if (hasOrders)
                 {
                     List<OrdersDTO> ordersDTOList = _mapper.Map<List<OrdersDTO>>(orders);
-
                     return Ok(ordersDTOList);
                 }
                 else

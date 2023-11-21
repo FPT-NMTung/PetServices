@@ -12,10 +12,10 @@
         <div class="card-header alert-primary">
             <ul class="nav nav-pills" id="pills-tab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-selected="true">Tất cả</a>
+                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="~/Customer/MyOrders/Index" role="tab" aria-selected="true">Tất cả</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-education-tab" data-toggle="pill" href="#pills-education" role="tab" aria-selected="false">Chờ thanh toán</a>
+                    <a class="nav-link" id="pills-education-tab" data-toggle="pill" href="#pills-education" role="tab" aria-selected="false">Đơn hàng chờ xử lý</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="pills-timeline-tab" data-toggle="pill" href="#pills-timeline" role="tab" aria-selected="false">Vận chuyển</a>
@@ -40,9 +40,24 @@
                         {
                             double totalPrice = 0;
                             <div class="work-container">
-                                <div class="work-container-inner">
+                                <div class="work-container-inner">  
                                     <h5>Order ID : @order.OrderId</h5>
-                                    <span class="badge badge-info"> @order.OrderStatus</span>
+                                    @if (@order.OrderStatus.Trim() == "Delivery")
+                                    {
+                                        <span class="badge badge-info">Đang giao</span>
+                                    }
+                                    else if (@order.OrderStatus.Trim() == "Reject")
+                                    {
+                                        <span class="badge badge-info">Đơn hàng bị huỷ</span>
+                                    }
+                                    else if (@order.OrderStatus.Trim() == "Waiting")
+                                    {
+                                        <span class="badge badge-info">Đơn hàng đang chờ xử lý</span>
+                                    }
+                                    else if (@order.OrderStatus.Trim() == "Received")
+                                    {
+                                        <span class="badge badge-info">Hoàn thành</span>
+                                    }
                                 </div>
                                 <p><i class="far fa-calendar-alt"></i> @order.OrderDate</p>
 
