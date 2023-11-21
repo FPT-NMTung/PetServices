@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
+using PetServices.DTO;
 using PetServices.Models;
 using System.Drawing.Printing;
 using System.Linq;
@@ -98,7 +99,7 @@ namespace FEPetServices.Controllers
                                 break;
                         }
                         int page = searchDTO.page ?? 1; ;
-                        int pagesize = searchDTO.pagesize ?? 6;
+                        int pagesize = searchDTO.pagesize ?? 9;
 
                         int totalItems = productList.Count;
                         int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
@@ -135,7 +136,7 @@ namespace FEPetServices.Controllers
         }
 
         
-        public async Task<IActionResult> Detail(int proId)
+        public async Task<IActionResult> Detail(int proId, string sortby, int? page)
         {
             ProductDetailModel model = new ProductDetailModel();
             try
@@ -172,6 +173,78 @@ namespace FEPetServices.Controllers
                             model.CateProduct = product;
                         }
                     }
+
+                    HttpResponseMessage voteNumberResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetProductVoteNumber?productID=" + proId);
+
+                    if (voteNumberResponse.IsSuccessStatusCode)
+                    {
+                        var voteNumber = await voteNumberResponse.Content.ReadFromJsonAsync<VoteNumberDTO>();
+
+                        model.VoteNumberas = voteNumber;
+                    }
+
+                    HttpResponseMessage productStarResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetProductStar?productID=" + proId);
+
+                    if (productStarResponse.IsSuccessStatusCode)
+                    {
+                        var content = await productStarResponse.Content.ReadAsStringAsync();
+
+                        if (int.TryParse(content, out int productStar))
+                        {
+                            ViewBag.productStar = productStar;
+                        }
+                    }
+
+                    HttpResponseMessage feedbackResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetAllFeedbackInProduct?productID=" + proId);
+
+                    if (feedbackResponse.IsSuccessStatusCode)
+                    {
+                        var feedback = await feedbackResponse.Content.ReadFromJsonAsync<List<FeedbackDTO>>();
+
+                        ViewBag.FeedbackCount = feedback?.Count();
+
+                        switch (sortby)
+                        {
+                            case "5star":
+                                feedback = feedback?.Where(f => f.NumberStart == 5).ToList();
+                                break;
+                            case "4star":
+                                feedback = feedback?.Where(f => f.NumberStart == 4).ToList();
+                                break;
+                            case "3star":
+                                feedback = feedback?.Where(f => f.NumberStart == 3).ToList();
+                                break;
+                            case "2star":
+                                feedback = feedback?.Where(f => f.NumberStart == 2).ToList();
+                                break;
+                            case "1star":
+                                feedback = feedback?.Where(f => f.NumberStart == 1).ToList();
+                                break;
+                            default:
+                                break;
+                        }
+                        ViewBag.sortby = sortby;
+
+                        ViewBag.FeedbacksCount = feedback?.Count();
+
+                        page = page ?? 1;
+
+                        HttpResponseMessage paggingResponse = await client.GetAsync("https://localhost:7255/api/Feedback/PaginationInProduct?productID=" + proId + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
+
+                        ViewBag.CurrentPage = page;
+
+                        if (paggingResponse.IsSuccessStatusCode)
+                        {
+                            var feedbacks = await paggingResponse.Content.ReadFromJsonAsync<List<FeedbackDTO>>();
+                            model.Feedback = feedbacks;
+                        }
+                        else
+                        {
+                            model.Feedback = feedback;
+                        }
+
+                    }
+
                     return View(model);
                 }
                 else
@@ -187,6 +260,8 @@ namespace FEPetServices.Controllers
         }
         public class ProductDetailModel
         {
+            public List<FeedbackDTO> Feedback { get; set; }
+            public VoteNumberDTO VoteNumberas { get; set; }
             public ProductDTO Product { get; set; }
             public List<ProductDTO> products { get; set; }
             public List<ProductDTO> CateProduct { get; set; }

@@ -204,13 +204,13 @@
                                                     <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
                                                 }
                                                 if (!string.IsNullOrEmpty(ViewBag.startdate))
-                                            {
-                                                <input type="hidden" name="startdate" value="@ViewBag.startdate">
-                                            }
-                                            if (!string.IsNullOrEmpty(ViewBag.enddate))
-                                            {
-                                                <input type="hidden" name="enddate" value="@ViewBag.enddate">
-                                            }
+                                                {
+                                                    <input type="hidden" name="startdate" value="@ViewBag.startdate">
+                                                }
+                                                if (!string.IsNullOrEmpty(ViewBag.enddate))
+                                                {
+                                                    <input type="hidden" name="enddate" value="@ViewBag.enddate">
+                                                }
                                                 <select id="sortby" name="sortby" class="single-select" onchange="this.form.submit();">
                                                     <!option value="name_asc" @(ViewBag.sortby == "name_asc" ? "selected" : "")>Tên từ A-Z</!option>
                                                     <!option value="name_desc" @(ViewBag.sortby == "name_desc" ? "selected" : "")>Tên từ Z-A</!option>
