@@ -1,4 +1,4 @@
-﻿<link rel="stylesheet" href="/css/Blog/AddBlog.css"></link>
+﻿<link rel="stylesheet" href="/css/Blog/EditBlog.css"></link>
 
 <head>
     <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
@@ -37,7 +37,7 @@
         </div>
         <div class="form-group">
           <label for="PublisheDate">Ngày đăng:</label>
-          <input type="datetime" class="form-control" name="PublisheDate" value="@Model.PublisheDate" />
+          <input type="date" class="form-control" name="PublisheDate" value="@Model.PublisheDate" />
 
         </div>
         <div class="form-group">
@@ -49,6 +49,17 @@
         <div class="form-group">
             <label>Nội dung:</label>
           <textarea class="form-control" id="tiny"  rows="20" cols="50" name="Content">@Model?.Content</textarea>
+        </div>
+        <div class="raw">
+            <div class="col-25">
+                <label for="Status">Trạng thái:</label>
+            </div>
+            <div class="col-75">
+                <label class="switch">
+                    <input type="checkbox" name="Status" @(Model?.Status ? "checked" : "")>
+                    <span class="slider round"></span>
+                </label>
+            </div>
         </div>
         <div class="form-group">
             <div class="row">

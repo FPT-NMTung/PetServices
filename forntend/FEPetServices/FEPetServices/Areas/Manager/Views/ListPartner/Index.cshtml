@@ -43,6 +43,10 @@
 
                             description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
                         }
+                        else
+                        {
+                          @Model.PartnerInfo.Descriptions;  
+                        }
                         <tr>
                             <td>@itemCount</td>
                             <td>@listAccounts.PartnerInfo.FirstName  @listAccounts.PartnerInfo.LastName</td>
