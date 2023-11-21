@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/assets/css/vendor/magnific-popup.css">
     <link rel="stylesheet" href="/assets/css/vendor/base.css">
     <link rel="stylesheet" href="/assets/css/style.min.css">
-    <link rel="stylesheet" href="/css/ProductDetail.css"></link>
+    <link rel="stylesheet" href="/css/ProductDetail.css">
 
 </head>
 
@@ -73,7 +73,7 @@
                                             }
                                         </div>
                                         <div class="review-link">
-                                            <a href="#">(<span>@Model.Feedback.Count</span> đánh giá của khách hàng)</a>
+                                            <a href="#">(<span>@ViewBag.FeedbackCount</span> đánh giá của khách hàng)</a>
                                         </div>
                                     </div>
                                     <ul class="product-meta">
@@ -159,7 +159,20 @@
                                 <div class="axil-comment-area pro-desc-commnet-area">
                                     @if (Model.Feedback != null && Model.Feedback.Count > 0)
                                     {
-                                        <h5 class="title">Có @Model.Feedback.Count đánh giá cho sản phẩm này</h5>
+                                        <div class="feedback-title-sort">
+                                            <h5 class="title">Có @ViewBag.FeedbacksCount đánh giá cho sản phẩm này</h5>
+                                            <form method="get">
+                                                <input type="hidden" name="proId" value="@Model.Product.ProductId">
+                                                <select name="sortby" onchange="this.form.submit();">
+                                                    <!option style="color: black" value="" @(ViewBag.sortby == null ? "selected" : "")>Tất cả</!option>
+                                                    <!option class="option" style="color: gold" value="5star" @(ViewBag.sortby == "5star" ? "selected" : "")>&#9733;&#9733;&#9733;&#9733;&#9733;&ensp; @Model.VoteNumberas.number5s</!option>
+                                                    <!option class="option" style="color: gold" value="4star" @(ViewBag.sortby == "4star" ? "selected" : "")>&#9733;&#9733;&#9733;&#9733;&#9734;&ensp; @Model.VoteNumberas.number4s</!option>
+                                                    <!option class="option" style="color: gold" value="3star" @(ViewBag.sortby == "3star" ? "selected" : "")>&#9733;&#9733;&#9733;&#9734;&#9734;&ensp; @Model.VoteNumberas.number3s</!option>
+                                                    <!option class="option" style="color: gold" value="2star" @(ViewBag.sortby == "2star" ? "selected" : "")>&#9733;&#9733;&#9734;&#9734;&#9734;&ensp; @Model.VoteNumberas.number2s</!option>
+                                                    <!option class="option" style="color: gold" value="1star" @(ViewBag.sortby == "1star" ? "selected" : "")>&#9733;&#9734;&#9734;&#9734;&#9734;&ensp; @Model.VoteNumberas.number1s</!option>
+                                                </select>
+                                            </form>
+                                        </div>
                                         <ul class="comment-list">
                                             @foreach (var feedback in Model.Feedback)
                                             {
@@ -199,6 +212,25 @@
                                                 </li>
                                             }
                                         </ul>
+                                        <div style="text-align: center">
+                                            <div class="pagination">
+                                                @{
+                                                    int pagenumber = ((@ViewBag.FeedbacksCount - 1) / 5) + 1;
+                                                    @if (ViewBag.CurrentPage > 1)
+                                                    {
+                                                        <a href="@Url.Action("Detail", new { proId = Model.Product.ProductId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
+                                                    }
+                                                    @for (int i = 1; i <= pagenumber; i++)
+                                                    {
+                                                        <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("Detail", new { proId = Model.Product.ProductId, sortby = ViewBag.sortby, page = i })">@i</a>
+                                                    }
+                                                    @if (ViewBag.CurrentPage < pagenumber)
+                                                    {
+                                                        <a href="@Url.Action("Detail", new { proId = Model.Product.ProductId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
                                     }
                                     else
                                     {
