@@ -85,6 +85,44 @@ namespace PetServices.Controllers
             }
         }
 
+        [HttpGet("orderstatus/{orderstatus}")]
+        public IActionResult CheckStatusOrder(string email, string orderstatus)
+        {
+            try
+            {
+                if (orderstatus != "All")
+                {
+                    List<Order> orders = _context.Orders
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) && o.OrderStatus == orderstatus)
+                                         .ToList();
+
+                    if (orders.Count == 0)
+                    {
+                        return NotFound("No orders found with the specified status");
+                    }
+                    else
+                    {
+                        return Ok();
+                    }
+                }
+                else
+                {
+                    List<Order> orders = _context.Orders
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email))
+                                         .ToList();
+                    if (orders.Count == 0)
+                    {
+                        return NotFound("No orders found with the specified status");
+                    }
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetOrder(int Id)
         {

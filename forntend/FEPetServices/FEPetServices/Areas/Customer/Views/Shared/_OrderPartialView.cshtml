@@ -1,6 +1,7 @@
 ﻿@using FEPetServices.Form.OrdersForm;
 @model List<OrderForm>
 
+<link href="~/css/orders/stylesheet.css" rel="stylesheet" />
 @foreach (var order in Model)
 {
     RenderOrder(order);
@@ -14,7 +15,22 @@
         <div class="work-container">
             <div class="work-container-inner">
                 <h5>Order ID : @order.OrderId</h5>
-                 @order.OrderStatus.Trim()
+                @if (@order.OrderStatus.Trim() == "Delivery")
+                {
+                    <span class="badge badge-info">Đang giao</span>
+                }
+                else if (@order.OrderStatus.Trim() == "Reject")
+                {
+                    <span class="badge badge-info">Đơn hàng bị huỷ</span>
+                }
+                else if (@order.OrderStatus.Trim() == "Waiting")
+                {
+                    <span class="badge badge-info">Đơn hàng đang chờ xử lý</span>
+                }
+                else if (@order.OrderStatus.Trim() == "Received")
+                {
+                    <span class="badge badge-info">Hoàn thành</span>
+                }
             </div>
             <p><i class="far fa-calendar-alt"></i> @order.OrderDate</p>
 

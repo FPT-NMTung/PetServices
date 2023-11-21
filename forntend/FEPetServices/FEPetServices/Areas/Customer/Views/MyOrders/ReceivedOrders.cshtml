@@ -25,7 +25,7 @@
                 <a class="nav-link" id="pills-document-tab" data-toggle="pill" href="~/Customer/MyOrders/Index?orderStatus=All&page=1&pageSize=5" role="tab" aria-selected="false">Chờ giao hàng</a>
                 </li>*@
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-event-tab" data-toggle="pill" href="~/Customer/MyOrders/ReceivedOrders?orderStatus=Received&page=1&pageSize=5" role="tab" aria-selected="false">Hoàn thành</a>
+                    <a class="nav-link active" id="pills-event-tab" data-toggle="pill" href="~/Customer/MyOrders/ReceivedOrders?orderStatus=Received&page=1&pageSize=5" role="tab" aria-selected="false">Hoàn thành</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrders/RejectOrders?orderStatus=Reject&page=1&pageSize=5" role="tab" aria-selected="false">Đã huỷ</a>
@@ -123,9 +123,9 @@
                     }
                     else
                     {
-                            <div class="work-container" style="width:100%">
-                             <p style="text-align:center">Chưa có đơn hàng</p>    
-                            </div>
+                        <div class="work-container" style="width:100%">
+                         <p style="text-align:center">Chưa có đơn hàng</p>    
+                        </div>
                     }
                 </div>
             </div>
@@ -144,9 +144,9 @@
                 loading = true;
 
                 $.ajax({
-                    url: '/Customer/MyOrders/DeliveryOrders',
+                    url: '/Customer/MyOrders/ReceivedOrders',
                     type: 'GET',
-                    data: { orderStatus: 'Delivery', page: pageIndex + 1, pageSize: 5 }, 
+                    data: { orderStatus: 'Received', page: pageIndex + 1, pageSize: 5 }, 
                     success: function (data) {
                         if (data.trim() !== '') {
                             $('#orders-container').append(data);

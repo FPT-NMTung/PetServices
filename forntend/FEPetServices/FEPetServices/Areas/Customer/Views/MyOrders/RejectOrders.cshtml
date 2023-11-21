@@ -13,29 +13,29 @@
         <div class="card-header alert-primary">
             <ul class="nav nav-pills" id="pills-tab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="~/Customer/MyOrders/Index" role="tab" aria-selected="true">Tất cả</a>
+                    <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="~/Customer/MyOrders/AllOrders?orderStatus=All&page=1&pageSize=5" role="tab" aria-selected="true">Tất cả</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-education-tab" data-toggle="pill" href="#pills-education" role="tab" aria-selected="false">Đơn hàng chờ xử lý</a>
+                    <a class="nav-link" id="pills-education-tab" data-toggle="pill" href="~/Customer/MyOrders/WaitingOrders?orderStatus=Waiting&page=1&pageSize=5" role="tab" aria-selected="false">Đơn hàng chờ xử lý</a>
+                </li>
+                @*<li class="nav-item">
+                <a class="nav-link active" id="pills-timeline-tab" data-toggle="pill" href="~/Customer/MyOrders/DeliveryOrders?orderStatus=Delivery&page=1&pageSize=5" role="tab" aria-selected="false">Vận chuyển</a>
+                </li>*@
+                @* <li class="nav-item">
+                <a class="nav-link" id="pills-document-tab" data-toggle="pill" href="~/Customer/MyOrders/Index?orderStatus=All&page=1&pageSize=5" role="tab" aria-selected="false">Chờ giao hàng</a>
+                </li>*@
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-event-tab" data-toggle="pill" href="~/Customer/MyOrders/ReceivedOrders?orderStatus=Received&page=1&pageSize=5" role="tab" aria-selected="false">Hoàn thành</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-timeline-tab" data-toggle="pill" href="#pills-timeline" role="tab" aria-selected="false">Vận chuyển</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="pills-document-tab" data-toggle="pill" href="#" role="tab" aria-selected="false">Chờ giao hàng</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="pills-event-tab" data-toggle="pill" href="#" role="tab" aria-selected="false">Hoàn thành</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="#" role="tab" aria-selected="false">Đã huỷ</a>
+                    <a class="nav-link active" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrders/RejectOrders?orderStatus=Reject&page=1&pageSize=5" role="tab" aria-selected="false">Đã huỷ</a>
                 </li>
             </ul>
         </div>
         <div class="card-body">
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">    
-                    @if (Model != null && Model.Count > 0)
+                    @if ((Model != null && Model.Count > 0) || (ViewBag.NotFound != null && ViewBag.NotFound != "Error404"))
                     {
                         <div id="orders-container">
                             @if (Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
@@ -131,26 +131,31 @@
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    @*Start Lazy Loading*@
     <script>
         var pageIndex = 1;
         var loading = false;
+        var lazyLoadingEnabled = true; 
 
         function loadMore() {
-            if (!loading) {
+            if (!loading && lazyLoadingEnabled) {
                 loading = true;
 
-                // Make an AJAX request to get more orders
                 $.ajax({
-                    url: '/Customer/MyOrders/Index', // Adjust the URL based on your route
+                    url: '/Customer/MyOrders/RejectOrders',
                     type: 'GET',
-                    data: { orderStatus: 'All', page: pageIndex + 1, pageSize: 5 }, // Adjust parameters as needed
+                    data: { orderStatus: 'Reject', page: pageIndex + 1, pageSize: 5 }, 
                     success: function (data) {
                         if (data.trim() !== '') {
                             $('#orders-container').append(data);
                             pageIndex++;
                         }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        lazyLoadingEnabled = false;
+                        console.error('AJAX error:', textStatus, errorThrown);
                     },
                     complete: function () {
                         loading = false;
@@ -159,12 +164,12 @@
             }
         }
 
-        // Attach an event listener to trigger loadMore when the user scrolls to the bottom
         $(window).scroll(function () {
-            if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+            if (lazyLoadingEnabled && $(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
                 loadMore();
             }
         });
     </script>
+    @*End Lazy Loading*@
 </body>
 </html>
