@@ -19,6 +19,7 @@ namespace PetServices.Models
         public virtual DbSet<Account> Accounts { get; set; } = null!;
         public virtual DbSet<Blog> Blogs { get; set; } = null!;
         public virtual DbSet<BookingRoomDetail> BookingRoomDetails { get; set; } = null!;
+        public virtual DbSet<BookingRoomService> BookingRoomServices { get; set; } = null!;
         public virtual DbSet<BookingServicesDetail> BookingServicesDetails { get; set; } = null!;
         public virtual DbSet<Feedback> Feedbacks { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
@@ -131,6 +132,35 @@ namespace PetServices.Models
                     .HasConstraintName("FK_BookingRoomDetail_Room");
             });
 
+            modelBuilder.Entity<BookingRoomService>(entity =>
+            {
+                entity.HasKey(e => new { e.OrderId, e.RoomId, e.ServiceId });
+
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.Property(e => e.RoomId).HasColumnName("RoomID");
+
+                entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.BookingRoomServices)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookingRoomServices_Orders");
+
+                entity.HasOne(d => d.Room)
+                    .WithMany(p => p.BookingRoomServices)
+                    .HasForeignKey(d => d.RoomId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookingRoomServices_Room");
+
+                entity.HasOne(d => d.Service)
+                    .WithMany(p => p.BookingRoomServices)
+                    .HasForeignKey(d => d.ServiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookingRoomServices_Services");
+            });
+
             modelBuilder.Entity<BookingServicesDetail>(entity =>
             {
                 entity.HasKey(e => new { e.ServiceId, e.OrderId })
@@ -204,9 +234,7 @@ namespace PetServices.Models
 
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
-                entity.Property(e => e.OrderStatus)
-                    .HasMaxLength(20)
-                    .IsFixedLength();
+                entity.Property(e => e.OrderStatus).HasMaxLength(500);
 
                 entity.Property(e => e.Phone)
                     .HasMaxLength(10)

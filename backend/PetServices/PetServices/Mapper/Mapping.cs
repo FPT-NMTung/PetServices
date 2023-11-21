@@ -44,6 +44,9 @@ namespace PetServices.Mapper
             CreateMap<BookingRoomDetail, BookingRoomDetailDTO>()
                .ReverseMap();
 
+            CreateMap<BookingRoomService, BookingRoomServiceDTO>()
+              .ReverseMap();
+
             CreateMap<OrderType, OrderTypeDTO>()
                .ReverseMap();
             #endregion

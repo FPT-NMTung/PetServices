@@ -356,11 +356,21 @@ namespace FEPetServices.Controllers
                         int currentPage = 1;
                         int pageSize = 8;
 
-                        var firstPageProducts = homeModel.ListProductTop8.OrderByDescending(p => p.QuantitySold).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+                        var firstPageProducts = homeModel.ListProductTop8
+                            .Where(p => p.Quantity > 0)
+                            .OrderByDescending(p => p.QuantitySold)
+                            .Skip((currentPage - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToList();
 
                         currentPage++;
 
-                        var secondPageProducts = homeModel.ListProductTop8.OrderByDescending(p => p.QuantitySold).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+                        var secondPageProducts = homeModel.ListProductTop8
+                            .Where(p => p.Quantity > 0)
+                            .OrderByDescending(p => p.QuantitySold)
+                            .Skip((currentPage - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToList();
 
                         homeModel.ListProductTop8 = firstPageProducts;
                         homeModel.ListProductSecond8 = secondPageProducts;
@@ -849,9 +859,23 @@ namespace FEPetServices.Controllers
                 SaveCartSession(cart);
             }
 
-            return RedirectToAction("Index", "Cart");
-        }
+            // Kiểm tra xem đây có phải là yêu cầu Ajax không
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                var cartItems = GetCartItems();
+                int totalQuantity = cartItems.Select(item => item?.service?.ServiceId ?? 0)
+                                              .Union(cartItems.Where(item => item?.product != null)
+                                                              .Select(item => item.product.ProductId))
+                                              .Count();
 
+                return Json(new { success = true, message = "Sản phẩm đã được thêm vào giỏ hàng.", totalQuantity });    
+            }
+            else
+            {
+                // Nếu không phải Ajax, chuyển hướng như trước
+                return RedirectToAction("Index", "Cart");
+            }
+        }
 
         void ClearCart()
         {

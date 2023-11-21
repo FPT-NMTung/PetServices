@@ -1,0 +1,179 @@
+﻿@using FEPetServices.Form.OrdersForm;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <link href="~/css/orders/stylesheet.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="card right-profile-card">
+        <div class="card-header alert-primary">
+            <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="~/Customer/MyOrders/AllOrders?orderStatus=All&page=1&pageSize=5" role="tab" aria-selected="true">Tất cả</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-education-tab" data-toggle="pill" href="~/Customer/MyOrders/WaitingOrders?orderStatus=Waiting&page=1&pageSize=5" role="tab" aria-selected="false">Đơn hàng chờ xử lý</a>
+                </li>
+                @*<li class="nav-item">
+                <a class="nav-link active" id="pills-timeline-tab" data-toggle="pill" href="~/Customer/MyOrders/DeliveryOrders?orderStatus=Delivery&page=1&pageSize=5" role="tab" aria-selected="false">Vận chuyển</a>
+                </li>*@
+                @* <li class="nav-item">
+                <a class="nav-link" id="pills-document-tab" data-toggle="pill" href="~/Customer/MyOrders/Index?orderStatus=All&page=1&pageSize=5" role="tab" aria-selected="false">Chờ giao hàng</a>
+                </li>*@
+                <li class="nav-item">
+                    <a class="nav-link active" id="pills-event-tab" data-toggle="pill" href="~/Customer/MyOrders/ReceivedOrders?orderStatus=Received&page=1&pageSize=5" role="tab" aria-selected="false">Hoàn thành</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrders/RejectOrders?orderStatus=Reject&page=1&pageSize=5" role="tab" aria-selected="false">Đã huỷ</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">    
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        <div id="orders-container">
+                            @if (Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                            {
+                                Html.Partial("_OrderPartialView", (List<OrderForm>)Model);
+                            }
+                            else
+                            {
+                                @foreach (var order in Model)
+                                {
+                                    double totalPrice = 0;
+                                    <div class="work-container">
+                                        <div class="work-container-inner">
+                                            <h5>Order ID : @order.OrderId</h5>
+                                            @if (@order.OrderStatus.Trim() == "Delivery")
+                                            {
+                                                <span class="badge badge-info">Đang giao</span>
+                                            }
+                                            else if (@order.OrderStatus.Trim() == "Reject")
+                                            {
+                                                <span class="badge badge-info">Đơn hàng bị huỷ</span>
+                                            }
+                                            else if (@order.OrderStatus.Trim() == "Waiting")
+                                            {
+                                                <span class="badge badge-info">Đơn hàng đang chờ xử lý</span>
+                                            }
+                                            else if (@order.OrderStatus.Trim() == "Received")
+                                            {
+                                                <span class="badge badge-info">Hoàn thành</span>
+                                            }
+                                        </div>
+                                        <p><i class="far fa-calendar-alt"></i> @order.OrderDate</p>
+
+                                        @if (order.OrderProductDetails != null && order.OrderProductDetails.Count > 0)
+                                        {
+                                            <div class="content-details">
+                                                <p class="bold-text">Thông tin sản phẩm đã được đặt hàng</p>
+                                                @foreach (var productDetail in order.OrderProductDetails)
+                                                {
+                                                    totalPrice = totalPrice + (productDetail.Quantity * productDetail.Price);
+                                                    <div class="content-detail">
+                                                        <div class="product-info">
+                                                            <img src="@productDetail.Product.Picture" width="50" height="50" alt="Product Image">
+                                                            <div class="product-info-detail">
+                                                                <p style="max-width:450px">@productDetail.Product.ProductName</p>
+                                                                <p style="font-size:.8rem;"><span>x</span>@productDetail.Quantity</p>
+                                                            </div>
+                                                        </div>
+                                                        <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
+                                                    </div>
+                                                    <div class="btn-content-detail">
+                                                        <button class="btn btn-primary">Hello Trung</button>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+
+                                        @if (order.BookingServicesDetails != null && order.BookingServicesDetails.Count > 0)
+                                        {
+                                            <div class="content-details">
+                                                <p class="bold-text">Thông tin dịch vụ đã được đặt hàng</p>
+                                                @foreach (var serviceDetail in order.BookingServicesDetails)
+                                                {
+                                                    totalPrice = totalPrice + serviceDetail.PriceService;
+                                                    <div class="content-detail">
+                                                        <div class="service-info">
+                                                            <img src="@serviceDetail.Service.Picture" width="50" height="50" alt="Service Image">
+                                                            <div class="service-info-detail">
+                                                                <p style="max-width:450px">@serviceDetail.Service.ServiceName</p>
+                                                                <p style="font-size:.8rem;"><span>Cân nặng thú cưng: </span>@serviceDetail.Weight Kg</p>
+                                                            </div>
+                                                        </div>
+                                                        <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
+                                                    </div>
+                                                    <div class="btn-content-detail">
+                                                        <button class="btn btn-outline-primary">Hello Trung</button>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                        <div class="headel-content">
+                                            <p>Tổng giá : </p>
+                                            <p>@(totalPrice.ToString("n0").Replace(",", ".")) VNĐ</p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="work-container" style="width:100%">
+                         <p style="text-align:center">Chưa có đơn hàng</p>    
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    @*Start Lazy Loading*@
+    <script>
+        var pageIndex = 1;
+        var loading = false;
+        var lazyLoadingEnabled = true; 
+
+        function loadMore() {
+            if (!loading && lazyLoadingEnabled) {
+                loading = true;
+
+                $.ajax({
+                    url: '/Customer/MyOrders/ReceivedOrders',
+                    type: 'GET',
+                    data: { orderStatus: 'Received', page: pageIndex + 1, pageSize: 5 }, 
+                    success: function (data) {
+                        if (data.trim() !== '') {
+                            $('#orders-container').append(data);
+                            pageIndex++;
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        lazyLoadingEnabled = false;
+                        console.error('AJAX error:', textStatus, errorThrown);
+                    },
+                    complete: function () {
+                        loading = false;
+                    }
+                });
+            }
+        }
+
+        $(window).scroll(function () {
+            if (lazyLoadingEnabled && $(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+                loadMore();
+            }
+        });
+    </script>
+    @*End Lazy Loading*@
+</body>
+</html>
