@@ -170,6 +170,36 @@ namespace FEPetServices.Areas.Partner.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> UpdateLocation([FromBody] LocationUpdateModel locationUpdate)
+        {
+            try
+            {
+                ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+                string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+                // Update the location in the database
+                var updateLocationModel = new PartnerLocationDTO { Lat = locationUpdate.Lat.ToString(), Lng = locationUpdate.Lng.ToString() };
+                HttpResponseMessage response = await _client.PutAsJsonAsync($"https://localhost:7255/api/Partner/UpdateLocation?email={email}", updateLocationModel);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessToast"] = "Cập nhật vị trí thành công";
+                    return Ok();
+                }
+                else
+                {
+                    TempData["ErrorToast"] = "Lỗi khi cập nhật vị trí, vui lòng thử lại sau";
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost]
         public IActionResult SaveLocation(double lat, double lng)
         {
             TempData["Lat"] = lat;
