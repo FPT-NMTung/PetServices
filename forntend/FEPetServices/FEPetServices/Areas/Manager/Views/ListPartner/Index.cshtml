@@ -34,11 +34,20 @@
                     foreach (var listAccounts in Model)
                     {
                         itemCount++;
+
+                        string description = listAccounts.PartnerInfo.Descriptions;
+
+                        if (description.Length > 100)
+                        {
+                            int lastSpace = description.LastIndexOf(' ', 100);
+
+                            description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                        }
                         <tr>
                             <td>@itemCount</td>
                             <td>@listAccounts.PartnerInfo.FirstName  @listAccounts.PartnerInfo.LastName</td>
                             <td>@listAccounts.PartnerInfo.Phone</td>
-                            <td>@listAccounts.PartnerInfo.Descriptions</td>
+                            <td>@description</td>
                             <td>
                                 <button type="button" class="map-button"
                                         data-lat="@listAccounts.PartnerInfo.Lat"
