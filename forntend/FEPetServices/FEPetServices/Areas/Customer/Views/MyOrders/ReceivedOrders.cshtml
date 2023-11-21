@@ -113,7 +113,7 @@
                                                         <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
                                                     <div class="btn-content-detail">
-                                                        <button class="btn btn-outline-primary" onclick="openPopup()">Đánh giá</button>
+                                                        <button class="btn btn-outline-primary" onclick="openPopup('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight')">Đánh giá</button>
                                                     </div>
                                                 }
                                             </div>
@@ -138,15 +138,17 @@
         </div>
         <div class="popup">
             <div id="overlay" class="overlay"></div>
-
             <div class="feedback popup-container" id="popup">
                 <div class="mb--40">
                     <!-- Start Comment Respond  -->
                     <div class="comment-respond pro-des-commend-respond mt--0">
                         <h3 class="title mb--30">Đánh giá</h3>
                         <div class="information">
-                            <img src="/assets//images/cuc-tinh-y-1.jpg" style="width: 50px; height: 50px;" />
-                            <p>Your email address will not be published. Required fields are marked</p>
+                            <img id="popupImage" style="width: 50px; height: 50px;" />
+                            <div>
+                                <p id="popupServiceName"></p>
+                                <p id="popupServiceInfo"></p>
+                            </div>
                         </div>
                         <div class="vote-star">
                             <p>Chất lượng sản phẩm/dịch vụ:</p>
@@ -246,9 +248,13 @@
     @*End Lazy Loading*@
     <script>
         //Hiện popup đánh giá
-        function openPopup() {
+        function openPopup(image, serviceName, weight) {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('popup').style.display = 'block';
+
+            document.getElementById('popupImage').src = image;
+            document.getElementById('popupServiceName').innerText = serviceName ;
+            document.getElementById('popupServiceInfo').innerText = 'Cân nặng: ' + weight + ' Kg';
         }
 
         // Ẩn popup đánh giá
