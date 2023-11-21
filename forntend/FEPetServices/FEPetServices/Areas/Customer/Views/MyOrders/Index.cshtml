@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using FEPetServices.Form.OrdersForm;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -33,83 +34,92 @@
         </div>
         <div class="card-body">
             <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">    
                     @if (Model != null && Model.Count > 0)
                     {
-                        @foreach (var order in Model)
-                        {
-                            double totalPrice = 0;
-                            <div class="work-container">
-                                <div class="work-container-inner">  
-                                    <h5>Order ID : @order.OrderId</h5>
-                                    @if (@order.OrderStatus.Trim() == "Delivery")
-                                    {
-                                        <span class="badge badge-info">Đang giao</span>
-                                    }
-                                    else if (@order.OrderStatus.Trim() == "Reject")
-                                    {
-                                        <span class="badge badge-info">Đơn hàng bị huỷ</span>
-                                    }
-                                    else if (@order.OrderStatus.Trim() == "Waiting")
-                                    {
-                                        <span class="badge badge-info">Đơn hàng đang chờ xử lý</span>
-                                    }
-                                    else if (@order.OrderStatus.Trim() == "Received")
-                                    {
-                                        <span class="badge badge-info">Hoàn thành</span>
-                                    }
-                                </div>
-                                <p><i class="far fa-calendar-alt"></i> @order.OrderDate</p>
-
-                                @if (order.OrderProductDetails != null && order.OrderProductDetails.Count > 0)
+                        <div id="orders-container">
+                            @if (Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                            {
+                                Html.Partial("_OrderPartialView", (List<OrderForm>)Model);
+                            }
+                            else
+                            {
+                                @foreach (var order in Model)
                                 {
-                                    <div class="content-details">
-                                        <p class="bold-text">Thông tin sản phẩm đã được đặt hàng</p>
-                                        @foreach (var productDetail in order.OrderProductDetails)
-                                        {
-                                            totalPrice = totalPrice + (productDetail.Quantity * productDetail.Price);
-                                            <div class="content-detail">
-                                                <div class="product-info">
-                                                    <img src="@productDetail.Product.Picture" width="50" height="50" alt="Product Image">
-                                                    <div class="product-info-detail">
-                                                        <p style="max-width:450px">@productDetail.Product.ProductName</p>
-                                                        <p style="font-size:.8rem;"><span>x</span>@productDetail.Quantity</p>
-                                                    </div>
-                                                </div>
-                                                <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
-                                            </div>
+                                    double totalPrice = 0;
+                                    <div class="work-container">
+                                        <div class="work-container-inner">
+                                            <h5>Order ID : @order.OrderId</h5>
+                                            @if (@order.OrderStatus.Trim() == "Delivery")
+                                            {
+                                                <span class="badge badge-info">Đang giao</span>
+                                            }
+                                            else if (@order.OrderStatus.Trim() == "Reject")
+                                            {
+                                                <span class="badge badge-info">Đơn hàng bị huỷ</span>
+                                            }
+                                            else if (@order.OrderStatus.Trim() == "Waiting")
+                                            {
+                                                <span class="badge badge-info">Đơn hàng đang chờ xử lý</span>
+                                            }
+                                            else if (@order.OrderStatus.Trim() == "Received")
+                                            {
+                                                <span class="badge badge-info">Hoàn thành</span>
+                                            }
+                                        </div>
+                                        <p><i class="far fa-calendar-alt"></i> @order.OrderDate</p>
 
-                                        }
-                                    </div>
-                                }
-
-                                @if (order.BookingServicesDetails != null && order.BookingServicesDetails.Count > 0)
-                                {
-                                    <div class="content-details">
-                                        <p class="bold-text">Thông tin dịch vụ đã được đặt hàng</p>
-                                        @foreach (var serviceDetail in order.BookingServicesDetails)
+                                        @if (order.OrderProductDetails != null && order.OrderProductDetails.Count > 0)
                                         {
-                                            totalPrice = totalPrice + serviceDetail.PriceService;
-                                            <div class="content-detail">
-                                                <div class="service-info">
-                                                    <img src="@serviceDetail.Service.Picture" width="50" height="50" alt="Service Image">
-                                                    <div class="service-info-detail">
-                                                        <p style="max-width:450px">@serviceDetail.Service.ServiceName</p>
-                                                        <p style="font-size:.8rem;"><span>Cân nặng thú cưng: </span>@serviceDetail.Weight Kg</p>
+                                            <div class="content-details">
+                                                <p class="bold-text">Thông tin sản phẩm đã được đặt hàng</p>
+                                                @foreach (var productDetail in order.OrderProductDetails)
+                                                {
+                                                    totalPrice = totalPrice + (productDetail.Quantity * productDetail.Price);
+                                                    <div class="content-detail">
+                                                        <div class="product-info">
+                                                            <img src="@productDetail.Product.Picture" width="50" height="50" alt="Product Image">
+                                                            <div class="product-info-detail">
+                                                                <p style="max-width:450px">@productDetail.Product.ProductName</p>
+                                                                <p style="font-size:.8rem;"><span>x</span>@productDetail.Quantity</p>
+                                                            </div>
+                                                        </div>
+                                                        <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
-                                                </div>
-                                                <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
+
+                                                }
                                             </div>
                                         }
+
+                                        @if (order.BookingServicesDetails != null && order.BookingServicesDetails.Count > 0)
+                                        {
+                                            <div class="content-details">
+                                                <p class="bold-text">Thông tin dịch vụ đã được đặt hàng</p>
+                                                @foreach (var serviceDetail in order.BookingServicesDetails)
+                                                {
+                                                    totalPrice = totalPrice + serviceDetail.PriceService;
+                                                    <div class="content-detail">
+                                                        <div class="service-info">
+                                                            <img src="@serviceDetail.Service.Picture" width="50" height="50" alt="Service Image">
+                                                            <div class="service-info-detail">
+                                                                <p style="max-width:450px">@serviceDetail.Service.ServiceName</p>
+                                                                <p style="font-size:.8rem;"><span>Cân nặng thú cưng: </span>@serviceDetail.Weight Kg</p>
+                                                            </div>
+                                                        </div>
+                                                        <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+
+                                        <div class="headel-content">
+                                            <p>Tổng giá : </p>
+                                            <p>@(totalPrice.ToString("n0").Replace(",", ".")) VNĐ</p>
+                                        </div>
                                     </div>
                                 }
-
-                                <div class="headel-content">
-                                    <p>Tổng giá : </p>
-                                    <p>@(totalPrice.ToString("n0").Replace(",", ".")) VNĐ</p>
-                                </div>
-                            </div>
-                        }
+                            }
+                        </div>
                     }
                     else
                     {
@@ -121,5 +131,40 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+        var pageIndex = 1;
+        var loading = false;
+
+        function loadMore() {
+            if (!loading) {
+                loading = true;
+
+                // Make an AJAX request to get more orders
+                $.ajax({
+                    url: '/Customer/MyOrders/Index', // Adjust the URL based on your route
+                    type: 'GET',
+                    data: { orderStatus: 'All', page: pageIndex + 1, pageSize: 5 }, // Adjust parameters as needed
+                    success: function (data) {
+                        if (data.trim() !== '') {
+                            $('#orders-container').append(data);
+                            pageIndex++;
+                        }
+                    },
+                    complete: function () {
+                        loading = false;
+                    }
+                });
+            }
+        }
+
+        // Attach an event listener to trigger loadMore when the user scrolls to the bottom
+        $(window).scroll(function () {
+            if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+                loadMore();
+            }
+        });
+    </script>
 </body>
 </html>

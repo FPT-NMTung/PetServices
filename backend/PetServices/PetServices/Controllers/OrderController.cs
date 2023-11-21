@@ -43,34 +43,35 @@ namespace PetServices.Controllers
         }
 
         [HttpGet("email/{email}")]
-        public IActionResult GetOrderUser(string email, string orderstatus)
+        public IActionResult GetOrderUser(string email, string orderstatus, int page = 1, int pageSize = 5)
         {
             try
             {
                 IQueryable<Order> query = _context.Orders
                     .Include(o => o.UserInfo)
                     .ThenInclude(u => u.Accounts)
-                     .Include(b => b.OrderProductDetails)
+                    .Include(b => b.OrderProductDetails)
                     .ThenInclude(o => o.Product)
                     .Include(b => b.BookingServicesDetails)
                     .ThenInclude(bs => bs.Service)
                     .Include(b => b.BookingRoomDetails)
                     .ThenInclude(br => br.Room)
-                    .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email))
-                    ;
+                    .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email));
 
                 if (!string.IsNullOrEmpty(orderstatus) && orderstatus.ToLower() != "all")
                 {
                     query = query.Where(o => o.OrderStatus == orderstatus);
                 }
-                query = query.OrderByDescending(o => o.OrderDate);
-                List<Order> orders = query.ToList();
 
-                bool hasOrders = orders.Any();
+                query = query.OrderByDescending(o => o.OrderDate);
+
+                var paginatedOrders = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+                bool hasOrders = paginatedOrders.Any();
 
                 if (hasOrders)
                 {
-                    List<OrdersDTO> ordersDTOList = _mapper.Map<List<OrdersDTO>>(orders);
+                    List<OrdersDTO> ordersDTOList = _mapper.Map<List<OrdersDTO>>(paginatedOrders);
                     return Ok(ordersDTOList);
                 }
                 else

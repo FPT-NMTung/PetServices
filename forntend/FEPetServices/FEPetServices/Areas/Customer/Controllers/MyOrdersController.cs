@@ -22,13 +22,13 @@ namespace FEPetServices.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string orderStatus)
+        public async Task<IActionResult> Index(string orderStatus, int page , int pageSize )
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
-            //https://localhost:7255/api/Order/email/customer%40gmail.com?orderstatus=All
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlOrders + "/email/" + email + "?orderstatus=" + orderStatus);
+            HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrlOrders}/email/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
+
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -39,7 +39,15 @@ namespace FEPetServices.Areas.Customer.Controllers
                 };
 
                 List<OrderForm> orders = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
-                return View(orders);
+
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return PartialView("_OrderPartialView", orders);
+                }
+                else
+                {
+                    return View(orders);
+                }
             }
             else
             {
@@ -48,9 +56,17 @@ namespace FEPetServices.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> DeliveryOrder(string orderStatus)
+        public async Task<IActionResult> DeliveryOrders(string orderStatus)
         {
             return View();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> WaitingOrders(string orderStatus)
+        {
+            return View();
+        }
+
+
     }
 }

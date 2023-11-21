@@ -1,0 +1,69 @@
+﻿@using FEPetServices.Form.OrdersForm;
+@model List<OrderForm>
+
+@foreach (var order in Model)
+{
+    RenderOrder(order);
+}
+
+@functions {
+    void RenderOrder(OrderForm order)
+    {
+        double totalPrice = 0;
+
+        <div class="work-container">
+            <div class="work-container-inner">
+                <h5>Order ID : @order.OrderId</h5>
+                 @order.OrderStatus.Trim()
+            </div>
+            <p><i class="far fa-calendar-alt"></i> @order.OrderDate</p>
+
+            @if (order.OrderProductDetails != null && order.OrderProductDetails.Count > 0)
+            {
+                <div class="content-details">
+                    <p class="bold-text">Thông tin sản phẩm đã được đặt hàng</p>
+                    @foreach (var productDetail in order.OrderProductDetails)
+                    {
+                        totalPrice = totalPrice + (double)(productDetail.Quantity * productDetail.Price);
+                        <div class="content-detail">
+                            <div class="product-info">
+                                <img src="@productDetail.Product.Picture" width="50" height="50" alt="Product Image">
+                                <div class="product-info-detail">
+                                    <p style="max-width:450px">@productDetail.Product.ProductName</p>
+                                    <p style="font-size:.8rem;"><span>x</span>@productDetail.Quantity</p>
+                                </div>
+                            </div>
+                            <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
+                        </div>
+                    }
+                </div>
+            }
+
+            @if (order.BookingServicesDetails != null && order.BookingServicesDetails.Count > 0)
+            {
+                <div class="content-details">
+                    <p class="bold-text">Thông tin dịch vụ đã được đặt hàng</p>
+                    @foreach (var serviceDetail in order.BookingServicesDetails)
+                    {
+                        totalPrice = totalPrice + (double)serviceDetail.PriceService;
+                        <div class="content-detail">
+                            <div class="service-info">
+                                <img src="@serviceDetail.Service.Picture" width="50" height="50" alt="Service Image">
+                                <div class="service-info-detail">
+                                    <p style="max-width:450px">@serviceDetail.Service.ServiceName</p>
+                                    <p style="font-size:.8rem;"><span>Cân nặng thú cưng: </span>@serviceDetail.Weight Kg</p>
+                                </div>
+                            </div>
+                            <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
+                        </div>
+                    }
+                </div>
+            }
+
+            <div class="headel-content">
+                <p>Tổng giá : </p>
+                <p>@(totalPrice.ToString("n0").Replace(",", ".")) VNĐ</p>
+            </div>
+        </div>
+    }
+}
