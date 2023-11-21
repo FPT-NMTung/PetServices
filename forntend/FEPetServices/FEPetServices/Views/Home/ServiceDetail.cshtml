@@ -145,12 +145,6 @@
                                     <!-- Start Product Action Wrapper  -->
                                     <div class="product-action-wrapper d-flex-center">
                                         <!-- Start Product Action  -->
-                                        <input type="hidden" name="ServiceId" value="@Model?.Service.ServiceId" />
-                                        <input type="hidden" name="PriceService" id="totalPriceService" value="" />
-                                        <input type="hidden" name="Weight" id="Weight" value="" />
-                                        <input type="hidden" name="PartnerId" id="PartnerId" value="" />
-                                        <input type="hidden" name="StartTime" id="StartTime" value="" />
-                                        <input type="hidden" name="EndTime" id="EndTime" value="" />
                                         <ul class="product-action action-style-two d-flex-center mb--0" style="display:contents;">
                                             <form method="post" action="@Url.Action("AddToCart", "Home")">
                                                 @Html.AntiForgeryToken()
@@ -158,6 +152,12 @@
                                             </form>
                                             <form method="post" action="@Url.Action("AddToCart", "Home")">
                                                 @Html.AntiForgeryToken()
+                                                <input type="hidden" name="ServiceId" value="@Model?.Service.ServiceId" />
+                                                <input type="hidden" name="PriceService" id="totalPriceService" value="" />
+                                                <input type="hidden" name="Weight" id="Weight" value="" />
+                                                <input type="hidden" name="PartnerId" id="PartnerId" value="" />
+                                                <input type="hidden" name="StartTime" id="StartTime" value="" />
+                                                <input type="hidden" name="EndTime" id="EndTime" value="" />
                                                 <button class="axil-btn btn-bg-primary" style="margin-left: 5px;" type="submit"><i class="fas fa-cart-plus"></i>Mua ngay</button>
                                             </form>
                                         </ul>

@@ -33,7 +33,7 @@
                         <form method="post" asp-controller="InformationPartner" asp-action="Index" enctype="multipart/form-data">
                             <div>
                                 <label for="image"></label>
-                                <input type="file" id="image" name="image" enctype="multipart/form-data">
+                                <input type="file" id="image" name="image" value="@Model?.PartnerInfo.ImagePartner" enctype="multipart/form-data">
                             </div>
 
                             <div class="row gx-3 mb-3">
@@ -89,8 +89,8 @@
                             <input type="hidden" name="Province" id="provinceNameInput" />
                             <input type="hidden" name="District" id="districtNameInput" />
                             <input type="hidden" name="Commune" id="wardsNameInput" />
-                            <input type="hidden" name="Lat" id="inputLat" />
-                            <input type="hidden" name="Lng" id="inputLng" />
+                            <input type="hidden" name="Lat" id="inputLat" value="@Model?.PartnerInfo.Lat" />
+                            <input type="hidden" name="Lng" id="inputLng" value="@Model?.PartnerInfo.Lng" />
 
                             <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
                             <a href="~/Partner/ChangePasswordPartner" class="btn btn-primary">
@@ -160,6 +160,43 @@
     </div>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>   
+
+    <script>
+        window.addEventListener("load", function () {
+            // Gọi action để lấy và hiển thị bản đồ với vị trí từ hàm Index của controller
+            showPartnerLocation(@Model?.PartnerInfo.Lat, @Model?.PartnerInfo.Lng);
+            startWatchingLocation(); // gọi hàm theo dõi vị trí
+        });
+
+        function showPartnerLocation(latitude, longitude) {
+            if (latitude && longitude) {
+                // Nếu có dữ liệu vị trí, hiển thị bản đồ với vị trí này
+                initMap(latitude, longitude);
+            } else {
+                document.getElementById("map").innerHTML = "<div style='text-align: center;'>Bạn chưa cập nhật dữ liệu về vị trí</div>";
+            }
+        }
+
+        // add mới, theo dõi vị trí khi di chuyển
+        function startWatchingLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(
+                    function (position) {
+                        var newLatitude = position.coords.latitude;
+                        var newLongitude = position.coords.longitude;
+                        initMap(newLatitude, newLongitude);
+                        document.getElementById("inputLat").value = newLatitude;
+                        document.getElementById("inputLng").value = newLongitude;
+                    },
+                    function (error) {
+                        showError(error);
+                    }
+                );
+            } else {
+                alert("Trình duyệt của bạn không hỗ trợ Geolocation.");
+            }
+        }
+    </script>
 </body>
 <script src="~/js/takeAddress.js"></script>
 </html>

@@ -229,6 +229,12 @@
                     if (roomcategory) {
                         url += (url.includes("?") ? "&" : "?") + "roomcategory=" + roomcategory;
                     }
+                    if (startdate) {
+                        url += (url.includes("?") ? "&" : "?") + "startdate=" + startdate;
+                    }
+                    if (enddate) {
+                        url += (url.includes("?") ? "&" : "?") + "enddate=" + enddate;
+                    }
 
                     var newurl = url + (url.includes("?") ? "&" : "?") + "pricefrom=" + fromprice + "&priceto=" + toprice;
 
