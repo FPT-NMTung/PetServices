@@ -119,6 +119,13 @@ namespace FEPetServices.Areas.Partner.Controllers
                 }
             }
 
+            // Check if Dob is greater than the current date
+            if (partnerInfo.Dob.HasValue && partnerInfo.Dob.Value > DateTime.Now)
+            {
+                TempData["ErrorToast"] = "Ngày sinh không thể lớn hơn ngày hiện tại";
+                return RedirectToAction("Index");
+            }
+
             if (partnerInfo.Address == null || partnerInfo.FirstName == null || partnerInfo.LastName == null)
             {
                 TempData["ErrorToast"] = "Vui lòng điền đầy đủ thông tin";

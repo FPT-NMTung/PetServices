@@ -53,6 +53,12 @@
                                     <input class="form-control" name="LastName" id="inputLastName" type="text" placeholder="Nhập tên của bạn" value="@Model?.PartnerInfo.LastName" required>
                                 </div>
                             </div>
+
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputEmailAddress">Ngày Sinh</label>
+                                <input class="form-control" type="date" placeholder="Enter your dob" value="@Model?.PartnerInfo.Dob" required>
+                            </div>
+                            
                             <div class="mb-3">
                                 <label class="small mb-1" for="inputEmailAddress">Email</label>
                                 <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="@Model?.Email" disabled>
