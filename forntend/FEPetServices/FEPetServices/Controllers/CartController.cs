@@ -98,12 +98,12 @@ namespace FEPetServices.Controllers
                 product = System.Text.Json.JsonSerializer.Deserialize<ProductDTO>(responseContent, option);
             }
 
-/*
+
             if (product.Quantity < quantity)
             {
                 ViewBag.ErrorToast = "Số lượng đặt hàng vượt quá số lượng sản phẩm còn lại";
-                return Error();
-            }*/
+                return RedirectToAction("Index", "Cart");
+            }
 
             var cart = GetCartItems();
             var cartitem = cart.Find(p => p.product.ProductId == productid);
