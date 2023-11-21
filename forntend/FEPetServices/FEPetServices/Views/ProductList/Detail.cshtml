@@ -1,17 +1,9 @@
 ﻿<!doctype html>
 <html class="no-js" lang="en">
 
-
-<!-- Mirrored from new.axilthemes.com/demo/template/etrade/single-product-5.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 10 Aug 2023 07:18:31 GMT -->
-
 <head>
-    <!-- Favicon -->
+
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
-
-    <!-- CSS
-    ============================================ -->
-
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/assets/css/vendor/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/vendor/font-awesome.css">
     <link rel="stylesheet" href="/assets/css/vendor/flaticon/flaticon.css">
@@ -22,24 +14,18 @@
     <link rel="stylesheet" href="/assets/css/vendor/magnific-popup.css">
     <link rel="stylesheet" href="/assets/css/vendor/base.css">
     <link rel="stylesheet" href="/assets/css/style.min.css">
-    <link rel="stylesheet" href="/css/ProductDetail.css"></link>
+    <link rel="stylesheet" href="/css/ProductDetail.css">
 
 </head>
 
 
 <body class="sticky-header">
-    <!--[if lte IE 9]>
-    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-<![endif]-->
     <a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
-    <!-- Start Header -->
     <header class="header axil-header header-style-5">
 
     </header>
-    <!-- End Header -->
 
     <main class="main-wrapper">
-        <!-- Start Shop Area  -->
         <div class="axil-single-product-area bg-color-white">
             <div class="single-product-thumb axil-section-gap pb--30 pb_sm--20">
                 <div class="container">
@@ -74,14 +60,20 @@
                                     </div>
                                     <div class="product-rating">
                                         <div class="star-rating">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="far fa-star"></i>
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= (ViewBag.productStar ?? 5))
+                                                {
+                                                    <i class="fas fa-star"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="far fa-star"></i>
+                                                }
+                                            }
                                         </div>
                                         <div class="review-link">
-                                            <a href="#">(<span>2</span> customer reviews)</a>
+                                            <a href="#">(<span>@ViewBag.FeedbackCount</span> đánh giá của khách hàng)</a>
                                         </div>
                                     </div>
                                     <ul class="product-meta">
@@ -97,8 +89,9 @@
                                         </div>
                                         <span>@Model.Product.Quantity sản phẩm có sẵn</span>
                                     </div>
-                                    <!-- Start Product Action Wrapper  -->
                                     <div class="product-action-wrapper d-flex-center">
+                                        <!-- Start Product Action  -->
+                                        <!-- Start Product Action  -->
                                         <!-- Start Product Action  -->
                                         <ul class="product-action action-style-two d-flex-center mb--0" >
                                             @if (@Model.Product.Quantity > 0)
@@ -116,20 +109,16 @@
                                             }
                                             else
                                             {
-                                                <button class="btn btn-danger" style="padding:5px; font-size:20px;" type="button">Hết hàng</button>
-                                            }
                                         </ul>
                                         <!-- End Product Action  -->
+
                                     </div>
-                                    <!-- End Product Action Wrapper  -->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- End .single-product-thumb -->
-
             <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
                 <div class="container">
                     <div class="product-desc-wrapper mb--30 mb_sm--10">
@@ -144,7 +133,6 @@
                                         bạn những trải nghiệm tuyệt vời nhất. Pet Shop - nơi bạn và thú cưng được yêu thương.</p>
                                 </div>
                             </div>
-                            <!-- End .col-lg-6 -->
                             <div class="col-lg-6 mb--30">
                                 <div class="single-desc">
                                     <h5 class="title">Sản phẩm</h5>
@@ -154,9 +142,7 @@
                                         được những ưu đãi và quà tặng hấp dẫn khi mua hàng trên trang web của cửa hàng.</p>
                                 </div>
                             </div>
-                            <!-- End .col-lg-6 -->
                         </div>
-                        <!-- End .row -->
                         <div class="row">
                             <div class="col-lg-12">
                                 <ul class="pro-des-features">
@@ -179,129 +165,101 @@
                                         Phục vụ tận tình
                                     </li>
                                 </ul>
-                                <!-- End .pro-des-features -->
                             </div>
                         </div>
-                        <!-- End .row -->
                     </div>
-                    <!-- End .product-desc-wrapper -->
 
                     <div class="reviews-wrapper">
                         <h4 class="mb--60">Reviews</h4>
                         <div class="row">
-                            <div class="col-lg-6 mb--40">
+                            <div class="col-lg-12 mb--40">
                                 <div class="axil-comment-area pro-desc-commnet-area">
-                                    <h5 class="title">01 Review for this product</h5>
-                                    <ul class="comment-list">
-                                        <!-- Start Single Comment  -->
-                                        <li class="comment">
-                                            <div class="comment-body">
-                                                <div class="single-comment">
-                                                    <div class="comment-img">
-                                                        <img src="assets/images/blog/author-image-4.png" alt="Author Images">
-                                                    </div>
-                                                    <div class="comment-inner">
-                                                        <h6 class="commenter">
-                                                            <a class="hover-flip-item-wrapper" href="#">
-                                                                <span class="hover-flip-item">
-                                                                    <span data-text="Cameron Williamson">Eleanor Pena</span>
-                                                                </span>
-                                                            </a>
-                                                            <span class="commenter-rating ratiing-four-star">
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star empty-rating"></i></a>
-                                                            </span>
-                                                        </h6>
-                                                        <div class="comment-text">
-                                                            <p>“We’ve created a full-stack structure for our working workflow processes, were from the funny the century initial all the made, have spare to negatives. ” </p>
+                                    @if (Model.Feedback != null && Model.Feedback.Count > 0)
+                                    {
+                                        <div class="feedback-title-sort">
+                                            <h5 class="title">Có @ViewBag.FeedbacksCount đánh giá cho sản phẩm này</h5>
+                                            <form method="get">
+                                                <input type="hidden" name="proId" value="@Model.Product.ProductId">
+                                                <select name="sortby" onchange="this.form.submit();">
+                                                    <!option style="color: black" value="" @(ViewBag.sortby == null ? "selected" : "")>Tất cả</!option>
+                                                    <!option class="option" style="color: gold" value="5star" @(ViewBag.sortby == "5star" ? "selected" : "") @(Model.VoteNumberas.number5s == 0 ? "disabled" : "")>&#9733;&#9733;&#9733;&#9733;&#9733;&ensp; @Model.VoteNumberas.number5s</!option>
+                                                    <!option class="option" style="color: gold" value="4star" @(ViewBag.sortby == "4star" ? "selected" : "") @(Model.VoteNumberas.number4s == 0 ? "disabled" : "")>&#9733;&#9733;&#9733;&#9733;&#9734;&ensp; @Model.VoteNumberas.number4s</!option>
+                                                    <!option class="option" style="color: gold" value="3star" @(ViewBag.sortby == "3star" ? "selected" : "") @(Model.VoteNumberas.number3s == 0 ? "disabled" : "")>&#9733;&#9733;&#9733;&#9734;&#9734;&ensp; @Model.VoteNumberas.number3s</!option>
+                                                    <!option class="option" style="color: gold" value="2star" @(ViewBag.sortby == "2star" ? "selected" : "") @(Model.VoteNumberas.number2s == 0 ? "disabled" : "")>&#9733;&#9733;&#9734;&#9734;&#9734;&ensp; @Model.VoteNumberas.number2s</!option>
+                                                    <!option class="option" style="color: gold" value="1star" @(ViewBag.sortby == "1star" ? "selected" : "") @(Model.VoteNumberas.number1s == 0 ? "disabled" : "")>&#9733;&#9734;&#9734;&#9734;&#9734;&ensp; @Model.VoteNumberas.number1s</!option>
+                                                </select>
+                                            </form>
+                                        </div>
+                                        <ul class="comment-list">
+                                            @foreach (var feedback in Model.Feedback)
+                                            {
+                                                <li class="comment">
+                                                    <div class="comment-body">
+                                                        <div class="single-comment">
+                                                            <div class="comment-img">
+                                                                <img src="@feedback.UserImage" alt="Author Images" style="height: 60px; width: 60px;">
+                                                            </div>
+                                                            <div class="comment-inner">
+                                                                <h6 class="commenter">
+                                                                    <a class="hover-flip-item-wrapper" href="#">
+                                                                        <span class="hover-flip-item">
+                                                                            <span data-text="Cameron Williamson">@feedback.UserName</span>
+                                                                        </span>
+                                                                    </a>
+                                                                    <span class="commenter-rating ratiing-four-star">
+                                                                        @for (int i = 1; i <= 5; i++)
+                                                                        {
+                                                                            if (i <= @feedback.NumberStart)
+                                                                            {
+                                                                                <a href="#"><i class="fas fa-star"></i></a>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <a href="#"><i class="fas fa-star empty-rating"></i></a>
+                                                                            }
+                                                                        }
+                                                                    </span>
+                                                                </h6>
+                                                                <div class="comment-text">
+                                                                    <p>@feedback.Content</p>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </li>
+                                            }
+                                        </ul>
+                                        <div style="text-align: center">
+                                            <div class="pagination">
+                                                @{
+                                                    int pagenumber = ((@ViewBag.FeedbacksCount - 1) / 5) + 1;
+                                                    @if (ViewBag.CurrentPage > 1)
+                                                    {
+                                                        <a href="@Url.Action("Detail", new { proId = Model.Product.ProductId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
+                                                    }
+                                                    @for (int i = 1; i <= pagenumber; i++)
+                                                    {
+                                                        <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("Detail", new { proId = Model.Product.ProductId, sortby = ViewBag.sortby, page = i })">@i</a>
+                                                    }
+                                                    @if (ViewBag.CurrentPage < pagenumber)
+                                                    {
+                                                        <a href="@Url.Action("Detail", new { proId = Model.Product.ProductId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
+                                                    }
+                                                }
                                             </div>
-                                        </li>
-                                        <!-- End Single Comment  -->
-
-                                        <!-- Start Single Comment  -->
-                                        <li class="comment">
-                                            <div class="comment-body">
-                                                <div class="single-comment">
-                                                    <div class="comment-img">
-                                                        <img src="assets/images/blog/author-image-4.png" alt="Author Images">
-                                                    </div>
-                                                    <div class="comment-inner">
-                                                        <h6 class="commenter">
-                                                            <a class="hover-flip-item-wrapper" href="#">
-                                                                <span class="hover-flip-item">
-                                                                    <span data-text="Rahabi Khan">Courtney Henry</span>
-                                                                </span>
-                                                            </a>
-                                                            <span class="commenter-rating ratiing-four-star">
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                            </span>
-                                                        </h6>
-                                                        <div class="comment-text">
-                                                            <p>“We’ve created a full-stack structure for our working workflow processes, were from the funny the century initial all the made, have spare to negatives. ”</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <!-- End Single Comment  -->
-
-                                        <!-- Start Single Comment  -->
-                                        <li class="comment">
-                                            <div class="comment-body">
-                                                <div class="single-comment">
-                                                    <div class="comment-img">
-                                                        <img src="assets/images/blog/author-image-5.png" alt="Author Images">
-                                                    </div>
-                                                    <div class="comment-inner">
-                                                        <h6 class="commenter">
-                                                            <a class="hover-flip-item-wrapper" href="#">
-                                                                <span class="hover-flip-item">
-                                                                    <span data-text="Rahabi Khan">Devon Lane</span>
-                                                                </span>
-                                                            </a>
-                                                            <span class="commenter-rating ratiing-four-star">
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                            </span>
-                                                        </h6>
-                                                        <div class="comment-text">
-                                                            <p>“We’ve created a full-stack structure for our working workflow processes, were from the funny the century initial all the made, have spare to negatives. ” </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <!-- End Single Comment  -->
-                                    </ul>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <h5 class="title">Hiện chưa có đánh giá cho sản phẩm này.</h5>
+                                    }
                                 </div>
-                                <!-- End .axil-commnet-area -->
                             </div>
-                            <!-- End .col -->
-                            <!-- End .col -->
                         </div>
                     </div>
-                    <!-- End .reviews-wrapper -->
                 </div>
             </div>
-            <!-- woocommerce-tabs -->
-
         </div>
-        <!-- End Shop Area  -->
-
-        <!-- Start Recently Viewed Product Area  -->
         <div class="axil-product-area bg-color-white axil-section-gap pb--50 pb_sm--30">
             <div class="container">
                 <div class="section-title-wrapper">
@@ -335,12 +293,9 @@
                         </div>
                     </div>
                     }
-                    <!-- End .slick-single-layout -->
-
                 </div>
             </div>
         </div>
-        <!-- End Recently Viewed Product Area  -->
     </main>
 
      <script>
