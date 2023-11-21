@@ -60,6 +60,74 @@ namespace PetServices.Controllers
             return Ok(Convert.ToInt32(averageStars));
         }
 
+        [HttpGet("GetRoomVoteNumber")]
+        public async Task<ActionResult> GetRoomVoteNumber(int roomID)
+        {
+            var feedbacks = await _context.Feedbacks.Where(f => f.RoomId == roomID).ToListAsync();
+
+            var feedback = new VoteNumberDTO
+            {
+                number5s = feedbacks.Count(f => f.NumberStart == 5),
+                number4s = feedbacks.Count(f => f.NumberStart == 4),
+                number3s = feedbacks.Count(f => f.NumberStart == 3),
+                number2s = feedbacks.Count(f => f.NumberStart == 2),
+                number1s = feedbacks.Count(f => f.NumberStart == 1),
+            };
+
+            return Ok(feedback);
+        }
+
+        [HttpGet("PaginationInRoom")]
+        public async Task<ActionResult> PaginationInRoom(int roomID, string starnumber, int pagenumber)
+        {
+            var pageSize = 5;
+            var starNumber = 0;
+
+            var feedbacks = await _context.Feedbacks.Where(f => f.RoomId == roomID).ToListAsync();
+                
+            if (starnumber == "5star")
+            {
+                starNumber = 5;
+            }
+            if (starnumber == "4star")
+            {
+                starNumber = 4;
+            }
+            if (starnumber == "3star")
+            {
+                starNumber = 3;
+            }
+            if (starnumber == "2star")
+            {
+                starNumber = 2;
+            }
+            if (starnumber == "1star")
+            {
+                starNumber = 1;
+            }
+
+            if (starnumber != "0")
+            {
+                feedbacks = feedbacks.Where(f => f.NumberStart == starNumber).ToList();
+            }
+
+            var startIndex = (pagenumber - 1) * pageSize;
+
+            feedbacks = feedbacks.Skip(startIndex).Take(pageSize).ToList();
+
+            var feedbacks1 = _mapper.Map<List<FeedbackDTO>>(feedbacks);
+
+            foreach (var feedback in feedbacks1)
+            {
+                var user = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserInfoId == feedback.UserId);
+
+                feedback.UserName = user?.LastName + user?.FirstName;
+                feedback.UserImage = user?.ImageUser;
+            }
+
+            return Ok(feedbacks1);
+        }
+
         [HttpGet("GetAllFeedbackInProduct")]
         public async Task<ActionResult> GetAllFeedbackInProduct(int productID)
         {
