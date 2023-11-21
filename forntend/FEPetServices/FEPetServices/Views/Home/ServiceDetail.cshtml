@@ -86,21 +86,21 @@
                                     <p class="description mb--40">@Model?.Service.Desciptions</p>
                                     <div style="margin-bottom:10px;">
                                         <p class="title" style="font-family: serif;font-size: 15px; height:1px;">Đối tác:</p>
-                                        <label class="containerbutton" >
-                                            <input type="checkbox" id="toggleSelect">
-                                            <div class="checkmark"></div>
-                                        
+                                        @*<label class="containerbutton" >*@
+                                            @*<input type="checkbox" id="toggleSelect">
+                                            <div class="checkmark"></div>*@
+                                           
                                             @if (ViewBag.Partners != null)
                                             {
-                                                <select name="PartnerInfoId" id="PartnerInfoId"  class="size-option"  style="font-family: serif ; width: 200px; height:30px; border:2px solid black" disabled >
+                                                <select name="PartnerInfoId" id="PartnerInfoId"  class="size-option"  style="font-family: serif ; width: 200px; height:30px; border:2px solid black" >
                                                     <option value="">Danh sách đối tác</option>
                                                     @foreach (var category in ViewBag.Partners)
                                                      {
-                                                    <option value="@category.Value">@category.Text</option>
+                                                     <option id="toggleSelect" value="@category.Value">@category.Text</option>
                                                      }
                                                 </select>
                                             }
-                                        </label>
+                                        @*</label>*@
                                     </div>
                                     <div class="product-variations-wrapper">
                                         <div class="product-variation product-size-variation">
@@ -329,18 +329,6 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
-        // Lấy tham chiếu đến checkbox và select bằng cách sử dụng id
-        var checkbox = document.getElementById('toggleSelect');
-        var select = document.getElementById('PartnerInfoId');
-
-        // Thêm sự kiện "change" cho checkbox
-        checkbox.addEventListener('change', function() {
-            if (checkbox.checked) {
-                select.removeAttribute('disabled');
-            } else {
-                select.setAttribute('disabled', 'disabled');
-            }
-        });
         const input = document.getElementById('petWeight');
         input.addEventListener('change', function() {
             if (input.value && !input.value.endsWith('kg')) {
@@ -395,14 +383,13 @@
     function calculateTotal() {
     var petWeight = parseFloat(document.getElementById('petWeight').value);
     var servicePrice = parseFloat(document.querySelector('.price.current-price').textContent.replace(/,/g, '').replace(/\D/g, ''));
-    @*var price = priceText ? parseInt(priceText.replace(/,/g, '').replace(/\D/g, '')) : 0;*@
-
     var additionalCost = 0;
     var additional =0;
 
     if (document.getElementById('toggleSelect').checked) {
         additional += 50000;
     }
+
 
     if (petWeight <= 5) {
         additionalCost += 0;
