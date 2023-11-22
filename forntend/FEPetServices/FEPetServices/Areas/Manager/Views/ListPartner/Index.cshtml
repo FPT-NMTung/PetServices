@@ -46,21 +46,13 @@
                             }
                             else
                             {
-                                // Nếu độ dài của description ít hơn hoặc bằng 100, giữ nguyên giá trị description ban đầu
                                 description = listAccounts.PartnerInfo.Descriptions;
                             }
                         }
                         else
                         {
-                            // Nếu description là null, gán description bằng chuỗi rỗng
                             description = string.Empty;
                         }
-                        // Tiếp tục xử lý hoặc sử dụng giá trị description đã được cập nhật
-
-
-                        
-                    
-
                         <tr>
                             <td>@itemCount</td>
                             <td>@listAccounts.PartnerInfo.FirstName  @listAccounts.PartnerInfo.LastName</td>
