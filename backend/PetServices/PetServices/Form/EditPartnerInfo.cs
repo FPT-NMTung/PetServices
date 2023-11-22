@@ -13,5 +13,6 @@
         public string? ImagePartner { get; set; }
         public string? Lat { get; set; }
         public string? Lng { get; set; }
+        public DateTime? Dob { get; set; }
     }
 }
