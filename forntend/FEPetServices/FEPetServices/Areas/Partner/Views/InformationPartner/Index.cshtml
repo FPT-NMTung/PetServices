@@ -99,6 +99,7 @@
                             <input type="hidden" name="Province" id="provinceNameInput" />
                             <input type="hidden" name="District" id="districtNameInput" />
                             <input type="hidden" name="Commune" id="wardsNameInput" />
+                            @*input ẩn, lưu thông tin cá nhân thì 2 trường này về null*@
                             <input type="hidden" name="Lat" id="inputLatt" />
                             <input type="hidden" name="Lng" id="inputLngg" />
 
@@ -113,10 +114,9 @@
 
                     <script>
                         window.addEventListener("load", function () {
-                            // Gọi action để lấy và hiển thị bản đồ với vị trí từ hàm Index của controller
                             getLocation();
                             showPartnerLocation(@Model?.PartnerInfo.Lat, @Model?.PartnerInfo.Lng);
-                            startWatchingLocation(); // gọi hàm theo dõi vị trí
+                            startWatchingLocation(); 
                         });
 
                         function getLocation() {
@@ -126,14 +126,11 @@
                                         var latitude = position.coords.latitude;
                                         var longitude = position.coords.longitude;
 
-                                        // Show position on the map
                                         initMap(latitude, longitude);
 
-                                        // Update hidden input fields with latitude and longitude
                                         document.getElementById("inputLat").value = latitude;
                                         document.getElementById("inputLng").value = longitude;
 
-                                        // Call the API to update the location in the database
                                         updateLocation(latitude, longitude);
                                     },
                                     function (error) {
@@ -179,7 +176,6 @@
                         }
 
                         function showError(error) {
-                            // Handle error messages as needed
                             switch (error.code) {
                                 case error.PERMISSION_DENIED:
                                     alert("Truy cập vào vị trí bị từ chối bởi người dùng.");
