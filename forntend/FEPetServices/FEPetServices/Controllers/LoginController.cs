@@ -14,13 +14,16 @@ namespace FEPetServices.Controllers
     {
         private readonly HttpClient client = null;
         private string DefaultApiUrl = "";
+        private readonly IConfiguration configuration;
 
-        public LoginController()
+        public LoginController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account";
+            /*DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account";*/
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
         }
 
         public IActionResult Index()
@@ -36,7 +39,7 @@ namespace FEPetServices.Controllers
                 var json = JsonConvert.SerializeObject(loginInfo);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "/Login", content); // Hãy đảm bảo rằng URL API của bạn là chính xác
+                HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "Account/Login", content); // Hãy đảm bảo rằng URL API của bạn là chính xác
 
                 if (response.IsSuccessStatusCode)
                 {
