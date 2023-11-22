@@ -21,8 +21,8 @@ namespace FEPetServices.Areas.Partner.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
-            DefaultApiUrlPartner = "https://pet-service-api.azurewebsites.net/api/Partner/updateInfo";
-            DefaultApiUrlInforPartner = "https://pet-service-api.azurewebsites.net/api/Partner";
+            DefaultApiUrlPartner = "https://localhost:7255/api/Partner/updateInfo";
+            //DefaultApiUrlPartner = "https://pet-service-api.azurewebsites.net/api/Partner/updateInfo";
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -118,6 +118,17 @@ namespace FEPetServices.Areas.Partner.Controllers
                     AccountInfo managerInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
                     partnerInfo.ImagePartner = managerInfos.PartnerInfo.ImagePartner;
                 }
+            }
+
+            // Check if Dob is greater than the current date
+            if (partnerInfo.Dob.HasValue && partnerInfo.Dob.Value < DateTime.Now)
+            {
+                
+            }
+            else
+            {
+                TempData["ErrorToast"] = "Ngày sinh không thể lớn hơn ngày hiện tại";
+                return RedirectToAction("Index");
             }
 
             if (partnerInfo.Address == null || partnerInfo.FirstName == null || partnerInfo.LastName == null)

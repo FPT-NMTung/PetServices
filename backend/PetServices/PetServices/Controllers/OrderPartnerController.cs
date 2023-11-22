@@ -47,7 +47,6 @@ namespace PetServices.Controllers
             .ThenInclude(y => y.Service)
             .Include(z => z.UserInfo)
             .Where(o => o.BookingServicesDetails.Any(b => b.Service.SerCategories.SerCategoriesId == serCategoriesId))
-            //&& (string.IsNullOrEmpty(orderStatus) || o.OrderStatus == orderStatus))
             .ToListAsync();
 
             return Ok(_mapper.Map<List<OrdersDTO>>(orders));
@@ -62,7 +61,6 @@ namespace PetServices.Controllers
                 .Where(o =>
                     o.BookingServicesDetails.Any(b => b.Service.SerCategories.SerCategoriesId == serCategoriesId) &&
                     o.BookingServicesDetails.All(b => b.PartnerInfoId == partnerInfoId))
-                //&& (string.IsNullOrEmpty(orderStatus) || o.OrderStatus == orderStatus))
                      .ToListAsync();
 
             return Ok(_mapper.Map<List<OrdersDTO>>(orders));
