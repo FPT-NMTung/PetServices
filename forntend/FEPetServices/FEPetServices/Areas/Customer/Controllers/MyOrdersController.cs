@@ -92,5 +92,8 @@ namespace FEPetServices.Areas.Customer.Controllers
 
         [HttpGet]
         public Task<IActionResult> RejectOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+
+        [HttpGet]
+        public Task<IActionResult> CompletedOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
     }
 }

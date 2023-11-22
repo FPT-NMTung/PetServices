@@ -19,7 +19,7 @@
                     <a class="nav-link" id="pills-education-tab" data-toggle="pill" href="~/Customer/MyOrders/WaitingOrders?orderStatus=Waiting&page=1&pageSize=5" role="tab" aria-selected="false">Đơn hàng chờ xử lý</a>
                 </li>
                 @*                <li class="nav-item">
-                <a class="nav-link active" id="pills-timeline-tab" data-toggle="pill" href="~/Customer/MyOrders/DeliveryOrders?orderStatus=Delivery&page=1&pageSize=5" role="tab" aria-selected="false">Vận chuyển</a>
+                <a class="nav-link" id="pills-timeline-tab" data-toggle="pill" href="~/Customer/MyOrders/DeliveryOrders?orderStatus=Delivery&page=1&pageSize=5" role="tab" aria-selected="false">Vận chuyển</a>
                 </li>*@
                 @* <li class="nav-item">
                 <a class="nav-link" id="pills-document-tab" data-toggle="pill" href="~/Customer/MyOrders/Index?orderStatus=All&page=1&pageSize=5" role="tab" aria-selected="false">Chờ giao hàng</a>
@@ -28,16 +28,16 @@
                     <a class="nav-link" id="pills-event-tab" data-toggle="pill" href="~/Customer/MyOrders/ReceivedOrders?orderStatus=Received&page=1&pageSize=5" role="tab" aria-selected="false">Đã được xác nhận</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrders/RejectOrders?orderStatus=Rejected&page=1&pageSize=5" role="tab" aria-selected="false">Đã huỷ</a>
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrders/RejectOrders?orderStatus=Reject&page=1&pageSize=5" role="tab" aria-selected="false">Đã huỷ</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrders/CompletedOrders?orderStatus=Completed&page=1&pageSize=5" role="tab" aria-selected="false">Hoàn thành</a>
+                    <a class="nav-link active" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrders/CompletedOrders?orderStatus=Completed&page=1&pageSize=5" role="tab" aria-selected="false">Hoàn thành</a>
                 </li>
             </ul>
         </div>
         <div class="card-body">
             <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">    
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                     @if (Model != null && Model.Count > 0)
                     {
                         <div id="orders-container">
@@ -130,9 +130,9 @@
                     }
                     else
                     {
-                            <div class="work-container" style="width:100%">
-                             <p style="text-align:center">Chưa có đơn hàng</p>    
-                            </div>
+                        <div class="work-container" style="width:100%">
+                            <p style="text-align:center">Chưa có đơn hàng</p>
+                        </div>
                     }
                 </div>
             </div>
@@ -144,28 +144,33 @@
     <script>
         var pageIndex = 1;
         var loading = false;
-        var lazyLoadingEnabled = true; 
+        var lazyLoadingEnabled = true;
 
         function loadMore() {
             if (!loading && lazyLoadingEnabled) {
                 loading = true;
+                $('#loading-indicator').show();
 
                 $.ajax({
-                    url: '/Customer/MyOrders/DeliveryOrders',
+                    url: '/Customer/MyOrders/CompletedOrders',
                     type: 'GET',
-                    data: { orderStatus: 'Delivery', page: pageIndex + 1, pageSize: 5 }, 
+                    data: { orderStatus: 'Completed', page: pageIndex + 1, pageSize: 5 },
                     success: function (data) {
                         if (data.trim() !== '') {
                             $('#orders-container').append(data);
                             pageIndex++;
+                        } else {
+                            lazyLoadingEnabled = false;
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         lazyLoadingEnabled = false;
                         console.error('AJAX error:', textStatus, errorThrown);
                     },
+
                     complete: function () {
                         loading = false;
+                        $('#loading-indicator').hide();
                     }
                 });
             }

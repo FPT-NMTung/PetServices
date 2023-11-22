@@ -55,9 +55,10 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="small mb-1" for="inputEmailAddress">Ngày Sinh</label>
-                                <input class="form-control" type="date" placeholder="Enter your dob" value="@Model?.PartnerInfo.Dob" required>
+                                <label class="small mb-1" for="inputDob">Ngày Sinh</label>
+                                <input class="form-control" name="Dob" id="inputDob" type="date" value="@Model?.PartnerInfo.Dob?.ToString("yyyy-MM-dd")" required>
                             </div>
+
                             
                             <div class="mb-3">
                                 <label class="small mb-1" for="inputEmailAddress">Email</label>
