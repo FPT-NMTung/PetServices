@@ -22,11 +22,11 @@
                         <div class="small font-italic text-muted mb-4">JPG hoặc PNG không vượt quá 5 MB</div>
                     </div>
                 </div>
-                
-                <div style="margin-top: 20px">
-                    <button class="btn btn-primary" onclick="getnewLocation()">Lấy vị trí</button>
-                </div>
-
+                @if (@Model?.PartnerInfo.Lat == null && @Model?.PartnerInfo.Lng == null ) {
+                    <div style="margin-top: 20px">
+                        <button class="btn btn-primary" onclick="getnewLocation()">Lấy vị trí</button>
+                    </div>
+                }
                 <div id="map" style="width: 100%; height: 400px; margin-top: 20px"></div>
                 <input type="hidden" name="Lat" id="inputLat" value="@Model?.PartnerInfo.Lat" />
                 <input type="hidden" name="Lng" id="inputLng" value="@Model?.PartnerInfo.Lng" />
