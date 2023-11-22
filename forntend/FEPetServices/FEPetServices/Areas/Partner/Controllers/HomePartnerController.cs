@@ -174,8 +174,6 @@ namespace FEPetServices.Areas.Partner.Controllers
         //Reject
         public async Task<IActionResult> ListOrderPetTrainingReject()
         {
-            //orderStatus = "Waiting";
-            //https://pet-service-api.azurewebsites.net/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
             if (response.IsSuccessStatusCode)
@@ -243,8 +241,6 @@ namespace FEPetServices.Areas.Partner.Controllers
         //Received
         public async Task<IActionResult> ListOrderPetTrainingReceived()
         {
-            //orderStatus = "Waiting";
-            //https://pet-service-api.azurewebsites.net/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
             if (response.IsSuccessStatusCode)
@@ -339,83 +335,5 @@ namespace FEPetServices.Areas.Partner.Controllers
                 return View();
             }
         }
-        //[HttpPut]
-        //public async Task<IActionResult> UpdateOrderStatus(int orderId, string status)
-        //{
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            string apiUrl = DefaultApiUrlOrderListOfPetTraining + "&OrderId=" + orderId + "&OrderStatus=" + status;
-                    
-        //            var ord = new OrderForm
-        //            {
-        //                OrderId = orderId,
-        //                OrderStatus = status
-        //            };
-
-        //            var json = JsonConvert.SerializeObject(ord);
-        //            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        //            HttpResponseMessage response = await client.PutAsJsonAsync(apiUrl, content);
-
-
-        //            if (response.IsSuccessStatusCode)
-        //            {
-        //                return Json(new
-        //                {
-        //                    Success = true
-        //                });
-        //            }
-        //            else if (response.StatusCode == HttpStatusCode.BadRequest)
-        //            {
-        //                var errorMessage = await response.Content.ReadAsStringAsync();
-        //                ViewBag.ErrorMessage = errorMessage;
-        //                return Json(new
-        //                {
-        //                    Success = false
-        //                });
-        //            }
-        //            else
-        //            {
-        //                var errorMessage = await response.Content.ReadAsStringAsync();
-        //                return Json(new
-        //                {
-        //                    Success = false
-        //                });
-        //            }
-        //        }
-        //        else
-        //        {
-        //            return Json(new
-        //            {
-        //                Success = false
-        //            });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
-        //        return View();
-        //    }
-        //    //// Tìm đơn hàng trong cơ sở dữ liệu theo orderId
-        //    //var order = await client.Orders.FirstOrDefaultAsync(o => o.OrderId == orderId);
-
-        //    //// Kiểm tra nếu đơn hàng tồn tại
-        //    //if (order != null)
-        //    //{
-        //    //    // Cập nhật trạng thái đơn hàng
-        //    //    order.OrderStatus = status;
-
-        //    //    // Lưu thay đổi vào cơ sở dữ liệu
-        //    //    await dbContext.SaveChangesAsync();
-
-        //    //    // Trả về một phản hồi thành công
-        //    //    return Json(new { success = true });
-        //    //}
-
-        //    //// Trả về một phản hồi thất bại nếu không tìm thấy đơn hàng
-        //    //return Json(new { success = false });
-        //}
     }
 }
