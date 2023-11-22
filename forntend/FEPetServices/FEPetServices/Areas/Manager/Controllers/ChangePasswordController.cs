@@ -11,13 +11,16 @@ namespace FEPetServices.Areas.Manager.Controllers
     {
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
+        private readonly IConfiguration configuration;
 
-        public ChangePasswordController()
+        public ChangePasswordController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account";
         }
         public async Task<IActionResult> Index([FromForm] ChangePassword changePassword)
         {
