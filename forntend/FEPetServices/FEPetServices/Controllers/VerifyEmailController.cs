@@ -11,12 +11,16 @@ namespace FEPetServices.Controllers
     public class VerifyEmailController : Controller
     {
         private readonly HttpClient _client;
-        private readonly string _defaultApiUrl;
+        /*private readonly string _defaultApiUrl;*/
+        private string DefaultApiUrl = "";
+        private readonly IConfiguration configuration;
 
-        public VerifyEmailController()
+        public VerifyEmailController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             _client = new HttpClient();
-            _defaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account/VerifyOTPAndActivateAccount";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //_defaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account/VerifyOTPAndActivateAccount";
         }
 
         public IActionResult Index()
@@ -40,7 +44,8 @@ namespace FEPetServices.Controllers
 
                 var json = JsonConvert.SerializeObject(model);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await _client.PostAsync(_defaultApiUrl, content);
+                //HttpResponseMessage response = await _client.PostAsync(_defaultApiUrl, content);
+                HttpResponseMessage response = await _client.PostAsync(DefaultApiUrl + "Account/VerifyOTPAndActivateAccount", content);
 
                 if (response.IsSuccessStatusCode)
                 {

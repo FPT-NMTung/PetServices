@@ -19,18 +19,21 @@ namespace FEPetServices.Controllers
     {
         private readonly HttpClient client = null;
         private string DefaultApiUrl = "";
+        private readonly IConfiguration configuration;
+        /*private string DefaultApiUrl = "";
         private string DefaultApiUrlProductList = "";
         private string DefaultApiUrlProductDetail = "";
-        private string DefaultApiUrlProductCategoryList = "";
+        private string DefaultApiUrlProductCategoryList = "";*/
 
-        public ProductListController()
+        public ProductListController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             DefaultApiUrl = "";
-            DefaultApiUrlProductList = "https://pet-service-api.azurewebsites.net/api/Product";
+           /* DefaultApiUrlProductList = "https://pet-service-api.azurewebsites.net/api/Product";
             DefaultApiUrlProductDetail = "https://pet-service-api.azurewebsites.net/api/Product/ProductID"; 
-            DefaultApiUrlProductCategoryList = "https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll";
+            DefaultApiUrlProductCategoryList = "https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll";*/
         }
 
         public async Task<IActionResult> Index(ProductDTO productDTO, ProductSearch searchDTO)
@@ -39,8 +42,10 @@ namespace FEPetServices.Controllers
             {
                 var json = JsonConvert.SerializeObject(productDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
-                HttpResponseMessage ProductCategoryResponse = await client.GetAsync(DefaultApiUrlProductCategoryList);
+                //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
+                //HttpResponseMessage ProductCategoryResponse = await client.GetAsync(DefaultApiUrlProductCategoryList);
+                HttpResponseMessage ProductCategoryResponse = await client.GetAsync(DefaultApiUrl + "ProductCategory/GetAll");
                 if (ProductCategoryResponse.IsSuccessStatusCode)
                 {
                     var categories = await ProductCategoryResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
@@ -141,8 +146,10 @@ namespace FEPetServices.Controllers
             ProductDetailModel model = new ProductDetailModel();
             try
             {
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductDetail + "/" + proId);
-                HttpResponseMessage listResponse = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
+                //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductDetail + "/" + proId);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product/ProductID" + "/" + proId);
+                //HttpResponseMessage listResponse = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
+                HttpResponseMessage listResponse = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
                 if (response.IsSuccessStatusCode)
                 {
                     
@@ -162,7 +169,8 @@ namespace FEPetServices.Controllers
                         PropertyNameCaseInsensitive = true
                     };
                     model.Product  = System.Text.Json.JsonSerializer.Deserialize<ProductDTO>(responseContent, option);
-                    HttpResponseMessage listCateProductResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Product/GetByCategory/" + model.Product.ProCategoriesId);
+                    //HttpResponseMessage listCateProductResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Product/GetByCategory/" + model.Product.ProCategoriesId);
+                    HttpResponseMessage listCateProductResponse = await client.GetAsync(DefaultApiUrl + "Product/GetByCategory/" + model.Product.ProCategoriesId);
                     if (listCateProductResponse.IsSuccessStatusCode)
                     {
                         var responseCateProductContent = await listCateProductResponse.Content.ReadAsStringAsync();
@@ -174,7 +182,8 @@ namespace FEPetServices.Controllers
                         }
                     }
 
-                    HttpResponseMessage voteNumberResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetProductVoteNumber?productID=" + proId);
+                    //HttpResponseMessage voteNumberResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetProductVoteNumber?productID=" + proId);
+                    HttpResponseMessage voteNumberResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetProductVoteNumber?productID=" + proId);
 
                     if (voteNumberResponse.IsSuccessStatusCode)
                     {
@@ -183,7 +192,8 @@ namespace FEPetServices.Controllers
                         model.VoteNumberas = voteNumber;
                     }
 
-                    HttpResponseMessage productStarResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetProductStar?productID=" + proId);
+                    //HttpResponseMessage productStarResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetProductStar?productID=" + proId);
+                    HttpResponseMessage productStarResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetProductStar?productID=" + proId);
 
                     if (productStarResponse.IsSuccessStatusCode)
                     {
@@ -195,7 +205,8 @@ namespace FEPetServices.Controllers
                         }
                     }
 
-                    HttpResponseMessage feedbackResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetAllFeedbackInProduct?productID=" + proId);
+                    //HttpResponseMessage feedbackResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetAllFeedbackInProduct?productID=" + proId);
+                    HttpResponseMessage feedbackResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetAllFeedbackInProduct?productID=" + proId);
 
                     if (feedbackResponse.IsSuccessStatusCode)
                     {
@@ -229,7 +240,8 @@ namespace FEPetServices.Controllers
 
                         page = page ?? 1;
 
-                        HttpResponseMessage paggingResponse = await client.GetAsync("https://localhost:7255/api/Feedback/PaginationInProduct?productID=" + proId + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
+                        //HttpResponseMessage paggingResponse = await client.GetAsync("https://localhost:7255/api/Feedback/PaginationInProduct?productID=" + proId + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
+                        HttpResponseMessage paggingResponse = await client.GetAsync(DefaultApiUrl + "Feedback/PaginationInProduct?productID=" + proId + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
 
                         ViewBag.CurrentPage = page;
 
@@ -304,7 +316,8 @@ namespace FEPetServices.Controllers
         {
             ProductDTO product = null;
 
-            HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductDetail + "/" + ProductId);
+            //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductDetail + "/" + ProductId);
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "/Product/ProductID/" + ProductId);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
