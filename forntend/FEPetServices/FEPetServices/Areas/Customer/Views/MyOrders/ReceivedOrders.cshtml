@@ -89,7 +89,7 @@
                                                         <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
                                                     <div class="btn-content-detail">
-                                                        <button class="btn btn-primary" onclick="openPopup()">Đánh giá</button>
+                                                        <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@order.UserInfoId')">Đánh giá</button>
                                                     </div>
                                                 }
                                             </div>
@@ -113,7 +113,7 @@
                                                         <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
                                                     <div class="btn-content-detail">
-                                                        <button class="btn btn-outline-primary" onclick="openPopup('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@order.UserInfoId')">Đánh giá</button>
+                                                        <button class="btn btn-outline-primary" onclick="openPopupService('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@order.UserInfoId')">Đánh giá</button>
                                                     </div>
                                                 }
                                             </div>
@@ -190,6 +190,7 @@
                                     <div class="form-group">
                                         <label>Đánh giá của bạn</label>
                                         <input type="hidden" id="serviceIdInput" value="" />
+                                        <input type="hidden" id="productIdInput" value="" />
                                         <input type="hidden" id="ratingInput" value="" />
                                         <input type="hidden" id="userIdInput" value="" />
                                         <textarea name="message" id="feedbackMessage" placeholder="Hãy chia sẻ những điều bạn thích về sản phẩm/dịch vụ này với mọi người nhé." cols="300" rows="5"></textarea>
@@ -251,7 +252,7 @@
     @*End Lazy Loading*@
     <script>
         //Hiện popup đánh giá
-        function openPopup(image, serviceName, weight, serviceId, userId) {
+        function openPopupService(image, serviceName, weight, serviceId, userId) {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('popup').style.display = 'block';
 
@@ -261,6 +262,23 @@
 
             document.getElementById('serviceIdInput').value = serviceId;
             document.getElementById('userIdInput').value = userId;
+            document.getElementById('productIdInput').value = null;
+
+        }
+
+        //Hiện popup đánh giá
+        function openPopupProduct(image, productName, quanlity, productId, userId) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+
+            document.getElementById('popupImage').src = image;
+            document.getElementById('popupServiceName').innerText = productName;
+            document.getElementById('popupServiceInfo').innerText = 'x' + quanlity;
+
+            document.getElementById('productIdInput').value = productId;
+            document.getElementById('userIdInput').value = userId;
+            document.getElementById('serviceIdInput').value = null;
+
         }
 
         // Ẩn popup đánh giá
@@ -310,17 +328,24 @@
             var feedbackMessage = document.getElementById('feedbackMessage').value;
 
             var serviceId = document.getElementById('serviceIdInput').value;
+            var productId = document.getElementById('productIdInput').value;
             var rating = document.getElementById('ratingInput').value;
             var userId = document.getElementById('userIdInput').value;
 
-            if (serviceId && rating && feedbackMessage) 
+            if (rating && feedbackMessage) 
             {
                 var data = {
-                    ServiceId: parseInt(serviceId),
                     NumberStart: parseInt(rating),
                     Content: feedbackMessage,
                     UserId: userId
                 };
+
+                if (productId !== null) {
+                    data.ProductId = parseInt(productId);
+                }
+                if (serviceId !== null) {
+                    data.ServiceId = parseInt(serviceId);
+                }
 
                 $.ajax({
                     url: 'https://localhost:7255/api/Feedback/AddFeedBack',
@@ -339,8 +364,12 @@
             }
             else 
             {
-                
-                alert('Please provide all required information.' + 'serviceId: ' + serviceId + 'rating: ' + rating + 'feedbackMessage: ' + feedbackMessage + 'abc: ' + userId);
+                alert('Please provide all required information.' +
+                    '\nserviceId: ' + serviceId +
+                    '\nproductId: ' + productId +
+                    '\nrating: ' + rating +
+                    '\nfeedbackMessage: ' + feedbackMessage +
+                    '\nuserId: ' + userId);
             }
         });
     </script>
