@@ -49,6 +49,8 @@ namespace PetServices.Controllers
             return Ok(_mapper.Map<List<AccountInfo>>(account));
         }
 
+
+
         [HttpGet("{email}")]
         public IActionResult Get(string email)
         {
@@ -85,7 +87,7 @@ namespace PetServices.Controllers
 
         
         [HttpPut("UpdateLocation")]
-        public IActionResult UpdateLocation([FromBody] PartnerInfoDTO partnerDTO, string email)
+        public IActionResult UpdateLocation([FromBody] PartnerLocationDTO partnerDTO, string email)
         {
             try
             {
@@ -99,12 +101,12 @@ namespace PetServices.Controllers
                     return NotFound("Tài khoản không tồn tại hoặc không phải là đối tác");
                 }
 
-                partnerAccount.PartnerInfo.Lat = partnerDTO.Lat;
+                partnerAccount.PartnerInfo.Lat = partnerDTO.Lat; 
                 partnerAccount.PartnerInfo.Lng = partnerDTO.Lng;
 
                 _context.SaveChanges();
 
-                return Ok(_mapper.Map<PartnerInfoDTO>(partnerAccount.PartnerInfo));
+                return Ok(_mapper.Map<PartnerLocationDTO>(partnerAccount.PartnerInfo));
             }
             catch (Exception ex)
             {

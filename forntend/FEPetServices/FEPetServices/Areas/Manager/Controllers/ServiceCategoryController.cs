@@ -91,19 +91,17 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     var json = JsonConvert.SerializeObject(serviceCategory);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                    // Gửi dữ liệu lên máy chủ
                     HttpResponseMessage response = await client.PostAsync(DefaultApiUrlServiceCategoryAdd, content);
 
                     if (response.IsSuccessStatusCode)
                     {
                         TempData["SuccessToast"] = "Thêm dịch vụ thành công!";
-                        return View(serviceCategory); // Chuyển hướng đến trang thành công hoặc trang danh sách
+                        return View(serviceCategory); 
                     }
                     else
                     {
                         TempData["ErrorToast"] = "Thêm dịch vụ thất bại. Vui lòng thử lại sau.";
-                        return View(serviceCategory); // Hiển thị lại biểu mẫu với dữ liệu đã điền
+                        return View(serviceCategory); 
                     }
                 }
                 else
@@ -114,14 +112,14 @@ namespace FEPetServices.Areas.Manager.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
-                return View(serviceCategory); // Hiển thị lại biểu mẫu với dữ liệu đã điền
+                return View(serviceCategory); 
             }
         }
 
         public static string GenerateRandomNumber(int length)
         {
             Random random = new Random();
-            const string chars = "0123456789"; // Chuỗi chứa các chữ số từ 0 đến 9
+            const string chars = "0123456789"; 
             char[] randomChars = new char[length];
 
             for (int i = 0; i < length; i++)

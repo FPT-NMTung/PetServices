@@ -320,6 +320,8 @@ namespace PetServices.Models
 
                 entity.Property(e => e.District).HasMaxLength(500);
 
+                entity.Property(e => e.Dob).HasColumnType("date");
+
                 entity.Property(e => e.FirstName).HasMaxLength(100);
 
                 entity.Property(e => e.ImageCertificate).IsUnicode(false);
@@ -351,6 +353,8 @@ namespace PetServices.Models
                 entity.ToTable("PetInfo");
 
                 entity.Property(e => e.PetInfoId).HasColumnName("PetInfoID");
+
+                entity.Property(e => e.Dob).HasColumnType("date");
 
                 entity.Property(e => e.ImagePet).IsUnicode(false);
 
@@ -492,6 +496,8 @@ namespace PetServices.Models
                 entity.Property(e => e.Commune).HasMaxLength(500);
 
                 entity.Property(e => e.District).HasMaxLength(500);
+
+                entity.Property(e => e.Dob).HasColumnType("date");
 
                 entity.Property(e => e.FirstName).HasMaxLength(100);
 

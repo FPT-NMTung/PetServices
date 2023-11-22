@@ -15,6 +15,8 @@ namespace PetServices.Mapper
 
             CreateMap<PartnerInfo, PartnerInfoDTO>()
                 .ReverseMap();
+            CreateMap<PartnerInfo, PartnerLocationDTO>()
+                .ReverseMap();
 
             CreateMap<PetInfo, PetInfoDTO>()
                 .ReverseMap();

@@ -13,6 +13,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
         private string DefaultApiUrlPartner = "";
+        private string DefaultApiUrlInforPartner = "";
 
         public InformationPartnerController()
         {
@@ -21,6 +22,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
             DefaultApiUrlPartner = "https://pet-service-api.azurewebsites.net/api/Partner/updateInfo";
+            DefaultApiUrlInforPartner = "https://pet-service-api.azurewebsites.net/api/Partner";
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -90,7 +92,6 @@ namespace FEPetServices.Areas.Partner.Controllers
                 TempData["ErrorToast"] = "Địa chỉ cụ thể phải lớn hơn 10 ký tự";
                 return RedirectToAction("Index");
             }
-            // Handle the uploaded image
             if (image != null)
             {
                 string filename = GenerateRandomNumber(5) + image.FileName;
@@ -104,7 +105,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
             else
             {
-                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrlPartner + "?email=" + email);
+                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrlInforPartner + "/" + email);
                 if (responseUser.IsSuccessStatusCode)
                 {
                     string responseContent = await responseUser.Content.ReadAsStringAsync();
@@ -166,6 +167,36 @@ namespace FEPetServices.Areas.Partner.Controllers
             {
                 TempData["ErrorToast"] = "Lỗi hệ thống vui lòng thử lại sau";
                 return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateLocation([FromBody] LocationUpdateModel locationUpdate)
+        {
+            try
+            {
+                ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+                string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+                // Update the location in the database
+                var updateLocationModel = new PartnerLocationDTO { Lat = locationUpdate.Lat.ToString(), Lng = locationUpdate.Lng.ToString() };
+                HttpResponseMessage response = await _client.PutAsJsonAsync($"https://pet-service-api.azurewebsites.net/api/Partner/UpdateLocation?email={email}", updateLocationModel);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessToast"] = "Cập nhật vị trí thành công";
+                    return Ok();
+                }
+                else
+                {
+                    TempData["ErrorToast"] = "Lỗi khi cập nhật vị trí, vui lòng thử lại sau";
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return StatusCode(500, ex.Message);
             }
         }
 
