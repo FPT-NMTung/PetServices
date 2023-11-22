@@ -11,8 +11,8 @@ namespace FEPetServices.Areas.Customer.Controllers
     {
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
-        private string DefaultApiUrlPet = "";
-        private string DefaultApiUrlOrders = "";
+        //private string DefaultApiUrlPet = "";
+        //private string DefaultApiUrlOrders = "";
         private readonly IConfiguration configuration;
 
         public MenuCustomerController(IConfiguration configuration)

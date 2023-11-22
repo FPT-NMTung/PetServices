@@ -12,13 +12,16 @@ namespace FEPetServices.Areas.Manager.Controllers
     {
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
+        private readonly IConfiguration configuration;
 
-        public InformationController()
+        public InformationController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
+            //DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -26,7 +29,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "/" + email);
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
 
             if (response.IsSuccessStatusCode)
             {
@@ -102,7 +105,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             else
             {
-                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "/" + email);
+                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
                 if (responseUser.IsSuccessStatusCode)
                 {
                     string responseContent = await responseUser.Content.ReadAsStringAsync();
@@ -125,7 +128,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
             if (userInfo.Province == null || userInfo.District == null || userInfo.Commune == null)
             {
-                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "/" + email);
+                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
                 if (responseUser.IsSuccessStatusCode)
                 {
                     string responseContent = await responseUser.Content.ReadAsStringAsync();
@@ -143,7 +146,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
 
             // Update the user information, including the image URL
-            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/updateInfo?email=" + email, userInfo);
+            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "UserInfo/updateInfo?email=" + email, userInfo);
             if (response.IsSuccessStatusCode)
             {
                 TempData["SuccessToast"] = "Cập nhật thông tin thành công";

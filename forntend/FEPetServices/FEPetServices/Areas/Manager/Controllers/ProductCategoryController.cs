@@ -12,21 +12,24 @@ namespace FEPetServices.Areas.Manager.Controllers
     {
         private readonly HttpClient client = null;
         private string DefaultApiUrl = "";
-        private string DefaultApiUrlProductCategoryList = "";
-        private string DefaultApiUrlProductCategoryDetail = "";
-        private string DefaultApiUrlProductCategoryAdd = "";
-        private string DefaultApiUrlProductCategoryUpdate = "";
+        //private string DefaultApiUrlProductCategoryList = "";
+        //private string DefaultApiUrlProductCategoryDetail = "";
+        //private string DefaultApiUrlProductCategoryAdd = "";
+        //private string DefaultApiUrlProductCategoryUpdate = "";
+        private readonly IConfiguration configuration;
 
-        public ProductCategoryController()
+
+        public ProductCategoryController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "";
-            DefaultApiUrlProductCategoryList = "https://pet-service-api.azurewebsites.net/api/ProductCategory";
-            DefaultApiUrlProductCategoryDetail = "https://pet-service-api.azurewebsites.net/api/ProductCategory/ProductCategorysID";
-            DefaultApiUrlProductCategoryAdd = "https://pet-service-api.azurewebsites.net/api/ProductCategory/CreateNewProductCategory";
-            DefaultApiUrlProductCategoryUpdate = "https://pet-service-api.azurewebsites.net/api/ProductCategory/Update?procateId=";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrlProductCategoryList = "https://pet-service-api.azurewebsites.net/api/ProductCategory";
+            //DefaultApiUrlProductCategoryDetail = "https://pet-service-api.azurewebsites.net/api/ProductCategory/ProductCategorysID";
+            //DefaultApiUrlProductCategoryAdd = "https://pet-service-api.azurewebsites.net/api/ProductCategory/CreateNewProductCategory";
+            //DefaultApiUrlProductCategoryUpdate = "https://pet-service-api.azurewebsites.net/api/ProductCategory/Update?procateId=";
         }
 
         public async Task<IActionResult> Index(ProductCategoryDTO productCategoryDTO)
@@ -35,7 +38,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             {
                 var json = JsonConvert.SerializeObject(productCategoryDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductCategoryList + "/GetAll");
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ProductCategory/GetAll");
                 if (response.IsSuccessStatusCode)
                 {
                     var rep = await response.Content.ReadAsStringAsync();
@@ -80,7 +83,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                     // Gửi dữ liệu lên máy chủ
-                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrlProductCategoryAdd, content);
+                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "ProductCategory/CreateNewProductCategory", content);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -111,7 +114,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             try
             {
                 //goi api de lay thong tin can sua
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductCategoryDetail + "/" + procateId);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ProductCategory/ProductCategorysID/" + procateId);
                 if (response.IsSuccessStatusCode)
                 {
                     var rep = await response.Content.ReadAsStringAsync();
@@ -172,7 +175,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 else
                 {
 
-                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrlProductCategoryDetail + "/" + procateId);
+                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrl + "ProductCategory/ProductCategorysID/" + procateId);
 
                     if (responseForImage.IsSuccessStatusCode)
                     {
@@ -203,7 +206,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 // Gửi dữ liệu lên máy chủ
-                HttpResponseMessage response = await client.PutAsync(DefaultApiUrlProductCategoryUpdate + procateId, content);
+                HttpResponseMessage response = await client.PutAsync(DefaultApiUrl + "ProductCategory/Update?procateId=" + procateId, content);
 
                 if (response.IsSuccessStatusCode)
                 {
