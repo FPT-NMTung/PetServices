@@ -339,14 +339,14 @@
                 minDate: "today",
                 enableTime: true,
                 dateFormat: "Y-m-d H:i",
-                minTime: "07:30",
+                minTime: new Date().getHours()+ serviceTime + ":00",
                 onClose: function(selectedDates, dateStr, instance) {
                     const selectedTime = new Date(dateStr);
                     const serviceType = instance.input.id;
                     
                     // Thay thế giờ đóng cửa trực tiếp trong onClose function
-                    let closingTime = new Date(selectedTime.toDateString() + " " + "19:00");
-                    if (selectedTime.getHours() >= 19) {
+                    let closingTime = new Date(selectedTime.toDateString()  + " " + "19:00");
+                    if (selectedTime.getHours()  >= 19) {
                         const nextDay = new Date(selectedTime);
                         nextDay.setDate(selectedTime.getDate() + 1);
                         nextDay.setHours(7);
