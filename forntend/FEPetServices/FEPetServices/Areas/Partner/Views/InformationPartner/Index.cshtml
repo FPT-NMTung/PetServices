@@ -16,10 +16,15 @@
                 <div class="card mb-4 mb-xl-0">
                     <div class="card-header">Hình ảnh cá nhân</div>
                     <div class="card-body text-center">
-                        <img style="max-height:600px;height:100%;max-width:380px;width:100%"
-                             class="img-account-profile mb-2" src="@Model?.PartnerInfo.ImagePartner" alt="">
-                        <!-- Profile picture help block-->
-                        <div class="small font-italic text-muted mb-4">JPG hoặc PNG không vượt quá 5 MB</div>
+                        @if (Model.PartnerInfo.ImagePartner == null)
+                        {
+                            <div class="small font-italic text-muted mb-4">JPG hoặc PNG không vượt quá 5 MB</div>
+                        }
+                        else
+                        {
+                            <img style="max-height:600px;height:100%;max-width:380px;width:100%"
+                             class="img-account-profile mb-2" src="@Model.PartnerInfo.ImagePartner" alt="">
+                        }
                     </div>
                 </div>
                 @if (@Model?.PartnerInfo.Lat == null && @Model?.PartnerInfo.Lng == null ) {

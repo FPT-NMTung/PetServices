@@ -22,10 +22,10 @@ namespace FEPetServices.Areas.Manager.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "";
-            DefaultApiUrlBlogList = "https://pet-service-api.azurewebsites.net/api/Blog";
-            DefaultApiUrlBlogDetail = "https://pet-service-api.azurewebsites.net/api/Blog/BlogID";
-            DefaultApiUrlBlogAdd = "https://pet-service-api.azurewebsites.net/api/Blog/CreateBlog";
-            DefaultApiUrlBlogUpdate = "https://pet-service-api.azurewebsites.net/api/Blog/UpdateBlog?blogId=";
+            DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
+            DefaultApiUrlBlogDetail = "https://localhost:7255/api/Blog/BlogID";
+            DefaultApiUrlBlogAdd = "https://localhost:7255/api/Blog/CreateBlog";
+            DefaultApiUrlBlogUpdate = "https://localhost:7255/api/Blog/UpdateBlog?blogId=";
 
         }
 
@@ -83,23 +83,22 @@ namespace FEPetServices.Areas.Manager.Controllers
                     }
 
                     // mặc định status là true
-                    /*serviceCategory.Status = true;*/
+                    blog.Status = true;
 
                     var json = JsonConvert.SerializeObject(blog);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    // Gửi dữ liệu lên máy chủ
                     HttpResponseMessage response = await client.PostAsync(DefaultApiUrlBlogAdd, content);
 
                     if (response.IsSuccessStatusCode)
                     {
                         TempData["SuccessToast"] = "Thêm bài viết thành công!";
-                        return View(blog); // Chuyển hướng đến trang thành công hoặc trang danh sách
+                        return View(blog); 
                     }
                     else
                     {
                         TempData["ErrorToast"] = "Thêm bài viết thất bại. Vui lòng thử lại sau.";
-                        return View(blog); // Hiển thị lại biểu mẫu với dữ liệu đã điền
+                        return View(blog); 
                     }
                 }
                 else
@@ -110,14 +109,14 @@ namespace FEPetServices.Areas.Manager.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
-                return View(blog); // Hiển thị lại biểu mẫu với dữ liệu đã điền
+                return View(blog); 
             }
         }
 
         public static string GenerateRandomNumber(int length)
         {
             Random random = new Random();
-            const string chars = "0123456789"; // Chuỗi chứa các chữ số từ 0 đến 9
+            const string chars = "0123456789"; 
             char[] randomChars = new char[length];
 
             for (int i = 0; i < length; i++)
@@ -206,14 +205,14 @@ namespace FEPetServices.Areas.Manager.Controllers
                         }
                     }
                 }
-                /* if (Request.Form["Status"] == "on")
-                 {
-                     serviceCategory.Status = true;
-                 }
-                 else
-                 {
-                     serviceCategory.Status = false;
-                 }*/
+                if (Request.Form["Status"] == "on")
+                {
+                    blog.Status = true;
+                }
+                else
+                {
+                    blog.Status = false;
+                }
 
                 var json = JsonConvert.SerializeObject(blog);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -223,12 +222,12 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
+                    TempData["SuccessToast"] = "Chỉnh sửa bài viết thành công!";
                     return View(blog); // Chuyển hướng đến trang thành công hoặc trang danh sách
                 }
                 else
                 {
-                    TempData["ErrorToast"] = "Chỉnh sửa dịch vụ thất bại. Vui lòng thử lại sau.";
+                    TempData["ErrorToast"] = "Chỉnh sửa bài viết thất bại. Vui lòng thử lại sau.";
                     return View(blog); // Hiển thị lại biểu mẫu với dữ liệu đã điền
                 }
             }
@@ -238,11 +237,6 @@ namespace FEPetServices.Areas.Manager.Controllers
                 TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
                 return View(blog); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
-
-            /*public async Task<IActionResult> AddBlog(BlogDTO blog)
-            {
-                return View();
-            }*/
         }
     }
 }
