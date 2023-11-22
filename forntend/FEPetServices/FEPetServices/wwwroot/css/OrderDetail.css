@@ -254,8 +254,10 @@
         color: #666;
     }
 
-    .lb-super-happy{
+    .lb-super-happy, .lb-super-sad, .lb-neutral {
         font-size: 15px;
     }
+
+
 }
 

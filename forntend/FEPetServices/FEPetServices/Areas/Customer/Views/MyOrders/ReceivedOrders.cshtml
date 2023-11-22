@@ -89,7 +89,7 @@
                                                         <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
                                                     <div class="btn-content-detail">
-                                                        <button class="btn btn-primary" onclick="openPopup()">Đánh giá</button>
+                                                        <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@order.UserInfoId')">Đánh giá</button>
                                                     </div>
                                                 }
                                             </div>
@@ -113,7 +113,7 @@
                                                         <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
                                                     <div class="btn-content-detail">
-                                                        <button class="btn btn-outline-primary" onclick="openPopup('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight')">Đánh giá</button>
+                                                        <button class="btn btn-outline-primary" onclick="openPopupService('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@order.UserInfoId')">Đánh giá</button>
                                                     </div>
                                                 }
                                             </div>
@@ -189,7 +189,11 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label>Đánh giá của bạn</label>
-                                        <textarea name="message" placeholder="Hãy chia sẻ những điều bạn thích về sản phẩm/dịch vụ này với mọi người nhé." cols="300" rows="5"></textarea>
+                                        <input type="hidden" id="serviceIdInput" value="" />
+                                        <input type="hidden" id="productIdInput" value="" />
+                                        <input type="hidden" id="ratingInput" value="" />
+                                        <input type="hidden" id="userIdInput" value="" />
+                                        <textarea name="message" id="feedbackMessage" placeholder="Hãy chia sẻ những điều bạn thích về sản phẩm/dịch vụ này với mọi người nhé." cols="300" rows="5"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
@@ -248,13 +252,33 @@
     @*End Lazy Loading*@
     <script>
         //Hiện popup đánh giá
-        function openPopup(image, serviceName, weight) {
+        function openPopupService(image, serviceName, weight, serviceId, userId) {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('popup').style.display = 'block';
 
             document.getElementById('popupImage').src = image;
             document.getElementById('popupServiceName').innerText = serviceName ;
             document.getElementById('popupServiceInfo').innerText = 'Cân nặng: ' + weight + ' Kg';
+
+            document.getElementById('serviceIdInput').value = serviceId;
+            document.getElementById('userIdInput').value = userId;
+            document.getElementById('productIdInput').value = null;
+
+        }
+
+        //Hiện popup đánh giá
+        function openPopupProduct(image, productName, quanlity, productId, userId) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+
+            document.getElementById('popupImage').src = image;
+            document.getElementById('popupServiceName').innerText = productName;
+            document.getElementById('popupServiceInfo').innerText = 'x' + quanlity;
+
+            document.getElementById('productIdInput').value = productId;
+            document.getElementById('userIdInput').value = userId;
+            document.getElementById('serviceIdInput').value = null;
+
         }
 
         // Ẩn popup đánh giá
@@ -282,36 +306,71 @@
             });
         });
 
+        function captureRating() {
+            var ratingRadios = document.getElementsByName('rate');
+
+            for (var i = 0; i < ratingRadios.length; i++) {
+                if (ratingRadios[i].checked) {
+                    var rating = parseInt(ratingRadios[i].value);
+
+                    document.getElementById('ratingInput').value = rating;
+                    break;
+                }
+            }
+            return rating;
+        }
 
         // Khi gửi đánh giá lên
-        document.getElementById('submit-feedback').addEventListener('click', function (e) {
+        document.getElementById('submit-feedback').addEventListener('click', function () {
 
-            var stars = document.querySelector('.rating input:checked').value;
-            var message = document.querySelector('textarea[name="message"]').value;
+            captureRating();
 
-            // Tạo một đối tượng FormData để chứa dữ liệu
-            var feedbackDTO = {
-                NumberStart: stars,
-                Content: message,
-            };
+            var feedbackMessage = document.getElementById('feedbackMessage').value;
 
-            apifeedback = 'https://localhost:7255/api/Feedback/AddFeedBack';
+            var serviceId = document.getElementById('serviceIdInput').value;
+            var productId = document.getElementById('productIdInput').value;
+            var rating = document.getElementById('ratingInput').value;
+            var userId = document.getElementById('userIdInput').value;
 
-            fetch(apifeedback, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(feedbackDTO)
-            })
-                .then(response => {
-                    if (response.status === 200) {
-                        console.debug("done");
+            if (rating && feedbackMessage) 
+            {
+                var data = {
+                    NumberStart: parseInt(rating),
+                    Content: feedbackMessage,
+                    UserId: userId
+                };
+
+                if (productId !== null) {
+                    data.ProductId = parseInt(productId);
+                }
+                if (serviceId !== null) {
+                    data.ServiceId = parseInt(serviceId);
+                }
+
+                $.ajax({
+                    url: 'https://localhost:7255/api/Feedback/AddFeedBack',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function (response) {
+
+                        closePopup();
+                        alert(response); 
+                    },
+                    error: function (error) {
+                        alert('Error submitting feedback: ' + error.responseText);
                     }
-                    else {
-                        console.debug("fail");
-                    }
-                })
+                });
+            }
+            else 
+            {
+                alert('Please provide all required information.' +
+                    '\nserviceId: ' + serviceId +
+                    '\nproductId: ' + productId +
+                    '\nrating: ' + rating +
+                    '\nfeedbackMessage: ' + feedbackMessage +
+                    '\nuserId: ' + userId);
+            }
         });
     </script>
 </body>
