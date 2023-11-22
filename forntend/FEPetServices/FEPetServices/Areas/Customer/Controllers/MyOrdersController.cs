@@ -13,14 +13,18 @@ namespace FEPetServices.Areas.Customer.Controllers
     public class MyOrdersController : Controller
     {
         private readonly HttpClient _client = null;
-        private readonly string DefaultApiUrlOrders = "";
+        private readonly string DefaultApiUrl = "";
+        //private readonly string DefaultApiUrlOrders = "";
+        private readonly IConfiguration configuration;
 
-        public MyOrdersController()
+        public MyOrdersController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrlOrders = "https://localhost:7255/api/Order";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrlOrders = "https://localhost:7255/api/Order";
         }
 
         private async Task<IActionResult> GetOrders(string orderStatus, int page, int pageSize)
@@ -29,7 +33,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             //https://localhost:7255/api/Order/orderstatus/Waiting?email=customer%40gmail.com
 
-            HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrlOrders}/orderstatus/{orderStatus}?email={email}");
+            HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderstatus/{orderStatus}?email={email}");
             if (responsecheck.StatusCode == HttpStatusCode.NotFound)
             {
                 ViewBag.NotFound = "Error404";
@@ -37,7 +41,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             }
             else
             {
-                HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrlOrders}/email/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
+                HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/email/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
 
                 if (response.IsSuccessStatusCode)
                 {

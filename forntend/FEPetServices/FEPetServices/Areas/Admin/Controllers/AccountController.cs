@@ -18,21 +18,24 @@ namespace FEPetServices.Areas.Admin.Controllers
         private string ApiUrlAccountList = "";
         private string ApiUrlAddAccount = "";
         private string ApiUrlUpdateAccount = "";
+        private readonly IConfiguration configuration;
 
-        public AccountController()
+        public AccountController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "";
-            ApiUrlAccountList = "https://pet-service-api.azurewebsites.net/api/Admin/GetAllAccountByAdmin";
-            ApiUrlAddAccount = "https://pet-service-api.azurewebsites.net/api/Admin/AddAccount";
-            ApiUrlUpdateAccount = "https://pet-service-api.azurewebsites.net/api/UpdateAccount";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //ApiUrlAccountList = "https://pet-service-api.azurewebsites.net/api/Admin/GetAllAccountByAdmin";
+            //ApiUrlAddAccount = "https://pet-service-api.azurewebsites.net/api/Admin/AddAccount";
+            //ApiUrlUpdateAccount = "https://pet-service-api.azurewebsites.net/api/UpdateAccount";
         }
 
         public async Task<IActionResult> Index()
         {
-            var accountList = await client.GetAsync(ApiUrlAccountList);
+            var accountList = await client.GetAsync(DefaultApiUrl + "Admin/GetAllAccountByAdmin");
+            //var accountList = await client.GetAsync(ApiUrlAccountList);
             if (accountList.IsSuccessStatusCode)
             {
                 var responseContent = await accountList.Content.ReadAsStringAsync();
@@ -59,7 +62,8 @@ namespace FEPetServices.Areas.Admin.Controllers
 
                     string password = HttpUtility.UrlEncode(addAccount.Password);
 
-                    ApiUrlAddAccount = ApiUrlAddAccount + "?email=" + addAccount.Email + "&password=" + password + "&roleId=" + addAccount.RoleId;
+                    DefaultApiUrl = DefaultApiUrl + "Admin/AddAccount" + "?email=" + addAccount.Email + "&password=" + password + "&roleId=" + addAccount.RoleId;
+                    //ApiUrlAddAccount = ApiUrlAddAccount + "?email=" + addAccount.Email + "&password=" + password + "&roleId=" + addAccount.RoleId;
 
                     HttpResponseMessage response = await client.PostAsync(ApiUrlAddAccount, content);
 
@@ -101,7 +105,8 @@ namespace FEPetServices.Areas.Admin.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    string apiUrl = ApiUrlUpdateAccount + "?Email=" + email + "&RoleId=" + roleId + "&Status=" + status;
+                    string apiUrl = DefaultApiUrl + "UpdateAccount" + "?Email=" + email + "&RoleId=" + roleId + "&Status=" + status;
+                    //string apiUrl = ApiUrlUpdateAccount + "?Email=" + email + "&RoleId=" + roleId + "&Status=" + status;
                     var acc = new UpdateAccountDTO
                     {
                         Email = email,
