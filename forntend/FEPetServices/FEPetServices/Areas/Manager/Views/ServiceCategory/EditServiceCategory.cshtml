@@ -40,26 +40,25 @@
       </div>
     </div>
     <div class="row">
-    <div class="col-25">
-        <label for="Status">Trạng thái:</label>
-    </div>
-    <div class="col-75">
-        <label class="switch">
-            <input type="checkbox" name="Status" @(Model?.Status ? "checked" : "")>
+        <div class="col-25">
+            <label for="Status">Trạng thái:</label>
+        </div>
+        <div class="col-75">
+            <label class="switch">
+                <input type="checkbox" name="Status" @(Model?.Status ? "checked" : "")>
 
-            <span class="slider round"></span>
-        </label>
+                <span class="slider round"></span>
+            </label>
+        </div>
     </div>
-</div>
-
-            <div class="row">
-                <div class="btn-group col-2">
-                    <a class="btn btn-primary btn_a" type="submit" value="Cancal" href="/Manager/ServiceCategory">Trở lại</a>
-                </div>
-                <div class="col-10">
-                    <input class="btn btn-primary" type="submit" value="Lưu thay đổi">
-                </div>
-            </div>
+    <div class="row">
+         <div class="btn-group col-2">
+         <a class="btn btn-primary btn_a" type="submit" value="Cancal" href="/Manager/ServiceCategory">Trở lại</a>
+         </div>
+          <div class="col-10">
+           <input class="btn btn-primary" type="submit" value="Lưu thay đổi">
+           </div>
+         </div>
   </form>
 
 </div>

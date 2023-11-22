@@ -49,6 +49,8 @@ namespace PetServices.Controllers
             return Ok(_mapper.Map<List<AccountInfo>>(account));
         }
 
+
+
         [HttpGet("{email}")]
         public IActionResult Get(string email)
         {

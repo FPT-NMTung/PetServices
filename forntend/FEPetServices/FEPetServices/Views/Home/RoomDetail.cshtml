@@ -76,7 +76,7 @@
                                         }
                                     </div>
                                     <div class="review-link">
-                                        <a href="#">(<span>2</span> customer reviews)</a>
+                                        <a href="#">(<span>@ViewBag.FeedbackCount</span> đánh giá của khách hàng )</a>
                                     </div>
                                 </div>
                                 <ul class="product-meta">
@@ -243,9 +243,22 @@
                     <div class="row">
                         <div class="col-lg-12 mb--40">
                             <div class="axil-comment-area pro-desc-commnet-area">
-                                @if (Model.Feedback != null)
+                                @if (Model.Feedback != null && Model.Feedback.Count > 0)
                                 {
-                                    <h5 class="title">Có @Model.Feedback.Count đánh giá cho phòng này</h5>
+                                    <div class="feedback-title-sort">
+                                        <h5 class="title">Có @ViewBag.FeedbacksCount đánh giá</h5>
+                                        <form method="get">
+                                            <input type="hidden" name="roomId" value="@Model.Room.RoomId">
+                                            <select name="sortby" onchange="this.form.submit();">
+                                                <!option style="color: black" value="" @(ViewBag.sortby == null ? "selected" : "")>Tất cả</!option>
+                                                <!option class="option" style="color: gold" value="5star" @(ViewBag.sortby == "5star" ? "selected" : "") @(Model.VoteNumberas.number5s == 0 ? "disabled" : "")>&#9733;&#9733;&#9733;&#9733;&#9733;&ensp; @Model.VoteNumberas.number5s</!option>
+                                                <!option class="option" style="color: gold" value="4star" @(ViewBag.sortby == "4star" ? "selected" : "") @(Model.VoteNumberas.number4s == 0 ? "disabled" : "")>&#9733;&#9733;&#9733;&#9733;&#9734;&ensp; @Model.VoteNumberas.number4s</!option>
+                                                <!option class="option" style="color: gold" value="3star" @(ViewBag.sortby == "3star" ? "selected" : "") @(Model.VoteNumberas.number3s == 0 ? "disabled" : "")>&#9733;&#9733;&#9733;&#9734;&#9734;&ensp; @Model.VoteNumberas.number3s</!option>
+                                                <!option class="option" style="color: gold" value="2star" @(ViewBag.sortby == "2star" ? "selected" : "") @(Model.VoteNumberas.number2s == 0 ? "disabled" : "")>&#9733;&#9733;&#9734;&#9734;&#9734;&ensp; @Model.VoteNumberas.number2s</!option>
+                                                <!option class="option" style="color: gold" value="1star" @(ViewBag.sortby == "1star" ? "selected" : "") @(Model.VoteNumberas.number1s == 0 ? "disabled" : "")>&#9733;&#9734;&#9734;&#9734;&#9734;&ensp; @Model.VoteNumberas.number1s</!option>
+                                            </select>
+                                        </form>
+                                    </div>
                                     <ul class="comment-list">
                                         @foreach (var feedback in Model.Feedback)
                                         {
@@ -267,11 +280,11 @@
                                                                     {
                                                                         if (i <= @feedback.NumberStart)
                                                                         {
-                                                                            <a href="#"><i class="fas fa-star"></i></a>
+                                                                            <a><i class="fas fa-star"></i></a>
                                                                         }
                                                                         else
                                                                         {
-                                                                            <a href="#"><i class="fas fa-star empty-rating"></i></a>
+                                                                            <a><i class="fas fa-star empty-rating"></i></a>
                                                                         }
                                                                     }
                                                                 </span>
@@ -284,8 +297,26 @@
                                                 </div>
                                             </li>
                                         }
-                                        
                                     </ul>
+                                    <div style="text-align: center">
+                                        <div class="pagination">
+                                            @{
+                                                int pagenumber = ((@ViewBag.FeedbacksCount - 1) / 5) + 1;
+                                                @if (ViewBag.CurrentPage > 1)
+                                                {
+                                                    <a href="@Url.Action("RoomDetail", new { roomId = Model.Room.RoomId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
+                                                }
+                                                @for (int i = 1; i <= pagenumber; i++)
+                                                {
+                                                    <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("RoomDetail", new { roomId = Model.Room.RoomId, sortby = ViewBag.sortby, page = i })">@i</a>
+                                                }
+                                                @if (ViewBag.CurrentPage < pagenumber)
+                                                {
+                                                    <a href="@Url.Action("RoomDetail", new { roomId = Model.Room.RoomId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
                                 }
                                 else
                                 {

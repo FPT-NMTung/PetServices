@@ -25,10 +25,10 @@ namespace FEPetServices.Controllers
             {
                 string filename = GenerateRandomNumber(5) + file.FileName;
                 filename = Path.GetFileName(filename);
-                string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Partner/", filename);
+                string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/partner/", filename);
                 var stream = new FileStream(uploadfile, FileMode.Create);
                 file.CopyToAsync(stream);
-                registerInfo.ImageCertificate = "/img/Partner/" + filename;
+                registerInfo.ImageCertificate = "/img/partner/" + filename;
             }
             try
             {

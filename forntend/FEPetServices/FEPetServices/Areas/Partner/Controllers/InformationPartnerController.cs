@@ -13,6 +13,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
         private string DefaultApiUrlPartner = "";
+        private string DefaultApiUrlInforPartner = "";
 
         public InformationPartnerController()
         {
@@ -91,7 +92,6 @@ namespace FEPetServices.Areas.Partner.Controllers
                 TempData["ErrorToast"] = "Địa chỉ cụ thể phải lớn hơn 10 ký tự";
                 return RedirectToAction("Index");
             }
-            // Handle the uploaded image
             if (image != null)
             {
                 string filename = GenerateRandomNumber(5) + image.FileName;
@@ -105,7 +105,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
             else
             {
-                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrlPartner + "?email=" + email);
+                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrlInforPartner + "/" + email);
                 if (responseUser.IsSuccessStatusCode)
                 {
                     string responseContent = await responseUser.Content.ReadAsStringAsync();
