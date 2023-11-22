@@ -15,9 +15,9 @@ namespace FEPetServices.Areas.Admin.Controllers
     {
         private readonly HttpClient client = null;
         private string DefaultApiUrl = "";
-        private string ApiUrlAccountList = "";
-        private string ApiUrlAddAccount = "";
-        private string ApiUrlUpdateAccount = "";
+        //private string ApiUrlAccountList = "";
+        //private string ApiUrlAddAccount = "";
+        //private string ApiUrlUpdateAccount = "";
         private readonly IConfiguration configuration;
 
         public AccountController(IConfiguration configuration)
@@ -65,7 +65,7 @@ namespace FEPetServices.Areas.Admin.Controllers
                     DefaultApiUrl = DefaultApiUrl + "Admin/AddAccount" + "?email=" + addAccount.Email + "&password=" + password + "&roleId=" + addAccount.RoleId;
                     //ApiUrlAddAccount = ApiUrlAddAccount + "?email=" + addAccount.Email + "&password=" + password + "&roleId=" + addAccount.RoleId;
 
-                    HttpResponseMessage response = await client.PostAsync(ApiUrlAddAccount, content);
+                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrl, content);
 
                     if (response.IsSuccessStatusCode)
                     {
