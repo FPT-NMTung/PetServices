@@ -360,8 +360,9 @@
       function kiemTra() {
         var datetimeStart = document.getElementById('datetimeStart').value;
         var datetimeEnd = document.getElementById('datetimeEnd').value;
+        var petWeight = document.getElementById('petWeight').value;
 
-        if (datetimeStart === '' || datetimeEnd === '') {
+        if (datetimeStart === '' || datetimeEnd === ''|| petWeight === '') {
             alert('Vui lòng điền đầy đủ thông tin.');
             return false; // Ngăn form submit nếu thông tin chưa được điền đầy đủ
         }
@@ -417,7 +418,7 @@ document.addEventListener("DOMContentLoaded", function() {
         onClose: function(selectedDates, dateStr, instance) {
             const currentTime = new Date(); // Thời gian hiện tại
             const selectedTime = new Date(dateStr);
-            const serviceTime = @Model.ServiceTime * 60 * 60 * 1000; // Thời gian dịch vụ là 1 giờ 30 phút
+            const serviceTime = @Model.Service.Time * 60 * 60 * 1000; // thời gian làm dịch vụ
             const openingTime = new Date(selectedTime.toDateString() + " " + "07:30");
             const closingTime = new Date(selectedTime.toDateString() + " " + "19:00");
 
