@@ -378,18 +378,13 @@
                         location.reload();
                     },
                     error: function (error) {
-                        alert('Error submitting feedback: ' + error.responseText);
+                        alert('Vui lòng kiểm tra lại thông tin: ' + error.responseText);
                     }
                 });
             }
             else 
             {
-                alert('Please provide all required information.' +
-                    '\nserviceId: ' + serviceId +
-                    '\nproductId: ' + productId +
-                    '\nrating: ' + rating +
-                    '\nfeedbackMessage: ' + feedbackMessage +
-                    '\nuserId: ' + userId);
+                alert('Vui lòng nhập nội dung đánh giá!');
             }
         });
     </script>
