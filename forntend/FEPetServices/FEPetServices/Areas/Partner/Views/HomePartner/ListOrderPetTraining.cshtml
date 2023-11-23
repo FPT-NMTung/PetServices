@@ -69,10 +69,11 @@
 
                 buttons_received.click(function () {
                     var orderId = $(this).data('orderid');
-                    let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusReceived?orderId=' + orderId;
+                    var partnerId = $(this).data('partnerinfoid');
+                    //let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusReceived?orderId=' + orderId;
                     //var orderId = $(this).data('orderid');  
                     //let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusReceived?orderId=' + orderId;
-                    let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusReceived?orderId=2';
+                    let url = 'https://localhost:7255/api/OrderPartner/UpdateOrderStatusReceived?orderId=' + orderId + '&partnerId=' + partnerId;
                     fetch(url).then(response => {
                         if (response.status == 200) {
                             console.log("Nhận đơn thành công!");
@@ -112,7 +113,7 @@
                             <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
                         </td>
                         <td>
-                            <button class="received-button" data-orderid="@pc.OrderId">Nhận Đơn</button>
+                            <button class="received-button" data-orderid="@pc.OrderId" data-partnerinfoid="@ViewBag.PartnerId">Nhận Đơn</button>
                         </td>
 
                     </tr>
