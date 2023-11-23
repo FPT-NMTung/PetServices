@@ -127,7 +127,7 @@ namespace PetServices.Controllers
                         account.PartnerInfo.Commune = account.UserInfo?.Commune ?? null;
                         account.PartnerInfo.Address = account.UserInfo?.Address ?? null;
                         account.PartnerInfo.Descriptions = account.UserInfo?.Descriptions ?? null;
-                        account.PartnerInfo.ImagePartner = account.UserInfo?.ImageUser ?? null;
+                        account.PartnerInfo.ImagePartner = account.UserInfo?.ImageUser ?? null; 
                     }
 
                     if (account.UserInfoId != null && accountchange.RoleId != 4)
