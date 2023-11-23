@@ -375,6 +375,7 @@
 
                         closePopup();
                         alert(response); 
+                        location.reload();
                     },
                     error: function (error) {
                         alert('Error submitting feedback: ' + error.responseText);

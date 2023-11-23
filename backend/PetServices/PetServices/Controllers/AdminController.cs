@@ -81,27 +81,27 @@ namespace PetServices.Controllers
         }
 
         [HttpPut("UpdateAccount")]
-        public async Task<ActionResult> UpdateAccount(string Email, int RoleId, bool Status)
+        public async Task<ActionResult> UpdateAccount(AccountByAdminDTO accountchange)
         {
             try
             {
                 var account = await _context.Accounts
                             .Include(a => a.UserInfo)
                             .Include(a => a.PartnerInfo)
-                            .FirstOrDefaultAsync(a => a.Email == Email);
+                            .FirstOrDefaultAsync(a => a.Email == accountchange.Email);
                 if (account == null)
                 {
                     return BadRequest("Không tìm thấy tài khoản");
                 }
 
-                else if (account.RoleId == RoleId && account.Status == Status)
+                else if (account.RoleId == accountchange.RoleId && account.Status == accountchange.Status)
                 {
                     return BadRequest("Bạn không có gì thay đổi so với ban đầu.");
                 }
 
                 else
                 {
-                    if (account.PartnerInfoId == null && RoleId == 4)
+                    if (account.PartnerInfoId == null && accountchange.RoleId == 4)
                     {
                         account.PartnerInfo = new PartnerInfo
                         {
@@ -117,7 +117,7 @@ namespace PetServices.Controllers
                         };
                     }
 
-                    if (account.PartnerInfoId != null && RoleId == 4)
+                    if (account.PartnerInfoId != null && accountchange.RoleId == 4)
                     {
                         account.PartnerInfo.FirstName = account.UserInfo?.FirstName ?? null;
                         account.PartnerInfo.LastName = account.UserInfo?.LastName ?? null;
@@ -130,7 +130,7 @@ namespace PetServices.Controllers
                         account.PartnerInfo.ImagePartner = account.UserInfo?.ImageUser ?? null;
                     }
 
-                    if (account.UserInfoId != null && RoleId != 4)
+                    if (account.UserInfoId != null && accountchange.RoleId != 4)
                     {
                         account.UserInfo.FirstName = account.PartnerInfo?.FirstName ?? null;
                         account.UserInfo.LastName = account.UserInfo?.LastName ?? null;
@@ -143,7 +143,7 @@ namespace PetServices.Controllers
                         account.UserInfo.ImageUser = account.PartnerInfo?.ImagePartner ?? null;
                     }
 
-                    if (account.UserInfoId == null && RoleId != 4)
+                    if (account.UserInfoId == null && accountchange.RoleId != 4)
                     {
                         account.UserInfo = new UserInfo
                         {
@@ -159,8 +159,8 @@ namespace PetServices.Controllers
                         };
                     }
 
-                    account.RoleId = RoleId;
-                    account.Status = Status;
+                    account.RoleId = accountchange.RoleId;
+                    account.Status = accountchange.Status;
 
                     _context.Entry(account).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     _context.Update(account);

@@ -55,7 +55,13 @@
         font-size: 40px;
         font-weight: bold;
         display: block;
+        text-decoration: none;
+        color: #666;
     }
+
+        .title:hover{
+            color: #666;
+        }
 
     .btn-add {
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
@@ -201,6 +207,16 @@
             "ordering": true,
             "info": true,
             "autoWidth": false,
+            "columnDefs": [
+                { "targets": [0], "width": "2%" },
+                { "targets": [1], "width": "15%" },
+                { "targets": [2], "width": "8%" },
+                { "targets": [3], "width": "13%" },
+                { "targets": [4], "width": "30%" },
+                { "targets": [5], "width": "10%" },
+                { "targets": [6], "width": "10%" },
+                { "targets": [7], "width": "12%" },
+            ],
             "language": {
                 "lengthMenu": "Hiển thị _MENU_ dòng",
                 "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
@@ -249,7 +265,7 @@
                             <tr>
                                 <td>@itemCount</td>
                                 <td>@account.Email</td>
-                                <td>@account.Password</td>
+                                <td>********</td>
                                 <td>@account.UserName</td>
                                 <td>@account.Address</td>
                                 <td>
@@ -287,27 +303,27 @@
             var roleId = $(this).closest('tr').find('select[name="Role"]').val();
             var status = $(this).closest('tr').find('input[type="checkbox"]').is(':checked');
 
-            console.log("Email:", email);
-                    console.log("RoleId:", roleId);
-                    console.log("Status:", status);
+            var data = {
+                Email: email,
+                RoleId: roleId,
+                Status: status
+            };
 
             $.ajax({
-                url: "/Account/UpdateAccount",
+                url: "https://localhost:7255/api/Admin/UpdateAccount",
                 type: "PUT",
-                data: {
-                    Email: email,
-                    RoleId: roleId,
-                    Status: status
-                },
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+
                 success: function (data) {
                     console.log("Cập nhật thành công:", data);
                     showSuccessToast();
                 },
                 error: function (error) {
                     console.error("Lỗi khi cập nhật:", error);
+
                     showErrorToast();
                 },
-
             });
         });
     });
