@@ -30,10 +30,10 @@ namespace FEPetServices.Controllers
             this.configuration = configuration;
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
-            DefaultApiUrl = "";
-           /* DefaultApiUrlProductList = "https://pet-service-api.azurewebsites.net/api/Product";
-            DefaultApiUrlProductDetail = "https://pet-service-api.azurewebsites.net/api/Product/ProductID"; 
-            DefaultApiUrlProductCategoryList = "https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll";*/
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            /* DefaultApiUrlProductList = "https://pet-service-api.azurewebsites.net/api/Product";
+             DefaultApiUrlProductDetail = "https://pet-service-api.azurewebsites.net/api/Product/ProductID"; 
+             DefaultApiUrlProductCategoryList = "https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll";*/
         }
 
         public async Task<IActionResult> Index(ProductDTO productDTO, ProductSearch searchDTO)
