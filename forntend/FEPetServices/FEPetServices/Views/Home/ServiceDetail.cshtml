@@ -439,10 +439,10 @@ document.addEventListener("DOMContentLoaded", function() {
             }
 
             // Kiểm tra nếu thời gian bắt đầu không nằm trong khoảng làm việc (7:30 - 19:00)
-            if (selectedTime < openingTime || selectedTime > closingTime) {
+            @*if (selectedTime < openingTime || selectedTime > closingTime) {
                 selectedTime.setTime(openingTime.getTime());
-            }
-            if(Date(selectedTime.toDateString() + " " + "00:00") <selectedTime.getTime()< Date(selectedTime.toDateString() + " " + "07:30")){
+            }*@
+            if(selectedTime < openingTime){
              const nextDay = new Date(selectedTime);
                 nextDay.setDate(selectedTime.getDate() );
                 nextDay.setHours(7);
@@ -454,7 +454,7 @@ document.addEventListener("DOMContentLoaded", function() {
             
 
             // Nếu thời gian kết thúc vượt quá thời gian đóng cửa (19:00)
-            if (Date(selectedTime.toDateString() + " " + "19:00") <selectedTime.getTime()< Date(selectedTime.toDateString() + " " + "00:00")||selectedTime.getTime() + serviceTime > closingTime.getTime()) {
+            if (selectedTime > closingTime||selectedTime.getTime() + serviceTime > closingTime.getTime()) {
                 const nextDay = new Date(selectedTime);
                 nextDay.setDate(selectedTime.getDate() + 1);
                 nextDay.setHours(7);
