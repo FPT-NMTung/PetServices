@@ -94,7 +94,7 @@ namespace FEPetServices.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index([FromForm] OrderForm orderform)
+        public async Task<IActionResult> Index([FromForm] OrderForm orderform, string payment)
         {
 
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
@@ -204,20 +204,20 @@ namespace FEPetServices.Controllers
                     vnpay.AddRequestData("vnp_TxnRef", orderform.OrderId.ToString());
 
                     string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
-                    Response.Redirect(paymentUrl);
 
                     foreach (var cartItem in cartItems)
                     {
                         if (cartItem.product != null)
                         {
                             HttpResponseMessage response = await _client.PutAsync("https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct"
-                                + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct,null);
+                                + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);
                         }
                     }
-                    // Xoá giỏ hàng
                     ClearCart();
+
                     TempData["SuccessToast"] = "Đặt hàng thành công. Vui lòng kiểm tra lại giỏ hàng.";
-                    return RedirectToAction("Index", "Home");
+
+                    return Redirect(paymentUrl);
                 }
                 else
                 {

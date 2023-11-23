@@ -23,14 +23,15 @@ namespace FEPetServices.Controllers
     {
         private readonly HttpClient client = null;
         private string DefaultApiUrl = "";
-        private string DefaultApiUrlProductDetail = "";
+        private readonly IConfiguration configuration;
 
-        public CartController()
+        public CartController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
-            DefaultApiUrl = "";
-            DefaultApiUrlProductDetail = "https://pet-service-api.azurewebsites.net/api/Product";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            /*DefaultApiUrlProductDetail = "https://pet-service-api.azurewebsites.net/api/Product";*/
         }
         public class CartItem
         {
@@ -87,7 +88,7 @@ namespace FEPetServices.Controllers
         {
             ProductDTO product = null;
             // Cập nhật Cart thay đổi số lượng quantity ...
-            HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductDetail + "/" + productid);
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product/" + productid);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();

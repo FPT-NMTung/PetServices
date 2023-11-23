@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <script src="~/js/map_partner.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM"></script>
 </head>
 <body>
@@ -26,10 +27,12 @@
                         }
                     </div>
                 </div>
-                <div style="margin-top: 20px">
-                    <button class="btn btn-primary" onclick="getLocation()">Lấy vị trí</button>
-                </div>
-                <div id="map" style="width: 100%; height: 400px;"></div>
+                @if (@Model?.PartnerInfo.Lat == null && @Model?.PartnerInfo.Lng == null ) {
+                    <div style="margin-top: 20px">
+                        <button class="btn btn-primary" onclick="getnewLocation()">Lấy vị trí</button>
+                    </div>
+                }
+                <div id="map" style="width: 100%; height: 400px; margin-top: 20px"></div>
                 <input type="hidden" name="Lat" id="inputLat" value="@Model?.PartnerInfo.Lat" />
                 <input type="hidden" name="Lng" id="inputLng" value="@Model?.PartnerInfo.Lng" />
             </div>
@@ -53,6 +56,13 @@
                                     <input class="form-control" name="LastName" id="inputLastName" type="text" placeholder="Nhập tên của bạn" value="@Model?.PartnerInfo.LastName" required>
                                 </div>
                             </div>
+
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputDob">Ngày Sinh</label>
+                                <input class="form-control" name="Dob" id="inputDob" type="date" value="@Model?.PartnerInfo.Dob?.ToString("yyyy-MM-dd")" required>
+                            </div>
+
+                            
                             <div class="mb-3">
                                 <label class="small mb-1" for="inputEmailAddress">Email</label>
                                 <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="@Model?.Email" disabled>
@@ -96,21 +106,24 @@
                             <input type="hidden" name="Province" id="provinceNameInput" />
                             <input type="hidden" name="District" id="districtNameInput" />
                             <input type="hidden" name="Commune" id="wardsNameInput" />
+                            @*input ẩn, lưu thông tin cá nhân thì 2 trường này về null*@
+                            <input type="hidden" name="Lat" id="inputLatt" />
+                            <input type="hidden" name="Lng" id="inputLngg" />
 
 
                             <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
                             <a href="~/Partner/ChangePasswordPartner" class="btn btn-primary">
                                 Đổi mật khẩu
                             </a>
+                                                       
                         </form>
-                    </div>
+                    </div>                   
 
                     <script>
                         window.addEventListener("load", function () {
-                            // Gọi action để lấy và hiển thị bản đồ với vị trí từ hàm Index của controller
                             getLocation();
                             showPartnerLocation(@Model?.PartnerInfo.Lat, @Model?.PartnerInfo.Lng);
-                            startWatchingLocation(); // gọi hàm theo dõi vị trí
+                            startWatchingLocation(); 
                         });
 
                         function getLocation() {
@@ -120,14 +133,11 @@
                                         var latitude = position.coords.latitude;
                                         var longitude = position.coords.longitude;
 
-                                        // Show position on the map
                                         initMap(latitude, longitude);
 
-                                        // Update hidden input fields with latitude and longitude
                                         document.getElementById("inputLat").value = latitude;
                                         document.getElementById("inputLng").value = longitude;
 
-                                        // Call the API to update the location in the database
                                         updateLocation(latitude, longitude);
                                     },
                                     function (error) {
@@ -173,7 +183,6 @@
                         }
 
                         function showError(error) {
-                            // Handle error messages as needed
                             switch (error.code) {
                                 case error.PERMISSION_DENIED:
                                     alert("Truy cập vào vị trí bị từ chối bởi người dùng.");

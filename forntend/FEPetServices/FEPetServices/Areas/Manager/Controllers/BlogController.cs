@@ -11,21 +11,25 @@ namespace FEPetServices.Areas.Manager.Controllers
     {
         private readonly HttpClient client = null;
         private string DefaultApiUrl = "";
-        private string DefaultApiUrlBlogList = "";
-        private string DefaultApiUrlBlogDetail = "";
-        private string DefaultApiUrlBlogAdd = "";
-        private string DefaultApiUrlBlogUpdate = "";
+        private readonly IConfiguration configuration;
 
-        public BlogController()
+        //private string DefaultApiUrlBlogList = "";
+        //private string DefaultApiUrlBlogDetail = "";
+        //private string DefaultApiUrlBlogAdd = "";
+        //private string DefaultApiUrlBlogUpdate = "";
+
+        public BlogController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "";
-            DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
-            DefaultApiUrlBlogDetail = "https://localhost:7255/api/Blog/BlogID";
-            DefaultApiUrlBlogAdd = "https://localhost:7255/api/Blog/CreateBlog";
-            DefaultApiUrlBlogUpdate = "https://localhost:7255/api/Blog/UpdateBlog?blogId=";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+
+            //DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
+            //DefaultApiUrlBlogDetail = "https://localhost:7255/api/Blog/BlogID";
+            //DefaultApiUrlBlogAdd = "https://localhost:7255/api/Blog/CreateBlog";
+            //DefaultApiUrlBlogUpdate = "https://localhost:7255/api/Blog/UpdateBlog?blogId=";
 
         }
 
@@ -36,7 +40,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var json = JsonConvert.SerializeObject(blog);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrlBlogList + "/GetAllBlog");
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Blog/GetAllBlog");
+                //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlBlogList + "/GetAllBlog");
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
@@ -88,7 +93,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                     var json = JsonConvert.SerializeObject(blog);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrlBlogAdd, content);
+                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "Blog/CreateBlog", content);
+                    //HttpResponseMessage response = await client.PostAsync(DefaultApiUrlBlogAdd, content);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -133,7 +139,8 @@ namespace FEPetServices.Areas.Manager.Controllers
             try
             {
                 // Gọi API để lấy thông tin ServiceCategory cần chỉnh sửa
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrlBlogDetail + "/" + blogId);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Blog/BlogID/" + blogId);
+                //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlBlogDetail + "/" + blogId);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -187,7 +194,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 else
                 {
 
-                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrlBlogDetail + "/" + blogId);
+                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrl + "Blog/BlogID/" + blogId);
+                    //HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrlBlogDetail + "/" + blogId);
 
                     if (responseForImage.IsSuccessStatusCode)
                     {
@@ -218,7 +226,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 // Gửi dữ liệu lên máy chủ
-                HttpResponseMessage response = await client.PutAsync(DefaultApiUrlBlogUpdate + blogId, content);
+                HttpResponseMessage response = await client.PutAsync(DefaultApiUrl + "Blog/UpdateBlog?blogId=" + blogId, content);
+                //HttpResponseMessage response = await client.PutAsync(DefaultApiUrlBlogUpdate + blogId, content);
 
                 if (response.IsSuccessStatusCode)
                 {

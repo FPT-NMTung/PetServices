@@ -42,6 +42,32 @@ namespace PetServices.Controllers
             }
         }
 
+        [HttpGet("latest")]
+        public IActionResult GetLatestOrder(string email)
+        {
+            try
+            {
+                int? latestOrderId = _context.Orders
+                    .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email))
+                    .OrderByDescending(o => o.OrderId)
+                    .Select(o => o.OrderId)
+                    .FirstOrDefault();
+
+                if (latestOrderId != null)
+                {
+                    return Ok(new { LatestOrderId = latestOrderId });
+                }
+                else
+                {
+                    return NotFound(new { Message = "No orders found for the specified email" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpGet("email/{email}")]
         public IActionResult GetOrderUser(string email, string orderstatus, int page = 1, int pageSize = 5)
         {

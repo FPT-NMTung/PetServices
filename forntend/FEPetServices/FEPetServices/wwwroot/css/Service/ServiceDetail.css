@@ -9,8 +9,10 @@
     border-radius: 10px;
 }
     .range-variant li.active {
-        border: 2px solid red;
+        border: 2px solid black;
+        
     }
+    
 
     .containerbutton {
         display: block;
