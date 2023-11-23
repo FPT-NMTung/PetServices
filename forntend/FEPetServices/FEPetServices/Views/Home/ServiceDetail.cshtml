@@ -132,9 +132,9 @@
                                     </div>
                                     <div class="product-action-wrapper d-flex-center">
                                         <ul class="product-action action-style-two d-flex-center mb--0" style="display:contents;">
-                                            <form method="post" action="@Url.Action("AddToCart", "Home")" onsubmit="return kiemTra()">
+                                            <form method="post" action="@Url.Action("AddToCart", "Home")" >
                                                 @Html.AntiForgeryToken()
-                                                <button class="axil-btn btn-bg-primary" type="button" onclick="addToCartService('@Model?.Service.ServiceId')"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
+                                                <button class="axil-btn btn-bg-primary" type="button" onclick="kiemTraAndSubmit('addToCartForm', '@Model?.Service.ServiceId')"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
                                             </form>
                                             <form method="post" action="@Url.Action("AddToCart", "Home")" onsubmit="return kiemTra()">
                                                 @Html.AntiForgeryToken()
@@ -325,16 +325,13 @@
     </main>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-    <script>
-        const input = document.getElementById('petWeight');
+  <script>
+      const input = document.getElementById('petWeight');
         input.addEventListener('change', function() {
             if (input.value && !input.value.endsWith('kg')) {
                 input.value += ' kg';
             }
         });
-
-  </script>
-  <script>
       function kiemTra() {
         var datetimeStart = document.getElementById('datetimeStart').value;
         var datetimeEnd = document.getElementById('datetimeEnd').value;
@@ -347,6 +344,21 @@
 
         // Nếu thông tin đã điền đầy đủ, cho phép form submit
         return true;
+    }
+    function kiemTraAndSubmit(formId, serviceId) {
+        var form = document.getElementById(formId);
+        var datetimeStart = document.getElementById('datetimeStart').value;
+        var datetimeEnd = document.getElementById('datetimeEnd').value;
+        var petWeight = document.getElementById('petWeight').value;
+
+        if (datetimeStart === '' || datetimeEnd === '' || petWeight === '') {
+            alert('Vui lòng điền đầy đủ thông tin.');
+            return false;
+        } else {
+            // Thực hiện hành động thêm vào giỏ hàng sau khi kiểm tra thành công
+            addToCartService(serviceId); // Gọi hàm thêm vào giỏ hàng
+            form.submit(); // Gửi form
+        }
     }
   </script>
   <script>
