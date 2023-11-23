@@ -158,12 +158,18 @@ namespace PetServices.Controllers
 
             if (result != null && BCrypt.Net.BCrypt.Verify(login.Password, result.Password))
             {
+                if (!result.Status)
+                {
+                    string errorMessage = "Tài khoản chưa được kích hoạt.";
+                    return BadRequest(errorMessage);
+                }
+
                 var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, login.Email),
-                new Claim(ClaimTypes.Role, result.Role?.RoleName),
-                new Claim("RoleId", result.Role?.RoleId.ToString()),
-            };
+                {
+                    new Claim(ClaimTypes.Name, login.Email),
+                    new Claim(ClaimTypes.Role, result.Role?.RoleName),
+                    new Claim("RoleId", result.Role?.RoleId.ToString()),
+                };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
