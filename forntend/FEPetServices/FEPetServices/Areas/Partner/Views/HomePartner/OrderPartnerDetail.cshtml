@@ -33,7 +33,11 @@
                     }
                     else if (Model.OrderStatus.Trim() == "Received")
                     {
-                        <span style="background-color: pink;color:deeppink">Đang chờ xác nhận</span>
+                        <span style="background-color: pink;color:deeppink">Đơn hàng đã được xác nhận</span>
+                    }
+                    else if (Model.OrderStatus.Trim() == "Delivering")
+                    {
+                        <span style="background-color: pink;color:deeppink">Đang giao hàng</span>
                     }
                 </div>
             </div>
