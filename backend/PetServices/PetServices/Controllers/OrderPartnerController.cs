@@ -95,7 +95,7 @@ namespace PetServices.Controllers
                     .Include(b => b.BookingServicesDetails)
                     .ThenInclude(bs => bs.Service)
                     .SingleOrDefaultAsync(b => b.OrderId == orderId);
-                order.OrderStatus = "Received";
+                order.OrderStatus = "Received_Services";
                 _context.Update(order);
                 await _context.SaveChangesAsync();
 
