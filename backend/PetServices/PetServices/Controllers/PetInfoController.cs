@@ -33,13 +33,20 @@ namespace PetServices.Controllers
         [HttpGet("{email}")]
         public IActionResult Get(string email)
         {
-            //Account roles admin, manager, customer 
-            Account account = _context.Accounts.Include(a => a.UserInfo).ThenInclude(u => u.PetInfos).FirstOrDefault(a => a.Email == email);
-            if (account == null)
+            List<Account> accounts = _context.Accounts
+    .Include(a => a.UserInfo)
+        .ThenInclude(u => u.PetInfos)
+    .Where(a => a.Email == email)
+    .ToList();
+
+            if (accounts == null)
             {
-                return NotFound("Tài khoản không tồn tài");
+                return NotFound("Tài khoản không tồn tại");
             }
-            return Ok(_mapper.Map<AccountInfo>(account));
+
+            List<AccountInfo> accountInfos = _mapper.Map<List<AccountInfo>>(accounts);
+            return Ok(accountInfos);
+
         }
 
         [HttpPost]
