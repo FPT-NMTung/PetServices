@@ -101,15 +101,22 @@ namespace FEPetServices.Controllers
                                 + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);
                         }
                     }
+                    //https://localhost:7255/api/Order/changeStatusPayment?Id=45
+                    HttpResponseMessage responseStatusPayment = await _client.PutAsync("https://localhost:7255/api/Order/changeStatusPayment"
+                               + "?Id=" + orderId, null);
 
                     ClearCart();
+
                     TempData["SuccessToast"] = "Thanh toán thành công.";
+                    ViewBag.SuccessOrderID = orderId;
+                    ViewBag.VNPAY = vnpayTranId;
                     ViewBag.CheckSucess = "Sucess";
                     return View();
                 }
                 else
                 {
-                    TempData["SuccessToast"] = "Đặt hàng thành công. Vui lòng kiểm tra lại giỏ hàng.";
+                    ViewBag.ErrorOrderID = orderId;
+                    ViewBag.VNPAY = vnpayTranId;
                     return View();
                 }
             }

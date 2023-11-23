@@ -204,6 +204,32 @@ namespace PetServices.Controllers
             }
         }
 
+        [HttpPut("changeStatusPayment")]
+        public async Task<IActionResult> ChangeStatusPayment(int Id)
+        {
+            try
+            {
+                Order order = await _context.Orders.SingleOrDefaultAsync(b => b.OrderId == Id);
+                // Kiểm tra booking có tồn tại hay không
+                if (order == null)
+                {
+                    return NotFound("Booking không tồn tài");
+                }
+                // Kiểm tra xem trạng thái cũ có chính xác hay không
+
+                order.StatusPayment = !order.StatusPayment;
+                _context.Orders.Update(order);
+
+                await _context.SaveChangesAsync();
+                return Ok("Đổi trạng thái thành công");
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] OrdersDTO orderDTO)
         {
