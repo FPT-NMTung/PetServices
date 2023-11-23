@@ -47,15 +47,16 @@ namespace PetServices.Controllers
         {
             try
             {
-                int? latestOrderId = _context.Orders
+                // Lấy đơn đặt hàng mới nhất cho người dùng có email tương ứng
+                Order latestOrder = _context.Orders
                     .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email))
                     .OrderByDescending(o => o.OrderId)
-                    .Select(o => o.OrderId)
                     .FirstOrDefault();
 
-                if (latestOrderId != null)
+                if (latestOrder != null)
                 {
-                    return Ok(new { LatestOrderId = latestOrderId });
+                    // Trả về toàn bộ thông tin đơn đặt hàng
+                    return Ok(_mapper.Map<OrdersDTO>(latestOrder));
                 }
                 else
                 {
@@ -64,9 +65,11 @@ namespace PetServices.Controllers
             }
             catch (Exception ex)
             {
+                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
                 return StatusCode(500, ex.Message);
             }
         }
+
 
         [HttpGet("email/{email}")]
         public IActionResult GetOrderUser(string email, string orderstatus, int page = 1, int pageSize = 5)

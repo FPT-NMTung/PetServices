@@ -1,7 +1,11 @@
-﻿using FEPetServices.Form.OrdersForm;
+﻿using FEPetServices.Form;
+using FEPetServices.Form.OrdersForm;
 using FEPetServices.Models.Payments;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using PetServices.Models;
 using System.Net.Http.Headers;
+using System.Text;
 
 namespace FEPetServices.Controllers
 {
@@ -29,7 +33,37 @@ namespace FEPetServices.Controllers
             DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
             DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";
         }
-        public IActionResult Index()
+
+        public const string CARTKEY = "cart";
+        public class CartItem
+        {
+            // Product
+            public int quantityProduct { set; get; }
+            public ProductDTO product { set; get; }
+
+            // Service
+            public int ServiceId { get; set; }
+            public double? Price { get; set; }
+            public double? Weight { get; set; }
+            public double? PriceService { get; set; }
+            public int? PartnerInfoId { get; set; }
+            public PartnerInfo? PartnerInfo { get; set; }
+            public ServiceDTO service { set; get; }
+            // Room
+        }
+        List<CartItem> GetCartItems()
+        {
+
+            var session = HttpContext.Session;
+            string jsoncart = session.GetString(CARTKEY);
+            if (jsoncart != null)
+            {
+                return JsonConvert.DeserializeObject<List<CartItem>>(jsoncart);
+            }
+            return new List<CartItem>();
+        }
+
+        public async Task<IActionResult> Index()
         {
             string vnp_HashSecret = _vnpConfiguration.HashSecret;
             var vnpayData = Request.Query;
@@ -58,6 +92,20 @@ namespace FEPetServices.Controllers
             {
                 if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
                 {
+                    List<CartItem> cartItems = GetCartItems();
+                    foreach (var cartItem in cartItems)
+                    {
+                        if (cartItem.product != null)
+                        {
+                            HttpResponseMessage response = await _client.PutAsync("https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct"
+                                + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);
+                        }
+                    }
+
+
+
+                    ClearCart();
+                    TempData["SuccessToast"] = "Thanh toán thành công.";
                     return View();
                 }
                 else
@@ -69,6 +117,11 @@ namespace FEPetServices.Controllers
             {
                 return View();
             }
+        }
+        void ClearCart()
+        {
+            var session = HttpContext.Session;
+            session.Remove(CARTKEY);
         }
     }
 }
