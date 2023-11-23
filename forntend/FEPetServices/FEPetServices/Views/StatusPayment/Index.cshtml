@@ -26,7 +26,7 @@
                             <a href="~/Home" class="axil-btn btn-bg-secondary right-icon">Trở về với Pet Services<i class="fal fa-long-arrow-right"></i></a>
                         </div>
                     }
-                    else
+                     @if (ViewBag.CheckSucess == "Success")
                     {
                         <div class="content" data-sal="slide-up" data-sal-duration="500" data-sal-delay="500" style="text-align: center;">
                             <div style="width: 100%; display: flex; justify-content: center;">
@@ -36,7 +36,7 @@
                             </div>
                             <p style="text-align: center; display: inline;color: #5cb85c;" class="title-highlighter highlighter-secondary">Thành công</p>
                             <h1 class="title" style="margin-bottom: 0px;">Thanh toán thành công</h1>
-                            <p style="margin-bottom:0">Đơn hàng của Quý khách đã được thanh toán thành công (Mã giao dịch: ViewBag.SuccessOrderID - VNPAY: @ViewBag.VNPAY). </p>
+                            <p style="margin-bottom:0">Đơn hàng của Quý khách đã được thanh toán thành công (Mã giao dịch: @ViewBag.SuccessOrderID - VNPAY: @ViewBag.VNPAY). </p>
                             <p>Cảm ơn Quý khách đã sử dụng dịch vụ của chúng tôi!</p>
                             <a href="~/Home" style="background-color: #5cb85c;" class="axil-btn btn-bg-secondary success right-icon">Trở về với Pet Services<i class="fal fa-long-arrow-right"></i></a>
                         </div>

@@ -104,17 +104,26 @@ namespace FEPetServices.Controllers
                     //https://localhost:7255/api/Order/changeStatusPayment?Id=45
                     HttpResponseMessage responseStatusPayment = await _client.PutAsync("https://localhost:7255/api/Order/changeStatusPayment"
                                + "?Id=" + orderId, null);
-
                     ClearCart();
-
                     TempData["SuccessToast"] = "Thanh toán thành công.";
                     ViewBag.SuccessOrderID = orderId;
-                    ViewBag.VNPAY = vnpayTranId;
-                    ViewBag.CheckSucess = "Sucess";
+                    ViewBag.VNPAY = vnpayTranId;    
+                    ViewBag.CheckSucess = "Success";
                     return View();
                 }
                 else
                 {
+                    List<CartItem> cartItems = GetCartItems();
+                    foreach (var cartItem in cartItems)
+                    {
+                        if (cartItem.product != null)
+                        {
+                            HttpResponseMessage response = await _client.PutAsync("https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct"
+                                + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);
+                        }
+                    }
+                    ClearCart();
+                    TempData["SuccessToast"] = "Đặt hàng thành công. Vui lòng kiểm tra lại giỏ hàng.";
                     ViewBag.ErrorOrderID = orderId;
                     ViewBag.VNPAY = vnpayTranId;
                     return View();
