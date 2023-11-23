@@ -11,17 +11,20 @@ namespace FEPetServices.Areas.Customer.Controllers
     {
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
-        private string DefaultApiUrlPet = "";
-        private string DefaultApiUrlOrders = "";
+        //private string DefaultApiUrlPet = "";
+        //private string DefaultApiUrlOrders = "";
+        private readonly IConfiguration configuration;
 
-        public MenuCustomerController()
+        public MenuCustomerController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
-            DefaultApiUrlPet = "https://pet-service-api.azurewebsites.net/api/PetInfo";
-            DefaultApiUrlOrders = "https://localhost:7255/api/Order";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
+            //DefaultApiUrlPet = "https://pet-service-api.azurewebsites.net/api/PetInfo";
+            //DefaultApiUrlOrders = "https://localhost:7255/api/Order";
         }
         public IActionResult Index()
         {
@@ -34,7 +37,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "/" + email);
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
 
             if (response.IsSuccessStatusCode)
             {
@@ -98,7 +101,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             }
             else
             {
-                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "/" + email);
+                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
                 if (responseUser.IsSuccessStatusCode)
                 {
                     string responseContent = await responseUser.Content.ReadAsStringAsync();
@@ -116,7 +119,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             if (userInfo.Province == null ||
                 userInfo.District == null || userInfo.Commune == null)
             {
-                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "/" + email);
+                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
                 if (responseUser.IsSuccessStatusCode)
                 {
                     string responseContent = await responseUser.Content.ReadAsStringAsync();
@@ -133,7 +136,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                 }
             }
 
-            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/updateInfo?email=" + email, userInfo);
+            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "UserInfo/updateInfo?email=" + email, userInfo);
             if (response.IsSuccessStatusCode)
             {
                 TempData["SuccessToast"] = "Cập nhật thông tin thành công";
@@ -204,7 +207,8 @@ namespace FEPetServices.Areas.Customer.Controllers
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlPet + "/" + email);
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl+ "PetInfo/" + email);
+            //HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlPet + "/" + email);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -227,7 +231,8 @@ namespace FEPetServices.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderDetail(int id)
         {
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlOrders + "/" + id);
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
+            //HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlOrders + "/" + id);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -258,7 +263,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         public async Task<IActionResult> OrderDetail(int id, [FromForm] Status status)
         {
             //https://pet-service-api.azurewebsites.net/api/Order/changeStatus?Id=1
-            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/changeStatus?Id=" + id, status);
+            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "UserInfo/changeStatus?Id=" + id, status);
             if (response.IsSuccessStatusCode)
             {
                 TempData["SuccessToast"] = "Cập nhật thành công";

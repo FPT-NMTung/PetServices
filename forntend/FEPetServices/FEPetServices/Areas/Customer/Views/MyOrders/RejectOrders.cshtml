@@ -18,17 +18,20 @@
                 <li class="nav-item">
                     <a class="nav-link" id="pills-education-tab" data-toggle="pill" href="~/Customer/MyOrders/WaitingOrders?orderStatus=Waiting&page=1&pageSize=5" role="tab" aria-selected="false">Đơn hàng chờ xử lý</a>
                 </li>
-                @*<li class="nav-item">
-                <a class="nav-link active" id="pills-timeline-tab" data-toggle="pill" href="~/Customer/MyOrders/DeliveryOrders?orderStatus=Delivery&page=1&pageSize=5" role="tab" aria-selected="false">Vận chuyển</a>
+                @*                <li class="nav-item">
+                <a class="nav-link" id="pills-timeline-tab" data-toggle="pill" href="~/Customer/MyOrders/DeliveryOrders?orderStatus=Delivery&page=1&pageSize=5" role="tab" aria-selected="false">Vận chuyển</a>
                 </li>*@
                 @* <li class="nav-item">
                 <a class="nav-link" id="pills-document-tab" data-toggle="pill" href="~/Customer/MyOrders/Index?orderStatus=All&page=1&pageSize=5" role="tab" aria-selected="false">Chờ giao hàng</a>
                 </li>*@
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-event-tab" data-toggle="pill" href="~/Customer/MyOrders/ReceivedOrders?orderStatus=Received&page=1&pageSize=5" role="tab" aria-selected="false">Hoàn thành</a>
+                    <a class="nav-link" id="pills-event-tab" data-toggle="pill" href="~/Customer/MyOrders/ReceivedOrders?orderStatus=Received&page=1&pageSize=5" role="tab" aria-selected="false">Đã được xác nhận</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrders/RejectOrders?orderStatus=Reject&page=1&pageSize=5" role="tab" aria-selected="false">Đã huỷ</a>
+                    <a class="nav-link active" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrders/RejectOrders?orderStatus=Rejected&page=1&pageSize=5" role="tab" aria-selected="false">Đã huỷ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrders/CompletedOrders?orderStatus=Completed&page=1&pageSize=5" role="tab" aria-selected="false">Hoàn thành</a>
                 </li>
             </ul>
         </div>
@@ -54,7 +57,7 @@
                                             {
                                                 <span class="badge badge-info">Đang giao</span>
                                             }
-                                            else if (@order.OrderStatus.Trim() == "Reject")
+                                            else if (@order.OrderStatus.Trim() == "Rejected")
                                             {
                                                 <span class="badge badge-info">Đơn hàng bị huỷ</span>
                                             }
@@ -64,7 +67,11 @@
                                             }
                                             else if (@order.OrderStatus.Trim() == "Received")
                                             {
-                                                <span class="badge badge-info">Hoàn thành</span>
+                                                <span class="badge badge-info">Đơn hàng đã được xác nhận</span>
+                                            }
+                                            else if (@order.OrderStatus.Trim() == "Completed")
+                                            {
+                                                <span class="badge badge-info">Đơn hàng đã hoàn thành</span>
                                             }
                                         </div>
                                         <p><i class="far fa-calendar-alt"></i> @order.OrderDate</p>
@@ -146,7 +153,7 @@
                 $.ajax({
                     url: '/Customer/MyOrders/RejectOrders',
                     type: 'GET',
-                    data: { orderStatus: 'Reject', page: pageIndex + 1, pageSize: 5 }, 
+                    data: { orderStatus: 'Rejected', page: pageIndex + 1, pageSize: 5 },
                     success: function (data) {
                         if (data.trim() !== '') {
                             $('#orders-container').append(data);

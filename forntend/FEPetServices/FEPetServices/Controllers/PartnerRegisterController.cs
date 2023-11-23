@@ -7,11 +7,16 @@ namespace FEPetServices.Controllers
     public class PartnerRegisterController : Controller
     {
         private readonly HttpClient _client;
-        private string _defaultApiUrl;
-        public PartnerRegisterController()
+        /*private string _defaultApiUrl;*/
+        private string DefaultApiUrl = "";
+
+        private readonly IConfiguration configuration;
+        public PartnerRegisterController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             _client = new HttpClient();
-            _defaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account/RegisterPartner"; 
+            /*_defaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account/RegisterPartner";*/
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
         }
         public IActionResult Index()
         {
@@ -32,28 +37,25 @@ namespace FEPetServices.Controllers
             }
             try
             {
-                // Chuyển thông tin đăng ký thành dạng JSON
                 var json = JsonConvert.SerializeObject(registerInfo);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await _client.PostAsync(_defaultApiUrl, content);
+                //HttpResponseMessage response = await _client.PostAsync(_defaultApiUrl, content);
+                HttpResponseMessage response = await _client.PostAsync(DefaultApiUrl + "Account/RegisterPartner", content);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    // Đăng ký thành công, bạn có thể xử lý kết quả ở đây (ví dụ: hiển thị thông báo thành công)
                     TempData["SuccessRegisterSuccessToast"] = "Vui lòng chờ đợi quản trị viên xét duyệt thông tin tài khoản của bạn";
                     return RedirectToAction("Index", "Login");
                 }
                 else
                 {
-                    // Đăng ký không thành công, bạn có thể xử lý kết quả ở đây (ví dụ: hiển thị thông báo lỗi)
                     ViewBag.ErrorToast = "Đăng ký không thành công. Mã lỗi HTTP: " + (int)response.StatusCode;
                     return View();
                 }
             }
             catch (Exception ex)
             {
-                // Xử lý lỗi nếu có
                 ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
                 return View();
             }

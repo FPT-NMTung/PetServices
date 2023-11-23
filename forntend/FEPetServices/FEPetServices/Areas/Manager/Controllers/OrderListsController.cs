@@ -13,20 +13,22 @@ namespace FEPetServices.Areas.Manager.Controllers
     {
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
+        private readonly IConfiguration configuration;
 
-        public OrderListsController()
+        public OrderListsController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Order";
-
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Order";
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl);
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order");
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -49,7 +51,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderDetail(int id)
         {
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "/" + id);
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -61,9 +63,9 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 OrderForm orderDetail = System.Text.Json.JsonSerializer.Deserialize<OrderForm>(responseContent, options);
                 double totalPrice = 0;
-                foreach(var od in orderDetail.OrderProductDetails)
+                foreach (var od in orderDetail.OrderProductDetails)
                 {
-                    totalPrice = (double)(totalPrice + od.Price * od.Quantity); 
+                    totalPrice = (double)(totalPrice + od.Price * od.Quantity);
                 }
                 foreach (var ob in orderDetail.BookingServicesDetails)
                 {
@@ -84,7 +86,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         public async Task<IActionResult> OrderDetail(int id, [FromForm] Status status)
         {
             //https://pet-service-api.azurewebsites.net/api/Order/changeStatus?Id=1
-            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "/changeStatus?Id=" + id, status);
+            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "Order/changeStatus?Id=" + id, status);
             if (response.IsSuccessStatusCode)
             {
                 TempData["SuccessToast"] = "Cập nhật thành công";

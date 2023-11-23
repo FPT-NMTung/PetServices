@@ -70,6 +70,7 @@ namespace PetServices.Controllers
                 existingAccount.UserInfo.Address = updateInfo.Address;
                 existingAccount.UserInfo.Descriptions = updateInfo.Descriptions;
                 existingAccount.UserInfo.ImageUser = updateInfo.ImageUser;
+                existingAccount.UserInfo.Dob = updateInfo.Dob;
 
                 _context.Accounts.Update(existingAccount);
                 await _context.SaveChangesAsync();
