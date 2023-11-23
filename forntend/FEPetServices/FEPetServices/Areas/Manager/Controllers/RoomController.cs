@@ -15,25 +15,29 @@ namespace FEPetServices.Areas.Manager.Controllers
     public class RoomController : Controller
     {
         private readonly HttpClient client = null;
-        private string ApiUrlRoomList;
-        private string ApiUrlRoomAdd;
-        private string ApiUrlRoomCategoryList;
-        private string ApiUrlRoomDetail;
-        private string ApiUrlRoomUpdate;
-        private string ApiUrlServiceList;
+        private string DefaultApiUrl = "";
+        private readonly IConfiguration configuration;
+        //private string ApiUrlRoomList;
+        //private string ApiUrlRoomAdd;
+        //private string ApiUrlRoomCategoryList;
+        //private string ApiUrlRoomDetail;
+        //private string ApiUrlRoomUpdate;
+        //private string ApiUrlServiceList;
 
-        public RoomController()
+        public RoomController(IConfiguration configuration)
         {
             client = new HttpClient();
+            this.configuration = configuration;
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
 
-            ApiUrlRoomList = "https://pet-service-api.azurewebsites.net/api/Room/GetAllRoom";
-            ApiUrlRoomAdd = "https://pet-service-api.azurewebsites.net/api/Room/AddRoom";
-            ApiUrlRoomCategoryList = "https://pet-service-api.azurewebsites.net/api/Room/GetRoomCategory";
-            ApiUrlRoomDetail = "https://pet-service-api.azurewebsites.net/api/Room/GetRoom/";
-            ApiUrlRoomUpdate = "https://pet-service-api.azurewebsites.net/api/Room/UpdateRoom?roomId=";
-            ApiUrlServiceList = "https://pet-service-api.azurewebsites.net/api/Room/GetAllService";
+            //ApiUrlRoomList = "https://pet-service-api.azurewebsites.net/api/Room/GetAllRoom";
+            //ApiUrlRoomAdd = "https://pet-service-api.azurewebsites.net/api/Room/AddRoom";
+            //ApiUrlRoomCategoryList = "https://pet-service-api.azurewebsites.net/api/Room/GetRoomCategory";
+            //ApiUrlRoomDetail = "https://pet-service-api.azurewebsites.net/api/Room/GetRoom/";
+            //ApiUrlRoomUpdate = "https://pet-service-api.azurewebsites.net/api/Room/UpdateRoom?roomId=";
+            //ApiUrlServiceList = "https://pet-service-api.azurewebsites.net/api/Room/GetAllService";
         }
 
         public async Task<ActionResult> Index(RoomDTO roomDTO)
@@ -43,7 +47,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var json = JsonConvert.SerializeObject(roomDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.GetAsync(ApiUrlRoomList);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Room/GetAllRoom");
+                //HttpResponseMessage response = await client.GetAsync(ApiUrlRoomList);
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
@@ -77,7 +82,8 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-                HttpResponseMessage roomCategoryResponse = await client.GetAsync(ApiUrlRoomCategoryList);
+                HttpResponseMessage roomCategoryResponse = await client.GetAsync(DefaultApiUrl + "Room/GetRoomCategory");
+                //HttpResponseMessage roomCategoryResponse = await client.GetAsync(ApiUrlRoomCategoryList);
 
                 if (roomCategoryResponse.IsSuccessStatusCode)
                 {
@@ -85,7 +91,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                     ViewBag.Categories = new SelectList(categories, "RoomCategoriesId", "RoomCategoriesName");
                 }
 
-                HttpResponseMessage serviceResponse = await client.GetAsync(ApiUrlServiceList);
+                HttpResponseMessage serviceResponse = await client.GetAsync(DefaultApiUrl + "Room/GetAllService");
+                //HttpResponseMessage serviceResponse = await client.GetAsync(ApiUrlServiceList);
 
                 if (serviceResponse.IsSuccessStatusCode)
                 {
@@ -118,7 +125,8 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PostAsync(ApiUrlRoomAdd, content);
+                HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "Room/AddRoom", content);
+                //HttpResponseMessage response = await client.PostAsync(ApiUrlRoomAdd, content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -157,7 +165,8 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-                HttpResponseMessage serviceResponse = await client.GetAsync(ApiUrlServiceList);
+                HttpResponseMessage serviceResponse = await client.GetAsync(DefaultApiUrl + "Room/GetAllService");
+                //HttpResponseMessage serviceResponse = await client.GetAsync(ApiUrlServiceList);
 
                 if (serviceResponse.IsSuccessStatusCode)
                 {
@@ -166,7 +175,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                     ViewBag.services = new SelectList(services, "ServiceId", "ServiceName");
                 }
 
-                HttpResponseMessage categoryResponse = await client.GetAsync(ApiUrlRoomCategoryList);
+                HttpResponseMessage categoryResponse = await client.GetAsync(DefaultApiUrl + "Room/GetRoomCategory");
+                //HttpResponseMessage categoryResponse = await client.GetAsync(ApiUrlRoomCategoryList);
 
                 if (!categoryResponse.IsSuccessStatusCode)
                 {
@@ -177,7 +187,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var categories = await categoryResponse.Content.ReadFromJsonAsync<List<RoomCategoryDTO>>();
                 ViewBag.Categories = new SelectList(categories, "RoomCategoriesId", "RoomCategoriesName");
 
-                HttpResponseMessage response = await client.GetAsync(ApiUrlRoomDetail + RoomId);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Room/GetRoom/" + RoomId);
+                //HttpResponseMessage response = await client.GetAsync(ApiUrlRoomDetail + RoomId);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -204,7 +215,8 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-                HttpResponseMessage categoryResponse = await client.GetAsync(ApiUrlRoomCategoryList);
+                HttpResponseMessage categoryResponse = await client.GetAsync(DefaultApiUrl + "Room/GetRoomCategory");
+                //HttpResponseMessage categoryResponse = await client.GetAsync(ApiUrlRoomCategoryList);
 
                 if (categoryResponse.IsSuccessStatusCode)
                 {
@@ -227,7 +239,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
                 else
                 {
-                    HttpResponseMessage responseForImage = await client.GetAsync(ApiUrlRoomDetail + RoomId);
+                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrl + "Room/GetRoom/" + RoomId);
+                    //HttpResponseMessage responseForImage = await client.GetAsync(ApiUrlRoomDetail + RoomId);
 
                     if (responseForImage.IsSuccessStatusCode)
                     {
@@ -256,7 +269,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var json = JsonConvert.SerializeObject(roomDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PutAsync(ApiUrlRoomUpdate + RoomId, content);
+                HttpResponseMessage response = await client.PutAsync(DefaultApiUrl + "Room/UpdateRoom?roomId=" + RoomId, content);
+                //HttpResponseMessage response = await client.PutAsync(ApiUrlRoomUpdate + RoomId, content);
 
                 if (response.IsSuccessStatusCode)
                 {

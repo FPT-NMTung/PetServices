@@ -13,24 +13,27 @@ namespace FEPetServices.Areas.Manager.Controllers
     public class ServiceController : Controller
     {
         private readonly HttpClient client = null;
+        private readonly IConfiguration configuration;
         private string DefaultApiUrl = "";
-        private string DefaultApiUrlServiceList = "";
-        private string DefaultApiUrlServiceAdd = "";
-        private string DefaultApiUrlServiceCategoryList = "";
-        private string DefaultApiUrlServiceDetail = "";
-        private string DefaultApiUrlServiceUpdate = "";
+        //private string DefaultApiUrlServiceList = "";
+        //private string DefaultApiUrlServiceAdd = "";
+        //private string DefaultApiUrlServiceCategoryList = "";
+        //private string DefaultApiUrlServiceDetail = "";
+        //private string DefaultApiUrlServiceUpdate = "";
 
-        public ServiceController()
+        public ServiceController(IConfiguration configuration)
         {
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "";
-            DefaultApiUrlServiceList = "https://pet-service-api.azurewebsites.net/api/Service/GetAllService";
-            DefaultApiUrlServiceAdd = "https://pet-service-api.azurewebsites.net/api/Service/CreateService";
-            DefaultApiUrlServiceCategoryList = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory";
-            DefaultApiUrlServiceDetail = "https://pet-service-api.azurewebsites.net/api/Service/ServiceID";
-            DefaultApiUrlServiceUpdate = "https://pet-service-api.azurewebsites.net/api/Service/UpdateServices?serviceId=";
+            this.configuration = configuration;
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = "";
+            //DefaultApiUrlServiceList = "https://pet-service-api.azurewebsites.net/api/Service/GetAllService";
+            //DefaultApiUrlServiceAdd = "https://pet-service-api.azurewebsites.net/api/Service/CreateService";
+            //DefaultApiUrlServiceCategoryList = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory";
+            //DefaultApiUrlServiceDetail = "https://pet-service-api.azurewebsites.net/api/Service/ServiceID";
+            //DefaultApiUrlServiceUpdate = "https://pet-service-api.azurewebsites.net/api/Service/UpdateServices?serviceId=";
 
         }
         public async Task<IActionResult> Index(ServiceDTO service)
@@ -40,7 +43,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var json = JsonConvert.SerializeObject(service);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceList);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Service/GetAllService");
+                //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceList);
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
@@ -75,7 +79,8 @@ namespace FEPetServices.Areas.Manager.Controllers
             try
             {
                
-                HttpResponseMessage categoryResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory");
+                HttpResponseMessage categoryResponse = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
+                //HttpResponseMessage categoryResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory");
 
                 if (categoryResponse.IsSuccessStatusCode)
                 {
@@ -100,7 +105,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 // Gửi dữ liệu lên máy chủ
-                HttpResponseMessage response = await client.PostAsync(DefaultApiUrlServiceAdd, content);
+                HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "Service/CreateService", content);
+                //HttpResponseMessage response = await client.PostAsync(DefaultApiUrlServiceAdd, content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -138,7 +144,8 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-                HttpResponseMessage categoryResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory");
+                HttpResponseMessage categoryResponse = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
+                //HttpResponseMessage categoryResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory");
 
                 if (categoryResponse.IsSuccessStatusCode)
                 {
@@ -146,7 +153,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                     ViewBag.Categories = new SelectList(categories, "SerCategoriesId", "SerCategoriesName");
                 }
                 //goi api de lay thong tin can sua
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceDetail + "/" + ServiceId);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Service/ServiceID/" + ServiceId);
+                //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceDetail + "/" + ServiceId);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -180,7 +188,8 @@ namespace FEPetServices.Areas.Manager.Controllers
             try
             {
 
-                HttpResponseMessage categoryResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory");
+                HttpResponseMessage categoryResponse = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
+                //HttpResponseMessage categoryResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory");
 
                 if (categoryResponse.IsSuccessStatusCode)
                 {
@@ -203,7 +212,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 else
                 {
                     // Handle the case when no new image is uploaded
-                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrlServiceDetail + "/" + ServiceId);
+                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrl + "Service/ServiceID/" + ServiceId);
+                    //HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrlServiceDetail + "/" + ServiceId);
 
                     if (responseForImage.IsSuccessStatusCode)
                     {
@@ -235,7 +245,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 // Send the data to the server
-                HttpResponseMessage response = await client.PutAsync(DefaultApiUrlServiceUpdate + ServiceId, content);
+                HttpResponseMessage response = await client.PutAsync(DefaultApiUrl + "Service/UpdateServices?serviceId=" + ServiceId, content);
+                //HttpResponseMessage response = await client.PutAsync(DefaultApiUrlServiceUpdate + ServiceId, content);
 
                 if (response.IsSuccessStatusCode)
                 {
