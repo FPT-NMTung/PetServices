@@ -39,7 +39,7 @@
         </div>
         <div class="card-body">
             <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">    
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                     @if (Model != null && Model.Count > 0)
                     {
                         <div id="orders-container">
@@ -95,9 +95,12 @@
                                                         </div>
                                                         <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
-                                                    <div class="btn-content-detail">
-                                                        <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@order.UserInfoId')">Đánh giá</button>
-                                                    </div>
+                                                    @if (productDetail.FeedbackStatus == null || productDetail.FeedbackStatus == false)
+                                                    {
+                                                        <div class="btn-content-detail">
+                                                            <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@order.UserInfoId', '@order.OrderId', '@productDetail.FeedbackStatus')">Đánh giá</button>
+                                                        </div>
+                                                    }
                                                 }
                                             </div>
                                         }
@@ -119,9 +122,12 @@
                                                         </div>
                                                         <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
-                                                    <div class="btn-content-detail">
-                                                        <button class="btn btn-outline-primary" onclick="openPopupService('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@order.UserInfoId')">Đánh giá</button>
-                                                    </div>
+                                                    @if (serviceDetail.FeedbackStatus == null || serviceDetail.FeedbackStatus == false)
+                                                    {
+                                                        <div class="btn-content-detail">
+                                                            <button class="btn btn-outline-primary" onclick="openPopupService('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>
+                                                        </div>
+                                                    }
                                                 }
                                             </div>
                                         }
@@ -200,6 +206,7 @@
                                         <input type="hidden" id="productIdInput" value="" />
                                         <input type="hidden" id="ratingInput" value="" />
                                         <input type="hidden" id="userIdInput" value="" />
+                                        <input type="hidden" id="orderIdInput" value="" />
                                         <textarea name="message" id="feedbackMessage" placeholder="Hãy chia sẻ những điều bạn thích về sản phẩm/dịch vụ này với mọi người nhé." cols="300" rows="5"></textarea>
                                     </div>
                                 </div>
@@ -259,7 +266,7 @@
     @*End Lazy Loading*@
     <script>
         //Hiện popup đánh giá
-        function openPopupService(image, serviceName, weight, serviceId, userId) {
+        function openPopupService(image, serviceName, weight, serviceId, userId, orderId) {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('popup').style.display = 'block';
 
@@ -269,12 +276,13 @@
 
             document.getElementById('serviceIdInput').value = serviceId;
             document.getElementById('userIdInput').value = userId;
+            document.getElementById('orderIdInput').value = orderId;
             document.getElementById('productIdInput').value = null;
 
         }
 
         //Hiện popup đánh giá
-        function openPopupProduct(image, productName, quanlity, productId, userId) {
+        function openPopupProduct(image, productName, quanlity, productId, userId, orderId, status) {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('popup').style.display = 'block';
 
@@ -284,8 +292,10 @@
 
             document.getElementById('productIdInput').value = productId;
             document.getElementById('userIdInput').value = userId;
+            document.getElementById('orderIdInput').value = orderId;
             document.getElementById('serviceIdInput').value = null;
 
+            alert("status: " + status);
         }
 
         // Ẩn popup đánh giá
@@ -338,13 +348,15 @@
             var productId = document.getElementById('productIdInput').value;
             var rating = document.getElementById('ratingInput').value;
             var userId = document.getElementById('userIdInput').value;
+            var orderId = document.getElementById('orderIdInput').value;
 
             if (rating && feedbackMessage) 
             {
                 var data = {
                     NumberStart: parseInt(rating),
                     Content: feedbackMessage,
-                    UserId: userId
+                    UserId: userId,
+                    OrderId: orderId
                 };
 
                 if (productId !== null) {
@@ -358,7 +370,7 @@
                     url: 'https://localhost:7255/api/Feedback/AddFeedBack',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify(data),
+                    data: JSON.stringify(data), 
                     success: function (response) {
 
                         closePopup();
