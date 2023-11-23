@@ -473,5 +473,51 @@ namespace UnitTest
             var errorMessage = errorMessages[0].ErrorMessage;
             Assert.Contains("Email cần có @", errorMessage);
         }
+
+        [Fact]
+        // 11. Email not active
+        public async Task Test_Login_Fail_Email_NotActive()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword("12345678");
+                var testUser = new Account
+                {
+                    Email = "hungnvhe153434@fpt.edu.vn",
+                    Password = hashedPassword,
+                    Role = new Role { RoleName = "CUSTOMER" },
+                    Status = false,
+                };
+
+                context.Accounts.Add(testUser);
+                context.SaveChanges();
+            }
+
+            var mockMapper = new Mock<IMapper>();
+            var mockConfiguration = new Mock<IConfiguration>();
+
+            mockConfiguration.Setup(x => x["Jwt:Key"]).Returns("Imsdg2wmP9DigIlxBV8czvXOa7XB442TBtioyAsVo5JEVCuOteFIGGJeo4nz4wa");
+            mockConfiguration.Setup(x => x["Jwt:Issuer"]).Returns("http://project");
+            mockConfiguration.Setup(x => x["Jwt:Audience"]).Returns("http://localhost5xxx");
+            mockConfiguration.Setup(x => x["Jwt:ExpiryInDays"]).Returns("1");
+
+            var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+            var loginForm = new LoginForm
+            {
+                Email = "hungnvhe153434@fpt.edu.vn",
+                Password = "12345678"
+            };
+
+            var result = await controller.Login(loginForm) as ObjectResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(400, result.StatusCode);
+            Assert.Equal("Tài khoản chưa được kích hoạt.", result.Value);
+        }
     }
 }

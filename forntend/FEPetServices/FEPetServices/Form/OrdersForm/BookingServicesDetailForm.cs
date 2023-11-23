@@ -13,6 +13,8 @@ namespace FEPetServices.Form.OrdersForm
         public int? PartnerInfoId { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
+        public bool? FeedbackStatus { get; set; }
+
         public virtual PartnerInfo? PartnerInfo { get; set; }
         public virtual ServiceDTO? Service { get; set; } = null!;
     }
