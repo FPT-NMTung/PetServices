@@ -19,7 +19,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         private string DefaultApiUrl = "";
         //private string DefaultApiUrlOrderPartner = "";
         //private string DefaultApiUrlOrderListOfPetTraining = "";
-        //private string DefaultApiUrlOrderListOfPetTrainingSpecial = "";
+        private string DefaultApiUrlOrderListOfPetTrainingSpecial = "";
         private readonly IConfiguration configuration;
 
         public HomePartnerController(IConfiguration configuration)
@@ -68,7 +68,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
-            HttpResponseMessage repId = await client.GetAsync(DefaultApiUrl + "/" + email);
+            HttpResponseMessage repId = await client.GetAsync(DefaultApiUrl + "Partner/" + email);
             AccountInfo account = null; // Initialize with null or a default value
 
             if (repId.IsSuccessStatusCode)
