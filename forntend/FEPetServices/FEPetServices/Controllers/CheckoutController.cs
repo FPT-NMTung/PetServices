@@ -242,7 +242,6 @@ namespace FEPetServices.Controllers
                         }
                         ClearCart();
                         TempData["SuccessToast"] = "Đặt hàng thành công. Vui lòng kiểm tra lại giỏ hàng.";
-
                         return RedirectToAction("Index", "Home");
                     }
                 }

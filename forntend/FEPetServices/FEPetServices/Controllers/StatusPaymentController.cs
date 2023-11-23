@@ -102,14 +102,14 @@ namespace FEPetServices.Controllers
                         }
                     }
 
-
-
                     ClearCart();
                     TempData["SuccessToast"] = "Thanh toán thành công.";
+                    ViewBag.CheckSucess = "Sucess";
                     return View();
                 }
                 else
                 {
+                    TempData["SuccessToast"] = "Đặt hàng thành công. Vui lòng kiểm tra lại giỏ hàng.";
                     return View();
                 }
             }
