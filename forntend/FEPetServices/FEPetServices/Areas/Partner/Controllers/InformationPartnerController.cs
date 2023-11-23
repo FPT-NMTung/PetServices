@@ -12,16 +12,17 @@ namespace FEPetServices.Areas.Partner.Controllers
     {
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
-        private string DefaultApiUrlPartner = "";
-        private string DefaultApiUrlInforPartner = "";
+        private readonly IConfiguration configuration;
+        //private string DefaultApiUrlPartner = "";
 
-        public InformationPartnerController()
+        public InformationPartnerController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
-            DefaultApiUrlPartner = "https://localhost:7255/api/Partner/updateInfo";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
             //DefaultApiUrlPartner = "https://pet-service-api.azurewebsites.net/api/Partner/updateInfo";
         }
         [HttpGet]
@@ -30,7 +31,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "/" + email);
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
 
             if (response.IsSuccessStatusCode)
             {
@@ -72,11 +73,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                 TempData["ErrorToast"] = "Số điện thoại không được để trống";
                 return RedirectToAction("Index");
             }
-            if (partnerInfo.Phone.Length == 10 && partnerInfo.Phone.StartsWith("0"))
-            {
-
-            }
-            else
+            if (partnerInfo.Phone.Length != 10 && !partnerInfo.Phone.StartsWith("0"))
             {
                 TempData["ErrorToast"] = "Số điện thoại phải bắt đầu bằng số 0 và có 10 chữ số";
                 return RedirectToAction("Index");
@@ -105,7 +102,8 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
             else
             {
-                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrlInforPartner + "/" + email);
+                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "Partner/updateInfo/" + email);
+                //HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrlPartner + "/" + email);
                 if (responseUser.IsSuccessStatusCode)
                 {
                     string responseContent = await responseUser.Content.ReadAsStringAsync();
@@ -121,11 +119,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
 
             // Check if Dob is greater than the current date
-            if (partnerInfo.Dob.HasValue && partnerInfo.Dob.Value < DateTime.Now)
-            {
-                
-            }
-            else
+            if (partnerInfo.Dob.HasValue && partnerInfo.Dob.Value > DateTime.Now)
             {
                 TempData["ErrorToast"] = "Ngày sinh không thể lớn hơn ngày hiện tại";
                 return RedirectToAction("Index");
@@ -150,7 +144,7 @@ namespace FEPetServices.Areas.Partner.Controllers
 
             if (partnerInfo.Province == null || partnerInfo.District == null || partnerInfo.Commune == null)
             {
-                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "/" + email);
+                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
                 if (responseUser.IsSuccessStatusCode)
                 {
                     string responseContent = await responseUser.Content.ReadAsStringAsync();
@@ -168,7 +162,8 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
 
             // Update the user information, including the image URL
-            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrlPartner + "?email=" + email, partnerInfo);
+            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "Partner/updateInfo?email=" + email, partnerInfo);
+            //HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrlPartner + "?email=" + email, partnerInfo);
             if (response.IsSuccessStatusCode)
             {
                 TempData["SuccessToast"] = "Cập nhật thông tin thành công";
@@ -191,7 +186,7 @@ namespace FEPetServices.Areas.Partner.Controllers
 
                 // Update the location in the database
                 var updateLocationModel = new PartnerLocationDTO { Lat = locationUpdate.Lat.ToString(), Lng = locationUpdate.Lng.ToString() };
-                HttpResponseMessage response = await _client.PutAsJsonAsync($"https://pet-service-api.azurewebsites.net/api/Partner/UpdateLocation?email={email}", updateLocationModel);
+                HttpResponseMessage response = await _client.PutAsJsonAsync($"{DefaultApiUrl}Partner/UpdateLocation?email={email}", updateLocationModel);
 
                 if (response.IsSuccessStatusCode)
                 {

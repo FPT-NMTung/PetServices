@@ -11,13 +11,16 @@ namespace FEPetServices.Areas.Partner.Controllers
     {
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
+        private readonly IConfiguration configuration;
 
-        public ChangePasswordPartnerController()
+        public ChangePasswordPartnerController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Account";
         }
         public async Task<IActionResult> Index([FromForm] ChangePassword changePassword)
         {
@@ -40,7 +43,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                 return View();
             }
 
-            string apiUrl = $"https://pet-service-api.azurewebsites.net/api/Account/newpassword?email={email}&oldpassword={changePassword.OldPassword}&newpassword={changePassword.NewPassword}&confirmnewpassword={changePassword.ConfirmNewPassword}";
+            string apiUrl = $"{DefaultApiUrl}Account/newpassword?email={email}&oldpassword={changePassword.OldPassword}&newpassword={changePassword.NewPassword}&confirmnewpassword={changePassword.ConfirmNewPassword}";
 
             HttpResponseMessage response = await _client.PutAsync(apiUrl, null);
 
