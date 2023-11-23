@@ -118,6 +118,7 @@
                                             </ul> 
                                         </div>
                                     </div>
+                                    
                                     <div style="margin-top:5px">
                                         <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ bắt đầu:</p>
                                         <input id="datetimeStart" type="text" placeholder="Thời gian bắt đầu" style="border:2px solid black" required>
@@ -133,24 +134,24 @@
                                      string? userimageuser = Context.Session.GetString("UserImage");
                                      if (userimageuser is not null)
                                       {
-                                                 @if (Model.account.UserInfo.PetInfos != null)
+                                                    @if (Model.account.UserInfo.PetInfos != null)
                                                 {
-                                                  <select name="PetInfoId" id="PetInfoId" class="size-option" style="font-family: serif; width: 200px; height: 30px; border: 2px solid black; margin-bottom: 5px;">
-                                                   <option value=" ">Cân nặng của bé</option>
-                                                   @foreach (var petInfor in Model.account.UserInfo.PetInfos)
-                                                        {
-                                                         <option value="@petInfor.PetInfoId">@petInfor.PetName @petInfor.Weight kg</option>
+                                                        <select name="PetInfoId" id="PetInfoId" class="size-option" style="font-family: serif; width: 200px; height: 30px; border: 2px solid black; margin-bottom: 5px;">
+                                                            <option value=" ">Cân nặng của bé</option>
+                                                            @foreach (var petInfor in Model.account.UserInfo.PetInfos) {
+                                                                <option value="@petInfor.PetInfoId" data-weight="@petInfor.Weight">@petInfor.PetName @petInfor.Weight</option>
                                                         }
-                                                         <option value="khac">Khác</option>
-                                                   </select>
+                                                            <option value="khac">Khác</option>
+                                                        </select>
                                                 }
 
-                                               <input class="lgweight" id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black; display: none;" required>
+
+                                                   <input class="lgweight" id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black; display: none;" required>
                                       }
                                       else
 
                                        {
-                                         <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black;" required> 
+                                             <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black;" required> 
                                        }
                                      }
                                      </div>
@@ -292,17 +293,17 @@
                                             <div class="pagination">
                                                     @{
                                                         int pagenumber = ((@ViewBag.FeedbacksCount - 1) / 5) + 1;
-                                                                            @if (ViewBag.CurrentPage > 1)
+                                                                                @if (ViewBag.CurrentPage > 1)
                                                         {
-                                                                            <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
+                                                                                <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
                                                         }
-                                                                            @for (int i = 1; i <= pagenumber; i++)
+                                                                                @for (int i = 1; i <= pagenumber; i++)
                                                         {
-                                                                            <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = i })">@i</a>
+                                                                                <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = i })">@i</a>
                                                         }
-                                                                            @if (ViewBag.CurrentPage < pagenumber)
+                                                                                @if (ViewBag.CurrentPage < pagenumber)
                                                         {
-                                                                            <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
+                                                                                <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
                                                         }
                                                     }
                                             </div>
@@ -350,118 +351,7 @@
     </main>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-  <script>
-   const input = document.getElementById('petWeight');
-    input.addEventListener('change', function() {
-     if (input.value && !input.value.endsWith('kg')) {
-       input.value += ' kg';
-     }
-     });
-      function kiemTra() {
-        var datetimeStart = document.getElementById('datetimeStart').value;
-        var datetimeEnd = document.getElementById('datetimeEnd').value;
-        var petWeight = document.getElementById('petWeight').value;
-
-        if (datetimeStart === '' || datetimeEnd === ''|| petWeight === '') {
-            alert('Vui lòng điền đầy đủ thông tin.');
-            return false; // Ngăn form submit nếu thông tin chưa được điền đầy đủ
-        }
-
-        // Nếu thông tin đã điền đầy đủ, cho phép form submit
-        return true;
-    }
-    function kiemTraAndSubmit(formId, serviceId) {
-        var form = document.getElementById(formId);
-        var datetimeStart = document.getElementById('datetimeStart').value;
-        var datetimeEnd = document.getElementById('datetimeEnd').value;
-        var petWeight = document.getElementById('petWeight').value;
-
-        if (datetimeStart === '' || datetimeEnd === '' || petWeight === '') {
-            alert('Vui lòng điền đầy đủ thông tin.');
-            return false;
-        } else {
-            // Thực hiện hành động thêm vào giỏ hàng sau khi kiểm tra thành công
-            addToCartService(serviceId); // Gọi hàm thêm vào giỏ hàng
-            form.submit(); // Gửi form
-        }
-    }
-    // cân nặng khi đặt cho người khác
-    document.getElementById("PetInfoId").addEventListener("change", function () {
-    // Lấy giá trị được chọn từ dropdown
-    var selectedValue = this.value;
-    
-    // Lấy tất cả các phần tử có class "lgweight"
-    var petWeightInputs = document.getElementsByClassName("lgweight");
-    
-    // Nếu giá trị được chọn là "khac", hiển thị tất cả các phần tử có class "lgweight"
-    if (selectedValue === "khac") {
-        for (var i = 0; i < petWeightInputs.length; i++) {
-            petWeightInputs[i].style.display = "block";
-            petWeightInputs[i].setAttribute("required", "required");
-        }
-    } else {
-        // Ngược lại, ẩn tất cả các phần tử có class "lgweight"
-        for (var i = 0; i < petWeightInputs.length; i++) {
-            petWeightInputs[i].style.display = "none";
-            petWeightInputs[i].removeAttribute("required");
-        }
-    }
-});
-
-  </script>
-  <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const fpStart = flatpickr("#datetimeStart", {
-        minDate: "today",
-        enableTime: true,
-        dateFormat: "Y-m-d H:i",
-        onClose: function(selectedDates, dateStr, instance) {
-            const currentTime = new Date(); // Thời gian hiện tại
-            const selectedTime = new Date(dateStr);
-            const serviceTime = @Model.Service.Time * 60 * 60 * 1000; // thời gian làm dịch vụ
-            const openingTime = new Date(selectedTime.toDateString() + " " + "07:30");
-            const closingTime = new Date(selectedTime.toDateString() + " " + "19:00");
-
-            // Kiểm tra nếu thời gian đặt lịch nhỏ hơn thời gian hiện tại
-            if (selectedTime <= currentTime) {
-                alert("Bạn không thể chọn thời gian trước hiện tại.");
-                return;
-            }
-
-            // Kiểm tra nếu thời gian bắt đầu không nằm trong khoảng làm việc (7:30 - 19:00)
-            if (selectedTime < openingTime || selectedTime > closingTime) {
-                selectedTime.setTime(openingTime.getTime());
-            }
-            
-
-            // Nếu thời gian kết thúc vượt quá thời gian đóng cửa (19:00)
-            if (selectedTime.getTime() > 19||selectedTime.getTime() + serviceTime > closingTime.getTime()) {
-                const nextDay = new Date(selectedTime);
-                nextDay.setDate(selectedTime.getDate() + 1);
-                nextDay.setHours(7);
-                nextDay.setMinutes(30);
-                selectedTime.setDate(nextDay.getDate());
-                selectedTime.setHours(nextDay.getHours());
-                selectedTime.setMinutes(nextDay.getMinutes());
-            }
-
-            const endTime = new Date(selectedTime.getTime() + serviceTime);
-            document.getElementById("datetimeEnd").value = endTime.toLocaleString();
-            var endDateInput = document.getElementById("EndTime");
-            endDateInput.value = endTime.toLocaleString();
-
-            document.getElementById("datetimeStart").value = selectedTime.toLocaleString();
-            var startDateInput = document.getElementById("StartTime");
-            startDateInput.value = selectedTime.toLocaleString();
-        }
-    });
-
-});
-
-
-
-    </script>
-    <script>
+   <script>
      // Function to calculate total amount
     function calculateTotal() {
     var petWeight = parseFloat(document.getElementById('petWeight').value);
@@ -517,6 +407,132 @@ document.getElementById('PartnerInfoId').addEventListener('change', calculateTot
 document.getElementById('petWeight').addEventListener('input', calculateTotal);
 
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+            var priceElements = document.querySelectorAll('.current-price');
+            priceElements.forEach(function (priceElement) {
+                var priceText = priceElement.textContent.trim();
+                var price = parseFloat(priceText.replace(/\s/g, '').replace('VNĐ', ''));
+                var formattedPrice = price.toLocaleString('vi-VN');
+                priceElement.textContent = formattedPrice + ' VNĐ';
+});
+        });
+</script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const fpStart = flatpickr("#datetimeStart", {
+        minDate: "today",
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        onClose: function(selectedDates, dateStr, instance) {
+            const currentTime = new Date(); // Thời gian hiện tại
+            const selectedTime = new Date(dateStr);
+            const serviceTime = @Model.Service.Time * 60 * 60 * 1000; // thời gian làm dịch vụ
+            const openingTime = new Date(selectedTime.toDateString() + " " + "07:30");
+            const closingTime = new Date(selectedTime.toDateString() + " " + "19:00");
+
+            // Kiểm tra nếu thời gian đặt lịch nhỏ hơn thời gian hiện tại
+            if (selectedTime <= currentTime) {
+                alert("Bạn không thể chọn thời gian trước hiện tại.");
+                return;
+            }
+
+            // Kiểm tra nếu thời gian bắt đầu không nằm trong khoảng làm việc (7:30 - 19:00)
+            if (selectedTime < openingTime || selectedTime > closingTime) {
+                selectedTime.setTime(openingTime.getTime());
+            }
+            if(Date(selectedTime.toDateString() + " " + "00:00") <selectedTime.getTime()< Date(selectedTime.toDateString() + " " + "07:30")){
+             const nextDay = new Date(selectedTime);
+                nextDay.setDate(selectedTime.getDate() );
+                nextDay.setHours(7);
+                nextDay.setMinutes(30);
+                selectedTime.setDate(nextDay.getDate());
+                selectedTime.setHours(nextDay.getHours());
+                selectedTime.setMinutes(nextDay.getMinutes());
+            }
+            
+
+            // Nếu thời gian kết thúc vượt quá thời gian đóng cửa (19:00)
+            if (Date(selectedTime.toDateString() + " " + "19:00") <selectedTime.getTime()< Date(selectedTime.toDateString() + " " + "00:00")||selectedTime.getTime() + serviceTime > closingTime.getTime()) {
+                const nextDay = new Date(selectedTime);
+                nextDay.setDate(selectedTime.getDate() + 1);
+                nextDay.setHours(7);
+                nextDay.setMinutes(30);
+                selectedTime.setDate(nextDay.getDate());
+                selectedTime.setHours(nextDay.getHours());
+                selectedTime.setMinutes(nextDay.getMinutes());
+            }
+
+            const endTime = new Date(selectedTime.getTime() + serviceTime);
+            document.getElementById("datetimeEnd").value = endTime.toLocaleString();
+            var endDateInput = document.getElementById("EndTime");
+            endDateInput.value = endTime.toLocaleString();
+
+            document.getElementById("datetimeStart").value = selectedTime.toLocaleString();
+            var startDateInput = document.getElementById("StartTime");
+            startDateInput.value = selectedTime.toLocaleString();
+        }
+    });
+
+});
+
+
+
+    </script>
+function calculateTotal() {
+    var petWeightSelect = document.getElementById('PetInfoId');
+    var selectedOption = petWeightSelect.options[petWeightSelect.selectedIndex];
+    var petWeight = parseFloat(selectedOption.getAttribute('data-weight'));
+
+    var servicePrice = parseFloat(document.querySelector('.price.current-price').textContent.replace(/,/g, '').replace(/\D/g, ''));
+    var additionalCost = 0;
+    var additional = 0;
+
+    if (document.getElementById('PartnerInfoId').value.trim() !== '') {
+        additional += 50000;
+    }
+
+   
+        if (petWeight <= 5) {
+            additionalCost += 0;
+        } else if (petWeight <= 10) {
+            additionalCost += 50000;
+        } else if (petWeight <= 20) {
+            additionalCost += 100000;
+        } else if (petWeight <= 40) {
+            additionalCost += 200000;
+        } else {
+            additionalCost += 400000;
+        }
+    
+
+    var PartnerInfoId = document.getElementById("PartnerInfoId");
+    var selectedPartnerId = PartnerInfoId.options[PartnerInfoId.selectedIndex];
+
+    var PartnerId = document.getElementById("PartnerId");
+    PartnerId.value = selectedPartnerId.value;
+
+    var totalAmount = servicePrice + additional + additionalCost;
+
+    var totalPriceService = document.getElementById("totalPriceService");
+    var Weight = document.getElementById("Weight");
+    totalPriceService.value = totalAmount;
+    Weight.value = petWeight;
+
+    document.getElementById('totalPriceService').textContent = totalAmount.toLocaleString('vi-VN') + " VNĐ";
+    document.getElementById('totalAmountDisplay').textContent =
+        servicePrice.toLocaleString('vi-VN') + "  (dịch vụ) + " +
+        additionalCost.toLocaleString('vi-VN') + " (cân nặng) + " +
+        additional.toLocaleString('vi-VN') + "  (đối tác) = " +
+        totalAmount.toLocaleString('vi-VN') + " VNĐ";
+}
+
+calculateTotal();
+
+document.getElementById('PartnerInfoId').addEventListener('change', calculateTotal);
+document.getElementById('PetInfoId').addEventListener('change', calculateTotal);
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
             var priceElements = document.querySelectorAll('.current-price');
