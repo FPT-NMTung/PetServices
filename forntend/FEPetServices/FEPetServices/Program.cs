@@ -1,10 +1,35 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using FEPetServices.Form.OrdersForm;
+using FEPetServices.Models.Payments;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(builder.Environment.ContentRootPath)
+    .AddJsonFile("appsettings.json")
+    .Build();
+
+// Đọc thông tin cấu hình VNP
+var vnpUrl = configuration["VnpConfig:Url"];
+var vnpApi = configuration["VnpConfig:Api"];
+var vnpTmnCode = configuration["VnpConfig:TmnCode"];
+var vnpHashSecret = configuration["VnpConfig:HashSecret"];
+var vnpReturnUrl = configuration["VnpConfig:ReturnUrl"];
+
+builder.Services.AddSingleton(new VnpConfiguration
+{
+    Url = vnpUrl,
+    Api = vnpApi,
+    TmnCode = vnpTmnCode,
+    HashSecret = vnpHashSecret,
+    ReturnUrl = vnpReturnUrl
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<Utils>(); ;
 builder.Services.AddCors();
 
 // Add session and time

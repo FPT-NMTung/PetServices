@@ -1,5 +1,6 @@
 ﻿using FEPetServices.Form;
 using FEPetServices.Form.OrdersForm;
+using FEPetServices.Models.Payments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -19,11 +20,21 @@ namespace FEPetServices.Controllers
         private string DefaultApiUrl = "";
         private string DefaultApiUrlUserInfo = "";
 
-        public CheckoutController()
+        private readonly IConfiguration _configuration;
+        private readonly VnpConfiguration _vnpConfiguration;
+
+        private readonly Utils _utils;
+
+        public CheckoutController(HttpClient client, IConfiguration configuration, Utils utils, VnpConfiguration vnpConfiguration)
         {
-            _client = new HttpClient();
+            _client = client;
+            _configuration = configuration;
+            _utils = utils;
+            _vnpConfiguration = vnpConfiguration;
+
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
+
             DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
             DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";
         }
@@ -85,6 +96,7 @@ namespace FEPetServices.Controllers
         [HttpPost]
         public async Task<IActionResult> Index([FromForm] OrderForm orderform)
         {
+
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             try
@@ -163,11 +175,41 @@ namespace FEPetServices.Controllers
 
                 if (responseOrder.IsSuccessStatusCode)
                 {
+                    DateTime date = DateTime.Now;
+                    string vnp_Returnurl = _vnpConfiguration.ReturnUrl;  // Use the configured value
+                    string vnp_Url = _vnpConfiguration.Url;  // Use the configured value
+                    string vnp_TmnCode = _vnpConfiguration.TmnCode;  // Use the configured value
+                    string vnp_HashSecret = _vnpConfiguration.HashSecret;  // Use the configured value
+
+                    VnPayLibrary vnpay = new VnPayLibrary();
+
+                    vnpay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
+                    vnpay.AddRequestData("vnp_Command", "pay");
+                    vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
+                    vnpay.AddRequestData("vnp_Amount", (100000 * 100).ToString());
+
+                    vnpay.AddRequestData("vnp_BankCode", "VNBANK");
+
+                    vnpay.AddRequestData("vnp_CreateDate", date.ToString("yyyyMMddHHmmss"));
+
+                    vnpay.AddRequestData("vnp_CurrCode", "VND");
+                    vnpay.AddRequestData("vnp_IpAddr", _utils.GetIpAddress());
+
+                    vnpay.AddRequestData("vnp_Locale", "vn");
+
+                    vnpay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang:" + orderform.OrderId);
+                    vnpay.AddRequestData("vnp_OrderType", "other");
+
+                    vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
+                    vnpay.AddRequestData("vnp_TxnRef", orderform.OrderId.ToString());
+
+                    string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
+                    Response.Redirect(paymentUrl);
+
                     foreach (var cartItem in cartItems)
                     {
                         if (cartItem.product != null)
                         {
-                            //https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct?ProductId=1&Quantity=50
                             HttpResponseMessage response = await _client.PutAsync("https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct"
                                 + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct,null);
                         }
@@ -194,6 +236,38 @@ namespace FEPetServices.Controllers
         {
             var session = HttpContext.Session;
             session.Remove(CARTKEY);
+        }
+
+        public void Payment(double price, DateTime orderDate, int orderId)
+        {
+            string vnp_Returnurl = _vnpConfiguration.ReturnUrl;  // Use the configured value
+            string vnp_Url = _vnpConfiguration.Url;  // Use the configured value
+            string vnp_TmnCode = _vnpConfiguration.TmnCode;  // Use the configured value
+            string vnp_HashSecret = _vnpConfiguration.HashSecret;  // Use the configured value
+
+            VnPayLibrary vnpay = new VnPayLibrary();
+
+            vnpay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
+            vnpay.AddRequestData("vnp_Command", "pay");
+            vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
+            vnpay.AddRequestData("vnp_Amount", (price * 100).ToString());
+
+            vnpay.AddRequestData("vnp_BankCode", "VNBANK");
+
+            vnpay.AddRequestData("vnp_CreateDate", orderDate.ToString("yyyyMMddHHmmss"));
+            vnpay.AddRequestData("vnp_CurrCode", "VND");
+            vnpay.AddRequestData("vnp_IpAddr", _utils.GetIpAddress());
+
+            vnpay.AddRequestData("vnp_Locale", "vn");
+
+            vnpay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang:" + orderId);
+            vnpay.AddRequestData("vnp_OrderType", "other");
+
+            vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
+            vnpay.AddRequestData("vnp_TxnRef", orderId.ToString());
+
+            string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
+            Response.Redirect(paymentUrl);
         }
     }
 }

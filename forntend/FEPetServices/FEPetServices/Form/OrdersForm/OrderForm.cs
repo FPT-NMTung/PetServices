@@ -3,7 +3,7 @@
     public class OrderForm
     {
         public int OrderId { get; set; }
-        public DateTime? OrderDate { get; set; }
+        public DateTime OrderDate { get; set; }
         public string? OrderStatus { get; set; }
         public string? Province { get; set; }
         public string? District { get; set; }
