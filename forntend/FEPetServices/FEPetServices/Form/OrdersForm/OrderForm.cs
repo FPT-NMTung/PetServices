@@ -10,6 +10,7 @@
         public string? Commune { get; set; }
         public string? Address { get; set; }
         public string? Phone { get; set; }
+        public bool? FeedbackStatus { get; set; }
         public string? FullName { get; set; }
         public int? UserInfoId { get; set; }
         public virtual UserInfo? UserInfo { get; set; }
