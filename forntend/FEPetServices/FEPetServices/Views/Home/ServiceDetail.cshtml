@@ -118,24 +118,25 @@
                                         </div>
                                     </div>
                                     <div style="margin-top:5px">
-                                        <p style="font-family: serif; font-size: 15px; height:1px;" >Chọn giờ bắt đầu:</p>
+                                        <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ bắt đầu:</p>
                                         <input id="datetimeStart" type="text" placeholder="Thời gian bắt đầu" style="border:2px solid black" required>
                                     </div>
                                     <div style="margin-top:5px">
-                                        <p style="font-family: serif; font-size: 15px; height:1px;" >Chọn giờ kết thúc:</p>
+                                        <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ kết thúc:</p>
                                         <input id="datetimeEnd" type="text" placeholder="Thời gian kết thúc" style="border:2px solid black" required> 
                                     </div>
+
                                     <div style="margin-top:5px;margin-bottom:10px;">
                                         <p style="font-family: serif; font-size: 15px; height:1px;">Cân nặng của thú cưng:</p>
                                         <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border:2px solid black" required>
                                     </div>
                                     <div class="product-action-wrapper d-flex-center">
                                         <ul class="product-action action-style-two d-flex-center mb--0" style="display:contents;">
-                                            <form method="post" action="@Url.Action("AddToCart", "Home")">
+                                            <form method="post" action="@Url.Action("AddToCart", "Home")" onsubmit="return kiemTra()">
                                                 @Html.AntiForgeryToken()
                                                 <button class="axil-btn btn-bg-primary" type="button" onclick="addToCartService('@Model?.Service.ServiceId')"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
                                             </form>
-                                            <form method="post" action="@Url.Action("AddToCart", "Home")">
+                                            <form method="post" action="@Url.Action("AddToCart", "Home")" onsubmit="return kiemTra()">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="ServiceId" value="@Model?.Service.ServiceId" />
                                                 <input type="hidden" name="PriceService" id="totalPriceService" value="" />
@@ -332,7 +333,22 @@
             }
         });
 
-    </script>
+  </script>
+  <script>
+      function kiemTra() {
+        var datetimeStart = document.getElementById('datetimeStart').value;
+        var datetimeEnd = document.getElementById('datetimeEnd').value;
+        var petWeight = document.getElementById('petWeight').value;
+
+        if (datetimeStart === '' || datetimeEnd === '' || petWeight === '') {
+            alert('Vui lòng điền đầy đủ thông tin.');
+            return false; // Ngăn form submit nếu thông tin chưa được điền đầy đủ
+        }
+
+        // Nếu thông tin đã điền đầy đủ, cho phép form submit
+        return true;
+    }
+  </script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
     const fpStart = flatpickr("#datetimeStart", {
@@ -342,7 +358,7 @@
         onClose: function(selectedDates, dateStr, instance) {
             const currentTime = new Date(); // Thời gian hiện tại
             const selectedTime = new Date(dateStr);
-            const serviceTime = 1.5 * 60 * 60 * 1000; // Thời gian dịch vụ là 1 giờ 30 phút
+            const serviceTime = @Model.Service.Time * 60 * 60 * 1000; // Thời gian dịch vụ là 1 giờ 30 phút
             const openingTime = new Date(selectedTime.toDateString() + " " + "07:30");
             const closingTime = new Date(selectedTime.toDateString() + " " + "19:00");
 
