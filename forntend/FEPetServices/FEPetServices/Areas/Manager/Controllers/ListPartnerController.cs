@@ -13,19 +13,23 @@ namespace FEPetServices.Areas.Manager.Controllers
     {
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
+        private readonly IConfiguration configuration;
 
-        public ListPartnerController()
+        public ListPartnerController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Partner";
+            //DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Partner";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl);
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Partner");
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -50,7 +54,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         public async Task<IActionResult> DetailPartner(string email)
         {
 
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "/" + email);
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Partner/" + email);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -73,7 +77,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpPost]
         public async Task<IActionResult> DetailPartner(string email, string password)
         {
-            HttpResponseMessage response = await _client.PutAsync(DefaultApiUrl + "/updateAccount?email=" + email, null);
+            HttpResponseMessage response = await _client.PutAsync(DefaultApiUrl + "Partner/updateAccount?email=" + email, null);
 
             if (response.IsSuccessStatusCode)
             {

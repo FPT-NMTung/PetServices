@@ -18,14 +18,17 @@ namespace FEPetServices.Controllers
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
         private string DefaultApiUrlUserInfo = "";
+        private readonly IConfiguration configuration;
 
-        public CheckoutController()
+        public CheckoutController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
-            DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            /*DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
+            DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";*/
         }
 
         [HttpGet]
@@ -34,7 +37,7 @@ namespace FEPetServices.Controllers
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "/" + email);
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
 
             if (response.IsSuccessStatusCode)
             {
@@ -92,7 +95,7 @@ namespace FEPetServices.Controllers
                 if (orderform.Province == null ||
                     orderform.District == null || orderform.Commune == null)
                 {
-                    HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "/" + email);
+                    HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
                     if (responseUser.IsSuccessStatusCode)
                     {
                         string responseContent = await responseUser.Content.ReadAsStringAsync();
@@ -159,7 +162,9 @@ namespace FEPetServices.Controllers
                 var jsonOrder = System.Text.Json.JsonSerializer.Serialize(order);
 
                 var content = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
-                var responseOrder = await _client.PostAsync("https://pet-service-api.azurewebsites.net/api/Order", content);
+                /*var responseOrder = await _client.PostAsync("https://pet-service-api.azurewebsites.net/api/Order", content);*/
+                var responseOrder = await _client.PostAsync(DefaultApiUrl + "Order", content);
+
 
                 if (responseOrder.IsSuccessStatusCode)
                 {
@@ -167,9 +172,11 @@ namespace FEPetServices.Controllers
                     {
                         if (cartItem.product != null)
                         {
-                            //https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct?ProductId=1&Quantity=50
-                            HttpResponseMessage response = await _client.PutAsync("https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct"
-                                + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct,null);
+                            /*HttpResponseMessage response = await _client.PutAsync("https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct"
+                                + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct,null);*/
+
+                            HttpResponseMessage response = await _client.PutAsync(DefaultApiUrl + "Product/ChangeProduct"
+                                + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);
                         }
                     }
                     // Xoá giỏ hàng

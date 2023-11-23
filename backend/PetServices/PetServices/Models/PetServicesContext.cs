@@ -242,6 +242,8 @@ namespace PetServices.Models
 
                 entity.Property(e => e.Province).HasMaxLength(500);
 
+                entity.Property(e => e.TypePay).HasMaxLength(500);
+
                 entity.Property(e => e.UserInfoId).HasColumnName("UserInfoID");
 
                 entity.HasOne(d => d.UserInfo)
