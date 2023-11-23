@@ -334,7 +334,7 @@
 
     </script>
   <script>
-document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function() {
     const fpStart = flatpickr("#datetimeStart", {
         minDate: "today",
         enableTime: true,
@@ -342,22 +342,22 @@ document.addEventListener("DOMContentLoaded", function() {
         onClose: function(selectedDates, dateStr, instance) {
             const currentTime = new Date(); // Thời gian hiện tại
             const selectedTime = new Date(dateStr);
-            const serviceTime = @Model.Service.Time * 60 * 60 * 1000;
+            const serviceTime = 1.5 * 60 * 60 * 1000; // Thời gian dịch vụ là 1 giờ 30 phút
             const openingTime = new Date(selectedTime.toDateString() + " " + "07:30");
             const closingTime = new Date(selectedTime.toDateString() + " " + "19:00");
 
             // Kiểm tra nếu thời gian đặt lịch nhỏ hơn thời gian hiện tại
             if (selectedTime <= currentTime) {
                 alert("Bạn không thể chọn thời gian trước hiện tại.");
-                return; // Dừng xử lý tiếp theo nếu thời gian đặt lịch nhỏ hơn thời gian hiện tại
+                return;
             }
 
             // Kiểm tra nếu thời gian bắt đầu không nằm trong khoảng làm việc (7:30 - 19:00)
             if (selectedTime < openingTime || selectedTime > closingTime) {
-                selectedTime.setTime(openingTime.getTime()); // Set thời gian bắt đầu là thời gian mở cửa (7:30)
+                selectedTime.setTime(openingTime.getTime());
             }
 
-            // Nếu thời gian bắt đầu cộng với thời gian dịch vụ vượt quá thời gian đóng cửa (19:00)
+            // Nếu thời gian kết thúc vượt quá thời gian đóng cửa (19:00)
             if (selectedTime.getTime() + serviceTime > closingTime.getTime()) {
                 const nextDay = new Date(selectedTime);
                 nextDay.setDate(selectedTime.getDate() + 1);
@@ -366,18 +366,23 @@ document.addEventListener("DOMContentLoaded", function() {
                 selectedTime.setDate(nextDay.getDate());
                 selectedTime.setHours(nextDay.getHours());
                 selectedTime.setMinutes(nextDay.getMinutes());
-
-                // Điều chỉnh thời gian kết thúc nếu thời gian bắt đầu vượt quá thời gian đóng cửa của ngày trước
-                let endTime = new Date(selectedTime.getTime() + serviceTime);
-                const closingTimeOfDay = new Date(selectedTime.toDateString() + " " + "19:00");
-                if (endTime > closingTimeOfDay) {
-                    endTime = closingTimeOfDay;
-                }
-
-                document.getElementById("datetimeEnd").value = endTime.toLocaleString();
-                var endDateInput = document.getElementById("EndTime");
-                endDateInput.value = endTime.toLocaleString();
             }
+
+            // Nếu thời gian bắt đầu bằng hoặc lớn hơn thời gian kết thúc, chuyển sang ngày hôm sau
+            if (selectedTime >= closingTime || selectedTime.getTime() + serviceTime > closingTime.getTime()) {
+                const nextDay = new Date(selectedTime);
+                nextDay.setDate(selectedTime.getDate() + 1);
+                nextDay.setHours(7);
+                nextDay.setMinutes(30);
+                selectedTime.setDate(nextDay.getDate());
+                selectedTime.setHours(nextDay.getHours());
+                selectedTime.setMinutes(nextDay.getMinutes());
+            }
+
+            const endTime = new Date(selectedTime.getTime() + serviceTime);
+            document.getElementById("datetimeEnd").value = endTime.toLocaleString();
+            var endDateInput = document.getElementById("EndTime");
+            endDateInput.value = endTime.toLocaleString();
 
             document.getElementById("datetimeStart").value = selectedTime.toLocaleString();
             var startDateInput = document.getElementById("StartTime");
