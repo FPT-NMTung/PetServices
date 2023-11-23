@@ -71,11 +71,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 TempData["ErrorToast"] = "Số điện thoại không được để trống";
                 return RedirectToAction("Index");
             }
-            if (userInfo.Phone.Length == 10 && userInfo.Phone.StartsWith("0"))
-            {
-                
-            }
-            else
+            if (userInfo.Phone.Length != 10 && !userInfo.Phone.StartsWith("0"))
             {
                 TempData["ErrorToast"] = "Số điện thoại phải bắt đầu bằng số 0 và có 10 chữ số";
                 return RedirectToAction("Index");
@@ -89,6 +85,12 @@ namespace FEPetServices.Areas.Manager.Controllers
             if (userInfo.Address.Length <= 10)
             {
                 TempData["ErrorToast"] = "Địa chỉ cụ thể phải lớn hơn 10 ký tự";
+                return RedirectToAction("Index");
+            }
+            //dob check 
+            if (userInfo.Dob.HasValue && userInfo.Dob.Value > DateTime.Now)
+            {
+                TempData["ErrorToast"] = "Ngày sinh không thể lớn hơn ngày hiện tại";
                 return RedirectToAction("Index");
             }
             // Handle the uploaded image

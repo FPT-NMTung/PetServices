@@ -71,7 +71,6 @@
                 {
                     <tr>
                         <td>@itemCount</td>
-                        @*<td><img src="@pc.UserInfoId" width="50" height="50"></td>*@
                         <td>@pc.UserInfo?.FirstName @pc.UserInfo?.LastName</td>
                         <td>
                             @foreach (var bd in pc.BookingServicesDetails)
@@ -84,7 +83,7 @@
                         <td>@pc.OrderDate</td>
                         <td>@pc.UserInfo.Phone</td>
                         <td>
-                            @pc.OrderStatus
+                            Đang Chờ Nhận Đơn
                         </td>
                         <td>
                             <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
