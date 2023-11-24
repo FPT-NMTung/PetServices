@@ -44,7 +44,7 @@
     });
 </script>
 
-<h1>Danh Sách Đơn Hàng Đã Hoành Thành Của Đối Tác</h1>
+<h1>Danh Sách Đơn Hàng Đã Hoàn Thành Của Nhân Viên</h1>
 
 <table id="lists" class="display">
     <thead>
@@ -75,7 +75,7 @@
                             @foreach (var bd in pc.BookingServicesDetails)
                             {
                                 <div>
-                                    @bd.Service.ServiceName - @bd.Price <br>
+                                    @bd.Service.ServiceName - @bd.Price.ToString("n0").Replace(",", ".") VNĐ <br>
                                 </div>
                             }
                         </td>
