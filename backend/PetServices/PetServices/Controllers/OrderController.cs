@@ -42,6 +42,35 @@ namespace PetServices.Controllers
             }
         }
 
+        [HttpGet("latest")]
+        public IActionResult GetLatestOrder(string email)
+        {
+            try
+            {
+                // Lấy đơn đặt hàng mới nhất cho người dùng có email tương ứng
+                Order latestOrder = _context.Orders
+                    .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email))
+                    .OrderByDescending(o => o.OrderId)
+                    .FirstOrDefault();
+
+                if (latestOrder != null)
+                {
+                    // Trả về toàn bộ thông tin đơn đặt hàng
+                    return Ok(_mapper.Map<OrdersDTO>(latestOrder));
+                }
+                else
+                {
+                    return NotFound(new { Message = "No orders found for the specified email" });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
         [HttpGet("email/{email}")]
         public IActionResult GetOrderUser(string email, string orderstatus, int page = 1, int pageSize = 5)
         {
@@ -163,6 +192,32 @@ namespace PetServices.Controllers
                     return BadRequest("Trạng thái cũ không hợp lệ");
                 }
                 order.OrderStatus = status.newStatus;
+                _context.Orders.Update(order);
+
+                await _context.SaveChangesAsync();
+                return Ok("Đổi trạng thái thành công");
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut("changeStatusPayment")]
+        public async Task<IActionResult> ChangeStatusPayment(int Id)
+        {
+            try
+            {
+                Order order = await _context.Orders.SingleOrDefaultAsync(b => b.OrderId == Id);
+                // Kiểm tra booking có tồn tại hay không
+                if (order == null)
+                {
+                    return NotFound("Booking không tồn tài");
+                }
+                // Kiểm tra xem trạng thái cũ có chính xác hay không
+
+                order.StatusPayment = !order.StatusPayment;
                 _context.Orders.Update(order);
 
                 await _context.SaveChangesAsync();
@@ -350,6 +405,8 @@ namespace PetServices.Controllers
                 UserInfoId = orderDTO.UserInfoId,
                 Phone = orderDTO.Phone,
                 FullName = orderDTO.FullName,
+                TypePay = orderDTO.TypePay,
+                StatusPayment = orderDTO.StatusPayment,
 
                 // Sản phẩm
                 OrderProductDetails = orderDTO.OrderProductDetails != null
@@ -369,10 +426,12 @@ namespace PetServices.Controllers
                         Price = priceRoom,
                         StartDate = dto.StartDate,
                         EndDate = dto.EndDate,
+                        TotalPrice = dto.TotalPrice,
+                        Note = dto.Note,
                     }).ToList()
                     : new List<BookingRoomDetail>(),
 
-                BookingRoomServices = orderDTO.BookingRoomServices != null 
+                BookingRoomServices = orderDTO.BookingRoomServices != null
                     ? orderDTO.BookingRoomServices.Select(dto => new BookingRoomService
                     {
                         RoomId = dto.RoomId,
@@ -380,6 +439,7 @@ namespace PetServices.Controllers
                         PriceService = dto.PriceService,
                     }).ToList()
                     : new List<BookingRoomService>(),
+
 
                 // Dịch vụ
                 BookingServicesDetails = orderDTO.BookingServicesDetails != null

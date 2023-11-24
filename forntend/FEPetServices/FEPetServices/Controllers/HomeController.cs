@@ -1,20 +1,11 @@
 ﻿using FEPetServices.Areas.DTO;
 using FEPetServices.Form;
-using FEPetServices.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using PetServices.DTO;
 using PetServices.Models;
-using System.Diagnostics;
-using System.Drawing.Printing;
-using System.Globalization;
-using System.Linq;
 using System.Net.Http.Headers;
-using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
@@ -168,6 +159,7 @@ namespace FEPetServices.Controllers
             try
             {
                 HttpResponseMessage serviceAvailableResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/GetServiceInRoom?roomId=" + roomId);
+                //HttpResponseMessage serviceAvailableResponse = await client.GetAsync(DefaultApiUrl + "Room/GetServiceInRoom?roomId=" + roomId);
 
                 if (serviceAvailableResponse.IsSuccessStatusCode)
                 {
@@ -227,6 +219,7 @@ namespace FEPetServices.Controllers
                 }
 
                 HttpResponseMessage serviceUnavailableResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/GetServiceOutRoom?roomId=" + roomId);
+               // HttpResponseMessage serviceUnavailableResponse = await client.GetAsync(DefaultApiUrl + "Room/GetServiceOutRoom?roomId=" + roomId);
 
                 if (serviceUnavailableResponse.IsSuccessStatusCode)
                 {

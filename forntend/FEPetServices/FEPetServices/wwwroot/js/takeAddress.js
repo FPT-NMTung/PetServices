@@ -118,3 +118,17 @@ districtDropdown.addEventListener("change", loadWards);
 var wardDropdown = document.getElementById("wardDropdown");
 wardDropdown.addEventListener("change", updateDisplayedNames);
 
+function validateForm() {
+    var cashChecked = document.getElementById("radio4").checked;
+    var momoChecked = document.getElementById("radio5").checked;
+
+    // Chỉ cho phép submit nếu chỉ một trong hai radio được chọn
+    if (!(cashChecked ^ momoChecked)) {
+        alert("Chỉ chọn một phương thức thanh toán.");
+        return false; // Ngăn chặn submit form
+    }
+
+    // Nếu muốn xử lý thêm các trường hợp khác, bạn có thể thực hiện ở đây
+
+    return true; // Cho phép submit form
+}
