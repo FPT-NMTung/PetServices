@@ -102,7 +102,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
             else
             {
-                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "Partner/updateInfo/" + email);
+                HttpResponseMessage responseUser = await _client.GetAsync("https://pet-service-api.azurewebsites.net/api/Partner/" + email);
                 //HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrlPartner + "/" + email);
                 if (responseUser.IsSuccessStatusCode)
                 {
