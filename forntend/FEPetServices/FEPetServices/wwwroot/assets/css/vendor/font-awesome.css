@@ -13114,6 +13114,10 @@
         content: "\10f487"
     }
 
+    .fad.fa-product-hunt:after {
+        content: "\10f288"
+    }
+
     .fad.fa-project-diagram:after {
         content: "\10f542"
     }

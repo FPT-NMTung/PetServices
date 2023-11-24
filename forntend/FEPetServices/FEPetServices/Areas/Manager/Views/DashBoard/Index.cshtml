@@ -32,22 +32,29 @@
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3" style="padding: 10px;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-body d-flex">
-                            <div class="d-flex">
+                            <div class="d-flex single-counter">
                                 <div class="card-body" style="padding: 13px 0px 0px 20px;">
-                                    <h7 class="fw-normal title">Total Users</h7>
-                                    <h3 class="mt--5 mb-0 text-dark fw-semibold">1234$</h3>
+                                    <h7 class="fw-normal title">Khách hàng mới</h7>
+                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count">@ViewBag.NumberCustomerInMonth</h3>
                                 </div>
                             </div>
                             <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
-                                <div class="chart-wrapper mt-1" style="color: rgb(111, 111, 255);">
+                                <div class="chart-wrapper mt-1" style="color: #32d0fc;">
                                     <i class="fad fa-user-plus" style="font-size: 70px;"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
                             <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
-                                <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: rgb(111, 111, 255); margin-top: 2.5px;"></i>
-                                <p style="color: rgb(111, 111, 255);">&ensp;5%</p>&nbspLast week
+                                @if (ViewBag.PercentCustomerPreviousMonth < 0)
+                                {
+                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 20px; color: #32d0fc; margin-top: 2.5px;"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #32d0fc; margin-top: 2.5px;"></i>
+                                }
+                                <p style="color: #32d0fc;">&ensp;@ViewBag.PercentCustomerPreviousMonth%</p>&nbspTrong tháng
                             </div>
                         </div>
                     </div>
@@ -55,22 +62,29 @@
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3" style="padding: 10px;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-body d-flex">
-                            <div class="d-flex">
+                            <div class="d-flex single-counter">
                                 <div class="card-body" style="padding: 13px 0px 0px 20px;">
-                                    <h7 class="fw-normal title">Total Users</h7>
-                                    <h3 class="mt--5 mb-0 text-dark fw-semibold">1234$</h3>
+                                    <h7 class="fw-normal title">Tổng đơn hàng</h7>
+                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count">@ViewBag.NumberOrderInMonth</h3>
                                 </div>
                             </div>
                             <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
-                                <div class="chart-wrapper mt-1" style="color: rgb(111, 111, 255);">
-                                    <i class="fad fa-user-plus" style="font-size: 70px;"></i>
+                                <div class="chart-wrapper mt-1" style="color: #f478f4">
+                                    <i class="fad fa-file-invoice-dollar" style="font-size: 70px;"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
                             <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
-                                <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: rgb(111, 111, 255); margin-top: 2.5px;"></i>
-                                <p style="color: rgb(111, 111, 255);">&ensp;5%</p>&nbspLast week
+                                @if (ViewBag.PercentOrderPreviousMonth < 0)
+                                {
+                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                }
+                                <p style="color: #f478f4">&ensp;@ViewBag.PercentOrderPreviousMonth%</p>&nbspTrong tháng
                             </div>
                         </div>
                     </div>
@@ -78,22 +92,29 @@
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3" style="padding: 10px;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-body d-flex">
-                            <div class="d-flex">
+                            <div class="d-flex single-counter">
                                 <div class="card-body" style="padding: 13px 0px 0px 20px;">
-                                    <h7 class="fw-normal title">Total Users</h7>
-                                    <h3 class="mt--5 mb-0 text-dark fw-semibold">1234$</h3>
+                                    <h7 class="fw-normal title">Tổng thu nhập</h7>
+                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count IncomeInMonth">@ViewBag.IncomeInMonth</h3>
                                 </div>
                             </div>
                             <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
-                                <div class="chart-wrapper mt-1" style="color: rgb(111, 111, 255);">
-                                    <i class="fad fa-user-plus" style="font-size: 70px;"></i>
+                                <div class="chart-wrapper mt-1" style="color: #f7ba48;">
+                                    <i class="fad fa-hand-holding-usd" style="font-size: 70px;"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
                             <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
-                                <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: rgb(111, 111, 255); margin-top: 2.5px;"></i>
-                                <p style="color: rgb(111, 111, 255);">&ensp;5%</p>&nbspLast week
+                                @if (ViewBag.PercentIncomePreviousMonth < 0)
+                                {
+                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 20px; color: #f7ba48; margin-top: 2.5px;"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #f7ba48; margin-top: 2.5px;"></i>
+                                }
+                                <p style="color: #f7ba48;">&ensp;@ViewBag.PercentIncomePreviousMonth%</p>&nbspTrong tháng
                             </div>
                         </div>
                     </div>
@@ -101,22 +122,29 @@
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3" style="padding: 10px;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-body d-flex">
-                            <div class="d-flex">
+                            <div class="d-flex single-counter">
                                 <div class="card-body" style="padding: 13px 0px 0px 20px;">
-                                    <h7 class="fw-normal title">Total Users</h7>
-                                    <h3 class="mt--5 mb-0 text-dark fw-semibold">1234$</h3>
+                                    <h7 class="fw-normal title">Tổng sản phẩm</h7>
+                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count">@ViewBag.NumberProductInMonth</h3>
                                 </div>
                             </div>
                             <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
-                                <div class="chart-wrapper mt-1" style="color: rgb(111, 111, 255);">
-                                    <i class="fad fa-user-plus" style="font-size: 70px;"></i>
+                                <div class="chart-wrapper mt-1" style="color: #4ecc48">
+                                    <i class="fad fa-parachute-box" style="font-size: 70px;"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
                             <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
-                                <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: rgb(111, 111, 255); margin-top: 2.5px;"></i>
-                                <p style="color: rgb(111, 111, 255);">&ensp;5%</p>&nbspLast week
+                                @if (ViewBag.PercentNumberProductPreviousMonth < 0)
+                                {
+                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 20px; color: #4ecc48; margin-top: 2.5px;"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #4ecc48; margin-top: 2.5px;"></i>
+                                }
+                                <p style="color: #4ecc48;">&ensp;@ViewBag.PercentNumberProductPreviousMonth%</p>&nbspTrong tháng
                             </div>
                         </div>
                     </div>
@@ -425,7 +453,6 @@
     <script src="~/assets/js/main.js "></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js "></script>
-
 
 </body>
 
