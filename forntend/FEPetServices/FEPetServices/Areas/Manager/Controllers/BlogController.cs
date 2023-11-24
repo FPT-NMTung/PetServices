@@ -13,10 +13,10 @@ namespace FEPetServices.Areas.Manager.Controllers
         private string DefaultApiUrl = "";
         private readonly IConfiguration configuration;
 
-        //private string DefaultApiUrlBlogList = "";
-        //private string DefaultApiUrlBlogDetail = "";
-        //private string DefaultApiUrlBlogAdd = "";
-        //private string DefaultApiUrlBlogUpdate = "";
+        private string DefaultApiUrlBlogList = "";
+        private string DefaultApiUrlBlogDetail = "";
+        private string DefaultApiUrlBlogAdd = "";
+        private string DefaultApiUrlBlogUpdate = "";
 
         public BlogController(IConfiguration configuration)
         {
@@ -26,10 +26,10 @@ namespace FEPetServices.Areas.Manager.Controllers
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
 
-            //DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
-            //DefaultApiUrlBlogDetail = "https://localhost:7255/api/Blog/BlogID";
-            //DefaultApiUrlBlogAdd = "https://localhost:7255/api/Blog/CreateBlog";
-            //DefaultApiUrlBlogUpdate = "https://localhost:7255/api/Blog/UpdateBlog?blogId=";
+            DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
+            DefaultApiUrlBlogDetail = "https://localhost:7255/api/Blog/BlogID";
+            DefaultApiUrlBlogAdd = "https://localhost:7255/api/Blog/CreateBlog";
+            DefaultApiUrlBlogUpdate = "https://localhost:7255/api/Blog/UpdateBlog?blogId=";
 
         }
 

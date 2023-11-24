@@ -476,5 +476,133 @@ namespace UnitTest
                 Assert.Contains("Số điện thoại không được chứa khoảng trắng!", result.Value.ToString());
             }
         }
+
+        [Fact]
+        // 15. FirstName null
+        public async Task Test_Register_FirstName_Null()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var registerDto = new RegisterDTO
+                {
+                    FirstName = "",
+                    LastName = "Service",
+                    Phone = "0987654321",
+                    Email = "psmsg65@gmail.com",
+                    Password = "12345678"
+                };
+
+                var result = await controller.Register(registerDto) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Contains("Họ không được để trống!", result.Value.ToString());
+            }
+        }
+
+        [Fact]
+        // 16. FristName @
+        public async Task Test_Register_FirstName_special()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var registerDto = new RegisterDTO
+                {
+                    FirstName = "Pet@@@123",
+                    LastName = "Service",
+                    Phone = "0987654321",
+                    Email = "psmsg65@gmail.com",
+                    Password = "12345678"
+                };
+
+                var result = await controller.Register(registerDto) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Contains("Họ chỉ chấp nhận các ký tự văn bản và không được chứa ký tự đặc biệt hoặc số.", result.Value.ToString());
+            }
+        }
+
+        [Fact]
+        // 17. LastName null
+        public async Task Test_Register_LastName_Null()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var registerDto = new RegisterDTO
+                {
+                    FirstName = "Pet",
+                    LastName = "",
+                    Phone = "0987654321",
+                    Email = "psmsg65@gmail.com",
+                    Password = "12345678"
+                };
+
+                var result = await controller.Register(registerDto) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Contains("Tên không được để trống!", result.Value.ToString());
+            }
+        }
+
+        [Fact]
+        // 18. LastName @@@
+        public async Task Test_Register_LastName_Special()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new AccountController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var registerDto = new RegisterDTO
+                {
+                    FirstName = "Pet",
+                    LastName = "Service@123",
+                    Phone = "0987654321",
+                    Email = "psmsg65@gmail.com",
+                    Password = "12345678"
+                };
+
+                var result = await controller.Register(registerDto) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Contains("Tên chỉ chấp nhận các ký tự văn bản và không được chứa ký tự đặc biệt hoặc số.", result.Value.ToString());
+            }
+        }
     }
 }

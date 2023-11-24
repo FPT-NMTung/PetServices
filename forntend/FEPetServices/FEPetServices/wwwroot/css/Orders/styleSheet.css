@@ -171,16 +171,29 @@ span.badge {
         color: black;
         margin-bottom: .5rem;
     }
+
+.headel-content-typepay {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid rgb(0,0,0,.5);
+    padding-top: 10px;
+}
+
+    .headel-content-typepay p {
+        color: black;
+        margin-bottom: .5rem;
+    }
 .btn-content-detail {
     display: flex;
     flex-direction: column;
-    margin-bottom:.5rem;
+    margin-bottom: .5rem;
 }
 
     .btn-content-detail button {
         height:38px;
         align-self: flex-end; 
     }
+
 
 /* Responsive Styles */
 @media (max-width: 768px) {
