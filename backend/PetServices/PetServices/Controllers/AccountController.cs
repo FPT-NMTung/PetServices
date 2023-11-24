@@ -223,6 +223,31 @@ namespace PetServices.Controllers
                 return BadRequest(ModelState);
             }
 
+            // check Họ
+            if (string.IsNullOrWhiteSpace(registerDto.FirstName))
+            {
+                string errorMessage = "Họ không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            string firstName = registerDto.FirstName;
+            if (!Regex.IsMatch(firstName, "^[a-zA-ZÀ-Ỹà-ỹ ]+$"))
+            {
+                string errorMessage = "Họ chỉ chấp nhận các ký tự văn bản và không được chứa ký tự đặc biệt hoặc số.";
+                return BadRequest(errorMessage);
+            }
+            // check Tên
+            if (string.IsNullOrWhiteSpace(registerDto.LastName))
+            {
+                string errorMessage = "Tên không được để trống!";
+                return BadRequest(errorMessage);
+            }
+            string lastName = registerDto.LastName;
+            if (!Regex.IsMatch(lastName, "^[a-zA-ZÀ-Ỹà-ỹ ]+$"))
+            {
+                string errorMessage = "Tên chỉ chấp nhận các ký tự văn bản và không được chứa ký tự đặc biệt hoặc số.";
+                return BadRequest(errorMessage);
+            }
+
             if (string.IsNullOrWhiteSpace(registerDto.Email))
             {
                 string errorMessage = "Email không được để trống!";
