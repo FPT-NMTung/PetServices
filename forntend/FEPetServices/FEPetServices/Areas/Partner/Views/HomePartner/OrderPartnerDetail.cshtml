@@ -31,7 +31,7 @@
                     {
                         <span style="background-color: yellow;color:green">Đang chờ xác nhận</span>
                     }
-                    else if (Model.OrderStatus.Trim() == "Received")
+                    else if (Model.OrderStatus.Trim() == "Received_Services")
                     {
                         <span style="background-color: pink;color:deeppink">Đơn hàng đã được xác nhận</span>
                     }
@@ -111,8 +111,8 @@
                         <tr>
                             <td>@serviceDetail.Service.ServiceName</td>
                             <td>@serviceDetail.Weight</td>
-                            <td>@serviceDetail.Price VNĐ</td>
-                            <td>@(serviceDetail.Price * serviceDetail.Weight)VNĐ</td>
+                            <td>@(serviceDetail.Price.ToString("n0").Replace(",", ".")) VNĐ</td>
+                            <td>@((serviceDetail.Price * serviceDetail.Weight).ToString("n0").Replace(",", ".")) VNĐ</td>
                         </tr>
                     }
                 </tbody>
@@ -132,8 +132,24 @@
             }
         @*</form>*@
         @*<button class="btn btn-primary" onclick="window.print()">In hoá đơn</button>*@
+
         <div class="btn-group">
-            <a class="btn btn-primary" href="~/HomePartner/ListOrderPetTraining">Trở lại</a>
+            @if (Model.OrderStatus.Trim() == "Completed")
+            {
+                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPetTrainingSpecialComplete">Trở lại</a>
+            }
+            else if (Model.OrderStatus.Trim() == "Rejected")
+            {
+                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPetTrainingSpecialRejected">Trở lại</a>
+            }
+            else if (Model.OrderStatus.Trim() == "Waiting")
+            {
+                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPetTraining">Trở lại</a>
+            }
+            else if (Model.OrderStatus.Trim() == "Received_Services")
+            {
+                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPetTrainingSpecialReceived">Trở lại</a>
+            }
         </div>
     </div>
 </body>

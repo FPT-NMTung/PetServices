@@ -14,21 +14,24 @@ namespace FEPetServices.Areas.Manager.Controllers
     {
         private readonly HttpClient client = null;
         private string DefaultApiUrl = "";
-        private string ApiUrlRoomCategoryList = "";
-        private string ApiUrlRoomCategoryDetail = "";
-        private string ApiUrlRoomCategoryAdd = "";
-        private string ApiUrlRoomCategoryUpdate = "";
+        //private string ApiUrlRoomCategoryList = "";
+        //private string ApiUrlRoomCategoryDetail = "";
+        //private string ApiUrlRoomCategoryAdd = "";
+        //private string ApiUrlRoomCategoryUpdate = "";
+        private readonly IConfiguration configuration;
 
-        public RoomCategoryController()
+        public RoomCategoryController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "";
-            ApiUrlRoomCategoryList = "https://pet-service-api.azurewebsites.net/api/RoomCategory/GetAllRoomCategory";
-            ApiUrlRoomCategoryDetail = "https://pet-service-api.azurewebsites.net/api/RoomCategory/GetRoomCategory/";
-            ApiUrlRoomCategoryAdd = "https://pet-service-api.azurewebsites.net/api/RoomCategory/AddRoomCategory";
-            ApiUrlRoomCategoryUpdate = "https://pet-service-api.azurewebsites.net/api/RoomCategory/UpdateRoomCategory?roomCategoryId=";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = "";
+            //ApiUrlRoomCategoryList = "https://pet-service-api.azurewebsites.net/api/RoomCategory/GetAllRoomCategory";
+            //ApiUrlRoomCategoryDetail = "https://pet-service-api.azurewebsites.net/api/RoomCategory/GetRoomCategory/";
+            //ApiUrlRoomCategoryAdd = "https://pet-service-api.azurewebsites.net/api/RoomCategory/AddRoomCategory";
+            //ApiUrlRoomCategoryUpdate = "https://pet-service-api.azurewebsites.net/api/RoomCategory/UpdateRoomCategory?roomCategoryId=";
 
         }
 
@@ -39,7 +42,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var json = JsonConvert.SerializeObject(roomCategoryDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.GetAsync(ApiUrlRoomCategoryList);
+                //HttpResponseMessage response = await client.GetAsync(ApiUrlRoomCategoryList);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "RoomCategory/GetAllRoomCategory");
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
@@ -88,7 +92,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                     var json = JsonConvert.SerializeObject(roomCategoryDTO);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    HttpResponseMessage response = await client.PostAsync(ApiUrlRoomCategoryAdd, content);
+                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "RoomCategory/AddRoomCategory", content);
+                    //HttpResponseMessage response = await client.PostAsync(ApiUrlRoomCategoryAdd, content);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -132,7 +137,8 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-                HttpResponseMessage response = await client.GetAsync(ApiUrlRoomCategoryDetail + roomCategoryId);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "RoomCategory/GetRoomCategory/" + roomCategoryId);
+                //HttpResponseMessage response = await client.GetAsync(ApiUrlRoomCategoryDetail + roomCategoryId);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -182,7 +188,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
                 else
                 {
-                    HttpResponseMessage responseForImage = await client.GetAsync(ApiUrlRoomCategoryDetail + roomCategoryId);
+                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrl + "RoomCategory/GetRoomCategory/" + roomCategoryId);
+                    //HttpResponseMessage responseForImage = await client.GetAsync(ApiUrlRoomCategoryDetail + roomCategoryId);
 
                     if (responseForImage.IsSuccessStatusCode)
                     {
@@ -212,12 +219,13 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var json = JsonConvert.SerializeObject(roomCategoryDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PutAsync(ApiUrlRoomCategoryUpdate + roomCategoryId, content);
+                HttpResponseMessage response = await client.PutAsync(DefaultApiUrl + "RoomCategory/UpdateRoomCategory?roomCategoryId=" + roomCategoryId, content);
+                //HttpResponseMessage response = await client.PutAsync(ApiUrlRoomCategoryUpdate + roomCategoryId, content);
 
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
-                    return View(roomCategoryDTO); 
+                    return View(roomCategoryDTO);
                 }
                 else
                 {

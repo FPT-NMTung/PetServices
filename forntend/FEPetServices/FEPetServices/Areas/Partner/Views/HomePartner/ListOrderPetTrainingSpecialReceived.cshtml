@@ -9,7 +9,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
 <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
-
+<link href="~/css/partner/listorderpartner.css" rel="stylesheet" />
 <script>
     $(document).ready(function () {
         // Khởi tạo DataTables
@@ -25,10 +25,10 @@
                 { "targets": [1], "width": "15%" },
                 { "targets": [2], "width": "25%" },
                 { "targets": [3], "width": "10%" }, // Điều chỉnh cột này để khớp với số cột thực tế
-                { "targets": [4], "width": "15%" },
-                { "targets": [5], "width": "10%" },
-                { "targets": [6], "width": "10%" },
-                { "targets": [7], "width": "10%" },
+                { "targets": [4], "width": "10%" },
+                { "targets": [5], "width": "15%" },
+                { "targets": [6], "width": "8%" },
+                { "targets": [7], "width": "12%" },
             ],
             "language": {
                 "lengthMenu": "Hiển thị _MENU_ dòng",
@@ -45,7 +45,7 @@
     });
 </script>
 
-<h1>Danh Sách Đơn Hàng Của Đối Tác</h1>
+<h1>Danh Sách Đơn Hàng Của Nhân Viên</h1>
 
 <table id="lists" class="display">
     <thead>
@@ -67,7 +67,7 @@
             foreach (var pc in Model)
             {
                 itemCount++;
-                if (pc.OrderStatus.Trim() == "Received")
+                if (pc.OrderStatus.Trim() == "Received_Services")
                 {
                     <tr>
                         <td>@itemCount</td>
@@ -77,22 +77,14 @@
                             @foreach (var bd in pc.BookingServicesDetails)
                             {
                                 <div>
-                                    @bd.Service.ServiceName - @bd.Price <br>
+                                    @bd.Service.ServiceName - @bd.Price.ToString("n0").Replace(",", ".") VNĐ <br>
                                 </div>
                             }
                         </td>
                         <td>@pc.OrderDate</td>
                         <td>@pc.UserInfo.Phone</td>
                         <td>
-                            @pc.OrderStatus
-                            @*@if (@pc.Status)
-                            {
-                            <button class="btn btn-active" onclick="toggleStatus(this)">Đang hoạt động</button>
-                            }
-                            else
-                            {
-                            <button class="btn btn-inactive" onclick="toggleStatus(this)">Ngưng hoạt động</button>
-                            }*@
+                            Đơn hàng đã được xác nhận
                         </td>
                         <td>
                             <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PetServices.DTO;
+using PetServices.Form;
 using PetServices.Models;
 
 namespace PetServices.Controllers
@@ -85,7 +86,7 @@ namespace PetServices.Controllers
             }
         }
         [HttpGet("UpdateOrderStatusReceived")]
-        public async Task<IActionResult> UpdateOrderStatusReceived(int orderId)
+        public async Task<IActionResult> UpdateOrderStatusReceived(int orderId, int partnerId)
         {
             try
             {
@@ -94,7 +95,14 @@ namespace PetServices.Controllers
                     .Include(b => b.BookingServicesDetails)
                     .ThenInclude(bs => bs.Service)
                     .SingleOrDefaultAsync(b => b.OrderId == orderId);
-                order.OrderStatus = "Received";
+                order.OrderStatus = "Received_Services";
+                foreach (var bookingDetail in order.BookingServicesDetails)
+                {
+                    if (bookingDetail.PartnerInfoId == null)
+                    {
+                        bookingDetail.PartnerInfoId = partnerId;
+                    }
+                }
                 _context.Update(order);
                 await _context.SaveChangesAsync();
 
@@ -113,15 +121,26 @@ namespace PetServices.Controllers
             try
             {
                 Order order = await _context.Orders
-                    .Include(b => b.UserInfo)
-                    .Include(b => b.BookingServicesDetails)
-                    .ThenInclude(bs => bs.Service)
+                    .Include(a => a.BookingServicesDetails)
                     .SingleOrDefaultAsync(b => b.OrderId == orderId);
-                order.OrderStatus = "Rejected";
-                _context.Update(order);
-                await _context.SaveChangesAsync();
-                return Ok(_mapper.Map<OrdersDTO>(order));
+                // Kiểm tra booking có tồn tại hay không
+                if (order == null)
+                {
+                    return NotFound("Booking không tồn tài");
+                }
 
+                // Cập nhật PartnerInfoId thành null cho các BookingServicesDetail có PartnerInfoId 
+                foreach (var bookingDetail in order.BookingServicesDetails)
+                {
+                    if (bookingDetail.PartnerInfoId != null)
+                    {
+                        bookingDetail.PartnerInfoId = null;
+                    }
+                }
+                _context.Orders.Update(order);
+
+                await _context.SaveChangesAsync();
+                return Ok("Đổi trạng thái thành công");
             }
             catch (Exception ex)
             {

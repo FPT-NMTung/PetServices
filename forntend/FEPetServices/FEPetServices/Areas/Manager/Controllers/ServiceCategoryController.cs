@@ -31,7 +31,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             DefaultApiUrlServiceCategoryAdd = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/AddServiceCategory";
             DefaultApiUrlServiceCategoryUpdate = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/EditServiceCategory?serCategoriesId=";
 
-    }
+        }
 
         public async Task<IActionResult> Index(ServiceCategoryDTO serviceCategory)
         {
@@ -66,25 +66,26 @@ namespace FEPetServices.Areas.Manager.Controllers
                 ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
             }
 
-            
+
             return View();
         }
 
-        public async Task<IActionResult> AddServiceCategory([FromForm] ServiceCategoryDTO serviceCategory,List<IFormFile> image)
+        public async Task<IActionResult> AddServiceCategory([FromForm] ServiceCategoryDTO serviceCategory, List<IFormFile> image)
         {
             try
             {
                 if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
                 {
                     if (serviceCategory.SerCategoriesName == null) { return View(); }
-                    foreach(var file in image) {
+                    foreach (var file in image)
+                    {
                         string filename = GenerateRandomNumber(5) + file.FileName;
                         filename = Path.GetFileName(filename);
                         string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/ServiceCategory/", filename);
                         var stream = new FileStream(uploadfile, FileMode.Create);
                         file.CopyToAsync(stream);
                         serviceCategory.Picture = "/img/ServiceCategory/" + filename;
-                     }
+                    }
 
                     // mặc định status là true
                     serviceCategory.Status = true;
@@ -96,30 +97,30 @@ namespace FEPetServices.Areas.Manager.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         TempData["SuccessToast"] = "Thêm dịch vụ thành công!";
-                        return View(serviceCategory); 
+                        return View(serviceCategory);
                     }
                     else
                     {
                         TempData["ErrorToast"] = "Thêm dịch vụ thất bại. Vui lòng thử lại sau.";
-                        return View(serviceCategory); 
+                        return View(serviceCategory);
                     }
                 }
                 else
                 {
-                    return View(serviceCategory); 
+                    return View(serviceCategory);
                 }
             }
             catch (Exception ex)
             {
                 TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
-                return View(serviceCategory); 
+                return View(serviceCategory);
             }
         }
 
         public static string GenerateRandomNumber(int length)
         {
             Random random = new Random();
-            const string chars = "0123456789"; 
+            const string chars = "0123456789";
             char[] randomChars = new char[length];
 
             for (int i = 0; i < length; i++)
@@ -142,12 +143,12 @@ namespace FEPetServices.Areas.Manager.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    
-                        var options = new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true
-                        };
-                        model.ServiceCategoryDTO = System.Text.Json.JsonSerializer.Deserialize<ServiceCategoryDTO>(responseContent, options);
+
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+                    model.ServiceCategoryDTO = System.Text.Json.JsonSerializer.Deserialize<ServiceCategoryDTO>(responseContent, options);
                     HttpResponseMessage responseListService = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Service/GetServicesByCategory/" + model.ServiceCategoryDTO.SerCategoriesId);
 
                     if (responseListService.IsSuccessStatusCode)
@@ -180,7 +181,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         }
         public class ServiceModel
         {
-            public ServiceCategoryDTO ServiceCategoryDTO { get; set; }  
+            public ServiceCategoryDTO ServiceCategoryDTO { get; set; }
             public List<ServiceDTO> serviceDTO { get; set; }
         }
 
