@@ -1,0 +1,17 @@
+﻿.Dashboard {
+    background-color: rgb(242, 242, 242);
+    padding: 10px;
+}
+
+.Dashboard .row {
+    display: flex;
+}
+
+p {
+    color: black;
+}
+
+.single-counter h3::after {
+    content: "+";
+    right: 0;
+}
