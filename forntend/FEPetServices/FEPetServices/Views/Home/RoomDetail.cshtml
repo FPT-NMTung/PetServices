@@ -113,29 +113,30 @@
 
                                 @if (ViewBag.ServiceUnavailable != null)
                                 {
-                                    foreach (var service in ViewBag.ServiceUnavailable)
-                                    {
-                                        <div class="col">
-                                            <div class="service-box service-style-2">
-                                                <div class="checkbox-wrapper">
-                                                    <input type="checkbox">
-                                                    <svg viewBox="0 0 35.6 35.6">
-                                                        <circle class="background" cx="12" cy="12" r="12"></circle>
-                                                        <circle class="stroke" cx="12" cy="12" r="10"></circle>
-                                                        <polyline class="check" points="8 12 10.5 15 17 8.7"></polyline>
-                                                    </svg>
-                                                </div>
-                                                <div class="icon">
-                                                    <img src="@service.Picture" style="width: 45px; height: 45px;">
-                                                </div>
-                                                <div class="content">
-                                                    <h6 class="title">@service.ServiceName</h6>
-                                                    <p>@service.Price vnđ</p>
+                                        @foreach (var service in ViewBag.ServiceUnavailable)
+                                        {
+                                            <div class="col">
+                                                <div class="service-box service-style-2">
+                                                    <div class="checkbox-wrapper">
+                                                        <input type="checkbox" name="selectedServices" value="@service.ServiceId" class="service-checkbox">
+                                                        <svg viewBox="0 0 35.6 35.6">
+                                                            <circle class="background" cx="12" cy="12" r="12"></circle>
+                                                            <circle class="stroke" cx="12" cy="12" r="10"></circle>
+                                                            <polyline class="check" points="8 12 10.5 15 17 8.7"></polyline>
+                                                        </svg>
+                                                    </div>
+                                                    <div class="icon">
+                                                        <img src="@service.Picture" style="width: 45px; height: 45px;">
+                                                    </div>
+                                                    <div class="content">
+                                                        <h6 class="title">@service.ServiceName</h6>
+                                                        <p>@service.Price vnđ</p>
+                                                        <input type="hidden" value="" name="ServiceId" class="hidden-service-id">
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        }
                                     }
-                                }
                             </div>
                         </div>
                     </div>
@@ -201,7 +202,7 @@
                                                 <span class="title">Các dịch vụ đặt thêm</span>
                                             </div>
                                             <div class="input-group" style="justify-content: space-between;">
-                                                <label class="name-service"></label>
+                                                <label class="name-service"></label>    
                                                 <span class="amount price-service"></span>
                                             </div>
                                         </td>
@@ -220,6 +221,7 @@
                                     <tr class="order-total">
                                         <td>Tổng</td>
                                         <td class="order-total-amount"></td>
+                                         <input name="totalPrice" id="totalPrice" value="" type="hidden" />
                                     </tr>
                                 </tbody>
                             </table>
@@ -229,7 +231,7 @@
                                 <p>Nhấn "Đặt phòng" đồng nghĩa với việc bạn công nhận mình đã đọc và đồng ý với các <a href="/Home/Terms">Điều khoản sử dụng</a> và <a href="/Home/Privacy">Chính sách quyền riêng tư</a> của chúng tôi.</p>
                             </div>
                             <div class="col-lg-4 booking-room">
-                                <input type="text" name="roomid" value="@Model.Room.RoomId"/>
+                                <input type="hidden" name="roomid" value="@Model.Room.RoomId"/>
                                 <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Đặt phòng</button>
                             </div>
                           
@@ -529,6 +531,9 @@
                 total += timeBookingPrice;
 
                 $('.order-total-amount').text(total.toLocaleString('vi-VN') + ' vnđ');
+                var totalPrice = document.getElementById("totalPrice");
+                totalPrice.value = total;
+
             }
 
             function calculateDuration(startDate, endDate) {
@@ -545,6 +550,21 @@
                 document.querySelector('label[for="super-sad"]').style.display = 'none';
             }
         }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('.service-checkbox').change(function () {
+                var checkbox = $(this);
+                var hiddenInput = checkbox.closest('.service-box').find('.hidden-service-id');
+
+                if (checkbox.prop('checked')) {
+                    hiddenInput.val(checkbox.val());
+                } else {
+                    hiddenInput.val('');
+                }
+            });
+        });
     </script>
 </body>
 

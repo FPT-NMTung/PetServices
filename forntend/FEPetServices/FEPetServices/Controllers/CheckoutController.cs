@@ -178,7 +178,7 @@ namespace FEPetServices.Controllers
                 var jsonOrder = System.Text.Json.JsonSerializer.Serialize(order);
 
                 var content = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
-                var responseOrder = await _client.PostAsync("https://pet-service-api.azurewebsites.net/api/Order", content);
+                var responseOrder = await _client.PostAsync("https://localhost:7255/api/Order", content);
 
                 if (responseOrder.IsSuccessStatusCode)
                 {

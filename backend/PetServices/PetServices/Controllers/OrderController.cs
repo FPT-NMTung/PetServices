@@ -405,6 +405,8 @@ namespace PetServices.Controllers
                 UserInfoId = orderDTO.UserInfoId,
                 Phone = orderDTO.Phone,
                 FullName = orderDTO.FullName,
+                TypePay = orderDTO.TypePay,
+                StatusPayment = orderDTO.StatusPayment,
 
                 // Sản phẩm
                 OrderProductDetails = orderDTO.OrderProductDetails != null
@@ -424,10 +426,12 @@ namespace PetServices.Controllers
                         Price = priceRoom,
                         StartDate = dto.StartDate,
                         EndDate = dto.EndDate,
+                        TotalPrice = dto.TotalPrice,
+                        Note = dto.Note,
                     }).ToList()
                     : new List<BookingRoomDetail>(),
 
-                BookingRoomServices = orderDTO.BookingRoomServices != null 
+                BookingRoomServices = orderDTO.BookingRoomServices != null
                     ? orderDTO.BookingRoomServices.Select(dto => new BookingRoomService
                     {
                         RoomId = dto.RoomId,
@@ -435,6 +439,7 @@ namespace PetServices.Controllers
                         PriceService = dto.PriceService,
                     }).ToList()
                     : new List<BookingRoomService>(),
+
 
                 // Dịch vụ
                 BookingServicesDetails = orderDTO.BookingServicesDetails != null

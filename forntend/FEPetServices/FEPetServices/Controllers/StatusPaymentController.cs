@@ -104,6 +104,7 @@ namespace FEPetServices.Controllers
                     //https://localhost:7255/api/Order/changeStatusPayment?Id=45
                     HttpResponseMessage responseStatusPayment = await _client.PutAsync("https://localhost:7255/api/Order/changeStatusPayment"
                                + "?Id=" + orderId, null);
+
                     ClearCart();
                     TempData["SuccessToast"] = "Thanh toán thành công.";
                     ViewBag.SuccessOrderID = orderId;

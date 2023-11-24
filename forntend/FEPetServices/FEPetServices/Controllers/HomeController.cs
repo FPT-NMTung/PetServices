@@ -174,8 +174,8 @@ namespace FEPetServices.Controllers
 
             try
             {
-                //HttpResponseMessage serviceAvailableResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/GetServiceInRoom?roomId=" + roomId);
-                HttpResponseMessage serviceAvailableResponse = await client.GetAsync(DefaultApiUrl + "Room/GetServiceInRoom?roomId=" + roomId);
+                HttpResponseMessage serviceAvailableResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/GetServiceInRoom?roomId=" + roomId);
+                //HttpResponseMessage serviceAvailableResponse = await client.GetAsync(DefaultApiUrl + "Room/GetServiceInRoom?roomId=" + roomId);
 
                 if (serviceAvailableResponse.IsSuccessStatusCode)
                 {
@@ -237,7 +237,7 @@ namespace FEPetServices.Controllers
                 }
 
                 //HttpResponseMessage serviceUnavailableResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/GetServiceOutRoom?roomId=" + roomId);
-                HttpResponseMessage serviceUnavailableResponse = await client.GetAsync(DefaultApiUrl + "hRoom/GetServiceOutRoom?roomId=" + roomId);
+                HttpResponseMessage serviceUnavailableResponse = await client.GetAsync(DefaultApiUrl + "Room/GetServiceOutRoom?roomId=" + roomId);
 
                 if (serviceUnavailableResponse.IsSuccessStatusCode)
                 {
