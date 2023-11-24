@@ -33,7 +33,8 @@ namespace FEPetServices.Areas.Customer.Controllers
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             //https://localhost:7255/api/Order/orderstatus/Waiting?email=customer%40gmail.com
 
-            HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrlOrders}Order/orderstatus/{orderStatus}?email={email}");
+            //HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrlOrders}Order/orderstatus/{orderStatus}?email={email}");
+            HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderstatus/{orderStatus}?email={email}");
             if (responsecheck.StatusCode == HttpStatusCode.NotFound)
             {
                 ViewBag.NotFound = "Error404";
@@ -41,7 +42,8 @@ namespace FEPetServices.Areas.Customer.Controllers
             }
             else
             {
-                HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrlOrders}Order/email/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
+                //HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrlOrders}Order/email/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
+                HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/email/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
 
                 if (response.IsSuccessStatusCode)
                 {

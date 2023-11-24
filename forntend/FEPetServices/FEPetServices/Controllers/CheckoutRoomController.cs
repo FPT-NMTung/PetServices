@@ -19,11 +19,11 @@ namespace FEPetServices.Controllers
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
         private string DefaultApiUrlUserInfo = "";
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
         private readonly VnpConfiguration _vnpConfiguration;
 
         private readonly Utils _utils;
-        public CheckoutRoomController(HttpClient client, IConfiguration _configuration, Utils utils, VnpConfiguration vnpConfiguration)
+        public CheckoutRoomController(HttpClient client, IConfiguration configuration, Utils utils, VnpConfiguration vnpConfiguration)
         {
             _client = client;
             _configuration = configuration;
@@ -33,9 +33,9 @@ namespace FEPetServices.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            /*DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");*/
-            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Product";
-            DefaultApiUrlUserInfo = "https://localhost:7255/api/UserInfo";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            /*DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Product";
+            DefaultApiUrlUserInfo = "https://localhost:7255/api/UserInfo";*/
         }
         public class CartItem
         {
@@ -81,7 +81,8 @@ namespace FEPetServices.Controllers
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             AccountInfo userInfo = null;
-            HttpResponseMessage responseInfo = await _client.GetAsync(DefaultApiUrlUserInfo + "/" + email);
+            //HttpResponseMessage responseInfo = await _client.GetAsync(DefaultApiUrlUserInfo + "/" + email);
+            HttpResponseMessage responseInfo = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
             if (responseInfo.IsSuccessStatusCode)
             {
                 string responseContent = await responseInfo.Content.ReadAsStringAsync();
@@ -99,7 +100,7 @@ namespace FEPetServices.Controllers
             RoomDTO room = null;
             //Room
             //https://localhost:7255/api/Room/GetRoom/1
-            HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/Room/GetRoom/" + RoomId);
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Room/GetRoom/" + RoomId);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -125,7 +126,7 @@ namespace FEPetServices.Controllers
                     {
                         int a = serviceId;
                         //https://localhost:7255/api/Service/ServiceID/5
-                        HttpResponseMessage responseService = await _client.GetAsync("https://localhost:7255/api/Service/ServiceID/" + serviceId);
+                        HttpResponseMessage responseService = await _client.GetAsync(DefaultApiUrl + "Service/ServiceID/" + serviceId);
                         if (responseService.IsSuccessStatusCode)
                         {
                             string responseContent = await responseService.Content.ReadAsStringAsync();
@@ -175,7 +176,7 @@ namespace FEPetServices.Controllers
                 if (orderform.Province == null ||
                     orderform.District == null || orderform.Commune == null)
                 {
-                    HttpResponseMessage responseUser = await _client.GetAsync("https://localhost:7255/api/UserInfo" + "/" + email);
+                    HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "UserInfo" + "/" + email);
                     if (responseUser.IsSuccessStatusCode)
                     {
                         string responseContent = await responseUser.Content.ReadAsStringAsync();
@@ -249,14 +250,14 @@ namespace FEPetServices.Controllers
                 var jsonOrder = System.Text.Json.JsonSerializer.Serialize(order);
 
                 var content = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
-                var responseOrder = await _client.PostAsync("https://localhost:7255/api/Order", content);
+                var responseOrder = await _client.PostAsync(DefaultApiUrl + "Order", content);
 
                 if (responseOrder.IsSuccessStatusCode)
                 {
                     if (payment == "vnpay")
                     {
                         int orderLatestID = 0;
-                        HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/Order/latest?email=" + email);
+                        HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/latest?email=" + email);
                         if (response.IsSuccessStatusCode)
                         {
                             string responseContent = await response.Content.ReadAsStringAsync();
