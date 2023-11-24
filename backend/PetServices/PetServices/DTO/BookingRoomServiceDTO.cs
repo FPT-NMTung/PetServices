@@ -8,9 +8,9 @@ namespace PetServices.DTO
         public int RoomId { get; set; }
         public int ServiceId { get; set; }
         public double? PriceService { get; set; }
-
-        public virtual RoomDTO? Room { get; set; } = null!;
-        public virtual ServiceDTO? Service { get; set; } = null!;
+        public bool? FeedbackStatus { get; set; }
+        public virtual RoomDTO Room { get; set; } = null!;
+        public virtual ServiceDTO Service { get; set; } = null!;
 
     }
 }

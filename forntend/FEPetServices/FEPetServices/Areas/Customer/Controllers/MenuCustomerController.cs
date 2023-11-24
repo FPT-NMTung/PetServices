@@ -67,16 +67,16 @@ namespace FEPetServices.Areas.Customer.Controllers
                 TempData["ErrorToast"] = "Số điện thoại không được để trống";
                 return RedirectToAction("Information");
             }
-            if (userInfo.Phone.Length == 10 && userInfo.Phone.StartsWith("0"))
-            {
-
-            }
-            else
+            if (userInfo.Phone.Length != 10 && !userInfo.Phone.StartsWith("0"))
             {
                 TempData["ErrorToast"] = "Số điện thoại phải bắt đầu bằng số 0 và có 10 chữ số";
                 return RedirectToAction("Information");
             }
-
+            if (userInfo.Dob.HasValue && userInfo.Dob.Value > DateTime.Now)
+            {
+                TempData["ErrorToast"] = "Ngày sinh không thể lớn hơn ngày hiện tại";
+                return RedirectToAction("Index");
+            }
             if (userInfo.Address == null)
             {
                 TempData["ErrorToast"] = "Địa chỉ cụ thể không được để trống";

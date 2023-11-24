@@ -13,6 +13,8 @@ namespace PetServices.DTO
         public int? PartnerInfoId { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
+        public bool? FeedbackStatus { get; set; }
+
         public virtual PartnerInfoDTO? PartnerInfo { get; set; }
         public virtual PetInfoDTO? PetInfo { get; set; }
         public virtual ServiceDTO? Service { get; set; } = null!;

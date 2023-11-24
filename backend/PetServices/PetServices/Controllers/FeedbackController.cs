@@ -365,6 +365,33 @@ namespace PetServices.Controllers
                     OrderId = feedbackDTO.OrderId,
                 };
 
+                if (feedbackDTO.OrderId != null)
+                {
+                    if (feedbackDTO.RoomId != null)
+                    {
+                        var roomOrder = await _context.BookingRoomDetails.FirstOrDefaultAsync(b => b.OrderId == feedbackDTO.OrderId && b.RoomId == feedbackDTO.RoomId);
+
+                        roomOrder.FeedbackStatus = true;
+                        await _context.SaveChangesAsync();
+                    }
+
+                    if (feedbackDTO.ProductId != null)
+                    {
+                        var productOrder = await _context.OrderProductDetails.FirstOrDefaultAsync(b => b.OrderId == feedbackDTO.OrderId && b.ProductId == feedbackDTO.ProductId);
+
+                        productOrder.FeedbackStatus = true;
+                        await _context.SaveChangesAsync();
+                    }
+
+                    if (feedbackDTO.ServiceId != null)
+                    {
+                        var serviceOrder = await _context.BookingServicesDetails.FirstOrDefaultAsync(b => b.OrderId == feedbackDTO.OrderId && b.ServiceId == feedbackDTO.ServiceId);
+
+                        serviceOrder.FeedbackStatus = true;
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
                 await _context.Feedbacks.AddAsync(feedback);
                 await _context.SaveChangesAsync();
 

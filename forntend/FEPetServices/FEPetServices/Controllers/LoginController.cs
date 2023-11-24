@@ -39,7 +39,7 @@ namespace FEPetServices.Controllers
                 var json = JsonConvert.SerializeObject(loginInfo);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "Account/Login", content); // Hãy đảm bảo rằng URL API của bạn là chính xác
+                HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "Account/Login", content); 
 
                 if (response.IsSuccessStatusCode)
                 {
