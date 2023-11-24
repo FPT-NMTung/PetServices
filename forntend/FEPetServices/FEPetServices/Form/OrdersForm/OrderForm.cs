@@ -18,5 +18,6 @@
         public virtual ICollection<OrderProductDetailForm> OrderProductDetails { get; set; }
         public virtual ICollection<BookingServicesDetailForm>? BookingServicesDetails { get; set; }
         public virtual ICollection<BookingRoomDetailForm>? BookingRoomDetails { get; set; }
+        public virtual ICollection<BookingRoomServiceForm>? BookingRoomServices { get; set; }
     }
 }

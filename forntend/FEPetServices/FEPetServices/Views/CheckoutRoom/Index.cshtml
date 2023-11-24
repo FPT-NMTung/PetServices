@@ -15,11 +15,11 @@
     <main class="main-wrapper">
         <div class="axil-checkout-area axil-section-gap">
             <div class="container">
-                <form method="post" asp-controller="CheckoutRoom" asp-action="Index">
+                <form method="post" action="@Url.Action("ChekoutRoomDB", "CheckoutRoom")">
                     <div class="row">
                         <div class="col-lg-5">
                             <div class="axil-checkout-billing">
-                                <h4 class="title mb--40">Chi tiết thanh toán    </h4>
+                                <h4 class="title mb--40">Chi tiết thanh toán</h4>
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
@@ -97,7 +97,7 @@
                                                                 <td>
                                                                     @if (item.Room != null)
                                                                     {
-                                                                        @foreach(var roomService in item.BookingRoomServices)
+                                                                        @foreach (var roomService in item.BookingRoomServices)
                                                                         {
                                                                             <div style="display:flex;font-size:14px;">
                                                                                 <span>Dịch vụ đã đặt : @(roomService.ServiceId)</span>

@@ -77,6 +77,8 @@ namespace FEPetServices.Controllers
             public double? Weight { get; set; }
             public double? PriceService { get; set; }
             public int? PartnerInfoId { get; set; }
+            public DateTime? StartTime { get; set; }
+            public DateTime? EndTime { get; set; }
             public PartnerInfo? PartnerInfo { get; set; }
             public ServiceDTO service { set; get; }
             // Room
@@ -168,6 +170,8 @@ namespace FEPetServices.Controllers
                             PriceService = cartItem.PriceService,
                             Weight = cartItem.Weight,
                             PartnerInfoId = cartItem.PartnerInfoId,
+                            StartTime = cartItem.StartTime,
+                            EndTime = cartItem.EndTime,
                         };
                         order.BookingServicesDetails.Add(bookingServicesDetail);
                         totalPrice = totalPrice + (double)cartItem.PriceService;

@@ -106,6 +106,7 @@ namespace FEPetServices.Controllers
                                + "?Id=" + orderId, null);
 
                     ClearCart();
+                    ClearCartRoom();
                     TempData["SuccessToast"] = "Thanh toán thành công.";
                     ViewBag.SuccessOrderID = orderId;
                     ViewBag.VNPAY = vnpayTranId;    
@@ -124,6 +125,7 @@ namespace FEPetServices.Controllers
                         }
                     }
                     ClearCart();
+                    ClearCartRoom();
                     TempData["SuccessToast"] = "Đặt hàng thành công. Vui lòng kiểm tra lại giỏ hàng.";
                     ViewBag.ErrorOrderID = orderId;
                     ViewBag.VNPAY = vnpayTranId;
@@ -139,6 +141,12 @@ namespace FEPetServices.Controllers
         {
             var session = HttpContext.Session;
             session.Remove(CARTKEY);
+        }
+
+        void ClearCartRoom()
+        {
+            var session = HttpContext.Session;
+            session.Remove("cartRoom");
         }
     }
 }
