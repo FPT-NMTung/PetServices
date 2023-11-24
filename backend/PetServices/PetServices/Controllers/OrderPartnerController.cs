@@ -86,7 +86,7 @@ namespace PetServices.Controllers
             }
         }
         [HttpGet("UpdateOrderStatusReceived")]
-        public async Task<IActionResult> UpdateOrderStatusReceived(int orderId)
+        public async Task<IActionResult> UpdateOrderStatusReceived(int orderId, int partnerId)
         {
             try
             {
@@ -96,6 +96,13 @@ namespace PetServices.Controllers
                     .ThenInclude(bs => bs.Service)
                     .SingleOrDefaultAsync(b => b.OrderId == orderId);
                 order.OrderStatus = "Received_Services";
+                foreach (var bookingDetail in order.BookingServicesDetails)
+                {
+                    if (bookingDetail.PartnerInfoId == null)
+                    {
+                        bookingDetail.PartnerInfoId = partnerId;
+                    }
+                }
                 _context.Update(order);
                 await _context.SaveChangesAsync();
 

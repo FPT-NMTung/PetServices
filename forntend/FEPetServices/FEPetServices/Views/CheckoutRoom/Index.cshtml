@@ -8,18 +8,18 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Checkout</title>
+    <title>Checkout Room</title>
 </head>
 
 <body class="sticky-header">
     <main class="main-wrapper">
         <div class="axil-checkout-area axil-section-gap">
             <div class="container">
-                <form method="post" asp-controller="Checkout" asp-action="Index">
+                <form method="post" action="@Url.Action("ChekoutRoomDB", "CheckoutRoom")">
                     <div class="row">
                         <div class="col-lg-5">
                             <div class="axil-checkout-billing">
-                                <h4 class="title mb--40">Chi tiết thanh toán    </h4>
+                                <h4 class="title mb--40">Chi tiết thanh toán</h4>
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
@@ -67,7 +67,7 @@
                                     <table class="table summery-table col-lg-12">
                                         <thead>
                                             <tr>
-                                                <th>Sản phẩm/Dịch vụ</th>
+                                                <th>Phòng</th>
                                                 <th>Khác</th>
                                                 <th>Số tiền</th>
                                             </tr>
@@ -75,57 +75,42 @@
                                         <tbody>
                                             @{
                                                 var sessions = HttpContextAccessor.HttpContext.Session;
-                                                string jsoncarts = sessions.GetString(FEPetServices.Controllers.ProductListController.CARTKEY);
+                                                string jsoncarts = sessions.GetString(FEPetServices.Controllers.CheckoutRoomController.CARTKEY);
                                                 double totalPrice = 0;
                                                 if (jsoncarts != null)
                                                 {
-                                                    var cartItems = JsonConvert.DeserializeObject<List<FEPetServices.Controllers.ProductListController.CartItem>>(jsoncarts);
+                                                    var cartItems = JsonConvert.DeserializeObject<List<FEPetServices.Controllers.CheckoutRoomController.CartItem>>(jsoncarts);
                                                     if (cartItems != null)
                                                     {
                                                         foreach (var item in cartItems)
                                                         {
                                                             <tr class="order-product">
-                                                            <td>
+                                                                <td>
                                                                     <div>
-                                                                        @if (item.product != null)
+                                                                        @if (item.Room != null)
                                                                         {
-                                                                            totalPrice = totalPrice + (double)(item.product.Price * item.quantityProduct);
-                                                                            <h5 style="font-size:16px;" class="item-title">@item.product.ProductName</h5>
-                                                                        }
-                                                                        @if (item.service != null)
-                                                                        {
-                                                                            totalPrice = totalPrice + (double)(item.PriceService);
-                                                                            <h5 style="font-size:16px;" class="item-title">@item.service.ServiceName</h5>
+                                                                            totalPrice = totalPrice + (double)(item.TotalPrice);
+                                                                            <h5 style="font-size:16px;" class="item-title">@item.Room.RoomName</h5>
                                                                         }
                                                                     </div>
-                                                            </td>
-                                                            <td>
-                                                                    @if (item.product != null)
+                                                                </td>
+                                                                <td>
+                                                                    @if (item.Room != null)
                                                                     {
-                                                                        <div style="display:flex;font-size:14px;">
-                                                                            <span>Số lượng : @item.quantityProduct</span>
-                                                                        </div>
+                                                                        @foreach (var roomService in item.BookingRoomServices)
+                                                                        {
+                                                                            <div style="display:flex;font-size:14px;">
+                                                                                <span>Dịch vụ đã đặt : @(roomService.ServiceId)</span>
+                                                                            </div>
+                                                                        }
                                                                     }
-                                                                    @if (item.service != null)
+                                                                </td>
+                                                                <td>
+                                                                    @if (item.Room != null)
                                                                     {
-                                                                        <div style="display:flex;font-size:14px;">
-                                                                            <span>Cân nặng thú cưng : @item.Weight Kg</span>
-                                                                        </div>
-                                                                        <div style="display:flex;font-size:14px;">
-                                                                            <span>Nhân viên đã đặt : @(item.PartnerInfoId == null ? "Không" : item.PartnerInfoId.ToString())</span>
-                                                                        </div>
+                                                                        <span class="amount">@($"{item.TotalPrice:n0}".Replace(",", ".")) VNĐ</span>
                                                                     }
-                                                            </td>
-                                                            <td>
-                                                                    @if (item.product != null)
-                                                                    {
-                                                                        <span class="amount">@($"{(item.product.Price * item.quantityProduct):n0}".Replace(",", ".")) VNĐ</span>
-                                                                    }
-                                                                    @if (item.service != null)
-                                                                    {
-                                                                        <span class="amount">@($"{item.PriceService:n0}".Replace(",", ".")) VNĐ</span>
-                                                                    }
-                                                            </td>
+                                                                </td>
                                                             </tr>
                                                         }
                                                         <tr class="order-total">
@@ -140,13 +125,13 @@
                                                         <td colspan="2">Giỏ hàng trống</td>
                                                     </tr>
                                                 }
-                                             }
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
                                 @{
                                     var sessionss = HttpContextAccessor.HttpContext.Session;
-                                    string jsoncartss = sessionss.GetString(FEPetServices.Controllers.ProductListController.CARTKEY);
+                                    string jsoncartss = sessionss.GetString(FEPetServices.Controllers.CheckoutRoomController.CARTKEY);
                                     if (jsoncartss != null)
                                     {
                                         <h5 class="title mb--20">Hình thức thanh toán<nav></nav></h5>

@@ -3,17 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PetServices.Models;
 using System.Net.Http.Headers;
-using FEPetServices.Areas.DTO;
-using FEPetServices.Form;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis;
-using Newtonsoft.Json;
-using PetServices.Models;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
@@ -31,7 +20,7 @@ namespace FEPetServices.Controllers
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
-            /*DefaultApiUrlProductDetail = "https://pet-service-api.azurewebsites.net/api/Product";*/
+            /*DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Product";*/
         }
         public class CartItem
         {
@@ -88,7 +77,8 @@ namespace FEPetServices.Controllers
         {
             ProductDTO product = null;
             // Cập nhật Cart thay đổi số lượng quantity ...
-            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product/" + productid);
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product/ProductID/" + productid);
+
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -99,12 +89,11 @@ namespace FEPetServices.Controllers
                 product = System.Text.Json.JsonSerializer.Deserialize<ProductDTO>(responseContent, option);
             }
 
-/*
             if (product.Quantity < quantity)
             {
                 ViewBag.ErrorToast = "Số lượng đặt hàng vượt quá số lượng sản phẩm còn lại";
-                return Error();
-            }*/
+                return RedirectToAction("Index", "Cart");
+            }
 
             var cart = GetCartItems();
             var cartitem = cart.Find(p => p.product.ProductId == productid);

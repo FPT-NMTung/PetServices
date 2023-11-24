@@ -1,6 +1,7 @@
 ﻿.received-button {
     background-color: #007BFF;
     color: #fff;
+    margin: 1px;
     padding: 8px 12px;
     border-radius: 5px;
     text-decoration: none;
@@ -9,5 +10,32 @@
     transition: background-color 0.2s;
 }
 .received-button:hover {
+    background-color: #0056b3;
+}
+.rejected-button {
+    background-color: #007BFF;
+    color: #fff;
+    margin: 1px;
+    padding: 8px 17px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+.rejected-button:hover {
+    background-color: #0056b3;
+}
+.completed-button {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+.completed-button:hover {
     background-color: #0056b3;
 }

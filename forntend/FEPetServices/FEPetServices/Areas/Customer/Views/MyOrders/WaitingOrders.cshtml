@@ -113,6 +113,8 @@
                                                             <div class="service-info-detail">
                                                                 <p style="max-width:450px">@serviceDetail.Service.ServiceName</p>
                                                                 <p style="font-size:.8rem;"><span>Cân nặng thú cưng: </span>@serviceDetail.Weight Kg</p>
+                                                                @*     PartnerID*@
+                                                                <p style="font-size:.8rem;"><span>Đối tác:</span>@serviceDetail.PartnerInfoId</p>
                                                             </div>
                                                         </div>
                                                         <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
@@ -127,6 +129,24 @@
                                         <div class="headel-content">
                                             <p>Tổng giá : </p>
                                             <p>@(totalPrice.ToString("n0").Replace(",", ".")) VNĐ</p>
+                                        </div>
+                                        <div class="work-container-inner">
+                                            @if (order != null && order.TypePay != null && order.TypePay.Trim() == "cash")
+                                            {
+                                                <p>Thanh toán trực tiếp</p>
+                                            }
+                                            @if (order != null && order.TypePay != null && @order.TypePay.Trim() == "vnpay")
+                                            {
+                                                <p>Thanh toán bằng hình thức chuyển khoản</p>
+                                            }
+                                            @if (!@order.StatusPayment)
+                                            {
+                                                <span class="badge badge-info">Chưa thanh toán</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-info">Đã thanh toán</span>
+                                            }
                                         </div>
                                     </div>
                                 }
