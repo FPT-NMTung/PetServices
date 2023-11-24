@@ -102,7 +102,7 @@
             </div>
         </div>
         <!-- End .single-product-thumb -->
-
+        <form method="post" action="@Url.Action("Index", "CheckoutRoom")">
         <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
             <div class="container">
                 <h5 class="title">Dịch vụ bạn muốn đặt thêm</h5>
@@ -148,7 +148,7 @@
                                 <div class="form-group col-lg-5 datetime-fixsize">
                                     <label for='start-datetime'>Ngày và giờ bắt đầu</label>
                                     <div class='input-group date'>
-                                        <input type='text' id='start-datetime' class="form-control" style="z-index: auto;" />
+                                            <input type='text' id='start-datetime' name="StartTime" class="form-control" style="z-index: auto;" />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -157,7 +157,7 @@
                                 <div class="form-group col-lg-5 datetime-fixsize">
                                     <label for='end-datetime'>Ngày và giờ kết thúc</label>
                                     <div class='input-group date'>
-                                        <input type='text' id='end-datetime' class="form-control" style="z-index: auto;" />
+                                            <input type='text' id='end-datetime' name="EndTime" class="form-control" style="z-index: auto;" />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -229,13 +229,16 @@
                                 <p>Nhấn "Đặt phòng" đồng nghĩa với việc bạn công nhận mình đã đọc và đồng ý với các <a href="/Home/Terms">Điều khoản sử dụng</a> và <a href="/Home/Privacy">Chính sách quyền riêng tư</a> của chúng tôi.</p>
                             </div>
                             <div class="col-lg-4 booking-room">
+                                <input type="text" name="roomid" value="@Model.Room.RoomId"/>
                                 <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Đặt phòng</button>
                             </div>
+                          
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+          </form>
         <div class="axil-product-area bg-color-white axil-section-gap pb--50 pb_sm--30">
             <div class="container">
                 <div class="reviews-wrapper">

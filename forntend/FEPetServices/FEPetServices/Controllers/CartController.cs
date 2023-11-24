@@ -3,17 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PetServices.Models;
 using System.Net.Http.Headers;
-using FEPetServices.Areas.DTO;
-using FEPetServices.Form;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis;
-using Newtonsoft.Json;
-using PetServices.Models;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
