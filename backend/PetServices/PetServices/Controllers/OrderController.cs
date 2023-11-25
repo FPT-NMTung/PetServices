@@ -488,10 +488,11 @@ namespace PetServices.Controllers
                         ServiceId = dto.ServiceId,
                         Price = dto.Price,
                         Weight = dto.Weight,
-                        PriceService = dto.PriceService ,
+                        PriceService = dto.PriceService,
                         PetInfoId = dto.PetInfoId,
                         StartTime = dto.StartTime,
                         EndTime = dto.EndTime,
+                        PartnerInfoId = dto.PartnerInfoId,
                     }).ToList()
                     : new List<BookingServicesDetail>()
             };

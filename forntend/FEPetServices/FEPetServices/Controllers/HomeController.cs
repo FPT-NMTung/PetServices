@@ -1124,6 +1124,7 @@ namespace FEPetServices.Controllers
                         service = service,
                         PartnerInfo = partner,
                         Weight = Weight,
+                        Price = service.Price,
                         PriceService = PriceService,
                         StartTime = StartTime,
                         EndTime = EndTime,
