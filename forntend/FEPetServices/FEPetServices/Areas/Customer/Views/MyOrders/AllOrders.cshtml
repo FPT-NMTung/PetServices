@@ -121,6 +121,28 @@
                                             </div>
                                         }
 
+                                        @if (order.BookingRoomDetails != null && order.BookingRoomDetails.Count > 0)
+                                        {
+                                            <div class="content-details">
+                                                <p class="bold-text">Thông tin phòng đã được đặt hàng</p>
+                                                @foreach (var roomDetail in order.BookingRoomDetails)
+                                                {
+                                                    <div class="content-detail">
+                                                        <div class="room-info">
+                                                            <img src="@roomDetail.Room.Picture" width="50" height="50" alt="Room Image">
+                                                            <div class="room-info-detail">
+                                                                <p style="max-width:450px">@roomDetail.Room.RoomName</p>
+                                                                @foreach(var roomService in order.BookingRoomServices)
+                                                                {
+                                                                    <p style="font-size:.8rem;">Dịch vụ: @roomService.Service.ServiceName</p>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <p>@($"{(roomDetail.TotalPrice):n0}".Replace(",", ".")) VNĐ</p>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
                                         <div class="headel-content">
                                             <p>Tổng giá : </p>
                                             <p>@(totalPrice.ToString("n0").Replace(",", ".")) VNĐ</p>

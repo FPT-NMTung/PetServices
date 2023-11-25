@@ -193,7 +193,12 @@ span.badge {
         height:38px;
         align-self: flex-end; 
     }
-
+.room-info {
+    display: flex;
+}
+.room-info-detail p{
+    margin: 0;
+}
 
 /* Responsive Styles */
 @media (max-width: 768px) {
