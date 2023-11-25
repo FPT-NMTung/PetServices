@@ -199,11 +199,30 @@ span.badge {
 .room-info-detail p{
     margin: 0;
 }
+.room-info-detail-service {
+    width: 550px;
+    display: flex;
+    max-width: 600px;
+    justify-content: space-between;
+}
 
+.content-detail-time {
+    border-top: 1px solid rgb(0,0,0,.5);
+    padding-top: 10px;
+}
+content-detail-time-service {
+    padding-top: 10px;
+}
 /* Responsive Styles */
 @media (max-width: 768px) {
     .timeline-icon {
         top: 10px;
     }
 }
+@media (max-width: 450px) {
+    .price-service-rooom {
+        display :none;
+    }
+}
+
 

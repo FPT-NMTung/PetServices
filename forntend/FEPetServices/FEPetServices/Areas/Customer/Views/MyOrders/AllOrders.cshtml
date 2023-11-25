@@ -115,6 +115,10 @@
                                                                 <p style="font-size:.8rem;"><span>Đối tác:</span>@serviceDetail.PartnerInfoId</p>
                                                             </div>
                                                         </div>
+                                                        <div class="content-detail-time-service">
+                                                            <p style="font-size:.8rem;">Thời gian bắt đầu: @serviceDetail?.StartTime</p>
+                                                            <p style="font-size:.8rem;">Thời gian kêt thúc: @serviceDetail?.EndTime</p>
+                                                        </div>
                                                         <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
                                                 }
@@ -127,22 +131,30 @@
                                                 <p class="bold-text">Thông tin phòng đã được đặt hàng</p>
                                                 @foreach (var roomDetail in order.BookingRoomDetails)
                                                 {
+                                                    totalPrice = totalPrice + roomDetail.TotalPrice;
                                                     <div class="content-detail">
                                                         <div class="room-info">
                                                             <img src="@roomDetail.Room.Picture" width="50" height="50" alt="Room Image">
                                                             <div class="room-info-detail">
-                                                                <p style="max-width:450px">@roomDetail.Room.RoomName</p>
+                                                                <p style="max-width:800px">@roomDetail.Room.RoomName</p>
                                                                 @foreach(var roomService in order.BookingRoomServices)
                                                                 {
-                                                                    <p style="font-size:.8rem;">Dịch vụ: @roomService.Service.ServiceName</p>
+                                                                    <div class="room-info-detail-service">
+                                                                        <p style="font-size:.8rem;">Dịch vụ: @roomService.Service.ServiceName</p>
+                                                                        <p class="price-service-rooom" style="font-size:.8rem;">@($"{(roomService.PriceService):n0}".Replace(",", ".")) VNĐ</p>
+                                                                    </div>
                                                                 }
                                                             </div>
                                                         </div>
-                                                        <p>@($"{(roomDetail.TotalPrice):n0}".Replace(",", ".")) VNĐ</p>
+                                                    </div>
+                                                    <div class="content-detail-time">
+                                                        <p style="font-size:.9rem;">Thời gian bắt đầu: @roomDetail.StartDate</p>
+                                                        <p style="font-size:.9rem;">Thời gian kêt thúc: @roomDetail.EndDate</p>
                                                     </div>
                                                 }
                                             </div>
                                         }
+
                                         <div class="headel-content">
                                             <p>Tổng giá : </p>
                                             <p>@(totalPrice.ToString("n0").Replace(",", ".")) VNĐ</p>
