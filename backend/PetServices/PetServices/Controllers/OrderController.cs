@@ -160,12 +160,16 @@ namespace PetServices.Controllers
             try
             {
                 Order order = await _context.Orders.Include(b => b.UserInfo)
-                .Include(b => b.OrderProductDetails)
-                .ThenInclude(o => o.Product)
-                .Include(b => b.BookingServicesDetails)
-                .ThenInclude(bs => bs.Service)
-                .Include(b => b.BookingRoomDetails)
-                .ThenInclude(br => br.Room)
+                .Include(o => o.UserInfo)
+                    .ThenInclude(u => u.Accounts)
+                    .Include(b => b.OrderProductDetails)
+                    .ThenInclude(o => o.Product)
+                    .Include(b => b.BookingServicesDetails)
+                    .ThenInclude(bs => bs.Service)
+                    .Include(b => b.BookingRoomDetails)
+                    .ThenInclude(br => br.Room)
+                    .Include(b => b.BookingRoomServices)
+                    .ThenInclude(br => br.Service)
                 .SingleOrDefaultAsync(b => b.OrderId == Id);
                 return Ok(_mapper.Map<OrdersDTO>(order));
 
