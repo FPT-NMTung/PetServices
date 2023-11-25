@@ -312,10 +312,13 @@ namespace FEPetServices.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToCart([FromForm] int ProductId, [FromForm] int quantityProduct)
+        public async Task<IActionResult> AddToCart([FromForm] int ProductId, int quantityProduct)
         {
             ProductDTO product = null;
-
+            if(quantityProduct <= 1)
+            {
+                quantityProduct = 1;
+            }
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductDetail + "/" + ProductId);
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "/Product/ProductID/" + ProductId);
             if (response.IsSuccessStatusCode)
@@ -335,11 +338,11 @@ namespace FEPetServices.Controllers
 
                 if (cartitem != null)
                 {
-                    cartitem.quantityProduct++;
+                    cartitem.quantityProduct += quantityProduct;
                 }
                 else
                 {
-                    cart.Add(new CartItem() { quantityProduct = 1, product = product });
+                    cart.Add(new CartItem() { quantityProduct = quantityProduct, product = product });
                 }
 
                 SaveCartSession(cart);

@@ -84,7 +84,13 @@
                                     <div class="product-variation product-size-variation">
                                         <h6 class="title">Số lượng:</h6>
                                         <div class="pro-qty mr--20">
-                                            <input type="text" id="quantityInput" value="1" onchange="updateHiddenQuantity()">
+                                            <input 
+                                                   id="quantityInput"
+                                                   class="form-control"
+                                                   type="number"
+                                                   value="1"
+                                                   min="1"
+                                                   oninput="validity.valid||(value='1');" />
                                         </div>
                                         <span>@Model.Product.Quantity sản phẩm có sẵn</span>
                                     </div>
@@ -96,15 +102,14 @@
                                                 <form method="post" action="@Url.Action("AddToCart", "ProductList")">
                                                     @Html.AntiForgeryToken()
                                                     <input type="hidden" name="ProductId" value="@Model.Product.ProductId" />
-                                                    <button class="axil-btn btn-bg-primary" type="button" style="width:300px;" onclick="addToCart('@Model.Product.ProductId')">
+                                                    <button class="axil-btn btn-bg-primary updateProductQuantityCart" type="button" style="width:300px;">
                                                         <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
                                                     </button>
                                                 </form>
                                                 <form method="post" action="@Url.Action("AddToCart", "ProductList")">
                                                     @Html.AntiForgeryToken()
-                                                    <input type="hidden" name="ProductId" value="@Model.Product.ProductId" />
-                                                    <input type="hidden" name="quantityProduct" id="hiddenQuantity" value="" />
-                                                    <button style="width:200px; margin-left: 5px;" href="" class="axil-btn btn-bg-primary" type="submit">
+                                                    <input type="hidden" name="ProductId" id="productId" value="@Model.Product.ProductId" />
+                                                    <button style="width:200px; margin-left: 5px;" href="" class="axil-btn btn-bg-primary updateProductQuantity" type="submit">
                                                         <i class="fas fa-cart-plus"></i>Mua ngay
                                                     </button>
                                                 </form>
@@ -121,186 +126,14 @@
                     </div>
                 </div>
             </div>
-            <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
-                <div class="container">
-                    <div class="product-desc-wrapper mb--30 mb_sm--10">
-                        <h4 class="mb--60 desc-heading">Giới thiệu</h4>
-                        <div class="row mb--15">
-                            <div class="col-lg-6 mb--30">
-                                <div class="single-desc">
-                                    <h5 class="title">Nhân viên:</h5>
-                                    <p>Tại đây, chúng tôi có một đội ngũ nhân viên tư vấn chuyên nghiệp và tận tâm, sẵn sàng giúp bạn lựa chọn những món đồ phù hợp nhất cho thú cưng của bạn. Nhân viên tư vấn của chúng tôi là những người yêu thú cưng và có
-                                        kiến thức sâu rộng về các loại thú cưng khác nhau. Họ sẽ lắng nghe nhu cầu và mong muốn của bạn, và đưa ra những gợi ý hợp lý và hữu ích. Họ cũng sẽ giới thiệu cho bạn những sản phẩm mới nhất và chất lượng nhất
-                                        trên thị trường, cũng như những khuyến mãi và ưu đãi hấp dẫn. Hãy đến với Pet Shop và gặp gỡ nhân viên tư vấn của chúng tôi, bạn sẽ không phải thất vọng. Chúng tôi luôn mong muốn mang lại cho bạn và thú cưng của
-                                        bạn những trải nghiệm tuyệt vời nhất. Pet Shop - nơi bạn và thú cưng được yêu thương.</p>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mb--30">
-                                <div class="single-desc">
-                                    <h5 class="title">Sản phẩm</h5>
-                                    <p>Các sản phẩm thú cưng của cửa hàng đều được chọn lọc kỹ lưỡng từ các nhà cung cấp uy tín và chất lượng cao. Bạn có thể yên tâm về chất lượng của các sản phẩm, vì chúng đều đạt tiêu chuẩn an toàn và chăm sóc thú cưng
-                                        tốt nhất. Bạn có thể xem thêm các chứng nhận và đánh giá của các sản phẩm trên trang web của cửa hàng.Cửa hàng cũng có dịch vụ vận chuyển nhanh chóng và tiện lợi cho khách hàng. Bạn chỉ cần đặt hàng trên trang web
-                                        hoặc qua điện thoại, và cửa hàng sẽ giao hàng cho bạn trong vòng 24 giờ. Bạn cũng có thể theo dõi trạng thái đơn hàng của mình trên trang web hoặc qua ứng dụng di động của cửa hàng. Ngoài ra, bạn cũng có thể nhận
-                                        được những ưu đãi và quà tặng hấp dẫn khi mua hàng trên trang web của cửa hàng.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <ul class="pro-des-features">
-                                    <li class="single-features">
-                                        <div class="icon">
-                                            <img src="/assets/images/product/product-thumb/icon-3.png" alt="icon">
-                                        </div>
-                                        Dễ đổi trả hàng
-                                    </li>
-                                    <li class="single-features">
-                                        <div class="icon">
-                                            <img src="/assets/images/product/product-thumb/icon-2.png" alt="icon">
-                                        </div>
-                                        Sản phẩm chất lượng
-                                    </li>
-                                    <li class="single-features">
-                                        <div class="icon">
-                                            <img src="/assets/images/product/product-thumb/icon-1.png" alt="icon">
-                                        </div>
-                                        Phục vụ tận tình
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="reviews-wrapper">
-                        <h4 class="mb--60">Reviews</h4>
-                        <div class="row">
-                            <div class="col-lg-12 mb--40">
-                                <div class="axil-comment-area pro-desc-commnet-area">
-                                    @if (Model.Feedback != null && Model.Feedback.Count > 0)
-                                    {
-                                        <div class="feedback-title-sort">
-                                            <h5 class="title">Có @ViewBag.FeedbacksCount đánh giá cho sản phẩm này</h5>
-                                            <form method="get">
-                                                <input type="hidden" name="proId" value="@Model.Product.ProductId">
-                                                <select name="sortby" onchange="this.form.submit();">
-                                                    <!option style="color: black" value="" @(ViewBag.sortby == null ? "selected" : "")>Tất cả</!option>
-                                                    <!option class="option" style="color: gold" value="5star" @(ViewBag.sortby == "5star" ? "selected" : "") @(Model.VoteNumberas.number5s == 0 ? "disabled" : "")>&#9733;&#9733;&#9733;&#9733;&#9733;&ensp; @Model.VoteNumberas.number5s</!option>
-                                                    <!option class="option" style="color: gold" value="4star" @(ViewBag.sortby == "4star" ? "selected" : "") @(Model.VoteNumberas.number4s == 0 ? "disabled" : "")>&#9733;&#9733;&#9733;&#9733;&#9734;&ensp; @Model.VoteNumberas.number4s</!option>
-                                                    <!option class="option" style="color: gold" value="3star" @(ViewBag.sortby == "3star" ? "selected" : "") @(Model.VoteNumberas.number3s == 0 ? "disabled" : "")>&#9733;&#9733;&#9733;&#9734;&#9734;&ensp; @Model.VoteNumberas.number3s</!option>
-                                                    <!option class="option" style="color: gold" value="2star" @(ViewBag.sortby == "2star" ? "selected" : "") @(Model.VoteNumberas.number2s == 0 ? "disabled" : "")>&#9733;&#9733;&#9734;&#9734;&#9734;&ensp; @Model.VoteNumberas.number2s</!option>
-                                                    <!option class="option" style="color: gold" value="1star" @(ViewBag.sortby == "1star" ? "selected" : "") @(Model.VoteNumberas.number1s == 0 ? "disabled" : "")>&#9733;&#9734;&#9734;&#9734;&#9734;&ensp; @Model.VoteNumberas.number1s</!option>
-                                                </select>
-                                            </form>
-                                        </div>
-                                        <ul class="comment-list">
-                                            @foreach (var feedback in Model.Feedback)
-                                            {
-                                                <li class="comment">
-                                                    <div class="comment-body">
-                                                        <div class="single-comment">
-                                                            <div class="comment-img">
-                                                                <img src="@feedback.UserImage" alt="Author Images" style="height: 60px; width: 60px;">
-                                                            </div>
-                                                            <div class="comment-inner">
-                                                                <h6 class="commenter">
-                                                                    <a class="hover-flip-item-wrapper" href="#">
-                                                                        <span class="hover-flip-item">
-                                                                            <span data-text="Cameron Williamson">@feedback.UserName</span>
-                                                                        </span>
-                                                                    </a>
-                                                                    <span class="commenter-rating ratiing-four-star">
-                                                                        @for (int i = 1; i <= 5; i++)
-                                                                        {
-                                                                            if (i <= @feedback.NumberStart)
-                                                                            {
-                                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <a href="#"><i class="fas fa-star empty-rating"></i></a>
-                                                                            }
-                                                                        }
-                                                                    </span>
-                                                                </h6>
-                                                                <div class="comment-text">
-                                                                    <p>@feedback.Content</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            }
-                                        </ul>
-                                        <div style="text-align: center">
-                                            <div class="pagination">
-                                                @{
-                                                    int pagenumber = ((@ViewBag.FeedbacksCount - 1) / 5) + 1;
-                                                    @if (ViewBag.CurrentPage > 1)
-                                                    {
-                                                        <a href="@Url.Action("Detail", new { proId = Model.Product.ProductId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
-                                                    }
-                                                    @for (int i = 1; i <= pagenumber; i++)
-                                                    {
-                                                        <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("Detail", new { proId = Model.Product.ProductId, sortby = ViewBag.sortby, page = i })">@i</a>
-                                                    }
-                                                    @if (ViewBag.CurrentPage < pagenumber)
-                                                    {
-                                                        <a href="@Url.Action("Detail", new { proId = Model.Product.ProductId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
-                                                    }
-                                                }
-                                            </div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <h5 class="title">Hiện chưa có đánh giá cho sản phẩm này.</h5>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
-        <div class="axil-product-area bg-color-white axil-section-gap pb--50 pb_sm--30">
-            <div class="container">
-                <div class="section-title-wrapper">
-                    <span class="title-highlighter highlighter-primary"><i class="far fa-shopping-basket"></i>Sản phẩm bạn có thể tham khảo</span>
-                </div>
-                <div class="recent-product-activation slick-layout-wrapper--15 axil-slick-arrow arrow-top-slide">
-                    @foreach (var product in Model.products)
-                    {
-                    <div class="slick-single-layout">
-                        <div class="axil-product">
-                            <div class="thumbnail">
-                                <a href="/ProductList/Detail?proId=@product.ProductId">
-                                    <img src="@product.Picture" alt="Product Images">
-                                </a>
-                                <div class="product-hover-action">
-                                    <ul class="cart-action">
-                                        <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                        <li class="select-option"><a href="cart.html">Add to Cart</a></li>
-                                        <li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="product-content">
-                                <div class="inner">
-                                    <h5 class="title"><a href="/ProductList/Detail?proId=@product.ProductId">@product.ProductName</a></h5>
-                                    <div class="product-price-variant">
-                                        <span class="price current-price">@product.Price</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    }
-                </div>
-            </div>
-        </div>
+       
     </main>
 
-     <script>
+    <script src="/assets/js/vendor/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
             var priceElements = document.querySelectorAll('.current-price');
             priceElements.forEach(function (priceElement) {
@@ -308,6 +141,55 @@
                 var price = parseFloat(priceText.replace(/\s/g, '').replace('VNĐ', ''));
                 var formattedPrice = price.toLocaleString('vi-VN');
                 priceElement.textContent = formattedPrice + ' VNĐ';
+            });
+        });
+
+        $(document).ready(function () {
+            $(".updateProductQuantity").click(function (event) {
+                event.preventDefault();
+                var productid = $("#productId").val();
+                var quantity = $("#quantityInput").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AddToCart", "ProductList")",
+                    data: {
+                        productid: productid,
+                        quantityProduct: quantity
+                    },
+                    success: function (result) {
+                        window.location.href = "@Url.Action("Index", "Cart")";
+                    },
+                    error: function (error) {
+                        console.error("Error updating cart:", error);
+                    }
+                });
+            });
+
+            $(".updateProductQuantityCart").click(function (event) {
+                event.preventDefault();
+                var productid = $("#productId").val();
+                var quantity = $("#quantityInput").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AddToCart", "ProductList")",
+                    data: {
+                        productid: productid,
+                        quantityProduct: quantity
+                    },
+                    headers: {
+                        RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (result) {
+                        $('#successModal').modal('show');
+                        console.log(result);
+                        updateCartCount(result.totalQuantity);
+                    },
+                    error: function (error) {
+                        console.error("Error updating cart:", error);
+                    }
+                });
             });
         });
     </script>
