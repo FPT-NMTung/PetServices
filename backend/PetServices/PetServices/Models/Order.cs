@@ -27,6 +27,7 @@ namespace PetServices.Models
         public int? UserInfoId { get; set; }
         public bool? StatusPayment { get; set; }
         public int? ReasonId { get; set; }
+        public double? TotalPrice { get; set; }
 
         public virtual Reason? Reason { get; set; }
         public virtual UserInfo? UserInfo { get; set; }
