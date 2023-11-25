@@ -10,12 +10,14 @@
         public string? Commune { get; set; }
         public string? Address { get; set; }
         public string? Phone { get; set; }
-        public bool? FeedbackStatus { get; set; }
+        public string? TypePay { get; set; }
         public string? FullName { get; set; }
         public int? UserInfoId { get; set; }
+        public bool? StatusPayment { get; set; }
         public virtual UserInfo? UserInfo { get; set; }
         public virtual ICollection<OrderProductDetailForm> OrderProductDetails { get; set; }
         public virtual ICollection<BookingServicesDetailForm>? BookingServicesDetails { get; set; }
         public virtual ICollection<BookingRoomDetailForm>? BookingRoomDetails { get; set; }
+        public virtual ICollection<BookingRoomServiceForm>? BookingRoomServices { get; set; }
     }
 }

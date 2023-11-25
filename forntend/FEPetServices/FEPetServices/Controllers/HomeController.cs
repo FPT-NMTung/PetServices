@@ -1,20 +1,12 @@
-﻿    using FEPetServices.Areas.DTO;
+﻿using FEPetServices.Areas.DTO;
 using FEPetServices.Form;
-using FEPetServices.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using PetServices.DTO;
 using PetServices.Models;
-using System.Diagnostics;
-using System.Drawing.Printing;
-using System.Globalization;
-using System.Linq;
 using System.Net.Http.Headers;
-using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 
@@ -45,6 +37,7 @@ namespace FEPetServices.Controllers
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
+
             DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
 
             /*ApiUrlRoomList = "https://pet-service-api.azurewebsites.net/api/Room/GetAllRoomCustomer";
@@ -66,7 +59,7 @@ namespace FEPetServices.Controllers
                 var json = JsonConvert.SerializeObject(roomDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                /*HttpResponseMessage response = await client.GetAsync(ApiUrlRoomList);*/
+                //HttpResponseMessage response = await client.GetAsync(ApiUrlRoomList);
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Room/GetAllRoomCustomer");
                 if (response.IsSuccessStatusCode)
                 {
@@ -87,7 +80,6 @@ namespace FEPetServices.Controllers
 
                         if (searchDTO.startdate != null && searchDTO.enddate != null)
                         {
-                            // HttpResponseMessage roomvalidResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/SearchRoomByDate?startDate=" + searchDTO.startdate + "&endDate=" + searchDTO.enddate);
                             HttpResponseMessage roomvalidResponse = await client.GetAsync(DefaultApiUrl + "Room/SearchRoomByDate?startDate=" + searchDTO.startdate + "&endDate=" + searchDTO.enddate);
                             roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(responseContent);
                         }
@@ -237,7 +229,7 @@ namespace FEPetServices.Controllers
                 }
 
                 //HttpResponseMessage serviceUnavailableResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/GetServiceOutRoom?roomId=" + roomId);
-                HttpResponseMessage serviceUnavailableResponse = await client.GetAsync(DefaultApiUrl + "hRoom/GetServiceOutRoom?roomId=" + roomId);
+                HttpResponseMessage serviceUnavailableResponse = await client.GetAsync(DefaultApiUrl + "Room/GetServiceOutRoom?roomId=" + roomId);
 
                 if (serviceUnavailableResponse.IsSuccessStatusCode)
                 {
@@ -269,8 +261,8 @@ namespace FEPetServices.Controllers
                     }
                 }
 
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Room/GetRoom/" + roomId);
                 //HttpResponseMessage response = await client.GetAsync(ApiUrlRoomDetail + roomId);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Room/GetRoom/" + roomId);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -303,7 +295,7 @@ namespace FEPetServices.Controllers
                 var json = JsonConvert.SerializeObject(serviceCategory);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                // HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
+                //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
 
 
@@ -474,6 +466,26 @@ namespace FEPetServices.Controllers
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
             //HttpResponseMessage partnerResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Partner/GetAllPartner");
             HttpResponseMessage partnerResponse = await client.GetAsync(DefaultApiUrl + "Partner/GetAllPartner");
+
+            if (User.Identity.IsAuthenticated)
+            {
+                ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+                string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+                //HttpResponseMessage PetInfo = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/PetInfo/" + email);
+                HttpResponseMessage PetInfo = await client.GetAsync(DefaultApiUrl + "PetInfo/" + email);
+
+                if (PetInfo.IsSuccessStatusCode)
+                {
+                    var responsePetInfo = await PetInfo.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(responsePetInfo))
+                    {
+                        var petInfo = JsonConvert.DeserializeObject<AccountInfo>(responsePetInfo);
+                        model.account = petInfo;
+                    }
+                }
+            }
+
             if (partnerResponse.IsSuccessStatusCode)
             {
                 var responsepartnerContent = await partnerResponse.Content.ReadAsStringAsync();
@@ -497,8 +509,8 @@ namespace FEPetServices.Controllers
                 }
             }
 
-            HttpResponseMessage voteNumberResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetServiceVoteNumber?serviceID=" + serviceIds);
             //HttpResponseMessage voteNumberResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetServiceVoteNumber?serviceID=" + serviceIds);
+            HttpResponseMessage voteNumberResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetServiceVoteNumber?serviceID=" + serviceIds);
 
             if (voteNumberResponse.IsSuccessStatusCode)
             {
@@ -588,6 +600,7 @@ namespace FEPetServices.Controllers
                     {
                         /*HttpResponseMessage responseService = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetServiceByServiceCategoryAndServiceID/"
                         + "?serviceCategoryId=" + serviceCategoryId + "&serviceId=" + serviceId);*/
+                        
                         HttpResponseMessage responseService = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetServiceByServiceCategoryAndServiceID/"
                         + "?serviceCategoryId=" + serviceCategoryId + "&serviceId=" + serviceId);
 
@@ -602,8 +615,10 @@ namespace FEPetServices.Controllers
                     {
                         /*HttpResponseMessage responseService = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetServiceByServiceCategoryAndServiceID/"
                      + "?serviceCategoryId=" + serviceCategoryId + "&serviceId=" + serviceIds);*/
+
                         HttpResponseMessage responseService = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetServiceByServiceCategoryAndServiceID/"
                      + "?serviceCategoryId=" + serviceCategoryId + "&serviceId=" + serviceIds);
+
                         if (response.IsSuccessStatusCode)
                         {
                             var responseContentService = await responseService.Content.ReadAsStringAsync();
@@ -633,6 +648,9 @@ namespace FEPetServices.Controllers
             public ProductDTO Product { get; set; }
             public List<ServiceCategoryDTO> CaServices { get; set; }
             public List<PartnerInfo> Partners { get; set; }
+            public List<PetInfo> PetInfo { get; set; }
+            public AccountInfo account { get; set; }
+
         }
 
         public class BlogModel
@@ -842,7 +860,8 @@ namespace FEPetServices.Controllers
             }
             return View(blog);
         }
-        public class PartModel {
+        public class PartModel
+        {
             public List<PartnerInfo> partner { set; get; }
             public List<ProductDTO> ListProductTop3 { get; set; }
             public List<ServiceCategoryDTO> CaServices { get; set; }
@@ -860,7 +879,7 @@ namespace FEPetServices.Controllers
 
 
         }
-        public async Task<IActionResult> Partner( int page = 1, int pagesize = 6, string PartName = "")
+        public async Task<IActionResult> Partner(int page = 1, int pagesize = 6, string PartName = "")
         {
             PartModel partModel = new PartModel();
             try
@@ -897,7 +916,6 @@ namespace FEPetServices.Controllers
                         partModel.CaServices = serviceCategories;
                     }
                 }
-                //HttpResponseMessage response = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Partner/GetAllPartner");
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Partner/GetAllPartner");
 
                 if (response.IsSuccessStatusCode)
@@ -951,80 +969,80 @@ namespace FEPetServices.Controllers
         public async Task<IActionResult> PartnerDetail(int partnerID)
         {
             PartDeatilModel partModel = new PartDeatilModel();
-                try
+            try
+            {
+                //HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
+                HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
+                //HttpResponseMessage responsedetail = await client.GetAsync("https://localhost:7255/api/Partner/PartnerInfoId?PartnerInfoId=" + partnerID);
+                HttpResponseMessage responsedetail = await client.GetAsync(DefaultApiUrl + "Partner/PartnerInfoId?PartnerInfoId=" + partnerID);
+                if (responsedetail.IsSuccessStatusCode)
                 {
-                    //HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
-                    HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
-                    //HttpResponseMessage responsedetail = await client.GetAsync("https://localhost:7255/api/Partner/PartnerInfoId?PartnerInfoId=" + partnerID);
-                    HttpResponseMessage responsedetail = await client.GetAsync(DefaultApiUrl + "Partner/PartnerInfoId?PartnerInfoId=" + partnerID);
-                    if (responsedetail.IsSuccessStatusCode)
+                    if (responseProduct.IsSuccessStatusCode)
                     {
-                        if (responseProduct.IsSuccessStatusCode)
+                        var rep = await responseProduct.Content.ReadAsStringAsync();
+                        if (!string.IsNullOrEmpty(rep))
                         {
-                            var rep = await responseProduct.Content.ReadAsStringAsync();
-                            if (!string.IsNullOrEmpty(rep))
-                            {
-                                partModel.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
+                            partModel.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
 
-                                int currentPage = 1;
-                                int pageSize = 3;
+                            int currentPage = 1;
+                            int pageSize = 3;
 
-                                var firstPageProducts = partModel.ListProductTop3.OrderByDescending(p => p.QuantitySold).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+                            var firstPageProducts = partModel.ListProductTop3.OrderByDescending(p => p.QuantitySold).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
 
-                                currentPage++;
+                            currentPage++;
 
-                                partModel.ListProductTop3 = firstPageProducts;
-                            }
+                            partModel.ListProductTop3 = firstPageProducts;
                         }
-                        //HttpResponseMessage responseCategoryService = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
-                        HttpResponseMessage responseCategoryService = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
-                        if (responseCategoryService.IsSuccessStatusCode)
-                        {
-                            var responseCategoryContent = await responseCategoryService.Content.ReadAsStringAsync();
+                    }
+                    //HttpResponseMessage responseCategoryService = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
+                    HttpResponseMessage responseCategoryService = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
+                    if (responseCategoryService.IsSuccessStatusCode)
+                    {
+                        var responseCategoryContent = await responseCategoryService.Content.ReadAsStringAsync();
 
-                            if (!string.IsNullOrEmpty(responseCategoryContent))
-                            {
-                                var serviceCategories = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
-                                partModel.CaServices = serviceCategories;
-                            }
+                        if (!string.IsNullOrEmpty(responseCategoryContent))
+                        {
+                            var serviceCategories = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
+                            partModel.CaServices = serviceCategories;
                         }
-                        //HttpResponseMessage response = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Partner/GetAllPartner");
-                        HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Partner/GetAllPartner");
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var responsePartContent = await response.Content.ReadAsStringAsync();
+                    }
+                    HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Partner/GetAllPartner");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responsePartContent = await response.Content.ReadAsStringAsync();
 
-                            if (!string.IsNullOrEmpty(responsePartContent))
-                            {
+                        if (!string.IsNullOrEmpty(responsePartContent))
+                        {
                             partModel.partner = JsonConvert.DeserializeObject<List<PartnerInfo>>(responsePartContent);
-                            }
                         }
+                    }
 
                     var Partnerdetail = await responsedetail.Content.ReadAsStringAsync();
                     if (!string.IsNullOrEmpty(Partnerdetail))
                     {
                         partModel.Partner = JsonConvert.DeserializeObject<PartnerInfo>(Partnerdetail);
                         return View(partModel);
-                    }else
+                    }
+                    else
                     {
                         ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
                     }
 
 
                 }
-                    else
-                    {
-                        ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
-                    }
-                }
-                catch (Exception ex)
+                else
                 {
-                    ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
                 }
-
-
-                return View();
             }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+            }
+
+
+            return View();
+        }
 
 
         public class CartItem
@@ -1060,12 +1078,11 @@ namespace FEPetServices.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToCart(int ServiceId, int PriceService, double Weight ,int PartnerId, DateTime StartTime, DateTime EndTime)
+        public async Task<IActionResult> AddToCart(int ServiceId, int PriceService, double Weight, int PartnerId, DateTime StartTime, DateTime EndTime)
         {
             ServiceDTO service = null;
-            PartnerInfo partner = null; 
+            PartnerInfo partner = null;
 
-            //HttpResponseMessage response = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Service/ServiceID/" + ServiceId);
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Service/ServiceID/" + ServiceId);
             if (response.IsSuccessStatusCode)
             {
@@ -1102,10 +1119,16 @@ namespace FEPetServices.Controllers
                 else
                 {
                     // Thêm mới
-                    cart.Add(new CartItem() { service = service, PartnerInfo = partner, 
-                        Weight = Weight, PriceService = PriceService,
-                        StartTime = StartTime, EndTime = EndTime,
-                        PartnerInfoId = PartnerId != 0 ? PartnerId : null});
+                    cart.Add(new CartItem()
+                    {
+                        service = service,
+                        PartnerInfo = partner,
+                        Weight = Weight,
+                        PriceService = PriceService,
+                        StartTime = StartTime,
+                        EndTime = EndTime,
+                        PartnerInfoId = PartnerId != 0 ? PartnerId : null
+                    });
                 }
 
                 // Lưu cart vào Session
@@ -1121,7 +1144,7 @@ namespace FEPetServices.Controllers
                                                               .Select(item => item.product.ProductId))
                                               .Count();
 
-                return Json(new { success = true, message = "Sản phẩm đã được thêm vào giỏ hàng.", totalQuantity });    
+                return Json(new { success = true, message = "Sản phẩm đã được thêm vào giỏ hàng.", totalQuantity });
             }
             else
             {
@@ -1142,8 +1165,8 @@ namespace FEPetServices.Controllers
             string jsoncart = JsonConvert.SerializeObject(ls);
             session.SetString(CARTKEY, jsoncart);
         }
-      
-            public IActionResult NotFound()
+
+        public IActionResult NotFound()
         {
             return View();
         }
@@ -1157,7 +1180,7 @@ namespace FEPetServices.Controllers
         public IActionResult Privacy()
         {
             return View();
-        }    
+        }
 
         public IActionResult Test()
         {
