@@ -368,5 +368,21 @@ namespace FEPetServices.Areas.Partner.Controllers
                 return View();
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> OrderPartnerDetail(int orderId, [FromBody] Status status)
+        {
+            HttpResponseMessage response = await client.PutAsJsonAsync("https://localhost:7255/api/OrderPartner/ChangeStatus?orderId=" + orderId, status);
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessToast"] = "Cập nhật thành công";
+                return RedirectToAction("OrderPartnerDetail", new { orderId = orderId });
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
     }
 }
