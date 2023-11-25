@@ -40,7 +40,7 @@
                     <p class="bold-text">Thông tin sản phẩm đã được đặt hàng</p>
                     @foreach (var productDetail in order.OrderProductDetails)
                     {
-                         totalPrice = totalPrice + (double) (productDetail.Quantity * productDetail.Price);
+                        totalPrice = totalPrice + (double)(productDetail.Quantity * productDetail.Price);
                         <div class="content-detail">
                             <div class="product-info">
                                 <img src="@productDetail.Product.Picture" width="50" height="50" alt="Product Image">
@@ -62,7 +62,7 @@
                     <p class="bold-text">Thông tin dịch vụ đã được đặt hàng</p>
                     @foreach (var serviceDetail in order.BookingServicesDetails)
                     {
-                        totalPrice = totalPrice + (double) serviceDetail.PriceService;
+                        totalPrice = totalPrice + (double)serviceDetail.PriceService;
                         <div class="content-detail">
                             <div class="service-info">
                                 <img src="@serviceDetail.Service.Picture" width="50" height="50" alt="Service Image">
@@ -89,7 +89,7 @@
                     <p class="bold-text">Thông tin phòng đã được đặt hàng</p>
                     @foreach (var roomDetail in order.BookingRoomDetails)
                     {
-                        totalPrice = totalPrice + (double) roomDetail.TotalPrice;
+                        totalPrice = totalPrice + (double)roomDetail.TotalPrice;
                         <div class="content-detail">
                             <div class="room-info">
                                 <img src="@roomDetail.Room.Picture" width="50" height="50" alt="Room Image">
