@@ -102,7 +102,7 @@
                             @foreach (var bd in pc.BookingServicesDetails)
                             {
                                 <div>
-                                    @bd.Service.ServiceName - @bd.Price.ToString("n0").Replace(",", ".") VNĐ <br>
+                                    @bd?.Service?.ServiceName - @bd?.Price?.ToString("n0").Replace(",", ".") VNĐ <br>
                                 </div>
                             }
                         </td>

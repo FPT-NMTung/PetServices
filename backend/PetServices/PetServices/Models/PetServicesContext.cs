@@ -31,6 +31,7 @@ namespace PetServices.Models
         public virtual DbSet<PetInfo> PetInfos { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductCategory> ProductCategories { get; set; } = null!;
+        public virtual DbSet<Reason> Reasons { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Room> Rooms { get; set; } = null!;
         public virtual DbSet<RoomCategory> RoomCategories { get; set; } = null!;
@@ -40,10 +41,10 @@ namespace PetServices.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var conf = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(conf.GetConnectionString("DbConnection"));
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("server=tcp:pet-services.database.windows.net,1433;Initial Catalog=PetServices;User ID=hungnv;Password=Hung@123;Integrated security=false");
             }
         }
 
@@ -242,9 +243,16 @@ namespace PetServices.Models
 
                 entity.Property(e => e.Province).HasMaxLength(500);
 
+                entity.Property(e => e.ReasonId).HasColumnName("ReasonID");
+
                 entity.Property(e => e.TypePay).HasMaxLength(500);
 
                 entity.Property(e => e.UserInfoId).HasColumnName("UserInfoID");
+
+                entity.HasOne(d => d.Reason)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.ReasonId)
+                    .HasConstraintName("FK_Orders_Reason");
 
                 entity.HasOne(d => d.UserInfo)
                     .WithMany(p => p.Orders)
@@ -403,6 +411,13 @@ namespace PetServices.Models
                 entity.Property(e => e.Picture).HasMaxLength(500);
 
                 entity.Property(e => e.ProCategoriesName).HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<Reason>(entity =>
+            {
+                entity.ToTable("Reason");
+
+                entity.Property(e => e.ReasonId).HasColumnName("ReasonID");
             });
 
             modelBuilder.Entity<Role>(entity =>

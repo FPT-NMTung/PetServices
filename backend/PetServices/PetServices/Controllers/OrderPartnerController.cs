@@ -170,5 +170,31 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpPut("ChangeStatus")]
+        public async Task<IActionResult> ChangeStatus(int orderId, [FromBody] Status status)
+        {
+            try
+            {
+                Order order = await _context.Orders.SingleOrDefaultAsync(b => b.OrderId == orderId);
+                if(order == null)
+                {
+                    return NotFound("Booking không tồn tại!");
+                }
+                if(order.OrderStatus.Trim() != status.oldStatus)
+                {
+                    return BadRequest("Trạng thái cũ không hợp lệ");
+                }
+                order.OrderStatus = status.newStatus;
+                _context.Orders.Update(order);
+
+                await _context.SaveChangesAsync();
+                return Ok("Đổi trạng thái thành công");
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
