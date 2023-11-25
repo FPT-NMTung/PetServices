@@ -26,7 +26,14 @@
                                     <div class="carousel-caption d-none d-md-block">
                                         <h5>@Model.UserInfo.PetInfos[i].PetName</h5>
                                         <p>@Model.UserInfo.PetInfos[i].Species</p>
-                                        <p>@Model.UserInfo.PetInfos[i].Gender</p>
+                                        @if(Model.UserInfo.PetInfos[i].Gender == true)
+                                        {
+                                            <p>Nam</p>
+                                        }
+                                        else
+                                        {
+                                            <p>Nữ</p>
+                                        }
                                         <p>@Model.UserInfo.PetInfos[i].Descriptions</p>
                                     </div>
                                 </div>
@@ -42,6 +49,7 @@
                         </button>
                     </div>
                     <button style="margin-bottom:2%;" class="btn btn-primary" type="submit">Đổi thông tin thú cưng</button>
+                    <a style="margin-bottom:2%;" href="~/Customer/Pet/AddPet" class="btn btn-primary" type="submit">Thêm thông tin thú cưng</a>
                 </form>
             </div>
         </div>

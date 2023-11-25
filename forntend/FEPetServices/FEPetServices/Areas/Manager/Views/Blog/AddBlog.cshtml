@@ -22,32 +22,32 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <form asp-action="EditBlog" method="post"  enctype="multipart/form-data">
+      <form asp-action="AddBlog" method="post"  enctype="multipart/form-data">
         <div class="form-group">
           <label>Tên bài viết:</label>
-          <input type="text" class="form-control" name="PageTile"  placeholder="Tên bài viết"/>
+          <input type="text" class="form-control" name="PageTile" required placeholder="Tên bài viết"/>
         </div>
         <div class="form-group">
           <label>Tiêu đề bài viết:</label>
-          <input type="text" class="form-control" name="Heading"  placeholder="Tiêu đề bài viết"/>
+          <input type="text" class="form-control" name="Heading" required  placeholder="Tiêu đề bài viết"/>
         </div>
         <div class="form-group">
           <label>Mô tả:</label>
-          <input type="text" class="form-control" name="Description"  placeholder="Mô tả"/>
+          <input type="text" class="form-control" name="Description" required placeholder="Mô tả"/>
         </div>
         <div class="form-group">
           <label>Ngày đăng:</label>
-          <input type="date" class="form-control" name="PublisheDate"  placeholder="Title"/>
+          <input type="date" class="form-control" name="PublisheDate" required placeholder="Title"/>
         </div>
         <div class="form-group">
           <label>Ảnh:</label>
           <div class="input-group">
-            <input type="file" name="image" class="form-control">
+            <input type="file" name="image" required class="form-control">
            </div>
         </div>
         <div class="form-group">
             <label>Nội dung:</label>
-          <textarea class="form-control" id="tiny" name="Content"></textarea>
+          <textarea class="form-control" id="tiny" required name="Content"></textarea>
         </div>
         <div class="form-group">
             <div class="row">

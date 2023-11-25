@@ -42,26 +42,41 @@ namespace PetServices.Controllers
             return Ok(_mapper.Map<AccountInfo>(account));
         }
 
-        [HttpPost]
-        public IActionResult AddPet([FromBody] PetInfoForm petInfoForm)
-        {
-            if (petInfoForm == null)
+            [HttpPost("CreatePet")]
+            public async Task<IActionResult> AddPet([FromBody] PetInfoDTO petInfoForm)
             {
-                return BadRequest("Dữ liệu không hợp lệ");
+                if (petInfoForm == null)
+                {
+                    return BadRequest("Dữ liệu không hợp lệ");
+                }
+
+                var newPet = new PetInfo
+                {
+                    PetInfoId = petInfoForm.PetInfoId,
+                    PetName = petInfoForm.PetName,
+                    ImagePet = petInfoForm.ImagePet,
+                    Species = petInfoForm.Species,
+                    Gender = petInfoForm.Gender,
+                    Descriptions = petInfoForm.Descriptions,
+                    UserInfoId = petInfoForm.UserInfoId,
+                    Weight = petInfoForm.Weight,
+                    Dob = petInfoForm.Dob
+                };
+
+                _context.PetInfos.Add(newPet);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return Ok(_mapper.Map<PetInfoDTO>(newPet));
+                }
+                catch (DbUpdateException ex)
+                {
+                    return StatusCode(500, ex.InnerException.Message);
+                }
             }
 
-            // Sử dụng AutoMapper để chuyển đổi từ PetInfoForm thành PetInfo
-            var petInfo = _mapper.Map<PetInfo>(petInfoForm);
-
-            // Thêm petInfo mới vào cơ sở dữ liệu
-            _context.PetInfos.Add(petInfo);
-            _context.SaveChanges();
-
-            // Trả về kết quả thành công và thông tin pet đã được thêm
-            return CreatedAtAction("Get", new { id = petInfo.PetInfoId }, petInfo);
-        }
-
-        [HttpPut("{id}")]
+            [HttpPut("{id}")]
         public IActionResult EditInfoPet(int id, [FromBody] PetInfoForm petInfoForm)
         {
             if (petInfoForm == null)
