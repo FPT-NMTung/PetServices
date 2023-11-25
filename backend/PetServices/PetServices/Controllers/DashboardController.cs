@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.VisualBasic;
 using PetServices.Form;
 using PetServices.Models;
 using System.Globalization;
@@ -453,39 +454,45 @@ namespace PetServices.Controllers
         [HttpGet("GetNumberOrderCompleteInMonth")]
         public async Task<ActionResult> GetNumberOrderCompleteInMonth()
         {
-            int month = DateTime.Now.Month;
-            int year = DateTime.Now.Year;
-            int previousMonth;
-            int newYear;
+            DateTime now = DateTime.Now;
 
             var NumberOrderComplete = new List<Quantity_RatioForm>();
 
-            if (month == 1)
+            for (int i = 0; i < 3; i++)
             {
-                previousMonth = 12;
-                newYear = year - 1;
-            }
-            else
-            {
-                previousMonth = month - 1;
-                newYear = year;
-            }
+                var currentMonth = now.AddMonths(-i);
+                var previousMonth = currentMonth.AddMonths(-1);
 
-            var orders = await _context.Orders.Where(o => o.OrderStatus == "Completed" && o.OrderDate.Value.Month == month && o.OrderDate.Value.Year == year).ToListAsync();
-            var ordersPrevious = await _context.Orders.Where(o => o.OrderStatus == "Completed" && o.OrderDate.Value.Month == previousMonth && o.OrderDate.Value.Year == newYear).ToListAsync();
+                var orders = await _context.Orders
+                    .Where(o => o.OrderStatus == "Completed" &&
+                                o.OrderDate.Value.Month == currentMonth.Month &&
+                                o.OrderDate.Value.Year == currentMonth.Year)
+                    .ToListAsync();
 
-            double percent = 0;
+                var ordersPrevious = await _context.Orders
+                    .Where(o => o.OrderStatus == "Completed" &&
+                                o.OrderDate.Value.Month == previousMonth.Month &&
+                                o.OrderDate.Value.Year == previousMonth.Year)
+                    .ToListAsync();
 
-            if (ordersPrevious.Count == 0)
-            {
-                percent = orders.Count / 1 * 100;
+                double percent = 0;
+
+                if (ordersPrevious.Count == 0)
+                {
+                    percent = orders.Count / 1 * 100;
+                }
+                else
+                {
+                    percent = (double)(orders.Count - ordersPrevious.Count) / ordersPrevious.Count * 100;
+                }
+
+                NumberOrderComplete.Add(new Quantity_RatioForm
+                {
+                    date = currentMonth.ToString("yyyy-MM"),
+                    quantity = orders.Count,
+                    Ratio = percent.ToString("F2")
+                });
             }
-            else
-            {
-                percent = (double)(orders.Count - ordersPrevious.Count) / ordersPrevious.Count * 100;
-            }
-
-            NumberOrderComplete.Add(new Quantity_RatioForm { quantity = orders.Count, Ratio = percent.ToString("F2") });
 
             return Ok(NumberOrderComplete);
         }
@@ -513,61 +520,53 @@ namespace PetServices.Controllers
             }
 
             var orders = await _context.Orders.Where(o => o.OrderStatus == "Received" && o.OrderStatus == "Delivery" && o.OrderDate.Value.Month == month && o.OrderDate.Value.Year == year).ToListAsync();
-            var ordersPrevious = await _context.Orders.Where(o => o.OrderStatus == "Received" && o.OrderStatus == "Delivery" && o.OrderDate.Value.Month == previousMonth && o.OrderDate.Value.Year == newYear).ToListAsync();
 
-            double percent = 0;
-
-            if (ordersPrevious.Count == 0)
-            {
-                percent = orders.Count / 1 * 100;
-            }
-            else
-            {
-                percent = (double)(orders.Count - ordersPrevious.Count) / ordersPrevious.Count * 100;
-            }
-
-            NumberOrderComplete.Add(new Quantity_RatioForm { quantity = orders.Count, Ratio = percent.ToString("F2") });
-
-            return Ok(NumberOrderComplete);
+            return Ok(orders.Count);
         }
 
         // Số đơn hàng bị hủy trong tháng 
         [HttpGet("GetNumberOrderRejectedInMonth")]
         public async Task<ActionResult> GetNumberOrderRejectedInMonth()
         {
-            int month = DateTime.Now.Month;
-            int year = DateTime.Now.Year;
-            int previousMonth;
-            int newYear;
+            DateTime now = DateTime.Now;
 
             var NumberOrderComplete = new List<Quantity_RatioForm>();
 
-            if (month == 1)
+            for (int i = 0; i < 3; i++)
             {
-                previousMonth = 12;
-                newYear = year - 1;
-            }
-            else
-            {
-                previousMonth = month - 1;
-                newYear = year;
-            }
+                var currentMonth = now.AddMonths(-i);
+                var previousMonth = currentMonth.AddMonths(-1);
 
-            var orders = await _context.Orders.Where(o => o.OrderStatus == "Rejected" && o.OrderDate.Value.Month == month && o.OrderDate.Value.Year == year).ToListAsync();
-            var ordersPrevious = await _context.Orders.Where(o => o.OrderStatus == "Rejected" && o.OrderDate.Value.Month == previousMonth && o.OrderDate.Value.Year == newYear).ToListAsync();
+                var orders = await _context.Orders
+                    .Where(o => o.OrderStatus == "Rejected" &&
+                                o.OrderDate.Value.Month == currentMonth.Month &&
+                                o.OrderDate.Value.Year == currentMonth.Year)
+                    .ToListAsync();
 
-            double percent = 0;
+                var ordersPrevious = await _context.Orders
+                    .Where(o => o.OrderStatus == "Rejected" &&
+                                o.OrderDate.Value.Month == previousMonth.Month &&
+                                o.OrderDate.Value.Year == previousMonth.Year)
+                    .ToListAsync();
 
-            if (ordersPrevious.Count == 0)
-            {
-                percent = orders.Count / 1 * 100;
+                double percent = 0;
+
+                if (ordersPrevious.Count == 0)
+                {
+                    percent = orders.Count / 1 * 100;
+                }
+                else
+                {
+                    percent = (double)(orders.Count - ordersPrevious.Count) / ordersPrevious.Count * 100;
+                }
+
+                NumberOrderComplete.Add(new Quantity_RatioForm
+                {
+                    date = currentMonth.ToString("MM-yyyy"),
+                    quantity = orders.Count,
+                    Ratio = percent.ToString("F2")
+                });
             }
-            else
-            {
-                percent = (double)(orders.Count - ordersPrevious.Count) / ordersPrevious.Count * 100;
-            }
-
-            NumberOrderComplete.Add(new Quantity_RatioForm { quantity = orders.Count, Ratio = percent.ToString("F2") });
 
             return Ok(NumberOrderComplete);
         }
