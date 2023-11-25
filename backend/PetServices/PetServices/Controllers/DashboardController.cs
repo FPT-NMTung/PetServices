@@ -203,13 +203,13 @@ namespace PetServices.Controllers
 
             var numberProduct = await _context.Orders.Where(o => o.OrderDate.Value.Month == currentMonth && o.OrderDate.Value.Year == currentYear && o.OrderStatus == "Completed").ToListAsync();
 
-            foreach ( var number in numberProduct)
+            foreach (var number in numberProduct)
             {
                 var productIncome = await _context.OrderProductDetails
                     .Where(o => o.OrderId == number.OrderId)
                     .ToListAsync();
 
-                foreach ( var product in productIncome)
+                foreach (var product in productIncome)
                 {
                     sell​​NumberProduct += product.Quantity ?? 0;
                 }
@@ -287,7 +287,7 @@ namespace PetServices.Controllers
 
             var ReceiveData = new List<ReceiveInDayForm>();
 
-            for (int i=1; i <= 7; i++)
+            for (int i = 1; i <= 7; i++)
             {
                 DateTime date = now.AddDays(-i);
                 double total = 0;
@@ -652,5 +652,51 @@ namespace PetServices.Controllers
             return Ok(NumberOrderComplete);
         }
 
+        [HttpGet("GetTop5CustomerArea")]
+        public async Task<ActionResult> GetTop5CustomerArea()
+        {
+            // Lấy danh sách khách hàng
+            var listCustomer = await _context.Accounts
+                .Include(a => a.UserInfo)
+                .Where(account => account.RoleId == 2)
+                .ToListAsync();
+
+            // Lấy danh sách thông tin khách hàng 
+            var userInfoIds = listCustomer
+                .Select(account => account.UserInfoId)
+                .ToList();
+
+            // Lấy danh sách khách hàng có UserInfoId nằm trong danh sách userInfoIds
+            var userInfos = _context.UserInfos
+                .Where(userInfo => userInfoIds.Contains(userInfo.UserInfoId))
+                .ToList();
+
+            // Đếm số lượng khách hàng trong 1 thành phố
+            var provinceCounts = userInfos
+                .GroupBy(userInfo => userInfo.Province)
+                .Select(group => new
+                {
+                    Province = group.Key,
+                    Quantity = group.Count()
+                })
+                .OrderByDescending(item => item.Quantity)
+                .Take(5)
+                .ToList();
+
+
+            var NumberOrderComplete = provinceCounts.Select(item => new Quantity_RatioForm
+            {
+                date = item.Province,
+                quantity = item.Quantity,
+            }).ToList();
+
+            NumberOrderComplete.Insert(0, new Quantity_RatioForm
+            {
+                date = "Tỉnh khác",
+                quantity = listCustomer.Count - userInfos.Count
+            });
+
+            return Ok(NumberOrderComplete);
+        }
     }
 }
