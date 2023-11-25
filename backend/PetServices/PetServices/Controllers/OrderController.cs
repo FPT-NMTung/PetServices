@@ -232,6 +232,32 @@ namespace PetServices.Controllers
             }
         }
 
+        [HttpPut("updateAllTotalPrice")]
+        public async Task<IActionResult> UpdateAllTotalPrice(int Id, double allTotalPrice)
+        {
+            try
+            {
+                Order order = await _context.Orders.SingleOrDefaultAsync(b => b.OrderId == Id);
+                // Kiểm tra booking có tồn tại hay không
+                if (order == null)
+                {
+                    return NotFound("Booking không tồn tài");
+                }
+                // Kiểm tra xem trạng thái cũ có chính xác hay không
+
+                order.TotalPrice = allTotalPrice;
+                _context.Orders.Update(order);
+
+                await _context.SaveChangesAsync();
+                return Ok("Thay đổi giá tiền thành công");
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] OrdersDTO orderDTO)
         {
@@ -371,10 +397,9 @@ namespace PetServices.Controllers
                     return BadRequest("Số lượng sản phẩm không đủ");
                 }
             }
-
-
             double priceProduct = 0;
             double priceRoom = 0;
+            double allTotalPrice = 0;
 
             if (orderDTO.OrderProductDetails != null)
             {
@@ -384,6 +409,8 @@ namespace PetServices.Controllers
                 {
                     priceProduct = (double)takeProduct.Price;
                 }
+
+                allTotalPrice += (double)orderDTO.OrderProductDetails.Sum(dto => (dto.Quantity * priceProduct));
             }
 
             if (orderDTO.BookingRoomDetails != null)
@@ -394,6 +421,13 @@ namespace PetServices.Controllers
                 {
                     priceRoom = (double)takeRoom.Price;
                 }
+
+                allTotalPrice += (double)orderDTO.BookingRoomDetails.Sum(dto => (dto.TotalPrice));
+            }
+
+            if (orderDTO.BookingServicesDetails != null)
+            {
+                allTotalPrice += (double)orderDTO.BookingServicesDetails.Sum(dto => (dto.PriceService));
             }
 
             var order = new Order
@@ -409,6 +443,7 @@ namespace PetServices.Controllers
                 FullName = orderDTO.FullName,
                 TypePay = orderDTO.TypePay,
                 StatusPayment = orderDTO.StatusPayment,
+                TotalPrice = allTotalPrice,
 
                 // Sản phẩm
                 OrderProductDetails = orderDTO.OrderProductDetails != null
