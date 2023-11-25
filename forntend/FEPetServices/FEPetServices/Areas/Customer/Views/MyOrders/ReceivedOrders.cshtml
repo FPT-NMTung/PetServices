@@ -95,12 +95,7 @@
                                                         </div>
                                                         <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
-                                                    @if (productDetail.FeedbackStatus == null || productDetail.FeedbackStatus == false)
-                                                    {
-                                                        <div class="btn-content-detail">
-                                                            <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@order.UserInfoId', '@order.OrderId', '@productDetail.FeedbackStatus')">Đánh giá</button>
-                                                        </div>
-                                                    }
+                                                    <div></div>
                                                 }
                                             </div>
                                         }
@@ -118,22 +113,70 @@
                                                             <div class="service-info-detail">
                                                                 <p style="max-width:450px">@serviceDetail.Service.ServiceName</p>
                                                                 <p style="font-size:.8rem;"><span>Cân nặng thú cưng: </span>@serviceDetail.Weight Kg</p>
+                                                                @*     PartnerID*@
+                                                                <p style="font-size:.8rem;"><span>Đối tác:</span>@serviceDetail.PartnerInfoId</p>
                                                             </div>
+                                                        </div>
+                                                        <div class="content-detail-time-service">
+                                                            <p style="font-size:.8rem;">Thời gian bắt đầu: @serviceDetail?.StartTime</p>
+                                                            <p style="font-size:.8rem;">Thời gian kêt thúc: @serviceDetail?.EndTime</p>
                                                         </div>
                                                         <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
-                                                    @if (serviceDetail.FeedbackStatus == null || serviceDetail.FeedbackStatus == false)
-                                                    {
-                                                        <div class="btn-content-detail">
-                                                            <button class="btn btn-outline-primary" onclick="openPopupService('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>
+                                                }
+                                            </div>
+                                        }
+
+                                        @if (order.BookingRoomDetails != null && order.BookingRoomDetails.Count > 0)
+                                        {
+                                            <div class="content-details">
+                                                <p class="bold-text">Thông tin phòng đã được đặt hàng</p>
+                                                @foreach (var roomDetail in order.BookingRoomDetails)
+                                                {
+                                                    totalPrice = totalPrice + roomDetail.TotalPrice;
+                                                    <div class="content-detail">
+                                                        <div class="room-info">
+                                                            <img src="@roomDetail.Room.Picture" width="50" height="50" alt="Room Image">
+                                                            <div class="room-info-detail">
+                                                                <p style="max-width:800px">@roomDetail.Room.RoomName</p>
+                                                                @foreach (var roomService in order.BookingRoomServices)
+                                                                {
+                                                                    <div class="room-info-detail-service">
+                                                                        <p style="font-size:.8rem;">Dịch vụ: @roomService.Service.ServiceName</p>
+                                                                        <p class="price-service-rooom" style="font-size:.8rem;">@($"{(roomService.PriceService):n0}".Replace(",", ".")) VNĐ</p>
+                                                                    </div>
+                                                                }
+                                                            </div>
                                                         </div>
-                                                    }
+                                                    </div>
+                                                    <div class="content-detail-time">
+                                                        <p style="font-size:.9rem;">Thời gian bắt đầu: @roomDetail.StartDate</p>
+                                                        <p style="font-size:.9rem;">Thời gian kêt thúc: @roomDetail.EndDate</p>
+                                                    </div>
                                                 }
                                             </div>
                                         }
                                         <div class="headel-content">
                                             <p>Tổng giá : </p>
                                             <p>@(totalPrice.ToString("n0").Replace(",", ".")) VNĐ</p>
+                                        </div>
+                                        <div class="work-container-inner">
+                                            @if (order != null && order.TypePay != null && order.TypePay.Trim() == "cash")
+                                            {
+                                                <p>Thanh toán trực tiếp</p>
+                                            }
+                                            @if (order != null && order.TypePay != null && @order.TypePay.Trim() == "vnpay")
+                                            {
+                                                <p>Thanh toán bằng hình thức chuyển khoản</p>
+                                            }
+                                            @if (!@order.StatusPayment)
+                                            {
+                                                <span class="badge badge-info">Chưa thanh toán</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-info">Đã thanh toán</span>
+                                            }
                                         </div>
                                     </div>
                                 }
@@ -367,7 +410,7 @@
                 }
 
                 $.ajax({
-                    url: 'https://localhost:7255/api/Feedback/AddFeedBack',
+                    url: 'https://pet-service-api.azurewebsites.net/api/Feedback/AddFeedBack',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(data), 

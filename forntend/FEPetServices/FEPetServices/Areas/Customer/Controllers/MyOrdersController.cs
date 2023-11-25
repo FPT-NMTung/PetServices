@@ -14,7 +14,7 @@ namespace FEPetServices.Areas.Customer.Controllers
     {
         private readonly HttpClient _client = null;
         private readonly string DefaultApiUrl = "";
-        //private readonly string DefaultApiUrlOrders = "";
+        private readonly string DefaultApiUrlOrders = "";
         private readonly IConfiguration configuration;
 
         public MyOrdersController(IConfiguration configuration)
@@ -24,7 +24,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
-            //DefaultApiUrlOrders = "https://localhost:7255/api/Order";
+            DefaultApiUrlOrders = "https://localhost:7255/api/";
         }
 
         private async Task<IActionResult> GetOrders(string orderStatus, int page, int pageSize)
@@ -33,6 +33,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             //https://localhost:7255/api/Order/orderstatus/Waiting?email=customer%40gmail.com
 
+            //HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrlOrders}Order/orderstatus/{orderStatus}?email={email}");
             HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderstatus/{orderStatus}?email={email}");
             if (responsecheck.StatusCode == HttpStatusCode.NotFound)
             {
@@ -41,6 +42,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             }
             else
             {
+                //HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrlOrders}Order/email/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
                 HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/email/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
 
                 if (response.IsSuccessStatusCode)

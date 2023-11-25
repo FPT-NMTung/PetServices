@@ -123,7 +123,11 @@
                         window.addEventListener("load", function () {
                             getLocation();
                             showPartnerLocation(@Model?.PartnerInfo.Lat, @Model?.PartnerInfo.Lng);
-                            startWatchingLocation(); 
+                            startWatchingLocation();
+
+                            setInterval(function () {
+                                updateLocationAutomatically();
+                            }, 5000);
                         });
 
                         function getLocation() {
@@ -219,6 +223,28 @@
                                 alert("Trình duyệt của bạn không hỗ trợ Geolocation.");
                             }
                         }
+
+                        async function updateLocationAutomatically() {
+                            if (navigator.geolocation) {
+                                navigator.geolocation.getCurrentPosition(
+                                    function (position) {
+                                        var latitude = position.coords.latitude;
+                                        var longitude = position.coords.longitude;
+
+                                        initMap(latitude, longitude);
+
+                                        document.getElementById("inputLat").value = latitude;
+                                        document.getElementById("inputLng").value = longitude;
+
+                                        updateLocation(latitude, longitude);
+                                    },
+                                    function (error) {
+                                        showError(error);
+                                    }
+                                );
+                            } else {
+                                alert("Trình duyệt của bạn không hỗ trợ Geolocation.");
+                            }
                     </script>
                 </div>
             </div>

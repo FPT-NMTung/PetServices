@@ -1,0 +1,25 @@
+﻿.thumbnail {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+    .thumbnail.error {
+        background-color: #ff497c;
+    }
+
+    .thumbnail.success {
+        background-color: #5cb85c;
+    }
+
+.fa-solid {
+    font-size: 40px;
+    color: #fff;
+}
+
+a.axil-btn.btn-bg-secondary.success:before, button.axil-btn.btn-bg-secondary.success:before {
+    background-color: #5cb85c;
+}
