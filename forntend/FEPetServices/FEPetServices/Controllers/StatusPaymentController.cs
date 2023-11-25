@@ -13,7 +13,7 @@ namespace FEPetServices.Controllers
     {
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
-        private string DefaultApiUrlUserInfo = "";
+        //private string DefaultApiUrlUserInfo = "";
 
         private readonly IConfiguration _configuration;
         private readonly VnpConfiguration _vnpConfiguration;
@@ -30,8 +30,10 @@ namespace FEPetServices.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
-            DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+
+            /*DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
+            DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";*/
         }
 
         public const string CARTKEY = "cart";
@@ -97,12 +99,18 @@ namespace FEPetServices.Controllers
                     {
                         if (cartItem.product != null)
                         {
-                            HttpResponseMessage response = await _client.PutAsync("https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct"
-                                + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);
+                            /*HttpResponseMessage response = await _client.PutAsync("https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct"
+                                + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);*/
+
+                            HttpResponseMessage response = await _client.PutAsync(DefaultApiUrl + "Product/ChangeProduct"
+                                    + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);
                         }
                     }
                     //https://localhost:7255/api/Order/changeStatusPayment?Id=45
-                    HttpResponseMessage responseStatusPayment = await _client.PutAsync("https://localhost:7255/api/Order/changeStatusPayment"
+                    /*HttpResponseMessage responseStatusPayment = await _client.PutAsync("https://localhost:7255/api/Order/changeStatusPayment"
+                               + "?Id=" + orderId, null);*/
+
+                    HttpResponseMessage responseStatusPayment = await _client.PutAsync(DefaultApiUrl + "Order/changeStatusPayment"
                                + "?Id=" + orderId, null);
 
                     ClearCart();
@@ -120,7 +128,10 @@ namespace FEPetServices.Controllers
                     {
                         if (cartItem.product != null)
                         {
-                            HttpResponseMessage response = await _client.PutAsync("https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct"
+                            /*HttpResponseMessage response = await _client.PutAsync("https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct"
+                                + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);*/
+
+                            HttpResponseMessage response = await _client.PutAsync(DefaultApiUrl + "Product/ChangeProduct"
                                 + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);
                         }
                     }

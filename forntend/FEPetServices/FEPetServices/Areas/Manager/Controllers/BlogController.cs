@@ -26,10 +26,10 @@ namespace FEPetServices.Areas.Manager.Controllers
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
 
-            DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
+            /*DefaultApiUrlBlogList = "https://localhost:7255/api/Blog";
             DefaultApiUrlBlogDetail = "https://localhost:7255/api/Blog/BlogID";
             DefaultApiUrlBlogAdd = "https://localhost:7255/api/Blog/CreateBlog";
-            DefaultApiUrlBlogUpdate = "https://localhost:7255/api/Blog/UpdateBlog?blogId=";
+            DefaultApiUrlBlogUpdate = "https://localhost:7255/api/Blog/UpdateBlog?blogId=";*/
 
         }
 

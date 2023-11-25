@@ -34,9 +34,10 @@ namespace FEPetServices.Controllers
 
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
 
-            DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
-            DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";
+            /*DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
+            DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";*/
         }
 
         [HttpGet]
@@ -45,7 +46,7 @@ namespace FEPetServices.Controllers
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "/" + email);
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
 
             if (response.IsSuccessStatusCode)
             {
@@ -109,7 +110,7 @@ namespace FEPetServices.Controllers
                 if (orderform.Province == null ||
                     orderform.District == null || orderform.Commune == null)
                 {
-                    HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "/" + email);
+                    HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
                     if (responseUser.IsSuccessStatusCode)
                     {
                         string responseContent = await responseUser.Content.ReadAsStringAsync();
@@ -182,14 +183,14 @@ namespace FEPetServices.Controllers
                 var jsonOrder = System.Text.Json.JsonSerializer.Serialize(order);
 
                 var content = new StringContent(jsonOrder, Encoding.UTF8, "application/json");
-                var responseOrder = await _client.PostAsync("https://localhost:7255/api/Order", content);
+                var responseOrder = await _client.PostAsync(DefaultApiUrl + "Order", content);
 
                 if (responseOrder.IsSuccessStatusCode)
                 {
                     if (payment == "vnpay")
                     {
                         int orderLatestID = 0;
-                        HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/Order/latest?email="+ email);
+                        HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/latest?email=" + email);
                         if (response.IsSuccessStatusCode)
                         {
                             string responseContent = await response.Content.ReadAsStringAsync();
@@ -240,7 +241,7 @@ namespace FEPetServices.Controllers
                         {
                             if (cartItem.product != null)
                             {
-                                HttpResponseMessage response = await _client.PutAsync("https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct"
+                                HttpResponseMessage response = await _client.PutAsync(DefaultApiUrl + "Product/ChangeProduct"
                                     + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);
                             }
                         }

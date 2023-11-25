@@ -227,10 +227,8 @@ nav {
 @media (min-width: 200px) {
     .d-md-block {
         display: block !important;
-
     }
 }
-
 @media (min-width: 768px) {
         .sidebar.collapsed {
             width: 4.75rem;
