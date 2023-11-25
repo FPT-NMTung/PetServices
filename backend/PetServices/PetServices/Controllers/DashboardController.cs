@@ -2,8 +2,10 @@
 using AutoMapper.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using PetServices.Form;
 using PetServices.Models;
 using System.Globalization;
 
@@ -24,6 +26,15 @@ namespace PetServices.Controllers
             _configuration = configuration;
         }
 
+        [HttpGet("getallorder")]
+        public async Task<ActionResult> getallorder()
+        {
+            var customerNumber = await _context.Orders.Where(o => o.OrderStatus == "Completed").ToListAsync();
+
+            return Ok(customerNumber);
+        }
+
+        // số khách hàng mới trong tháng 
         [HttpGet("GetNumberCustomerInMonth")]
         public async Task<ActionResult> GetNumberCustomerInMonth()
         {
@@ -34,6 +45,7 @@ namespace PetServices.Controllers
             return Ok(customerNumber.Count);
         }
 
+        // % khách hàng mới trong tháng so với tháng trước 
         [HttpGet("GetPercentCustomerPreviousMonth")]
         public async Task<ActionResult> GetPercentCustomerPreviousMonth()
         {
@@ -66,17 +78,19 @@ namespace PetServices.Controllers
             return Ok(percent.ToString("F2"));
         }
 
+        // số đơn hàng trong tháng
         [HttpGet("GetNumberOrderInMonth")]
         public async Task<ActionResult> GetNumberOrderInMonth()
         {
             int currentMonth = DateTime.Now.Month;
             int currentYear = DateTime.Now.Year;
 
-            var numberOrder = await _context.Orders.Where(o => o.OrderDate.Value.Month == currentMonth && o.OrderDate.Value.Year == currentYear).ToListAsync();
+            var numberOrder = await _context.Orders.Where(o => o.OrderDate.Value.Month == currentMonth && o.OrderDate.Value.Year == currentYear && o.OrderStatus == "Completed").ToListAsync();
 
             return Ok(numberOrder.Count);
         }
 
+        // % số đơn hàng trong tháng so với tháng trước
         [HttpGet("GetPercentOrderPreviousMonth")]
         public async Task<ActionResult> GetPercentOrderPreviousMonth()
         {
@@ -95,8 +109,8 @@ namespace PetServices.Controllers
                 previousMonth = currentMonth - 1;
                 newYear = currentYear;
             }
-            var numberOrder = await _context.Orders.Where(o => o.OrderDate.Value.Month == currentMonth && o.OrderDate.Value.Year == currentYear).ToListAsync();
-            var numberOrderPreviousMonth = await _context.Orders.Where(o => o.OrderDate.Value.Month == previousMonth && o.OrderDate.Value.Year == newYear).ToListAsync();
+            var numberOrder = await _context.Orders.Where(o => o.OrderDate.Value.Month == currentMonth && o.OrderDate.Value.Year == currentYear && o.OrderStatus == "Completed").ToListAsync();
+            var numberOrderPreviousMonth = await _context.Orders.Where(o => o.OrderDate.Value.Month == previousMonth && o.OrderDate.Value.Year == newYear && o.OrderStatus == "Completed").ToListAsync();
 
             if (numberOrderPreviousMonth.Count == 0)
             {
@@ -108,6 +122,7 @@ namespace PetServices.Controllers
             return Ok(percent.ToString("F2"));
         }
 
+        // tổng thu nhập trong tháng
         [HttpGet("GetIncomeInMonth")]
         public async Task<ActionResult> GetIncomeInMonth()
         {
@@ -116,7 +131,7 @@ namespace PetServices.Controllers
             double totalIncome = 0;
 
             var ordersInMonth = await _context.Orders
-                .Where(o => o.OrderDate.Value.Month == currentMonth && o.OrderDate.Value.Year == currentYear)
+                .Where(o => o.OrderDate.Value.Month == currentMonth && o.OrderDate.Value.Year == currentYear && o.OrderStatus == "Completed")
                 .ToListAsync();
 
             foreach (var order in ordersInMonth)
@@ -136,7 +151,7 @@ namespace PetServices.Controllers
 
                 foreach (var service in ServiceIncome)
                 {
-                    totalIncome += service.Price ?? 0;
+                    totalIncome += service.PriceService ?? 0;
                 }
 
                 var RoomIncome = await _context.BookingRoomDetails
@@ -152,7 +167,7 @@ namespace PetServices.Controllers
             return Ok(totalIncome);
         }
 
-
+        // % tổng thu nhập trong tháng so với tháng trước
         [HttpGet("GetPercentIncomePreviousMonth")]
         public async Task<ActionResult> GetPercentIncomePreviousMonth()
         {
@@ -175,11 +190,11 @@ namespace PetServices.Controllers
             }
 
             var ordersInMonth = await _context.Orders
-                .Where(o => o.OrderDate.Value.Month == currentMonth && o.OrderDate.Value.Year == currentYear)
+                .Where(o => o.OrderDate.Value.Month == currentMonth && o.OrderDate.Value.Year == currentYear && o.OrderStatus == "Completed")
                 .ToListAsync();
 
             var ordersPreviousMonth = await _context.Orders
-                .Where(o => o.OrderDate.Value.Month == previousMonth && o.OrderDate.Value.Year == newYear)
+                .Where(o => o.OrderDate.Value.Month == previousMonth && o.OrderDate.Value.Year == newYear && o.OrderStatus == "Completed")
                 .ToListAsync();
 
             foreach (var order in ordersInMonth)
@@ -199,7 +214,7 @@ namespace PetServices.Controllers
 
                 foreach (var service in ServiceIncome)
                 {
-                    totalIncome += service.Price ?? 0;
+                    totalIncome += service.PriceService ?? 0;
                 }
 
                 var RoomIncome = await _context.BookingRoomDetails
@@ -229,7 +244,7 @@ namespace PetServices.Controllers
 
                 foreach (var service in ServiceIncome)
                 {
-                    totalIncomepreviousMonth += service.Price ?? 0;
+                    totalIncomepreviousMonth += service.PriceService ?? 0;
                 }
 
                 var RoomIncome = await _context.BookingRoomDetails
@@ -252,6 +267,7 @@ namespace PetServices.Controllers
             return Ok(percent.ToString("F2"));
         }
 
+        // số lượng sản phẩm bán trong tháng 
         [HttpGet("GetNumberProductInMonth")]
         public async Task<ActionResult> GetNumberProductInMonth()
         {
@@ -259,7 +275,7 @@ namespace PetServices.Controllers
             int currentYear = DateTime.Now.Year;
             int sell​​NumberProduct = 0;
 
-            var numberProduct = await _context.Orders.Where(o => o.OrderDate.Value.Month == currentMonth && o.OrderDate.Value.Year == currentYear).ToListAsync();
+            var numberProduct = await _context.Orders.Where(o => o.OrderDate.Value.Month == currentMonth && o.OrderDate.Value.Year == currentYear && o.OrderStatus == "Completed").ToListAsync();
 
             foreach ( var number in numberProduct)
             {
@@ -276,6 +292,7 @@ namespace PetServices.Controllers
             return Ok(sell​​NumberProduct);
         }
 
+        // % số lượng sản phẩm bán trong tháng so với tháng trước
         [HttpGet("GetPercentNumberProductPreviousMonth")]
         public async Task<ActionResult> GetPercentNumberProductPreviousMonth()
         {
@@ -299,8 +316,8 @@ namespace PetServices.Controllers
                 newYear = currentYear;
             }
 
-            var numberProduct = await _context.Orders.Where(o => o.OrderDate.Value.Month == currentMonth && o.OrderDate.Value.Year == currentYear).ToListAsync();
-            var numberProductPreviousMonth = await _context.Orders.Where(o => o.OrderDate.Value.Month == previousMonth && o.OrderDate.Value.Year == newYear).ToListAsync();
+            var numberProduct = await _context.Orders.Where(o => o.OrderDate.Value.Month == currentMonth && o.OrderDate.Value.Year == currentYear && o.OrderStatus == "Completed").ToListAsync();
+            var numberProductPreviousMonth = await _context.Orders.Where(o => o.OrderDate.Value.Month == previousMonth && o.OrderDate.Value.Year == newYear && o.OrderStatus == "Completed").ToListAsync();
 
             foreach (var number in numberProduct)
             {
@@ -336,59 +353,142 @@ namespace PetServices.Controllers
             return Ok(percent.ToString("F2"));
         }
 
-        /*[HttpGet("GetAllCustomerByAll")]
-        public async Task<ActionResult> GetAllCustomerByAll(int? day, int? month, int? year)
+        // Doanh số service theo ngày
+        [HttpGet("GetTotalPriceServiceIn7Day")]
+        public async Task<ActionResult> GetTotalPriceServiceIn7Day()
         {
-            try
-            {
-                var query = _context.Accounts.AsQueryable();
+            DateTime now = DateTime.Now;
 
-                if (year.HasValue)
+            var ReceiveData = new List<ReceiveInDayForm>();
+
+            for (int i=1; i <= 7; i++)
+            {
+                DateTime date = now.AddDays(-i);
+                double total = 0;
+
+                var orders = await _context.Orders.Where(o => o.OrderDate == date && o.OrderStatus == "Completed").ToListAsync();
+
+                foreach (var order in orders)
                 {
-                    if (day.HasValue && month.HasValue)
+                    var services = await _context.BookingServicesDetails.Where(b => b.OrderId == order.OrderId).ToListAsync();
+
+
+                    foreach (var service in services)
                     {
-                        query = query.Where(n => n.CreateDate.Value.Day == day && n.CreateDate.Value.Month == month && n.CreateDate.Value.Year == year);
-                    }
-                    else if (month.HasValue)
-                    {
-                        query = query.Where(n => n.CreateDate.Value.Month == month && n.CreateDate.Value.Year == year);
-                    }
-                    else
-                    {
-                        query = query.Where(n => n.CreateDate.Value.Year == year);
+                        total += service.PriceService ?? 0;
                     }
                 }
-                else
+
+                ReceiveData.Add(new ReceiveInDayForm { Date = date.ToShortDateString(), Receive = total });
+            }
+
+            return Ok(ReceiveData);
+        }
+
+        // Doanh số product theo ngày
+        [HttpGet("GetTotalPriceProductIn7Day")]
+        public async Task<ActionResult> GetTotalPriceProductIn7Day()
+        {
+            DateTime now = DateTime.Now;
+
+            var ReceiveData = new List<ReceiveInDayForm>();
+
+            for (int i = 1; i <= 7; i++)
+            {
+                DateTime date = now.AddDays(-i);
+                double total = 0;
+
+                var orders = await _context.Orders.Where(o => o.OrderDate == date && o.OrderStatus == "Completed").ToListAsync();
+
+                foreach (var order in orders)
                 {
-                    return BadRequest("Hãy cung cấp tham số: year.");
+                    var products = await _context.OrderProductDetails.Where(b => b.OrderId == order.OrderId).ToListAsync();
+
+
+                    foreach (var product in products)
+                    {
+                        total += product.Price ?? 0;
+                    }
                 }
 
-                var newCustomer = await query.ToListAsync();
-
-                return Ok(newCustomer);
-
+                ReceiveData.Add(new ReceiveInDayForm { Date = date.ToShortDateString(), Receive = total });
             }
-            catch (Exception ex)
-            {
-                return BadRequest($"Lỗi: {ex.Message}");
-            }
-        }*/
 
-        /*[HttpGet("GetAllAccount")]
-        public async Task<ActionResult> GetPercentIncreaseCustomerByMonth()
+            return Ok(ReceiveData);
+        }
+
+        // Doanh số room theo ngày
+        [HttpGet("GetTotalPriceRoomIn7Day")]
+        public async Task<ActionResult> GetTotalPriceRoomIn7Day()
         {
-            try
-            {
-                var accountsInMonth = await _context.Accounts
-                    .Where(a => a.CreateDate.Value.Month == month)
-                    .ToListAsync();
+            DateTime now = DateTime.Now;
 
-                return Ok(accountsInMonth);
-            }
-            catch (Exception ex)
+            var ReceiveData = new List<ReceiveInDayForm>();
+
+            for (int i = 1; i <= 7; i++)
             {
-                return BadRequest($"Lỗi: {ex.Message}");
+                DateTime date = now.AddDays(-i);
+                double total = 0;
+
+                var orders = await _context.Orders.Where(o => o.OrderDate == date && o.OrderStatus == "Completed").ToListAsync();
+
+                foreach (var order in orders)
+                {
+                    var rooms = await _context.BookingRoomDetails.Where(b => b.OrderId == order.OrderId).ToListAsync();
+
+
+                    foreach (var room in rooms)
+                    {
+                        total += room.Price ?? 0;
+                    }
+                }
+
+                ReceiveData.Add(new ReceiveInDayForm { Date = date.ToShortDateString(), Receive = total });
             }
-        }*/
+
+            return Ok(ReceiveData);
+        }
+
+        // Số đơn hàng hoàn thành trong tháng 
+        [HttpGet("GetNumberOrderCompleteInMonth")]
+        public async Task<ActionResult> GetNumberOrderCompleteInMonth()
+        {
+            int month = DateTime.Now.Month;
+            int year = DateTime.Now.Year;
+            int previousMonth;
+            int newYear;
+
+            var NumberOrderComplete = new List<Quantity_RatioForm>();
+
+            if (month == 1)
+            {
+                previousMonth = 12;
+                newYear = year - 1;
+            }
+            else
+            {
+                previousMonth = month - 1;
+                newYear = year;
+            }
+
+            var orders = await _context.Orders.Where(o => o.OrderStatus == "Completed" && o.OrderDate.Value.Month == month && o.OrderDate.Value.Year == year).ToListAsync();
+            var ordersPrevious = await _context.Orders.Where(o => o.OrderStatus == "Completed" && o.OrderDate.Value.Month == previousMonth && o.OrderDate.Value.Year == newYear).ToListAsync();
+
+            double percent = 0;
+
+            if (ordersPrevious.Count == 0)
+            {
+                percent = ordersPrevious.Count / 1 * 100;
+            }
+            else
+            {
+                percent = (double)(orders.Count - ordersPrevious.Count) / ordersPrevious.Count * 100;
+            }
+
+            NumberOrderComplete.Add(new Quantity_RatioForm { quantity = orders.Count, Ratio = percent });
+
+            return Ok(percent.ToString("F2"));
+        }
+
     }
 }
