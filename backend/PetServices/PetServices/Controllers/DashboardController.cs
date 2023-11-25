@@ -137,32 +137,7 @@ namespace PetServices.Controllers
 
             foreach (var order in ordersInMonth)
             {
-                var productIncome = await _context.OrderProductDetails
-                    .Where(o => o.OrderId == order.OrderId)
-                    .ToListAsync();
-
-                foreach (var product in productIncome)
-                {
-                    totalIncome += product.Price ?? 0;
-                }
-
-                var ServiceIncome = await _context.BookingServicesDetails
-                    .Where(o => o.OrderId == order.OrderId)
-                    .ToListAsync();
-
-                foreach (var service in ServiceIncome)
-                {
-                    totalIncome += service.PriceService ?? 0;
-                }
-
-                var RoomIncome = await _context.BookingRoomDetails
-                    .Where(o => o.OrderId == order.OrderId)
-                    .ToListAsync();
-
-                foreach (var room in RoomIncome)
-                {
-                    totalIncome += room.Price ?? 0;
-                }
+                totalIncome += order.TotalPrice ?? 0;
             }
 
             return Ok(totalIncome);
@@ -200,62 +175,12 @@ namespace PetServices.Controllers
 
             foreach (var order in ordersInMonth)
             {
-                var productIncome = await _context.OrderProductDetails
-                    .Where(o => o.OrderId == order.OrderId)
-                    .ToListAsync();
-
-                foreach (var product in productIncome)
-                {
-                    totalIncome += product.Price ?? 0;
-                }
-
-                var ServiceIncome = await _context.BookingServicesDetails
-                    .Where(o => o.OrderId == order.OrderId)
-                    .ToListAsync();
-
-                foreach (var service in ServiceIncome)
-                {
-                    totalIncome += service.PriceService ?? 0;
-                }
-
-                var RoomIncome = await _context.BookingRoomDetails
-                    .Where(o => o.OrderId == order.OrderId)
-                    .ToListAsync();
-
-                foreach (var room in RoomIncome)
-                {
-                    totalIncome += room.Price ?? 0;
-                }
+                totalIncome += order.TotalPrice ?? 0;
             }
 
             foreach (var order in ordersPreviousMonth)
             {
-                var productIncome = await _context.OrderProductDetails
-                    .Where(o => o.OrderId == order.OrderId)
-                    .ToListAsync();
-
-                foreach (var product in productIncome)
-                {
-                    totalIncomepreviousMonth += product.Price ?? 0;
-                }
-
-                var ServiceIncome = await _context.BookingServicesDetails
-                    .Where(o => o.OrderId == order.OrderId)
-                    .ToListAsync();
-
-                foreach (var service in ServiceIncome)
-                {
-                    totalIncomepreviousMonth += service.PriceService ?? 0;
-                }
-
-                var RoomIncome = await _context.BookingRoomDetails
-                    .Where(o => o.OrderId == order.OrderId)
-                    .ToListAsync();
-
-                foreach (var room in RoomIncome)
-                {
-                    totalIncomepreviousMonth += room.Price ?? 0;
-                }
+                totalIncomepreviousMonth += order.TotalPrice ?? 0;
             }
 
             if (totalIncomepreviousMonth == 0)
@@ -565,6 +490,162 @@ namespace PetServices.Controllers
                     date = currentMonth.ToString("MM-yyyy"),
                     quantity = orders.Count,
                     Ratio = percent.ToString("F2")
+                });
+            }
+
+            return Ok(NumberOrderComplete);
+        }
+
+        [HttpGet("GetTop5RoomBooking")]
+        public async Task<ActionResult> GetTop5RoomBooking()
+        {
+            DateTime now = DateTime.Now;
+
+            var NumberOrderComplete = new List<Quantity_RatioForm>();
+
+            // Lấy ra danh sách các đơn đặt hàng trong tháng hiện tại đã hoàn thành
+            var orders = await _context.Orders
+                .Include(o => o.BookingRoomDetails)
+                .Where(o => o.OrderStatus == "Completed" && o.OrderDate.Value.Month == now.Month && o.OrderDate.Value.Year == now.Year)
+                .ToListAsync();
+
+            // Lấy ra danh sách các phòng theo các đơn đặt hàng đó
+            var roomIds = orders
+                .SelectMany(order => order.BookingRoomDetails.Select(o => o.RoomId))
+                .ToList();
+
+            // Tính toán số lượng đơn đặt hàng cho mỗi phòng
+            var roomOrderCounts = roomIds
+                .GroupBy(roomId => roomId)
+                .ToDictionary(r => r.Key, r => r.Count());
+
+            // Sắp xếp các phòng theo số lượng đơn đặt hàng giảm dần
+            var topRooms = roomOrderCounts
+                .OrderByDescending(o => o.Value)
+                .Take(5)
+                .ToList();
+
+            // Tổng số đơn đặt hàng trong tháng hiện tại
+            int totalOrders = orders.Count;
+
+            NumberOrderComplete.Insert(0, new Quantity_RatioForm
+            {
+                date = "Phòng khác",
+                quantity = totalOrders - topRooms.Count
+            });
+
+            foreach (var room in topRooms)
+            {
+                var Room = await _context.Rooms.FirstOrDefaultAsync(o => o.RoomId == room.Key);
+
+                NumberOrderComplete.Add(new Quantity_RatioForm
+                {
+                    date = Room.RoomName,
+                    quantity = room.Value
+                });
+            }
+
+            return Ok(NumberOrderComplete);
+        }
+
+        [HttpGet("GetTop5ServiceBooking")]
+        public async Task<ActionResult> GetTop5ServiceBooking()
+        {
+            DateTime now = DateTime.Now;
+
+            var NumberOrderComplete = new List<Quantity_RatioForm>();
+
+            // Lấy ra danh sách các đơn đặt hàng trong tháng hiện tại đã hoàn thành
+            var orders = await _context.Orders
+                .Include(o => o.BookingServicesDetails)
+                .Where(o => o.OrderStatus == "Completed" && o.OrderDate.Value.Month == now.Month && o.OrderDate.Value.Year == now.Year)
+                .ToListAsync();
+
+            // Lấy ra danh sách các phòng theo các đơn đặt hàng đó
+            var serviceIds = orders
+                .SelectMany(order => order.BookingServicesDetails.Select(o => o.ServiceId))
+                .ToList();
+
+            // Tính toán số lượng đơn đặt hàng cho mỗi dịch vụ
+            var serviceOrderCounts = serviceIds
+                .GroupBy(serviceId => serviceId)
+                .ToDictionary(r => r.Key, r => r.Count());
+
+            // Sắp xếp các dịch vụ theo số lượng đơn đặt hàng giảm dần
+            var topServices = serviceOrderCounts
+                .OrderByDescending(o => o.Value)
+                .Take(5)
+                .ToList();
+
+            // Tổng số đơn đặt hàng trong tháng hiện tại
+            int totalOrders = orders.Count;
+
+            NumberOrderComplete.Insert(0, new Quantity_RatioForm
+            {
+                date = "Dịch vụ khác",
+                quantity = totalOrders - topServices.Count
+            });
+
+            foreach (var service in topServices)
+            {
+                var Service = await _context.Services.FirstOrDefaultAsync(o => o.ServiceId == service.Key);
+
+                NumberOrderComplete.Add(new Quantity_RatioForm
+                {
+                    date = Service.ServiceName,
+                    quantity = service.Value
+                });
+            }
+
+            return Ok(NumberOrderComplete);
+        }
+
+        [HttpGet("GetTop5ProductOrder")]
+        public async Task<ActionResult> GetTop5ProductOrder()
+        {
+            DateTime now = DateTime.Now;
+
+            var NumberOrderComplete = new List<Quantity_RatioForm>();
+
+            // Lấy ra danh sách các đơn đặt hàng trong tháng hiện tại đã hoàn thành
+            var orders = await _context.Orders
+                .Include(o => o.OrderProductDetails)
+                .Where(o => o.OrderStatus == "Completed" && o.OrderDate.Value.Month == now.Month && o.OrderDate.Value.Year == now.Year)
+                .ToListAsync();
+
+            // Lấy ra danh sách các sản phẩm theo các đơn đặt hàng đó
+            var ProductIds = orders
+                .SelectMany(order => order.OrderProductDetails.Select(o => o.ProductId))
+                .ToList();
+
+            // Tính toán số lượng đơn đặt hàng cho mỗi sản phẩm
+            var productOrderCounts = ProductIds
+                .GroupBy(productId => productId)
+                .ToDictionary(r => r.Key, r => r.Count());
+
+            // Sắp xếp các sản phẩm theo số lượng đơn đặt hàng giảm dần
+            var topProduct = productOrderCounts
+                .OrderByDescending(o => o.Value)
+                .Take(5)
+                .ToList();
+
+            // Tổng số đơn đặt hàng trong tháng hiện tại
+            int totalOrders = orders.Count;
+
+            NumberOrderComplete.Insert(0, new Quantity_RatioForm
+            {
+                date = "Sản phẩm khác",
+                quantity = totalOrders - topProduct.Count
+            });
+
+            foreach (var product in topProduct)
+            {
+                var Product = await _context.Products.FirstOrDefaultAsync(o => o.ProductId == product.Key);
+
+                NumberOrderComplete.Add(new Quantity_RatioForm
+                {
+                    date = Product.ProductName,
+                    quantity = product.Value
                 });
             }
 
