@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 namespace FEPetServices.Areas.Customer.Controllers
 {
@@ -96,5 +97,104 @@ namespace FEPetServices.Areas.Customer.Controllers
 
             return new string(randomChars);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditPet(int petId)
+        {
+            try
+            {
+
+                HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/PetInfo/PetID/" + petId);
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+
+                    PetInfo managerInfos = System.Text.Json.JsonSerializer.Deserialize<PetInfo>(responseContent, options);
+
+                    return View(managerInfos);
+                }
+                else
+                {
+                    TempData["ErrorToast"] = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
+            }
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditPet([FromForm] PetInfo petInfo, IFormFile image, int petId)
+        {
+            try
+            {
+                if (image != null && image.Length > 0)
+                {
+                    Console.WriteLine(image);
+                    var imagePath = "/img/Pet/" + image.FileName;
+                    petInfo.ImagePet = imagePath;
+
+                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "Pet", image.FileName);
+                    using (var stream = new FileStream(physicalImagePath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
+
+                }
+                else
+                {
+                    HttpResponseMessage responseForImage = await client.GetAsync("https://localhost:7255/api/PetInfo/PetID/" + petId);
+
+                    if (responseForImage.IsSuccessStatusCode)
+                    {
+                        var responseContent = await responseForImage.Content.ReadAsStringAsync();
+
+                        if (!string.IsNullOrEmpty(responseContent))
+                        {
+                            var pet = JsonConvert.DeserializeObject<PetInfo>(responseContent);
+
+                            if (pet != null)
+                            {
+                                // Assign the existing image path to serviceCategory.Prictue.
+                                petInfo.ImagePet = pet.ImagePet;
+                            }
+                        }
+                    }
+                }
+
+                var json = JsonConvert.SerializeObject(petInfo);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await client.PutAsync("https://localhost:7255/api/PetInfo/UpdatePet?id=" + petId, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessToast"] = "Chỉnh sửa thông tin thú cưng thành công!";
+                    return View(petInfo); 
+                }
+                else
+                {
+                    TempData["ErrorToast"] = "Chỉnh sửa thông tin thú cưng thất bại. Vui lòng thử lại sau.";
+                    return View(petInfo);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
+                return View(petInfo); 
+            }
+        }
+
     }
 }
