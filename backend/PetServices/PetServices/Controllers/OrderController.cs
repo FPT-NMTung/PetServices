@@ -86,6 +86,7 @@ namespace PetServices.Controllers
                     .Include(b => b.BookingRoomDetails)
                     .ThenInclude(br => br.Room)
                     .Include(b => b.BookingRoomServices)
+                    .ThenInclude(br => br.Service)
                     .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email));
 
                 if (!string.IsNullOrEmpty(orderstatus) && orderstatus.ToLower() != "all")
