@@ -9,9 +9,8 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="/css/Service/ServiceDetail.css"></link>
+    <link rel="stylesheet" href="/css/Service/ServiceDetail.css">
 </head>
-
 
 <body class="sticky-header">
     <a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
@@ -347,6 +346,7 @@
                     </div>
                 </div>
             </div>
+        </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
@@ -451,14 +451,18 @@ document.addEventListener("DOMContentLoaded", function() {
                 selectedTime.setMinutes(nextDay.getMinutes());
             }
 
-            const endTime = new Date(selectedTime.getTime() + serviceTime);
-            document.getElementById("datetimeEnd").value = endTime.toLocaleString();
-            var endDateInput = document.getElementById("EndTime");
-            endDateInput.value = endTime.toLocaleString();
+                    const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+                    const endTime = new Date(selectedTime.getTime() + serviceTime);
 
-            document.getElementById("datetimeStart").value = selectedTime.toLocaleString();
-            var startDateInput = document.getElementById("StartTime");
-            startDateInput.value = selectedTime.toLocaleString();
+                    document.getElementById("datetimeEnd").value = endTime.toLocaleString('en-US', options);
+                    var endDateInput = document.getElementById("EndTime");
+                    endDateInput.value = endTime.toLocaleString('en-US', options);
+
+                    document.getElementById("datetimeStart").value = selectedTime.toLocaleString('en-US', options);
+                    var startDateInput = document.getElementById("StartTime");
+                    startDateInput.value = selectedTime.toLocaleString('en-US', options);
+
+
         }
     });
 
