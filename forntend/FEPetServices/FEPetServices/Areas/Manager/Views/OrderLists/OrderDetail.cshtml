@@ -74,7 +74,7 @@
             @if (Model.OrderProductDetails != null && Model.OrderProductDetails.Count > 0)
             {
                 @*Thông tin sản phẩm*@
-                <h3>Thông tin sản phẩm đã được đặt hàng</h3>
+                <h4>Thông tin sản phẩm</h4>
                 <div style="overflow-x:auto;">
                     <table class="table">
                         <thead>
@@ -110,7 +110,7 @@
 
             @if (Model.BookingServicesDetails != null && Model.BookingServicesDetails.Count > 0)
             {
-                <h3>Thông tin dịch vụ</h3>
+                <h4>Thông tin dịch vụ</h4>
                 <div style="overflow-x:auto;">
                     <table class="table">
                         <thead>
@@ -161,6 +161,52 @@
                 </div>
             }
 
+            @if (Model.BookingRoomDetails != null && Model.BookingRoomDetails.Count > 0)
+            {
+                <h4>Thông tin phòng</h4>
+                <div style="overflow-x:auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Tên Phòng</th>
+                                <th>Giá phòng</th>
+                                <th>Dịch vụ trong phòng</th>
+                                <th>Thời gian</th>
+                                <th>Tổng giá</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var roomDetail in Model.BookingRoomDetails)
+                            {
+                                <tr>
+                                    <td>@roomDetail.Room.RoomName</td>
+                                    <td>
+                                        @($"{roomDetail.Price:n0}".Replace(",", ".")) VNĐ
+                                    </td>
+                                    <td>
+                                        @foreach (var roomService in Model.BookingRoomServices)
+                                        {
+                                            <div style="width: 250px;" class="room-info-detail-service">
+                                                <p style="font-size:.8rem;">Dịch vụ: @roomService.Service.ServiceName</p>
+                                            </div>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="content-detail-time-service">
+                                            <p style="font-size:.8rem;">Thời gian bắt đầu: <br></br> @roomDetail?.StartDate</p>
+                                            <p style="font-size:.8rem;">Thời gian kêt thúc: <br></br> @roomDetail?.EndDate </p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @($"{roomDetail.TotalPrice:n0}".Replace(",", ".")) VNĐ
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
             <div style="margin-bottom:0" class="form-group row">
                 <p class="col-sm-6 col-form-label">Hoá đơn</p>
                 <p class="col-sm-6 col-form-label" style="text-align:end">Thanh toán</p>
@@ -168,6 +214,25 @@
             <div class="form-group row">
                 <p class="col-sm-6 col-form-label"><strong>#</strong></td>
                 <p class="col-sm-6 col-form-label" style="text-align:end"><strong>@($"{Model.TotalPrice:n0}".Replace(",", ".")) VNĐ</strong></p>
+            </div>
+
+            <div class="work-container-inner">
+                @if (Model != null && Model.TypePay != null && Model.TypePay.Trim() == "cash")
+                {
+                    <p>Thanh toán trực tiếp</p>
+                }
+                @if (Model != null && Model.TypePay != null && @Model.TypePay.Trim() == "vnpay")
+                {
+                    <p>Thanh toán bằng hình thức chuyển khoản</p>
+                }
+                @if (!@Model.StatusPayment)
+                {
+                    <span class="badge badge-info">Chưa thanh toán</span>
+                }
+                else
+                {
+                    <span class="badge badge-info">Đã thanh toán</span>
+                }
             </div>
             @if (Model.OrderStatus.Trim() == "Waiting")
             {

@@ -312,7 +312,7 @@ namespace FEPetServices.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToCart([FromForm] int ProductId)
+        public async Task<IActionResult> AddToCart([FromForm] int ProductId, [FromForm] int quantityProduct)
         {
             ProductDTO product = null;
 

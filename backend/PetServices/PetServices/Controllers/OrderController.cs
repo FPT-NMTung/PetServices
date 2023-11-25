@@ -159,8 +159,8 @@ namespace PetServices.Controllers
         {
             try
             {
-                Order order = await _context.Orders.Include(b => b.UserInfo)
-                .Include(o => o.UserInfo)
+                Order order = await _context.Orders
+                    .Include(o => o.UserInfo)
                     .ThenInclude(u => u.Accounts)
                     .Include(b => b.OrderProductDetails)
                     .ThenInclude(o => o.Product)

@@ -36,6 +36,14 @@ function addToCartService(serviceId) {
     });
 }
 
+function updateHiddenQuantity() {
+    var quantityInput = document.getElementById('quantityInput');
+    var hiddenQuantity = document.getElementById('hiddenQuantity');
+    hiddenQuantity.value = quantityInput.value;
+
+    console.log("Updated hidden quantity: " + hiddenQuantity.value);
+}
+
 function updateCartCount(totalQuantity) {
     $('#cart-count').text(totalQuantity);
 }
