@@ -76,7 +76,6 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Enable authentication and authorization
 app.UseAuthentication();
 app.UseAuthorization();
 
