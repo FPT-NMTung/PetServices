@@ -20426,3 +20426,13 @@ body.open .closeMask {
         .axil-product .cart-action li.select-option button:hover:before {
             transform: scale(1.1)
         }
+.payment-content {
+    display: flex;
+    align-items: center;
+}
+
+    .payment-content input,
+    .payment-content label,
+    .payment-content img {
+        margin: 5px;
+    }
