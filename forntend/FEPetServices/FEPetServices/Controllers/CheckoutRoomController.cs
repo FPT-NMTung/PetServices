@@ -219,17 +219,7 @@ namespace FEPetServices.Controllers
                 {
                     if (cartItem.Room != null)
                     {
-                        var bookingRoomDetail = new BookingRoomDetailForm
-                        {
-                            RoomId = cartItem.RoomId,
-                            Price = cartItem.Price,
-                            TotalPrice = cartItem.TotalPrice,
-                            StartDate = cartItem.StartDate,
-                            EndDate = cartItem.EndDate,
-                        };
-
-                        order.BookingRoomDetails.Add(bookingRoomDetail);
-
+                        totalPrice = (double)cartItem.TotalPrice;
                         if (cartItem.BookingRoomServices != null && cartItem.BookingRoomServices.Any())
                         {
                             foreach (var roomService in cartItem.BookingRoomServices)
@@ -243,6 +233,16 @@ namespace FEPetServices.Controllers
                                 order.BookingRoomServices.Add(bookingRoomService);
                             }
                         }
+
+                        var bookingRoomDetail = new BookingRoomDetailForm
+                        {
+                            RoomId = cartItem.RoomId,
+                            Price = cartItem.Price,
+                            TotalPrice = cartItem.TotalPrice,
+                            StartDate = cartItem.StartDate,
+                            EndDate = cartItem.EndDate,
+                        };
+                        order.BookingRoomDetails.Add(bookingRoomDetail);
                     }
                 }
 
@@ -312,14 +312,13 @@ namespace FEPetServices.Controllers
                 {
                     var errorContent = await responseOrder.Content.ReadAsStringAsync();
                 }
-
-                return View("/Error");
+                return View();
             }
             catch (Exception ex)
             {
                 ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
             }
-            return View("/Error");
+            return View();
         }
     }
 }
