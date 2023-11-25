@@ -85,6 +85,7 @@ namespace PetServices.Controllers
                     .ThenInclude(bs => bs.Service)
                     .Include(b => b.BookingRoomDetails)
                     .ThenInclude(br => br.Room)
+                    .Include(b => b.BookingRoomServices)
                     .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email));
 
                 if (!string.IsNullOrEmpty(orderstatus) && orderstatus.ToLower() != "all")
@@ -439,7 +440,6 @@ namespace PetServices.Controllers
                         PriceService = dto.PriceService,
                     }).ToList()
                     : new List<BookingRoomService>(),
-
 
                 // Dịch vụ
                 BookingServicesDetails = orderDTO.BookingServicesDetails != null
