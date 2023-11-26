@@ -536,7 +536,7 @@
                 type: 'donut',
             },
             labels: ServiceName,
-            colors: ["#ffb658", '#f18f90', '#ffd4b7', '#fffda3', '#adc341', '#92bbe6'],
+            colors: ["#ffb658", '#f18f90', '#76F9E4', '#FFA3FC', '#adc341', '#92bbe6'],
             legend: {
                 position: 'bottom',
                 fontSize: '13px',
@@ -553,21 +553,18 @@
         var ProductName = [];
         var totalQuantity = 0;
 
-
         @foreach (var item in ViewBag.Top5ProductOrder)
         {
-
             @:totalQuantity = @item.Text;
             break;
-        }
-        ;
+        };
 
         @foreach (var item in ViewBag.Top5ProductOrder)
         {
             if (!string.IsNullOrEmpty(item.Value))
             {
-                @:ProductData.push(@item.Text);
-                @:ProductName.push('@item.Value');
+                @:ProductData.push("@item.Text");
+                @:ProductName.push('@Html.Raw(item.Value)');
             }
         };
 
@@ -597,10 +594,6 @@
                         }
                     }
                 }
-            },
-            legend: {
-                position: 'bottom',
-                fontSize: '13px',
             }
         };
 
