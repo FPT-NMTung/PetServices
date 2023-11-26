@@ -232,7 +232,7 @@
                                             </div>
                                             <div class="product-hover-action">
                                                 <ul class="cart-action">
-                                                    <li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>
+                                                    @*<li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>*@
                                                     <li class="select-option">
                                                         <form method="post" action="@Url.Action("AddToCart", "ProductList")">
                                                             @Html.AntiForgeryToken()
@@ -240,7 +240,7 @@
                                                             <button class="add-to-card" type="button" onclick="addToCart('@product.ProductId')"><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
                                                         </form>
                                                     </li>
-                                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
+                                                    @*<li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>*@
                                                 </ul>
                                             </div>
                                         </div>
@@ -287,7 +287,7 @@
                                             </div>
                                             <div class="product-hover-action">
                                                 <ul class="cart-action">
-                                                    <li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>
+                                                    @*<li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>*@
                                                     <li class="select-option">
                                                         <form method="post" action="@Url.Action("AddToCart", "ProductList")">
                                                             @Html.AntiForgeryToken()
@@ -295,7 +295,7 @@
                                                             <button class="add-to-card" type="button" onclick="addToCart('@product.ProductId')"><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
                                                         </form>
                                                     </li>
-                                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
+                                                    @*<li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>*@
                                                 </ul>
                                             </div>
                                         </div>
@@ -370,9 +370,9 @@
                                             <h5 style="height:60px" class="title"><a href="single-product.html">@services.SerCategoriesName</a></h5>
                                         <div class="product-hover-action">
                                             <ul class="cart-action">
-                                                <li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>
+                                                @*<li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>*@
                                                 <li class="select-option"><a href="single-product.html">Xem chi tiết</a></li>
-                                                <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
+                                                @*<li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>*@
                                             </ul>
                                         </div>
                                     </div>
@@ -390,8 +390,8 @@
         <div class="axil-why-choose-area pb--50 pb_sm--30">
             <div class="container">
                 <div class="section-title-wrapper section-title-center">
-                    <span class="title-highlighter highlighter-secondary"><i class="fal fa-thumbs-up"></i>Tại sao lựa chọn chúng tôi</span>
-                    <h2 class="title">Why People Choose Us</h2>
+                    <span class="title-highlighter highlighter-secondary"><i class="fal fa-thumbs-up"></i>Tại sao</span>
+                    <h2 class="title">Tại sao mọi người chọn chúng tôi</h2>
                 </div>
                 <div class="row row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 row--20">
                     <div class="col">
