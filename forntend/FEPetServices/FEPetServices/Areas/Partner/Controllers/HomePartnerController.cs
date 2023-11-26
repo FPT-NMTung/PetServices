@@ -3,6 +3,7 @@ using FEPetServices.Controllers;
 using FEPetServices.Form;
 using FEPetServices.Form.OrdersForm;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Headers;
@@ -33,7 +34,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             //DefaultApiUrlOrderPartner = "https://pet-service-api.azurewebsites.net/api/OrderPartner";
             //DefaultApiUrlOrderListOfPetTraining = "https://pet-service-api.azurewebsites.net/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4";
             //DefaultApiUrlOrderListOfPetTrainingSpecial = "https://pet-service-api.azurewebsites.net/api/OrderPartner/ListOrderPetTrainingSpecial";
-            
+
         }
         public async Task<IActionResult> Index()
         {
@@ -340,6 +341,12 @@ namespace FEPetServices.Areas.Partner.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderPartnerDetail(int orderId)
         {
+            HttpResponseMessage reasonResponse = await client.GetAsync("https://localhost:7255/api/Reason/GetAll");
+            if (reasonResponse.IsSuccessStatusCode)
+            {
+                var reaCategories = await reasonResponse.Content.ReadFromJsonAsync<List<ReasonDTO>>();
+                ViewBag.Reasons = new SelectList(reaCategories, "ReasonId", "ReasonTitle");
+            }
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/" + orderId);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderPartner + "/" + orderId);
             if (response.IsSuccessStatusCode)
@@ -370,7 +377,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> OrderPartnerDetail(int orderId, [FromBody] Status status)
+        public async Task<IActionResult> OrderPartnerDetail(int orderId, [FromForm] Status status)
         {
             //HttpResponseMessage response = await client.PutAsJsonAsync("https://localhost:7255/api/OrderPartner/ChangeStatus?orderId=" + orderId, status);
             HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl + "OrderPartner/ChangeStatus?orderId=" + orderId, status);
