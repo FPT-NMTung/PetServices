@@ -157,7 +157,41 @@ namespace FEPetServices.Areas.Manager.Controllers
                     ViewBag.NumberOrderRejectedInMonth1 = new SelectList(NumberOrderRejectedInMonth, "quantity", "Ratio");
                 }
 
+                // Top 5 phòng được book nhiều nhất trong tháng 
+                HttpResponseMessage Top5RoomBookingResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetTop5RoomBooking");
 
+                if (Top5RoomBookingResponse.IsSuccessStatusCode)
+                {
+                    var Top5RoomBooking = await Top5RoomBookingResponse.Content.ReadFromJsonAsync<List<Quantity_RatioForm>>();
+                    ViewBag.Top5RoomBooking = new SelectList(Top5RoomBooking, "date", "quantity");
+                }
+
+                // Top 5 dịch vụ được book nhiều nhất trong tháng 
+                HttpResponseMessage Top5ServiceBookingResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetTop5ServiceBooking");
+
+                if (Top5ServiceBookingResponse.IsSuccessStatusCode)
+                {
+                    var Top5ServiceBooking = await Top5ServiceBookingResponse.Content.ReadFromJsonAsync<List<Quantity_RatioForm>>();
+                    ViewBag.Top5ServiceBooking = new SelectList(Top5ServiceBooking, "date", "quantity");
+                }
+
+                // Top 5 sản phẩm bán chạy nhất trong tháng 
+                HttpResponseMessage Top5ProductOrderResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetTop5ProductOrder");
+
+                if (Top5ProductOrderResponse.IsSuccessStatusCode)
+                {
+                    var Top5ProductOrder = await Top5ProductOrderResponse.Content.ReadFromJsonAsync<List<Quantity_RatioForm>>();
+                    ViewBag.Top5ProductOrder = new SelectList(Top5ProductOrder, "date", "quantity");
+                }
+
+                // Top 5 khu vực đông khách hàng nhất  
+                HttpResponseMessage Top5CustomerAreaResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetTop5CustomerArea");
+
+                if (Top5CustomerAreaResponse.IsSuccessStatusCode)
+                {
+                    var Top5CustomerArea = await Top5CustomerAreaResponse.Content.ReadFromJsonAsync<List<Quantity_RatioForm>>();
+                    ViewBag.Top5CustomerArea = new SelectList(Top5CustomerArea, "date", "quantity");
+                }
             }
             catch (Exception ex)
             {

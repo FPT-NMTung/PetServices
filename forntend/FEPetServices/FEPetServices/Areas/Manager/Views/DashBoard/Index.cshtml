@@ -267,7 +267,7 @@
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
                             <div>
-                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Top 5 phòng</h6>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Top 5 phòng tháng</h6>
                             </div>
                         </div>
                         <div class="box mt-4">
@@ -279,7 +279,7 @@
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
                             <div>
-                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Top 5 dịch vụ</h6>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Top 5 dịch vụ tháng</h6>
                             </div>
                         </div>
                         <div class="box mt-4">
@@ -293,7 +293,7 @@
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
                             <div>
-                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Top 5 sản phẩm</h6>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Top 5 sản phẩm tháng</h6>
                             </div>
                         </div>
                         <div class="box mt-4">
@@ -433,10 +433,10 @@
 
         var options = {
             series: [{
-                name: 'Net Profit',
+                name: 'Đơn hoàn thành',
                 data: OrderCompleteData
             }, {
-                name: 'Revenue',
+                name: 'Đơn bị hủy',
                 data: OrderRejectedData
             }],
             chart: {
@@ -473,13 +473,6 @@
             fill: {
                 opacity: 1
             },
-            xaxis: {
-                labels: {
-                    style: {
-                        fontSize: '13px',
-                    }
-                }
-            },
             yaxis: {
                 labels: {
                     style: {
@@ -493,6 +486,174 @@
         };
 
         var chart = new ApexCharts(document.querySelector("#column-charts-order"), options);
+        chart.render();
+    </script>
+
+    @*Top 5 phòng được book nhiều nhất trong tháng*@
+    <script>
+        var RoomData = [];
+        var RoomName = [];
+
+        @foreach (var item in ViewBag.Top5RoomBooking)
+        {
+            @:RoomData.push(@item.Text);
+            @:RoomName.push('@item.Value');
+        };
+
+        var options = {
+            series: RoomData,
+            chart: {
+                width: 350,
+                type: 'pie',
+            },
+            labels: RoomName,
+            colors: ["#ef5b76", '#b75984', '#5d3b78', '#908cb1', '#bbc6d8', '#ffb658'],
+            legend: {
+                position: 'bottom',
+                fontSize: '13px',
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#pie-chart-room"), options);
+        chart.render();
+    </script>
+
+    @*Top 5 dịch vụ được book nhiều nhất trong tháng*@
+    <script>
+        var ServiceData = [];
+        var ServiceName = [];
+
+        @foreach (var item in ViewBag.Top5ServiceBooking)
+        {
+            @:ServiceData.push(@item.Text);
+            @:ServiceName.push('@item.Value');
+        };
+
+        var options = {
+            series: ServiceData,
+            chart: {
+                width: 350,
+                type: 'donut',
+            },
+            labels: ServiceName,
+            colors: ["#ffb658", '#f18f90', '#ffd4b7', '#fffda3', '#adc341', '#92bbe6'],
+            legend: {
+                position: 'bottom',
+                fontSize: '13px',
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#donut-chart-service"), options);
+        chart.render();
+    </script>
+
+    @*Top 5 sản phẩm bán chạy nhất trong tháng*@
+    <script>
+        var ProductData = [];
+        var ProductName = [];
+        var totalQuantity = 0;
+
+
+        @foreach (var item in ViewBag.Top5ProductOrder)
+        {
+
+            @:totalQuantity = @item.Text;
+            break;
+        }
+        ;
+
+        @foreach (var item in ViewBag.Top5ProductOrder)
+        {
+            if (!string.IsNullOrEmpty(item.Value))
+            {
+                @:ProductData.push(@item.Text);
+                @:ProductName.push('@item.Value');
+            }
+        };
+
+        var options = {
+            series: ProductData,
+            chart: {
+                height: 300,
+                type: 'radialBar',
+            },
+            labels: ProductName,
+            colors: ["#fe2712", '#f99900', '#a61a49', '#3b01a3', '#64b131'],
+            plotOptions: {
+                radialBar: {
+                    dataLabels: {
+                        name: {
+                            fontSize: '22px',
+                        },
+                        value: {
+                            fontSize: '16px',
+                        },
+                        total: {
+                            show: true,
+                            label: 'Tổng sản phẩm',
+                            formatter: function (w) {
+                                return totalQuantity;
+                            }
+                        }
+                    }
+                }
+            },
+            legend: {
+                position: 'bottom',
+                fontSize: '13px',
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart-product"), options);
+        chart.render();
+    </script>
+
+   @* Top 5 khu vực đông khách hàng nhất*@
+    <script>
+        var CusAreaData = [];
+        var AreaName = [];
+
+        @foreach (var item in ViewBag.Top5CustomerArea)
+        {
+            @:CusAreaData.push(@item.Text);
+            @:AreaName.push('@item.Value');
+        };
+
+        var options = {
+            series: CusAreaData,
+            chart: {
+                width: 350,
+                type: 'polarArea'
+            },
+            labels: AreaName,
+            colors: ["#ffba90", '#f8ec62', '#ffafbc', '#c2eaf2', '#d8baec', '#a0dab4'],
+            fill: {
+                opacity: 1
+            },
+            stroke: {
+                width: 1,
+                colors: undefined
+            },
+            yaxis: {
+                show: false
+            },
+            legend: {
+                position: 'bottom',
+                fontSize: '13px',
+            },
+            plotOptions: {
+                polarArea: {
+                    rings: {
+                        strokeWidth: 0
+                    },
+                    spokes: {
+                        strokeWidth: 0
+                    },
+                }
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart-cusarea"), options);
         chart.render();
     </script>
 </body>

@@ -287,7 +287,7 @@ namespace PetServices.Controllers
 
             var ReceiveData = new List<ReceiveInDayForm>();
 
-            for (int i = 1; i <= 7; i++)
+            for (int i = 7; i >= 1; i--)
             {
                 DateTime date = now.AddDays(-i);
                 double total = 0;
@@ -319,7 +319,7 @@ namespace PetServices.Controllers
 
             var ReceiveData = new List<ReceiveInDayForm>();
 
-            for (int i = 1; i <= 7; i++)
+            for (int i = 7; i >= 1; i--)
             {
                 DateTime date = now.AddDays(-i);
                 double total = 0;
@@ -350,7 +350,7 @@ namespace PetServices.Controllers
 
             var ReceiveData = new List<ReceiveInDayForm>();
 
-            for (int i = 1; i <= 7; i++)
+            for (int i = 7; i >= 1; i--)
             {
                 DateTime date = now.AddDays(-i);
                 double total = 0;
@@ -632,38 +632,31 @@ namespace PetServices.Controllers
                 .Where(o => o.OrderStatus == "Completed" && o.OrderDate.Value.Month == now.Month && o.OrderDate.Value.Year == now.Year)
                 .ToListAsync();
 
-            // Lấy ra danh sách các sản phẩm theo các đơn đặt hàng đó
-            var ProductIds = orders
-                .SelectMany(order => order.OrderProductDetails.Select(o => o.ProductId))
-                .ToList();
+            var productQuantities = new Dictionary<int, int>();
+            int totalQuantity = 0;
 
-            // Tính toán số lượng đơn đặt hàng cho mỗi sản phẩm
-            var productOrderCounts = ProductIds
-                .GroupBy(productId => productId)
-                .ToDictionary(r => r.Key, r => r.Count());
+            foreach (var order in orders)
+            {
+                foreach (var orderProductDetail in order.OrderProductDetails)
+                {
+                    if (productQuantities.ContainsKey(orderProductDetail.ProductId))
+                    {
+                        productQuantities[orderProductDetail.ProductId] += orderProductDetail.Quantity ?? 0;
+                    }
+                    else
+                    {
+                        productQuantities[orderProductDetail.ProductId] = orderProductDetail.Quantity ?? 0;
+                    }
+
+                    totalQuantity += orderProductDetail.Quantity ?? 0;
+                }
+            }
 
             // Sắp xếp các sản phẩm theo số lượng đơn đặt hàng giảm dần
-            var topProduct = productOrderCounts
+            var topProduct = productQuantities
                 .OrderByDescending(o => o.Value)
                 .Take(5)
                 .ToList();
-
-            if (topProduct.Count - topProduct.Count > 0)
-            {
-                NumberOrderComplete.Insert(0, new Quantity_RatioForm
-                {
-                    date = "Sản phẩm khác",
-                    quantity = topProduct.Count - topProduct.Count
-                });
-            }
-            else
-            {
-                NumberOrderComplete.Insert(0, new Quantity_RatioForm
-                {
-                    date = "Tổng các sản phẩm",
-                    quantity = ProductIds.Count
-                });
-            }
 
             foreach (var product in topProduct)
             {
@@ -672,10 +665,14 @@ namespace PetServices.Controllers
                 NumberOrderComplete.Add(new Quantity_RatioForm
                 {
                     date = Product.ProductName,
-                    picture = Product.Picture,
-                    quantity = product.Value
+                    quantity = (int)Math.Floor(((double)product.Value / totalQuantity) * 100),
                 });
             }
+
+            NumberOrderComplete.Insert(0, new Quantity_RatioForm
+            {
+                quantity = totalQuantity
+            });
 
             return Ok(NumberOrderComplete);
         }
@@ -719,12 +716,6 @@ namespace PetServices.Controllers
                 date = item.Province,
                 quantity = item.Quantity,
             }).ToList();
-
-            NumberOrderComplete.Insert(0, new Quantity_RatioForm
-            {
-                date = "Tỉnh khác",
-                quantity = listCustomer.Count - userInfos.Count
-            });
 
             return Ok(NumberOrderComplete);
         }
