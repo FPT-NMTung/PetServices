@@ -131,28 +131,28 @@
                                     <div style="margin-top: 5px; margin-bottom: 10px;">
                                     <p style="font-family: serif; font-size: 15px; height: 1px;">Cân nặng của thú cưng:</p>
                                     @{
-                                     string? userimageuser = Context.Session.GetString("UserImage");
-                                     if (userimageuser is not null)
-                                      {
-                                                    @if (Model.account.UserInfo.PetInfos != null)
-                                                {
-                                                        <select name="PetInfoId" id="PetInfoId" class="size-option" style="font-family: serif; width: 200px; height: 30px; border: 2px solid black; margin-bottom: 5px;">
-                                                            <option value=" ">Cân nặng của bé</option>
-                                                            @foreach (var petInfor in Model.account.UserInfo.PetInfos) {
-                                                                <option value="@petInfor.PetInfoId" data-weight="@petInfor.Weight">@petInfor.PetName @petInfor.Weight</option>
-                                                        }
-                                                            <option value="khac">Khác</option>
-                                                        </select>
-                                                }
+                                        string? userimageuser = Context.Session.GetString("UserImage");
+                                         if (userimageuser is not null)
+                                          {
+                                                        @if (Model.account.UserInfo.PetInfos != null)
+                                                    {
+                                                            <select name="PetInfoId" id="PetInfoId" class="size-option" style="font-family: serif; width: 200px; height: 30px; border: 2px solid black; margin-bottom: 5px;">
+                                                                <option value=" ">Cân nặng của bé</option>
+                                                                @foreach (var petInfor in Model.account.UserInfo.PetInfos) {
+                                                                    <option value="@petInfor.PetInfoId" data-weight="@petInfor.Weight">@petInfor.PetName @petInfor.Weight</option>
+                                                            }
+                                                                <option value="khac">Khác</option>
+                                                            </select>
+                                                    }
 
 
-                                                   <input class="lgweight" id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black; display: none;" required>
-                                      }
-                                      else
+                                                       <input class="lgweight" id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black; display: none;" required>
+                                          }
+                                         else
 
-                                       {
-                                             <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black;" required> 
-                                       }
+                                         {
+                                            <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black;" required> 
+                                         }
                                      }
                                      </div>
                                        
@@ -451,18 +451,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 selectedTime.setHours(nextDay.getHours());
                 selectedTime.setMinutes(nextDay.getMinutes());
             }
+            const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+            const endTime = new Date(selectedTime.getTime() + serviceTime);
 
-                    const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-                    const endTime = new Date(selectedTime.getTime() + serviceTime);
+            document.getElementById("datetimeEnd").value = endTime.toLocaleString('en-US', options);
+            var endDateInput = document.getElementById("EndTime");
+            endDateInput.value = endTime.toLocaleString('en-US', options);
 
-                    document.getElementById("datetimeEnd").value = endTime.toLocaleString('en-US', options);
-                    var endDateInput = document.getElementById("EndTime");
-                    endDateInput.value = endTime.toLocaleString('en-US', options);
-
-                    document.getElementById("datetimeStart").value = selectedTime.toLocaleString('en-US', options);
-                    var startDateInput = document.getElementById("StartTime");
-                    startDateInput.value = selectedTime.toLocaleString('en-US', options);
-
+            document.getElementById("datetimeStart").value = selectedTime.toLocaleString('en-US', options);
+            var startDateInput = document.getElementById("StartTime");
+            startDateInput.value = selectedTime.toLocaleString('en-US', options);
 
         }
     });
