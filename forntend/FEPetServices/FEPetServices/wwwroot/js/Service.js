@@ -1,8 +1,10 @@
 ﻿function validateForm() {
     const name = document.getElementById('ServiceName');
     const price = document.getElementById('Price');
+    const time = document.getElementById('Time');
     const desciptions = document.getElementById('Desciptions');
     const fnameErrorMessage = document.getElementById('fname-error-message');
+    const timeErrorMessage = document.getElementById('time-error-message');
     const priceErrorMessage = document.getElementById('price-error-message');
     const subjectErrorMessage = document.getElementById('subject-error-message');
 
@@ -17,6 +19,7 @@
     fnameErrorMessage.textContent = "";
     priceErrorMessage.textContent = "";
     subjectErrorMessage.textContent = "";
+    timeErrorMessage.textContent = "";
 
     let isValid = true;
 
@@ -26,12 +29,23 @@
     }
 
     if (!numbersOnly.test(price.value)) {
-        priceErrorMessage.textContent = "Giá phải là số.";
+        priceErrorMessage.textContent = "Giá phải là số dương.";
         isValid = false;
-    } else {
+    } if {
         const priceValue = parseInt(price.value);
         if (priceValue <= 0) {
-            priceErrorMessage.textContent = "Giá phải lớn hơn 0.";
+            priceErrorMessage.textContent = "Giá phải là số dương.";
+            isValid = false;
+        }
+    }
+
+    if (!numbersOnly.test(time.value)) {
+        timeErrorMessage.textContent = "Thời gian phải là số dương.";
+        isValid = false;
+    } else {
+        const timeValue = parseInt(time.value);
+        if (timeValue < 0 || timeValue > 6) {
+            timeErrorMessage.textContent = "Thời gian phải từ 0 đến 6 tiếng.";
             isValid = false;
         }
     }
