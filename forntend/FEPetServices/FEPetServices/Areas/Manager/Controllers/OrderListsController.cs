@@ -8,6 +8,7 @@ using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = "ManaOnly")]
     public class OrderListsController : Controller
     {
@@ -38,7 +39,6 @@ namespace FEPetServices.Areas.Manager.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
                 return View(orderLists);
             }
@@ -51,7 +51,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderDetail(int id)
         {
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
+            HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Order/" + id);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -60,20 +60,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 {
                     PropertyNameCaseInsensitive = true
                 };
-
                 OrderForm orderDetail = System.Text.Json.JsonSerializer.Deserialize<OrderForm>(responseContent, options);
-                double totalPrice = 0;
-                foreach (var od in orderDetail.OrderProductDetails)
-                {
-                    totalPrice = (double)(totalPrice + od.Price * od.Quantity);
-                }
-                foreach (var ob in orderDetail.BookingServicesDetails)
-                {
-                    totalPrice = (double)(totalPrice + ob.PriceService);
-                }
-
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
-                ViewBag.TotalPrice = totalPrice;
                 return View(orderDetail);
             }
             else
@@ -82,6 +69,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 return View();
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> OrderDetail(int id, [FromForm] Status status)
         {

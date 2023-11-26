@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"></link>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="~/css/PetInfo.css"></link>
 </head>
 <body>
     <div>
@@ -21,14 +24,23 @@
                         <div class="carousel-inner">
                             @for (int i = 0; i < Model.UserInfo.PetInfos.Count; i++)
                             {
-                                <div class="carousel-item @(i == 0 ? "active" : "")">
-                                    <img src="https://sb.tinhte.vn/2021/07/5557920_CV.jpg" class="d-block w-100" alt="Ảnh">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h5>@Model.UserInfo.PetInfos[i].PetName</h5>
-                                        <p>@Model.UserInfo.PetInfos[i].Species</p>
-                                        <p>@Model.UserInfo.PetInfos[i].Gender</p>
-                                        <p>@Model.UserInfo.PetInfos[i].Descriptions</p>
-                                    </div>
+                                <div  class="carousel-item @(i == 0 ? "active" : "")">
+                                  <img src="https://media.istockphoto.com/id/1370544962/vi/anh/n%E1%BB%81n-gi%E1%BA%A5y-tr%E1%BA%AFng-k%E1%BA%BFt-c%E1%BA%A5u-b%C3%ACa-c%E1%BB%A9ng-s%E1%BB%A3i-%C4%91%E1%BB%83-c%E1%BA%A1o-r%C3%A2u.jpg?s=612x612&w=0&k=20&c=7fuXKUP3PkMIZhFg4MWyov7kxvVh2oFSQ3qBmhtvodw=" class="d-block w-100" alt="...">
+                                  <div style="color:black;" class="carousel-caption d-none d-md-block">
+                                        <img src="@Model?.UserInfo.PetInfos[i].ImagePet" style="width:50% ;height:60%;" alt="pet"></img>
+                                        <p>Tên:@Model?.UserInfo.PetInfos[i].PetName</p> 
+                                        <p>Giống:@Model?.UserInfo.PetInfos[i].Species</p>
+                                        @if(Model?.UserInfo.PetInfos[i].Gender == true)
+                                        {
+                                            <p>Giới tính:Đực</p>
+                                        }
+                                        else
+                                        {
+                                            <p>Giới tính:Cái</p>
+                                        }
+                                        <p>Mô tả:@Model.UserInfo.PetInfos[i].Descriptions</p>
+                                        <a style="margin-bottom:2%;" href="~/Customer/Pet/EditPet?petId=@Model.UserInfo.PetInfos[i].PetInfoId" class="btn btn-primary" type="submit">Đổi thông tin thú cưng</a>
+                                  </div>
                                 </div>
                             }
                         </div>
@@ -41,11 +53,23 @@
                             <span class="visually-hidden">Next</span>
                         </button>
                     </div>
-                    <button style="margin-bottom:2%;" class="btn btn-primary" type="submit">Đổi thông tin thú cưng</button>
+                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
+                      <div class="carousel-indicators">
+                           @for (int i = 0; i < Model.UserInfo.PetInfos.Count; i++)
+                            {
+                        <button type="button" data-bs-target="#carouselExampleIndicators"  @(i == 0 ? "class=active" : "") data-bs-slide-to="@i" aria-current="true" aria-label="Slide @(i + 1)"></button>
+                            }
+                      </div>
+                      <div style="margin-top:50px;">
+                       
+                        <a style="margin-bottom:2%;" href="~/Customer/Pet/AddPet" class="btn btn-primary" type="submit">Thêm thông tin thú cưng</a>
+                      </div>
+                    
                 </form>
             </div>
         </div>
     </div>
 </body>
 <script src="~/js/toastnotification.js"></script>
+
 </html>

@@ -1,15 +1,15 @@
-﻿using FEPetServices.Form;
-using FEPetServices.Form.OrdersForm;
+﻿using FEPetServices.Form.OrdersForm;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace FEPetServices.Areas.Customer.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+    [Authorize(Policy = "ManaOnly, CusOnly")]
     public class MyOrdersController : Controller
     {
         private readonly HttpClient _client = null;
