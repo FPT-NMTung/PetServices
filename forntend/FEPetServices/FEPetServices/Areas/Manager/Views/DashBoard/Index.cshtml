@@ -20,6 +20,13 @@
 
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 
+    <script src="https://cdn.jsdelivr.net/npm/react@16.12/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@16.12/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prop-types@15.7.2/prop-types.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-apexcharts@1.3.6/dist/react-apexcharts.iife.min.js"></script>
+
 </head>
 
 <body>
@@ -29,6 +36,8 @@
                 <h4 class="page-title">Dashboard</h4>
             </div>
             <div class="row" style="margin-bottom: 30px;">
+
+                @*Thống kê số lượng khách hàng mới trong tháng*@
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3" style="padding: 10px;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-body d-flex">
@@ -59,6 +68,8 @@
                         </div>
                     </div>
                 </div>
+
+                @*Thống kê số lượng đơn hoàn thành trong tháng*@
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3" style="padding: 10px;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-body d-flex">
@@ -89,6 +100,8 @@
                         </div>
                     </div>
                 </div>
+
+                @*Thống kê thu nhập trong tháng*@
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3" style="padding: 10px;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-body d-flex">
@@ -119,6 +132,8 @@
                         </div>
                     </div>
                 </div>
+
+                @*Thống kê số lượng sản phẩm bán ra trong tháng*@
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3" style="padding: 10px;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-body d-flex">
@@ -150,7 +165,9 @@
                     </div>
                 </div>
             </div>
+            
             <div class="row" style="margin-bottom: 30px;">
+                @*Thống kê doanh số bán trong 7 ngày gần nhất*@
                 <div class="col-xl-9" style="padding: 10px; border: none;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
@@ -158,16 +175,21 @@
                                 <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Doanh thu</h6>
                             </div>
                         </div>
-                        <div class="card-body" style=" padding: 10px;">
-                            <img style=" padding: 10px; height: 500px;" src="https://phunuvietnam.mediacdn.vn/179072216278405120/2023/6/6/maxresdefault-16860433510502104520327.jpg ">
+                        <div class="box mt-4">
+                            <div id="line-adwords" class=""></div>
                         </div>
                     </div>
                 </div>
+                @*Thống kê số đơn hàng hoàn thành/ bị hủy trong 3 tháng gần nhất*@
                 <div class="col-xl-3" style="padding: 10px; border: none;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
-                        <div>
-                            <img style=" padding: 20px; height: 350px;" src="https://phunuvietnam.mediacdn.vn/179072216278405120/2023/6/6/maxresdefault-16860433510502104520327.jpg ">
-
+                        <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
+                            <div>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Doanh thu</h6>
+                            </div>
+                        </div>
+                        <div class="box mt-4">
+                            <div id="column-charts-order" class=""></div>
                         </div>
                         <div class="card-body" style="padding: 20px;">
                             <div class="d-flex mb-4 mt-3">
@@ -194,252 +216,6 @@
                     </div>
                 </div>
             </div>
-            <div class="row" style="margin-bottom: 30px;">
-                <div class="col-xxl-4 col-md-12" style="padding: 10px; border: none;">
-                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
-                        <div class="card-header single-counter" style="background-color: rgb(255, 255, 255); height: 50px;">
-                            <div class="d-flex" style="justify-content: space-between;">
-                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Khu vực tập trung khách hàng</h6>
-                            </div>
-                        </div>
-                        <div class="card-body pb-0">
-                            <img style="height: 30%; padding: 10px;" src="https://phunuvietnam.mediacdn.vn/179072216278405120/2023/6/6/maxresdefault-16860433510502104520327.jpg">
-                            <div class="table-responsive mt-2 text-center">
-                                <table class="table text-nowrap border-dashed mb-0">
-                                    <thead class="text-uppercase">
-                                        <tr>
-                                            <th scope="col" class="text-start">Khu vực</th>
-                                            <th scope="col">Sản phẩm</th>
-                                            <th scope="col">Thuê phòng</th>
-                                            <th scope="col">Thuê dịch vụ</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="p-3">Ha Noi</td>
-                                            <td class="p-3">50%</td>
-                                            <td class="p-3">40%</td>
-                                            <td class="p-3">30%</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="p-3">Ho Chi Minh</td>
-                                            <td class="p-3">50%</td>
-                                            <td class="p-3">40%</td>
-                                            <td class="p-3">30%</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="p-3">Hai <i class="mdi mdi-phone-log-outline:"></i></td>
-                                            <td class="p-3">50%</td>
-                                            <td class="p-3">40%</td>
-                                            <td class="p-3">30%</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="p-3">Da Nang</td>
-                                            <td class="p-3">50%</td>
-                                            <td class="p-3">40%</td>
-                                            <td class="p-3">30%</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="p-3">Nam Dinh</td>
-                                            <td class="p-3">50%</td>
-                                            <td class="p-3">40%</td>
-                                            <td class="p-3">30%</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xxl-4 col-lg-6 col-md-12" style="padding-top: 10px;">
-                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
-                        <div class="card-header single-counter" style="background-color: rgb(255, 255, 255); height: 50px;">
-                            <div class="d-flex" style="justify-content: space-between;">
-                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Khách hàng mới hàng tháng</h6>
-                                <h3 class="title count" style="color: rgb(30, 105, 197);">999</h3>
-                            </div>
-                        </div>
-                        <div class="card-body pb-0">
-                            <ul>
-                                <li type="none" style="padding-bottom: 10px;">
-                                    <div class="d-flex">
-                                        <img style="height: 50px; width: 50px; border-radius: 50%;" src="https://phunuvietnam.mediacdn.vn/179072216278405120/2023/6/6/maxresdefault-16860433510502104520327.jpg">
-                                        <div style="padding-left: 20px;">
-                                            <div class="fw-semibold" style="color: rgb(60, 60, 60);">
-                                                Tên khách hàng
-                                                <span class="text-muted fs-11 mx-2 fw-normal">11/24/2023</span>
-                                            </div>
-                                            <p style="font-size: 14px;">text tasdfasdf asd</p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li type="none">
-                                    <div class="d-flex">
-                                        <img style="height: 50px; width: 50px; border-radius: 50%;" src="https://phunuvietnam.mediacdn.vn/179072216278405120/2023/6/6/maxresdefault-16860433510502104520327.jpg">
-                                        <div style="padding-left: 20px;">
-                                            <div class="fw-semibold" style="color: rgb(60, 60, 60);">
-                                                Tên khách hàng
-                                                <span class="text-muted fs-11 mx-2 fw-normal">11/24/2023</span>
-                                            </div>
-                                            <p style="font-size: 14px;">text tasdfasdf asd</p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li type="none">
-                                    <div class="d-flex">
-                                        <img style="height: 50px; width: 50px; border-radius: 50%;" src="https://phunuvietnam.mediacdn.vn/179072216278405120/2023/6/6/maxresdefault-16860433510502104520327.jpg">
-                                        <div style="padding-left: 20px;">
-                                            <div class="fw-semibold" style="color: rgb(60, 60, 60);">
-                                                Tên khách hàng
-                                                <span class="text-muted fs-11 mx-2 fw-normal">11/24/2023</span>
-                                            </div>
-                                            <p style="font-size: 14px;">text tasdfasdf asd</p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li type="none">
-                                    <div class="d-flex">
-                                        <img style="height: 50px; width: 50px; border-radius: 50%;" src="https://phunuvietnam.mediacdn.vn/179072216278405120/2023/6/6/maxresdefault-16860433510502104520327.jpg">
-                                        <div style="padding-left: 20px;">
-                                            <div class="fw-semibold" style="color: rgb(60, 60, 60);">
-                                                Tên khách hàng
-                                                <span class="text-muted fs-11 mx-2 fw-normal">11/24/2023</span>
-                                            </div>
-                                            <p style="font-size: 14px;">text tasdfasdf asd</p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li type="none">
-                                    <div class="d-flex">
-                                        <img style="height: 50px; width: 50px; border-radius: 50%;" src="https://phunuvietnam.mediacdn.vn/179072216278405120/2023/6/6/maxresdefault-16860433510502104520327.jpg">
-                                        <div style="padding-left: 20px;">
-                                            <div class="fw-semibold" style="color: rgb(60, 60, 60);">
-                                                Tên khách hàng
-                                                <span class="text-muted fs-11 mx-2 fw-normal">11/24/2023</span>
-                                            </div>
-                                            <p style="font-size: 14px;">text tasdfasdf asd</p>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xxl-4 col-lg-6 col-md-12" style="padding-top: 10px;">
-                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
-                        <div class="card-header single-counter" style="background-color: rgb(255, 255, 255); height: 50px;">
-                            <div class="d-flex" style="justify-content: space-between;">
-                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Sản phẩm mới hàng tháng</h6>
-                                <h3 class="title count" style="color: rgb(30, 105, 197);">999</h3>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="new-product">
-                                <div class="row mb-5">
-                                    <div class="col-sm-2 col-lg-3 col-xl-3 col-xxl-2 mb-sm-0 mb-3">
-                                        <img style="height: 50px; width: 50px; border-radius: 50%;" src="https://phunuvietnam.mediacdn.vn/179072216278405120/2023/6/6/maxresdefault-16860433510502104520327.jpg">
-                                    </div>
-                                    <div class="col-sm-10 col-lg-9 col-xl-9 col-xxl-10 ps-sm-0">
-                                        <div class="d-flex align-items-end justify-content-between mb-1">
-                                            <h6 class="mb-1">Product name</h6>
-                                            <h6 class="fw-semibold mb-1">
-                                                12345
-                                                <span class="fs-11" style="color: rgb(153, 255, 0);">
-                                                    (
-                                                    <i class="fad fa-arrow-up" style="font-size: 14px;"></i> 666%)
-                                                </span>
-                                            </h6>
-                                        </div>
-                                        <div class="progress progress-sm mb-3">
-                                            <div class="progress-bar bg-primary" style="width: 70%;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-5">
-                                    <div class="col-sm-2 col-lg-3 col-xl-3 col-xxl-2 mb-sm-0 mb-3">
-                                        <img style="height: 50px; width: 50px; border-radius: 50%;" src="https://phunuvietnam.mediacdn.vn/179072216278405120/2023/6/6/maxresdefault-16860433510502104520327.jpg">
-                                    </div>
-                                    <div class="col-sm-10 col-lg-9 col-xl-9 col-xxl-10 ps-sm-0">
-                                        <div class="d-flex align-items-end justify-content-between mb-1">
-                                            <h6 class="mb-1">Product name</h6>
-                                            <h6 class="fw-semibold mb-1">
-                                                12345
-                                                <span class="fs-11" style="color: rgb(153, 255, 0);">
-                                                    (
-                                                    <i class="fad fa-arrow-up" style="font-size: 14px;"></i> 666%)
-                                                </span>
-                                            </h6>
-                                        </div>
-                                        <div class="progress progress-sm mb-3">
-                                            <div class="progress-bar bg-primary" style="width: 70%;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-5">
-                                    <div class="col-sm-2 col-lg-3 col-xl-3 col-xxl-2 mb-sm-0 mb-3">
-                                        <img style="height: 50px; width: 50px; border-radius: 50%;" src="https://phunuvietnam.mediacdn.vn/179072216278405120/2023/6/6/maxresdefault-16860433510502104520327.jpg">
-                                    </div>
-                                    <div class="col-sm-10 col-lg-9 col-xl-9 col-xxl-10 ps-sm-0">
-                                        <div class="d-flex align-items-end justify-content-between mb-1">
-                                            <h6 class="mb-1">Product name</h6>
-                                            <h6 class="fw-semibold mb-1">
-                                                12345
-                                                <span class="fs-11" style="color: rgb(255, 77, 0)">
-                                                    (
-                                                    <i class="fad fa-arrow-down" style="font-size: 14px;"></i> 666%)
-                                                </span>
-                                            </h6>
-                                        </div>
-                                        <div class="progress progress-sm mb-3">
-                                            <div class="progress-bar bg-primary" style="width: 70%;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-5">
-                                    <div class="col-sm-2 col-lg-3 col-xl-3 col-xxl-2 mb-sm-0 mb-3">
-                                        <img style="height: 50px; width: 50px; border-radius: 50%;" src="https://phunuvietnam.mediacdn.vn/179072216278405120/2023/6/6/maxresdefault-16860433510502104520327.jpg">
-                                    </div>
-                                    <div class="col-sm-10 col-lg-9 col-xl-9 col-xxl-10 ps-sm-0">
-                                        <div class="d-flex align-items-end justify-content-between mb-1">
-                                            <h6 class="mb-1">Product name</h6>
-                                            <h6 class="fw-semibold mb-1">
-                                                12345
-                                                <span class="fs-11" style="color: rgb(153, 255, 0);">
-                                                    (
-                                                    <i class="fad fa-arrow-up" style="font-size: 14px;"></i> 666%)
-                                                </span>
-                                            </h6>
-                                        </div>
-                                        <div class="progress progress-sm mb-3">
-                                            <div class="progress-bar bg-primary" style="width: 70%;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-5">
-                                    <div class="col-sm-2 col-lg-3 col-xl-3 col-xxl-2 mb-sm-0 mb-3">
-                                        <img style="height: 50px; width: 50px; border-radius: 50%;" src="https://phunuvietnam.mediacdn.vn/179072216278405120/2023/6/6/maxresdefault-16860433510502104520327.jpg">
-                                    </div>
-                                    <div class="col-sm-10 col-lg-9 col-xl-9 col-xxl-10 ps-sm-0">
-                                        <div class="d-flex align-items-end justify-content-between mb-1">
-                                            <h6 class="mb-1">Product name</h6>
-                                            <h6 class="fw-semibold mb-1">
-                                                12345
-                                                <span class="fs-11" style="color: rgb(255, 77, 0)">
-                                                    (
-                                                    <i class="fad fa-arrow-down" style="font-size: 14px;"></i> 666%)
-                                                </span>
-                                            </h6>
-                                        </div>
-                                        <div class="progress progress-sm mb-3">
-                                            <div class="progress-bar bg-primary" style="width: 70%;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -454,6 +230,123 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js "></script>
 
+    @*Thống kê doanh số bán trong 7 ngày gần nhất*@
+    <script>
+        var optionsLine = {
+            chart: {
+                height: 420,
+                type: 'line',
+                zoom: {
+                    enabled: false
+                },
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 4
+            },
+            colors: ["#ffc4a4", '#fba2d0', '#c688eb'],
+            series: [{
+                name: "&nbsp Music",
+                data: [1, 15, 26, 20, 33, 27]
+            }, {
+                name: "&nbsp Photos",
+                data: [3, 33, 21, 42, 19, 32]
+            }, {
+                name: "&nbsp Files",
+                data: [0, 39, 52, 11, 29, 43]
+            }],
+            markers: {
+                size: 4,
+                strokeWidth: 0,
+                hover: {
+                    size: 6
+                }
+            },
+            labels: ['01/15/2002', '01/16/2002', '01/17/2002', '01/18/2002', '01/19/2002', '01/20/2002'],
+            xaxis: {
+                labels: {
+                    style: {
+                        fontSize: '13px',
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        fontSize: '13px',
+                    }
+                }
+            },
+            legend: {
+                offsetY: 8,
+                fontSize: '14px',
+            }
+        }
+        var chartLine = new ApexCharts(document.querySelector('#line-adwords'), optionsLine);
+        chartLine.render();
+    </script>
+
+    @*Thống kê số đơn hàng hoàn thành/ bị hủy trong 3 tháng gần nhất*@
+    <script>
+        var options = {
+            series: [{
+                name: 'Net Profit',
+                data: [44, 55, 57]
+            }, {
+                name: 'Revenue',
+                data: [76, 85, 101]
+            }],
+            chart: {
+                type: 'bar',
+                height: 350,
+                zoom: {
+                    enabled: false
+                },
+            },
+            colors: ["#d6ff99", '#ffb899'],
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '30%',
+                    endingShape: 'rounded'
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                show: true,
+                width: 3,
+                colors: ['transparent']
+            },
+            xaxis: {
+                categories: ['Feb', 'Mar', 'Apr'],
+            },
+            fill: {
+                opacity: 1
+            },
+            xaxis: {
+                labels: {
+                    style: {
+                        fontSize: '13px',
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        fontSize: '13px',
+                    }
+                }
+            },
+            legend: {
+                fontSize: '14px',
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#column-charts-order"), options);
+        chart.render();
+    </script>
 </body>
 
 </html>

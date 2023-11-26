@@ -292,7 +292,7 @@ namespace PetServices.Controllers
                 DateTime date = now.AddDays(-i);
                 double total = 0;
 
-                var orders = await _context.Orders.Where(o => o.OrderDate == date && o.OrderStatus == "Completed").ToListAsync();
+                var orders = await _context.Orders.Where(o => o.OrderDate.Value.Date == date.Date && o.OrderStatus == "Completed").ToListAsync();
 
                 foreach (var order in orders)
                 {
@@ -324,16 +324,15 @@ namespace PetServices.Controllers
                 DateTime date = now.AddDays(-i);
                 double total = 0;
 
-                var orders = await _context.Orders.Where(o => o.OrderDate == date && o.OrderStatus == "Completed").ToListAsync();
+                var orders = await _context.Orders.Where(o => o.OrderDate.Value.Date == date.Date && o.OrderStatus == "Completed").ToListAsync();
 
                 foreach (var order in orders)
                 {
                     var products = await _context.OrderProductDetails.Where(b => b.OrderId == order.OrderId).ToListAsync();
 
-
                     foreach (var product in products)
                     {
-                        total += product.Price ?? 0;
+                        total += (product.Price ?? 0) * (product.Quantity ?? 0);
                     }
                 }
 
@@ -356,7 +355,7 @@ namespace PetServices.Controllers
                 DateTime date = now.AddDays(-i);
                 double total = 0;
 
-                var orders = await _context.Orders.Where(o => o.OrderDate == date && o.OrderStatus == "Completed").ToListAsync();
+                var orders = await _context.Orders.Where(o => o.OrderDate.Value.Date == date.Date && o.OrderStatus == "Completed").ToListAsync();
 
                 foreach (var order in orders)
                 {
@@ -365,7 +364,7 @@ namespace PetServices.Controllers
 
                     foreach (var room in rooms)
                     {
-                        total += room.Price ?? 0;
+                        total += room.TotalPrice ?? 0;
                     }
                 }
 
@@ -634,8 +633,8 @@ namespace PetServices.Controllers
 
             NumberOrderComplete.Insert(0, new Quantity_RatioForm
             {
-                date = "Sản phẩm khác",
-                quantity = totalOrders - topProduct.Count
+                date = "Total",
+                quantity = topProduct.Count
             });
 
             foreach (var product in topProduct)
@@ -645,6 +644,7 @@ namespace PetServices.Controllers
                 NumberOrderComplete.Add(new Quantity_RatioForm
                 {
                     date = Product.ProductName,
+                    picture = Product.Picture,
                     quantity = product.Value
                 });
             }
