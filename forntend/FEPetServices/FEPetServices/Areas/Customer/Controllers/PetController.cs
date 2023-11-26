@@ -1,4 +1,5 @@
 ﻿using FEPetServices.Form;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PetServices.Models;
@@ -10,6 +11,8 @@ using System.Text.Json;
 
 namespace FEPetServices.Areas.Customer.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+    [Authorize(Policy = "ManaOnly, CusOnly")]
     public class PetController : Controller
     {
         private readonly HttpClient client = null;
@@ -62,7 +65,8 @@ namespace FEPetServices.Areas.Customer.Controllers
 
                     var json = JsonConvert.SerializeObject(petInfo);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/PetInfo/CreatePet", content);
+                    //HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/PetInfo/CreatePet", content);
+                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "PetInfo/CreatePet", content);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -104,7 +108,8 @@ namespace FEPetServices.Areas.Customer.Controllers
             try
             {
 
-                HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/PetInfo/PetID/" + petId);
+                //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/PetInfo/PetID/" + petId);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "PetInfo/PetID/" + petId);
 
 
                 if (response.IsSuccessStatusCode)
@@ -153,7 +158,8 @@ namespace FEPetServices.Areas.Customer.Controllers
                 }
                 else
                 {
-                    HttpResponseMessage responseForImage = await client.GetAsync("https://localhost:7255/api/PetInfo/PetID/" + petId);
+                    //HttpResponseMessage responseForImage = await client.GetAsync("https://localhost:7255/api/PetInfo/PetID/" + petId);
+                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrl + "PetInfo/PetID/" + petId);
 
                     if (responseForImage.IsSuccessStatusCode)
                     {
@@ -175,7 +181,8 @@ namespace FEPetServices.Areas.Customer.Controllers
                 var json = JsonConvert.SerializeObject(petInfo);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PutAsync("https://localhost:7255/api/PetInfo/UpdatePet?id=" + petId, content);
+                //HttpResponseMessage response = await client.PutAsync("https://localhost:7255/api/PetInfo/UpdatePet?id=" + petId, content);
+                HttpResponseMessage response = await client.PutAsync(DefaultApiUrl + "PetInfo/UpdatePet?id=" + petId, content);
 
                 if (response.IsSuccessStatusCode)
                 {

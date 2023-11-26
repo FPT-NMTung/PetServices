@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = "ManaOnly")]
     public class ServiceCategoryController : Controller
     {
