@@ -7,6 +7,7 @@ using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = "ManaOnly")]
     public class InformationController : Controller
     {
@@ -23,6 +24,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             //DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
             DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
         }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -64,6 +66,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpPost]
         public async Task<IActionResult> Index([FromForm] UserInfo userInfo, IFormFile image)
         {
+
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             if (userInfo.Phone == null)
