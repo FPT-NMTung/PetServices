@@ -1,4 +1,5 @@
 ﻿using FEPetServices.Form;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PetServices.Models;
@@ -10,6 +11,8 @@ using System.Text.Json;
 
 namespace FEPetServices.Areas.Customer.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+    [Authorize(Policy = "ManaOnly, CusOnly")]
     public class PetController : Controller
     {
         private readonly HttpClient client = null;

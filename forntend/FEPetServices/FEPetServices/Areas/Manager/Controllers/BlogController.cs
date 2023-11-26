@@ -1,4 +1,5 @@
 ﻿using FEPetServices.Areas.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -7,6 +8,8 @@ using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+    [Authorize(Policy = "ManaOnly")]
     public class BlogController : Controller
     {
         private readonly HttpClient client = null;
