@@ -495,6 +495,8 @@ namespace PetServices.Controllers
             return Ok(NumberOrderComplete);
         }
 
+
+        // Top 5 phòng được book nhiều nhất trong tháng 
         [HttpGet("GetTop5RoomBooking")]
         public async Task<ActionResult> GetTop5RoomBooking()
         {
@@ -524,14 +526,22 @@ namespace PetServices.Controllers
                 .Take(5)
                 .ToList();
 
-            // Tổng số đơn đặt hàng trong tháng hiện tại
-            int totalOrders = orders.Count;
-
-            NumberOrderComplete.Insert(0, new Quantity_RatioForm
+            if (roomIds.Count - topRooms.Count > 0)
             {
-                date = "Phòng khác",
-                quantity = totalOrders - topRooms.Count
-            });
+                NumberOrderComplete.Insert(0, new Quantity_RatioForm
+                {
+                    date = "Phòng khác",
+                    quantity = roomIds.Count - topRooms.Count
+                });
+            }
+            else
+            {
+                NumberOrderComplete.Insert(0, new Quantity_RatioForm
+                {
+                    date = "Tất cả phòng",
+                    quantity = roomIds.Count
+                });
+            }
 
             foreach (var room in topRooms)
             {
@@ -547,6 +557,7 @@ namespace PetServices.Controllers
             return Ok(NumberOrderComplete);
         }
 
+        // Top 5 dịch vụ được book nhiều nhất trong tháng 
         [HttpGet("GetTop5ServiceBooking")]
         public async Task<ActionResult> GetTop5ServiceBooking()
         {
@@ -576,14 +587,22 @@ namespace PetServices.Controllers
                 .Take(5)
                 .ToList();
 
-            // Tổng số đơn đặt hàng trong tháng hiện tại
-            int totalOrders = orders.Count;
-
-            NumberOrderComplete.Insert(0, new Quantity_RatioForm
+            if (serviceIds.Count - topServices.Count > 0)
             {
-                date = "Dịch vụ khác",
-                quantity = totalOrders - topServices.Count
-            });
+                NumberOrderComplete.Insert(0, new Quantity_RatioForm
+                {
+                    date = "Dịch vụ khác",
+                    quantity = serviceIds.Count - topServices.Count
+                });
+            }
+            else
+            {
+                NumberOrderComplete.Insert(0, new Quantity_RatioForm
+                {
+                    date = "Tổng các dịch vụ",
+                    quantity = serviceIds.Count
+                });
+            }
 
             foreach (var service in topServices)
             {
@@ -599,6 +618,7 @@ namespace PetServices.Controllers
             return Ok(NumberOrderComplete);
         }
 
+        // Top 5 sản phẩm bán chạy nhất trong tháng 
         [HttpGet("GetTop5ProductOrder")]
         public async Task<ActionResult> GetTop5ProductOrder()
         {
@@ -628,14 +648,22 @@ namespace PetServices.Controllers
                 .Take(5)
                 .ToList();
 
-            // Tổng số đơn đặt hàng trong tháng hiện tại
-            int totalOrders = orders.Count;
-
-            NumberOrderComplete.Insert(0, new Quantity_RatioForm
+            if (topProduct.Count - topProduct.Count > 0)
             {
-                date = "Total",
-                quantity = topProduct.Count
-            });
+                NumberOrderComplete.Insert(0, new Quantity_RatioForm
+                {
+                    date = "Sản phẩm khác",
+                    quantity = topProduct.Count - topProduct.Count
+                });
+            }
+            else
+            {
+                NumberOrderComplete.Insert(0, new Quantity_RatioForm
+                {
+                    date = "Tổng các sản phẩm",
+                    quantity = ProductIds.Count
+                });
+            }
 
             foreach (var product in topProduct)
             {
@@ -652,6 +680,8 @@ namespace PetServices.Controllers
             return Ok(NumberOrderComplete);
         }
 
+
+        // Top 5 khu vực đông khách hàng nhất 
         [HttpGet("GetTop5CustomerArea")]
         public async Task<ActionResult> GetTop5CustomerArea()
         {

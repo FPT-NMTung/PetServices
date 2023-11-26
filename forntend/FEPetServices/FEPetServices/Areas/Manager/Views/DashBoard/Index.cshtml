@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using PetServices.Form;
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -33,7 +34,7 @@
     <div class="Dashboard">
         <div class="container-fluid">
             <div class="page-header">
-                <h4 class="page-title">Dashboard</h4>
+                <h4 class="page-title">Thống kê doanh số</h4>
             </div>
             <div class="row" style="margin-bottom: 30px;">
 
@@ -63,7 +64,7 @@
                                 {
                                     <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #32d0fc; margin-top: 2.5px;"></i>
                                 }
-                                <p style="color: #32d0fc;">&ensp;@ViewBag.PercentCustomerPreviousMonth%</p>&nbspTrong tháng
+                                <p style="color: #32d0fc;">&ensp;@ViewBag.PercentCustomerPreviousMonth%</p>&nbspSo với tháng trước
                             </div>
                         </div>
                     </div>
@@ -95,7 +96,7 @@
                                 {
                                     <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
                                 }
-                                <p style="color: #f478f4">&ensp;@ViewBag.PercentOrderPreviousMonth%</p>&nbspTrong tháng
+                                <p style="color: #f478f4">&ensp;@ViewBag.PercentOrderPreviousMonth%</p>&nbspSo với tháng trước
                             </div>
                         </div>
                     </div>
@@ -127,7 +128,7 @@
                                 {
                                     <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #f7ba48; margin-top: 2.5px;"></i>
                                 }
-                                <p style="color: #f7ba48;">&ensp;@ViewBag.PercentIncomePreviousMonth%</p>&nbspTrong tháng
+                                <p style="color: #f7ba48;">&ensp;@ViewBag.PercentIncomePreviousMonth%</p>&nbspSo với tháng trước
                             </div>
                         </div>
                     </div>
@@ -159,7 +160,7 @@
                                 {
                                     <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #4ecc48; margin-top: 2.5px;"></i>
                                 }
-                                <p style="color: #4ecc48;">&ensp;@ViewBag.PercentNumberProductPreviousMonth%</p>&nbspTrong tháng
+                                <p style="color: #4ecc48;">&ensp;@ViewBag.PercentNumberProductPreviousMonth%</p>&nbspSo với tháng trước
                             </div>
                         </div>
                     </div>
@@ -172,11 +173,11 @@
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
                             <div>
-                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Doanh thu</h6>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Doanh thu trong 7 ngày</h6>
                             </div>
                         </div>
-                        <div class="box mt-4">
-                            <div id="line-adwords" class=""></div>
+                        <div class="box mt-4" style="padding: 10px 10px 0px 10px;">
+                            <div id="line-adwords" style="min-width: 10px;" class=""></div>
                         </div>
                     </div>
                 </div>
@@ -185,33 +186,132 @@
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
                             <div>
-                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Doanh thu</h6>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Đơn hàng trong 3 tháng</h6>
                             </div>
                         </div>
-                        <div class="box mt-4">
+                        <div class="box mt-4" style="padding: 10px;">
                             <div id="column-charts-order" class=""></div>
                         </div>
-                        <div class="card-body" style="padding: 20px;">
+                        <div class="card-body" style="padding: 0px 20px 0px 20px;">
                             <div class="d-flex mb-4 mt-3">
                                 <i class="fad fa-badge-check" style="margin-top: 5px; font-size: 30px; margin-right: 10px; color: rgb(153, 255, 0);"></i>
-                                <div>
-                                    <p class="mb-1 fw-semibold ">Hóa đơn hoàn thành</p>
-                                    <p class="fw-normal fs-12 mb-1" style="font-size: 13px;"><span style="color: rgb(153, 255, 0);">9%</span> Tăng</p>
-                                </div>
-                                <div class="ms-auto mb-auto">
-                                    <p class="fw-bold mb-0" style="font-size: 22px; color: rgb(73, 64, 64);">9999</p>
-                                </div>
+                                @{
+                                    foreach (var item in ViewBag.NumberOrderCompleteInMonth1)
+                                    {
+                                        bool containsMinus = item?.Text.Contains("-") ?? false;
+
+                                        <div>
+                                            <p class="mb-1 fw-semibold ">Đơn hàng hoàn thành</p>
+
+                                            <div style="display: flex;">
+                                                @if (containsMinus)
+                                                {
+                                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 15px; color: rgb(153, 255, 0); margin-top: 2.5px;"></i>
+                                                    <p class="fw-normal fs-12 mb-1" style="font-size: 13px;"><span style="color: rgb(153, 255, 0);">@item?.Text.Replace("-", string.Empty)%</span> So với tháng trước</p>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 15px; color: rgb(153, 255, 0); margin-top: 2.5px;"></i>
+                                                    <p class="fw-normal fs-12 mb-1" style="font-size: 13px;"><span style="color: rgb(153, 255, 0);">@item?.Text%</span> So với tháng trước</p>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div class="ms-auto mb-auto">
+                                            <p class="fw-bold mb-0" style="font-size: 22px; color: rgb(73, 64, 64);">@item?.Value</p>
+                                        </div>
+
+                                        break;
+                                    }
+                                }
                             </div>
                             <div class="d-flex mb-4 mt-3">
                                 <i class="fad fa-badge-check" style="margin-top: 5px; font-size: 30px; margin-right: 10px; color: rgb(255, 77, 0)"></i>
-                                <div>
-                                    <p class="mb-1 fw-semibold ">Hóa đơn bị hủy</p>
-                                    <p class="fw-normal fs-12 mb-1" style="font-size: 13px;"><span style="color: rgb(255, 77, 0)">9%</span> Tăng</p>
-                                </div>
-                                <div class="ms-auto mb-auto">
-                                    <p class="fw-bold mb-0" style="font-size: 22px; color: rgb(73, 64, 64);">9999</p>
-                                </div>
+                                @{
+                                    foreach (var item in ViewBag.NumberOrderRejectedInMonth1)
+                                    {
+                                        bool containsMinus = item?.Text.Contains("-") ?? false;
+
+                                        <div>
+                                            <p class="mb-1 fw-semibold ">Đơn hàng bị hủy</p>
+
+                                            <div style="display: flex;">
+                                                @if (containsMinus)
+                                                {
+                                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 15px; color: rgb(255, 77, 0); margin-top: 2.5px;"></i>
+                                                    <p class="fw-normal fs-12 mb-1" style="font-size: 13px;"><span style="color: rgb(255, 77, 0)">@item?.Text.Replace("-", string.Empty)%</span> So với tháng trước</p>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 15px; color: rgb(255, 77, 0); margin-top: 2.5px;"></i>
+                                                    <p class="fw-normal fs-12 mb-1" style="font-size: 13px;"><span style="color: rgb(255, 77, 0)">@item?.Text%</span> So với tháng trước</p>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div class="ms-auto mb-auto">
+                                            <p class="fw-bold mb-0" style="font-size: 22px; color: rgb(73, 64, 64);">@item?.Value</p>
+                                        </div>
+
+                                        break;
+                                    }
+                                }
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 30px;">
+                @*Top 5 dịch vụ được book nhiều nhất trong tháng*@
+                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 500px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
+                            <div>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Top 5 phòng</h6>
+                            </div>
+                        </div>
+                        <div class="box mt-4">
+                            <div id="pie-chart-room" class=""></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 500px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
+                            <div>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Top 5 dịch vụ</h6>
+                            </div>
+                        </div>
+                        <div class="box mt-4">
+                            <div id="donut-chart-service" class=""></div>
+                        </div>
+                    </div>
+                </div>
+
+                @*Top 5 sản phẩm bán chạy nhất trong tháng*@
+                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 500px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
+                            <div>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Top 5 sản phẩm</h6>
+                            </div>
+                        </div>
+                        <div class="box mt-4">
+                            <div id="chart-product" class=""></div>
+                        </div>
+                    </div>
+                </div>
+
+                @*Top 5 khu vực đông khách hàng nhất*@
+                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 500px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
+                            <div>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Top 5 khu vực</h6>
+                            </div>
+                        </div>
+                        <div class="box mt-4">
+                            <div id="chart-cusarea" class=""></div>
                         </div>
                     </div>
                 </div>
@@ -232,6 +332,26 @@
 
     @*Thống kê doanh số bán trong 7 ngày gần nhất*@
     <script>
+        var totalPriceServiceData = [];
+        var DateData = [];
+        @foreach (var item in ViewBag.TotalPriceServiceIn7Day)
+        {
+            @:totalPriceServiceData.push(@item.Text);
+            @:DateData.push('@item.Value');
+        };
+
+        var totalPriceProductData = [];
+        @foreach (var item in ViewBag.TotalPriceProductIn7Day)
+        {
+            @:totalPriceProductData.push(@item.Text);
+        };
+
+        var totalPriceRoomData = [];
+        @foreach (var item in ViewBag.TotalPriceRoomIn7Day)
+        {
+            @:totalPriceRoomData.push(@item.Text);
+        };
+
         var optionsLine = {
             chart: {
                 height: 420,
@@ -239,6 +359,11 @@
                 zoom: {
                     enabled: false
                 },
+                toolbar: {
+                    offsetX: -15,
+                    offsetY: -15,
+                    position: 'top-right',
+                }
             },
             stroke: {
                 curve: 'smooth',
@@ -246,14 +371,14 @@
             },
             colors: ["#ffc4a4", '#fba2d0', '#c688eb'],
             series: [{
-                name: "&nbsp Music",
-                data: [1, 15, 26, 20, 33, 27]
+                name: "&nbsp Doanh số dịch vụ",
+                data: totalPriceServiceData
             }, {
-                name: "&nbsp Photos",
-                data: [3, 33, 21, 42, 19, 32]
+                name: "&nbsp Doanh số sản phẩm",
+                data: totalPriceProductData
             }, {
-                name: "&nbsp Files",
-                data: [0, 39, 52, 11, 29, 43]
+                name: "&nbsp Doanh số phòng",
+                data: totalPriceRoomData
             }],
             markers: {
                 size: 4,
@@ -262,7 +387,7 @@
                     size: 6
                 }
             },
-            labels: ['01/15/2002', '01/16/2002', '01/17/2002', '01/18/2002', '01/19/2002', '01/20/2002'],
+            labels: DateData,
             xaxis: {
                 labels: {
                     style: {
@@ -274,6 +399,9 @@
                 labels: {
                     style: {
                         fontSize: '13px',
+                    },
+                    formatter: function (value) {
+                        return Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
                     }
                 }
             },
@@ -288,20 +416,40 @@
 
     @*Thống kê số đơn hàng hoàn thành/ bị hủy trong 3 tháng gần nhất*@
     <script>
+        var OrderCompleteData = [];
+        var DateData = [];
+
+        @foreach (var item in ViewBag.NumberOrderCompleteInMonth)
+        {
+            @:OrderCompleteData.push(@item.Text);
+            @:DateData.push('@item.Value');
+        };
+
+        var OrderRejectedData = [];
+        @foreach (var item in ViewBag.NumberOrderRejectedInMonth)
+        {
+            @:OrderRejectedData.push(@item.Text);
+        };
+
         var options = {
             series: [{
                 name: 'Net Profit',
-                data: [44, 55, 57]
+                data: OrderCompleteData
             }, {
                 name: 'Revenue',
-                data: [76, 85, 101]
+                data: OrderRejectedData
             }],
             chart: {
                 type: 'bar',
-                height: 350,
+                height: 290,
                 zoom: {
                     enabled: false
                 },
+                toolbar: {
+                    offsetX: -5,
+                    offsetY: -15,
+                    position: 'top-right',
+                }
             },
             colors: ["#d6ff99", '#ffb899'],
             plotOptions: {
@@ -320,7 +468,7 @@
                 colors: ['transparent']
             },
             xaxis: {
-                categories: ['Feb', 'Mar', 'Apr'],
+                categories: DateData,
             },
             fill: {
                 opacity: 1

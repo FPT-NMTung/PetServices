@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using PetServices.DTO;
+using PetServices.Form;
 using PetServices.Models;
 using System.Net;
 using System.Net.Http.Headers;
@@ -108,6 +109,55 @@ namespace FEPetServices.Areas.Manager.Controllers
                     var PercentNumberProductPreviousMonth = await PercentNumberProductPreviousMonthResponse.Content.ReadFromJsonAsync<double>();
                     ViewBag.PercentNumberProductPreviousMonth = PercentNumberProductPreviousMonth;
                 }
+
+                // Doanh số service theo ngày
+                HttpResponseMessage TotalPriceServiceIn7DayResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetTotalPriceServiceIn7Day");
+
+                if (TotalPriceServiceIn7DayResponse.IsSuccessStatusCode)
+                {
+                    var TotalPriceServiceIn7Day = await TotalPriceServiceIn7DayResponse.Content.ReadFromJsonAsync<List<ReceiveInDayForm>>();
+                    ViewBag.TotalPriceServiceIn7Day = new SelectList(TotalPriceServiceIn7Day, "Date", "Receive");
+                }
+
+                // Doanh số product theo ngày
+                HttpResponseMessage TotalPriceProductIn7DayResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetTotalPriceProductIn7Day");
+
+                if (TotalPriceServiceIn7DayResponse.IsSuccessStatusCode)
+                {
+                    var TotalPriceProductIn7Day = await TotalPriceProductIn7DayResponse.Content.ReadFromJsonAsync<List<ReceiveInDayForm>>();
+                    ViewBag.TotalPriceProductIn7Day = new SelectList(TotalPriceProductIn7Day, "Date", "Receive");
+                }
+
+                // Doanh số room theo ngày
+                HttpResponseMessage TotalPriceRoomIn7DayResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetTotalPriceRoomIn7Day");
+
+                if (TotalPriceRoomIn7DayResponse.IsSuccessStatusCode)
+                {
+                    var TotalPriceRoomIn7Day = await TotalPriceRoomIn7DayResponse.Content.ReadFromJsonAsync<List<ReceiveInDayForm>>();
+                    ViewBag.TotalPriceRoomIn7Day = new SelectList(TotalPriceRoomIn7Day, "Date", "Receive");
+                }
+
+                // Số đơn hàng hoàn thành trong tháng 
+                HttpResponseMessage NumberOrderCompleteInMonthResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetNumberOrderCompleteInMonth");
+
+                if (NumberOrderCompleteInMonthResponse.IsSuccessStatusCode)
+                {
+                    var NumberOrderCompleteInMonth = await NumberOrderCompleteInMonthResponse.Content.ReadFromJsonAsync<List<Quantity_RatioForm>>();
+                    ViewBag.NumberOrderCompleteInMonth = new SelectList(NumberOrderCompleteInMonth, "date", "quantity");
+                    ViewBag.NumberOrderCompleteInMonth1 = new SelectList(NumberOrderCompleteInMonth,"quantity", "Ratio");
+                }
+
+                // Số đơn hàng bị hủy trong tháng
+                HttpResponseMessage NumberOrderRejectedInMonthResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetNumberOrderRejectedInMonth");
+
+                if (NumberOrderRejectedInMonthResponse.IsSuccessStatusCode)
+                {
+                    var NumberOrderRejectedInMonth = await NumberOrderRejectedInMonthResponse.Content.ReadFromJsonAsync<List<Quantity_RatioForm>>();
+                    ViewBag.NumberOrderRejectedInMonth = new SelectList(NumberOrderRejectedInMonth, "date", "quantity");
+                    ViewBag.NumberOrderRejectedInMonth1 = new SelectList(NumberOrderRejectedInMonth, "quantity", "Ratio");
+                }
+
+
             }
             catch (Exception ex)
             {
