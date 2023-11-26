@@ -121,13 +121,10 @@
 
                     <script>
                         window.addEventListener("load", function () {
+                            // Gọi action để lấy và hiển thị bản đồ với vị trí từ hàm Index của controller
                             getLocation();
                             showPartnerLocation(@Model?.PartnerInfo.Lat, @Model?.PartnerInfo.Lng);
-                            startWatchingLocation();
-
-                            setInterval(function () {
-                                updateLocationAutomatically();
-                            }, 5000);
+                            startWatchingLocation(); // gọi hàm theo dõi vị trí
                         });
 
                         function getLocation() {
@@ -137,11 +134,14 @@
                                         var latitude = position.coords.latitude;
                                         var longitude = position.coords.longitude;
 
+                                        // Show position on the map
                                         initMap(latitude, longitude);
 
+                                        // Update hidden input fields with latitude and longitude
                                         document.getElementById("inputLat").value = latitude;
                                         document.getElementById("inputLng").value = longitude;
 
+                                        // Call the API to update the location in the database
                                         updateLocation(latitude, longitude);
                                     },
                                     function (error) {
@@ -187,6 +187,7 @@
                         }
 
                         function showError(error) {
+                            // Handle error messages as needed
                             switch (error.code) {
                                 case error.PERMISSION_DENIED:
                                     alert("Truy cập vào vị trí bị từ chối bởi người dùng.");
@@ -212,6 +213,7 @@
                                         var newLongitude = position.coords.longitude;
                                         initMap(newLatitude, newLongitude);
 
+                                        // Cập nhật giá trị của inputLat và inputLng
                                         document.getElementById("inputLat").value = newLatitude;
                                         document.getElementById("inputLng").value = newLongitude;
                                     },
@@ -223,29 +225,8 @@
                                 alert("Trình duyệt của bạn không hỗ trợ Geolocation.");
                             }
                         }
-
-                        async function updateLocationAutomatically() {
-                            if (navigator.geolocation) {
-                                navigator.geolocation.getCurrentPosition(
-                                    function (position) {
-                                        var latitude = position.coords.latitude;
-                                        var longitude = position.coords.longitude;
-
-                                        initMap(latitude, longitude);
-
-                                        document.getElementById("inputLat").value = latitude;
-                                        document.getElementById("inputLng").value = longitude;
-
-                                        updateLocation(latitude, longitude);
-                                    },
-                                    function (error) {
-                                        showError(error);
-                                    }
-                                );
-                            } else {
-                                alert("Trình duyệt của bạn không hỗ trợ Geolocation.");
-                            }
                     </script>
+
                 </div>
             </div>
         </div>
