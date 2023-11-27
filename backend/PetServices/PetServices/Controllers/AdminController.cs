@@ -64,6 +64,7 @@ namespace PetServices.Controllers
                             .Include(a => a.UserInfo)
                             .Include(a => a.PartnerInfo)
                             .Include(a => a.Role)
+                            .Where(a => a.RoleId != 4)
                             .ToListAsync();
 
             var accountsViewModel = _mapper.Map<List<AccountByAdminDTO>>(accounts);

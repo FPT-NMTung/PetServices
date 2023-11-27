@@ -208,14 +208,13 @@
             "info": true,
             "autoWidth": false,
             "columnDefs": [
-                { "targets": [0], "width": "2%" },
-                { "targets": [1], "width": "15%" },
-                { "targets": [2], "width": "8%" },
-                { "targets": [3], "width": "13%" },
-                { "targets": [4], "width": "30%" },
+                { "targets": [0], "width": "5%" },
+                { "targets": [1], "width": "17%" },
+                { "targets": [2], "width": "15%" },
+                { "targets": [3], "width": "33%" },
+                { "targets": [4], "width": "10%" },
                 { "targets": [5], "width": "10%" },
                 { "targets": [6], "width": "10%" },
-                { "targets": [7], "width": "12%" },
             ],
             "language": {
                 "lengthMenu": "Hiển thị _MENU_ dòng",
@@ -247,7 +246,6 @@
                     <tr>
                         <th>STT</th>
                         <th>Email</th>
-                        <th>Mật khẩu</th>
                         <th>Tên người dùng</th>
                         <th>Địa chỉ</th>
                         <th>Chức vụ</th>
@@ -265,12 +263,10 @@
                             <tr>
                                 <td>@itemCount</td>
                                 <td>@account.Email</td>
-                                <td>********</td>
                                 <td>@account.UserName</td>
                                 <td>@account.Address</td>
                                 <td>
                                     <select class="form-select" name="Role" id="Role">
-                                        <option value="1" @(account.RoleId == 1 ? "selected" : "")>Quản trị viên</option>
                                         <option value="2" @(account.RoleId == 2 ? "selected" : "")>Khách hàng</option>
                                         <option value="3" @(account.RoleId == 3 ? "selected" : "")>Quản lý</option>
                                         <option value="4" @(account.RoleId == 4 ? "selected" : "")>Đối tác</option>
@@ -310,6 +306,7 @@
             };
 
             $.ajax({
+                //https://pet-service-api.azurewebsites.net/api/Admin/UpdateAccount
                 url: "https://localhost:7255/api/Admin/UpdateAccount",
                 type: "PUT",
                 contentType: 'application/json',
