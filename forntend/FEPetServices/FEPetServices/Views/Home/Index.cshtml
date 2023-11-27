@@ -24,10 +24,10 @@
                                         <div class="item-rating">
                                             <div class="thumb">
                                                 <ul>
-                                                    <li><img src="~/assets/images/others/author1.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author2.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author3.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author4.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author1.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author2.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author3.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author4.png" alt="Author"></li>
                                                 </ul>
                                             </div>
                                             <div class="content">
@@ -55,10 +55,10 @@
                                         <div class="item-rating">
                                             <div class="thumb">
                                                 <ul>
-                                                    <li><img src="~/assets/images/others/author1.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author2.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author3.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author4.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author1.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author2.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author3.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author4.png" alt="Author"></li>
                                                 </ul>
                                             </div>
                                             <div class="content">
@@ -86,10 +86,10 @@
                                         <div class="item-rating">
                                             <div class="thumb">
                                                 <ul>
-                                                    <li><img src="~/assets/images/others/author1.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author2.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author3.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author4.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author1.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author2.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author3.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author4.png" alt="Author"></li>
                                                 </ul>
                                             </div>
                                             <div class="content">
@@ -117,10 +117,10 @@
                                         <div class="item-rating">
                                             <div class="thumb">
                                                 <ul>
-                                                    <li><img src="~/assets/images/others/author1.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author2.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author3.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author4.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author1.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author2.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author3.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author4.png" alt="Author"></li>
                                                 </ul>
                                             </div>
                                             <div class="content">
@@ -233,34 +233,15 @@
                                             <div class="product-hover-action">
                                                 <ul class="cart-action">
                                                     @*<li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>*@
-                                                    @*<li class="select-option">
+                                                    <li class="select-option">
                                                         <form method="post" action="@Url.Action("AddToCart", "ProductList")">
                                                             @Html.AntiForgeryToken()
                                                             <input type="hidden" name="ProductId" value="@product.ProductId" />
                                                             <button class="add-to-card" type="button" onclick="addToCart('@product.ProductId')"><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
                                                         </form>
-                                                    </li>*@
+                                                    </li>
                                                     @*<li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>*@
-                                                    @if (@product.Quantity > 0)
-                                                    {
-                                                        <form method="post" action="@Url.Action("AddToCart", "ProductList")">
-                                                            @Html.AntiForgeryToken()
-                                                            <input type="hidden" name="ProductId" value="@product.ProductId" />
-                                                            <button class="axil-btn btn-bg-primary updateProductQuantityCart" type="button" style="width:300px;">
-                                                                <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
-                                                            </button>
-                                                        </form>
-                                                        @*<form method="post" action="@Url.Action("AddToCart", "ProductList")">
-                                                            @Html.AntiForgeryToken()
-                                                            <input type="hidden" name="ProductId" id="productId" value="@product.ProductId" />
-                                                            <button style="width:200px; margin-left: 5px;" href="" class="axil-btn btn-bg-primary updateProductQuantity" type="submit">
-                                                                <i class="fas fa-cart-plus"></i>Mua ngay
-                                                            </button>
-                                                        </form>*@
-                                                    }
-                                                    else
-                                                    {
-                                                    }
+                                                    
                                                 </ul>
                                             </div>
                                         </div>
@@ -459,66 +440,6 @@
         </div>
         @*End End*@
         </main>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                var priceElements = document.querySelectorAll('.current-price');
-                priceElements.forEach(function (priceElement) {
-                    var priceText = priceElement.textContent.trim();
-                    var price = parseFloat(priceText.replace(/\s/g, '').replace('VNĐ', ''));
-                    var formattedPrice = price.toLocaleString('vi-VN');
-                    priceElement.textContent = formattedPrice + ' VNĐ';
-                });
-            });
-
-            $(document).ready(function () {
-                $(".updateProductQuantity").click(function (event) {
-                    event.preventDefault();
-                    var productid = $("#productId").val();
-                    var quantity = $("#quantityInput").val();
-
-                    $.ajax({
-                        type: "POST",
-                        url: "@Url.Action("AddToCart", "ProductList")",
-                        data: {
-                            productid: productid,
-                            quantityProduct: quantity
-                        },
-                        success: function (result) {
-                            window.location.href = "@Url.Action("Index", "Cart")";
-                        },
-                        error: function (error) {
-                            console.error("Error updating cart:", error);
-                        }
-                    });
-                });
-
-                $(".updateProductQuantityCart").click(function (event) {
-                    event.preventDefault();
-                    var productid = $("#productId").val();
-                    var quantity = $("#quantityInput").val();
-
-                    $.ajax({
-                        type: "POST",
-                        url: "@Url.Action("AddToCart", "ProductList")",
-                        data: {
-                            productid: productid,
-                            quantityProduct: quantity
-                        },
-                        headers: {
-                            RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
-                        },
-                        success: function (result) {
-                            $('#successModal').modal('show');
-                            console.log(result);
-                            updateCartCount(result.totalQuantity);
-                        },
-                        error: function (error) {
-                            console.error("Error updating cart:", error);
-                        }
-                    });
-                });
-            });
-        </script>
     </body>
 <script src="~/assets/js/vendor/modernizr.min.js"></script>
 <!-- jQuery JS -->
@@ -540,4 +461,5 @@
 <script src="~/assets/js/vendor/waypoints.min.js"></script>
 <!-- Main JS -->
 <script src="~/assets/js/main.js"></script>
+<link href="~/css/homepage.css" rel="stylesheet" />
 </html>
