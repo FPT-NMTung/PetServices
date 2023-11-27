@@ -28,18 +28,18 @@
                                   <img src="https://media.istockphoto.com/id/1370544962/vi/anh/n%E1%BB%81n-gi%E1%BA%A5y-tr%E1%BA%AFng-k%E1%BA%BFt-c%E1%BA%A5u-b%C3%ACa-c%E1%BB%A9ng-s%E1%BB%A3i-%C4%91%E1%BB%83-c%E1%BA%A1o-r%C3%A2u.jpg?s=612x612&w=0&k=20&c=7fuXKUP3PkMIZhFg4MWyov7kxvVh2oFSQ3qBmhtvodw=" class="d-block w-100" alt="...">
                                   <div style="color:black;" class="carousel-caption d-none d-md-block">
                                         <img src="@Model?.UserInfo.PetInfos[i].ImagePet" style="width:50% ;height:60%;" alt="pet"></img>
-                                        <p>Tên:@Model?.UserInfo.PetInfos[i].PetName</p> 
-                                        <p>Giống:@Model?.UserInfo.PetInfos[i].Species</p>
+                                        <p>Tên : @Model?.UserInfo.PetInfos[i].PetName</p> 
+                                        <p>Giống : @Model?.UserInfo.PetInfos[i].Species</p>
+                                        <p>Ngày sinh : @Model?.UserInfo.PetInfos[i].Dob?.ToString("yyyy-MM-dd")</p>
                                         @if(Model?.UserInfo.PetInfos[i].Gender == true)
                                         {
-                                            <p>Giới tính:Đực</p>
+                                            <p>Giới tính : Đực</p>
                                         }
                                         else
                                         {
-                                            <p>Giới tính:Cái</p>
+                                            <p>Giới tính : Cái</p>
                                         }
-                                        <p>Mô tả:@Model.UserInfo.PetInfos[i].Descriptions</p>
-                                        <a style="margin-bottom:2%;" href="~/Customer/Pet/EditPet?petId=@Model.UserInfo.PetInfos[i].PetInfoId" class="btn btn-primary" type="submit">Đổi thông tin thú cưng</a>
+                                        <a style="margin-bottom:2%;" href="~/Customer/Pet/EditPet?petId=@Model.UserInfo.PetInfos[i].PetInfoId" class="btn btn-primary" type="submit">Chi tiết thông tin</a>
                                   </div>
                                 </div>
                             }

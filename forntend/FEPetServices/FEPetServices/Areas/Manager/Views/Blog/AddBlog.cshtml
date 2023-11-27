@@ -24,29 +24,29 @@
     <div class="col-md-12">
       <form asp-action="AddBlog" method="post"  enctype="multipart/form-data">
         <div class="form-group">
-          <label>Tên bài viết:</label>
+          <label>Tên bài viết<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
           <input type="text" class="form-control" name="PageTile" required placeholder="Tên bài viết"/>
         </div>
         <div class="form-group">
-          <label>Tiêu đề bài viết:</label>
+          <label>Tiêu đề bài viết<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
           <input type="text" class="form-control" name="Heading" required  placeholder="Tiêu đề bài viết"/>
         </div>
         <div class="form-group">
-          <label>Mô tả:</label>
+          <label>Mô tả <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
           <input type="text" class="form-control" name="Description" required placeholder="Mô tả"/>
         </div>
         <div class="form-group">
-          <label>Ngày đăng:</label>
+          <label>Ngày đăng <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
           <input type="date" class="form-control" name="PublisheDate" required placeholder="Title"/>
         </div>
         <div class="form-group">
-          <label>Ảnh:</label>
+          <label>Ảnh <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
           <div class="input-group">
             <input type="file" name="image" required class="form-control">
            </div>
         </div>
         <div class="form-group">
-            <label>Nội dung:</label>
+            <label>Nội dung <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
           <textarea class="form-control" id="tiny" required name="Content"></textarea>
         </div>
         <div class="form-group">
@@ -63,4 +63,9 @@
     </div>
   </div>
 </div>
+<style>
+.fa-asterisk{
+    color:red;
+}
+</style>
 </body>
