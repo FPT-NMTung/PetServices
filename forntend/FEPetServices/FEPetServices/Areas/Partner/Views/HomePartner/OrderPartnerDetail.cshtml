@@ -9,7 +9,7 @@
     <div class="container print-container">
         <h2>Chi tiết đơn hàng</h2>
         @*Thông tin đơn hàng*@
-        <form method="post" asp-controller="HomePartner" asp-action="OrderPartnerDetail">
+        <form method="post" action="@Url.Action("OrderPartnerDetail", "HomePartner")">
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Ngày mua hàng :</label>
                 <div class="col-sm-9">
@@ -68,33 +68,6 @@
                     <input type="text" readonly class="form-control-plaintext" value="@Model.UserInfo.Phone">
                 </div>
             </div>
-            @*Thông tin sản phẩm*@
-            @*<h3>Thông tin sản phẩm đã được đặt hàng</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Tên sản phẩm</th>
-                        <th>Số lượng</th>
-                        <th>Giá từng sản phẩm</th>
-                        <th>Tổng giá</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var productDetail in Model.OrderProductDetails)
-                    {
-                        <tr>
-                            <td>@productDetail.Product.ProductName</td>
-                            <td>@productDetail.Price VNĐ</td>
-                            <td>@productDetail.Quantity</td>
-                            <td>@(productDetail.Quantity * productDetail.Price) VNĐ</td>
-                        </tr>
-                    }
-                    <tr>
-                        <td colspan="3" style="text-align: right;"><strong>Tổng tiền:</strong></td>
-                        <td><strong>@ViewBag.TotalPrice VNĐ</strong></td>
-                    </tr>
-                </tbody>
-            </table>*@
             <h3>Thông tin dịch vụ</h3>
             <table class="table">
                 <thead>
@@ -122,13 +95,63 @@
 
             @if (Model.OrderStatus.Trim() == "Waiting")
             {
-                <input type="hidden" name="Id" value="@Model?.OrderId" />
+                <input type="hidden" name="orderId" value="@Model?.OrderId" />
                 <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
-                <select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
-                    <option style="background-color: green; color:#fff" value="Received_Services">Nhận Đơn</option>
-                    <option style="background-color: red; color:#fff" value="Rejected">Hủy Đơn</option>
-                </select>
+                <div style="display:flex;">
+                    @*@if (Model.BookingServicesDetails.PartnerInfoId != null){}*@
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="receivedCheckbox" name="newStatus" value="Received_Services">
+                        <label class="form-check-label" for="receivedCheckbox" style="background-color: green; color:#fff">Nhận Đơn</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="rejectedCheckbox" name="newStatus" value="Waiting" onchange="handleRejectChange()">
+                        <label class="form-check-label" for="rejectedCheckbox" style="background-color: red; color:#fff">Hủy Đơn</label>
+                    </div>
+                    <div id="reasonSelect" style="display: none;" class="form-group">
+                        <div style="display:flex;">
+                            <div class="title" style="padding-right: 10px;">
+                                <label for="ReasonId">Lý Do Hủy Đơn: </label>
+                            </div>
+                            <div class="typeinput">
+                                @if (ViewBag.Reasons != null)
+                                {
+                                    <select id="ReasonId" name="ReasonId" required onchange="handleReasonChange(this)">
+                                        <option value="Lý do">Chọn Lý Do Hủy Đơn</option>
+                                        @foreach (var rea in ViewBag.Reasons)
+                                        {
+                                            <option value="@rea.Value">@rea.Text</option>
+                                        }
+                                        <option value="khac">Lý Do Hủy Đơn Khác</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <span class="text-danger">Error</span>
+                                }
+                            </div>
+                        </div> 
+
+                        
+                    </div>
+                        
+                </div>
+                <div id="lydoKhac" style="display: none;">
+                    <div>
+                        <label for="title">Tiêu Đề:</label>
+                        <input type="text" id="title" name="title" style="width:100%" placeholder="Nhập Tiêu Đề">
+                    </div>
+                    <div>
+                        <label for="description">Mô Tả:</label>
+                        <textarea id="description" name="description" style="width:100%" placeholder="Nhập Mô Tả"></textarea>
+                    </div>  
+                </div>
+                
+            @*<form method="post" asp-controller="HomePartner" asp-action="OrderPartnerDetail">*@
+                @Html.AntiForgeryToken()
                 <button class="btn btn-primary" type="submit">Xác nhận</button>
+
+                
             }
         </form>
         @*<button class="btn btn-primary" onclick="window.print()">In hoá đơn</button>*@
@@ -152,5 +175,40 @@
             }
         </div>
     </div>
+    <script>
+        // Xử lý sự kiện khi chọn nút radio "Rejected"
+        $('#rejectedCheckbox').on('change', function () {
+            if ($(this).prop('checked')) {
+                $('#reasonSelect').show();  // Hiển thị select dropdown khi nút radio "Rejected" được chọn
+            } else {
+                $('#reasonSelect').hide();  // Ẩn select dropdown khi nút radio "Rejected" không được chọn
+            }
+        });
+    </script>
+
+    <script>
+        function handleRejectChange() {
+            var partnerIdInput = document.getElementById('partnerId');
+            partnerIdInput.value = null;
+            // Hiển thị hoặc ẩn phần lý do hủy đơn tùy thuộc vào giá trị chọn
+            var reasonSelectDiv = document.getElementById('reasonSelect');
+            var lydoKhacDiv = document.getElementById('lydoKhac');
+            if (document.getElementById('rejectedCheckbox').checked) {
+                reasonSelectDiv.style.display = 'block';
+            } else {
+                reasonSelectDiv.style.display = 'none';
+                lydoKhacDiv.style.display = 'none';
+            }
+        }
+        function handleReasonChange(selectElement) {
+            var lydoKhacDiv = document.getElementById('lydoKhac');
+
+            if (selectElement.value == 'khac') {
+                lydoKhacDiv.style.display = 'block';  // Hiển thị div khi chọn lựa chọn "Lý Do Hủy Đơn Khác"
+            } else {
+                lydoKhacDiv.style.display = 'none';   // Ẩn div khi chọn bất kỳ lựa chọn khác
+            }
+        }
+    </script>
 </body>
 </html>

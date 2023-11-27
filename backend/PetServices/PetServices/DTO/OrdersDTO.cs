@@ -19,6 +19,7 @@ namespace PetServices.DTO
         public int? ReasonId { get; set; }
         public double? TotalPrice { get; set; }
 
+        public virtual Reason? Reason { get; set; }
         public virtual UserInfoDTO? UserInfo { get; set; }
         public virtual ICollection<OrderProductDetailDTO>? OrderProductDetails { get; set; }
         public virtual ICollection<BookingRoomServiceDTO>? BookingRoomServices { get; set; }
