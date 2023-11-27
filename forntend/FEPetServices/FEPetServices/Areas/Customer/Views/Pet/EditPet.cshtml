@@ -12,7 +12,7 @@
       <input type="text" id="PetInfoId" name="PetInfoId" value="@Model?.PetInfoId" required hidden>
     <div class="row">
       <div class="col-25">
-        <label for="PetName">Tên thú cưng:</label>
+        <label for="PetName">Tên thú cưng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
         <input type="text" id="PetName" name="PetName" value="@Model?.PetName" required>
@@ -30,7 +30,7 @@
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="Gender">Giới tính:</label>
+        <label for="Gender">Giới tính<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
         <select name="Gender" id="Gender">
@@ -52,7 +52,7 @@
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="Price">Giống thú cưng</label>
+        <label for="Price">Giống thú cưng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
         <input type="text" id="Species" name="Species" value="@Model?.Species" placeholder="Giống thú cưng" required>
@@ -61,7 +61,7 @@
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="Dob">Ngày sinh:</label>
+        <label for="Dob">Ngày sinh<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
         <input type="date" id="Dob" name="Dob" value="@Model?.Dob?.ToString("yyyy-MM-dd")" required>
@@ -70,7 +70,7 @@
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="Weight">Cân nặng:</label>
+        <label for="Weight">Cân nặng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
         <input type="number" id="Weight" name="Weight" value="@Model?.Weight"  required>

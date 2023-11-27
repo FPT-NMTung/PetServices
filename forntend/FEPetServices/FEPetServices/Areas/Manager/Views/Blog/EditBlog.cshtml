@@ -24,30 +24,30 @@
     <div class="col-md-12">
       <form asp-action="EditBlog" method="post"  enctype="multipart/form-data">
         <div class="form-group">
-          <label for="PageTile">Tên bài viết:</label>
+          <label for="PageTile" >Tên bài viết <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:<span class="fr-icon required fr-label-note" aria-hidden="true"></span></label>
           <input type="text" class="form-control" name="PageTile" value="@Model?.PageTile" required placeholder="Tên bài viết"/>
         </div>
         <div class="form-group">
-          <label>Tiêu đề bài viết:</label>
+          <label>Tiêu đề bài viết <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
           <input type="text" class="form-control" name="Heading" value="@Model?.Heading" required placeholder="Tiêu đề bài viết"/>
         </div>
         <div class="form-group">
-          <label>Mô tả:</label>
+          <label>Mô tả <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
           <input type="text" class="form-control" name="Description" value="@Model?.Description" required placeholder="Mô tả"/>
         </div>
         <div class="form-group">
-          <label for="PublisheDate">Ngày đăng:</label>
-          <input type="date" class="form-control" name="PublisheDate" value="@Model.PublisheDate?.ToString("yyyy-MM-dd")" required />
+          <label for="PublisheDate">Ngày đăng <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+          <input type="date" class="form-control" name="PublisheDate" value="@Model?.PublisheDate?.ToString("yyyy-MM-dd")" required />
 
         </div>
         <div class="form-group">
-          <label>Ảnh:</label>
+          <label>Ảnh :</label>
           <div class="input-group">
             <input type="file" name="image" class="form-control">
            </div>
         </div>
         <div class="form-group">
-            <label>Nội dung:</label>
+            <label>Nội dung <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
           <textarea class="form-control" id="tiny"  rows="20" cols="50" name="Content" required>@Model?.Content</textarea>
         </div>
         <div class="raw">
@@ -75,4 +75,9 @@
     </div>
   </div>
 </div>
+<style>
+.fa-asterisk{
+    color:red;
+}
+</style>
 </body>
