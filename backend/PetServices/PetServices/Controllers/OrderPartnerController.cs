@@ -59,6 +59,7 @@ namespace PetServices.Controllers
                 .Include(x => x.BookingServicesDetails)
                 .ThenInclude(y => y.Service)
                 .Include(z => z.UserInfo)
+                .Include(q => q.Reason)
                 .Where(o =>
                     o.BookingServicesDetails.Any(b => b.Service.SerCategories.SerCategoriesId == serCategoriesId) &&
                     o.BookingServicesDetails.All(b => b.PartnerInfoId == partnerInfoId))
@@ -75,6 +76,7 @@ namespace PetServices.Controllers
                     .Include(b => b.UserInfo)
                     .Include(b => b.BookingServicesDetails)
                     .ThenInclude(bs => bs.Service)
+                    .Include(a => a.Reason)
                     .SingleOrDefaultAsync(b => b.OrderId == orderId);
                 return Ok(_mapper.Map<OrdersDTO>(order));
 
@@ -116,12 +118,13 @@ namespace PetServices.Controllers
             }
         }
         [HttpGet("UpdateOrderStatusRejected")]
-        public async Task<IActionResult> UpdateOrderStatusRejected(int orderId)
+        public async Task<IActionResult> UpdateOrderStatusRejected(int orderId, int reasonId)
         {
             try
             {
                 Order order = await _context.Orders
                     .Include(a => a.BookingServicesDetails)
+                    .Include(a => a.Reason)
                     .SingleOrDefaultAsync(b => b.OrderId == orderId);
                 // Kiểm tra booking có tồn tại hay không
                 if (order == null)
@@ -137,6 +140,7 @@ namespace PetServices.Controllers
                         bookingDetail.PartnerInfoId = null;
                     }
                 }
+                order.ReasonId = reasonId;
                 _context.Orders.Update(order);
 
                 await _context.SaveChangesAsync();
@@ -175,7 +179,9 @@ namespace PetServices.Controllers
         {
             try
             {
-                Order order = await _context.Orders.SingleOrDefaultAsync(b => b.OrderId == orderId);
+                Order order = await _context.Orders
+                    .Include(c => c.BookingServicesDetails)
+                    .SingleOrDefaultAsync(b => b.OrderId == orderId);
                 if(order == null)
                 {
                     return NotFound("Booking không tồn tại!");
@@ -183,6 +189,13 @@ namespace PetServices.Controllers
                 if(order.OrderStatus.Trim() != status.oldStatus)
                 {
                     return BadRequest("Trạng thái cũ không hợp lệ");
+                }
+                foreach (var bookingDetail in order.BookingServicesDetails)
+                {
+                    if (bookingDetail.PartnerInfoId != null)
+                    {
+                        bookingDetail.PartnerInfoId = null;
+                    }
                 }
                 order.OrderStatus = status.newStatus;
                 _context.Orders.Update(order);

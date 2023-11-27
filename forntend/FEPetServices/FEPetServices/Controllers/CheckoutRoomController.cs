@@ -110,14 +110,16 @@ namespace FEPetServices.Controllers
                 };
                 room = System.Text.Json.JsonSerializer.Deserialize<RoomDTO>(responseContent, option);
             }
-            if (RoomId != null)
+
+            if (room != null && RoomId > 0)
             {
                 var cart = GetCartItems();
                 var cartitem = cart.Find(s => s.Room != null && s.Room.RoomId == RoomId);
 
                 if (cartitem != null)
                 {
-
+                    TempData["WatingToast"] = "Phòng đã có trong giỏ hàng.";
+                    return RedirectToAction("Index", "CheckoutRoom");
                 }
                 else
                 {
@@ -161,7 +163,7 @@ namespace FEPetServices.Controllers
                     return View(userInfo);
                 }
             }
-            return View();
+            return View(userInfo);
         }
 
         public async Task<IActionResult> ChekoutRoomDB([FromForm] OrderForm orderform, string payment)
@@ -320,6 +322,25 @@ namespace FEPetServices.Controllers
                 ViewBag.ErrorToast = "Đã xảy ra lỗi: " + ex.Message;
             }
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult RemoveRoomCart([FromForm] int RoomId)
+        {
+            var cart = GetCartItems();
+
+            if (RoomId > 0)
+            {
+                var serviceCartItem = cart.Find(s => s.Room != null && s.Room.RoomId == RoomId);
+
+                if (serviceCartItem != null)
+                {
+                    cart.Remove(serviceCartItem);
+                    SaveCartSession(cart);
+                }
+            }
+
+            return RedirectToAction("Index", "CheckoutRoom");
         }
     }
 }

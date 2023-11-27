@@ -12,7 +12,7 @@
         <form method="post" asp-controller="RoomCategory" asp-action="EditRoomCategory" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div class="row">
                 <div class="col-25">
-                    <label for="RoomCategoriesName">Tên Loại Phòng:</label>
+                    <label for="RoomCategoriesName">Tên Loại Phòng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                 </div>
                 <div class="col-75">
                     <input type="text" id="RoomCategoriesName" name="RoomCategoriesName" value="@Model?.RoomCategoriesName" required>
@@ -31,7 +31,7 @@
             </div>
             <div class="row">
                 <div class="col-25">
-                    <label for="Desciptions">Mô Tả:</label>
+                    <label for="Desciptions">Mô Tả<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                 </div>
                 <div class="col-75">
                     <textarea id="Desciptions" name="Desciptions" placeholder="Nội Dung ..." style="height:200px" required>@Model?.Desciptions</textarea>
@@ -64,6 +64,11 @@
         </form>
 
     </div> 
+    <style>
+.fa-asterisk{
+    color:red;
+}
+</style>
     <script src="/js/RoomCategory.js"></script>
 </body>
 </html>

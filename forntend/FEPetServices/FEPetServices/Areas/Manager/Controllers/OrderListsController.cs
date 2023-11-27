@@ -8,6 +8,7 @@ using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = "ManaOnly")]
     public class OrderListsController : Controller
     {
@@ -47,6 +48,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 return View();
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> OrderDetail(int id)
         {

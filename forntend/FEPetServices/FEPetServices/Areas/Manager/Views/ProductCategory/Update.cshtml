@@ -26,7 +26,7 @@
             <div class="noidung-cate-product">
                 <div class="form-group">
                     <div class="title">
-                        <label for="ProCategoriesName">Tên Loại Sản Phẩm: </label>
+                        <label for="ProCategoriesName">Tên Loại Sản Phẩm<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>: </label>
                     </div>
                     <div class="typeinput">
                         <input type="text" class="form-control" id="ProCategoriesName" name="ProCategoriesName" value="@Model?.ProCategoriesName" style="width:100%" required />
@@ -37,7 +37,7 @@
 
                 <div class="form-group">
                     <div class="title">
-                        <label for="Desciptions">Mô Tả Chi Tiết: </label>
+                        <label for="Desciptions">Mô Tả Chi Tiết<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>: </label>
                     </div>
                     <div class="typeinput">
                         <textarea class="form-control" id="Desciptions" name="Desciptions" style="width:100%; height: auto" required>@Model?.Desciptions</textarea>
@@ -101,3 +101,8 @@
         return isValid;
     }
 </script>
+<style>
+.fa-asterisk{
+    color:red;
+}
+</style>

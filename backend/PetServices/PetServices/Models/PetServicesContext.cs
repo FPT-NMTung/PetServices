@@ -181,6 +181,8 @@ namespace PetServices.Models
 
                 entity.Property(e => e.StartTime).HasColumnType("datetime");
 
+                entity.Property(e => e.StatusOrderService).HasMaxLength(200);
+
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.BookingServicesDetails)
                     .HasForeignKey(d => d.OrderId)
@@ -270,6 +272,8 @@ namespace PetServices.Models
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
+                entity.Property(e => e.StatusOrderProduct).HasMaxLength(200);
+
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderProductDetails)
                     .HasForeignKey(d => d.OrderId)
@@ -356,6 +360,15 @@ namespace PetServices.Models
                 entity.ToTable("Payment");
 
                 entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
+
+                entity.Property(e => e.DateSalary).HasColumnType("datetime");
+
+                entity.Property(e => e.PartnerInfoId).HasColumnName("PartnerInfoID");
+
+                entity.HasOne(d => d.PartnerInfo)
+                    .WithMany(p => p.Payments)
+                    .HasForeignKey(d => d.PartnerInfoId)
+                    .HasConstraintName("FK_Payment_PartnerInfo");
             });
 
             modelBuilder.Entity<PetInfo>(entity =>

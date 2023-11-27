@@ -11,7 +11,7 @@
   <form asp-action="AddPet" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
     <div class="row">
       <div class="col-25">
-        <label for="PetName">Tên thú cưng:</label>
+        <label for="PetName">Tên thú cưng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
         <input type="text" id="PetName" name="PetName" placeholder="Tên thú cưng.." required>
@@ -20,7 +20,7 @@
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="image">Ảnh:</label>
+        <label for="image">Ảnh<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
         <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" required>
@@ -29,11 +29,11 @@
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="Gender">Giới tính:</label>
+        <label for="Gender">Giới tính<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
         <select name="Gender" id="Gender">
-            <option>Chọn giới tính cho bé </option>
+            <option>Chọn giới tính cho bé <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i> </option>
             <option value="true">Đực</option>
             <option value="false">Cái</option>
         </select>
@@ -42,7 +42,7 @@
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="Price">Giống thú cưng</label>
+        <label for="Price">Giống thú cưng <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
         <input type="text" id="Species" name="Species" placeholder="Giống thú cưng" required>
@@ -51,7 +51,7 @@
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="Dob">Ngày sinh:</label>
+        <label for="Dob">Ngày sinh<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
         <input type="date" id="Dob" name="Dob"  required>
@@ -60,7 +60,7 @@
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="Weight">Cân nặng:</label>
+        <label for="Weight">Cân nặng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
         <input type="number" id="Weight" name="Weight"  required>
@@ -73,7 +73,7 @@
         <label for="Descriptions">Mô Tả:</label>
       </div>
       <div class="col-75">
-        <textarea id="Descriptions" name="Descriptions" placeholder="Mô tả .." style="height:200px" required></textarea>
+        <textarea id="Descriptions" name="Descriptions" placeholder="Mô tả .." style="height:200px" ></textarea>
         <div style="color:red" class="error-message" id="subject-error-message"></div>
       </div>
     </div>
@@ -92,6 +92,9 @@
         width:100px;
         height:100px;
     }
+.fa-asterisk{
+    color:red;
+}
 </style>
 <script src="~/js/Service.js"></script>
 </body>

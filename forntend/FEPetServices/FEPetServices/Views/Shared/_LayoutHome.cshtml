@@ -365,6 +365,14 @@
             });
         </script>
     }
+    @if (!string.IsNullOrEmpty(TempData["WatingToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showWatingToast();
+            });
+        </script>
+    }
     @*End - Base *@
     @*-------------------------------------------------------*@
     @*Start - Loading data TempData*@
@@ -434,6 +442,14 @@
             title: 'Thất bại',
             message: '@TempData["ErrorToast"]',
             type: 'error',
+            duration: 2000
+        });
+    }
+    function showWatingToast() {
+        toast({
+            title: 'Thất bại',
+            message: '@TempData["WatingToast"]',
+            type: 'wating',
             duration: 2000
         });
     }

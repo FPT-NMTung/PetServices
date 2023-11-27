@@ -24,10 +24,10 @@
                                         <div class="item-rating">
                                             <div class="thumb">
                                                 <ul>
-                                                    <li><img src="~/assets/images/others/author1.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author2.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author3.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author4.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author1.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author2.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author3.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author4.png" alt="Author"></li>
                                                 </ul>
                                             </div>
                                             <div class="content">
@@ -55,10 +55,10 @@
                                         <div class="item-rating">
                                             <div class="thumb">
                                                 <ul>
-                                                    <li><img src="~/assets/images/others/author1.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author2.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author3.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author4.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author1.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author2.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author3.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author4.png" alt="Author"></li>
                                                 </ul>
                                             </div>
                                             <div class="content">
@@ -86,10 +86,10 @@
                                         <div class="item-rating">
                                             <div class="thumb">
                                                 <ul>
-                                                    <li><img src="~/assets/images/others/author1.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author2.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author3.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author4.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author1.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author2.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author3.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author4.png" alt="Author"></li>
                                                 </ul>
                                             </div>
                                             <div class="content">
@@ -117,10 +117,10 @@
                                         <div class="item-rating">
                                             <div class="thumb">
                                                 <ul>
-                                                    <li><img src="~/assets/images/others/author1.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author2.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author3.png" alt="Author"></li>
-                                                    <li><img src="~/assets/images/others/author4.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author1.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author2.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author3.png" alt="Author"></li>
+                                                    <li><img src="~/img/other/author4.png" alt="Author"></li>
                                                 </ul>
                                             </div>
                                             <div class="content">
@@ -195,9 +195,9 @@
                     @foreach(var cateProduct in Model.ListProductCategories){
                     <div class="slick-single-layout">
                         <div class="categrie-product" data-sal="zoom-out" data-sal-delay="300" data-sal-duration="500">
-                            <a href="#">
-                                    <img class="img-cat" src="@cateProduct.Picture" alt="product categorie">
-                                    <h6 class="cat-title">@cateProduct.ProCategoriesName</h6>
+                            <a href="/ProductList?productcategory=@cateProduct.ProCategoriesId">
+                                <img class="img-cat" src="@cateProduct.Picture" alt="product categorie">
+                                <h6 class="cat-title">@cateProduct.ProCategoriesName</h6>
                             </a>
                         </div>
                     </div>
@@ -223,7 +223,7 @@
                                 <div class="col-xl-3 col-lg-4 col-sm-6 col-12 mb--30">
                                     <div class="axil-product product-style-one">
                                         <div class="thumbnail">
-                                            <a href="single-product.html">
+                                            <a href="/ProductList/Detail?proId=@product.ProductId">
                                                 <img data-sal="zoom-out" data-sal-delay="200" data-sal-duration="800" loading="lazy" class="main-img" src="@product.Picture" alt="Product Images">
                                                 <img class="hover-img" src="@product.Picture" alt="Product Images">
                                             </a>
@@ -241,6 +241,7 @@
                                                         </form>
                                                     </li>
                                                     @*<li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>*@
+                                                    
                                                 </ul>
                                             </div>
                                         </div>
@@ -257,7 +258,7 @@
                                                     <span class="rating-number">(64)</span>
                                                 </div>
                                                 <div style="height:60px">
-                                                    <h5 class="title"><a href="single-product.html">@product.ProductName</a></h5>
+                                                    <h5 class="title"><a href="/ProductList/Detail?proId=@product.ProductId">@product.ProductName</a></h5>
                                                 </div>
                                                 <div class="product-price-variant">
                                                     <span class="price current-price">@product.Price.ToString("n0").Replace(",", ".") VNĐ</span>
@@ -312,7 +313,7 @@
                                                     <span class="rating-number">(64)</span>
                                                 </div>
                                                 <div style="height:60px">
-                                                    <h5 class="title"><a href="single-product.html">@product.ProductName</a></h5>
+                                                    <h5 class="title"><a href="/ProductList/Detail?proId=@product.ProductId">@product.ProductName</a></h5>
                                                 </div>
                                                 <div class="product-price-variant">
                                                     <span class="price current-price">@product.Price.ToString("n0").Replace(",", ".") VNĐ</span>
@@ -367,11 +368,11 @@
                                                 </span>
                                                 <span class="rating-number">(64)</span>
                                             </div>
-                                            <h5 style="height:60px" class="title"><a href="single-product.html">@services.SerCategoriesName</a></h5>
+                                            <h5 style="height:60px" class="title"><a href="~/Home/ServiceDetail?serviceCategoryId=@services.SerCategoriesId">@services.SerCategoriesName</a></h5>
                                         <div class="product-hover-action">
                                             <ul class="cart-action">
                                                 @*<li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>*@
-                                                <li class="select-option"><a href="single-product.html">Xem chi tiết</a></li>
+                                                    <li class="select-option"><a href="~/Home/ServiceDetail?serviceCategoryId=@services.SerCategoriesId">Xem chi tiết</a></li>
                                                 @*<li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>*@
                                             </ul>
                                         </div>
@@ -460,4 +461,5 @@
 <script src="~/assets/js/vendor/waypoints.min.js"></script>
 <!-- Main JS -->
 <script src="~/assets/js/main.js"></script>
+<link href="~/css/homepage.css" rel="stylesheet" />
 </html>
