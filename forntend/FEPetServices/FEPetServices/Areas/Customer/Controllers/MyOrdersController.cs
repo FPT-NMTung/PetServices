@@ -9,7 +9,7 @@ using System.Text.Json;
 namespace FEPetServices.Areas.Customer.Controllers
 {
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-    [Authorize(Policy = "ManaOnly, CusOnly")]
+    [Authorize(Policy = "CusOnly")]
     public class MyOrdersController : Controller
     {
         private readonly HttpClient _client = null;
