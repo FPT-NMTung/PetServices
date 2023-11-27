@@ -1027,8 +1027,6 @@ namespace FEPetServices.Controllers
                     {
                         ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
                     }
-
-
                 }
                 else
                 {
@@ -1114,7 +1112,8 @@ namespace FEPetServices.Controllers
 
                 if (cartitem != null)
                 {
-
+                    TempData["WatingToast"] = "Dịch vụ đã có trong giỏ hàng.";
+                    return RedirectToAction("Index", "Cart");
                 }
                 else
                 {

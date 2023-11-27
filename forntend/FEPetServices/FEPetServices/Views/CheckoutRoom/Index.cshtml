@@ -112,6 +112,14 @@
                                                                     }
                                                                 </td>
                                                             </tr>
+                                                            <tr>
+                                                                <td colspan="2"></td>
+                                                                <td>
+                                                                    <button class="btn btn-outline-danger removecart" data-roomid="@item.Room.RoomId">
+                                                                        Xoá
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
                                                         }
                                                         <tr class="order-total">
                                                             <td colspan="2">Tổng số tiền hoá đơn</td>
@@ -122,7 +130,7 @@
                                                 else
                                                 {
                                                     <tr class="cart-item">
-                                                        <td colspan="2">Giỏ hàng trống</td>
+                                                        <td colspan="1">Giỏ hàng trống</td>
                                                     </tr>
                                                 }
                                             }
@@ -185,4 +193,27 @@
 
 <!-- Main JS -->
 <script src="~/assets/js/main.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".removecart").click(function (event) {
+            event.preventDefault();
+            var roomid = $(this).attr("data-roomid");
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("RemoveRoomCart", "CheckoutRoom")",
+                data: {
+                    RoomId: roomid,
+                },
+                success: function (result) {
+                    window.location.href = "@Url.Action("Index", "CheckoutRoom")";
+                },
+                error: function (error) {
+                    console.error("Error removing item from cart:", error);
+                }
+            });
+        });
+    });
+</script>
 </html>
