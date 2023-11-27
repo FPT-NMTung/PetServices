@@ -10,13 +10,13 @@
 <body>
 <h2>Chỉnh Sửa Loại Dịch Vụ Thú Cưng</h2>
 <div class="container">
-  <form method="post" asp-controller="ServiceCategory" asp-action="EditServiceCategory" enctype="multipart/form-data" onsubmit="return validateForm()">
+  <form  asp-action="EditServiceCategory" method="post"  enctype="multipart/form-data" onsubmit="return validateForm()">
     <div class="row">
       <div class="col-25">
         <label for="SerCategoriesName">Tên Dịch Vụ:</label>
       </div>
       <div class="col-75">
-        <input type="text" id="SerCategoriesName" name="SerCategoriesName"  value="@Model?.ServiceCategoryDTO.SerCategoriesName">
+        <input type="text" id="SerCategoriesName" name="SerCategoriesName"  value="@Model?.SerCategoriesName">
         <div style="color:red" class="error-message" id="fname-error-message"></div>
       </div>
     </div>
@@ -28,7 +28,7 @@
     <div class="col-75">
         <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" >
 
-        <img src="@Model?.ServiceCategoryDTO.Picture" height="100px" width="100px" style="float: left;" id="imagePreview">
+        <img src="@Model?.Picture" height="100px" width="100px" style="float: left;" id="imagePreview">
         
     </div>
     </div>
@@ -37,7 +37,7 @@
         <label for="Desciptions">Mô Tả:</label>
       </div>
       <div class="col-75">
-        <textarea id="Desciptions" name="Desciptions" placeholder="Nội Dung .." style="height:200px"  >@Model?.ServiceCategoryDTO.Desciptions</textarea>
+        <textarea id="Desciptions" name="Desciptions" placeholder="Nội Dung .." style="height:200px"  >@Model?.Desciptions</textarea>
         <div style="color:red" class="error-message" id="subject-error-message"></div>
       </div>
     </div>
@@ -47,7 +47,7 @@
         </div>
         <div class="col-75">
             <label class="switch">
-                <input type="checkbox" name="Status" @(Model?.ServiceCategoryDTO.Status ? "checked" : "")>
+                <input type="checkbox" name="Status" @(Model?.Status ? "checked" : "")>
                 <span class="slider round"></span>
             </label>
         </div>
@@ -77,12 +77,10 @@
             <th>Chi tiết</th>
         </tr>
     </thead>
-    <tbody>
-        @if (Model.serviceDTO != null && Model.serviceDTO.Count > 0)
-        {
-            int itemCount = 0;
-            foreach (var service in Model.serviceDTO)
-            {
+    <tbody>        
+           
+            @foreach (var service in ViewBag.service)
+            {   int itemCount = 0;
                 itemCount++;
                 string description = service.Desciptions;
 
@@ -124,7 +122,7 @@
 
                 </tr>
             }
-        }
+        
     </tbody>
 </table>
 </div>
