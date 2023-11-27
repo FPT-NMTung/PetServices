@@ -379,8 +379,8 @@ namespace FEPetServices.Areas.Partner.Controllers
         [HttpPost]
         public async Task<IActionResult> OrderPartnerDetail(int orderId, [FromForm] Status status)
         {
-            //HttpResponseMessage response = await client.PutAsJsonAsync("https://localhost:7255/api/OrderPartner/ChangeStatus?orderId=" + orderId, status);
-            HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl + "OrderPartner/ChangeStatus?orderId=" + orderId, status);
+            HttpResponseMessage response = await client.PutAsJsonAsync("https://localhost:7255/api/OrderPartner/ChangeStatus?orderId=" + orderId, status);
+            //HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl + "OrderPartner/ChangeStatus?orderId=" + orderId, status);
             if (response.IsSuccessStatusCode)
             {
                 TempData["SuccessToast"] = "Cập nhật thành công";
