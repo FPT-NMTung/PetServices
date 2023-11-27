@@ -52,7 +52,8 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderDetail(int id)
         {
-            HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Order/" + id);
+            //HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Order/" + id);
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
