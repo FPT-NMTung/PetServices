@@ -30,6 +30,7 @@
                                         <img src="@Model?.UserInfo.PetInfos[i].ImagePet" style="width:50% ;height:60%;" alt="pet"></img>
                                         <p>Tên:@Model?.UserInfo.PetInfos[i].PetName</p> 
                                         <p>Giống:@Model?.UserInfo.PetInfos[i].Species</p>
+                                        <p>Giống:@Model?.UserInfo.PetInfos[i].Dob?.ToString("yyyy-MM-dd")</p>
                                         @if(Model?.UserInfo.PetInfos[i].Gender == true)
                                         {
                                             <p>Giới tính:Đực</p>
