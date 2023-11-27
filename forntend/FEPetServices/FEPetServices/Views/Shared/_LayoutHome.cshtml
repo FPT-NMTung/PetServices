@@ -489,6 +489,17 @@
     }
     @*End - Base ViewBag*@
     @*-------------------------------------------------------*@
+    @*Start - Base ViewBag*@
+        function showErrorToastCheckInput() {
+            toast({
+                title: 'Thất bại',
+                message: 'Vui lòng điền đầy đủ thông tin.',
+                type: 'wating',
+                duration: 2000
+            });
+        }
+    @*End - Base ViewBag*@
+    @*-------------------------------------------------------*@
 </script>
 <script>
     function updateCartCount(totalQuantity) {

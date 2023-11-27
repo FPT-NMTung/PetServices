@@ -363,7 +363,7 @@
         var petWeight = document.getElementById('petWeight').value;
 
         if (datetimeStart === '' || datetimeEnd === ''|| petWeight === '') {
-            alert('Vui lòng điền đầy đủ thông tin.');
+            showErrorToastCheckInput();
             return false; // Ngăn form submit nếu thông tin chưa được điền đầy đủ
         }
 
@@ -377,7 +377,8 @@
         var petWeight = document.getElementById('petWeight').value;
 
         if (datetimeStart === '' || datetimeEnd === '' || petWeight === '') {
-            alert('Vui lòng điền đầy đủ thông tin.');
+                showErrorToastCheckInput();
+
             return false;
         } else {
             // Thực hiện hành động thêm vào giỏ hàng sau khi kiểm tra thành công
