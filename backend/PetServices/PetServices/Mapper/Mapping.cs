@@ -49,6 +49,8 @@ namespace PetServices.Mapper
 
             CreateMap<OrderType, OrderTypeDTO>()
                .ReverseMap();
+            CreateMap<Reason, ReasonDTO>()
+                .ReverseMap();
             #endregion
 
             #region Account

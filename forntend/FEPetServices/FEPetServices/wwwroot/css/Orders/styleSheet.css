@@ -213,6 +213,14 @@ span.badge {
 content-detail-time-service {
     padding-top: 10px;
 }
+.bill-header{
+    display:flex;
+    justify-content:center;
+}
+.bill-footer {
+    display: flex;
+    justify-content: center;
+}
 /* Responsive Styles */
 @media (max-width: 768px) {
     .timeline-icon {

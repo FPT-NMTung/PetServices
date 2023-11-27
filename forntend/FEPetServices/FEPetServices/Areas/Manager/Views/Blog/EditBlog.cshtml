@@ -25,19 +25,19 @@
       <form asp-action="EditBlog" method="post"  enctype="multipart/form-data">
         <div class="form-group">
           <label for="PageTile">Tên bài viết:</label>
-          <input type="text" class="form-control" name="PageTile" value="@Model?.PageTile" placeholder="Tên bài viết"/>
+          <input type="text" class="form-control" name="PageTile" value="@Model?.PageTile" required placeholder="Tên bài viết"/>
         </div>
         <div class="form-group">
           <label>Tiêu đề bài viết:</label>
-          <input type="text" class="form-control" name="Heading" value="@Model?.Heading" placeholder="Tiêu đề bài viết"/>
+          <input type="text" class="form-control" name="Heading" value="@Model?.Heading" required placeholder="Tiêu đề bài viết"/>
         </div>
         <div class="form-group">
           <label>Mô tả:</label>
-          <input type="text" class="form-control" name="Description" value="@Model?.Description" placeholder="Mô tả"/>
+          <input type="text" class="form-control" name="Description" value="@Model?.Description" required placeholder="Mô tả"/>
         </div>
         <div class="form-group">
           <label for="PublisheDate">Ngày đăng:</label>
-          <input type="date" class="form-control" name="PublisheDate" value="@Model.PublisheDate" />
+          <input type="date" class="form-control" name="PublisheDate" value="@Model.PublisheDate" required />
 
         </div>
         <div class="form-group">
@@ -48,7 +48,7 @@
         </div>
         <div class="form-group">
             <label>Nội dung:</label>
-          <textarea class="form-control" id="tiny"  rows="20" cols="50" name="Content">@Model?.Content</textarea>
+          <textarea class="form-control" id="tiny"  rows="20" cols="50" name="Content" required>@Model?.Content</textarea>
         </div>
         <div class="raw">
             <div class="col-25">

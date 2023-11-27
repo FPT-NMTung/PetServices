@@ -29,7 +29,13 @@ namespace PetServices.Controllers
             List<PetInfo> petInfos = _context.PetInfos.ToList();
             return Ok(_mapper.Map<List<PetInfoDTO>>(petInfos));
         }
-
+        [HttpGet("PetID/{id}")]
+        public IActionResult GetById(int id)
+        {
+            PetInfo pet = _context.PetInfos
+                .FirstOrDefault(c => c.PetInfoId == id);
+            return Ok(_mapper.Map<PetInfoDTO>(pet));
+        }
         [HttpGet("{email}")]
         public IActionResult Get(string email)
         {
@@ -42,49 +48,71 @@ namespace PetServices.Controllers
             return Ok(_mapper.Map<AccountInfo>(account));
         }
 
-        [HttpPost]
-        public IActionResult AddPet([FromBody] PetInfoForm petInfoForm)
+            [HttpPost("CreatePet")]
+            public async Task<IActionResult> AddPet([FromBody] PetInfoDTO petInfoForm)
+            {
+                if (petInfoForm == null)
+                {
+                    return BadRequest("Dữ liệu không hợp lệ");
+                }
+
+                var newPet = new PetInfo
+                {
+                    PetInfoId = petInfoForm.PetInfoId,
+                    PetName = petInfoForm.PetName,
+                    ImagePet = petInfoForm.ImagePet,
+                    Species = petInfoForm.Species,
+                    Gender = petInfoForm.Gender,
+                    Descriptions = petInfoForm.Descriptions,
+                    UserInfoId = petInfoForm.UserInfoId,
+                    Weight = petInfoForm.Weight,
+                    Dob = petInfoForm.Dob
+                };
+
+                _context.PetInfos.Add(newPet);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return Ok(_mapper.Map<PetInfoDTO>(newPet));
+                }
+                catch (DbUpdateException ex)
+                {
+                    return StatusCode(500, ex.InnerException.Message);
+                }
+            }
+
+        [HttpPut("UpdatePet")]
+        public IActionResult EditInfoPet(int id, [FromBody] PetInfoDTO petInfoForm)
         {
-            if (petInfoForm == null)
+            var pet = _context.PetInfos
+               .FirstOrDefault(p => p.PetInfoId == id);
+
+            if (pet == null)
             {
-                return BadRequest("Dữ liệu không hợp lệ");
+                return NotFound();
             }
 
-            // Sử dụng AutoMapper để chuyển đổi từ PetInfoForm thành PetInfo
-            var petInfo = _mapper.Map<PetInfo>(petInfoForm);
+            pet.PetInfoId = petInfoForm.PetInfoId;
+            pet.PetName = petInfoForm.PetName;
+            pet.ImagePet = petInfoForm.ImagePet;
+            pet.Species = petInfoForm.Species;
+            pet.Gender = petInfoForm.Gender;
+            pet.Descriptions = petInfoForm.Descriptions;
+            pet.Weight = petInfoForm.Weight;
+            pet.UserInfo = pet.UserInfo;
+            pet.Dob = petInfoForm.Dob;
 
-            // Thêm petInfo mới vào cơ sở dữ liệu
-            _context.PetInfos.Add(petInfo);
-            _context.SaveChanges();
-
-            // Trả về kết quả thành công và thông tin pet đã được thêm
-            return CreatedAtAction("Get", new { id = petInfo.PetInfoId }, petInfo);
-        }
-
-        [HttpPut("{id}")]
-        public IActionResult EditInfoPet(int id, [FromBody] PetInfoForm petInfoForm)
-        {
-            if (petInfoForm == null)
+            try
             {
-                return BadRequest("Dữ liệu không hợp lệ");
+                _context.Entry(pet).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                _context.SaveChanges();
             }
-
-            // Tìm thông tin pet cần chỉnh sửa theo PetInfoId
-            var existingPetInfo = _context.PetInfos.FirstOrDefault(p => p.PetInfoId == id);
-
-            if (existingPetInfo == null)
+            catch (DbUpdateConcurrencyException)
             {
-                return NotFound("Không tìm thấy thông tin pet");
+                return Conflict();
             }
-
-            // Sử dụng AutoMapper để cập nhật thông tin pet từ petInfoForm
-            _mapper.Map(petInfoForm, existingPetInfo);
-
-            // Lưu thay đổi vào cơ sở dữ liệu
-            _context.SaveChanges();
-
-            // Trả về kết quả thành công và thông tin pet đã được chỉnh sửa
-            return Ok(existingPetInfo);
+            return Ok(pet);
         }
 
 

@@ -84,27 +84,34 @@
                                     <div class="product-variation product-size-variation">
                                         <h6 class="title">Số lượng:</h6>
                                         <div class="pro-qty mr--20">
-                                            <input type="text" value="1">
-
+                                            <input 
+                                                   id="quantityInput"
+                                                   class="form-control"
+                                                   type="number"
+                                                   value="1"
+                                                   min="1"
+                                                   oninput="validity.valid||(value='1');" />
                                         </div>
                                         <span>@Model.Product.Quantity sản phẩm có sẵn</span>
                                     </div>
                                     <div class="product-action-wrapper d-flex-center">
                                         <!-- Start Product Action  -->
-                                        <!-- Start Product Action  -->
-                                        <!-- Start Product Action  -->
-                                        <ul class="product-action action-style-two d-flex-center mb--0" >
+                                        <ul class="product-action action-style-two d-flex-center mb--0">
                                             @if (@Model.Product.Quantity > 0)
                                             {
                                                 <form method="post" action="@Url.Action("AddToCart", "ProductList")">
                                                     @Html.AntiForgeryToken()
                                                     <input type="hidden" name="ProductId" value="@Model.Product.ProductId" />
-                                                    <button class="axil-btn btn-bg-primary" type="button" style="width:300px;" onclick="addToCart('@Model.Product.ProductId')"><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
+                                                    <button class="axil-btn btn-bg-primary updateProductQuantityCart" type="button" style="width:300px;">
+                                                        <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
+                                                    </button>
                                                 </form>
                                                 <form method="post" action="@Url.Action("AddToCart", "ProductList")">
                                                     @Html.AntiForgeryToken()
-                                                <input type="hidden" name="ProductId" value="@Model.Product.ProductId" />
-                                                <button style="width:200px; margin-left: 5px;" href="" class="axil-btn btn-bg-primary" type="submit"><i class="fas fa-cart-plus"></i>Mua ngay</button>
+                                                    <input type="hidden" name="ProductId" id="productId" value="@Model.Product.ProductId" />
+                                                    <button style="width:200px; margin-left: 5px;" href="" class="axil-btn btn-bg-primary updateProductQuantity" type="submit">
+                                                        <i class="fas fa-cart-plus"></i>Mua ngay
+                                                    </button>
                                                 </form>
                                             }
                                             else
@@ -112,7 +119,6 @@
                                             }
                                         </ul>
                                         <!-- End Product Action  -->
-
                                     </div>
                                 </div>
                             </div>
@@ -120,7 +126,8 @@
                     </div>
                 </div>
             </div>
-            <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
+        </div>
+        <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
                 <div class="container">
                     <div class="product-desc-wrapper mb--30 mb_sm--10">
                         <h4 class="mb--60 desc-heading">Giới thiệu</h4>
@@ -279,7 +286,7 @@
                                     <ul class="cart-action">
                                         <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
                                         <li class="select-option"><a href="cart.html">Add to Cart</a></li>
-                                        <li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>
+                                        @*<li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>*@
                                     </ul>
                                 </div>
                             </div>
@@ -299,17 +306,69 @@
         </div>
     </main>
 
-     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-                var priceElements = document.querySelectorAll('.current-price');
-                priceElements.forEach(function (priceElement) {
-                    var priceText = priceElement.textContent.trim();
-                    var price = parseFloat(priceText.replace(/\s/g, '').replace('VNĐ', ''));
-                    var formattedPrice = price.toLocaleString('vi-VN');
-                    priceElement.textContent = formattedPrice + ' VNĐ';
-    });
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var priceElements = document.querySelectorAll('.current-price');
+            priceElements.forEach(function (priceElement) {
+                var priceText = priceElement.textContent.trim();
+                var price = parseFloat(priceText.replace(/\s/g, '').replace('VNĐ', ''));
+                var formattedPrice = price.toLocaleString('vi-VN');
+                priceElement.textContent = formattedPrice + ' VNĐ';
             });
+        });
+
+        $(document).ready(function () {
+            $(".updateProductQuantity").click(function (event) {
+                event.preventDefault();
+                var productid = $("#productId").val();
+                var quantity = $("#quantityInput").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AddToCart", "ProductList")",
+                    data: {
+                        productid: productid,
+                        quantityProduct: quantity
+                    },
+                    success: function (result) {
+                        window.location.href = "@Url.Action("Index", "Cart")";
+                    },
+                    error: function (error) {
+                        console.error("Error updating cart:", error);
+                    }
+                });
+            });
+
+            $(".updateProductQuantityCart").click(function (event) {
+                event.preventDefault();
+                var productid = $("#productId").val();
+                var quantity = $("#quantityInput").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AddToCart", "ProductList")",
+                    data: {
+                        productid: productid,
+                        quantityProduct: quantity
+                    },
+                    headers: {
+                        RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (result) {
+                        $('#successModal').modal('show');
+                        console.log(result);
+                        updateCartCount(result.totalQuantity);
+                    },
+                    error: function (error) {
+                        console.error("Error updating cart:", error);
+                    }
+                });
+            });
+        });
     </script>
+
     <!-- Modernizer JS -->
     <script src="/assets/js/vendor/modernizr.min.js"></script>
     <!-- jQuery JS -->
@@ -329,12 +388,6 @@
     <script src="/assets/js/vendor/isotope.pkgd.min.js"></script>
     <script src="/assets/js/vendor/counterup.js"></script>
     <script src="/assets/js/vendor/waypoints.min.js"></script>
-
-    <!-- Main JS -->
     <script src="/assets/js/main.js"></script>
 </body>
-
-
-<!-- Mirrored from new.axilthemes.com/demo/template/etrade/single-product-5.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 10 Aug 2023 07:18:31 GMT -->
-
 </html>
