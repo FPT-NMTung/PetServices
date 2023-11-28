@@ -294,21 +294,21 @@
                                         </ul>
                                         <div style="text-align: center">
                                             <div class="pagination">
-                                                    @{
-                                                        int pagenumber = ((@ViewBag.FeedbacksCount - 1) / 5) + 1;
-                                                                                @if (ViewBag.CurrentPage > 1)
-                                                        {
-                                                                                <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
-                                                        }
-                                                                                @for (int i = 1; i <= pagenumber; i++)
-                                                        {
-                                                                                <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = i })">@i</a>
-                                                        }
-                                                                                @if (ViewBag.CurrentPage < pagenumber)
-                                                        {
-                                                                                <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
-                                                        }
+                                                @{
+                                                    int pagenumber = ((@ViewBag.FeedbacksCount - 1) / 5) + 1;
+                                                    @if (ViewBag.CurrentPage > 1)
+                                                    {
+                                                        <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
                                                     }
+                                                    @for (int i = 1; i <= pagenumber; i++)
+                                                    {
+                                                        <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = i })">@i</a>
+                                                    }
+                                                    @if (ViewBag.CurrentPage < pagenumber)
+                                                    {
+                                                        <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
+                                                    }
+                                                }
                                             </div>
                                         </div>
                                         }
