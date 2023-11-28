@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
+using PetServices.Form;
 using PetServices.Models;
 
 namespace PetServices.Controllers
@@ -329,6 +330,192 @@ namespace PetServices.Controllers
             }
 
             return Ok(feedbacks1);
+        }
+
+        [HttpGet("GetStarInTakeCarePet")]
+        public async Task<ActionResult> GetStarInTakeCarePet()
+        {
+            var takeCareServices = await _context.Services.Where(s => s.SerCategoriesId == 3).ToListAsync();
+
+            double totalStars = 0;
+            int totalFeedbackCount = 0;
+            int count = 0;
+
+            foreach (var service in takeCareServices)
+            {
+                var feedbacks = _context.Feedbacks
+                    .Where(f => f.ServiceId == service.ServiceId)
+                    .ToList();
+
+                if (feedbacks.Any())
+                {
+                    totalStars += feedbacks.Average(f => f.NumberStart) ?? 0;
+                    totalFeedbackCount += feedbacks.Count;
+                    count++; 
+                }
+            }
+
+            if (count > 0)
+            {
+                double averageStars = totalFeedbackCount > 0 ? Math.Round(totalStars / count, 1) : 0;
+
+                var feedbackData = new FeedbackDataForm
+                {
+                    AverageStars = averageStars,
+                    TotalFeedbackCount = totalFeedbackCount
+                };
+
+                return Ok(feedbackData);
+            }
+            else
+            {
+                var feedbackData = new FeedbackDataForm
+                {
+                    AverageStars = 0,
+                    TotalFeedbackCount = 0
+                };
+                return Ok(feedbackData);
+            }
+        }
+
+        [HttpGet("GetStarInRoomPet")]
+        public async Task<ActionResult> GetStarInRoomPet()
+        {
+            var Rooms = await _context.Rooms.ToListAsync();
+
+            double totalStars = 0;
+            int totalFeedbackCount = 0;
+            int count = 0;
+
+
+            foreach (var room in Rooms)
+            {
+                var feedbacks = _context.Feedbacks
+                    .Where(f => f.RoomId == room.RoomId)
+                    .ToList();
+
+                if (feedbacks.Any())
+                {
+                    totalStars += feedbacks.Average(f => f.NumberStart) ?? 0;
+                    totalFeedbackCount += feedbacks.Count;
+                    count++;
+                }
+            }
+
+            if (count > 0)
+            {
+                double averageStars = totalFeedbackCount > 0 ? Math.Round(totalStars / count, 1) : 0;
+
+                var feedbackData = new FeedbackDataForm
+                {
+                    AverageStars = averageStars,
+                    TotalFeedbackCount = totalFeedbackCount
+                };
+
+                return Ok(feedbackData);
+            }
+            else
+            {
+                var feedbackData = new FeedbackDataForm
+                {
+                    AverageStars = 0,
+                    TotalFeedbackCount = 0
+                };
+                return Ok(feedbackData);
+            }
+        }
+
+        [HttpGet("GetStarInPetWalking")]
+        public async Task<ActionResult> GetStarInPetWalking()
+        {
+            var PetWalkingServices = await _context.Services.Where(s => s.SerCategoriesId == 4).ToListAsync();
+
+            double totalStars = 0;
+            int totalFeedbackCount = 0;
+            int count = 0;
+
+            foreach (var service in PetWalkingServices)
+            {
+                var feedbacks = _context.Feedbacks
+                    .Where(f => f.ServiceId == service.ServiceId)
+                    .ToList();
+
+                if (feedbacks.Any())
+                {
+                    totalStars += feedbacks.Average(f => f.NumberStart) ?? 0;
+                    totalFeedbackCount += feedbacks.Count;
+                    count++;
+                }
+            }
+
+            if (count > 0)
+            {
+                double averageStars = totalFeedbackCount > 0 ? Math.Round(totalStars / count, 1) : 0;
+
+                var feedbackData = new FeedbackDataForm
+                {
+                    AverageStars = averageStars,
+                    TotalFeedbackCount = totalFeedbackCount
+                };
+
+                return Ok(feedbackData);
+            }
+            else
+            {
+                var feedbackData = new FeedbackDataForm
+                {
+                    AverageStars = 0,
+                    TotalFeedbackCount = 0
+                };
+                return Ok(feedbackData);
+            }
+        }
+
+        [HttpGet("GetStarInProductPet")]
+        public async Task<ActionResult> GetStarInProductPet()
+        {
+            var Products = await _context.Products.ToListAsync();
+
+            double totalStars = 0;
+            int totalFeedbackCount = 0;
+            int count = 0;
+
+
+            foreach (var Product in Products)
+            {
+                var feedbacks = _context.Feedbacks
+                    .Where(f => f.ProductId == Product.ProductId)
+                    .ToList();
+
+                if (feedbacks.Any())
+                {
+                    totalStars += feedbacks.Average(f => f.NumberStart) ?? 0;
+                    totalFeedbackCount += feedbacks.Count;
+                    count++;
+                }
+            }
+
+            if (count > 0)
+            {
+                double averageStars = totalFeedbackCount > 0 ? Math.Round(totalStars / count, 1) : 0;
+
+                var feedbackData = new FeedbackDataForm
+                {
+                    AverageStars = averageStars,
+                    TotalFeedbackCount = totalFeedbackCount
+                };
+
+                return Ok(feedbackData);
+            }
+            else
+            {
+                var feedbackData = new FeedbackDataForm
+                {
+                    AverageStars = 0,
+                    TotalFeedbackCount = 0
+                };
+                return Ok(feedbackData);
+            }
         }
 
         [HttpDelete("del")]

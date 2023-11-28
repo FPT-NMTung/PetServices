@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using PetServices.DTO;
+using PetServices.Form;
 using PetServices.Models;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -298,7 +299,6 @@ namespace FEPetServices.Controllers
                 //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
 
-
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
@@ -380,8 +380,45 @@ namespace FEPetServices.Controllers
             HomeModel homeModel = new HomeModel();
             try
             {
+                HttpResponseMessage StarInTakeCarePetResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetStarInTakeCarePet");
+
+                if (StarInTakeCarePetResponse.IsSuccessStatusCode)
+                {
+                    var StarInTakeCarePet = await StarInTakeCarePetResponse.Content.ReadFromJsonAsync<FeedbackDataForm>();
+
+                    ViewBag.StarInTakeCarePet = StarInTakeCarePet;
+                }
+
+                HttpResponseMessage StarInRoomPetResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetStarInRoomPet");
+
+                if (StarInRoomPetResponse.IsSuccessStatusCode)
+                {
+                    var StarInRoomPet = await StarInRoomPetResponse.Content.ReadFromJsonAsync<FeedbackDataForm>();
+
+                    ViewBag.StarInRoomPet = StarInRoomPet;
+                }
+
+                HttpResponseMessage StarInPetWalkingResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetStarInPetWalking");
+
+                if (StarInPetWalkingResponse.IsSuccessStatusCode)
+                {
+                    var StarInPetWalking = await StarInPetWalkingResponse.Content.ReadFromJsonAsync<FeedbackDataForm>();
+
+                    ViewBag.StarInPetWalking = StarInPetWalking;
+                }
+
+                HttpResponseMessage StarInProductPetResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetStarInProductPet");
+
+                if (StarInProductPetResponse.IsSuccessStatusCode)
+                {
+                    var StarInProductPet = await StarInProductPetResponse.Content.ReadFromJsonAsync<FeedbackDataForm>();
+
+                    ViewBag.StarInProductPet = StarInProductPet;
+                }
+
                 //HttpResponseMessage responseCategoryProduct = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll");
                 HttpResponseMessage responseCategoryProduct = await client.GetAsync(DefaultApiUrl + "ProductCategory/GetAll");
+
                 //HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
                 HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
                 if (responseProduct.IsSuccessStatusCode && responseCategoryProduct.IsSuccessStatusCode)

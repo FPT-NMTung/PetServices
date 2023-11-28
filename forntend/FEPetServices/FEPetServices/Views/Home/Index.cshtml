@@ -32,14 +32,25 @@
                                             </div>
                                             <div class="content">
                                                 <span class="rating-icon">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fal fa-star"></i>
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i <= (ViewBag.StarInTakeCarePet.AverageStars ?? 5))
+                                                        {
+                                                            <i class="fas fa-star"></i>
+                                                        }
+                                                        else if (i - ViewBag.StarInTakeCarePet.AverageStars < 1)
+                                                        {
+                                                            <i class="fas fa-star-half-alt"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="far fa-star"></i>
+                                                        }
+                                                    }
+                                                    <span style="color: #7e7e7e; font-size: 17px;">@ViewBag.StarInTakeCarePet.AverageStars</span>
                                                 </span>
                                                 <span class="review-text">
-                                                    <span>100+</span> Reviews
+                                                    <span>@ViewBag.StarInTakeCarePet.TotalFeedbackCount</span> Đánh giá
                                                 </span>
                                             </div>
                                         </div>
@@ -63,14 +74,25 @@
                                             </div>
                                             <div class="content">
                                                 <span class="rating-icon">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fal fa-star"></i>
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i <= (ViewBag.StarInRoomPet.AverageStars ?? 5))
+                                                        {
+                                                            <i class="fas fa-star"></i>
+                                                        }
+                                                        else if (i - ViewBag.StarInRoomPet.AverageStars < 1)
+                                                        {
+                                                            <i class="fas fa-star-half-alt"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="far fa-star"></i>
+                                                        }
+                                                    }
+                                                    <span style="color: #7e7e7e; font-size: 17px;">@ViewBag.StarInRoomPet.AverageStars</span>
                                                 </span>
                                                 <span class="review-text">
-                                                    <span>100+</span> Reviews
+                                                    <span>@ViewBag.StarInRoomPet.TotalFeedbackCount</span> Đánh giá
                                                 </span>
                                             </div>
                                         </div>
@@ -94,14 +116,25 @@
                                             </div>
                                             <div class="content">
                                                 <span class="rating-icon">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fal fa-star"></i>
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i <= (ViewBag.StarInPetWalking.AverageStars ?? 5))
+                                                        {
+                                                            <i class="fas fa-star"></i>
+                                                        }
+                                                        else if (i - ViewBag.StarInPetWalking.AverageStars < 1)
+                                                        {
+                                                            <i class="fas fa-star-half-alt"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="far fa-star"></i>
+                                                        }
+                                                    }
+                                                    <span style="color: #7e7e7e; font-size: 17px;">@ViewBag.StarInPetWalking.AverageStars</span>
                                                 </span>
                                                 <span class="review-text">
-                                                    <span>100+</span> Reviews
+                                                    <span>@ViewBag.StarInPetWalking.TotalFeedbackCount</span> Đánh giá
                                                 </span>
                                             </div>
                                         </div>
@@ -125,14 +158,25 @@
                                             </div>
                                             <div class="content">
                                                 <span class="rating-icon">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fal fa-star"></i>
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i <= (ViewBag.StarInProductPet.AverageStars ?? 5))
+                                                        {
+                                                            <i class="fas fa-star"></i>
+                                                        }
+                                                        else if (i - ViewBag.StarInProductPet.AverageStars < 1)
+                                                        {
+                                                            <i class="fas fa-star-half-alt"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="far fa-star"></i>
+                                                        }
+                                                    }
+                                                    <span style="color: #7e7e7e; font-size: 17px;">@ViewBag.StarInProductPet.AverageStars</span>
                                                 </span>
                                                 <span class="review-text">
-                                                    <span>100+</span> Reviews
+                                                    <span>@ViewBag.StarInProductPet.TotalFeedbackCount</span> Đánh giá
                                                 </span>
                                             </div>
                                         </div>
