@@ -13,6 +13,8 @@
         public int? ProCategoriesId { get; set; }
         public int? Quantity { get; set; }
         public int? QuantitySold { get; set; }
+        public double? NumberStar { get; set; }
+        public int? NumberVoter { get; set; }
 
     }
 }

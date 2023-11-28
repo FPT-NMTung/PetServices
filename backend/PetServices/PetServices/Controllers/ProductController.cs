@@ -26,7 +26,23 @@ namespace PetServices.Controllers
         {
             List<Product> products = _context.Products.Include(s => s.ProCategories)
                 .ToList();
-            return Ok(_mapper.Map<List<ProductDTO>>(products));
+
+            var productlist = _mapper.Map<List<ProductDTO>>(products);
+
+            foreach (var product in productlist)
+            {
+                var averageStars = _context.Feedbacks.Where(f => f.ProductId == product.ProductId).Average(f => f.NumberStart);
+
+                if (averageStars.HasValue)
+                {
+                    averageStars = Math.Round(averageStars.Value, 1);
+                }
+
+                product.NumberStar = averageStars ?? 0;
+                product.NumberVoter = _context.Feedbacks.Where(f => f.ProductId == product.ProductId).ToList().Count();
+            }
+
+            return Ok(productlist);
         }
         [HttpGet("ProductID/{id}")]
         public IActionResult GetById(int id)

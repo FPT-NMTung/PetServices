@@ -100,6 +100,11 @@
 
 .check-valid {
     margin-top: 10px;
+    display: flex;
+}
+
+#status-icon{
+    margin-top: -5px;
 }
 
 @media only screen and (max-width: 992px) {
@@ -179,7 +184,6 @@
     .super-happy[class="super-happy"]:checked + svg,
     .super-happy[class="super-happy"]:focus + svg {
         fill: rgb(0, 204, 79);
-        transition: 1.5s;
     }
 
 .super-sad[class="super-sad"]:hover + svg,
@@ -268,4 +272,6 @@
             color: whitesmoke;
         }
 
-
+.super-happy:hover {
+    fill: rgb(0, 204, 79);
+}
