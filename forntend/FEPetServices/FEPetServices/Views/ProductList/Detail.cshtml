@@ -289,8 +289,14 @@
                                 </a>
                                 <div class="product-hover-action">
                                     <ul class="cart-action">
-                                        <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                        <li class="select-option"><a href="cart.html">Add to Cart</a></li>
+                                            <form method="post" action="@Url.Action("AddToCart", "ProductList")">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="ProductId" id="productId" value="@Model.Product.ProductId" />
+                                                <button style="width:200px; margin-left: 5px;" href="" class="axil-btn btn-bg-primary updateProductQuantity" type="submit">
+                                                    <i class="fas fa-cart-plus"></i>Mua ngay
+                                                </button>
+                                            </form>
+                                       @* <li class="select-option"><a href="cart.html">Add to Cart</a></li>*@
                                         @*<li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>*@
                                     </ul>
                                 </div>

@@ -11,7 +11,7 @@
             <div class="anh-product">
                 <div class="form-group">
                     <div class="title">
-                        <label for="image">Ảnh:</label>
+                        <label for="image">Ảnh <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                     </div>
                     <div class="typeinput">
                         <input type="file" class="form-control" style="color: red;" id="image" name="image" onchange="changeImageSource()" required>
@@ -22,7 +22,7 @@
             <div class="noidung-product">
                 <div class="form-group">
                     <div class="title">
-                        <label for="ProductName">Tên Sản Phẩm: </label>
+                        <label for="ProductName">Tên Sản Phẩm <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>: </label>
                     </div>
                     <div class="typeinput">
                         <input type="text" class="form-control" id="ProductName" name="ProductName" value="@Model?.ProductName" style="width:100%" required />
@@ -31,7 +31,7 @@
                 </div>
                 <div class="form-group">
                     <div class="title">
-                        <label for="Price">Giá Sản Phẩm: </label>
+                        <label for="Price">Giá Sản Phẩm<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>: </label>
                     </div>
                     <div class="typeinput">
                         <input type="text" class="form-control" id="Price" name="Price" value="@Model?.Price" style="width:100%" required />
@@ -49,7 +49,7 @@
                 </div>*@
                 <div class="form-group">
                     <div class="title">
-                        <label for="Desciption">Mô Tả Chi Tiết: </label>
+                        <label for="Desciption">Mô Tả Chi Tiết<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>: </label>
                     </div>
                     <div class="typeinput">
                         <textarea class="form-control" id="Desciption" name="Desciption" style="width:100%; height: auto" required> @Model?.Desciption</textarea>
@@ -58,7 +58,7 @@
                 </div>
                 <div class="form-group">
                     <div class="title">
-                        <label for="CreateDate">Ngày Thêm Sản Phẩm: </label>
+                        <label for="CreateDate">Ngày Thêm Sản Phẩm <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>: </label>
                     </div>
                     <div class="typeinput">
                         <input type="date" class="form-control" id="CreateDate" name="CreateDate" value="@Model?.CreateDate" style="width:100%" />
@@ -67,7 +67,7 @@
                 </div>
                 <div class="form-group">
                     <div class="title">
-                        <label for="ProCategoriesId">Loại Sản Phẩm: </label>
+                        <label for="ProCategoriesId">Loại Sản Phẩm <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>: </label>
                     </div>
                     <div class="typeinput">
                         @if (ViewBag.ProCategories != null)
@@ -102,3 +102,8 @@
 
     </form>
 </div>
+<style>
+.fa-asterisk{
+    color:red;
+}
+</style>

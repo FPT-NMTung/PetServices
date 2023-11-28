@@ -135,7 +135,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> EditServiceCategory(int serCategoriesId)
         {
-            ServiceModel model = new ServiceModel();
+            
             try
             {
                 // Gọi API để lấy thông tin ServiceCategory cần chỉnh sửa
@@ -149,8 +149,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                     {
                         PropertyNameCaseInsensitive = true
                     };
-                    model.ServiceCategoryDTO = System.Text.Json.JsonSerializer.Deserialize<ServiceCategoryDTO>(responseContent, options);
-                    HttpResponseMessage responseListService = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Service/GetServicesByCategory/" + model.ServiceCategoryDTO.SerCategoriesId);
+                    ServiceCategoryDTO managerInfos = System.Text.Json.JsonSerializer.Deserialize<ServiceCategoryDTO>(responseContent, options);
+                    HttpResponseMessage responseListService = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Service/GetServicesByCategory/" + managerInfos.SerCategoriesId);
 
                     if (responseListService.IsSuccessStatusCode)
                     {
@@ -158,14 +158,14 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                         if (!string.IsNullOrEmpty(ServiceList))
                         {
-                            model.serviceDTO = JsonConvert.DeserializeObject<List<ServiceDTO>>(ServiceList);
-
+                            var service = JsonConvert.DeserializeObject<List<ServiceDTO>>(ServiceList);
+                            ViewBag.service = service;
                         }
 
                     }
 
                     TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
-                    return View(model);
+                    return View(managerInfos);
                 }
                 else
                 {
@@ -178,7 +178,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
 
             // Return the view with or without an error message
-            return View(model);
+            return View();
         }
         public class ServiceModel
         {
@@ -237,6 +237,18 @@ namespace FEPetServices.Areas.Manager.Controllers
                 {
                     serviceCategory.Status = false;
                 }
+                HttpResponseMessage responseListService = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Service/GetServicesByCategory/" + serviceCategory.SerCategoriesId);
+
+                if (responseListService.IsSuccessStatusCode)
+                {
+                    var ServiceList = await responseListService.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(ServiceList))
+                    {
+                        var service = JsonConvert.DeserializeObject<List<ServiceDTO>>(ServiceList);
+                        ViewBag.service = service;
+                    }
+                }
 
                 var json = JsonConvert.SerializeObject(serviceCategory);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -247,6 +259,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
+                    
                     TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
                     return View(serviceCategory); // Chuyển hướng đến trang thành công hoặc trang danh sách
                 }
