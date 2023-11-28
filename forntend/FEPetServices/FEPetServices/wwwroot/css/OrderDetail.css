@@ -64,7 +64,7 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 9999999;
+    z-index: 4000;
 }
 
 /* Style for the popup container */
@@ -79,7 +79,7 @@
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     padding: 20px;
-    z-index: 99999999; /* Ensure the popup is above the overlay */
+    z-index: 9000; /* Ensure the popup is above the overlay */
 }
 
 /* Style for the close button */
