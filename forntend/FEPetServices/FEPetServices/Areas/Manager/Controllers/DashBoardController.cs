@@ -38,7 +38,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             try
             {
                 // số khách hàng mới trong tháng 
-                HttpResponseMessage NumberCustomerInMonthResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetNumberCustomerInMonth");
+                HttpResponseMessage NumberCustomerInMonthResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetNumberCustomerInMonth");
 
                 if (NumberCustomerInMonthResponse.IsSuccessStatusCode)
                 {
@@ -47,7 +47,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // % khách hàng mới trong tháng so với tháng trước 
-                HttpResponseMessage PercentCustomerPreviousMonthResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetPercentCustomerPreviousMonth");
+                HttpResponseMessage PercentCustomerPreviousMonthResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetPercentCustomerPreviousMonth");
 
                 if (PercentCustomerPreviousMonthResponse.IsSuccessStatusCode)
                 {
@@ -56,7 +56,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // số đơn hàng trong tháng
-                HttpResponseMessage NumberOrderInMonthResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetNumberOrderInMonth");
+                HttpResponseMessage NumberOrderInMonthResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetNumberOrderInMonth");
 
                 if (NumberOrderInMonthResponse.IsSuccessStatusCode)
                 {
@@ -65,7 +65,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // % số đơn hàng trong tháng so với tháng trước
-                HttpResponseMessage PercentOrderPreviousMonthResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetPercentOrderPreviousMonth");
+                HttpResponseMessage PercentOrderPreviousMonthResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetPercentOrderPreviousMonth");
 
                 if (PercentOrderPreviousMonthResponse.IsSuccessStatusCode)
                 {
@@ -74,7 +74,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // tổng thu nhập trong tháng
-                HttpResponseMessage IncomeInMonthResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetIncomeInMonth");
+                HttpResponseMessage IncomeInMonthResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetIncomeInMonth");
 
                 if (IncomeInMonthResponse.IsSuccessStatusCode)
                 {
@@ -84,7 +84,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // % tổng thu nhập trong tháng so với tháng trước
-                HttpResponseMessage PercentIncomePreviousMonthResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetPercentIncomePreviousMonth");
+                HttpResponseMessage PercentIncomePreviousMonthResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetPercentIncomePreviousMonth");
 
                 if (PercentIncomePreviousMonthResponse.IsSuccessStatusCode)
                 {
@@ -93,7 +93,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // số lượng sản phẩm bán trong tháng
-                HttpResponseMessage NumberProductInMonthResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetNumberProductInMonth");
+                HttpResponseMessage NumberProductInMonthResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetNumberProductInMonth");
 
                 if (NumberProductInMonthResponse.IsSuccessStatusCode)
                 {
@@ -102,7 +102,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // % số lượng sản phẩm bán trong tháng so với tháng trước
-                HttpResponseMessage PercentNumberProductPreviousMonthResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetPercentNumberProductPreviousMonth");
+                HttpResponseMessage PercentNumberProductPreviousMonthResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetPercentNumberProductPreviousMonth");
 
                 if (PercentNumberProductPreviousMonthResponse.IsSuccessStatusCode)
                 {
@@ -111,7 +111,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // Doanh số service theo ngày
-                HttpResponseMessage TotalPriceServiceIn7DayResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetTotalPriceServiceIn7Day");
+                HttpResponseMessage TotalPriceServiceIn7DayResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetTotalPriceServiceIn7Day");
 
                 if (TotalPriceServiceIn7DayResponse.IsSuccessStatusCode)
                 {
@@ -120,7 +120,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // Doanh số product theo ngày
-                HttpResponseMessage TotalPriceProductIn7DayResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetTotalPriceProductIn7Day");
+                HttpResponseMessage TotalPriceProductIn7DayResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetTotalPriceProductIn7Day");
 
                 if (TotalPriceServiceIn7DayResponse.IsSuccessStatusCode)
                 {
@@ -129,7 +129,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // Doanh số room theo ngày
-                HttpResponseMessage TotalPriceRoomIn7DayResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetTotalPriceRoomIn7Day");
+                HttpResponseMessage TotalPriceRoomIn7DayResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetTotalPriceRoomIn7Day");
 
                 if (TotalPriceRoomIn7DayResponse.IsSuccessStatusCode)
                 {
@@ -138,7 +138,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // Số đơn hàng hoàn thành trong tháng 
-                HttpResponseMessage NumberOrderCompleteInMonthResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetNumberOrderCompleteInMonth");
+                HttpResponseMessage NumberOrderCompleteInMonthResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetNumberOrderCompleteInMonth");
 
                 if (NumberOrderCompleteInMonthResponse.IsSuccessStatusCode)
                 {
@@ -148,7 +148,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // Số đơn hàng bị hủy trong tháng
-                HttpResponseMessage NumberOrderRejectedInMonthResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetNumberOrderRejectedInMonth");
+                HttpResponseMessage NumberOrderRejectedInMonthResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetNumberOrderRejectedInMonth");
 
                 if (NumberOrderRejectedInMonthResponse.IsSuccessStatusCode)
                 {
@@ -158,7 +158,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // Top 5 phòng được book nhiều nhất trong tháng 
-                HttpResponseMessage Top5RoomBookingResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetTop5RoomBooking");
+                HttpResponseMessage Top5RoomBookingResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetTop5RoomBooking");
 
                 if (Top5RoomBookingResponse.IsSuccessStatusCode)
                 {
@@ -167,7 +167,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // Top 5 dịch vụ được book nhiều nhất trong tháng 
-                HttpResponseMessage Top5ServiceBookingResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetTop5ServiceBooking");
+                HttpResponseMessage Top5ServiceBookingResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetTop5ServiceBooking");
 
                 if (Top5ServiceBookingResponse.IsSuccessStatusCode)
                 {
@@ -176,7 +176,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // Top 5 sản phẩm bán chạy nhất trong tháng 
-                HttpResponseMessage Top5ProductOrderResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetTop5ProductOrder");
+                HttpResponseMessage Top5ProductOrderResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetTop5ProductOrder");
 
                 if (Top5ProductOrderResponse.IsSuccessStatusCode)
                 {
@@ -185,7 +185,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // Top 5 khu vực đông khách hàng nhất  
-                HttpResponseMessage Top5CustomerAreaResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetTop5CustomerArea");
+                HttpResponseMessage Top5CustomerAreaResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetTop5CustomerArea");
 
                 if (Top5CustomerAreaResponse.IsSuccessStatusCode)
                 {

@@ -449,8 +449,8 @@ namespace PetServices.Controllers
         }
 
         // Số đơn hàng bị hủy trong tháng 
-        [HttpGet("GetNumberOrderRejectedInMonth")]
-        public async Task<ActionResult> GetNumberOrderRejectedInMonth()
+        [HttpGet("GetNumberOrderCancelledInMonth")]
+        public async Task<ActionResult> GetNumberOrderCancelledInMonth()
         {
             DateTime now = DateTime.Now;
 
@@ -462,13 +462,13 @@ namespace PetServices.Controllers
                 var previousMonth = currentMonth.AddMonths(-1);
 
                 var orders = await _context.Orders
-                    .Where(o => o.OrderStatus == "Rejected" &&
+                    .Where(o => o.OrderStatus == "Cancelled" &&
                                 o.OrderDate.Value.Month == currentMonth.Month &&
                                 o.OrderDate.Value.Year == currentMonth.Year)
                     .ToListAsync();
 
                 var ordersPrevious = await _context.Orders
-                    .Where(o => o.OrderStatus == "Rejected" &&
+                    .Where(o => o.OrderStatus == "Cancelled" &&
                                 o.OrderDate.Value.Month == previousMonth.Month &&
                                 o.OrderDate.Value.Year == previousMonth.Year)
                     .ToListAsync();
@@ -695,7 +695,7 @@ namespace PetServices.Controllers
 
             // Lấy danh sách khách hàng có UserInfoId nằm trong danh sách userInfoIds
             var userInfos = _context.UserInfos
-                .Where(userInfo => userInfoIds.Contains(userInfo.UserInfoId))
+                .Where(userInfo => userInfoIds.Contains(userInfo.UserInfoId) && userInfo.Province != null)
                 .ToList();
 
             // Đếm số lượng khách hàng trong 1 thành phố
