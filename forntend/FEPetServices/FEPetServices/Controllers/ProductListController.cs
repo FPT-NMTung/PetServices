@@ -193,7 +193,7 @@ namespace FEPetServices.Controllers
                     }
 
                     //HttpResponseMessage productStarResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetProductStar?productID=" + proId);
-                    HttpResponseMessage productStarResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetProductStar?productID=" + proId);
+                    HttpResponseMessage productStarResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetProductStar?productID=" + proId);
 
                     if (productStarResponse.IsSuccessStatusCode)
                     {
