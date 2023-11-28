@@ -133,7 +133,6 @@
                                                             <button class="btn btn-outline-primary" onclick="openPopupService('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>
                                                         </div>
                                                     }
-
                                                 }
                                             </div>
                                         }
@@ -164,6 +163,12 @@
                                                         <p style="font-size:.9rem;">Thời gian bắt đầu: @roomDetail.StartDate</p>
                                                         <p style="font-size:.9rem;">Thời gian kêt thúc: @roomDetail.EndDate</p>
                                                     </div>
+                                                    @if (roomDetail.FeedbackStatus == null || roomDetail.FeedbackStatus == false)
+                                                    {
+                                                        <div class="btn-content-detail">
+                                                            <button class="btn btn-outline-primary" onclick="openPopupRoom('@roomDetail.Room.Picture', '@roomDetail.Room.RoomName', '@roomDetail.RoomId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>
+                                                        </div>
+                                                    }
                                                 }
                                             </div>
                                         }
@@ -261,6 +266,7 @@
                                     <label>Đánh giá của bạn</label>
                                     <input type="hidden" id="serviceIdInput" value="" />
                                     <input type="hidden" id="productIdInput" value="" />
+                                    <input type="hidden" id="roomIdInput" value="" />
                                     <input type="hidden" id="ratingInput" value="" />
                                     <input type="hidden" id="userIdInput" value="" />
                                     <input type="hidden" id="orderIdInput" value="" />
@@ -329,7 +335,7 @@
     @*End Lazy Loading*@
 
     <script>
-        //Hiện popup đánh giá
+        //Hiện popup đánh giá service 
         function openPopupService(image, serviceName, weight, serviceId, userId, orderId) {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('popup').style.display = 'block';
@@ -342,24 +348,39 @@
             document.getElementById('userIdInput').value = userId;
             document.getElementById('orderIdInput').value = orderId;
             document.getElementById('productIdInput').value = null;
+            document.getElementById('roomIdInput').value = null;
 
         }
 
-        //Hiện popup đánh giá
-        function openPopupProduct(image, productName, quanlity, productId, userId, orderId, status) {
+        //Hiện popup đánh giá product
+        function openPopupProduct(image, productName, quantity, productId, userId, orderId, status) {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('popup').style.display = 'block';
 
             document.getElementById('popupImage').src = image;
             document.getElementById('popupServiceName').innerText = productName;
-            document.getElementById('popupServiceInfo').innerText = 'x' + quanlity;
+            document.getElementById('popupServiceInfo').innerText = 'x' + quantity;
 
             document.getElementById('productIdInput').value = productId;
             document.getElementById('userIdInput').value = userId;
             document.getElementById('orderIdInput').value = orderId;
             document.getElementById('serviceIdInput').value = null;
+            document.getElementById('roomIdInput').value = null;
+        }
 
-            alert("status: " + status);
+        //Hiện popup đánh giá room
+        function openPopupRoom(image, roomName, roomId, userId, orderId, status) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+
+            document.getElementById('popupImage').src = image;
+            document.getElementById('popupServiceName').innerText = roomName;
+
+            document.getElementById('roomIdInput').value = roomId;
+            document.getElementById('userIdInput').value = userId;
+            document.getElementById('orderIdInput').value = orderId;
+            document.getElementById('serviceIdInput').value = null;
+            document.getElementById('productIdInput').value = null;
         }
 
         // Ẩn popup đánh giá
@@ -410,6 +431,7 @@
 
             var serviceId = document.getElementById('serviceIdInput').value;
             var productId = document.getElementById('productIdInput').value;
+            var roomId = document.getElementById('roomIdInput').value;
             var rating = document.getElementById('ratingInput').value;
             var userId = document.getElementById('userIdInput').value;
             var orderId = document.getElementById('orderIdInput').value;
@@ -428,6 +450,9 @@
                 if (serviceId !== null) {
                     data.ServiceId = parseInt(serviceId);
                 }
+                if (roomId !== null) {
+                    data.RoomId = parseInt(roomId);
+                }
 
                 $.ajax({
                     url: 'https://pet-service-api.azurewebsites.net/api/Feedback/AddFeedBack',
@@ -437,20 +462,16 @@
                     success: function (response) {
 
                         closePopup();
-                        alert(response);
+                        showSuccessFeedbackViewBag();
+                        location.reload();
                     },
                     error: function (error) {
-                        alert('Error submitting feedback: ' + error.responseText);
+                        showErrorToastFeedbackViewBag();
                     }
                 });
             }
             else {
-                alert('Please provide all required information.' +
-                    '\nserviceId: ' + serviceId +
-                    '\nproductId: ' + productId +
-                    '\nrating: ' + rating +
-                    '\nfeedbackMessage: ' + feedbackMessage +
-                    '\nuserId: ' + userId);
+                showErrorToastFeedback2ViewBag();
             }
         });
     </script>
