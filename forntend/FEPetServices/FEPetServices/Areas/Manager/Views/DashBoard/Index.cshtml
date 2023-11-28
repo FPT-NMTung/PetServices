@@ -1,0 +1,654 @@
+﻿@using PetServices.Form;
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="~/css/DashBoard.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/font-awesome.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/flaticon/flaticon.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/slick.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/slick-theme.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/sal.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/magnific-popup.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/base.css">
+
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/react@16.12/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@16.12/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prop-types@15.7.2/prop-types.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-apexcharts@1.3.6/dist/react-apexcharts.iife.min.js"></script>
+
+</head>
+
+<body>
+    <div class="Dashboard">
+        <div class="container-fluid">
+            <div class="page-header">
+                <h4 class="page-title">Thống kê doanh số</h4>
+            </div>
+            <div class="row" style="margin-bottom: 30px;">
+
+                @*Thống kê số lượng khách hàng mới trong tháng*@
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3" style="padding: 10px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-body d-flex">
+                            <div class="d-flex single-counter">
+                                <div class="card-body" style="padding: 13px 0px 0px 20px;">
+                                    <h7 class="fw-normal title">Khách hàng mới</h7>
+                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count">@ViewBag.NumberCustomerInMonth</h3>
+                                </div>
+                            </div>
+                            <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
+                                <div class="chart-wrapper mt-1" style="color: #32d0fc;">
+                                    <i class="fad fa-user-plus" style="font-size: 70px;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
+                            <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
+                                @if (ViewBag.PercentCustomerPreviousMonth < 0)
+                                {
+                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 20px; color: #32d0fc; margin-top: 2.5px;"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #32d0fc; margin-top: 2.5px;"></i>
+                                }
+                                <p style="color: #32d0fc;">&ensp;@ViewBag.PercentCustomerPreviousMonth%</p>&nbspSo với tháng trước
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @*Thống kê số lượng đơn hoàn thành trong tháng*@
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3" style="padding: 10px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-body d-flex">
+                            <div class="d-flex single-counter">
+                                <div class="card-body" style="padding: 13px 0px 0px 20px;">
+                                    <h7 class="fw-normal title">Tổng đơn hàng</h7>
+                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count">@ViewBag.NumberOrderInMonth</h3>
+                                </div>
+                            </div>
+                            <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
+                                <div class="chart-wrapper mt-1" style="color: #f478f4">
+                                    <i class="fad fa-file-invoice-dollar" style="font-size: 70px;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
+                            <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
+                                @if (ViewBag.PercentOrderPreviousMonth < 0)
+                                {
+                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                }
+                                <p style="color: #f478f4">&ensp;@ViewBag.PercentOrderPreviousMonth%</p>&nbspSo với tháng trước
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @*Thống kê thu nhập trong tháng*@
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3" style="padding: 10px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-body d-flex">
+                            <div class="d-flex single-counter">
+                                <div class="card-body" style="padding: 13px 0px 0px 20px;">
+                                    <h7 class="fw-normal title">Tổng thu nhập</h7>
+                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count IncomeInMonth">@ViewBag.IncomeInMonth</h3>
+                                </div>
+                            </div>
+                            <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
+                                <div class="chart-wrapper mt-1" style="color: #f7ba48;">
+                                    <i class="fad fa-hand-holding-usd" style="font-size: 70px;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
+                            <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
+                                @if (ViewBag.PercentIncomePreviousMonth < 0)
+                                {
+                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 20px; color: #f7ba48; margin-top: 2.5px;"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #f7ba48; margin-top: 2.5px;"></i>
+                                }
+                                <p style="color: #f7ba48;">&ensp;@ViewBag.PercentIncomePreviousMonth%</p>&nbspSo với tháng trước
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @*Thống kê số lượng sản phẩm bán ra trong tháng*@
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3" style="padding: 10px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-body d-flex">
+                            <div class="d-flex single-counter">
+                                <div class="card-body" style="padding: 13px 0px 0px 20px;">
+                                    <h7 class="fw-normal title">Tổng sản phẩm</h7>
+                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count">@ViewBag.NumberProductInMonth</h3>
+                                </div>
+                            </div>
+                            <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
+                                <div class="chart-wrapper mt-1" style="color: #4ecc48">
+                                    <i class="fad fa-parachute-box" style="font-size: 70px;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
+                            <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
+                                @if (ViewBag.PercentNumberProductPreviousMonth < 0)
+                                {
+                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 20px; color: #4ecc48; margin-top: 2.5px;"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #4ecc48; margin-top: 2.5px;"></i>
+                                }
+                                <p style="color: #4ecc48;">&ensp;@ViewBag.PercentNumberProductPreviousMonth%</p>&nbspSo với tháng trước
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row" style="margin-bottom: 30px;">
+                @*Thống kê doanh số bán trong 7 ngày gần nhất*@
+                <div class="col-xl-9" style="padding: 10px; border: none;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
+                            <div>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Doanh thu trong 7 ngày</h6>
+                            </div>
+                        </div>
+                        <div class="box mt-4" style="padding: 10px 10px 0px 10px;">
+                            <div id="line-adwords" style="min-width: 10px;" class=""></div>
+                        </div>
+                    </div>
+                </div>
+                @*Thống kê số đơn hàng hoàn thành/ bị hủy trong 3 tháng gần nhất*@
+                <div class="col-xl-3" style="padding: 10px 10px 0px 10px; border: none;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
+                            <div>
+                                <h6 class="fw-normal title" style="padding: 0px 10px 10px 10px; font-weight: 700!important">Đơn hàng trong 3 tháng</h6>
+                            </div>
+                        </div>
+                        <div class="box mt-4" style="padding: 10px;">
+                            <div id="column-charts-order" class=""></div>
+                        </div>
+                        <div class="card-body" style="padding: 0px 20px 0px 20px;">
+                            <div class="d-flex mb-4 mt-3">
+                                <i class="fad fa-badge-check" style="margin-top: 5px; font-size: 30px; margin-right: 10px; color: rgb(153, 255, 0);"></i>
+                                @{
+                                    foreach (var item in ViewBag.NumberOrderCompleteInMonth1)
+                                    {
+                                        bool containsMinus = item?.Text.Contains("-") ?? false;
+
+                                        <div>
+                                            <p class="mb-1 fw-semibold ">Đơn hàng hoàn thành</p>
+
+                                            <div style="display: flex;">
+                                                @if (containsMinus)
+                                                {
+                                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 15px; color: rgb(153, 255, 0); margin-top: 2.5px;"></i>
+                                                    <p class="fw-normal fs-12 mb-1" style="font-size: 13px;"><span style="color: rgb(153, 255, 0);">@item?.Text.Replace("-", string.Empty)%</span> So với tháng trước</p>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 15px; color: rgb(153, 255, 0); margin-top: 2.5px;"></i>
+                                                    <p class="fw-normal fs-12 mb-1" style="font-size: 13px;"><span style="color: rgb(153, 255, 0);">@item?.Text%</span> So với tháng trước</p>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div class="ms-auto mb-auto">
+                                            <p class="fw-bold mb-0" style="font-size: 22px; color: rgb(73, 64, 64);">@item?.Value</p>
+                                        </div>
+
+                                        break;
+                                    }
+                                }
+                            </div>
+                            <div class="d-flex mb-4 mt-3">
+                                <i class="fad fa-badge-check" style="margin-top: 5px; font-size: 30px; margin-right: 10px; color: rgb(255, 77, 0)"></i>
+                                @{
+                                    foreach (var item in ViewBag.NumberOrderRejectedInMonth1)
+                                    {
+                                        bool containsMinus = item?.Text.Contains("-") ?? false;
+
+                                        <div>
+                                            <p class="mb-1 fw-semibold ">Đơn hàng bị hủy</p>
+
+                                            <div style="display: flex;">
+                                                @if (containsMinus)
+                                                {
+                                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 15px; color: rgb(255, 77, 0); margin-top: 2.5px;"></i>
+                                                    <p class="fw-normal fs-12 mb-1" style="font-size: 13px;"><span style="color: rgb(255, 77, 0)">@item?.Text.Replace("-", string.Empty)%</span> So với tháng trước</p>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 15px; color: rgb(255, 77, 0); margin-top: 2.5px;"></i>
+                                                    <p class="fw-normal fs-12 mb-1" style="font-size: 13px;"><span style="color: rgb(255, 77, 0)">@item?.Text%</span> So với tháng trước</p>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div class="ms-auto mb-auto">
+                                            <p class="fw-bold mb-0" style="font-size: 22px; color: rgb(73, 64, 64);">@item?.Value</p>
+                                        </div>
+
+                                        break;
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 30px;">
+                @*Top 5 dịch vụ được book nhiều nhất trong tháng*@
+                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 500px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
+                            <div>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Top 5 phòng tháng</h6>
+                            </div>
+                        </div>
+                        <div class="box mt-4">
+                            <div id="pie-chart-room" class=""></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 500px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
+                            <div>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Top 5 dịch vụ tháng</h6>
+                            </div>
+                        </div>
+                        <div class="box mt-4">
+                            <div id="donut-chart-service" class=""></div>
+                        </div>
+                    </div>
+                </div>
+
+                @*Top 5 sản phẩm bán chạy nhất trong tháng*@
+                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 500px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
+                            <div>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Top 5 sản phẩm tháng</h6>
+                            </div>
+                        </div>
+                        <div class="box mt-4">
+                            <div id="chart-product" class=""></div>
+                        </div>
+                    </div>
+                </div>
+
+                @*Top 5 khu vực đông khách hàng nhất*@
+                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 500px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
+                            <div>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Top 5 khu vực</h6>
+                            </div>
+                        </div>
+                        <div class="box mt-4">
+                            <div id="chart-cusarea" class=""></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/assets/js/vendor/jquery.js "></script>
+    <script src="~/assets/js/vendor/slick.min.js "></script>
+    <script src="~/assets/js/vendor/jquery-ui.min.js "></script>
+    <script src="~/assets/js/vendor/sal.js "></script>
+    <script src="~/assets/js/vendor/imagesloaded.pkgd.min.js "></script>
+    <script src="~/assets/js/vendor/counterup.js "></script>
+    <script src="~/assets/js/vendor/waypoints.min.js "></script>
+    <script src="~/assets/js/main.js "></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js "></script>
+
+    @*Thống kê doanh số bán trong 7 ngày gần nhất*@
+    <script>
+        var totalPriceServiceData = [];
+        var DateData = [];
+        @foreach (var item in ViewBag.TotalPriceServiceIn7Day)
+        {
+            @:totalPriceServiceData.push(@item.Text);
+            @:DateData.push('@item.Value');
+        };
+
+        var totalPriceProductData = [];
+        @foreach (var item in ViewBag.TotalPriceProductIn7Day)
+        {
+            @:totalPriceProductData.push(@item.Text);
+        };
+
+        var totalPriceRoomData = [];
+        @foreach (var item in ViewBag.TotalPriceRoomIn7Day)
+        {
+            @:totalPriceRoomData.push(@item.Text);
+        };
+
+        var optionsLine = {
+            chart: {
+                height: 420,
+                type: 'line',
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    offsetX: -15,
+                    offsetY: -15,
+                    position: 'top-right',
+                }
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 4
+            },
+            colors: ["#ffc4a4", '#fba2d0', '#c688eb'],
+            series: [{
+                name: "&nbsp Doanh số dịch vụ",
+                data: totalPriceServiceData
+            }, {
+                name: "&nbsp Doanh số sản phẩm",
+                data: totalPriceProductData
+            }, {
+                name: "&nbsp Doanh số phòng",
+                data: totalPriceRoomData
+            }],
+            markers: {
+                size: 4,
+                strokeWidth: 0,
+                hover: {
+                    size: 6
+                }
+            },
+            labels: DateData,
+            xaxis: {
+                labels: {
+                    style: {
+                        fontSize: '13px',
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        fontSize: '13px',
+                    },
+                    formatter: function (value) {
+                        return Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+                    }
+                }
+            },
+            legend: {
+                offsetY: 8,
+                fontSize: '14px',
+            }
+        }
+        var chartLine = new ApexCharts(document.querySelector('#line-adwords'), optionsLine);
+        chartLine.render();
+    </script>
+
+    @*Thống kê số đơn hàng hoàn thành/ bị hủy trong 3 tháng gần nhất*@
+    <script>
+        var OrderCompleteData = [];
+        var DateData = [];
+
+        @foreach (var item in ViewBag.NumberOrderCompleteInMonth)
+        {
+            @:OrderCompleteData.push(@item.Text);
+            @:DateData.push('@item.Value');
+        };
+
+        var OrderRejectedData = [];
+        @foreach (var item in ViewBag.NumberOrderRejectedInMonth)
+        {
+            @:OrderRejectedData.push(@item.Text);
+        };
+
+        var options = {
+            series: [{
+                name: 'Đơn hoàn thành',
+                data: OrderCompleteData
+            }, {
+                name: 'Đơn bị hủy',
+                data: OrderRejectedData
+            }],
+            chart: {
+                type: 'bar',
+                height: 290,
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    offsetX: -5,
+                    offsetY: -15,
+                    position: 'top-right',
+                }
+            },
+            colors: ["#d6ff99", '#ffb899'],
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '30%',
+                    endingShape: 'rounded'
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                show: true,
+                width: 3,
+                colors: ['transparent']
+            },
+            xaxis: {
+                categories: DateData,
+            },
+            fill: {
+                opacity: 1
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        fontSize: '13px',
+                    }
+                }
+            },
+            legend: {
+                fontSize: '14px',
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#column-charts-order"), options);
+        chart.render();
+    </script>
+
+    @*Top 5 phòng được book nhiều nhất trong tháng*@
+    <script>
+        var RoomData = [];
+        var RoomName = [];
+
+        @foreach (var item in ViewBag.Top5RoomBooking)
+        {
+            @:RoomData.push(@item.Text);
+            @:RoomName.push('@item.Value');
+        };
+
+        var options = {
+            series: RoomData,
+            chart: {
+                width: 350,
+                type: 'pie',
+            },
+            labels: RoomName,
+            colors: ["#ef5b76", '#b75984', '#5d3b78', '#908cb1', '#bbc6d8', '#ffb658'],
+            legend: {
+                position: 'bottom',
+                fontSize: '13px',
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#pie-chart-room"), options);
+        chart.render();
+    </script>
+
+    @*Top 5 dịch vụ được book nhiều nhất trong tháng*@
+    <script>
+        var ServiceData = [];
+        var ServiceName = [];
+
+        @foreach (var item in ViewBag.Top5ServiceBooking)
+        {
+            @:ServiceData.push(@item.Text);
+            @:ServiceName.push('@item.Value');
+        };
+
+        var options = {
+            series: ServiceData,
+            chart: {
+                width: 350,
+                type: 'donut',
+            },
+            labels: ServiceName,
+            colors: ["#ffb658", '#f18f90', '#76F9E4', '#FFA3FC', '#adc341', '#92bbe6'],
+            legend: {
+                position: 'bottom',
+                fontSize: '13px',
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#donut-chart-service"), options);
+        chart.render();
+    </script>
+
+    @*Top 5 sản phẩm bán chạy nhất trong tháng*@
+    <script>
+        var ProductData = [];
+        var ProductName = [];
+        var totalQuantity = 0;
+
+        @foreach (var item in ViewBag.Top5ProductOrder)
+        {
+            @:totalQuantity = @item.Text;
+            break;
+        };
+
+        @foreach (var item in ViewBag.Top5ProductOrder)
+        {
+            if (!string.IsNullOrEmpty(item.Value))
+            {
+                @:ProductData.push("@item.Text");
+                @:ProductName.push('@Html.Raw(item.Value)');
+            }
+        };
+
+        var options = {
+            series: ProductData,
+            chart: {
+                height: 280,
+                type: 'radialBar',
+            },
+            labels: ProductName,
+            colors: ["#fe2712", '#f99900', '#a61a49', '#3b01a3', '#64b131'],
+            plotOptions: {
+                radialBar: {
+                    dataLabels: {
+                        name: {
+                            fontSize: '22px',
+                        },
+                        value: {
+                            fontSize: '16px',
+                        },
+                        total: {
+                            show: true,
+                            label: 'Tổng sản phẩm',
+                            formatter: function (w) {
+                                return totalQuantity;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart-product"), options);
+        chart.render();
+    </script>
+
+   @* Top 5 khu vực đông khách hàng nhất*@
+    <script>
+        var CusAreaData = [];
+        var AreaName = [];
+
+        @foreach (var item in ViewBag.Top5CustomerArea)
+        {
+            @:CusAreaData.push(@item.Text);
+            @:AreaName.push('@item.Value');
+        };
+
+        var options = {
+            series: CusAreaData,
+            chart: {
+                width: 350,
+                type: 'polarArea'
+            },
+            labels: AreaName,
+            colors: ["#ffba90", '#f8ec62', '#ffafbc', '#c2eaf2', '#d8baec', '#a0dab4'],
+            fill: {
+                opacity: 1
+            },
+            stroke: {
+                width: 1,
+                colors: undefined
+            },
+            yaxis: {
+                show: false
+            },
+            legend: {
+                position: 'bottom',
+                fontSize: '13px',
+            },
+            plotOptions: {
+                polarArea: {
+                    rings: {
+                        strokeWidth: 0
+                    },
+                    spokes: {
+                        strokeWidth: 0
+                    },
+                }
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart-cusarea"), options);
+        chart.render();
+    </script>
+</body>
+
+</html>
