@@ -380,7 +380,8 @@ namespace FEPetServices.Controllers
             HomeModel homeModel = new HomeModel();
             try
             {
-                HttpResponseMessage StarInTakeCarePetResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetStarInTakeCarePet");
+                //"https://localhost:7255/api/Feedback/GetStarInTakeCarePet"
+                HttpResponseMessage StarInTakeCarePetResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetStarInTakeCarePet");
 
                 if (StarInTakeCarePetResponse.IsSuccessStatusCode)
                 {
@@ -389,7 +390,8 @@ namespace FEPetServices.Controllers
                     ViewBag.StarInTakeCarePet = StarInTakeCarePet;
                 }
 
-                HttpResponseMessage StarInRoomPetResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetStarInRoomPet");
+                //"https://localhost:7255/api/Feedback/GetStarInRoomPet"
+                HttpResponseMessage StarInRoomPetResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetStarInRoomPet");
 
                 if (StarInRoomPetResponse.IsSuccessStatusCode)
                 {
@@ -398,7 +400,8 @@ namespace FEPetServices.Controllers
                     ViewBag.StarInRoomPet = StarInRoomPet;
                 }
 
-                HttpResponseMessage StarInPetWalkingResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetStarInPetWalking");
+                //"https://localhost:7255/api/Feedback/GetStarInPetWalking"
+                HttpResponseMessage StarInPetWalkingResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetStarInPetWalking");
 
                 if (StarInPetWalkingResponse.IsSuccessStatusCode)
                 {
@@ -407,7 +410,8 @@ namespace FEPetServices.Controllers
                     ViewBag.StarInPetWalking = StarInPetWalking;
                 }
 
-                HttpResponseMessage StarInProductPetResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetStarInProductPet");
+                //"https://localhost:7255/api/Feedback/GetStarInProductPet"
+                HttpResponseMessage StarInProductPetResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetStarInProductPet");
 
                 if (StarInProductPetResponse.IsSuccessStatusCode)
                 {

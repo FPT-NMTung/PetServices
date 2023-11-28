@@ -293,13 +293,23 @@
                                             <div class="inner">
                                                 <div class="product-rating">
                                                     <span class="icon">
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
+                                                        @for (int i = 1; i <= 5; i++)
+                                                        {
+                                                            if (i <= (product.NumberStar ?? 5))
+                                                            {
+                                                                <i class="fas fa-star"></i>
+                                                            }
+                                                            else if (i - product.NumberStar < 1)
+                                                            {
+                                                                <i class="fas fa-star-half-alt"></i>
+                                                            }
+                                                            else
+                                                            {
+                                                                <i class="far fa-star"></i>
+                                                            }
+                                                        }
                                                     </span>
-                                                    <span class="rating-number">(64)</span>
+                                                    <span class="rating-number">(@product.NumberVoter)</span>
                                                 </div>
                                                 <div style="height:60px">
                                                     <h5 class="title"><a href="/ProductList/Detail?proId=@product.ProductId">@product.ProductName</a></h5>
@@ -348,13 +358,23 @@
                                             <div class="inner">
                                                 <div class="product-rating">
                                                     <span class="icon">
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
+                                                        @for (int i = 1; i <= 5; i++)
+                                                        {
+                                                            if (i <= (product.NumberStar ?? 5))
+                                                            {
+                                                                <i class="fas fa-star"></i>
+                                                            }
+                                                            else if (i - product.NumberStar < 1)
+                                                            {
+                                                                <i class="fas fa-star-half-alt"></i>
+                                                            }
+                                                            else
+                                                            {
+                                                                <i class="far fa-star"></i>
+                                                            }
+                                                        }
                                                     </span>
-                                                    <span class="rating-number">(64)</span>
+                                                    <span class="rating-number">(@product.NumberVoter)</span>
                                                 </div>
                                                 <div style="height:60px">
                                                     <h5 class="title"><a href="/ProductList/Detail?proId=@product.ProductId">@product.ProductName</a></h5>
@@ -404,13 +424,23 @@
                                     <div class="inner">
                                             <div class="product-rating">
                                                 <span class="icon">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i <= (services.NumberStar ?? 5))
+                                                        {
+                                                            <i class="fas fa-star"></i>
+                                                        }
+                                                        else if (i - services.NumberStar < 1)
+                                                        {
+                                                            <i class="fas fa-star-half-alt"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="far fa-star"></i>
+                                                        }
+                                                    }
                                                 </span>
-                                                <span class="rating-number">(64)</span>
+                                                <span class="rating-number">(@services.NumberVoter)</span>
                                             </div>
                                             <h5 style="height:60px" class="title"><a href="~/Home/ServiceDetail?serviceCategoryId=@services.SerCategoriesId">@services.SerCategoriesName</a></h5>
                                         <div class="product-hover-action">
