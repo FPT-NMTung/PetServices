@@ -255,7 +255,7 @@ namespace FEPetServices.Controllers
                 {
                     var content = await roomStarResponse.Content.ReadAsStringAsync();
 
-                    if (int.TryParse(content, out int roomStar))
+                    if (double.TryParse(content, out double roomStar))
                     {
                         ViewBag.RoomStar = roomStar;
                     }
@@ -503,7 +503,7 @@ namespace FEPetServices.Controllers
             {
                 var content = await ServiceStarResponse.Content.ReadAsStringAsync();
 
-                if (int.TryParse(content, out int serviceStar))
+                if (double.TryParse(content, out double serviceStar))
                 {
                     ViewBag.serviceStar = serviceStar;
                 }

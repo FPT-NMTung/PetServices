@@ -131,19 +131,6 @@ namespace PetServices.Controllers
                         account.PartnerInfo.ImagePartner = account.UserInfo?.ImageUser ?? null; 
                     }
 
-                    if (account.UserInfoId != null && accountchange.RoleId != 4)
-                    {
-                        account.UserInfo.FirstName = account.PartnerInfo?.FirstName ?? null;
-                        account.UserInfo.LastName = account.UserInfo?.LastName ?? null;
-                        account.UserInfo.Phone = account.PartnerInfo?.Phone ?? null;
-                        account.UserInfo.Province = account.PartnerInfo?.Province ?? null;
-                        account.UserInfo.District = account.PartnerInfo?.District ?? null;
-                        account.UserInfo.Commune = account.PartnerInfo?.Commune ?? null;
-                        account.UserInfo.Address = account.PartnerInfo?.Address ?? null;
-                        account.UserInfo.Descriptions = account.PartnerInfo?.Descriptions ?? null;
-                        account.UserInfo.ImageUser = account.PartnerInfo?.ImagePartner ?? null;
-                    }
-
                     if (account.UserInfoId == null && accountchange.RoleId != 4)
                     {
                         account.UserInfo = new UserInfo
@@ -158,6 +145,20 @@ namespace PetServices.Controllers
                             Descriptions = account.PartnerInfo?.Descriptions ?? null,
                             ImageUser = account.PartnerInfo?.ImagePartner ?? null,
                         };
+                    }
+
+
+                    if (account.UserInfoId != null && accountchange.RoleId != 4)
+                    {
+                        account.UserInfo.FirstName = account.PartnerInfo?.FirstName ?? null;
+                        account.UserInfo.LastName = account.UserInfo?.LastName ?? null;
+                        account.UserInfo.Phone = account.PartnerInfo?.Phone ?? null;
+                        account.UserInfo.Province = account.PartnerInfo?.Province ?? null;
+                        account.UserInfo.District = account.PartnerInfo?.District ?? null;
+                        account.UserInfo.Commune = account.PartnerInfo?.Commune ?? null;
+                        account.UserInfo.Address = account.PartnerInfo?.Address ?? null;
+                        account.UserInfo.Descriptions = account.PartnerInfo?.Descriptions ?? null;
+                        account.UserInfo.ImageUser = account.PartnerInfo?.ImagePartner ?? null;
                     }
 
                     account.RoleId = accountchange.RoleId;

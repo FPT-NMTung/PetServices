@@ -57,7 +57,12 @@ namespace PetServices.Controllers
         {
             var averageStars = _context.Feedbacks.Where(f => f.RoomId == roomID).Average(f => f.NumberStart);
 
-            return Ok(Convert.ToInt32(averageStars));
+            if (averageStars.HasValue)
+            {
+                averageStars = Math.Round(averageStars.Value, 1);
+            }
+
+            return Ok(averageStars); ;
         }
 
         [HttpGet("GetRoomVoteNumber")]
@@ -151,7 +156,12 @@ namespace PetServices.Controllers
         {
             var averageStars = _context.Feedbacks.Where(f => f.ProductId == productID).Average(f => f.NumberStart);
 
-            return Ok(Convert.ToInt32(averageStars));
+            if (averageStars.HasValue)
+            {
+                averageStars = Math.Round(averageStars.Value, 1);
+            }
+
+            return Ok(averageStars);
         }
 
         [HttpGet("GetProductVoteNumber")]
@@ -245,7 +255,12 @@ namespace PetServices.Controllers
         {
             var averageStars = _context.Feedbacks.Where(f => f.ServiceId == serviceID).Average(f => f.NumberStart);
 
-            return Ok(Convert.ToInt32(averageStars));
+            if (averageStars.HasValue)
+            {
+                averageStars = Math.Round(averageStars.Value, 1);
+            }
+
+            return Ok(averageStars); ;
         }
 
         [HttpGet("GetServiceVoteNumber")]
