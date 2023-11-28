@@ -75,7 +75,13 @@ namespace FEPetServices.Areas.Manager.Controllers
         public async Task<IActionResult> OrderDetail(int id, [FromForm] Status status)
         {
             //https://pet-service-api.azurewebsites.net/api/Order/changeStatus?Id=1
-            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "Order/changeStatus?Id=" + id, status);
+            if(status.newStatus == "Confirmed")
+            {
+                status.newStatusProduct = "Packaging";
+                status.newStatusService = "Waiting";    
+            }
+
+            HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
             if (response.IsSuccessStatusCode)
             {
                 TempData["SuccessToast"] = "Cập nhật thành công";

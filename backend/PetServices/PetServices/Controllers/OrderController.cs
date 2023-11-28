@@ -25,6 +25,7 @@ namespace PetServices.Controllers
             _configuration = configuration;
         }
 
+        #region Get
         [HttpGet]
         public IActionResult Get()
         {
@@ -77,16 +78,18 @@ namespace PetServices.Controllers
             try
             {
                 IQueryable<Order> query = _context.Orders
-                    .Include(o => o.UserInfo)
-                    .ThenInclude(u => u.Accounts)
+                   .Include(o => o.UserInfo)
+                        .ThenInclude(u => u.Accounts)
                     .Include(b => b.OrderProductDetails)
-                    .ThenInclude(o => o.Product)
+                        .ThenInclude(o => o.Product)
                     .Include(b => b.BookingServicesDetails)
-                    .ThenInclude(bs => bs.Service)
+                        .ThenInclude(bs => bs.Service)
+                     .Include(b => b.BookingServicesDetails)
+                        .ThenInclude(s => s.PartnerInfo)
                     .Include(b => b.BookingRoomDetails)
-                    .ThenInclude(br => br.Room)
+                        .ThenInclude(br => br.Room)
                     .Include(b => b.BookingRoomServices)
-                    .ThenInclude(br => br.Service)
+                        .ThenInclude(br => br.Service)
                     .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email));
 
                 if (!string.IsNullOrEmpty(orderstatus) && orderstatus.ToLower() != "all")
@@ -161,18 +164,20 @@ namespace PetServices.Controllers
             {
                 Order order = await _context.Orders
                     .Include(o => o.UserInfo)
-                    .ThenInclude(u => u.Accounts)
+                        .ThenInclude(u => u.Accounts)
                     .Include(b => b.OrderProductDetails)
-                    .ThenInclude(o => o.Product)
+                        .ThenInclude(o => o.Product)
                     .Include(b => b.BookingServicesDetails)
-                    .ThenInclude(bs => bs.Service)
+                        .ThenInclude(bs => bs.Service)
+                     .Include(b => b.BookingServicesDetails)
+                            .ThenInclude(s => s.PartnerInfo) 
                     .Include(b => b.BookingRoomDetails)
-                    .ThenInclude(br => br.Room)
+                        .ThenInclude(br => br.Room)
                     .Include(b => b.BookingRoomServices)
-                    .ThenInclude(br => br.Service)
-                .SingleOrDefaultAsync(b => b.OrderId == Id);
-                return Ok(_mapper.Map<OrdersDTO>(order));
+                        .ThenInclude(br => br.Service)
+                    .SingleOrDefaultAsync(b => b.OrderId == Id);
 
+                return Ok(_mapper.Map<OrdersDTO>(order));
             }
             catch (Exception ex)
             {
@@ -181,26 +186,57 @@ namespace PetServices.Controllers
             }
         }
 
+
+        #endregion
+
+        #region Put
         [HttpPut("changeStatus")]
         public async Task<IActionResult> ChangeStatus(int Id, [FromBody] Status status)
         {
             try
             {
-                Order order = await _context.Orders.SingleOrDefaultAsync(b => b.OrderId == Id);
+                Order order = await _context.Orders
+                    .Include(o => o.OrderProductDetails)
+                    .Include(o => o.BookingServicesDetails)
+                    .SingleOrDefaultAsync(b => b.OrderId == Id);
+
                 // Kiểm tra booking có tồn tại hay không
                 if (order == null)
                 {
-                    return NotFound("Booking không tồn tài");
+                    return NotFound("Booking không tồn tại");
                 }
+
                 // Kiểm tra xem trạng thái cũ có chính xác hay không
                 if (order.OrderStatus.Trim() != status.oldStatus)
                 {
                     return BadRequest("Trạng thái cũ không hợp lệ");
                 }
+
                 order.OrderStatus = status.newStatus;
+
+                if (order.OrderProductDetails != null)
+                {
+                    foreach (var dto in order.OrderProductDetails)
+                    {
+                        dto.StatusOrderProduct = status.newStatusProduct;
+                    }
+                }
+
+                if (order.BookingServicesDetails != null)
+                {
+                    foreach (var dto in order.BookingServicesDetails)
+                    {
+                        dto.StatusOrderService = status.newStatusService;
+                    }
+                }
+
+                // Update the order and its related details
                 _context.Orders.Update(order);
+                _context.OrderProductDetails.UpdateRange(order.OrderProductDetails);
+                _context.BookingServicesDetails.UpdateRange(order.BookingServicesDetails);
 
                 await _context.SaveChangesAsync();
+
                 return Ok("Đổi trạng thái thành công");
             }
             catch (Exception ex)
@@ -209,6 +245,7 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
 
         [HttpPut("changeStatusPayment")]
         public async Task<IActionResult> ChangeStatusPayment(int Id)
@@ -261,7 +298,9 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        #endregion
 
+        #region Post
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] OrdersDTO orderDTO)
         {
@@ -456,6 +495,7 @@ namespace PetServices.Controllers
                       Quantity = dto.Quantity,
                       Price = priceProduct,
                       ProductId = dto.ProductId,
+                      StatusOrderProduct = dto.StatusOrderProduct,
                   }).ToList()
                 : new List<OrderProductDetail>(),
 
@@ -493,6 +533,7 @@ namespace PetServices.Controllers
                         StartTime = dto.StartTime,
                         EndTime = dto.EndTime,
                         PartnerInfoId = dto.PartnerInfoId,
+                        StatusOrderService = dto.StatusOrderService,
                     }).ToList()
                     : new List<BookingServicesDetail>()
             };
@@ -500,9 +541,8 @@ namespace PetServices.Controllers
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-
             return Ok("Order thành công!");
         }
-
+        #endregion
     }
 }

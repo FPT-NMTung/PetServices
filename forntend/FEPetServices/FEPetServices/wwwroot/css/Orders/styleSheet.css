@@ -221,6 +221,14 @@ content-detail-time-service {
     display: flex;
     justify-content: center;
 }
+
+.status-content-detail {
+    display: flex;
+    justify-content: space-between;
+    justify-content:end;
+    margin: 10px 0;
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
     .timeline-icon {

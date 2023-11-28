@@ -23,7 +23,8 @@ namespace FEPetServices.Areas.Customer.Controllers
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            DefaultApiUrl = "https://localhost:7255/api/";
             DefaultApiUrlOrders = "https://localhost:7255/api/";
         }
 
