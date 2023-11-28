@@ -138,11 +138,11 @@
                                             {
                                                 @if (Model.account.UserInfo.PetInfos != null)
                                                 {
-                                                    <select name="PetInfoId" id="PetInfoId" class="size-option" style="font-family: serif; width: 200px; height: 30px; border: 2px solid black; margin-bottom: 5px;">
+                                                    <select name="PetInfoId" id="PetInfoId" class="size-option" style="font-family: serif; width: 200px; height: 30px; border: 2px solid black; margin-bottom: 5px;" onchange="updateWeight()">
                                                         <option value=" ">Cân nặng của bé</option>
                                                         @foreach (var petInfor in Model.account.UserInfo.PetInfos)
                                                         {
-                                                            <option id="petWeight" value="@petInfor.Weight" data-weight="@petInfor.Weight">@petInfor.PetName @petInfor.Weight Kg</option>
+                                                            <option value="@petInfor.Weight" data-weight="@petInfor.Weight">@petInfor.PetName @petInfor.Weight Kg</option>
                                                         }
                                                         <option value="khac">Khác</option>
                                                     </select>
@@ -472,6 +472,30 @@
         });
     </script>
     <script>
+        function updateWeight() {
+            var selectElement = document.getElementById("PetInfoId");
+            var inputElement = document.getElementById("petWeight");
+
+            // Get the selected option
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
+
+            // Check if the selected option is not "Khác"
+            if (selectedOption.value !== "khac") {
+                // Set the input value to the data-weight attribute of the selected option
+                inputElement.value = selectedOption.getAttribute("data-weight");
+                var Weight = document.getElementById("Weight");
+                Weight.value = inputElement.value;
+            } else {
+                // If "Khác" is selected, show the input field
+                inputElement.style.display = "block";
+                inputElement.value = ""; // You may want to clear the input value in this case
+                var Weight = document.getElementById("Weight");
+                Weight.value = inputElement.value;
+            }
+        }
+        updateWeight()
+    </script>
+    <script>
         // Function to calculate total amount
         function calculateTotal() {
             var petWeight = parseFloat(document.getElementById('petWeight').value);
@@ -519,7 +543,6 @@
                 formatNumberToString(additional) + "  (đối tác) " +
                 "=" + formatNumberToString(totalAmount) + " VNĐ";
         }
-
         // Trigger the initial calculation
         calculateTotal();
 
@@ -562,7 +585,6 @@
 
     <!-- Main JS -->
     <script src="~/assets/js/main.js"></script>
-
 </body>
 
 </html>

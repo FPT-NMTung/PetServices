@@ -102,5 +102,34 @@ namespace FEPetServices.Areas.Customer.Controllers
 
         [HttpGet]
         public Task<IActionResult> CompletedOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+
+        private List<OrderForm> originalOrders;
+
+        [HttpGet]
+        public IActionResult SearchOrders(string searchValue)
+        {
+            if (originalOrders == null)
+            {
+                //LoadOriginalOrders().Wait(); 
+            }
+
+            var searchResults = originalOrders.Where(order =>
+                order.OrderId.ToString().Contains(searchValue) ||
+                order.OrderProductDetails.Any(productDetail => productDetail.Product.ProductName.Contains(searchValue)) ||
+                order.BookingServicesDetails.Any(serviceDetail => serviceDetail.Service.ServiceName.Contains(searchValue)) ||
+                order.BookingRoomDetails.Any(roomDetail => roomDetail.Room.RoomName.Contains(searchValue))
+            ).ToList();
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_OrderPartialView", searchResults);
+            }
+            else
+            {
+                return View("AllOrders", searchResults);
+            }
+        }
+
+
     }
 }

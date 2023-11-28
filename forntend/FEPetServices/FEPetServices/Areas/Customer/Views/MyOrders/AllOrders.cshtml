@@ -35,6 +35,12 @@
                 </li>
             </ul>
         </div>
+        <!-- Search bar -->
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search by ID or Name">
+            <button onclick="searchOrders()">Search</button>
+        </div>
+
         <div class="card-body">
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">    
@@ -261,5 +267,24 @@
         });
     </script>
     @*End Lazy Loading*@
+    <script>
+        function searchOrders() {
+            var searchValue = $('#searchInput').val().trim();
+
+            if (searchValue !== '') {
+                $.ajax({
+                    url: '/Customer/MyOrders/SearchOrders',
+                    type: 'GET',
+                    data: { searchValue: searchValue },
+                    success: function (data) {
+                        $('#orders-container').html(data);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error('Search AJAX error:', textStatus, errorThrown);
+                    }
+                });
+            }
+        }
+    </script>
 </body>
 </html>
