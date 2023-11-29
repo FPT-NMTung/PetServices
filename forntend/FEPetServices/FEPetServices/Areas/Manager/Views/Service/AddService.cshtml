@@ -33,7 +33,7 @@
         <label for="Price">Giá<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
-        <input type="number" id="Price" name="Price" placeholder="Giá tiền" required>
+        <input type="number" id="Price" name="Price" placeholder="Giá tiền" min="0" required>
         <div style="color:red" class="error-message" id="price-error-message"></div> 
       </div>
     </div>
@@ -42,7 +42,7 @@
             <label for="Time">Thời gian làm dịch vụ<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
         </div>
         <div class="col-75">
-            <input type="number" id="Time" name="Time" placeholder="Nhập giờ" step="any" required>
+            <input type="number" id="Time" name="Time" placeholder="Nhập giờ" min="0" step="any" required>
             <div style="color:red" class="error-message" id="time-error-message"></div>
         </div>
     </div>
