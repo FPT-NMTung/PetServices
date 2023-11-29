@@ -221,7 +221,6 @@ namespace FEPetServices.Areas.Manager.Controllers
                         }
                     }
                 }
-
                 if (Request.Form["Status"] == "on")
                 {
                     productDTO.Status = true;
