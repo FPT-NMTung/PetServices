@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-@*<link rel="stylesheet" href="/css/Service/Service.css"></link>*@
+    @*<link rel="stylesheet" href="/css/Service/Service.css"></link>*@
 <link rel="stylesheet" href="/css/Room.css"></link>
 <link href="~/css/toastNotification.css" rel="stylesheet" />
 
@@ -37,7 +37,7 @@
         <label for="Price">Giá<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
-                    <input type="number" id="Price" name="Price" value="@Model?.Price" placeholder="Giá tiền" required>
+                    <input type="number" id="Price" name="Price" value="@Model?.Price" min="0" placeholder="Giá tiền" required>
         <div style="color:red" class="error-message" id="price-error-message"></div> <!-- Lưu ý rằng id ở đây là "price-error-message" -->
       </div>
     </div>
@@ -46,7 +46,7 @@
         <label for="Time">Thời gian làm dịch vụ<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
     </div>
     <div class="col-75">
-        <input type="number" id="Time" name="Time" value="@Model?.Time" placeholder="Nhập giờ" step="any" required>
+        <input type="number" id="Time" name="Time" value="@Model?.Time" min="0" placeholder="Nhập giờ" step="any" required>
         <div style="color:red" class="error-message" id="time-error-message"></div>
     </div>
 </div>
@@ -62,7 +62,7 @@
                     <option value="@Model?.SerCategoriesId" >@Model?.SerCategoriesName</option>
                         @foreach (var category in ViewBag.Categories)
                         {
-                                <option value="@category.Value">@category.Text</option>
+                                    <option value="@category.Value">@category.Text</option>
                         }
                 </select>
         </div>
