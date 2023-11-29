@@ -115,7 +115,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             try
             {
                 //goi api de lay thong tin can sua
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductCategoryDetail+"/"  + procateId);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ProductCategory/ProductCategorysID/"   + procateId);
                 if (response.IsSuccessStatusCode)
                 {
                     var rep = await response.Content.ReadAsStringAsync();
@@ -151,6 +151,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             return View();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Update(ProductCategoryDTO productCategoryDTO, int procateId, IFormFile image)
@@ -189,7 +190,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                             if (existingPC != null)
                             {
                                 // Assign the existing image path to serviceCategory.Prictue.
-                                productCategoryDTO.Picture = productCategoryDTO.Picture;
+                                productCategoryDTO.Picture = existingPC.Picture;
                             }
                         }
                     }
@@ -211,12 +212,12 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
+                    TempData["SuccessToast"] = "Chỉnh sửa sản phẩm thành công!";
                     return View(productCategoryDTO); // Chuyển hướng đến trang thành công hoặc trang danh sách
                 }
                 else
                 {
-                    TempData["ErrorToast"] = "Chỉnh sửa dịch vụ thất bại. Vui lòng thử lại sau.";
+                    TempData["ErrorToast"] = "Chỉnh sửa sản phẩm  thất bại. Vui lòng thử lại sau.";
                     return View(productCategoryDTO); // Hiển thị lại biểu mẫu với dữ liệu đã điền
                 }
             }
