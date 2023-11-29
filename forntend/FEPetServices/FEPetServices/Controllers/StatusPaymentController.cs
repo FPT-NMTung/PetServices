@@ -106,6 +106,7 @@ namespace FEPetServices.Controllers
                                     + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);
                         }
                     }
+
                     //https://localhost:7255/api/Order/changeStatusPayment?Id=45
                     /*HttpResponseMessage responseStatusPayment = await _client.PutAsync("https://localhost:7255/api/Order/changeStatusPayment"
                                + "?Id=" + orderId, null);*/

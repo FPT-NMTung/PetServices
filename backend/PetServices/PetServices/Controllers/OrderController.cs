@@ -31,8 +31,20 @@ namespace PetServices.Controllers
         {
             try
             {
-                List<Order> orders = _context.Orders.Include(b => b.UserInfo)
-
+                List<Order> orders = _context.Orders
+                      .Include(o => o.UserInfo)
+                        .ThenInclude(u => u.Accounts)
+                    .Include(b => b.OrderProductDetails)
+                        .ThenInclude(o => o.Product)
+                    .Include(b => b.BookingServicesDetails)
+                        .ThenInclude(bs => bs.Service)
+                     .Include(b => b.BookingServicesDetails)
+                            .ThenInclude(s => s.PartnerInfo)
+                    .Include(b => b.BookingRoomDetails)
+                        .ThenInclude(br => br.Room)
+                    .Include(b => b.BookingRoomServices)
+                        .ThenInclude(br => br.Service)
+                    .Where(o => o.BookingRoomDetails.Count() == 0 && (o.BookingServicesDetails.Count() > 0 || o.OrderProductDetails.Count() > 0))
                 .ToList();
                 return Ok(_mapper.Map<List<OrdersDTO>>(orders));
             }
@@ -70,7 +82,6 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
 
         [HttpGet("email/{email}")]
         public IActionResult GetOrderUser(string email, string orderstatus, int page = 1, int pageSize = 5)
@@ -186,7 +197,34 @@ namespace PetServices.Controllers
             }
         }
 
-
+        [HttpGet("ordersroom")]
+        public async Task<IActionResult> GetOrdersRoom()
+        {
+            try
+            {
+                List<Order> orders = _context.Orders
+                      .Include(o => o.UserInfo)
+                        .ThenInclude(u => u.Accounts)
+                    .Include(b => b.OrderProductDetails)
+                        .ThenInclude(o => o.Product)
+                    .Include(b => b.BookingServicesDetails)
+                        .ThenInclude(bs => bs.Service)
+                     .Include(b => b.BookingServicesDetails)
+                            .ThenInclude(s => s.PartnerInfo)
+                    .Include(b => b.BookingRoomDetails)
+                        .ThenInclude(br => br.Room)
+                    .Include(b => b.BookingRoomServices)
+                        .ThenInclude(br => br.Service)
+                    .Where(o => o.BookingRoomDetails.Count() > 0 && o.BookingServicesDetails.Count() == 0 && o.OrderProductDetails.Count() == 0)
+                    .ToList();
+                return Ok(_mapper.Map<List<OrdersDTO>>(orders));
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
+                return StatusCode(500, ex.Message);
+            }
+        }
         #endregion
 
         #region Put
@@ -298,7 +336,7 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        #endregion
+        #endregion  
 
         #region Post
         [HttpPost]

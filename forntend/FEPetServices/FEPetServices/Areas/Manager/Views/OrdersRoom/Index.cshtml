@@ -12,7 +12,7 @@
 </head>
 <body>
     <div>
-        <h1>Danh sách đơn hàng</h1>
+        <h1>Danh sách phòng được đặt</h1>
     </div>
     <div>
         <table id="lists">
@@ -41,27 +41,23 @@
                             <td>
                                 @if (orderLists?.OrderStatus.Trim() == "Confirmed")
                                 {
-                                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đã được xác nhận và trong giai đoạn xử lý </span>
+                                    <span style="display:inline-block" class="badge badge-info">Đã trả phòng</span>
                                 }
-                                else if (orderLists?.OrderStatus.Trim() == "Processing")
+                                else if (orderLists?.OrderStatus.Trim() == "Refund")
                                 {
-                                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đang được thực hiện</span>
+                                    <span style="display:inline-block" class="badge badge-info">Hoàn tiên</span>
                                 }
                                 else if (orderLists?.OrderStatus.Trim() == "Placed")
                                 {
-                                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đang chờ xác nhận</span>
-                                }
-                                else if (orderLists?.OrderStatus.Trim() == "Completed")
-                                {
-                                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đã hoàn thành</span>
+                                    <span style="display:inline-block" class="badge badge-info">Chờ nhận phòng</span>
                                 }
                                 else if (orderLists?.OrderStatus.Trim() == "Cancelled")
                                 {
-                                    <span style="display:inline-block" class="badge badge-info">Đơn hàng bị huỷ</span>
+                                    <span style="display:inline-block" class="badge badge-info">Phòng bị huỷ </span>
                                 }
                             </td>
                             <td>
-                                <a class="detail-button" href="~/Manager/OrderLists/OrderDetail?id=@orderLists.OrderId">Chi tiết</a>
+                                <a class="detail-button" href="~/Manager/OrdersRoom/OrderRoomDetail?id=@orderLists.OrderId">Chi tiết</a>
                             </td>
                         </tr>
                     }
