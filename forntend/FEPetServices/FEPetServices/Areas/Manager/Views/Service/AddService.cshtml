@@ -50,17 +50,20 @@
         <label for="SerCategoriesId">Loại Dịch Vụ <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i></label>
       </div>
       <div class="col-75">
-         @if (ViewBag.Categories != null){
-         <select id="SerCategoriesId" name="SerCategoriesId" required>
-            <option value="">Danh sách loại dịch vụ</option>
-            @foreach (var category in ViewBag.Categories)
-                {
-                    <option value="@category.Value">@category.Text</option>
-                }
-        </select>
-        } else {
-            <span class="text-danger">Error: Service Categories data not available.</span>
-        }
+                    @if (ViewBag.Categories != null)
+                    {
+             <select id="SerCategoriesId" name="SerCategoriesId" required>
+                <option value="">Danh sách loại dịch vụ</option>
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                            <option value="@category.Value">@category.Text</option>
+                            }
+            </select>
+                    }
+                    else
+                    {
+                <span class="text-danger">Error: Service Categories data not available.</span>
+                    }
       </div>
     </div>
     <div class="row">
@@ -86,9 +89,13 @@
     img{
         width:100px;
         height:100px;
-.fa-asterisk{
-    color:red;
-}
+    }
+.fa-asterisk {
+            color: red;
+            font-size:6px;
+            padding-top:20px;
+            margin-right:10px;
+        }
 
 </style>
 <script src="~/js/Service.js"></script>

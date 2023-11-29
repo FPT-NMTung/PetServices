@@ -14,7 +14,7 @@
         <form asp-action="EditServiceCategory" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div class="row">
                 <div class="col-25">
-                    <label for="SerCategoriesName">Tên Dịch Vụ<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                    <label for="SerCategoriesName">Tên Dịch Vụ<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i> :</label>
                 </div>
                 <div class="col-75">
                     <input type="text" id="SerCategoriesName" name="SerCategoriesName" value="@Model?.SerCategoriesName">
@@ -35,7 +35,7 @@
             </div>
             <div class="row">
                 <div class="col-25">
-                    <label for="Desciptions">Mô Tả<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                    <label for="Desciptions">Mô Tả<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i> :</label>
                 </div>
                 <div class="col-75">
                     <textarea id="Desciptions" name="Desciptions" placeholder="Nội Dung .." style="height:200px">@Model?.Desciptions</textarea>
@@ -83,7 +83,7 @@
                 </tr>
             </thead>
             <tbody>
-              @if (Model != null && ViewBag.service.Count > 0)
+                @if (Model != null && ViewBag.service.Count > 0)
                 {
                     int itemCount = 0;
                     foreach (var service in ViewBag.service)
@@ -109,28 +109,28 @@
                             description = string.Empty;
                         }
 
-                        <tr>
-                            <td>@itemCount</td>
-                            <td>@service.ServiceName</td>
-                            <td>@description</td>
-                            <td><img src="@service.Picture" width="50" height="50"></td>
-                            <td>
+                                <tr>
+                                    <td>@itemCount</td>
+                                    <td>@service.ServiceName</td>
+                                    <td>@description</td>
+                                    <td><img src="@service.Picture" width="50" height="50"></td>
+                                    <td>
                                 @if (@service.Status)
                                 {
-                                    <button class="btn btn-active" onclick="toggleStatus(this)">Đang hoạt động</button>
+                                                <button class="btn btn-active" onclick="toggleStatus(this)">Đang hoạt động</button>
                                 }
                                 else
                                 {
-                                    <button class="btn btn-inactive" onclick="toggleStatus(this)">Ngưng hoạt động</button>
+                                                <button class="btn btn-inactive" onclick="toggleStatus(this)">Ngưng hoạt động</button>
                                 }
-                            </td>
-                            <td>
-                                <a class="btn-detail" href="/Manager/Service/EditService?serviceId=@service.ServiceId">Chi tiết</a>
-                            </td>
+                                    </td>
+                                    <td>
+                                        <a class="btn-detail" href="/Manager/Service/EditService?serviceId=@service.ServiceId">Chi tiết</a>
+                                    </td>
 
-                        </tr>
+                                </tr>
                     }
-               }
+                }
 
             </tbody>
         </table>
@@ -269,6 +269,9 @@
 
         .fa-asterisk {
             color: red;
+            font-size:6px;
+            padding-top:20px;
+            margin-right:10px;
         }
     </style>
 </body>

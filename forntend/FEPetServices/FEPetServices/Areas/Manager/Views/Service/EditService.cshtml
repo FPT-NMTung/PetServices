@@ -23,12 +23,12 @@
     <div class="col-25">
         <label for="image">Ảnh:</label>
     </div>
-        
+
     <div class="col-75">
         <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" accept="image/*">>
 
         <img src="@Model?.Picture" height="100px" width="100px" style="float: left;" id="imagePreview">
-        
+
     </div>
     </div>
     <div class="row">
@@ -52,17 +52,17 @@
 
     <div class="row">
         <div class="col-25">
-            @*<input type="hidden" name="SerCategoriesId" value="@Model.SerCategoriesId" />*@
+                    @*<input type="hidden" name="SerCategoriesId" value="@Model.SerCategoriesId" />*@
 
             <label for="SerCategoriesId">Loại Dịch Vụ<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i></label>
         </div>
         <div class="col-75">
                 <select id="SerCategoriesId" name="SerCategoriesId"  required>
                     <option value="@Model?.SerCategoriesId" >@Model?.SerCategoriesName</option>
-                    @foreach (var category in ViewBag.Categories)
-                    {
-                        <option value="@category.Value">@category.Text</option>
-                    }
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.Value">@category.Text</option>
+                        }
                 </select>
         </div>
     </div>
@@ -99,9 +99,12 @@
 </div>
     </body>
     <style>
-.fa-asterisk{
-    color:red;
-}
+.fa-asterisk {
+            color: red;
+            font-size:6px;
+            padding-top:20px;
+            margin-right:10px;
+        }
 </style>
 <script src="~/js/Service.js"></script>
 </html>
