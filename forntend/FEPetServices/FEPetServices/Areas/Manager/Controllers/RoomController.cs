@@ -226,7 +226,12 @@ namespace FEPetServices.Areas.Manager.Controllers
                     ViewBag.Categories = new SelectList(categories, "RoomCategoriesId", "RoomCategoriesName");
                 }
 
-                roomDTO.ServiceIds = Request.Form["SelectedServices"].ToString().Split(',').Select(int.Parse).ToList();
+                var SelectedServices = Request.Form["SelectedServices"];
+                roomDTO.ServiceIds = !string.IsNullOrEmpty(SelectedServices)
+                    ? SelectedServices.ToString().Split(',').Select(int.Parse).ToList()
+                    : new List<int>();
+
+                /*roomDTO.ServiceIds = Request.Form["SelectedServices"].ToString().Split(',').Select(int.Parse).ToList();*/
 
                 if (image != null && image.Length > 0)
                 {
