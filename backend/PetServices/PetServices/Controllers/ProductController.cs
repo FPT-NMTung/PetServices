@@ -201,7 +201,8 @@ namespace PetServices.Controllers
                 product.Status = productDTO.Status;
                 product.Price = productDTO.Price;
                 product.Quantity = productDTO.Quantity;
-                product.CreateDate = DateTime.Now;
+                product.CreateDate = productDTO.CreateDate;
+                product.UpdateDate = DateTime.Now;
                 product.ProCategoriesId = productDTO.ProCategoriesId;
                 _context.Update(product);
                 await _context.SaveChangesAsync();
@@ -226,7 +227,7 @@ namespace PetServices.Controllers
                 }
 
                 product.Status = status;
-
+                product.UpdateDate = DateTime.Now;
                 _context.Entry(product).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 await _context.SaveChangesAsync();
 
