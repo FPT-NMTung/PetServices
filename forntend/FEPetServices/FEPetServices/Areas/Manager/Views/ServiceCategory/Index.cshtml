@@ -66,6 +66,16 @@
         border-radius: 5px;
     }
 
+    .btn-active:hover {
+        background-color: #26B323;
+        color: black;
+    }
+
+    .btn-inactive:hover {
+        background-color: #d30f0b;
+        color: black;
+    }
+
     .btn-detail {
         text-align: center;
         border-radius: 5px;
@@ -175,11 +185,11 @@
                     <td>
                         @if (@servicecategory.Status)
                         {
-                            <button class="btn btn-active">Đang hoạt động</button>
+                            <button class="btn-active">Đang hoạt động</button>
                         }
                         else
                         {
-                            <button class="btn btn-inactive" >Ngưng hoạt động</button>
+                            <button class="btn-inactive" >Ngưng hoạt động</button>
                         }
                     </td>
                     <td>
