@@ -115,7 +115,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             try
             {
                 //goi api de lay thong tin can sua
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ProductCategory/ProductCategorysID/" + procateId);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductCategoryDetail+"/"  + procateId);
                 if (response.IsSuccessStatusCode)
                 {
                     var rep = await response.Content.ReadAsStringAsync();
