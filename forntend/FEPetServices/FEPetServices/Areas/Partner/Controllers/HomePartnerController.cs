@@ -14,6 +14,7 @@ using System.Text.Json;
 
 namespace FEPetServices.Areas.Partner.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class HomePartnerController : Controller
     {
         private readonly HttpClient client = null;

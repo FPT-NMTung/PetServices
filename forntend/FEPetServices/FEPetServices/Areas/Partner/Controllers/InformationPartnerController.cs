@@ -7,6 +7,7 @@ using System.Text.Json;
 
 namespace FEPetServices.Areas.Partner.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = "PartnerOnly")]
     public class InformationPartnerController : Controller
     {
