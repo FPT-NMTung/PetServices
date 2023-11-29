@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Admin.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = "AdminOnly")]
     public class AccountController : Controller
     {

@@ -1,33 +1,38 @@
-﻿using FEPetServices.Form.OrdersForm;
+﻿using FEPetServices.Form;
+using FEPetServices.Form.OrdersForm;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
+
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = "ManaOnly")]
-    public class OrderListsController : Controller
+    public class OrdersRoomController : Controller
     {
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
         private readonly IConfiguration configuration;
 
-        public OrderListsController(IConfiguration configuration)
+        public OrdersRoomController(IConfiguration configuration)
         {
             this.configuration = configuration;
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
-            DefaultApiUrl = "https://localhost:7255/api/";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Order";
+
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/getOrder");
+            //https://localhost:7255/api/Order/getOrderRoom
+            HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Order/getOrderRoom");
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -48,10 +53,9 @@ namespace FEPetServices.Areas.Manager.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> OrderDetail(int id)
+        public async Task<IActionResult> OrderRoomDetail(int id)
         {
-            //HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Order/" + id);
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
+            HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Order/" + id);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -71,19 +75,16 @@ namespace FEPetServices.Areas.Manager.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> OrderDetail(int id, [FromForm] Status status)
+        public async Task<IActionResult> OrderRoomDetail(int id, [FromForm] Status status)
         {
-            if(status.newStatus == "Confirmed")
-            {
-                status.newStatusProduct = "Packaging";
-                status.newStatusService = "Waiting";    
-            }
+            status.newStatusProduct = "";
+            status.newStatusService = "";
 
             HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
             if (response.IsSuccessStatusCode)
             {
                 TempData["SuccessToast"] = "Cập nhật thành công";
-                return RedirectToAction("OrderDetail", new { id = id });
+                return RedirectToAction("OrderRoomDetail", new { id = id });
             }
             else
             {
@@ -91,6 +92,5 @@ namespace FEPetServices.Areas.Manager.Controllers
                 return View();
             }
         }
-
     }
 }

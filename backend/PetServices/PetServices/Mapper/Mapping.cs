@@ -49,6 +49,7 @@ namespace PetServices.Mapper
 
             CreateMap<OrderType, OrderTypeDTO>()
                .ReverseMap();
+
             CreateMap<Reason, ReasonDTO>()
                 .ReverseMap();
             #endregion
@@ -72,8 +73,28 @@ namespace PetServices.Mapper
                             act => act.MapFrom(src => src.Status))
                 .ForMember(des => des.UserInfoId,
                             act => act.MapFrom(src => src.UserInfoId));
+
+            CreateMap<Account, AccountByAdminDTO>()
+            .ForMember(dest => dest.Stt, opt => opt.Ignore())
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src =>
+                        src.PartnerInfoId != null ? src.PartnerInfo.FirstName + " " + src.PartnerInfo.LastName :
+                        (src.UserInfoId != null ? src.UserInfo.FirstName + " " + src.UserInfo.LastName : "Null")))
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src =>
+                        src.PartnerInfoId != null ? src.PartnerInfo.Province + ", " + src.PartnerInfo.District
+                        + ", " + src.PartnerInfo.Commune + ", " + src.PartnerInfo.Address :
+                        (src.UserInfoId != null ? src.UserInfo.Province + ", " + src.UserInfo.District
+                        + ", " + src.UserInfo.Commune + ", " + src.UserInfo.Address : "Null")));
+
+            CreateMap<Account, UpdateAccountDTO>()
+                .ForMember(des => des.Email,
+                            act => act.MapFrom(src => src.Email))
+                .ForMember(des => des.RoleId,
+                            act => act.MapFrom(src => src.RoleId))
+                .ForMember(des => des.Status,
+                            act => act.MapFrom(src => src.Status));
             #endregion
 
+            #region Service
             CreateMap<ServiceCategory, ServiceCategoryDTO>()
                 .ForMember(des => des.SerCategoriesId,
                             act => act.MapFrom(src => src.SerCategoriesId))
@@ -94,36 +115,18 @@ namespace PetServices.Mapper
                 .ForMember(dest => dest.Time, opt => opt.MapFrom(src => src.Time))
                 .ForMember(dest => dest.SerCategoriesId, opt => opt.MapFrom(src => src.SerCategoriesId))
                 .ForMember(dest => dest.SerCategoriesName, opt => opt.MapFrom(src => src.SerCategories.SerCategoriesName));
-                
-            
+            #endregion
 
-
-            CreateMap<Account, AccountByAdminDTO>()
-            .ForMember(dest => dest.Stt, opt => opt.Ignore())
-            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src =>
-                        src.PartnerInfoId != null ? src.PartnerInfo.FirstName + " " + src.PartnerInfo.LastName :
-                        (src.UserInfoId != null ? src.UserInfo.FirstName + " " + src.UserInfo.LastName : "Null")))
-            .ForMember(dest => dest.Address, opt => opt.MapFrom(src =>
-                        src.PartnerInfoId != null ? src.PartnerInfo.Province + ", " + src.PartnerInfo.District
-                        + ", " + src.PartnerInfo.Commune + ", " + src.PartnerInfo.Address :
-                        (src.UserInfoId != null ? src.UserInfo.Province + ", " + src.UserInfo.District
-                        + ", " + src.UserInfo.Commune + ", " + src.UserInfo.Address : "Null")));
-
-            CreateMap<Account,UpdateAccountDTO >()
-                .ForMember(des => des.Email,
-                            act => act.MapFrom(src => src.Email))
-                .ForMember(des => des.RoleId,
-                            act => act.MapFrom(src => src.RoleId))
-                .ForMember(des => des.Status,
-                            act => act.MapFrom(src => src.Status));
-
+            #region Room
             CreateMap<RoomCategory, RoomCategoryDTO>()
                 .ReverseMap();
 
             CreateMap<Room, RoomDTO>()
                 .ForMember(dest => dest.RoomCategoriesName, opt => opt.MapFrom(src => src.RoomCategories.RoomCategoriesName))
                 .ReverseMap();
+            #endregion
 
+            #region Product
             CreateMap<Product, ProductDTO>()
                 .ForMember(dest => dest.ProCategoriesName, opt => opt.MapFrom(src => src.ProCategories.ProCategoriesName));
 
@@ -133,6 +136,9 @@ namespace PetServices.Mapper
                 .ForMember(dest => dest.Desciptions, opt => opt.MapFrom(src => src.Desciptions))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.Picture, opt => opt.MapFrom(src => src.Picture));
+            #endregion
+
+            #region Blogs
             CreateMap<Blog, BlogDTO>()
                 .ForMember(dest => dest.BlogId, opt => opt.MapFrom(src => src.BlogId))
                 .ForMember(dest => dest.PageTile, opt => opt.MapFrom(src => src.PageTile))
@@ -141,6 +147,9 @@ namespace PetServices.Mapper
                 .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
+
+            #endregion
+
             CreateMap<Feedback, FeedbackDTO>()
                 .ReverseMap();
         }
