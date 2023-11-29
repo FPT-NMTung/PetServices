@@ -31,8 +31,8 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            //https://localhost:7255/api/Order/ordersRoom
-            HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Order/ordersroom");
+            //https://localhost:7255/api/Order/getOrderRoom
+            HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Order/getOrderRoom");
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -66,6 +66,28 @@ namespace FEPetServices.Areas.Manager.Controllers
                 };
                 OrderForm orderDetail = System.Text.Json.JsonSerializer.Deserialize<OrderForm>(responseContent, options);
                 return View(orderDetail);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> OrderRoomDetail(int id, [FromForm] Status status)
+        {
+            if (status.newStatus == "Confirmed")
+            {
+                status.newStatusProduct = "";
+                status.newStatusService = "";
+            }
+
+            HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessToast"] = "Cập nhật thành công";
+                return RedirectToAction("OrderRoomDetail", new { id = id });
             }
             else
             {

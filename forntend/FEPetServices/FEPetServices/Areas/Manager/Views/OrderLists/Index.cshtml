@@ -70,7 +70,7 @@
             <tfoot>
                 @if (!string.IsNullOrEmpty(TempData["ErrorLoadingDataToast"] as string))
                 {
-                    <div class="alert alert-danger">
+                    <div style="margin: 0 30px;" class="alert alert-danger">
                         <span style="color:red">@TempData["ErrorLoadingDataToast"]</span>
                     </div>
                 }

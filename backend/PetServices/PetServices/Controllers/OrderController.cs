@@ -26,8 +26,8 @@ namespace PetServices.Controllers
         }
 
         #region Get
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("getOrder")]
+        public IActionResult GetOrder()
         {
             try
             {
@@ -45,7 +45,38 @@ namespace PetServices.Controllers
                     .Include(b => b.BookingRoomServices)
                         .ThenInclude(br => br.Service)
                     .Where(o => o.BookingRoomDetails.Count() == 0 && (o.BookingServicesDetails.Count() > 0 || o.OrderProductDetails.Count() > 0))
+                    .OrderByDescending(o => o.OrderDate)
                 .ToList();
+                return Ok(_mapper.Map<List<OrdersDTO>>(orders));
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("getOrderRoom")]
+        public IActionResult GetOrderRoom()
+        {
+            try
+            {
+                List<Order> orders = _context.Orders
+                    .Include(o => o.UserInfo)
+                        .ThenInclude(u => u.Accounts)
+                    .Include(b => b.OrderProductDetails)
+                        .ThenInclude(o => o.Product)
+                    .Include(b => b.BookingServicesDetails)
+                        .ThenInclude(bs => bs.Service)
+                     .Include(b => b.BookingServicesDetails)
+                            .ThenInclude(s => s.PartnerInfo)
+                    .Include(b => b.BookingRoomDetails)
+                        .ThenInclude(br => br.Room)
+                    .Include(b => b.BookingRoomServices)
+                        .ThenInclude(br => br.Service)
+                    .Where(o => o.BookingRoomDetails.Count() > 0 && o.BookingServicesDetails.Count() == 0 && o.OrderProductDetails.Count() == 0)
+                    .OrderByDescending(o => o.OrderDate)
+                    .ToList();
                 return Ok(_mapper.Map<List<OrdersDTO>>(orders));
             }
             catch (Exception ex)
@@ -193,12 +224,6 @@ namespace PetServices.Controllers
             }
         }
 
-
-
-
-
-
-
         [HttpGet("orderstatus/{orderstatus}")]
         public IActionResult CheckStatusOrder(string email, string orderstatus)
         {
@@ -266,34 +291,6 @@ namespace PetServices.Controllers
             }
         }
 
-        [HttpGet("ordersroom")]
-        public async Task<IActionResult> GetOrdersRoom()
-        {
-            try
-            {
-                List<Order> orders = _context.Orders
-                      .Include(o => o.UserInfo)
-                        .ThenInclude(u => u.Accounts)
-                    .Include(b => b.OrderProductDetails)
-                        .ThenInclude(o => o.Product)
-                    .Include(b => b.BookingServicesDetails)
-                        .ThenInclude(bs => bs.Service)
-                     .Include(b => b.BookingServicesDetails)
-                            .ThenInclude(s => s.PartnerInfo)
-                    .Include(b => b.BookingRoomDetails)
-                        .ThenInclude(br => br.Room)
-                    .Include(b => b.BookingRoomServices)
-                        .ThenInclude(br => br.Service)
-                    .Where(o => o.BookingRoomDetails.Count() > 0 && o.BookingServicesDetails.Count() == 0 && o.OrderProductDetails.Count() == 0)
-                    .ToList();
-                return Ok(_mapper.Map<List<OrdersDTO>>(orders));
-            }
-            catch (Exception ex)
-            {
-                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
-                return StatusCode(500, ex.Message);
-            }
-        }
         #endregion
 
         #region Put
