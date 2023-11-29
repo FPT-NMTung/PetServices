@@ -8,9 +8,6 @@
     const priceErrorMessage = document.getElementById('price-error-message');
     const subjectErrorMessage = document.getElementById('subject-error-message');
 
-    console.log('Debug: fname.value', name.value);
-    console.log('Debug: subject.value', desciptions.value);
-
     const specialChars = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/; // Special character regex
     const specialChar = /[@#$%^&*{}\[\]~]/;
     const numbersOnly = /^[0-9]+$/; // Only numbers regex
@@ -31,7 +28,7 @@
     if (!numbersOnly.test(price.value)) {
         priceErrorMessage.textContent = "Giá phải là số dương.";
         isValid = false;
-    } if {
+    } else {
         const priceValue = parseInt(price.value);
         if (priceValue <= 0) {
             priceErrorMessage.textContent = "Giá phải là số dương.";

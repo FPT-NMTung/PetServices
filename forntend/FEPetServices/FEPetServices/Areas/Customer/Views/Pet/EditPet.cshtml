@@ -80,7 +80,7 @@
     <input type="text" id="UserInfoId" name="UserInfoId" value="@Model?.UserInfoId" required hidden>
     <div class="row">
       <div class="col-25">
-        <label for="Descriptions">Mô Tả:</label>
+        <label for="Descriptions">Mô Tả<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
         <textarea id="Descriptions" name="Descriptions" placeholder="Mô tả .." style="height:200px" required>@Model?.Descriptions</textarea>
@@ -102,6 +102,12 @@
         width:100px;
         height:100px;
     }
+    .fa-asterisk {
+            color: red;
+            font-size:6px;
+            padding-top:20px;
+            margin-right:10px;
+        }
 </style>
 <script src="~/js/Service.js"></script>
 </body>

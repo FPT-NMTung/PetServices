@@ -163,17 +163,24 @@
             foreach (var roomCategory in Model)
             {
                 itemCount++;
-                    string description = roomCategory.Desciptions;
+                        string description = roomCategory.Desciptions;
 
-                    if (description != null)
-                    {
-                        if (description.Length > 100)
+                        if (description != null)
                         {
-                            int lastSpace = description.LastIndexOf(' ', 100);
-
-                            description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                            if (description.Length > 100)
+                            {
+                                int lastSpace = description.LastIndexOf(' ', 100);
+                                description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                            }
+                            else
+                            {
+                                description = roomCategory.Desciptions;
+                            }
                         }
-                    }
+                        else
+                        {
+                            description = string.Empty;
+                        }
                 <tr>
                     <td>@itemCount</td>
                     <td>@roomCategory.RoomCategoriesName</td>

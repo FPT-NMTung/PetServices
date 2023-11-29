@@ -7,6 +7,7 @@ using System.Text.Json;
 
 namespace FEPetServices.Areas.Partner.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = "PartnerOnly")]
     public class InformationPartnerController : Controller
     {
@@ -161,7 +162,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
 
             // Update the user information, including the image URL
-            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "Partner/updateInfo?email=" + email, partnerInfo);
+            HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/Partner/updateInfo?email=" + email, partnerInfo);
             //HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrlPartner + "?email=" + email, partnerInfo);
             if (response.IsSuccessStatusCode)
             {
