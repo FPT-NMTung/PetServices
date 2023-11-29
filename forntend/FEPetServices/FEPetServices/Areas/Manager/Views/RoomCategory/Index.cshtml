@@ -55,6 +55,17 @@
         width: 135px;
         height: 40px;
         border-radius: 5px;
+        border: none;
+    }
+
+        .btn-active:hover{
+            background-color: #26B323;
+            color: black;
+        }
+
+    .btn-inactive:hover {
+        background-color: #d30f0b;
+        color: black;
     }
 
     .btn-inactive {
@@ -64,6 +75,7 @@
         width: 135px;
         height: 40px;
         border-radius: 5px;
+        border: none;
     }
 
     .btn-detail {
@@ -170,11 +182,11 @@
                     <td>
                         @if (@roomCategory.Status)
                         {
-                            <button class="btn btn-active">Đang hoạt động</button>
+                            <button class="btn-active">Đang hoạt động</button>
                         }
                         else
                         {
-                            <button class="btn btn-inactive">Ngưng hoạt động</button>
+                            <button class="btn-inactive">Ngưng hoạt động</button>
                         }
                     </td>
                     <td>

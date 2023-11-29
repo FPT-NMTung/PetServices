@@ -148,7 +148,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // Số đơn hàng bị hủy trong tháng
-                HttpResponseMessage NumberOrderRejectedInMonthResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetNumberOrderRejectedInMonth");
+                HttpResponseMessage NumberOrderRejectedInMonthResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetNumberOrderCancelledInMonth");
 
                 if (NumberOrderRejectedInMonthResponse.IsSuccessStatusCode)
                 {

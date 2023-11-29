@@ -58,6 +58,11 @@ namespace FEPetServices.Controllers
 
                     return RedirectToAction("Index", "VerifyEmail");
                 }
+                /*else if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    ViewBag.ErrorToast = response.Content.ReadAsStringAsync();
+
+                }*/
                 else
                 {
                     ViewBag.ErrorToast = "Đăng ký không thành công. Tài khoản đã tồn tại";
