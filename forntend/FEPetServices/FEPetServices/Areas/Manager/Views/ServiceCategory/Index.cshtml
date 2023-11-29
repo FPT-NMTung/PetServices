@@ -55,6 +55,7 @@
         width: 135px;
         height: 40px;
         border-radius: 5px;
+        border: none;
     }
 
     .btn-inactive {
@@ -64,6 +65,17 @@
         width: 135px;
         height: 40px;
         border-radius: 5px;
+        border: none;
+    }
+
+    .btn-active:hover {
+        background-color: #26B323;
+        color: black;
+    }
+
+    .btn-inactive:hover {
+        background-color: #d30f0b;
+        color: black;
     }
 
     .btn-detail {
@@ -156,17 +168,24 @@
             foreach (var servicecategory in Model)
             {
                 itemCount++;
-                string description = servicecategory.Desciptions;
+                        string description = servicecategory.Desciptions;
 
-                    if (description != null)
-                    {
-                        if (description.Length > 100)
+                        if (description != null)
                         {
-                            int lastSpace = description.LastIndexOf(' ', 100);
-
-                            description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                            if (description.Length > 100)
+                            {
+                                int lastSpace = description.LastIndexOf(' ', 100);
+                                description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                            }
+                            else
+                            {
+                                description = servicecategory.Desciptions;
+                            }
                         }
-                    }
+                        else
+                        {
+                            description = string.Empty;
+                        }
                 <tr>
                     <td>@itemCount</td>
                     <td>@servicecategory.SerCategoriesName</td>
@@ -175,11 +194,11 @@
                     <td>
                         @if (@servicecategory.Status)
                         {
-                            <button class="btn btn-active">Đang hoạt động</button>
+                            <button class="btn-active">Đang hoạt động</button>
                         }
                         else
                         {
-                            <button class="btn btn-inactive" >Ngưng hoạt động</button>
+                            <button class="btn-inactive" >Ngưng hoạt động</button>
                         }
                     </td>
                     <td>

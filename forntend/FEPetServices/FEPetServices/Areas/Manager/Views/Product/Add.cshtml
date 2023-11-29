@@ -1,109 +1,110 @@
-﻿@{
-    ViewData["Title"] = "Thêm Sản Phẩm";
-}
-<h1 style="text-align:center">Thêm Sản Phẩm Mới</h1>
-<link href="~/css/manager/product.css" rel="stylesheet" />
-<link href="~/css/toastNotification.css" rel="stylesheet" />
-<script src="~/js/manager/product.js"></script>
-<div class="container container-add-new">
-    <form asp-action="Add" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
-        <div class="noidung">
-            <div class="anh-product">
-                <div class="form-group">
-                    <div class="title">
-                        <label for="image">Ảnh <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-                    </div>
-                    <div class="typeinput">
-                        <input type="file" class="form-control" style="color: red;" id="image" name="image" onchange="changeImageSource()" required>
-                        <img class="form-control-anh" src="~/img/add-image-1.png" height="50%" width="50%" style="float: left;" id="imagePreview" />
-                    </div>
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <link href="~/css/manager/product.css" rel="stylesheet" />
+</head>
+<body>
+    <h1 style="font-size: 40px; font-weight: bold; text-align:center">Thêm sản phẩm cho thú cưng</h1>
+    <div class="container">
+        <form asp-action="Add" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <div class="row">
+                <div class="col-25">
+                    <label for="ProductName">Tên Sản Phẩm<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="ProductName" name="ProductName" placeholder="Tên sản phẩm" required>
+                    <div style="color:red" class="error-message" id="fname-error-message"></div>
                 </div>
             </div>
-            <div class="noidung-product">
-                <div class="form-group">
-                    <div class="title">
-                        <label for="ProductName">Tên Sản Phẩm <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>: </label>
-                    </div>
-                    <div class="typeinput">
-                        <input type="text" class="form-control" id="ProductName" name="ProductName" value="@Model?.ProductName" style="width:100%" required />
-                        <div style="color: red" class="error-message" id="fnameErrorMessage"></div>
-                    </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="image">Ảnh<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                 </div>
-                <div class="form-group">
-                    <div class="title">
-                        <label for="Price">Giá Sản Phẩm<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>: </label>
-                    </div>
-                    <div class="typeinput">
-                        <input type="text" class="form-control" id="Price" name="Price" value="@Model?.Price" style="width:100%" required />
-                        <div style="color: red" class="error-message" id="fnameErrorMessage"></div>
-                    </div>
-                </div>
-                @*<div class="form-group">
-                <div class="title">
-                <label for="Quantity">Số Lượng Sản Phẩm: </label>
-                </div>
-                <div class="typeinput">
-                <input type="text" class="form-control" id="Quantity" name="Quantity" value="@Model?.Quantity" style="width:100%" required/>
-                <div style="color: red" class="error-message" id="fnameErrorMessage"></div>
-                </div>
-                </div>*@
-                <div class="form-group">
-                    <div class="title">
-                        <label for="Desciption">Mô Tả Chi Tiết<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>: </label>
-                    </div>
-                    <div class="typeinput">
-                        <textarea class="form-control" id="Desciption" name="Desciption" style="width:100%; height: auto" required> @Model?.Desciption</textarea>
-                        <div style="color: red" class="error-message" id="subjectErrorMessage"></div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="title">
-                        <label for="CreateDate">Ngày Thêm Sản Phẩm <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>: </label>
-                    </div>
-                    <div class="typeinput">
-                        <input type="date" class="form-control" id="CreateDate" name="CreateDate" value="@Model?.CreateDate" style="width:100%" />
-                        <div style="color: red" class="error-message" id="fnameErrorMessage"></div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="title">
-                        <label for="ProCategoriesId">Loại Sản Phẩm <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>: </label>
-                    </div>
-                    <div class="typeinput">
-                        @if (ViewBag.ProCategories != null)
-                        {
-                            <select id="ProCategoriesId" name="ProCategoriesId" required>
-                                <option value="Loại Sản Phẩm">Select A Product Category</option>
-                                @foreach (var cate in ViewBag.ProCategories)
-                                {
-                                    <option value="@cate.Value">@cate.Text</option>
-                                }
-                            </select>
-                        }
-                        else
-                        {
-                            <span class="text-danger">Error</span>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-6" style="text-align:left">
-                <button type="submit" class="btn btn-primary">Thêm Mới</button>
-            </div>
-            <div class="col-6" style="text-align:right">
-                <button class="btn btn-primary" type="button" onclick="returnProduct()">
-                    Quay lại Danh Sách
-                </button>
-            </div>
-        </div>
+                <div class="col-75">
+                    <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" required>
 
-    </form>
-</div>
-<style>
-.fa-asterisk{
-    color:red;
-}
-</style>
+                    <img src="~/img/icon/addicon.png" height="100px" width="100px" style="float: left; padding: 10px;" id="imagePreview">
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="Price">Giá Sản Phẩm<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <div class="quantity-container">
+                        <input type="number" class="quantity" id="Price" name="Price" placeholder="Giá tiền" min="0" required>&ensp; đ
+                    </div>
+                    <div style="color:red" class="error-message" id="price-error-message"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="Quantity">Số lượng sản phẩm<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <div class="quantity-container">
+                        <input type="number" class="quantity" id="Quantity" name="Quantity" placeholder="Số lượng" min="0" required>&ensp;
+                    </div>
+                    <div style="color:red" class="error-message" id="quantity-error-message"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="ProCategoriesId">Loại Sản Phẩm<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i></label>
+                </div>
+                <div class="col-75">
+                    @if (ViewBag.ProCategories != null)
+                    {
+                        <select id="ProCategoriesId" name="ProCategoriesId" required>
+                            <option value="">Chọn một loại sản phẩm</option>
+                            @foreach (var category in ViewBag.ProCategories)
+                            {
+                                <option value="@category.Value">@category.Text</option>
+                            }
+                        </select>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Lỗi: Dữ liệu không khả dụng.</span>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="Desciption">Mô Tả<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <textarea id="Desciption" name="Desciption" placeholder="Nội Dung" style="height:200px" required></textarea>
+                    <div style="color:red" class="error-message" id="subject-error-message"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                </div>
+                <div class="col-75 btn-row">
+                    <div class="btn-back">
+                        <a type="submit" value="Cancel" href="/Manager/Product" class="cancel">Trở lại</a>
+                    </div>
+                    <div class="btn-submit">
+                        <input type="submit" value="Thêm sản phẩm">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <style>
+       .fa-asterisk {
+            color: red;
+            font-size:6px;
+            padding-top:20px;
+            margin-right:10px;
+        }
+    </style>
+    <script src="~/js/manager/product.js"></script>
+</body>
+</html>
+

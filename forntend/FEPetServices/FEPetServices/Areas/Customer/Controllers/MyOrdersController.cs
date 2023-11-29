@@ -23,7 +23,8 @@ namespace FEPetServices.Areas.Customer.Controllers
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            DefaultApiUrl = "https://localhost:7255/api/";
             DefaultApiUrlOrders = "https://localhost:7255/api/";
         }
 
@@ -39,11 +40,11 @@ namespace FEPetServices.Areas.Customer.Controllers
             {
                 ViewBag.NotFound = "Error404";
                 return View();
-            }
+            }   
             else
             {
                 //HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrlOrders}Order/email/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
-                HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/email/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
+                HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/getOrderUser/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -86,18 +87,6 @@ namespace FEPetServices.Areas.Customer.Controllers
 
         [HttpGet]
         public Task<IActionResult> AllOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
-
-        [HttpGet]
-        public Task<IActionResult> DeliveryOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
-
-        [HttpGet]
-        public Task<IActionResult> WaitingOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
-
-        [HttpGet]
-        public Task<IActionResult> ReceivedOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
-
-        [HttpGet]
-        public Task<IActionResult> RejectOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
 
         [HttpGet]
         public Task<IActionResult> CompletedOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);

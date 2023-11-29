@@ -407,6 +407,8 @@ namespace PetServices.Models
 
                 entity.Property(e => e.ProductName).HasMaxLength(500);
 
+                entity.Property(e => e.UpdateDate).HasColumnType("date");
+
                 entity.HasOne(d => d.ProCategories)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.ProCategoriesId)

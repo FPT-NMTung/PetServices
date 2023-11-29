@@ -13,10 +13,10 @@ namespace FEPetServices.Areas.Manager.Controllers
     {
         private readonly HttpClient client = null;
         private string DefaultApiUrl = "";
-        private string DefaultApiUrlProductCategoryList = "";
-        private string DefaultApiUrlProductCategoryDetail = "";
-        private string DefaultApiUrlProductCategoryAdd = "";
-        private string DefaultApiUrlProductCategoryUpdate = "";
+        //private string DefaultApiUrlProductCategoryList = "";
+        //private string DefaultApiUrlProductCategoryDetail = "";
+        //private string DefaultApiUrlProductCategoryAdd = "";
+        //private string DefaultApiUrlProductCategoryUpdate = "";
         private readonly IConfiguration configuration;
 
 
@@ -27,10 +27,10 @@ namespace FEPetServices.Areas.Manager.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
-            DefaultApiUrlProductCategoryList = "https://pet-service-api.azurewebsites.net/api/ProductCategory";
-            DefaultApiUrlProductCategoryDetail = "https://pet-service-api.azurewebsites.net/api/ProductCategory/ProductCategorysID";
-            DefaultApiUrlProductCategoryAdd = "https://pet-service-api.azurewebsites.net/api/ProductCategory/CreateNewProductCategory";
-            DefaultApiUrlProductCategoryUpdate = "https://pet-service-api.azurewebsites.net/api/ProductCategory/Update?procateId=";
+            //DefaultApiUrlProductCategoryList = "https://pet-service-api.azurewebsites.net/api/ProductCategory";
+            //DefaultApiUrlProductCategoryDetail = "https://pet-service-api.azurewebsites.net/api/ProductCategory/ProductCategorysID";
+            //DefaultApiUrlProductCategoryAdd = "https://pet-service-api.azurewebsites.net/api/ProductCategory/CreateNewProductCategory";
+            //DefaultApiUrlProductCategoryUpdate = "https://pet-service-api.azurewebsites.net/api/ProductCategory/Update?procateId=";
         }
 
         public async Task<IActionResult> Index(ProductCategoryDTO productCategoryDTO)
@@ -47,7 +47,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     {
                         var productCateList = JsonConvert.DeserializeObject<List<ProductCategoryDTO>>(rep);
 
-                        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                        //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                         return View(productCateList);
                     }
                     else
@@ -67,17 +67,21 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             return View();
         }
-        public async Task<IActionResult> CreateNewProductCategory([FromForm] ProductCategoryDTO proCategory, IFormFile image)
+        public async Task<IActionResult> CreateNewProductCategory([FromForm] ProductCategoryDTO proCategory, List<IFormFile> image)
         {
             try
             {
                 if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
                 {
-                    if (image != null && image.Length > 0)
+                    if (proCategory.ProCategoriesName == null) { return View(); }
+                    foreach (var file in image)
                     {
-                        // Xử lý và lưu trữ ảnh
-                        Console.WriteLine(image);
-                        proCategory.Picture = "/img/ProductCategory/" + image.FileName.ToString();
+                        string filename = GenerateRandomNumber(5) + file.FileName;
+                        filename = Path.GetFileName(filename);
+                        string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/ProductCategory/", filename);
+                        var stream = new FileStream(uploadfile, FileMode.Create);
+                        file.CopyToAsync(stream);
+                        proCategory.Picture = "/img/ProductCategory/" + filename;
                     }
 
                     var json = JsonConvert.SerializeObject(proCategory);
@@ -108,6 +112,19 @@ namespace FEPetServices.Areas.Manager.Controllers
                 return View(proCategory); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
         }
+        public static string GenerateRandomNumber(int length)
+        {
+            Random random = new Random();
+            const string chars = "0123456789";
+            char[] randomChars = new char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                randomChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(randomChars);
+        }
 
         [HttpGet]
         public async Task<IActionResult> Update(int procateId, ProductCategoryDTO productCategoryDTO)
@@ -115,7 +132,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             try
             {
                 //goi api de lay thong tin can sua
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ProductCategory/ProductCategorysID/" + procateId);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ProductCategory/ProductCategorysID/"   + procateId);
                 if (response.IsSuccessStatusCode)
                 {
                     var rep = await response.Content.ReadAsStringAsync();
@@ -151,6 +168,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             return View();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Update(ProductCategoryDTO productCategoryDTO, int procateId, IFormFile image)
@@ -189,7 +207,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                             if (existingPC != null)
                             {
                                 // Assign the existing image path to serviceCategory.Prictue.
-                                productCategoryDTO.Picture = productCategoryDTO.Picture;
+                                productCategoryDTO.Picture = existingPC.Picture;
                             }
                         }
                     }
@@ -211,12 +229,12 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
+                    TempData["SuccessToast"] = "Chỉnh sửa sản phẩm thành công!";
                     return View(productCategoryDTO); // Chuyển hướng đến trang thành công hoặc trang danh sách
                 }
                 else
                 {
-                    TempData["ErrorToast"] = "Chỉnh sửa dịch vụ thất bại. Vui lòng thử lại sau.";
+                    TempData["ErrorToast"] = "Chỉnh sửa sản phẩm  thất bại. Vui lòng thử lại sau.";
                     return View(productCategoryDTO); // Hiển thị lại biểu mẫu với dữ liệu đã điền
                 }
             }

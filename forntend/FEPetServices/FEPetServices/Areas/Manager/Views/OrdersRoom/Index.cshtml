@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @*<link href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">*@
+    <link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <link href="~/css/datatable.css" rel="stylesheet" />
+    <link href="~/css/orders/stylesheet.css" rel="stylesheet" />
+</head>
+<body>
+    <div>
+        <h1>Danh sách phòng được đặt</h1>
+    </div>
+    <div>
+        <table id="lists">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Tên</th>
+                    <th>Số điện thoại</th>
+                    <th>Ngày đặt đơn</th>
+                    <th>Trạng thái đơn hàng</th>
+                    <th>Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int itemCount = 0;
+                    foreach (var orderLists in Model)
+                    {
+                        itemCount++;
+                        <tr>
+                            <td>@itemCount</td>
+                            <td>@orderLists?.FullName</td>
+                            <td>@orderLists?.Phone</td>
+                            <td>@orderLists?.OrderDate</td>
+                            <td>
+                                @if (orderLists?.OrderStatus.Trim() == "Confirmed")
+                                {
+                                    <span style="display:inline-block" class="badge badge-info">Đã trả phòng</span>
+                                }
+                                else if (orderLists?.OrderStatus.Trim() == "Refund")
+                                {
+                                    <span style="display:inline-block" class="badge badge-info">Hoàn tiên</span>
+                                }
+                                else if (orderLists?.OrderStatus.Trim() == "Placed")
+                                {
+                                    <span style="display:inline-block" class="badge badge-info">Chờ nhận phòng</span>
+                                }
+                                else if (orderLists?.OrderStatus.Trim() == "Cancelled")
+                                {
+                                    <span style="display:inline-block" class="badge badge-info">Phòng bị huỷ </span>
+                                }
+                            </td>
+                            <td>
+                                <a class="detail-button" href="~/Manager/OrdersRoom/OrderRoomDetail?id=@orderLists.OrderId">Chi tiết</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                @if (!string.IsNullOrEmpty(TempData["ErrorLoadingDataToast"] as string))
+                {
+                    <div style="margin: 0 30px;" class="alert alert-danger">
+                        <span style="color:red">@TempData["ErrorLoadingDataToast"]</span>
+                    </div>
+                }
+            </tfoot>
+        </table>
+    </div>
+</body>
+<script>
+    $(document).ready(function () {
+        // Khởi tạo DataTables
+        var table = $('#lists').DataTable({
+            "responsive": true,
+            "paging": true,
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "dom": 'Bfrtip',
+            "buttons": [
+                {
+                    extend: 'copy',
+                    text: 'Sao chép',
+                },
+                {
+                    extend: 'csv',
+                    text: 'Xuất CSV',
+                    filename: 'Danh sách order'
+                },
+                {
+                    extend: 'excel',
+                    text: 'Xuất Excel',
+                    filename: 'Danh sách order'
+                },
+                {
+                    extend: 'pdf',
+                    text: 'Xuất PDF',
+                    filename: 'Danh sách order'
+                },
+                {
+                    extend: 'print',
+                    text: 'In',
+                }
+            ],
+
+            "columnDefs": [
+                { "targets": [0], "width": "5%" },
+                { "targets": [1], "width": "20%" },
+                { "targets": [2], "width": "15%" },
+                { "targets": [3], "width": "20%" },
+                { "targets": [4], "width": "25%" },
+                { "targets": [5], "width": "15%" },
+            ],
+            "language": {
+                "lengthMenu": "Hiển thị _MENU_ dòng",
+                "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
+                "search": "Tìm kiếm:",
+                "paginate": {
+                    "first": "Đầu",
+                    "last": "Cuối",
+                    "next": "Tiếp",
+                    "previous": "Trước"
+                }
+            },
+        });
+    });
+</script>
+</html>

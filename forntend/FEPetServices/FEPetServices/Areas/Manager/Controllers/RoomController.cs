@@ -56,7 +56,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     if (!string.IsNullOrEmpty(responseContent))
                     {
-                        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                        //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                         var roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(responseContent);
 
                         return View(roomList);
@@ -118,11 +118,12 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
                 roomDTO.Status = true;
 
-                roomDTO.ServiceIds = Request.Form["SelectedServices"].ToString().Split(',').Select(int.Parse).ToList();
+                var selectedServices = Request.Form["SelectedServices"];
+                roomDTO.ServiceIds = !string.IsNullOrEmpty(selectedServices)
+                    ? selectedServices.ToString().Split(',').Select(int.Parse).ToList()
+                    : new List<int>();
 
                 var json = JsonConvert.SerializeObject(roomDTO);
-                Console.WriteLine(roomDTO);
-                Console.WriteLine(json);
 
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -225,7 +226,12 @@ namespace FEPetServices.Areas.Manager.Controllers
                     ViewBag.Categories = new SelectList(categories, "RoomCategoriesId", "RoomCategoriesName");
                 }
 
-                roomDTO.ServiceIds = Request.Form["SelectedServices"].ToString().Split(',').Select(int.Parse).ToList();
+                var SelectedServices = Request.Form["SelectedServices"];
+                roomDTO.ServiceIds = !string.IsNullOrEmpty(SelectedServices)
+                    ? SelectedServices.ToString().Split(',').Select(int.Parse).ToList()
+                    : new List<int>();
+
+                /*roomDTO.ServiceIds = Request.Form["SelectedServices"].ToString().Split(',').Select(int.Parse).ToList();*/
 
                 if (image != null && image.Length > 0)
                 {

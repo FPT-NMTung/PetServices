@@ -1,20 +1,12 @@
-﻿using FEPetServices.Areas.DTO;
-using FEPetServices.Form;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;
-using PetServices.DTO;
 using PetServices.Form;
-using PetServices.Models;
-using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Mail;
-using System.Text;
-using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = "ManaOnly")]
     public class DashBoardController : Controller
     {
@@ -148,7 +140,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 // Số đơn hàng bị hủy trong tháng
-                HttpResponseMessage NumberOrderRejectedInMonthResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetNumberOrderRejectedInMonth");
+                HttpResponseMessage NumberOrderRejectedInMonthResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetNumberOrderCancelledInMonth");
 
                 if (NumberOrderRejectedInMonthResponse.IsSuccessStatusCode)
                 {

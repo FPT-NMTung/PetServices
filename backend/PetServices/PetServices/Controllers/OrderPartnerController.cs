@@ -97,12 +97,44 @@ namespace PetServices.Controllers
                     .Include(b => b.BookingServicesDetails)
                     .ThenInclude(bs => bs.Service)
                     .SingleOrDefaultAsync(b => b.OrderId == orderId);
-                order.OrderStatus = "Received_Services";
                 foreach (var bookingDetail in order.BookingServicesDetails)
                 {
                     if (bookingDetail.PartnerInfoId == null)
                     {
                         bookingDetail.PartnerInfoId = partnerId;
+                    }
+                    if(bookingDetail.StatusOrderService == "Waiting")
+                    {
+                        bookingDetail.StatusOrderService = "Received";
+                    }
+                }
+                _context.Update(order);
+                await _context.SaveChangesAsync();
+
+                return Ok(_mapper.Map<OrdersDTO>(order));
+
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpGet("UpdateOrderStatusProcessing")]
+        public async Task<IActionResult> UpdateOrderStatusProcessing(int orderId)
+        {
+            try
+            {
+                Order order = await _context.Orders
+                    .Include(b => b.UserInfo)
+                    .Include(b => b.BookingServicesDetails)
+                    .ThenInclude(bs => bs.Service)
+                    .SingleOrDefaultAsync(b => b.OrderId == orderId);
+                foreach (var bookingDetail in order.BookingServicesDetails)
+                {
+                    if(bookingDetail.StatusOrderService == "Received")
+                    {
+                        bookingDetail.StatusOrderService = "Processing";
                     }
                 }
                 _context.Update(order);
@@ -138,8 +170,13 @@ namespace PetServices.Controllers
                     if (bookingDetail.PartnerInfoId != null)
                     {
                         bookingDetail.PartnerInfoId = null;
+                        if(bookingDetail.PriceService != null)
+                        {
+                            bookingDetail.PriceService -= 50000;
+                        }
                     }
                 }
+                order.TotalPrice -= 50000;
                 order.ReasonId = reasonId;
                 _context.Orders.Update(order);
 
@@ -195,8 +232,13 @@ namespace PetServices.Controllers
                     if (bookingDetail.PartnerInfoId != null)
                     {
                         bookingDetail.PartnerInfoId = null;
+                        if(bookingDetail.PriceService != null)
+                        {
+                            bookingDetail.PriceService -= 50000;
+                        }
                     }
                 }
+                order.TotalPrice -= 50000;
                 order.OrderStatus = status.newStatus;
                 _context.Orders.Update(order);
 

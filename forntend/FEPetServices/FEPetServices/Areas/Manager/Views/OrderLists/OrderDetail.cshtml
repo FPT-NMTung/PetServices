@@ -11,240 +11,270 @@
     <div class="container print-container">
         <h2>Chi tiết đơn hàng</h2>
         @*Thông tin đơn hàng*@
-        <form method="post" asp-controller="OrderLists" asp-action="OrderDetail">
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Ngày mua hàng :</label>
-                <div class="col-sm-9">
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Ngày mua hàng :</label>
+            <div class="col-sm-9">
                 <input type="text" readonly class="form-control-plaintext" value="@Model.OrderDate">
-                </div>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Trạng thái :</label>
-                <div class="col-sm-9" style="padding-top:8px">
-                    @if (Model.OrderStatus.Trim() == "Delivery")
-                    {
-                        <span style="display:inline-block" class="badge badge-info">Đang giao</span>
-                    }
-                    else if (Model.OrderStatus.Trim() == "Rejected")
-                    {
-                        <span style="display:inline-block" class="badge badge-info">Đơn hàng bị huỷ</span>
-                    }
-                    else if (Model.OrderStatus.Trim() == "Waiting")
-                    {
-                        <span style="display:inline-block" class="badge badge-info">Đơn hàng đang chờ xử lý</span>
-                    }
-                    else if (Model.OrderStatus.Trim() == "Received")
-                    {
-                        <span style="display:inline-block" class="badge badge-info">Đơn hàng đã được xác nhận</span>
-                    }
-                    else if (Model.OrderStatus.Trim() == "Completed")
-                    {
-                        <span style="display:inline-block" class="badge badge-info">Đơn hàng đã hoàn thành</span>
-                    }
-                </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Trạng thái :</label>
+            <div class="col-sm-9" style="padding-top:8px">
+                @if (Model.OrderStatus.Trim() == "Confirmed")
+                {
+                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đã được xác nhận và trong giai đoạn xử lý </span>
+                }
+                else if (Model.OrderStatus.Trim() == "Processing")
+                {
+                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đang được thực hiện</span>
+                }
+                else if (Model.OrderStatus.Trim() == "Placed")
+                {
+                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đang chờ xác nhận</span>
+                }
+                else if (Model.OrderStatus.Trim() == "Completed")
+                {
+                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đã hoàn thành</span>
+                }
+                else if (Model.OrderStatus.Trim() == "Cancelled")
+                {
+                    <span style="display:inline-block" class="badge badge-info">Đơn hàng bị huỷ</span>
+                }
             </div>
+        </div>
         @*Thông tin khách hàng*@
         <h3>Thông tin khách hàng</h3>
         <div class="form-group row">
             <label class="col-sm-3 col-form-label">Tên Khách Hàng :</label>
             <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" value="@Model.FullName">
+                <input type="text" readonly class="form-control-plaintext" value="@Model.FullName">
             </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-3 col-form-label">Địa chỉ :</label>
             <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext"
-                   value="@Model.Province , @Model.District , @Model.Commune">
+                <input type="text" readonly class="form-control-plaintext"
+                       value="@Model.Province , @Model.District , @Model.Commune">
             </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-3 col-form-label">Địa chỉ cụ thể :</label>
             <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" value="@Model.Address">
+                <input type="text" readonly class="form-control-plaintext" value="@Model.Address">
             </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-3 col-form-label">Thông tin liên hệ :</label>
             <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" value="@Model.Phone">
+                <input type="text" readonly class="form-control-plaintext" value="@Model.Phone">
             </div>
         </div>
 
-            @if (Model.OrderProductDetails != null && Model.OrderProductDetails.Count > 0)
-            {
-                @*Thông tin sản phẩm*@
-                <h4>Thông tin sản phẩm</h4>
-                <div style="overflow-x:auto;">
-                    <table class="table">
-                        <thead>
+        @if (Model.OrderProductDetails != null && Model.OrderProductDetails.Count > 0)
+        {
+            @*Thông tin sản phẩm*@
+            <h4>Thông tin sản phẩm</h4>
+            <div style="overflow-x:auto;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Giá từng sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Tổng giá</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.OrderProductDetails.Count; i++)
+                        {
+                            var productDetail = Model.OrderProductDetails[i];
                             <tr>
-                                <th>Tên sản phẩm</th>
-                                <th>Giá từng sản phẩm</th>
-                                <th>Số lượng</th>
-                                <th>Tổng giá</th>
+                                <td>@productDetail.Product.ProductName</td>
+                                <td>@($"{productDetail.Price:n0}".Replace(",", ".")) VNĐ</td>
+                                <td>@productDetail.Quantity</td>
+                                <td>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var productDetail in Model.OrderProductDetails)
-                            {
-                                <tr>
-                                    <td>@productDetail.Product.ProductName</td>
-                                    <td>
-                                        @(
-                                            $"{productDetail.Price:n0}".Replace(",", ".")
-                                            ) VNĐ
-                                    </td>
-                                    <td>@productDetail.Quantity</td>
-                                    <td>
-                                        @(
-                                            $"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")
-                                            ) VNĐ
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            }
 
-            @if (Model.BookingServicesDetails != null && Model.BookingServicesDetails.Count > 0)
-            {
-                <h4>Thông tin dịch vụ</h4>
-                <div style="overflow-x:auto;">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Tên dịch vụ</th>
-                                <th>Giá dịch vụ</th>
-                                <th>Cân nặng thú cưng</th>
-                                <th>Thông tin nhân viên</th>
-                                <th>Thời gian</th>
-                                <th>Tổng giá</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var serviceDetail in Model.BookingServicesDetails)
+                            @if (i == Model.OrderProductDetails.Count - 1)
                             {
                                 <tr>
-                                    <td>@serviceDetail.Service.ServiceName</td>
+                                    <td colspan="3"></td>
                                     <td>
-                                        @($"{serviceDetail.Price:n0}".Replace(",", ".")) VNĐ
-                                    </td>
-                                    <td>@serviceDetail.Weight Kg</td>
-                                    <td>
-                                        @if (@serviceDetail.PartnerInfoId != null)
-                                        {
-                                            <div style="display:flex">
-                                                <p>@serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName</p>
-                                                <p> - ID: @serviceDetail?.PartnerInfoId</p>
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <p>Không</p>
-                                        }
-                                    </td>
-                                    <td>
-                                        <div class="content-detail-time-service">
-                                            <p style="font-size:.8rem;">Thời gian bắt đầu: <br></br> @serviceDetail?.StartTime</p>
-                                            <p style="font-size:.8rem;">Thời gian kêt thúc: <br></br> @serviceDetail?.EndTime </p>
+                                        <div class="status-content-detail">
+                                            @if (productDetail?.StatusOrderProduct?.Trim() == "Placed")
+                                            {
+                                                <span class="badge badge-info">Sản phẩm đang chờ xác nhận</span>
+                                            }
+                                            else if (productDetail?.StatusOrderProduct?.Trim() == "Packaging")
+                                            {
+                                                <span class="badge badge-info">Đóng gói sản phẩm</span>
+                                            }
                                         </div>
                                     </td>
-                                    <td>
-                                        @($"{serviceDetail.PriceService:n0}".Replace(",", ".")) VNĐ
-                                    </td>
                                 </tr>
                             }
-                        </tbody>
-                    </table>
-                </div>
-            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
 
-            @if (Model.BookingRoomDetails != null && Model.BookingRoomDetails.Count > 0)
-            {
-                <h4>Thông tin phòng</h4>
-                <div style="overflow-x:auto;">
-                    <table class="table">
-                        <thead>
+        @if (Model.BookingServicesDetails != null && Model.BookingServicesDetails.Count > 0)
+        {
+            <h4>Thông tin dịch vụ</h4>
+            <div style="overflow-x:auto;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tên dịch vụ</th>
+                            <th>Giá dịch vụ</th>
+                            <th>Cân nặng thú cưng</th>
+                            <th>Thông tin nhân viên</th>
+                            <th>Thời gian</th>
+                            <th>Tổng giá</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var serviceDetail in Model.BookingServicesDetails)
+                        {
                             <tr>
-                                <th>Tên Phòng</th>
-                                <th>Giá phòng</th>
-                                <th>Dịch vụ trong phòng</th>
-                                <th>Thời gian</th>
-                                <th>Tổng giá</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var roomDetail in Model.BookingRoomDetails)
-                            {
-                                <tr>
-                                    <td>@roomDetail.Room.RoomName</td>
-                                    <td>
-                                        @($"{roomDetail.Price:n0}".Replace(",", ".")) VNĐ
-                                    </td>
-                                    <td>
-                                        @foreach (var roomService in Model.BookingRoomServices)
-                                        {
-                                            <div style="width: 250px;" class="room-info-detail-service">
-                                                <p style="font-size:.8rem;">Dịch vụ: @roomService.Service.ServiceName</p>
-                                            </div>
-                                        }
-                                    </td>
-                                    <td>
-                                        <div class="content-detail-time-service">
-                                            <p style="font-size:.8rem;">Thời gian bắt đầu: <br></br> @roomDetail?.StartDate</p>
-                                            <p style="font-size:.8rem;">Thời gian kêt thúc: <br></br> @roomDetail?.EndDate </p>
+                                <td>@serviceDetail.Service.ServiceName</td>
+                                <td>
+                                    @($"{serviceDetail.Price:n0}".Replace(",", ".")) VNĐ
+                                </td>
+                                <td>@serviceDetail.Weight Kg</td>
+                                <td>
+                                    @if (@serviceDetail.PartnerInfoId != null)
+                                    {
+                                        <div style="display:flex">
+                                            <p style="font-size:.9rem;">@serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName</p>
+                                            <p style="font-size:.9rem;"> - ID: @serviceDetail?.PartnerInfoId</p>
                                         </div>
-                                    </td>
-                                    <td>
-                                        @($"{roomDetail.TotalPrice:n0}".Replace(",", ".")) VNĐ
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                                    }
+                                    else
+                                    {
+                                        <p>Không</p>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="content-detail-time-service">
+                                        <p style="font-size:.8rem;">Thời gian bắt đầu: <br></br> @serviceDetail?.StartTime</p>
+                                        <p style="font-size:.8rem;">Thời gian kêt thúc: <br></br> @serviceDetail?.EndTime </p>
+                                    </div>
+                                </td>
+                                <td>
+                                    @($"{serviceDetail.PriceService:n0}".Replace(",", ".")) VNĐ
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"></td>
+                                <td>
+                                    <div class="status-content-detail">
+                                        @if (@serviceDetail?.StatusOrderService?.Trim() == "Placed")
+                                        {
+                                            <span class="badge badge-info">Dịch vụ đang chờ xác nhận</span>
+                                        }
+                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Waiting")
+                                        {
+                                            <span class="badge badge-info">Dịch vụ đang chờ xử lý </span>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        @if (Model.BookingRoomDetails != null && Model.BookingRoomDetails.Count > 0)
+        {
+            <h4>Thông tin phòng</h4>
+            <div style="overflow-x:auto;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tên Phòng</th>
+                            <th>Giá phòng</th>
+                            <th>Dịch vụ trong phòng</th>
+                            <th>Thời gian</th>
+                            <th>Tổng giá</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var roomDetail in Model.BookingRoomDetails)
+                        {
+                            <tr>
+                                <td>@roomDetail.Room.RoomName</td>
+                                <td>
+                                    @($"{roomDetail.Price:n0}".Replace(",", ".")) VNĐ
+                                </td>
+                                <td>
+                                    @foreach (var roomService in Model.BookingRoomServices)
+                                    {
+                                        <div style="width: 250px;" class="room-info-detail-service">
+                                            <p style="font-size:.8rem;">Dịch vụ: @roomService.Service.ServiceName</p>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="content-detail-time-service">
+                                        <p style="font-size:.8rem;">Thời gian bắt đầu: <br></br> @roomDetail?.StartDate</p>
+                                        <p style="font-size:.8rem;">Thời gian kêt thúc: <br></br> @roomDetail?.EndDate </p>
+                                    </div>
+                                </td>
+                                <td>
+                                    @($"{roomDetail.TotalPrice:n0}".Replace(",", ".")) VNĐ
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <div style="margin-bottom:0" class="form-group row">
+            <p class="col-sm-6 col-form-label">Hoá đơn</p>
+            <p class="col-sm-6 col-form-label" style="text-align:end">Thanh toán</p>
+        </div>
+        <div class="form-group row">
+            <p class="col-sm-6 col-form-label"><strong>#</strong></td>
+            <p class="col-sm-6 col-form-label" style="text-align:end"><strong>@($"{Model.TotalPrice:n0}".Replace(",", ".")) VNĐ</strong></p>
+        </div>
+
+        <div class="work-container-inner">
+            @if (Model != null && Model.TypePay != null && Model.TypePay.Trim() == "cash")
+            {
+                <p>Thanh toán trực tiếp</p>
             }
-
-            <div style="margin-bottom:0" class="form-group row">
-                <p class="col-sm-6 col-form-label">Hoá đơn</p>
-                <p class="col-sm-6 col-form-label" style="text-align:end">Thanh toán</p>
-            </div>
-            <div class="form-group row">
-                <p class="col-sm-6 col-form-label"><strong>#</strong></td>
-                <p class="col-sm-6 col-form-label" style="text-align:end"><strong>@($"{Model.TotalPrice:n0}".Replace(",", ".")) VNĐ</strong></p>
-            </div>
-
-            <div class="work-container-inner">
-                @if (Model != null && Model.TypePay != null && Model.TypePay.Trim() == "cash")
-                {
-                    <p>Thanh toán trực tiếp</p>
-                }
-                @if (Model != null && Model.TypePay != null && @Model.TypePay.Trim() == "vnpay")
-                {
-                    <p>Thanh toán bằng hình thức chuyển khoản</p>
-                }
-                @if (!@Model.StatusPayment)
-                {
-                    <span class="badge badge-info">Chưa thanh toán</span>
-                }
-                else
-                {
-                    <span class="badge badge-info">Đã thanh toán</span>
-                }
-            </div>
-            @if (Model.OrderStatus.Trim() == "Waiting")
+            @if (Model != null && Model.TypePay != null && @Model.TypePay.Trim() == "vnpay")
+            {
+                <p>Thanh toán bằng hình thức chuyển khoản</p>
+            }
+            @if (!@Model.StatusPayment)
+            {
+                <span class="badge badge-info">Chưa thanh toán</span>
+            }
+            else
+            {
+                <span class="badge badge-info">Đã thanh toán</span>
+            }
+        </div>
+        <form method="post" asp-controller="OrderLists" asp-action="OrderDetail">
+            @if (Model.OrderStatus.Trim() == "Placed")
             {
                 <input type="hidden" name="Id" value="@Model?.OrderId" />
                 <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
+
                 <select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
-                    <option value="Delivery">Xác nhận đơn hàng</option>
-                    <option value="Rejected">Huỷ đơn hàng</option>
+                    <option value="Confirmed">Xác nhận đơn hàng</option>
+                    <option value="Cancelled">Huỷ đơn hàng</option>
                 </select>
-                <button class="btn btn-primary" type="submit">Xác nhận</button>                
+
+                <button class="btn btn-primary" type="submit">Xác nhận</button>
             }
         </form>
+
         <button class="btn btn-primary" onclick="window.print()">In hoá đơn</button>
         <div class="btn-group">
             <a class="btn btn-primary" href="~/Manager/OrderLists/Index">Trở lại</a>

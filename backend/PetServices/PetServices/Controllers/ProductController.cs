@@ -201,7 +201,8 @@ namespace PetServices.Controllers
                 product.Status = productDTO.Status;
                 product.Price = productDTO.Price;
                 product.Quantity = productDTO.Quantity;
-                product.CreateDate = DateTime.Now;
+                product.CreateDate = productDTO.CreateDate;
+                product.UpdateDate = DateTime.Now;
                 product.ProCategoriesId = productDTO.ProCategoriesId;
                 _context.Update(product);
                 await _context.SaveChangesAsync();
@@ -226,7 +227,7 @@ namespace PetServices.Controllers
                 }
 
                 product.Status = status;
-
+                product.UpdateDate = DateTime.Now;
                 _context.Entry(product).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 await _context.SaveChangesAsync();
 
@@ -267,6 +268,25 @@ namespace PetServices.Controllers
             {
                 return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
             }
+        }
+        [HttpDelete]
+        public IActionResult DeleteServce(int serviceId)
+        {
+            var service = _context.Products.FirstOrDefault(p => p.ProductId == serviceId);
+            if (service == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                _context.Products.Remove(service);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Conflict();
+            }
+            return Ok(service);
         }
     }
 }
