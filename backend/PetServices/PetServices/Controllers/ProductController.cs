@@ -268,5 +268,24 @@ namespace PetServices.Controllers
                 return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
             }
         }
+        [HttpDelete]
+        public IActionResult DeleteServce(int serviceId)
+        {
+            var service = _context.Products.FirstOrDefault(p => p.ProductId == serviceId);
+            if (service == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                _context.Products.Remove(service);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Conflict();
+            }
+            return Ok(service);
+        }
     }
 }
