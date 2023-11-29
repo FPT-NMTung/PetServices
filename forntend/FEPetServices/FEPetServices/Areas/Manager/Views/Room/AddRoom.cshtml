@@ -11,7 +11,7 @@
         <form asp-action="AddRoom" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div class="row">
                 <div class="col-25">
-                    <label for="RoomName">Tên Phòng:</label>
+                    <label for="RoomName">Tên Phòng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                 </div>
                 <div class="col-75">
                     <input type="text" id="RoomName" name="RoomName" placeholder="Tên phòng..." required>
@@ -20,7 +20,7 @@
             </div>
             <div class="row">
                 <div class="col-25">
-                    <label for="image">Ảnh:</label>
+                    <label for="image">Ảnh<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                 </div>
 
                 <div class="col-75">
@@ -32,7 +32,7 @@
             </div>
             <div class="row">
                 <div class="col-25">
-                    <label for="Price">Giá:</label>
+                    <label for="Price">Giá<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                 </div>
                 <div class="col-75">
                     <div class="quantity-container">
@@ -43,11 +43,11 @@
             </div>
             <div class="row">
                 <div class="col-25">
-                    <label for="Slot">Số lượng:</label>
+                    <label for="Slot">Số lượng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                 </div>
                 <div class="col-75">
                     <div class="quantity-container">
-                        <input type="number" class="slot" id="Slot" name="Slot" placeholder="Số lượng" min="0" required>&ensp; đ
+                        <input type="number" class="slot" id="Slot" name="Slot" placeholder="Số lượng" min="0" required>&ensp;
                     </div>
                     <div style="color:red" class="error-message" id="slot-error-message"></div>
                 </div>
@@ -79,7 +79,7 @@
             </div>
             <div class="row">
                 <div class="col-25">
-                    <label for="SerCategoriesId">Loại Phòng</label>
+                    <label for="SerCategoriesId">Loại Phòng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i></label>
                 </div>
                 <div class="col-75">
                     @if (ViewBag.Categories != null)
@@ -100,7 +100,7 @@
             </div>
             <div class="row">
                 <div class="col-25">
-                    <label for="Desciptions">Mô Tả:</label>
+                    <label for="Desciptions">Mô Tả<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                 </div>
                 <div class="col-75">
                     <textarea id="Desciptions" name="Desciptions" placeholder="Nội Dung .." style="height:200px" required></textarea>
@@ -121,6 +121,11 @@
             </div>
         </form>
     </div>
+    <style>
+.fa-asterisk{
+    color:red;
+}
+</style>
     <script src="~/js/Room.js"></script>
 </body>
 </html>

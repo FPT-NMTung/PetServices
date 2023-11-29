@@ -199,7 +199,7 @@ namespace FEPetServices.Controllers
                     {
                         var content = await productStarResponse.Content.ReadAsStringAsync();
 
-                        if (int.TryParse(content, out int productStar))
+                        if (double.TryParse(content, out double productStar))
                         {
                             ViewBag.productStar = productStar;
                         }

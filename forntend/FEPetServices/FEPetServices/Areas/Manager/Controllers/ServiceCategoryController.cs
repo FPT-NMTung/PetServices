@@ -16,21 +16,24 @@ namespace FEPetServices.Areas.Manager.Controllers
     {
         private readonly HttpClient client = null;
         private string DefaultApiUrl = "";
-        private string DefaultApiUrlServiceCategoryList = "";
+        private readonly IConfiguration configuration;
+        /*private string DefaultApiUrlServiceCategoryList = "";
         private string DefaultApiUrlServiceCategoryDetail = "";
         private string DefaultApiUrlServiceCategoryAdd = "";
-        private string DefaultApiUrlServiceCategoryUpdate = "";
+        private string DefaultApiUrlServiceCategoryUpdate = "";*/
 
-        public ServiceCategoryController()
+        public ServiceCategoryController(IConfiguration configuration)
         {
             client = new HttpClient();
+            this.configuration = configuration;
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "";
-            DefaultApiUrlServiceCategoryList = "https://pet-service-api.azurewebsites.net/api/ServiceCategory";
-            DefaultApiUrlServiceCategoryDetail = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/ServiceCategorysID";
-            DefaultApiUrlServiceCategoryAdd = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/AddServiceCategory";
-            DefaultApiUrlServiceCategoryUpdate = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/EditServiceCategory?serCategoriesId=";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+
+            //DefaultApiUrlServiceCategoryList = "https://pet-service-api.azurewebsites.net/api/ServiceCategory";
+            //DefaultApiUrlServiceCategoryDetail = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/ServiceCategorysID";
+            //DefaultApiUrlServiceCategoryAdd = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/AddServiceCategory";
+            //DefaultApiUrlServiceCategoryUpdate = "https://pet-service-api.azurewebsites.net/api/ServiceCategory/EditServiceCategory?serCategoriesId=";
 
         }
 
@@ -41,7 +44,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var json = JsonConvert.SerializeObject(serviceCategory);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
@@ -93,7 +96,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     var json = JsonConvert.SerializeObject(serviceCategory);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrlServiceCategoryAdd, content);
+                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "ServiceCategory/AddServiceCategory", content);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -135,11 +138,11 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> EditServiceCategory(int serCategoriesId)
         {
-            ServiceModel model = new ServiceModel();
+            
             try
             {
                 // Gọi API để lấy thông tin ServiceCategory cần chỉnh sửa
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceCategoryDetail + "/" + serCategoriesId);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ServiceCategory/ServiceCategorysID/" + serCategoriesId);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -149,8 +152,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                     {
                         PropertyNameCaseInsensitive = true
                     };
-                    model.ServiceCategoryDTO = System.Text.Json.JsonSerializer.Deserialize<ServiceCategoryDTO>(responseContent, options);
-                    HttpResponseMessage responseListService = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Service/GetServicesByCategory/" + model.ServiceCategoryDTO.SerCategoriesId);
+                    ServiceCategoryDTO managerInfos = System.Text.Json.JsonSerializer.Deserialize<ServiceCategoryDTO>(responseContent, options);
+                    HttpResponseMessage responseListService = await client.GetAsync(DefaultApiUrl + "Service/GetServicesByCategory/" + managerInfos.SerCategoriesId);
 
                     if (responseListService.IsSuccessStatusCode)
                     {
@@ -158,14 +161,14 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                         if (!string.IsNullOrEmpty(ServiceList))
                         {
-                            model.serviceDTO = JsonConvert.DeserializeObject<List<ServiceDTO>>(ServiceList);
-
+                            var service = JsonConvert.DeserializeObject<List<ServiceDTO>>(ServiceList);
+                            ViewBag.service = service;
                         }
 
                     }
 
                     TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
-                    return View(model);
+                    return View(managerInfos);
                 }
                 else
                 {
@@ -178,7 +181,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
 
             // Return the view with or without an error message
-            return View(model);
+            return View();
         }
         public class ServiceModel
         {
@@ -211,7 +214,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 {
 
                     //HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrl + "ServiceCategory/ServiceCategorysID/" + serCategoriesId);
-                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrlServiceCategoryDetail + "/" + serCategoriesId);
+                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrl + "ServiceCategory/ServiceCategorysID/" + serCategoriesId);
 
                     if (responseForImage.IsSuccessStatusCode)
                     {
@@ -237,6 +240,18 @@ namespace FEPetServices.Areas.Manager.Controllers
                 {
                     serviceCategory.Status = false;
                 }
+                HttpResponseMessage responseListService = await client.GetAsync(DefaultApiUrl + "Service/GetServicesByCategory/" + serviceCategory.SerCategoriesId);
+
+                if (responseListService.IsSuccessStatusCode)
+                {
+                    var ServiceList = await responseListService.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(ServiceList))
+                    {
+                        var service = JsonConvert.DeserializeObject<List<ServiceDTO>>(ServiceList);
+                        ViewBag.service = service;
+                    }
+                }
 
                 var json = JsonConvert.SerializeObject(serviceCategory);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -247,6 +262,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
+                    
                     TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
                     return View(serviceCategory); // Chuyển hướng đến trang thành công hoặc trang danh sách
                 }

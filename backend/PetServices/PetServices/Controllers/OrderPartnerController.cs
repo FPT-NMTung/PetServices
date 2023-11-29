@@ -179,7 +179,9 @@ namespace PetServices.Controllers
         {
             try
             {
-                Order order = await _context.Orders.SingleOrDefaultAsync(b => b.OrderId == orderId);
+                Order order = await _context.Orders
+                    .Include(c => c.BookingServicesDetails)
+                    .SingleOrDefaultAsync(b => b.OrderId == orderId);
                 if(order == null)
                 {
                     return NotFound("Booking không tồn tại!");
@@ -187,6 +189,13 @@ namespace PetServices.Controllers
                 if(order.OrderStatus.Trim() != status.oldStatus)
                 {
                     return BadRequest("Trạng thái cũ không hợp lệ");
+                }
+                foreach (var bookingDetail in order.BookingServicesDetails)
+                {
+                    if (bookingDetail.PartnerInfoId != null)
+                    {
+                        bookingDetail.PartnerInfoId = null;
+                    }
                 }
                 order.OrderStatus = status.newStatus;
                 _context.Orders.Update(order);

@@ -14,6 +14,7 @@ using System.Text.Json;
 
 namespace FEPetServices.Areas.Partner.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class HomePartnerController : Controller
     {
         private readonly HttpClient client = null;
@@ -341,7 +342,8 @@ namespace FEPetServices.Areas.Partner.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderPartnerDetail(int orderId)
         {
-            HttpResponseMessage reasonResponse = await client.GetAsync("https://localhost:7255/api/Reason/GetAll");
+            //HttpResponseMessage reasonResponse = await client.GetAsync("https://localhost:7255/api/Reason/GetAll");
+            HttpResponseMessage reasonResponse = await client.GetAsync(DefaultApiUrl + "Reason/GetAll");
             if (reasonResponse.IsSuccessStatusCode)
             {
                 var reaCategories = await reasonResponse.Content.ReadFromJsonAsync<List<ReasonDTO>>();

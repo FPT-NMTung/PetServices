@@ -12,7 +12,7 @@
         <form asp-action="AddRoomCategory" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div class="row">
                 <div class="col-25">
-                    <label for="RoomCategoriesName">Tên Loại Phòng:</label>
+                    <label for="RoomCategoriesName">Tên Loại Phòng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                 </div>
                 <div class="col-75">
                     <input type="text" id="RoomCategoriesName" name="RoomCategoriesName" placeholder="Tên loại phòng..." required>
@@ -21,7 +21,7 @@
             </div>
             <div class="row">
                 <div class="col-25">
-                    <label for="image">Ảnh:</label>
+                    <label for="image">Ảnh<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                 </div>
 
                 <div class="col-75">
@@ -33,7 +33,7 @@
             </div>
             <div class="row">
                 <div class="col-25">
-                    <label for="Desciptions">Mô Tả:</label>
+                    <label for="Desciptions">Mô Tả<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                 </div>
                 <div class="col-75">
                     <textarea id="Desciptions" name="Desciptions" placeholder="Nội Dung .." style="height:200px" required></textarea>
@@ -48,13 +48,18 @@
                         <a type="submit" value="Cancal" href="/Manager/RoomCategory" class="cancel">Trở lại</a>
                     </div>
                     <div class="btn-submit">
-                        <input type="submit" value="Thêm loại dịch vụ">
+                        <input type="submit" value="Thêm loại phòng">
                     </div>
                 </div>
             </div>
         </form>
     </div>
     <script src="~/js/RoomCategory.js"></script>
+    <style>
+.fa-asterisk{
+    color:red;
+}
+</style>
 </body>
 </html>
 

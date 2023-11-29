@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
+using PetServices.Form;
 using PetServices.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -29,7 +30,33 @@ namespace PetServices.Controllers
         public IActionResult GetAllServiceCategory()
         {
             List<ServiceCategory> serviceCategories = _context.ServiceCategories.ToList();
-            return Ok(_mapper.Map<List<ServiceCategoryDTO>>(serviceCategories));
+
+            var serviceCategorylist = _mapper.Map<List<ServiceCategoryDTO>>(serviceCategories);
+
+            foreach (var serviceCategory in serviceCategorylist)
+            {
+                var services = _context.Services.Where(s => s.SerCategoriesId == serviceCategory.SerCategoriesId).ToList();
+                int count = 0;
+                double totalStar = 0;
+                int totalFeedbackCount = 0;
+
+                foreach (var service in services)
+                {
+                    var feedback = _context.Feedbacks.Where(f => f.ServiceId == service.ServiceId).ToList();
+
+                    if (feedback.Any())
+                    {
+                        totalStar += feedback.Average(f => f.NumberStart) ?? 0;
+                        totalFeedbackCount += feedback.Count;
+                        count++;
+                    }
+                }
+
+                serviceCategory.NumberStar = totalFeedbackCount > 0 ? Math.Round(totalStar / count, 1) : 0;
+                serviceCategory.NumberVoter = totalFeedbackCount;
+            }
+
+            return Ok(serviceCategorylist);
         }
 
 

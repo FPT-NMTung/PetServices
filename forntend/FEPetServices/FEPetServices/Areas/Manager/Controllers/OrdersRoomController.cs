@@ -77,11 +77,8 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpPost]
         public async Task<IActionResult> OrderRoomDetail(int id, [FromForm] Status status)
         {
-            if (status.newStatus == "Confirmed")
-            {
-                status.newStatusProduct = "";
-                status.newStatusService = "";
-            }
+            status.newStatusProduct = "";
+            status.newStatusService = "";
 
             HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
             if (response.IsSuccessStatusCode)

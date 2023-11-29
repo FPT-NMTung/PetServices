@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using PetServices.DTO;
+using PetServices.Form;
 using PetServices.Models;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -255,7 +256,7 @@ namespace FEPetServices.Controllers
                 {
                     var content = await roomStarResponse.Content.ReadAsStringAsync();
 
-                    if (int.TryParse(content, out int roomStar))
+                    if (double.TryParse(content, out double roomStar))
                     {
                         ViewBag.RoomStar = roomStar;
                     }
@@ -297,7 +298,6 @@ namespace FEPetServices.Controllers
 
                 //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
-
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -380,8 +380,49 @@ namespace FEPetServices.Controllers
             HomeModel homeModel = new HomeModel();
             try
             {
+                //"https://localhost:7255/api/Feedback/GetStarInTakeCarePet"
+                HttpResponseMessage StarInTakeCarePetResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetStarInTakeCarePet");
+
+                if (StarInTakeCarePetResponse.IsSuccessStatusCode)
+                {
+                    var StarInTakeCarePet = await StarInTakeCarePetResponse.Content.ReadFromJsonAsync<FeedbackDataForm>();
+
+                    ViewBag.StarInTakeCarePet = StarInTakeCarePet;
+                }
+
+                //"https://localhost:7255/api/Feedback/GetStarInRoomPet"
+                HttpResponseMessage StarInRoomPetResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetStarInRoomPet");
+
+                if (StarInRoomPetResponse.IsSuccessStatusCode)
+                {
+                    var StarInRoomPet = await StarInRoomPetResponse.Content.ReadFromJsonAsync<FeedbackDataForm>();
+
+                    ViewBag.StarInRoomPet = StarInRoomPet;
+                }
+
+                //"https://localhost:7255/api/Feedback/GetStarInPetWalking"
+                HttpResponseMessage StarInPetWalkingResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetStarInPetWalking");
+
+                if (StarInPetWalkingResponse.IsSuccessStatusCode)
+                {
+                    var StarInPetWalking = await StarInPetWalkingResponse.Content.ReadFromJsonAsync<FeedbackDataForm>();
+
+                    ViewBag.StarInPetWalking = StarInPetWalking;
+                }
+
+                //"https://localhost:7255/api/Feedback/GetStarInProductPet"
+                HttpResponseMessage StarInProductPetResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetStarInProductPet");
+
+                if (StarInProductPetResponse.IsSuccessStatusCode)
+                {
+                    var StarInProductPet = await StarInProductPetResponse.Content.ReadFromJsonAsync<FeedbackDataForm>();
+
+                    ViewBag.StarInProductPet = StarInProductPet;
+                }
+
                 //HttpResponseMessage responseCategoryProduct = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll");
                 HttpResponseMessage responseCategoryProduct = await client.GetAsync(DefaultApiUrl + "ProductCategory/GetAll");
+
                 //HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
                 HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
                 if (responseProduct.IsSuccessStatusCode && responseCategoryProduct.IsSuccessStatusCode)
@@ -503,7 +544,7 @@ namespace FEPetServices.Controllers
             {
                 var content = await ServiceStarResponse.Content.ReadAsStringAsync();
 
-                if (int.TryParse(content, out int serviceStar))
+                if (double.TryParse(content, out double serviceStar))
                 {
                     ViewBag.serviceStar = serviceStar;
                 }

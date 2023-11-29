@@ -225,12 +225,12 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
+                    TempData["SuccessToast"] = "Chỉnh sửa loại phòng thành công!";
                     return View(roomCategoryDTO);
                 }
                 else
                 {
-                    TempData["ErrorToast"] = "Chỉnh sửa dịch vụ thất bại. Vui lòng thử lại sau.";
+                    TempData["ErrorToast"] = "Chỉnh sửa loại phòng thất bại. Vui lòng thử lại sau.";
                     return View(roomCategoryDTO);
                 }
             }

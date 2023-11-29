@@ -1,0 +1,435 @@
+﻿@using FEPetServices.Form.OrdersForm;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <link href="~/css/orders/stylesheet.css" rel="stylesheet" />
+    <link href="~/css/OrderDetail.css" rel="stylesheet" />
+
+</head>
+<body>
+    <div class="card right-profile-card">
+        <div class="card-header alert-primary">
+            <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="~/Customer/MyOrders/AllOrders?orderStatus=All&page=1&pageSize=5" role="tab" aria-selected="true">Tất cả</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-education-tab" data-toggle="pill" href="~/Customer/MyOrders/WaitingOrders?orderStatus=Waiting&page=1&pageSize=5" role="tab" aria-selected="false">Đơn hàng chờ xử lý</a>
+                </li>
+                @*                <li class="nav-item">
+                <a class="nav-link" id="pills-timeline-tab" data-toggle="pill" href="~/Customer/MyOrders/DeliveryOrders?orderStatus=Delivery&page=1&pageSize=5" role="tab" aria-selected="false">Vận chuyển</a>
+                </li>*@
+                @* <li class="nav-item">
+                <a class="nav-link" id="pills-document-tab" data-toggle="pill" href="~/Customer/MyOrders/Index?orderStatus=All&page=1&pageSize=5" role="tab" aria-selected="false">Chờ giao hàng</a>
+                </li>*@
+                <li class="nav-item">
+                    <a class="nav-link active" id="pills-event-tab" data-toggle="pill" href="~/Customer/MyOrders/ReceivedOrders?orderStatus=Received&page=1&pageSize=5" role="tab" aria-selected="false">Đã được xác nhận</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrders/RejectOrders?orderStatus=Rejected&page=1&pageSize=5" role="tab" aria-selected="false">Đã huỷ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrders/CompletedOrders?orderStatus=Completed&page=1&pageSize=5" role="tab" aria-selected="false">Hoàn thành</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        <div id="orders-container">
+                            @if (Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                            {
+                                Html.Partial("_OrderPartialView", (List<OrderForm>)Model);
+                            }
+                            else
+                            {
+                                @foreach (var order in Model)
+                                {
+                                    double totalPrice = 0;
+                                    <div class="work-container">
+                                        <div class="work-container-inner">
+                                            <h5>Order ID : @order.OrderId</h5>
+                                            @if (@order.OrderStatus.Trim() == "Delivery")
+                                            {
+                                                <span class="badge badge-info">Đang giao</span>
+                                            }
+                                            else if (@order.OrderStatus.Trim() == "Rejected")
+                                            {
+                                                <span class="badge badge-info">Đơn hàng bị huỷ</span>
+                                            }
+                                            else if (@order.OrderStatus.Trim() == "Waiting")
+                                            {
+                                                <span class="badge badge-info">Đơn hàng đang chờ xử lý</span>
+                                            }
+                                            else if (@order.OrderStatus.Trim() == "Received")
+                                            {
+                                                <span class="badge badge-info">Đơn hàng đã được xác nhận</span>
+                                            }
+                                            else if (@order.OrderStatus.Trim() == "Completed")
+                                            {
+                                                <span class="badge badge-info">Đơn hàng đã hoàn thành</span>
+                                            }
+                                        </div>
+                                        <p><i class="far fa-calendar-alt"></i> @order.OrderDate</p>
+
+                                        @if (order.OrderProductDetails != null && order.OrderProductDetails.Count > 0)
+                                        {
+                                            <div class="content-details">
+                                                <p class="bold-text">Thông tin sản phẩm đã được đặt hàng</p>
+                                                @foreach (var productDetail in order.OrderProductDetails)
+                                                {
+                                                    totalPrice = totalPrice + (productDetail.Quantity * productDetail.Price);
+                                                    <div class="content-detail">
+                                                        <div class="product-info">
+                                                            <img src="@productDetail.Product.Picture" width="50" height="50" alt="Product Image">
+                                                            <div class="product-info-detail">
+                                                                <p style="max-width:450px">@productDetail.Product.ProductName</p>
+                                                                <p style="font-size:.8rem;"><span>x</span>@productDetail.Quantity</p>
+                                                            </div>
+                                                        </div>
+                                                        <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
+                                                    </div>
+                                                    <div></div>
+                                                }
+                                            </div>
+                                        }
+
+                                        @if (order.BookingServicesDetails != null && order.BookingServicesDetails.Count > 0)
+                                        {
+                                            <div class="content-details">
+                                                <p class="bold-text">Thông tin dịch vụ đã được đặt hàng</p>
+                                                @foreach (var serviceDetail in order.BookingServicesDetails)
+                                                {
+                                                    totalPrice = totalPrice + serviceDetail.PriceService;
+                                                    <div class="content-detail">
+                                                        <div class="service-info">
+                                                            <img src="@serviceDetail.Service.Picture" width="50" height="50" alt="Service Image">
+                                                            <div class="service-info-detail">
+                                                                <p style="max-width:450px">@serviceDetail.Service.ServiceName</p>
+                                                                <p style="font-size:.8rem;"><span>Cân nặng thú cưng: </span>@serviceDetail.Weight Kg</p>
+                                                                @*     PartnerID*@
+                                                                <p style="font-size:.8rem;"><span>Đối tác:</span>@serviceDetail.PartnerInfoId</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="content-detail-time-service">
+                                                            <p style="font-size:.8rem;">Thời gian bắt đầu: @serviceDetail?.StartTime</p>
+                                                            <p style="font-size:.8rem;">Thời gian kêt thúc: @serviceDetail?.EndTime</p>
+                                                        </div>
+                                                        <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+
+                                        @if (order.BookingRoomDetails != null && order.BookingRoomDetails.Count > 0)
+                                        {
+                                            <div class="content-details">
+                                                <p class="bold-text">Thông tin phòng đã được đặt hàng</p>
+                                                @foreach (var roomDetail in order.BookingRoomDetails)
+                                                {
+                                                    totalPrice = totalPrice + roomDetail.TotalPrice;
+                                                    <div class="content-detail">
+                                                        <div class="room-info">
+                                                            <img src="@roomDetail.Room.Picture" width="50" height="50" alt="Room Image">
+                                                            <div class="room-info-detail">
+                                                                <p style="max-width:800px">@roomDetail.Room.RoomName</p>
+                                                                @foreach (var roomService in order.BookingRoomServices)
+                                                                {
+                                                                    <div class="room-info-detail-service">
+                                                                        <p style="font-size:.8rem;">Dịch vụ: @roomService.Service.ServiceName</p>
+                                                                        <p class="price-service-rooom" style="font-size:.8rem;">@($"{(roomService.PriceService):n0}".Replace(",", ".")) VNĐ</p>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="content-detail-time">
+                                                        <p style="font-size:.9rem;">Thời gian bắt đầu: @roomDetail.StartDate</p>
+                                                        <p style="font-size:.9rem;">Thời gian kêt thúc: @roomDetail.EndDate</p>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                        <div class="headel-content">
+                                            <p>Tổng giá : </p>
+                                            <p>@(totalPrice.ToString("n0").Replace(",", ".")) VNĐ</p>
+                                        </div>
+                                        <div class="work-container-inner">
+                                            @if (order != null && order.TypePay != null && order.TypePay.Trim() == "cash")
+                                            {
+                                                <p>Thanh toán trực tiếp</p>
+                                            }
+                                            @if (order != null && order.TypePay != null && @order.TypePay.Trim() == "vnpay")
+                                            {
+                                                <p>Thanh toán bằng hình thức chuyển khoản</p>
+                                            }
+                                            @if (!@order.StatusPayment)
+                                            {
+                                                <span class="badge badge-info">Chưa thanh toán</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-info">Đã thanh toán</span>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="work-container" style="width:100%">
+                         <p style="text-align:center">Chưa có đơn hàng</p>    
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="popup">
+            <div id="overlay" class="overlay"></div>
+            <div class="feedback popup-container" id="popup">
+                <div class="mb--40">
+                    <!-- Start Comment Respond  -->
+                    <div class="comment-respond pro-des-commend-respond mt--0">
+                        <h3 class="title mb--30">Đánh giá</h3>
+                        <div class="information">
+                            <img id="popupImage" style="width: 50px; height: 50px;" />
+                            <div>
+                                <p id="popupServiceName"></p>
+                                <p id="popupServiceInfo"></p>
+                            </div>
+                        </div>
+                        <div class="vote-star">
+                            <p>Chất lượng sản phẩm/dịch vụ:</p>
+                            <div class="rate-all">
+                                <div class="rating">
+                                    <input value="5" name="rate" id="star5" type="radio" checked="">
+                                    <label title="text" for="star5"></label>
+                                    <input value="4" name="rate" id="star4" type="radio">
+                                    <label title="text" for="star4"></label>
+                                    <input value="3" name="rate" id="star3" type="radio">
+                                    <label title="text" for="star3"></label>
+                                    <input value="2" name="rate" id="star2" type="radio">
+                                    <label title="text" for="star2"></label>
+                                    <input value="1" name="rate" id="star1" type="radio">
+                                    <label title="text" for="star1"></label>
+                                </div>
+                                <div>
+                                    <label for="super-happy" class="lb-super-happy">
+                                        <input type="radio" name="rating" class="super-happy" id="super-happy" value="super-happy">
+                                        <svg class="svg" viewBox="0 0 24 24"><path d="M12,17.5C14.33,17.5 16.3,16.04 17.11,14H6.89C7.69,16.04 9.67,17.5 12,17.5M8.5,11A1.5,1.5 0 0,0 10,9.5A1.5,1.5 0 0,0 8.5,8A1.5,1.5 0 0,0 7,9.5A1.5,1.5 0 0,0 8.5,11M15.5,11A1.5,1.5 0 0,0 17,9.5A1.5,1.5 0 0,0 15.5,8A1.5,1.5 0 0,0 14,9.5A1.5,1.5 0 0,0 15.5,11M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg>
+                                        Tuyệt vời
+                                    </label>
+                                    <label for="neutral" class="lb-neutral" style="display: none">
+                                        <input type="radio" name="rating" class="neutral" id="neutral" value="neutral">
+                                        <svg class="svg" viewBox="0 0 24 24"><path d="M8.5,11A1.5,1.5 0 0,1 7,9.5A1.5,1.5 0 0,1 8.5,8A1.5,1.5 0 0,1 10,9.5A1.5,1.5 0 0,1 8.5,11M15.5,11A1.5,1.5 0 0,1 14,9.5A1.5,1.5 0 0,1 15.5,8A1.5,1.5 0 0,1 17,9.5A1.5,1.5 0 0,1 15.5,11M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M9,14H15A1,1 0 0,1 16,15A1,1 0 0,1 15,16H9A1,1 0 0,1 8,15A1,1 0 0,1 9,14Z"></path></svg>
+                                        Bình thường
+                                    </label>
+                                    <label for="super-sad" class="lb-super-sad" style="display: none">
+                                        <input type="radio" name="rating" class="super-sad" id="super-sad" value="super-sad">
+                                        <svg class="svg" viewBox="0 0 24 24"><path d="M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M16.18,7.76L15.12,8.82L14.06,7.76L13,8.82L14.06,9.88L13,10.94L14.06,12L15.12,10.94L16.18,12L17.24,10.94L16.18,9.88L17.24,8.82L16.18,7.76M7.82,12L8.88,10.94L9.94,12L11,10.94L9.94,9.88L11,8.82L9.94,7.76L8.88,8.82L7.82,7.76L6.76,8.82L7.82,9.88L6.76,10.94L7.82,12M12,14C9.67,14 7.69,15.46 6.89,17.5H17.11C16.31,15.46 14.33,14 12,14Z"></path></svg>
+                                        Thất vọng
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <form>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>Đánh giá của bạn</label>
+                                        <input type="hidden" id="serviceIdInput" value="" />
+                                        <input type="hidden" id="productIdInput" value="" />
+                                        <input type="hidden" id="ratingInput" value="" />
+                                        <input type="hidden" id="userIdInput" value="" />
+                                        <input type="hidden" id="orderIdInput" value="" />
+                                        <textarea name="message" id="feedbackMessage" placeholder="Hãy chia sẻ những điều bạn thích về sản phẩm/dịch vụ này với mọi người nhé." cols="300" rows="5"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-submit">
+                                        <button type="button" class="back" onclick="closePopup()">Trở lại</button>
+                                        <button type="button" id="submit-feedback" class="done">Hoàn thành</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- End Comment Respond  -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    @*Start Lazy Loading*@
+    <script>
+        var pageIndex = 1;
+        var loading = false;
+        var lazyLoadingEnabled = true; 
+
+        function loadMore() {
+            if (!loading && lazyLoadingEnabled) {
+                loading = true;
+
+                $.ajax({
+                    url: '/Customer/MyOrders/ReceivedOrders',
+                    type: 'GET',
+                    data: { orderStatus: 'Received', page: pageIndex + 1, pageSize: 5 }, 
+                    success: function (data) {
+                        if (data.trim() !== '') {
+                            $('#orders-container').append(data);
+                            pageIndex++;
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        lazyLoadingEnabled = false;
+                        console.error('AJAX error:', textStatus, errorThrown);
+                    },
+                    complete: function () {
+                        loading = false;
+                    }
+                });
+            }
+        }
+
+        $(window).scroll(function () {
+            if (lazyLoadingEnabled && $(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+                loadMore();
+            }
+        });
+    </script>
+    @*End Lazy Loading*@
+    <script>
+        //Hiện popup đánh giá
+        function openPopupService(image, serviceName, weight, serviceId, userId, orderId) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+
+            document.getElementById('popupImage').src = image;
+            document.getElementById('popupServiceName').innerText = serviceName ;
+            document.getElementById('popupServiceInfo').innerText = 'Cân nặng: ' + weight + ' Kg';
+
+            document.getElementById('serviceIdInput').value = serviceId;
+            document.getElementById('userIdInput').value = userId;
+            document.getElementById('orderIdInput').value = orderId;
+            document.getElementById('productIdInput').value = null;
+
+        }
+
+        //Hiện popup đánh giá
+        function openPopupProduct(image, productName, quanlity, productId, userId, orderId, status) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+
+            document.getElementById('popupImage').src = image;
+            document.getElementById('popupServiceName').innerText = productName;
+            document.getElementById('popupServiceInfo').innerText = 'x' + quanlity;
+
+            document.getElementById('productIdInput').value = productId;
+            document.getElementById('userIdInput').value = userId;
+            document.getElementById('orderIdInput').value = orderId;
+            document.getElementById('serviceIdInput').value = null;
+
+            alert("status: " + status);
+        }
+
+        // Ẩn popup đánh giá
+        function closePopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        // Xử lý rating khi chọn sao thì hiện ra content theo sao vote
+        document.querySelectorAll('.rating input').forEach(input => {
+            input.addEventListener('change', function () {
+                // Ẩn tất cả các nhãn
+                document.querySelectorAll('.lb-super-happy, .lb-neutral, .lb-super-sad').forEach(label => {
+                    label.style.display = 'none';
+                });
+
+                // Hiển thị nhãn tương ứng với số sao được chọn
+                if (this.value >= 4) {
+                    document.querySelector('.lb-super-happy').style.display = 'block';
+                } else if (this.value == 3 || this.value == 2) {
+                    document.querySelector('.lb-neutral').style.display = 'block';
+                } else {
+                    document.querySelector('.lb-super-sad').style.display = 'block';
+                }
+            });
+        });
+
+        function captureRating() {
+            var ratingRadios = document.getElementsByName('rate');
+
+            for (var i = 0; i < ratingRadios.length; i++) {
+                if (ratingRadios[i].checked) {
+                    var rating = parseInt(ratingRadios[i].value);
+
+                    document.getElementById('ratingInput').value = rating;
+                    break;
+                }
+            }
+            return rating;
+        }
+
+        // Khi gửi đánh giá lên
+        document.getElementById('submit-feedback').addEventListener('click', function () {
+
+            captureRating();
+
+            var feedbackMessage = document.getElementById('feedbackMessage').value;
+
+            var serviceId = document.getElementById('serviceIdInput').value;
+            var productId = document.getElementById('productIdInput').value;
+            var rating = document.getElementById('ratingInput').value;
+            var userId = document.getElementById('userIdInput').value;
+            var orderId = document.getElementById('orderIdInput').value;
+
+            if (rating && feedbackMessage) 
+            {
+                var data = {
+                    NumberStart: parseInt(rating),
+                    Content: feedbackMessage,
+                    UserId: userId,
+                    OrderId: orderId
+                };
+
+                if (productId !== null) {
+                    data.ProductId = parseInt(productId);
+                }
+                if (serviceId !== null) {
+                    data.ServiceId = parseInt(serviceId);
+                }
+
+                $.ajax({
+                    url: 'https://pet-service-api.azurewebsites.net/api/Feedback/AddFeedBack',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data), 
+                    success: function (response) {
+
+                        closePopup();
+                        alert(response); 
+                        location.reload();
+                    },
+                    error: function (error) {
+                        alert('Vui lòng kiểm tra lại thông tin: ' + error.responseText);
+                    }
+                });
+            }
+            else 
+            {
+                alert('Vui lòng nhập nội dung đánh giá!');
+            }
+        });
+    </script>
+</body>
+</html>
