@@ -5796,12 +5796,14 @@ a.axil-btn.btn-size-md, button.axil-btn.btn-size-md {
 
 .team-left-fullwidth {
     margin-left: calc((100% - 1320px)/2);
+    margin-right: calc((100% - 1320px)/2);
     overflow: hidden
 }
 
 @media only screen and (max-width: 1349px) {
     .team-left-fullwidth {
-        margin-left: auto
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 

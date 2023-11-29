@@ -1,17 +1,8 @@
-﻿using FEPetServices.Areas.DTO;
-using FEPetServices.Form;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;
-using PetServices.DTO;
 using PetServices.Form;
-using PetServices.Models;
-using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Mail;
-using System.Text;
-using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
@@ -35,6 +26,12 @@ namespace FEPetServices.Areas.Manager.Controllers
 
         public async Task<IActionResult> Index()
         {
+            DashBoard dashboard = new DashBoard
+            {
+                FeedbackRoom = new List<FeedbackForm>(),
+                FeedbackService = new List<FeedbackForm>(),
+                FeedbackProduct = new List<FeedbackForm>()
+            };
             try
             {
                 // số khách hàng mới trong tháng 
@@ -192,18 +189,50 @@ namespace FEPetServices.Areas.Manager.Controllers
                     var Top5CustomerArea = await Top5CustomerAreaResponse.Content.ReadFromJsonAsync<List<Quantity_RatioForm>>();
                     ViewBag.Top5CustomerArea = new SelectList(Top5CustomerArea, "date", "quantity");
                 }
+
+                // đánh giá của khách hàng về các sản phẩm
+                HttpResponseMessage FeedbackOfProductResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetFeedbackOfProduct");
+
+                if (FeedbackOfProductResponse.IsSuccessStatusCode)
+                {
+                    var FeedbackOfProduct = await FeedbackOfProductResponse.Content.ReadFromJsonAsync<List<FeedbackForm>>();
+
+                    dashboard.FeedbackProduct = FeedbackOfProduct;
+                }
+
+                // đánh giá của khách hàng về các phòng
+                HttpResponseMessage FeedbackOfRoomResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetFeedbackOfRoom");
+
+                if (FeedbackOfRoomResponse.IsSuccessStatusCode)
+                {
+                    var FeedbackOfRoom = await FeedbackOfRoomResponse.Content.ReadFromJsonAsync<List<FeedbackForm>>();
+
+                    dashboard.FeedbackRoom = FeedbackOfRoom;
+                }
+
+                // đánh giá của khách hàng về các dịch vụ
+                HttpResponseMessage FeedbackOfServiceResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetFeedbackOfService");
+
+                if (FeedbackOfServiceResponse.IsSuccessStatusCode)
+                {
+                    var FeedbackOfService = await FeedbackOfServiceResponse.Content.ReadFromJsonAsync<List<FeedbackForm>>();
+
+                    dashboard.FeedbackService = FeedbackOfService;
+                }
             }
             catch (Exception ex)
             {
                 ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
             }
 
-            return View();
+            return View(dashboard);
         }
 
         public class DashBoard
         {
-            
+            public List<FeedbackForm>? FeedbackRoom { get; set; }
+            public List<FeedbackForm>? FeedbackService { get; set; }
+            public List<FeedbackForm>? FeedbackProduct { get; set; }
         }
     }
 }
