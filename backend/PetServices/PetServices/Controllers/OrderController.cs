@@ -32,7 +32,7 @@ namespace PetServices.Controllers
             try
             {
                 List<Order> orders = _context.Orders
-                      .Include(o => o.UserInfo)
+                    .Include(o => o.UserInfo)
                         .ThenInclude(u => u.Accounts)
                     .Include(b => b.OrderProductDetails)
                         .ThenInclude(o => o.Product)
@@ -62,6 +62,18 @@ namespace PetServices.Controllers
             {
                 // Lấy đơn đặt hàng mới nhất cho người dùng có email tương ứng
                 Order latestOrder = _context.Orders
+                     .Include(o => o.UserInfo)
+                        .ThenInclude(u => u.Accounts)
+                    .Include(b => b.OrderProductDetails)
+                        .ThenInclude(o => o.Product)
+                    .Include(b => b.BookingServicesDetails)
+                        .ThenInclude(bs => bs.Service)
+                     .Include(b => b.BookingServicesDetails)
+                            .ThenInclude(s => s.PartnerInfo)
+                    .Include(b => b.BookingRoomDetails)
+                        .ThenInclude(br => br.Room)
+                    .Include(b => b.BookingRoomServices)
+                        .ThenInclude(br => br.Service)
                     .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email))
                     .OrderByDescending(o => o.OrderId)
                     .FirstOrDefault();
@@ -582,5 +594,42 @@ namespace PetServices.Controllers
             return Ok("Order thành công!");
         }
         #endregion
+
+        #region Delete
+        [HttpDelete("delete/{orderId}")]
+        public async Task<IActionResult> DeleteOrder(int orderId)
+        {
+            try
+            {
+                Order order = await _context.Orders
+                    .Include(o => o.OrderProductDetails)
+                    .Include(o => o.BookingServicesDetails)
+                    .Include(o => o.BookingRoomDetails)
+                    .Include(o => o.BookingRoomServices)
+                    .SingleOrDefaultAsync(o => o.OrderId == orderId);
+
+                if (order == null)
+                {
+                    return NotFound(new { Message = $"Không tìm thấy order : {orderId}" });
+                }
+
+                _context.OrderProductDetails.RemoveRange(order.OrderProductDetails);
+                _context.BookingServicesDetails.RemoveRange(order.BookingServicesDetails);
+                _context.BookingRoomDetails.RemoveRange(order.BookingRoomDetails);
+                _context.BookingRoomServices.RemoveRange(order.BookingRoomServices);
+
+                _context.Orders.Remove(order);
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { Message = $"Xoá order thành công" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        #endregion
+
     }
 }

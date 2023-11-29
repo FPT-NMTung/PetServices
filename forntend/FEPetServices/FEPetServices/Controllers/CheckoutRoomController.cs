@@ -202,7 +202,7 @@ namespace FEPetServices.Controllers
                 OrderForm order = new OrderForm
                 {
                     OrderDate = dateOrder,
-                    OrderStatus = "Waiting",
+                    OrderStatus = "Placed",
                     Province = orderform.Province,
                     District = orderform.District,
                     Commune = orderform.Commune,
@@ -303,12 +303,6 @@ namespace FEPetServices.Controllers
                         string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
 
                         return Redirect(paymentUrl);
-                    }
-                    else
-                    {
-                        ClearCart();
-                        TempData["SuccessToast"] = "Đặt hàng thành công. Vui lòng kiểm tra lại giỏ hàng.";
-                        return RedirectToAction("Index", "Home");
                     }
                 }
                 else
