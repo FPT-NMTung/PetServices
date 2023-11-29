@@ -29,10 +29,9 @@
                 </li>
             </ul>
         </div>
-        <!-- Search bar -->
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Bạn có thể search theo mã đơn hàng cũng như tên sản phẩm">
-            <button onclick="searchOrders()">Search</button>
+
+        <div class="search-order">
+             <input type="text" id="searchInput" placeholder="Bạn có thể tìm kiếm theo mã đơn hàng, tên sản phẩm hoặc dịch vụ">
         </div>
 
         <div class="card-body">
@@ -261,23 +260,35 @@
         });
     </script>
     @*End Lazy Loading*@
+
+    @*Start Search*@
+    <!-- Add this script after your lazy loading script -->
     <script>
-        function searchOrders() {
-            var searchValue = $('#searchInput').val().trim();
-            if (searchValue !== '') {
-                $.ajax({
-                    url: '/Customer/MyOrders/SearchOrders',
-                    type: 'GET',
-                    data: { searchValue: searchValue },
-                    success: function (data) {
-                        $('#orders-container').html(data);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.error('Search AJAX error:', textStatus, errorThrown);
-                    }
-                });
+        $(document).ready(function () {
+            function search() {
+                var searchTerm = $('#searchInput').val().toLowerCase();
+
+                if (!searchTerm) {
+                    $('.work-container').show();
+                    return;
+                }
+
+                $('.work-container').hide();
+
+                $('.work-container').filter(function () {
+                    var orderId = $(this).find('h5').text().toLowerCase();
+                    var productName = $(this).find('.product-info-detail p').text().toLowerCase();
+                    var serviceName = $(this).find('.service-info-detail p').text().toLowerCase();
+
+                    return orderId.includes(searchTerm) || productName.includes(searchTerm) || serviceName.includes(searchTerm);
+                }).show();
             }
-        }
+            $('#searchInput').on('keyup', function () {
+                search();
+            });
+        });
     </script>
+    @*End Search*@
+
 </body>
 </html>
