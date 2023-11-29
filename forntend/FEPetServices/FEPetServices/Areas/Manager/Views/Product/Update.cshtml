@@ -64,6 +64,26 @@
             </div>
             <div class="row">
                 <div class="col-25">
+                    <label for="CreateDate">Ngày Tạo<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <div class="date-container">
+                        <input type="date" class="create" id="CreateDate" name="CreateDate" style="height : 40px; width : 100%; padding : 12px;" value="@Model?.CreateDate" disabled>
+                    </div>
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-25">
+                    <label for="UpdateDate">Ngày Cập Nhật<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <div class="date-container">
+                        <input type="date" class="create" id="UpdateDate" name="UpdateDate" style="height : 40px; width : 100%; padding : 12px;" value="@Model?.CreateDate" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
                     <label for="ProCategoriesId">Loại Sản Phẩm<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i></label>
                 </div>
                 <div class="col-75">
@@ -122,6 +142,9 @@
     <style>
         .fa-asterisk {
             color: red;
+            font-size:6px;
+            padding-top:20px;
+            margin-right:10px;
         }
     </style>
 </body>

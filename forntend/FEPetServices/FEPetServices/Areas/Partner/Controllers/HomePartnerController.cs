@@ -41,6 +41,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         {
             return View();
         }
+        //Waiting
         public async Task<IActionResult> ListOrderPetTraining()
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
@@ -129,32 +130,6 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
         }
         //Complete
-        //public async Task<IActionResult> ListOrderPetTrainingComplete()
-        //{
-        //    //orderStatus = "Waiting";
-        //    //https://pet-service-api.azurewebsites.net/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
-        //    HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPetTraining?serCategoriesId=4");
-        //    //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
-        //    //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        string responseContent = await response.Content.ReadAsStringAsync();
-
-        //        var options = new JsonSerializerOptions
-        //        {
-        //            PropertyNameCaseInsensitive = true
-        //        };
-
-        //        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
-        //        List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
-        //        return View(orderLists);
-        //    }
-        //    else
-        //    {
-        //        TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
-        //        return View();
-        //    }
-        //}
         public async Task<IActionResult> ListOrderPetTrainingSpecialComplete()
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
@@ -270,30 +245,6 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
         }
         //Received
-        //public async Task<IActionResult> ListOrderPetTrainingReceived()
-        //{
-        //    HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPetTraining?serCategoriesId=4");
-        //    //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
-        //    //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        string responseContent = await response.Content.ReadAsStringAsync();
-
-        //        var options = new JsonSerializerOptions
-        //        {
-        //            PropertyNameCaseInsensitive = true
-        //        };
-
-        //        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
-        //        List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
-        //        return View(orderLists);
-        //    }
-        //    else
-        //    {
-        //        TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
-        //        return View();
-        //    }
-        //}
         public async Task<IActionResult> ListOrderPetTrainingSpecialReceived()
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;

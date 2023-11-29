@@ -66,7 +66,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             return View();
         }
-        public async Task<IActionResult> Add([FromForm] ProductDTO pro, IFormFile image)
+        public async Task<IActionResult> Add([FromForm] ProductDTO pro, List<IFormFile> image)
         {
             try
             {
@@ -78,11 +78,15 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
                 if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
                 {
-                    if (image != null && image.Length > 0)
+                    if (pro.ProCategoriesName == null) { return View(); }
+                    foreach (var file in image)
                     {
-                        // Xử lý và lưu trữ ảnh
-                        Console.WriteLine(image);
-                        pro.Picture = "/img/" + image.FileName.ToString();
+                        string filename = GenerateRandomNumber(5) + file.FileName;
+                        filename = Path.GetFileName(filename);
+                        string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Product/", filename);
+                        var stream = new FileStream(uploadfile, FileMode.Create);
+                        file.CopyToAsync(stream);
+                        pro.Picture = "/img/Product/" + filename;
                     }
                     var json = JsonConvert.SerializeObject(pro);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -111,6 +115,20 @@ namespace FEPetServices.Areas.Manager.Controllers
                 TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
                 return View(pro); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
+        }
+
+        public static string GenerateRandomNumber(int length)
+        {
+            Random random = new Random();
+            const string chars = "0123456789";
+            char[] randomChars = new char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                randomChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(randomChars);
         }
         [HttpGet]
         public async Task<IActionResult> Update(int proId, ProductDTO productDTO)
