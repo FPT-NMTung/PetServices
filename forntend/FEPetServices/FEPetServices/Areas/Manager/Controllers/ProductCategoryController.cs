@@ -13,10 +13,10 @@ namespace FEPetServices.Areas.Manager.Controllers
     {
         private readonly HttpClient client = null;
         private string DefaultApiUrl = "";
-        private string DefaultApiUrlProductCategoryList = "";
-        private string DefaultApiUrlProductCategoryDetail = "";
-        private string DefaultApiUrlProductCategoryAdd = "";
-        private string DefaultApiUrlProductCategoryUpdate = "";
+        //private string DefaultApiUrlProductCategoryList = "";
+        //private string DefaultApiUrlProductCategoryDetail = "";
+        //private string DefaultApiUrlProductCategoryAdd = "";
+        //private string DefaultApiUrlProductCategoryUpdate = "";
         private readonly IConfiguration configuration;
 
 
@@ -27,10 +27,10 @@ namespace FEPetServices.Areas.Manager.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
-            DefaultApiUrlProductCategoryList = "https://pet-service-api.azurewebsites.net/api/ProductCategory";
-            DefaultApiUrlProductCategoryDetail = "https://pet-service-api.azurewebsites.net/api/ProductCategory/ProductCategorysID";
-            DefaultApiUrlProductCategoryAdd = "https://pet-service-api.azurewebsites.net/api/ProductCategory/CreateNewProductCategory";
-            DefaultApiUrlProductCategoryUpdate = "https://pet-service-api.azurewebsites.net/api/ProductCategory/Update?procateId=";
+            //DefaultApiUrlProductCategoryList = "https://pet-service-api.azurewebsites.net/api/ProductCategory";
+            //DefaultApiUrlProductCategoryDetail = "https://pet-service-api.azurewebsites.net/api/ProductCategory/ProductCategorysID";
+            //DefaultApiUrlProductCategoryAdd = "https://pet-service-api.azurewebsites.net/api/ProductCategory/CreateNewProductCategory";
+            //DefaultApiUrlProductCategoryUpdate = "https://pet-service-api.azurewebsites.net/api/ProductCategory/Update?procateId=";
         }
 
         public async Task<IActionResult> Index(ProductCategoryDTO productCategoryDTO)
