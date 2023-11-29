@@ -78,6 +78,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
                 if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
                 {
+                    if (pro.ProCategoriesName == null) { return View(); }
                     foreach (var file in image)
                     {
                         string filename = GenerateRandomNumber(5) + file.FileName;

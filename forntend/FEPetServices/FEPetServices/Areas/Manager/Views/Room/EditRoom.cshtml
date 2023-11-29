@@ -13,7 +13,7 @@
         <form method="post" asp-action="EditRoom" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div class="row">
                 <div class="col-25">
-                    <label for="RoomName">Tên Loại Phòng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                    <label for="RoomName">Tên Phòng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                 </div>
                 <div class="col-75">
                     <input type="text" id="RoomName" name="RoomName" value="@Model.RoomName" placeholder="Tên loại phòng...">
@@ -36,7 +36,7 @@
                 </div>
                 <div class="col-75">
                     <div class="quantity-container">
-                        <input type="number" class="slot" id="Slot" name="Slot" placeholder="Số lượng" value="@Model?.Price" min="0" required>&ensp; đ
+                        <input type="number" class="slot" id="Price" name="Price" placeholder="Số lượng" value="@Model?.Price" min="0" required>&ensp; đ
                     </div>
                     <div style="color:red" class="error-message" id="price-error-message"></div>
                 </div>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="col-75">
                     <div class="quantity-container">
-                        <input type="number" class="slot" id="Slot" name="Slot" placeholder="Số lượng" value="@Model?.Slot" min="0" required>&ensp; đ
+                        <input type="number" class="slot" id="Slot" name="Slot" placeholder="Số lượng" value="@Model?.Slot" min="0" required>&ensp; 
                     </div>
                     <div style="color:red" class="error-message" id="slot-error-message"></div>
                 </div>
