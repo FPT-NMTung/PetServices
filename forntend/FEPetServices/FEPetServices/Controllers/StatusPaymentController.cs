@@ -1,11 +1,15 @@
-﻿using FEPetServices.Form;
+﻿using FEPetServices.Areas.DTO;
+using FEPetServices.Form;
 using FEPetServices.Form.OrdersForm;
 using FEPetServices.Models.Payments;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PetServices.Models;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 namespace FEPetServices.Controllers
 {
@@ -30,10 +34,10 @@ namespace FEPetServices.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
 
-            /*DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
-            DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";*/
+            DefaultApiUrl = "https://localhost:7255/api/";
+            /*DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";*/
         }
 
         public const string CARTKEY = "cart";
@@ -67,6 +71,9 @@ namespace FEPetServices.Controllers
 
         public async Task<IActionResult> Index()
         {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
             string vnp_HashSecret = _vnpConfiguration.HashSecret;
             var vnpayData = Request.Query;
             VnPayLibrary vnpay = new VnPayLibrary();
@@ -106,6 +113,7 @@ namespace FEPetServices.Controllers
                                     + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);
                         }
                     }
+
                     //https://localhost:7255/api/Order/changeStatusPayment?Id=45
                     /*HttpResponseMessage responseStatusPayment = await _client.PutAsync("https://localhost:7255/api/Order/changeStatusPayment"
                                + "?Id=" + orderId, null);*/
@@ -135,9 +143,56 @@ namespace FEPetServices.Controllers
                                 + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);
                         }
                     }
+
+                    int orderLatestID = 0;
+                    bool checkRoom = false;
+                    HttpResponseMessage responseLastOrder = await _client.GetAsync(DefaultApiUrl + "Order/latest?email=" + email);
+                    if (responseLastOrder.IsSuccessStatusCode)
+                    {
+                        string responseContent = await responseLastOrder.Content.ReadAsStringAsync();
+
+                        var options = new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        };
+
+                        OrderForm orderLatest = System.Text.Json.JsonSerializer.Deserialize<OrderForm>(responseContent, options);
+                        orderLatestID = orderLatest.OrderId;
+
+                        //https://localhost:7255/api/Order/delete/123
+                        if(orderLatest.BookingRoomDetails.Count() > 0 && orderLatest.BookingServicesDetails.Count() == 0 
+                            && orderLatest.OrderProductDetails.Count() == 0)
+                        {
+                            HttpResponseMessage responseDeleteOrder = await _client.DeleteAsync("https://localhost:7255/api/" + "Order/delete/" + orderLatestID);
+                            if (responseDeleteOrder.IsSuccessStatusCode)
+                            {
+                                checkRoom = true;
+                            }
+                            else
+                            {
+                                return View("/Eroorr");
+                            }
+                        }
+                        else
+                        {
+                            return View("/Eroorr");
+                        }
+                    }
+                    else
+                    {
+                        return View("/Eroorr");
+                    }
+
                     ClearCart();
                     ClearCartRoom();
-                    TempData["SuccessToast"] = "Đặt hàng thành công. Vui lòng kiểm tra lại giỏ hàng.";
+                    if (!checkRoom)
+                    {
+                        TempData["SuccessToast"] = "Đặt hàng thành công. Vui lòng kiểm tra lại giỏ hàng.";
+                    }
+                    else
+                    {
+                        TempData["ErrorToast"] = "Đặt phòng thất bại. Vui lòng kiểm tra thanh toán .";
+                    }
                     ViewBag.ErrorOrderID = orderId;
                     ViewBag.VNPAY = vnpayTranId;
                     return View();
