@@ -40,7 +40,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 List<AccountInfo> listAccounts = System.Text.Json.JsonSerializer.Deserialize<List<AccountInfo>>(responseContent, options);
                 return View(listAccounts);
             }
@@ -65,7 +65,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 AccountInfo accountInfo = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
                 return View(accountInfo);
             }

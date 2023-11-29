@@ -47,7 +47,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     {
                         var productCateList = JsonConvert.DeserializeObject<List<ProductCategoryDTO>>(rep);
 
-                        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                        //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                         return View(productCateList);
                     }
                     else

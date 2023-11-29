@@ -53,7 +53,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var serviceList = JsonConvert.DeserializeObject<List<ServiceDTO>>(responseContent);
-                        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                        //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                         return View(serviceList);
                     }
                     else

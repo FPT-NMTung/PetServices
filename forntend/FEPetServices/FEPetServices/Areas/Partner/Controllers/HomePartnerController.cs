@@ -71,7 +71,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
                 orderLists = orderLists
                     .Where(order => order.BookingServicesDetails.Any(x => x.PartnerInfoId == null)).ToList();
@@ -117,7 +117,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
                 return View(orderLists);
             }
@@ -188,7 +188,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
                 return View(orderLists);
             }
@@ -213,7 +213,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
                 return View(orderLists);
             }
@@ -258,7 +258,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
                 return View(orderLists);
             }
@@ -328,7 +328,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
                 return View(orderLists);
             }
@@ -366,7 +366,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     totalPrice = (double)(totalPrice + od.Price * od.Quantity);
                 }
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 ViewBag.TotalPrice = totalPrice;
                 return View(orderDetail);
             }

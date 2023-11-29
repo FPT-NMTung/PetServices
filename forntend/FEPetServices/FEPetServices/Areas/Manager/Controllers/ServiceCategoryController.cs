@@ -52,7 +52,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var servicecategoryList = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseContent);
-                        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                        //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                         return View(servicecategoryList);
                     }
                     else
@@ -167,7 +167,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     }
 
-                    TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                    //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                     return View(managerInfos);
                 }
                 else
