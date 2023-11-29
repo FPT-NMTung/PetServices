@@ -52,31 +52,18 @@
                         <label class="label @(Model.Status ? "active" : "inactive")"></label>
                     </div>
                 </div>
-
-                @*<div class="col-75">
-                    <label class="switch">
-                        <input type="checkbox" name="Status" @(Model?.Status ? "checked" : "")>
-                        <span class="slider round"></span>
-                    </label>
-                </div>*@
             </div>
             <div class="row">
                 <div class="col-25">
                 </div>
                 <div class="col-75 btn-row">
                     <div class="btn-back">
-                        <a type="submit" value="Cancal" href="Manager/ServiceCategory" class="cancel">Trở lại</a>
+                        <a type="submit" value="Cancal" href="/Manager/ServiceCategory" class="cancel">Trở lại</a>
                     </div>
                     <div class="btn-submit">
                         <input type="submit" value="Lưu chỉnh sửa">
                     </div>
                 </div>
-                @*<div class="btn-group col-2">
-                    <a class="btn btn-primary btn_a" type="submit" value="Cancal" href="/Manager/ServiceCategory">Trở lại</a>
-                </div>
-                <div class="col-10">
-                    <input class="btn btn-primary" type="submit" value="Lưu thay đổi">
-                </div>*@
             </div>
         </form>
 
@@ -96,51 +83,54 @@
                 </tr>
             </thead>
             <tbody>
-
-                @foreach (var service in ViewBag.service)
+              @if (Model != null && ViewBag.service.Count > 0)
                 {
                     int itemCount = 0;
-                    itemCount++;
-                    string description = service.Desciptions;
-
-                    if (description != null)
+                    foreach (var service in ViewBag.service)
                     {
-                        if (description.Length > 100)
-                        {
-                            int lastSpace = description.LastIndexOf(' ', 100);
-                            description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
-                        }
-                        else
-                        {
-                            description = service.Desciptions;
-                        }
-                    }
-                    else
-                    {
-                        description = string.Empty;
-                    }
 
-                    <tr>
-                        <td>@itemCount</td>
-                        <td>@service.ServiceName</td>
-                        <td>@description</td>
-                        <td><img src="@service.Picture" width="50" height="50"></td>
-                        <td>
-                            @if (@service.Status)
+                        itemCount++;
+                        string description = service.Desciptions;
+
+                        if (description != null)
+                        {
+                            if (description.Length > 100)
                             {
-                                <button class="btn btn-active" onclick="toggleStatus(this)">Đang hoạt động</button>
+                                int lastSpace = description.LastIndexOf(' ', 100);
+                                description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
                             }
                             else
                             {
-                                <button class="btn btn-inactive" onclick="toggleStatus(this)">Ngưng hoạt động</button>
+                                description = service.Desciptions;
                             }
-                        </td>
-                        <td>
-                            <a class="btn-detail" href="/Manager/Service/EditService?serviceId=@service.ServiceId">Chi tiết</a>
-                        </td>
+                        }
+                        else
+                        {
+                            description = string.Empty;
+                        }
 
-                    </tr>
-                }
+                        <tr>
+                            <td>@itemCount</td>
+                            <td>@service.ServiceName</td>
+                            <td>@description</td>
+                            <td><img src="@service.Picture" width="50" height="50"></td>
+                            <td>
+                                @if (@service.Status)
+                                {
+                                    <button class="btn btn-active" onclick="toggleStatus(this)">Đang hoạt động</button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-inactive" onclick="toggleStatus(this)">Ngưng hoạt động</button>
+                                }
+                            </td>
+                            <td>
+                                <a class="btn-detail" href="/Manager/Service/EditService?serviceId=@service.ServiceId">Chi tiết</a>
+                            </td>
+
+                        </tr>
+                    }
+               }
 
             </tbody>
         </table>
@@ -165,7 +155,7 @@
                     { "targets": [5], "width": "10%" },
                 ],
                 "language": {
-                    "lengthMenu": "Hiển thị _MENU_ dòng",
+                    "lengthMenu": "Hiển thị dòng _MENU_" ,
                     "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
                     "search": "Tìm kiếm:",
                     "paginate": {
