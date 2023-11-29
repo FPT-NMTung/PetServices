@@ -226,7 +226,6 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                             if (existingServiceCategory != null)
                             {
-                                // Assign the existing image path to serviceCategory.Prictue.
                                 serviceCategory.Picture = existingServiceCategory.Picture;
                             }
                         }
