@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-    @*<link rel="stylesheet" href="/css/Service/Service.css"></link>*@
+@*<link rel="stylesheet" href="/css/Service/Service.css"></link>*@
 <link rel="stylesheet" href="/css/Room.css"></link>
 <link href="~/css/toastNotification.css" rel="stylesheet" />
 
@@ -77,36 +77,28 @@
         <div style="color:red" class="error-message" id="subject-error-message"></div>
       </div>
     </div>
-      <div class="row">
-    <div class="col-25">
-        <label for="Status">Trạng thái:</label>
-    </div>
-    <div class="col-75">
-        <label class="switch">
-            <input type="checkbox"  name="Status" @(Model.Status ? "checked" : "")>
-            <span class="slider round"></span>
-        </label>
-    </div>
-</div>
-            @*    <div class="row">
-       <div class="btn-group col-2">
-         <a class="btn btn-primary btn_a" type="submit" value="Cancel" href="/Manager/ServiceCategory/EditServiceCategory?serCategoriesId=@Model.SerCategoriesId">Trở lại</a>
-      </div>
-      <div class="col-10">
-                    <input class="btn btn-primary" type="submit" value="Lưu thay đổi">
-      </div>
-    </div>*@
-     <div class="row">
+    <div class="row">
                 <div class="col-25">
+                    <label for="Status">Trạng thái:</label>
                 </div>
-                <div class="col-75 btn-row">
-                    <div class="btn-back">
-                        <a type="submit" value="Cancal" href="/Manager/ServiceCategory/EditServiceCategory?serCategoriesId=@Model.SerCategoriesId" class="cancel">Trở lại</a>
-                    </div>
-                    <div class="btn-submit">
-                        <input type="submit" value="Lưu thay đổi">
+                <div class="col-75">
+                    <div class="switch">
+                        <input type="checkbox" name="Status" class="toggles" @(Model.Status ? "checked" : "") />
+                        <label class="label @(Model.Status ? "active" : "inactive")"></label>
                     </div>
                 </div>
+            </div>
+     <div class="row">
+          <div class="col-25">
+          </div>
+          <div class="col-75 btn-row">
+          <div class="btn-back">
+             <a type="submit" value="Cancal" href="/Manager/ServiceCategory/EditServiceCategory?serCategoriesId=@Model.SerCategoriesId" class="cancel">Trở lại</a>
+          </div>
+          <div class="btn-submit">
+            <input type="submit" value="Lưu thay đổi">
+          </div>
+       </div>
      </div>
   </form>
 </div>
