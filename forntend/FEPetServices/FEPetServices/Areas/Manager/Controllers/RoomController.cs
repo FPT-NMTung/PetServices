@@ -118,11 +118,12 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
                 roomDTO.Status = true;
 
-                roomDTO.ServiceIds = Request.Form["SelectedServices"].ToString().Split(',').Select(int.Parse).ToList();
+                var selectedServices = Request.Form["SelectedServices"];
+                roomDTO.ServiceIds = !string.IsNullOrEmpty(selectedServices)
+                    ? selectedServices.ToString().Split(',').Select(int.Parse).ToList()
+                    : new List<int>();
 
                 var json = JsonConvert.SerializeObject(roomDTO);
-                Console.WriteLine(roomDTO);
-                Console.WriteLine(json);
 
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 

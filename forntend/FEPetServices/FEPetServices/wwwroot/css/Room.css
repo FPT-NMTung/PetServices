@@ -250,8 +250,9 @@ input:checked + .slider:before {
     border-radius: 0px 0px 5px 5px;
 }
 
-.service-container{
+.service-container {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .service-container div {
@@ -259,7 +260,15 @@ input:checked + .slider:before {
     width: 25%;
 }
 
-    .service-container div label{
+@media only screen and (max-width: 768px) {
+    .service-container div {
+        display: flex;
+        width: 100%;
+    }
+}
+
+
+    .service-container div label {
         margin-right: -10px;
     }
 
@@ -267,39 +276,39 @@ input:checked + .slider:before {
         padding-top: 7px;
     }
 
-.service-container input {
-    display: none;
-}
+    .service-container input {
+        display: none;
+    }
 
-.service-container input + label {
-    position: relative;
-    padding-left: 30px; 
-    cursor: pointer;
-}
+        .service-container input + label {
+            position: relative;
+            padding-left: 30px;
+            cursor: pointer;
+        }
 
-.service-container input + label:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    width: 20px; 
-    height: 20px; 
-    border: 2px solid #4CAF50; 
-    background-color: white;
-    border-radius: 5px;
-}
-    
-.service-container input:checked + label:before {
-    background-color: #4CAF50;
-    border: 2px solid #4CAF50;
-}
+            .service-container input + label:before {
+                content: '';
+                position: absolute;
+                left: 0;
+                width: 20px;
+                height: 20px;
+                border: 2px solid #4CAF50;
+                background-color: white;
+                border-radius: 5px;
+            }
 
-.service-container input:checked + label:after {
-    content: '\2713'; 
-    position: absolute;
-    margin-top: -3px;
-    margin-left: -2px;
-    left: 5px; 
-    font-size: 18px; 
-    color: white; 
-    font-weight: bold;
-}
+        .service-container input:checked + label:before {
+            background-color: #4CAF50;
+            border: 2px solid #4CAF50;
+        }
+
+        .service-container input:checked + label:after {
+            content: '\2713';
+            position: absolute;
+            margin-top: -3px;
+            margin-left: -2px;
+            left: 5px;
+            font-size: 18px;
+            color: white;
+            font-weight: bold;
+        }
