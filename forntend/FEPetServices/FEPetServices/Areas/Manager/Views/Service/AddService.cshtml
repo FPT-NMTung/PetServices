@@ -2,11 +2,12 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/css/Service/Service.css">
+@*<link rel="stylesheet" href="/css/Service/Service.css">*@
+<link rel="stylesheet" href="/css/RoomCategory.css"></link>
 <link href="~/css/toastNotification.css" rel="stylesheet" />
 </head>
 <body>
-<h2>Thêm Dịch Vụ Thú Cưng</h2>
+<h2 style="text-align:center;">Thêm Dịch Vụ Thú Cưng</h2>
 <div class="container">
   <form asp-action="AddService" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
     <div class="row">
@@ -75,14 +76,18 @@
         <div style="color:red" class="error-message" id="subject-error-message"></div>
       </div>
     </div>
-    <div class="row">
-      <div class="btn-group col-2">
-         <a class="btn btn-primary btn_a" type="submit" value="Cancel" href="~/Manager/Service" class="cancel">Trở lại</a>
-      </div>
-      <div class="col-10">
-        <input class="btn btn-primary" type="submit" value="Thêm mới dịch vụ">
-      </div>
-    </div>
+     <div class="row">
+                <div class="col-25">
+                </div>
+                <div class="col-75 btn-row">
+                    <div class="btn-back">
+                        <a type="submit" value="Cancal" href="/Manager/ServiceCategory" class="cancel">Trở lại</a>
+                    </div>
+                    <div class="btn-submit">
+                        <input type="submit" value="Thêm mới dịch vụ">
+                    </div>
+                </div>
+            </div>
   </form>
 </div>
 <style>
