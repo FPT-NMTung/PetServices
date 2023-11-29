@@ -40,11 +40,11 @@ namespace FEPetServices.Areas.Customer.Controllers
             {
                 ViewBag.NotFound = "Error404";
                 return View();
-            }
+            }   
             else
             {
                 //HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrlOrders}Order/email/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
-                HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/email/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
+                HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/getOrderUser/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -89,21 +89,41 @@ namespace FEPetServices.Areas.Customer.Controllers
         public Task<IActionResult> AllOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
 
         [HttpGet]
-        public Task<IActionResult> DeliveryOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
-
-        [HttpGet]
-        public Task<IActionResult> WaitingOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
-
-        [HttpGet]
-        public Task<IActionResult> ReceivedOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
-
-        [HttpGet]
-        public Task<IActionResult> RejectOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
-
-        [HttpGet]
         public Task<IActionResult> CompletedOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
 
         private List<OrderForm> originalOrders;
+
+        [HttpGet]
+        public async Task<IActionResult> LoadOriginalOrders()
+        {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+            HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/email/{email}?orderstatus=All&page=1&pageSize=5");
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                if (!string.IsNullOrEmpty(responseContent) && responseContent.Contains("404 Not Found"))
+                {
+                    return View("Error404");
+                }
+
+                originalOrders = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
+
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
 
         [HttpGet]
         public IActionResult SearchOrders(string searchValue)

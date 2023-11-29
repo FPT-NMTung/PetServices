@@ -18,12 +18,6 @@
                 <li class="nav-item">
                     <a class="nav-link" id="pills-education-tab" data-toggle="pill" href="~/Customer/MyOrders/WaitingOrders?orderStatus=Waiting&page=1&pageSize=5" role="tab" aria-selected="false">Đơn hàng chờ xử lý</a>
                 </li>
-                @*                <li class="nav-item">
-                <a class="nav-link" id="pills-timeline-tab" data-toggle="pill" href="~/Customer/MyOrders/DeliveryOrders?orderStatus=Delivery&page=1&pageSize=5" role="tab" aria-selected="false">Vận chuyển</a>
-                </li>*@
-                @* <li class="nav-item">
-                <a class="nav-link" id="pills-document-tab" data-toggle="pill" href="~/Customer/MyOrders/Index?orderStatus=All&page=1&pageSize=5" role="tab" aria-selected="false">Chờ giao hàng</a>
-                </li>*@
                 <li class="nav-item">
                     <a class="nav-link" id="pills-event-tab" data-toggle="pill" href="~/Customer/MyOrders/ReceivedOrders?orderStatus=Received&page=1&pageSize=5" role="tab" aria-selected="false">Đã được xác nhận</a>
                 </li>
@@ -37,7 +31,7 @@
         </div>
         <!-- Search bar -->
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search by ID or Name">
+            <input type="text" id="searchInput" placeholder="Bạn có thể search theo mã đơn hàng cũng như tên sản phẩm">
             <button onclick="searchOrders()">Search</button>
         </div>
 
@@ -270,7 +264,6 @@
     <script>
         function searchOrders() {
             var searchValue = $('#searchInput').val().trim();
-
             if (searchValue !== '') {
                 $.ajax({
                     url: '/Customer/MyOrders/SearchOrders',
