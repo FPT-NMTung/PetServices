@@ -80,11 +80,11 @@
                     <td>
                         @if (@product.Status)
                         {
-                            <button class="btn btn-active" onclick="toggleStatus(this)">Đang hoạt động</button>
+                            <button class="btn-active" onclick="toggleStatus(this)">Đang hoạt động</button>
                         }
                         else
                         {
-                            <button class="btn btn-inactive" onclick="toggleStatus(this)">Ngưng hoạt động</button>
+                            <button class="btn-inactive" onclick="toggleStatus(this)">Ngưng hoạt động</button>
                         }
                     </td>
                     <td>
@@ -243,6 +243,7 @@
         width: 135px;
         height: 40px;
         border-radius: 5px;
+        border: none;
     }
 
     .btn-inactive {
@@ -252,6 +253,17 @@
         width: 135px;
         height: 40px;
         border-radius: 5px;
+        border: none;
+    }
+
+    .btn-active:hover {
+        background-color: #26B323;
+        color: black;
+    }
+
+    .btn-inactive:hover {
+        background-color: #d30f0b;
+        color: black;
     }
 
     .btn-detail {
