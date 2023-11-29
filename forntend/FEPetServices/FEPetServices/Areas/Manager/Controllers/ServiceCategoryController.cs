@@ -138,7 +138,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> EditServiceCategory(int serCategoriesId)
         {
-            
+
             try
             {
                 // Gọi API để lấy thông tin ServiceCategory cần chỉnh sửa
@@ -239,7 +239,20 @@ namespace FEPetServices.Areas.Manager.Controllers
                 {
                     serviceCategory.Status = false;
                 }
-                HttpResponseMessage responseListService = await client.GetAsync(DefaultApiUrl + "Service/GetServicesByCategory/" + serviceCategory.SerCategoriesId);
+                HttpResponseMessage responseService = await client.GetAsync(DefaultApiUrl + "Service/GetServicesByCategory/" + serCategoriesId);
+
+                if (responseService.IsSuccessStatusCode)
+                {
+                    var ServiceList = await responseService.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(ServiceList))
+                    {
+                        var service = JsonConvert.DeserializeObject<List<ServiceDTO>>(ServiceList);
+                        ViewBag.service = service;
+                    }
+
+                }
+                HttpResponseMessage responseListService = await client.GetAsync(DefaultApiUrl + "Service/GetServicesByCategory/" + serCategoriesId);
 
                 if (responseListService.IsSuccessStatusCode)
                 {
@@ -261,7 +274,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    
+
                     TempData["SuccessToast"] = "Chỉnh sửa dịch vụ thành công!";
                     return View(serviceCategory); // Chuyển hướng đến trang thành công hoặc trang danh sách
                 }

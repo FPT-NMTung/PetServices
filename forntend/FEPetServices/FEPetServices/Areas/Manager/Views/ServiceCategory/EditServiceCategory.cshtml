@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -82,7 +82,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if (Model != null && ViewBag.service.Count > 0)
+                @if ( ViewBag.service.Count > 0)
                 {
                     int itemCount = 0;
                     foreach (var service in ViewBag.service)
