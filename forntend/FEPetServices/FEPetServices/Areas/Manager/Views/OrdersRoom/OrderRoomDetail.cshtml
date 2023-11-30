@@ -12,6 +12,12 @@
         <h2>Chi tiết đơn hàng</h2>
         @*Thông tin đơn hàng*@
         <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Mã đơn hàng :</label>
+            <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" value="@Model.OrderId">
+            </div>
+        </div>
+        <div class="form-group row">
             <label class="col-sm-3 col-form-label">Ngày mua hàng :</label>
             <div class="col-sm-9">
                 <input type="text" readonly class="form-control-plaintext" value="@Model?.OrderDate">

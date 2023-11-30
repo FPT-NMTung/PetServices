@@ -125,7 +125,7 @@
                                                                 <p style="max-width:450px">@serviceDetail.Service.ServiceName</p>
                                                                 <p style="font-size:.8rem;"><span>Cân nặng thú cưng: </span>@serviceDetail.Weight Kg</p>
                                                            @*     PartnerID*@
-                                                                <p style="font-size:.8rem;"><span>Đối tác:</span>@serviceDetail.PartnerInfoId</p>
+                                                                <p style="font-size:.8rem;"><span>Đối tác:</span>@serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName </p>
                                                             </div>
                                                         </div>
                                                         <div class="content-detail-time-service">
