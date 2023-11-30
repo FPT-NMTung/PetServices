@@ -159,19 +159,19 @@
         <div class="btn-group">
             @if (Model.OrderStatus.Trim() == "Completed")
             {
-                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPetTrainingSpecialComplete">Trở lại</a>
-            }
-            else if (Model.OrderStatus.Trim() == "Rejected")
-            {
-                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPetTrainingSpecialRejected">Trở lại</a>
+                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerComplete">Trở lại</a>
             }
             else if (Model.OrderStatus.Trim() == "Waiting")
             {
-                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPetTraining">Trở lại</a>
+                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartner">Trở lại</a>
             }
             else if (Model.OrderStatus.Trim() == "Received_Services")
             {
-                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPetTrainingSpecialReceived">Trở lại</a>
+                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerReceived">Trở lại</a>
+            }
+            else
+            {
+                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerSpecial">Trở lại</a>
             }
         </div>
     </div>
