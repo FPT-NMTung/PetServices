@@ -42,7 +42,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             return View();
         }
         //Waiting
-        public async Task<IActionResult> ListOrderPetTraining()
+        public async Task<IActionResult> ListOrderPartner()
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
@@ -85,7 +85,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                 return View();
             }
         }
-        public async Task<IActionResult> ListOrderPetTrainingSpecial()
+        public async Task<IActionResult> ListOrderPartnerSpecial()
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
@@ -130,7 +130,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
         }
         //Complete
-        public async Task<IActionResult> ListOrderPetTrainingSpecialComplete()
+        public async Task<IActionResult> ListOrderPartnerComplete()
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
@@ -175,7 +175,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
         }
         //Reject
-        public async Task<IActionResult> ListOrderPetTrainingReject()
+        public async Task<IActionResult> ListOrderPartnerReject()
         {
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPetTraining?serCategoriesId=4");
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
@@ -199,7 +199,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                 return View();
             }
         }
-        public async Task<IActionResult> ListOrderPetTrainingSpecialReject()
+        public async Task<IActionResult> ListOrderPartnerSpecialReject()
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
@@ -245,7 +245,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
         }
         //Received
-        public async Task<IActionResult> ListOrderPetTrainingSpecialReceived()
+        public async Task<IActionResult> ListOrderPartnerReceived()
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
