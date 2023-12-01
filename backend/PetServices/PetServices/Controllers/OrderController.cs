@@ -22,7 +22,7 @@ namespace PetServices.Controllers
         {
             _context = context;
             _mapper = mapper;
-            _configuration = configuration;
+            _configuration = configuration; 
         }
 
         #region Get
@@ -322,7 +322,10 @@ namespace PetServices.Controllers
                 {
                     foreach (var dto in order.OrderProductDetails)
                     {
-                        dto.StatusOrderProduct = status.newStatusProduct;
+                        if (!string.IsNullOrEmpty(status.newStatusProduct))
+                        {
+                            dto.StatusOrderProduct = status.newStatusProduct;
+                        }
                     }
                 }
 
@@ -330,7 +333,10 @@ namespace PetServices.Controllers
                 {
                     foreach (var dto in order.BookingServicesDetails)
                     {
-                        dto.StatusOrderService = status.newStatusService;
+                        if (!string.IsNullOrEmpty(status.newStatusService))
+                        {
+                            dto.StatusOrderService = status.newStatusService;
+                        }
                     }
                 }
 

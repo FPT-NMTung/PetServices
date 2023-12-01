@@ -23,11 +23,72 @@ namespace FEPetServices.Areas.Manager.Controllers
             //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
             DefaultApiUrl = "https://localhost:7255/api/";
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/getOrder");
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
 
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
 
-            return View();
+                List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options)
+                  .Where(order => order.OrderStatus.Trim() == "Confirmed")
+                  .ToList();
+                return View(orderLists);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> OrderShippedDetail(int id)
+        {
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                OrderForm orderDetail = System.Text.Json.JsonSerializer.Deserialize<OrderForm>(responseContent, options);
+                return View(orderDetail);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> OrderShippedDetail(int id, [FromForm] Status status)
+        {
+            if (status.newStatus == "Processing")
+            {
+                status.newStatusProduct = "Shipped";
+                status.newStatusService = "";
+            }
+
+            HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessToast"] = "Cập nhật thành công";
+                return RedirectToAction("OrderShippedDetail", new { id = id });
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
         }
     }
 }
