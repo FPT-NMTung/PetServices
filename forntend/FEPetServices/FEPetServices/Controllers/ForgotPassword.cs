@@ -34,14 +34,14 @@ namespace FEPetServices.Controllers
                     // Sử dụng JSON.NET để phân tích chuỗi JSON thành đối tượng
                     var result = JsonConvert.DeserializeObject<PasswordResetResponse>(resultString);
 
-                    if (result.NewPass == "NotFound")
+                    if (result.NewPassword == "NotFound")
                     {
                         ViewBag.ErrorToast = "Tài khoản không tồn tại.";
                         return View("Index");
                     }
                     else
                     {
-                        string pass = result.NewPass;
+                        string pass = result.NewPassword;
 
                         // Gửi mật khẩu mới qua email
                         SendPasswordResetEmail(email, pass);

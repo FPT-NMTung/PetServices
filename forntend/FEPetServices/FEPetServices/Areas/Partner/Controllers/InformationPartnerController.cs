@@ -103,7 +103,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
             else
             {
-                HttpResponseMessage responseUser = await _client.GetAsync("https://pet-service-api.azurewebsites.net/api/Partner/" + email);
+                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "Partner/" + email);
                 if (responseUser.IsSuccessStatusCode)
                 {
                     string responseContent = await responseUser.Content.ReadAsStringAsync();
@@ -162,7 +162,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
 
             // Update the user information, including the image URL
-            HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/Partner/updateInfo?email=" + email, partnerInfo);
+            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "Partner/updateInfo?email=" + email, partnerInfo);
             //HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrlPartner + "?email=" + email, partnerInfo);
             if (response.IsSuccessStatusCode)
             {
