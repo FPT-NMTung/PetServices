@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="col-75">
-                    <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px">
+                    <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" accept="image/*">
                     <img src="@Model?.Picture" style="float: left; height:100px; width:100px;" id="imagePreview">
                 </div>
             </div>
@@ -68,7 +68,7 @@
                 </div>
                 <div class="col-75">
                     <div class="date-container">
-                        <input type="date" class="create" id="CreateDate" name="CreateDate" style="height : 40px; width : 100%; padding : 12px;" value="@Model?.CreateDate?.ToString("yyyy-MM-dd")" disabled>
+                        <input type="date" name="CreateDate" style="height : 40px; width : 100%; padding : 12px;" value="@Model?.CreateDate?.ToString("yyyy-MM-dd")" readonly">
                     </div>
                 </div>
             </div> 
@@ -78,7 +78,7 @@
                 </div>
                 <div class="col-75">
                     <div class="date-container">
-                        <input type="date" class="create" id="UpdateDate" name="UpdateDate" style="height : 40px; width : 100%; padding : 12px;" value="@Model?.UpdateDate?.ToString("yyyy-MM-dd")" disabled>
+                        <input type="date" name="UpdateDate" style="height : 40px; width : 100%; padding : 12px;" value="@DateTime.Now.ToString("yyyy-MM-dd")" readonly>
                     </div>
                 </div>
             </div>

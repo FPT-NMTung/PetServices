@@ -22,9 +22,8 @@
                 <div class="col-25">
                     <label for="image">Ảnh<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                 </div>
-
                 <div class="col-75">
-                    <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" required>
+                    <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" required accept="image/*">
 
                     <img src="~/img/icon/addicon.png" height="100px" width="100px" style="float: left; padding: 10px;" id="imagePreview">
 
@@ -50,6 +49,16 @@
                         <input type="number" class="quantity" id="Quantity" name="Quantity" placeholder="Số lượng" min="0" required>&ensp;
                     </div>
                     <div style="color:red" class="error-message" id="quantity-error-message"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="CreateDate">Ngày Tạo<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <div class="date-container">
+                        <input type="date" class="create" id="CreateDate" name="CreateDate" style="height : 40px; width : 100%; padding : 12px;" disabled>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -107,4 +116,11 @@
     <script src="~/js/manager/Product.js"></script>
 </body>
 </html>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var createDateInput = document.getElementById("CreateDate");
+        var today = new Date().toISOString().split('T')[0];
+        createDateInput.value = today;
+    });
+</script>
 
