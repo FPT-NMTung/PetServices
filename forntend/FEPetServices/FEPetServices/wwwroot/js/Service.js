@@ -6,7 +6,7 @@
     const fnameErrorMessage = document.getElementById('fname-error-message');
     const timeErrorMessage = document.getElementById('time-error-message');
     const priceErrorMessage = document.getElementById('price-error-message');
-    const subjectErrorMessage = document.getElementById('subject-error-message');
+   /* const subjectErrorMessage = document.getElementById('subject-error-message');*/
 
     const specialChars = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/; // Special character regex
     const specialChar = /[@#$%^&*{}\[\]~]/;

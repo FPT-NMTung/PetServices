@@ -1,8 +1,8 @@
 ﻿function validateForm() {
     const fname = document.getElementById('ProCategoriesName');
-    const subject = document.getElementById('Desciptions');
+    /*const subject = document.getElementById('Desciptions');*/
     const fnameErrorMessage = document.getElementById('fname-error-message');
-    const subjectErrorMessage = document.getElementById('subject-error-message');
+    /*const subjectErrorMessage = document.getElementById('subject-error-message');*/
 
     console.log('Debug: fname.value', fname.value);
     console.log('Debug: subject.value', subject.value);
