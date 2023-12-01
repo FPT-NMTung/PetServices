@@ -68,12 +68,12 @@
                                             {
                                                 url += (url.Contains("?") ? "&" : "?") + "pricefrom=" + ViewBag.pricefrom;
                                             }
-                                            <li class="@(string.IsNullOrEmpty(ViewBag.productcategory) ? "current-cat" : "")"><a href="@url">Tất cả</a></li>
-                                            @foreach (var category in ViewBag.Categories)
+                                                    <li class="@(string.IsNullOrEmpty(ViewBag.productcategory) ? "current-cat" : "")"><a href="@url">Tất cả</a></li>
+                                                    @foreach (var category in ViewBag.Categories)
                                             {
-                                                <li class="@(ViewBag.productcategory == category.Value ? "current-cat" : "")">
-                                                    <a href="@(url + (url.Contains("?") ? "&" : "?") + "productcategory=" + category.Value)">@category.Text</a>
-                                                </li>
+                                                        <li class="@(ViewBag.productcategory == category.Value ? "current-cat" : "")">
+                                                            <a href="@(url + (url.Contains("?") ? "&" : "?") + "productcategory=" + category.Value)">@category.Text</a>
+                                                        </li>
                                             }
                                         }
                                     </ul>
@@ -103,24 +103,24 @@
                                                 @{
                                                     if (!string.IsNullOrEmpty(ViewBag.sortby))
                                                     {
-                                                        <input type="hidden" name="sortby" value="@ViewBag.sortby">
+                                                                <input type="hidden" name="sortby" value="@ViewBag.sortby">
                                                     }
                                                     if (!string.IsNullOrEmpty(ViewBag.productcategory))
                                                     {
-                                                        <input type="hidden" name="productcategory" value="@ViewBag.productcategory">
+                                                                <input type="hidden" name="productcategory" value="@ViewBag.productcategory">
                                                     }
                                                     if (!string.IsNullOrEmpty(ViewBag.priceto))
                                                     {
-                                                        <input type="hidden" name="priceto" value="@ViewBag.priceto">
+                                                                <input type="hidden" name="priceto" value="@ViewBag.priceto">
                                                     }
                                                     if (!string.IsNullOrEmpty(ViewBag.pricefrom))
                                                     {
-                                                        <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
+                                                                <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
                                                     }
-                                                    <div class="relative">
-                                                        <input class="input-cal input-base" value="@(ViewBag.productname)" name="productname" id="input" placeholder="" type="text">
-                                                        <label id="label-input">Name</label>
-                                                    </div>
+                                                            <div class="relative">
+                                                                <input class="input-cal input-base" value="@(ViewBag.productname)" name="productname" id="input" placeholder="" type="text">
+                                                                <label id="label-input">Name</label>
+                                                            </div>
                                                 }
                                             </form>
                                         </span>
@@ -128,26 +128,26 @@
                                             @{
                                                 if (!string.IsNullOrEmpty(ViewBag.productname))
                                                 {
-                                                    <input type="hidden" name="productname" value="@ViewBag.productname">
+                                                            <input type="hidden" name="productname" value="@ViewBag.productname">
                                                 }
                                                 if (!string.IsNullOrEmpty(ViewBag.productcategory))
                                                 {
-                                                    <input type="hidden" name="productcategory" value="@ViewBag.productcategory">
+                                                            <input type="hidden" name="productcategory" value="@ViewBag.productcategory">
                                                 }
                                                 if (!string.IsNullOrEmpty(ViewBag.priceto))
                                                 {
-                                                    <input type="hidden" name="priceto" value="@ViewBag.priceto">
+                                                            <input type="hidden" name="priceto" value="@ViewBag.priceto">
                                                 }
                                                 if (!string.IsNullOrEmpty(ViewBag.pricefrom))
                                                 {
-                                                    <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
+                                                            <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
                                                 }
-                                                <select id="sortby" name="sortby" class="single-select" onchange="this.form.submit();">
-                                                    <!option value="name_asc" @(ViewBag.sortby == "name_asc" ? "selected" : "")>Tên từ A-Z</!option>
-                                                    <!option value="name_desc" @(ViewBag.sortby == "name_desc" ? "selected" : "")>Tên từ Z-A</!option>
-                                                    <!option value="price" @(ViewBag.sortby == "price" ? "selected" : "")>Giá từ thấp đến cao</!option>
-                                                    <!option value="price_desc" @(ViewBag.sortby == "price_desc" ? "selected" : "")>Giá từ cao đến thấp</!option>
-                                                </select>
+                                                        <select id="sortby" name="sortby" class="single-select" onchange="this.form.submit();">
+                                                            <!option value="name_asc" @(ViewBag.sortby == "name_asc" ? "selected" : "")>Tên từ A-Z</!option>
+                                                            <!option value="name_desc" @(ViewBag.sortby == "name_desc" ? "selected" : "")>Tên từ Z-A</!option>
+                                                            <!option value="price" @(ViewBag.sortby == "price" ? "selected" : "")>Giá từ thấp đến cao</!option>
+                                                            <!option value="price_desc" @(ViewBag.sortby == "price_desc" ? "selected" : "")>Giá từ cao đến thấp</!option>
+                                                        </select>
                                             }
                                         </form>
                                     </div>
@@ -164,12 +164,12 @@
                                     <div class="axil-product product-style-one mb--30">
                                         <div class="thumbnail">
                                             <a href="/ProductList/Detail?proId=@product.ProductId">
-                                                <img src="@product.Picture" alt="Product Images">
+                                                <img style="height:300px;" src="@product.Picture" alt="Product Images">
                                             </a>
                                         </div>
                                         <div class="product-content" data-room-category="@product.ProCategoriesId">
                                             <div class="inner">
-                                                <h5 class="title"><a href="/ProductList/Detail?proId=@product.ProductId">@product.ProductName</a></h5>
+                                                <h5 class="title" style="height:50px;"><a href="/ProductList/Detail?proId=@product.ProductId">@product.ProductName</a></h5>
                                                 <div class="product-price-variant">
                                                     <span class="price current-price">@product.Price VNĐ</span>
                                                 </div>

@@ -8,7 +8,7 @@
     const quantityErrorMessage = document.getElementById('quantity-error-message');
     const subjectErrorMessage = document.getElementById('subject-error-message');
 
-    const specialChars = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/;
+    const specialChars = /[!@#%^*{}\[\]<>?-]/
     const specialChar = /[@#$%^&*{}\[\]~]/;
     const numbersOnly = /^[0-9]+$/;
 

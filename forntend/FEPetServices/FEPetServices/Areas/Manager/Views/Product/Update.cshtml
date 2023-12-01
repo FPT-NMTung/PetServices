@@ -68,7 +68,7 @@
                 </div>
                 <div class="col-75">
                     <div class="date-container">
-                        <input type="date" class="create" id="CreateDate" name="CreateDate" style="height : 40px; width : 100%; padding : 12px;" value="@Model?.CreateDate" disabled>
+                        <input type="date" class="create" id="CreateDate" name="CreateDate" style="height : 40px; width : 100%; padding : 12px;" value="@Model?.CreateDate?.ToString("yyyy-MM-dd")" disabled>
                     </div>
                 </div>
             </div> 
@@ -78,7 +78,7 @@
                 </div>
                 <div class="col-75">
                     <div class="date-container">
-                        <input type="date" class="create" id="UpdateDate" name="UpdateDate" style="height : 40px; width : 100%; padding : 12px;" value="@Model?.CreateDate" disabled>
+                        <input type="date" class="create" id="UpdateDate" name="UpdateDate" style="height : 40px; width : 100%; padding : 12px;" value="@Model?.UpdateDate" disabled>
                     </div>
                 </div>
             </div>
