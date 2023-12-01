@@ -720,6 +720,85 @@ namespace PetServices.Controllers
             return Ok(NumberOrderComplete);
         }
 
-        
+        // đánh giá của khách hàng về các sản phẩm
+        [HttpGet("GetFeedbackOfProduct")]
+        public async Task<ActionResult> GetFeedbackOfProduct()
+        {
+            //lấy danh sách đánh giá các sản phẩm 
+            var listFeedback = await _context.Feedbacks.Where(o => o.ProductId != null).ToListAsync();
+
+            var feedback = new List<FeedbackForm>();
+
+            foreach (var Feedback in listFeedback)
+            {
+                var product = await _context.Products.FirstOrDefaultAsync(o => o.ProductId == Feedback.ProductId);
+                var customer = await _context.UserInfos.FirstOrDefaultAsync(o => o.UserInfoId == Feedback.UserId);
+
+                feedback.Add(new FeedbackForm
+                {
+                    name = product.ProductName,
+                    picture = product.Picture,
+                    customerName = customer.FirstName + customer.LastName,
+                    NumberStart = Feedback.NumberStart,
+                    Content = Feedback.Content,
+                });
+            }
+
+            return Ok(feedback);
+        }
+
+        // đánh giá của khách hàng về các phòng
+        [HttpGet("GetFeedbackOfRoom")]
+        public async Task<ActionResult> GetFeedbackOfRoom()
+        {
+            //lấy danh sách đánh giá các phòng 
+            var listFeedback = await _context.Feedbacks.Where(o => o.RoomId != null).ToListAsync();
+
+            var feedback = new List<FeedbackForm>();
+
+            foreach (var Feedback in listFeedback)
+            {
+                var room = await _context.Rooms.FirstOrDefaultAsync(o => o.RoomId == Feedback.RoomId);
+                var customer = await _context.UserInfos.FirstOrDefaultAsync(o => o.UserInfoId == Feedback.UserId);
+
+                feedback.Add(new FeedbackForm
+                {
+                    name = room.RoomName,
+                    picture = room.Picture,
+                    customerName = customer.FirstName + customer.LastName,
+                    NumberStart = Feedback.NumberStart,
+                    Content = Feedback.Content,
+                });
+            }
+
+            return Ok(feedback);
+        }
+
+        // đánh giá của khách hàng về các dịch vụ
+        [HttpGet("GetFeedbackOfService")]
+        public async Task<ActionResult> GetFeedbackOfService()
+        {
+            //lấy danh sách đánh giá các dịch vụ
+            var listFeedback = await _context.Feedbacks.Where(o => o.ServiceId != null && o.UserId != null).ToListAsync();
+
+            var feedback = new List<FeedbackForm>();
+
+            foreach (var Feedback in listFeedback)
+            {
+                var service = await _context.Services.FirstOrDefaultAsync(o => o.ServiceId == Feedback.ServiceId);
+                var customer = await _context.UserInfos.FirstOrDefaultAsync(o => o.UserInfoId == Feedback.UserId);
+
+                feedback.Add(new FeedbackForm
+                {
+                    name = service.ServiceName ?? null,
+                    picture = service.Picture ?? null,
+                    customerName = customer.FirstName + customer.LastName ?? null,
+                    NumberStart = Feedback.NumberStart,
+                    Content = Feedback.Content,
+                });
+            }
+
+            return Ok(feedback);
+        }
     }
 }
