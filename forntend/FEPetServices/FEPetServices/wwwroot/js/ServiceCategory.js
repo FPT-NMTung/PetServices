@@ -1,6 +1,6 @@
 ﻿function validateForm() {
     const fname = document.getElementById('SerCategoriesName');
-    const subject = document.getElementById('Desciptions');
+    /*const subject = document.getElementById('Desciptions');*/
     const fnameErrorMessage = document.getElementById('fname-error-message');
     const subjectErrorMessage = document.getElementById('subject-error-message');
 

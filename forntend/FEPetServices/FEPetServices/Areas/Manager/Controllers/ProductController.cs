@@ -66,7 +66,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             return View();
         }
-        public async Task<IActionResult> Add([FromForm] ProductDTO pro, List<IFormFile> image)
+        public async Task<IActionResult> Add([FromForm] ProductDTO pro, IFormFile image)
         {
             try
             {
@@ -76,20 +76,22 @@ namespace FEPetServices.Areas.Manager.Controllers
                     var proCategories = await proCateResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
                     ViewBag.ProCategories = new SelectList(proCategories, "ProCategoriesId", "ProCategoriesName");
                 }
-                if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
-                {
-                    if (pro.ProductName == null) { return View(); }
-                    foreach (var file in image)
-                    {
-                        string filename = GenerateRandomNumber(5) + file.FileName;
-                        filename = Path.GetFileName(filename);
-                        string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Product/", filename);
-                        var stream = new FileStream(uploadfile, FileMode.Create);
-                        file.CopyToAsync(stream);
-                        pro.Picture = "/img/Product/" + filename;
-                    }
 
-                    var json = JsonConvert.SerializeObject(pro);
+                if (pro.ProductName == null) { return View(); }
+                if (image != null && image.Length > 0)
+                {
+                    string filename = GenerateRandomNumber(5) + image.FileName;
+                    filename = Path.GetFileName(filename);
+                    string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Product/", filename);
+                    var stream = new FileStream(uploadfile, FileMode.Create);
+                    image.CopyToAsync(stream);
+                    pro.Picture = "/img/Product/" + filename;
+                }
+                else
+                {
+                    return View(pro);
+                }
+                var json = JsonConvert.SerializeObject(pro);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                     // Gửi dữ liệu lên máy chủ
@@ -97,19 +99,16 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TempData["SuccessToast"] = "Thêm loại sản phẩm thành công!";
-                        return View(pro); // Chuyển hướng đến trang thành công hoặc trang danh sách
+                        TempData["SuccessToast"] = "Thêm sản phẩm thành công!";
+                        return View(pro); // Chuyển hướng đến trang thành công hoặc trang danh sách.
                     }
                     else
                     {
-                        TempData["ErrorToast"] = "Thêm loại sản phẩm thất bại. Vui lòng thử lại sau.";
-                        return View(pro); // Hiển thị lại biểu mẫu với dữ liệu đã điền
+                        TempData["ErrorToast"] = "Thêm sản phẩm thất bại. Vui lòng thử lại sau.";
+                        return View(pro); // Hiển thị lại biểu mẫu với dữ liệu đã điền.
                     }
-                }
-                else
-                {
-                    return View(pro);
-                }
+                
+               
             }
             catch (Exception ex)
             {
@@ -232,7 +231,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 {
                     productDTO.Status = false;
                 }
-
+                
                 var json = JsonConvert.SerializeObject(productDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 

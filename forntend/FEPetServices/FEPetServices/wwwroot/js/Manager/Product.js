@@ -2,13 +2,13 @@
     const fname = document.getElementById('ProductName');
     const price = document.getElementById('Price');
     const quantity = document.getElementById('Quantity');
-    const subject = document.getElementById('Desciption');
+    /*const subject = document.getElementById('Desciption');*/
     const fnameErrorMessage = document.getElementById('fname-error-message');
     const priceErrorMessage = document.getElementById('price-error-message');
     const quantityErrorMessage = document.getElementById('quantity-error-message');
-    const subjectErrorMessage = document.getElementById('subject-error-message');
+    /*const subjectErrorMessage = document.getElementById('subject-error-message');*/
 
-    const specialChars = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/;
+    const specialChars = /[!@#%^*{}\[\]<>?-]/
     const specialChar = /[@#$%^&*{}\[\]~]/;
     const numbersOnly = /^[0-9]+$/;
 
