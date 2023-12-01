@@ -2,6 +2,7 @@
 {
     public class PasswordResetResponse
     {
-        public string NewPass { get; set; }
+        public string Email { get; set; }
+        public string NewPassword { get; set; }
     }
 }
