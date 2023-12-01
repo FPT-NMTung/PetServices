@@ -70,7 +70,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-                HttpResponseMessage proCateResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll");
+                HttpResponseMessage proCateResponse = await client.GetAsync(DefaultApiUrl + "ProductCategory/GetAll");
                 if (proCateResponse.IsSuccessStatusCode)
                 {
                     var proCategories = await proCateResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
@@ -78,7 +78,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
                 if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
                 {
-                    if (pro.ProCategoriesName == null) { return View(); }
+                    if (pro.ProductName == null) { return View(); }
                     foreach (var file in image)
                     {
                         string filename = GenerateRandomNumber(5) + file.FileName;
@@ -88,6 +88,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                         file.CopyToAsync(stream);
                         pro.Picture = "/img/Product/" + filename;
                     }
+
                     var json = JsonConvert.SerializeObject(pro);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -96,12 +97,12 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TempData["SuccessToast"] = "Thêm sản phẩm thành công!";
+                        TempData["SuccessToast"] = "Thêm loại sản phẩm thành công!";
                         return View(pro); // Chuyển hướng đến trang thành công hoặc trang danh sách
                     }
                     else
                     {
-                        TempData["ErrorToast"] = "Thêm sản phẩm thất bại. Vui lòng thử lại sau.";
+                        TempData["ErrorToast"] = "Thêm loại sản phẩm thất bại. Vui lòng thử lại sau.";
                         return View(pro); // Hiển thị lại biểu mẫu với dữ liệu đã điền
                     }
                 }
@@ -116,7 +117,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 return View(pro); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
         }
-
+        
         public static string GenerateRandomNumber(int length)
         {
             Random random = new Random();
@@ -137,6 +138,8 @@ namespace FEPetServices.Areas.Manager.Controllers
             {
                 //goi api de lay thong tin can sua
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product/ProductID/" + proId);
+                //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Product/Add" + proId);
+
                 HttpResponseMessage proCateResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll");
                 if (proCateResponse.IsSuccessStatusCode)
                 {
