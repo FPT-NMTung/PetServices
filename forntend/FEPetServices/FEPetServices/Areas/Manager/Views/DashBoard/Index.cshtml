@@ -58,6 +58,35 @@
                 },
             });
 
+            // DataTable cho bảng FeedbackRoom
+            var tableRoom = $('#FeedbackRoom').DataTable({
+                "responsive": true,
+                "paging": true,
+                "ordering": true,
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "searching": true,
+                "info": true,
+                "autoWidth": false,
+                "columnDefs": [
+                    { "targets": [0], "width": "5%" },
+                    { "targets": [1], "width": "25%" },
+                    { "targets": [2], "width": "16%" },
+                    { "orderable": false, "targets": [3], "width": "10%" },
+                    { "orderable": false, "targets": [4], "width": "44%" }
+                ],
+                "language": {
+                    "lengthMenu": "Hiển thị  _MENU_  dòng",
+                    "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
+                    "search": "Tìm kiếm: ",
+                    "paginate": {
+                        "first": "Đầu",
+                        "last": "Cuối",
+                        "next": "Tiếp",
+                        "previous": "Trước"
+                    }
+                },
+            });
+
             
         });
     </script>
@@ -359,6 +388,9 @@
                             <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Đánh giá của khách hàng</h6>
                             <div class="option">
                                 <input hidden value=""/>
+                                <a class="fw-normal title clicked" id="productFB" style="font-weight: 500!important" onclick="showFeedbackProduct()">Sản phẩm</a>
+                                <a class="fw-normal title" id="serviceFB" style="font-weight: 500!important" onclick="showFeedbackService()">Dịch vụ</a>
+                                <a class="fw-normal title" id="roomFB" style="font-weight: 500!important" onclick="showFeedbackRoom()">Phòng</a>
                                 
                             </div>
                         </div>
@@ -422,6 +454,64 @@
                             </tbody>
                         </table>
                         
+                        @*Danh sách feedback của phòng*@
+                        <table id="FeedbackRoom" class="display lists" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Thông tin phòng </th>
+                                    <th>Thông tin khách hàng</th>
+                                    <th>Đánh giá</th>
+                                    <th>Nội dung đánh giá</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.FeedbackRoom != null)
+                                {
+                                    @foreach (var item in Model.FeedbackRoom)
+                                    {
+                                        <tr>
+                                            <td>@item.stt</td>
+                                            <td>
+                                                <div class="d-flex name-service">
+                                                    <img src="@item.picture" style="" />
+                                                    <p class="name">@item.name</p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="name-cus">
+                                                    <p class="name">@item.customerName</p>
+                                                    <p class="email">@item.gmail</p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    @for (int i = 0; i < 5; i++)
+                                                    {
+                                                        if (i < item.NumberStart)
+                                                        {
+                                                            <i class="fas fa-star"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="far fa-star"></i>
+                                                        }
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @item.Content
+                                                @*<span class="content-short"></span>
+                                                <span class="content-full" style="display: none;">@item.Content</span>
+                                                <a href="#" class="read-more" style="display: none;">Xem thêm</a>
+                                                <a href="#" class="read-less" style="display: none;">Thu gọn</a>*@
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
                         
                     </div>
                 </div>
@@ -440,7 +530,53 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js "></script>
 
-    
+    @*Thống kê đánh giá của khách hàng*@
+    <script>
+        function showFeedbackProduct() {
+            // Ẩn tất cả các bảng
+            $('#FeedbackProduct').hide();
+            $('#FeedbackRoom').hide();
+            $('#FeedbackService').hide();
+
+            // Hiển thị bảng FeedbackProduct
+            $('#FeedbackProduct').show();
+
+            // Hiển thị DataTable đã được khởi tạo
+            $('#FeedbackService_wrapper').hide();
+            $('#FeedbackRoom_wrapper').hide();
+            $('#FeedbackProduct_wrapper').show();
+
+            // Xóa class 'clicked' từ tất cả các tùy chọn
+            $('.option .title').removeClass('clicked');
+
+            // Thêm class 'clicked' vào tùy chọn được chọn
+            $('#productFB').addClass('clicked');
+        }
+
+        
+
+        function showFeedbackRoom() {
+            // Ẩn tất cả các bảng
+            $('#FeedbackProduct').hide();
+            $('#FeedbackRoom').hide();
+            $('#FeedbackService').hide();
+
+            // Hiển thị bảng FeedbackRoom
+            $('#FeedbackRoom').show();
+
+            // Hiển thị DataTable đã được khởi tạo
+            $('#FeedbackService_wrapper').hide();
+            $('#FeedbackRoom_wrapper').show();
+            $('#FeedbackProduct_wrapper').hide();
+
+            // Xóa class 'clicked' từ tất cả các tùy chọn
+            $('.option .title').removeClass('clicked');
+
+            // Thêm class 'clicked' vào tùy chọn được chọn
+            $('#roomFB').addClass('clicked');
+        }
+
+    </script>
 
     
 
