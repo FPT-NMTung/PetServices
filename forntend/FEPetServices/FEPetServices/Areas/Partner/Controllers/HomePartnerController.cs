@@ -41,7 +41,8 @@ namespace FEPetServices.Areas.Partner.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> ListOrderPetTraining()
+        //Waiting
+        public async Task<IActionResult> ListOrderPartner()
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
@@ -72,7 +73,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
                 orderLists = orderLists
                     .Where(order => order.BookingServicesDetails.Any(x => x.PartnerInfoId == null)).ToList();
@@ -84,7 +85,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                 return View();
             }
         }
-        public async Task<IActionResult> ListOrderPetTrainingSpecial()
+        public async Task<IActionResult> ListOrderPartnerSpecial()
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
@@ -118,7 +119,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
                 return View(orderLists);
             }
@@ -129,33 +130,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
         }
         //Complete
-        //public async Task<IActionResult> ListOrderPetTrainingComplete()
-        //{
-        //    //orderStatus = "Waiting";
-        //    //https://pet-service-api.azurewebsites.net/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4&orderStatus=Waiting
-        //    HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPetTraining?serCategoriesId=4");
-        //    //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
-        //    //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        string responseContent = await response.Content.ReadAsStringAsync();
-
-        //        var options = new JsonSerializerOptions
-        //        {
-        //            PropertyNameCaseInsensitive = true
-        //        };
-
-        //        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
-        //        List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
-        //        return View(orderLists);
-        //    }
-        //    else
-        //    {
-        //        TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
-        //        return View();
-        //    }
-        //}
-        public async Task<IActionResult> ListOrderPetTrainingSpecialComplete()
+        public async Task<IActionResult> ListOrderPartnerComplete()
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
@@ -189,7 +164,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
                 return View(orderLists);
             }
@@ -200,7 +175,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
         }
         //Reject
-        public async Task<IActionResult> ListOrderPetTrainingReject()
+        public async Task<IActionResult> ListOrderPartnerReject()
         {
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPetTraining?serCategoriesId=4");
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
@@ -214,7 +189,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
                 return View(orderLists);
             }
@@ -224,7 +199,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                 return View();
             }
         }
-        public async Task<IActionResult> ListOrderPetTrainingSpecialReject()
+        public async Task<IActionResult> ListOrderPartnerSpecialReject()
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
@@ -259,7 +234,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
                 return View(orderLists);
             }
@@ -270,31 +245,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
         }
         //Received
-        //public async Task<IActionResult> ListOrderPetTrainingReceived()
-        //{
-        //    HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPetTraining?serCategoriesId=4");
-        //    //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
-        //    //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        string responseContent = await response.Content.ReadAsStringAsync();
-
-        //        var options = new JsonSerializerOptions
-        //        {
-        //            PropertyNameCaseInsensitive = true
-        //        };
-
-        //        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
-        //        List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
-        //        return View(orderLists);
-        //    }
-        //    else
-        //    {
-        //        TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
-        //        return View();
-        //    }
-        //}
-        public async Task<IActionResult> ListOrderPetTrainingSpecialReceived()
+        public async Task<IActionResult> ListOrderPartnerReceived()
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
@@ -329,7 +280,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
                 return View(orderLists);
             }
@@ -367,7 +318,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     totalPrice = (double)(totalPrice + od.Price * od.Quantity);
                 }
 
-                TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                 ViewBag.TotalPrice = totalPrice;
                 return View(orderDetail);
             }

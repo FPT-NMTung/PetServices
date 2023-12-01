@@ -46,7 +46,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     if (!string.IsNullOrEmpty(rep))
                     {
                         var productList = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
-                        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                        //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                         return View(productList);
                     }
                     else
@@ -221,7 +221,6 @@ namespace FEPetServices.Areas.Manager.Controllers
                         }
                     }
                 }
-
                 if (Request.Form["Status"] == "on")
                 {
                     productDTO.Status = true;
