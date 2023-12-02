@@ -43,7 +43,7 @@
                         <form method="post" asp-controller="InformationPartner" asp-action="Index" enctype="multipart/form-data">
                             <div>
                                 <label for="image"></label>
-                                <input type="file" id="image" name="image" value="@Model?.PartnerInfo.ImagePartner" enctype="multipart/form-data">
+                                <input type="file" id="image" name="image" value="@Model?.PartnerInfo.ImagePartner" enctype="multipart/form-data" accept="image/*">
                             </div>
 
                             <div class="row gx-3 mb-3">
@@ -66,6 +66,16 @@
                             <div class="mb-3">
                                 <label class="small mb-1" for="inputEmailAddress">Email</label>
                                 <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="@Model?.Email" disabled>
+                            </div>
+
+                             <div class="mb-3">
+                                <label class="small mb-1" for="inputCardName">Tên ngân hàng</label>
+                                <input class="form-control"  type="text" name="CardName" id="CardName"  value="@Model?.PartnerInfo.CardName" required>
+                            </div>
+
+                             <div class="mb-3">
+                                <label class="small mb-1" for="inputCardNumber">Số tài khoản</label>
+                                <input class="form-control" id="CardNumber" type="text" name="CardNumber" value="@Model?.PartnerInfo.CardNumber" required>
                             </div>
 
                             <div class="row gx-3 mb-3">

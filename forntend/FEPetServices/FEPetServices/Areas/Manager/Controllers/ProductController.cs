@@ -46,7 +46,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     if (!string.IsNullOrEmpty(rep))
                     {
                         var productList = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
-                        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                        //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                         return View(productList);
                     }
                     else
@@ -70,21 +70,28 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-                HttpResponseMessage proCateResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll");
+                HttpResponseMessage proCateResponse = await client.GetAsync(DefaultApiUrl + "ProductCategory/GetAll");
                 if (proCateResponse.IsSuccessStatusCode)
                 {
                     var proCategories = await proCateResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
                     ViewBag.ProCategories = new SelectList(proCategories, "ProCategoriesId", "ProCategoriesName");
                 }
-                if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
+
+                if (pro.ProductName == null) { return View(); }
+                if (image != null && image.Length > 0)
                 {
-                    if (image != null && image.Length > 0)
-                    {
-                        // Xử lý và lưu trữ ảnh
-                        Console.WriteLine(image);
-                        pro.Picture = "/img/" + image.FileName.ToString();
-                    }
-                    var json = JsonConvert.SerializeObject(pro);
+                    string filename = GenerateRandomNumber(5) + image.FileName;
+                    filename = Path.GetFileName(filename);
+                    string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Product/", filename);
+                    var stream = new FileStream(uploadfile, FileMode.Create);
+                    image.CopyToAsync(stream);
+                    pro.Picture = "/img/Product/" + filename;
+                }
+                else
+                {
+                    return View(pro);
+                }
+                var json = JsonConvert.SerializeObject(pro);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                     // Gửi dữ liệu lên máy chủ
@@ -93,24 +100,35 @@ namespace FEPetServices.Areas.Manager.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         TempData["SuccessToast"] = "Thêm sản phẩm thành công!";
-                        return View(pro); // Chuyển hướng đến trang thành công hoặc trang danh sách
+                        return View(pro); // Chuyển hướng đến trang thành công hoặc trang danh sách.
                     }
                     else
                     {
                         TempData["ErrorToast"] = "Thêm sản phẩm thất bại. Vui lòng thử lại sau.";
-                        return View(pro); // Hiển thị lại biểu mẫu với dữ liệu đã điền
+                        return View(pro); // Hiển thị lại biểu mẫu với dữ liệu đã điền.
                     }
-                }
-                else
-                {
-                    return View(pro);
-                }
+                
+               
             }
             catch (Exception ex)
             {
                 TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
                 return View(pro); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
+        }
+        
+        public static string GenerateRandomNumber(int length)
+        {
+            Random random = new Random();
+            const string chars = "0123456789";
+            char[] randomChars = new char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                randomChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(randomChars);
         }
         [HttpGet]
         public async Task<IActionResult> Update(int proId, ProductDTO productDTO)
@@ -119,6 +137,8 @@ namespace FEPetServices.Areas.Manager.Controllers
             {
                 //goi api de lay thong tin can sua
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product/ProductID/" + proId);
+                //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Product/Add" + proId);
+
                 HttpResponseMessage proCateResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll");
                 if (proCateResponse.IsSuccessStatusCode)
                 {
@@ -203,7 +223,6 @@ namespace FEPetServices.Areas.Manager.Controllers
                         }
                     }
                 }
-
                 if (Request.Form["Status"] == "on")
                 {
                     productDTO.Status = true;
@@ -212,7 +231,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 {
                     productDTO.Status = false;
                 }
-
+                
                 var json = JsonConvert.SerializeObject(productDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 

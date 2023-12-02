@@ -52,6 +52,15 @@
                             <label class="small mb-1" >Email</label>
                             <input class="form-control"  type="email" value="@Model?.Email" disabled>
                         </div>
+                          <div class="mb-3">
+                                <label class="small mb-1" for="inputEmailAddress">Tên ngân hàng</label>
+                                <input class="form-control"  type="text" name="CardName" id="CardName"  value="@Model?.PartnerInfo.CardName" disabled>
+                            </div>
+
+                             <div class="mb-3">
+                                <label class="small mb-1" for="inputEmailAddress">Số tài khoản</label>
+                                <input class="form-control" id="CardNumber" type="text" name="CardNumber" value="@Model?.PartnerInfo.CardNumber" disabled>
+                            </div>
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label class="small mb-1" >Tỉnh</label>
@@ -78,7 +87,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="small mb-1" for="inputDescriptions">Mô tả </label>
-                            <textarea class="form-control">@Model?.PartnerInfo.Descriptions</textarea>
+                            <textarea  style="height:300px;" class="form-control" >@Model?.PartnerInfo.Descriptions</textarea>
                         </div>
                         <input type="hidden" name="Email" value="@Model?.Email" />
                         <input type="hidden" name="Password" value="@Model?.Password" />
