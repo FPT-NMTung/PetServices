@@ -473,10 +473,10 @@
                                             </td>
                                             <td>
                                                 @item.Content
-                                                @*<span class="content-short"></span>
+                                                <span class="content-short"></span>
                                                 <span class="content-full" style="display: none;">@item.Content</span>
                                                 <a href="#" class="read-more" style="display: none;">Xem thêm</a>
-                                                <a href="#" class="read-less" style="display: none;">Thu gọn</a>*@
+                                                <a href="#" class="read-less" style="display: none;">Thu gọn</a>
                                             </td>
                                         </tr>
                                     }
@@ -531,10 +531,10 @@
                                             </td>
                                             <td>
                                                 @item.Content
-                                                @*<span class="content-short"></span>
+                                                <span class="content-short"></span>
                                                 <span class="content-full" style="display: none;">@item.Content</span>
                                                 <a href="#" class="read-more" style="display: none;">Xem thêm</a>
-                                                <a href="#" class="read-less" style="display: none;">Thu gọn</a>*@
+                                                <a href="#" class="read-less" style="display: none;">Thu gọn</a>
                                             </td>
                                         </tr>
                                     }
@@ -589,10 +589,10 @@
                                             </td>
                                             <td>
                                                 @item.Content
-                                                @*<span class="content-short"></span>
+                                                <span class="content-short"></span>
                                                 <span class="content-full" style="display: none;">@item.Content</span>
                                                 <a href="#" class="read-more" style="display: none;">Xem thêm</a>
-                                                <a href="#" class="read-less" style="display: none;">Thu gọn</a>*@
+                                                <a href="#" class="read-less" style="display: none;">Thu gọn</a>
                                             </td>
                                         </tr>
                                     }
@@ -684,7 +684,7 @@
     </script>
 
     @*Xem thêm/ẩn bớt nội dung feedback*@
-    @*<script>
+    <script>
         $(document).ready(function () {
             var fullContent = $(".content-full").text();
             var shortContent = fullContent;
@@ -714,7 +714,7 @@
                 $(this).hide();
             });
         });
-    </script>*@
+    </script>
 
     @*Thống kê doanh số bán trong 7 ngày gần nhất*@
     <script>
