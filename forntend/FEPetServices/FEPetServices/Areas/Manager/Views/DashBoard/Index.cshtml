@@ -43,7 +43,8 @@
                     { "targets": [1], "width": "25%" },
                     { "targets": [2], "width": "16%" },
                     { "orderable": false, "targets": [3], "width": "10%" },
-                    { "orderable": false, "targets": [4], "width": "44%" }
+                    { "orderable": false, "targets": [4], "width": "44%" },
+                    { "targets": [5], "visible": false }
                 ],
                 "language": {
                     "lengthMenu": "Hiển thị  _MENU_  dòng",
@@ -72,7 +73,8 @@
                     { "targets": [1], "width": "25%" },
                     { "targets": [2], "width": "16%" },
                     { "orderable": false, "targets": [3], "width": "10%" },
-                    { "orderable": false, "targets": [4], "width": "44%" }
+                    { "orderable": false, "targets": [4], "width": "44%" },
+                    { "targets": [5], "visible": false }
                 ],
                 "language": {
                     "lengthMenu": "Hiển thị  _MENU_  dòng",
@@ -101,7 +103,8 @@
                     { "targets": [1], "width": "25%" },
                     { "targets": [2], "width": "16%" },
                     { "orderable": false, "targets": [3], "width": "10%" },
-                    { "orderable": false, "targets": [4], "width": "44%" }
+                    { "orderable": false, "targets": [4], "width": "44%" },
+                    { "targets": [5], "visible": false }
                 ],
                 "language": {
                     "lengthMenu": "Hiển thị  _MENU_  dòng",
@@ -417,11 +420,24 @@
                         <div class="head">
                             <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Đánh giá của khách hàng</h6>
                             <div class="option">
-                                <input hidden value=""/>
-                                <a class="fw-normal title clicked" id="productFB" style="font-weight: 500!important" onclick="showFeedbackProduct()">Sản phẩm</a>
-                                <a class="fw-normal title" id="serviceFB" style="font-weight: 500!important" onclick="showFeedbackService()">Dịch vụ</a>
-                                <a class="fw-normal title" id="roomFB" style="font-weight: 500!important" onclick="showFeedbackRoom()">Phòng</a>
-                                
+                                <button class="option-button" style="display: none;"></button>
+                                <div class="dropdown-option">
+                                    <input hidden value="" />
+                                    <a class="fw-normal title clicked" id="productFB" style="font-weight: 500!important" onclick="showFeedbackProduct()">Sản phẩm</a>
+                                    <a class="fw-normal title" id="serviceFB" style="font-weight: 500!important" onclick="showFeedbackService()">Dịch vụ</a>
+                                    <a class="fw-normal title" id="roomFB" style="font-weight: 500!important" onclick="showFeedbackRoom()">Phòng</a>
+                                    <div class="dropdown">
+                                        <button class="dropdown-button">Đánh giá</button>
+                                        <div class="dropdown-content">
+                                            <div id="star5" class="dropdown-item 5" onclick="SortStar(5)">5 sao</div>
+                                            <div id="star4" class="dropdown-item 4" onclick="SortStar(4)">4 sao</div>
+                                            <div id="star3" class="dropdown-item 3" onclick="SortStar(3)">3 sao</div>
+                                            <div id="star2" class="dropdown-item 2" onclick="SortStar(2)">2 sao</div>
+                                            <div id="star1" class="dropdown-item 1" onclick="SortStar(1)">1 sao</div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="typeTable" value="FeedbackProduct" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -435,6 +451,7 @@
                                     <th>Thông tin khách hàng</th>
                                     <th>Đánh giá</th>
                                     <th>Nội dung đánh giá</th>
+                                    <th>Số sao</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -473,17 +490,18 @@
                                             </td>
                                             <td>
                                                 @item.Content
-                                                <span class="content-short"></span>
-                                                <span class="content-full" style="display: none;">@item.Content</span>
-                                                <a href="#" class="read-more" style="display: none;">Xem thêm</a>
-                                                <a href="#" class="read-less" style="display: none;">Thu gọn</a>
+                                                @*<span class="content-short"></span>
+                                        <span class="content-full" style="display: none;">@item.Content</span>
+                                        <a href="#" class="read-more" style="display: none;">Xem thêm</a>
+                                        <a href="#" class="read-less" style="display: none;">Thu gọn</a>*@
                                             </td>
+                                            <td>@item.NumberStart</td>
                                         </tr>
                                     }
                                 }
                             </tbody>
                         </table>
-                        
+
                         @*Danh sách feedback của phòng*@
                         <table id="FeedbackRoom" class="display lists" style="display: none;">
                             <thead>
@@ -493,6 +511,7 @@
                                     <th>Thông tin khách hàng</th>
                                     <th>Đánh giá</th>
                                     <th>Nội dung đánh giá</th>
+                                    <th>Số sao</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -531,11 +550,12 @@
                                             </td>
                                             <td>
                                                 @item.Content
-                                                <span class="content-short"></span>
-                                                <span class="content-full" style="display: none;">@item.Content</span>
-                                                <a href="#" class="read-more" style="display: none;">Xem thêm</a>
-                                                <a href="#" class="read-less" style="display: none;">Thu gọn</a>
+                                                @*<span class="content-short"></span>
+                                        <span class="content-full" style="display: none;">@item.Content</span>
+                                        <a href="#" class="read-more" style="display: none;">Xem thêm</a>
+                                        <a href="#" class="read-less" style="display: none;">Thu gọn</a>*@
                                             </td>
+                                            <td>@item.NumberStart</td>
                                         </tr>
                                     }
                                 }
@@ -551,6 +571,7 @@
                                     <th>Thông tin khách hàng</th>
                                     <th>Đánh giá</th>
                                     <th>Nội dung đánh giá</th>
+                                    <th>Số sao</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -589,11 +610,12 @@
                                             </td>
                                             <td>
                                                 @item.Content
-                                                <span class="content-short"></span>
-                                                <span class="content-full" style="display: none;">@item.Content</span>
-                                                <a href="#" class="read-more" style="display: none;">Xem thêm</a>
-                                                <a href="#" class="read-less" style="display: none;">Thu gọn</a>
+                                                @*<span class="content-short"></span>
+                                        <span class="content-full" style="display: none;">@item.Content</span>
+                                        <a href="#" class="read-more" style="display: none;">Xem thêm</a>
+                                        <a href="#" class="read-less" style="display: none;">Thu gọn</a>*@
                                             </td>
+                                            <td>@item.NumberStart</td>
                                         </tr>
                                     }
                                 }
@@ -637,6 +659,9 @@
 
             // Thêm class 'clicked' vào tùy chọn được chọn
             $('#productFB').addClass('clicked');
+
+            // Cập nhật giá trị của phần tử input
+            $('#typeTable').val('FeedbackProduct');
         }
 
         function showFeedbackService() {
@@ -658,6 +683,9 @@
 
             // Thêm class 'clicked' vào tùy chọn được chọn
             $('#serviceFB').addClass('clicked');
+
+            // Cập nhật giá trị của phần tử input
+            $('#typeTable').val('FeedbackService');
         }
 
         function showFeedbackRoom() {
@@ -679,42 +707,55 @@
 
             // Thêm class 'clicked' vào tùy chọn được chọn
             $('#roomFB').addClass('clicked');
+
+            // Cập nhật giá trị của phần tử input
+            $('#typeTable').val('FeedbackRoom');
         }
 
+        // Sort theo số sao
+        function SortStar(star) {
+            $('.dropdown-item').removeClass('clicked');
+            $('.dropdown-item .' + star).addClass('clicked');
+            var value = $('#typeTable').val();
+
+            var table = $('#' + value).DataTable();
+
+            table.column(5).search(star).draw();
+        }
     </script>
 
     @*Xem thêm/ẩn bớt nội dung feedback*@
-    <script>
-        $(document).ready(function () {
-            var fullContent = $(".content-full").text();
-            var shortContent = fullContent;
-            if (fullContent.length > 100) {
-                shortContent = fullContent.substr(0, 100);
-                var lastSpace = shortContent.lastIndexOf(" ");
-                if (lastSpace > 0) {
-                    shortContent = shortContent.substr(0, lastSpace) + "...";
-                }
-                $(".read-more").show();
-            }
-            $(".content-short").text(shortContent);
+    @*<script>
+    $(document).ready(function () {
+    var fullContent = $(".content-full").text();
+    var shortContent = fullContent;
+    if (fullContent.length > 100) {
+    shortContent = fullContent.substr(0, 100);
+    var lastSpace = shortContent.lastIndexOf(" ");
+    if (lastSpace > 0) {
+    shortContent = shortContent.substr(0, lastSpace) + "...";
+    }
+    $(".read-more").show();
+    }
+    $(".content-short").text(shortContent);
 
-            $(".read-more").click(function (e) {
-                e.preventDefault();
-                $(this).siblings(".content-short").hide();
-                $(this).siblings(".content-full").show();
-                $(this).siblings(".read-less").show();
-                $(this).hide();
-            });
+    $(".read-more").click(function (e) {
+    e.preventDefault();
+    $(this).siblings(".content-short").hide();
+    $(this).siblings(".content-full").show();
+    $(this).siblings(".read-less").show();
+    $(this).hide();
+    });
 
-            $(".read-less").click(function (e) {
-                e.preventDefault();
-                $(this).siblings(".content-full").hide();
-                $(this).siblings(".content-short").show();
-                $(this).siblings(".read-more").show();
-                $(this).hide();
-            });
-        });
-    </script>
+    $(".read-less").click(function (e) {
+    e.preventDefault();
+    $(this).siblings(".content-full").hide();
+    $(this).siblings(".content-short").show();
+    $(this).siblings(".read-more").show();
+    $(this).hide();
+    });
+    });
+    </script>*@
 
     @*Thống kê doanh số bán trong 7 ngày gần nhất*@
     <script>

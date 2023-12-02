@@ -120,6 +120,7 @@ p {
 .feedbacktable .dropdown-item {
     display: block;
     cursor: pointer;
+    padding: 5px;
 }
 
 .feedbacktable .dropdown:hover .dropdown-button {
@@ -133,4 +134,11 @@ p {
 .feedbacktable .dropdown-item:hover {
     background-color: #ededed;
     color: #ff0026;
+}
+
+@media only screen and (max-width: 880px) {
+    .feedbacktable .card-header .option {
+        position: relative;
+        display: inline-block;
+    }
 }
