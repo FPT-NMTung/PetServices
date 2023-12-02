@@ -52,7 +52,7 @@ namespace PetServices.Controllers
 
             return Ok(_mapper.Map<List<OrdersDTO>>(orders));
         }
-        [HttpGet("ListOrderPetTrainingSpecial")]
+        /*[HttpGet("ListOrderPetTrainingSpecial")]
         public async Task<IActionResult> ListOrderPetTrainingSpecial(int serCategoriesId, int partnerInfoId)
         {
             List<Order> orders = await _context.Orders
@@ -86,7 +86,7 @@ namespace PetServices.Controllers
                 // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
                 return StatusCode(500, ex.Message);
             }
-        }
+        }*/
         [HttpGet("UpdateOrderStatusReceived")]
         public async Task<IActionResult> UpdateOrderStatusReceived(int orderId, int partnerId)
         {
@@ -117,7 +117,7 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpGet("UpdateOrderStatusRejected")]
+       /* [HttpGet("UpdateOrderStatusRejected")]
         public async Task<IActionResult> UpdateOrderStatusRejected(int orderId, int reasonId)
         {
             try
@@ -151,7 +151,7 @@ namespace PetServices.Controllers
                 // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
                 return StatusCode(500, ex.Message);
             }
-        }
+        }*/
         [HttpGet("UpdateOrderStatusCompleted")]
         public async Task<IActionResult> UpdateOrderStatusCompleted(int orderId)
         {
