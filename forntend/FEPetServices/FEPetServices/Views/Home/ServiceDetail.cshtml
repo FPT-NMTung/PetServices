@@ -359,7 +359,6 @@
         </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
     <script>
         const input = document.getElementById('petWeight');
         input.addEventListener('change', function () {
@@ -367,83 +366,58 @@
                 input.value += ' kg';
             }
         });
+
+        function showErrorToastCheckInput() {
+            // Add your error toast implementation here
+            // This function should handle showing an error message to the user
+        }
+
         function kiemTra() {
             var datetimeStart = document.getElementById('datetimeStart').value;
             var datetimeEnd = document.getElementById('datetimeEnd').value;
             var petWeight = document.getElementById('petWeight').value;
 
-<<<<<<< HEAD
             if (datetimeStart === '' || datetimeEnd === '' || petWeight === '') {
                 alert('Vui lòng điền đầy đủ thông tin.');
-                return false; // Ngăn form submit nếu thông tin chưa được điền đầy đủ
+                return false; // Prevent form submission if information is not filled out completely
             }
-
-            // Nếu thông tin đã điền đầy đủ, cho phép form submit
+            // If information is filled out completely, allow form submission
             return true;
-=======
-        if (datetimeStart === '' || datetimeEnd === ''|| petWeight === '') {
-            showErrorToastCheckInput();
-            return false; // Ngăn form submit nếu thông tin chưa được điền đầy đủ
->>>>>>> 56a81006070d42733fb2bbeee01b26ff4057bc8f
         }
+
         function kiemTraAndSubmit(formId, serviceId) {
             var form = document.getElementById(formId);
             var datetimeStart = document.getElementById('datetimeStart').value;
             var datetimeEnd = document.getElementById('datetimeEnd').value;
             var petWeight = document.getElementById('petWeight').value;
 
-<<<<<<< HEAD
             if (datetimeStart === '' || datetimeEnd === '' || petWeight === '') {
-                alert('Vui lòng điền đầy đủ thông tin.');
-                return false;
-            } else {
-                // Thực hiện hành động thêm vào giỏ hàng sau khi kiểm tra thành công
-                addToCartService(serviceId); // Gọi hàm thêm vào giỏ hàng
-                form.submit(); // Gửi form
-            }
-=======
-        // Nếu thông tin đã điền đầy đủ, cho phép form submit
-        return true;
-    }
-    function kiemTraAndSubmit(formId, serviceId) {
-        var form = document.getElementById(formId);
-        var datetimeStart = document.getElementById('datetimeStart').value;
-        var datetimeEnd = document.getElementById('datetimeEnd').value;
-        var petWeight = document.getElementById('petWeight').value;
-
-        if (datetimeStart === '' || datetimeEnd === '' || petWeight === '') {
                 showErrorToastCheckInput();
-
-            return false;
-        } else {
-            // Thực hiện hành động thêm vào giỏ hàng sau khi kiểm tra thành công
-            addToCartService(serviceId); // Gọi hàm thêm vào giỏ hàng
-            form.submit(); // Gửi form
->>>>>>> 56a81006070d42733fb2bbeee01b26ff4057bc8f
+                return false; // Prevent form submission if information is not filled out completely
+            } else {
+                // Perform the action (e.g., addToCartService) after successful validation
+                // addToCartService(serviceId); // Uncomment this line if addToCartService is defined
+                form.submit(); // Submit the form
+            }
         }
-        // cân nặng khi đặt cho người khác
-        document.getElementById("PetInfoId").addEventListener("change", function () {
-            // Lấy giá trị được chọn từ dropdown
-            var selectedValue = this.value;
 
-            // Lấy tất cả các phần tử có class "lgweight"
+        // Cân nặng khi đặt cho người khác
+        document.getElementById("PetInfoId").addEventListener("change", function () {
+            var selectedValue = this.value;
             var petWeightInputs = document.getElementsByClassName("lgweight");
 
-            // Nếu giá trị được chọn là "khac", hiển thị tất cả các phần tử có class "lgweight"
             if (selectedValue === "khac") {
                 for (var i = 0; i < petWeightInputs.length; i++) {
                     petWeightInputs[i].style.display = "block";
                     petWeightInputs[i].setAttribute("required", "required");
                 }
             } else {
-                // Ngược lại, ẩn tất cả các phần tử có class "lgweight"
                 for (var i = 0; i < petWeightInputs.length; i++) {
                     petWeightInputs[i].style.display = "none";
                     petWeightInputs[i].removeAttribute("required");
                 }
             }
         });
-
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -516,6 +490,48 @@
                 inputElement.value = selectedOption.getAttribute("data-weight");
                 var Weight = document.getElementById("Weight");
                 Weight.value = inputElement.value;
+
+                var servicePrice = parseFloat(document.querySelector('.price.current-price').textContent.replace(/,/g, '').replace(/\D/g, ''));
+                var additionalCost = 0;
+                var additional = 0;
+                if (document.getElementById('PartnerInfoId').value.trim() !== '') {
+                    additional += 50000;
+                }
+
+                if (inputElement.value <= 5) {
+                    additionalCost += 0;
+                } else if (inputElement.value > 5 && inputElement.value <= 10) {
+                    additionalCost += 50000;
+                } else if (inputElement.value > 10 && inputElement.value <= 20) {
+                    additionalCost += 100000;
+                } else if (inputElement.value > 20 && inputElement.value <= 40) {
+                    additionalCost += 200000;
+                } else if (inputElement.value > 40) {
+                    additionalCost += 400000;
+                }
+
+                var PartnerInfoId = document.getElementById("PartnerInfoId");
+                var selectedPartnerId = PartnerInfoId.options[PartnerInfoId.selectedIndex];
+
+                var PartnerId = document.getElementById("PartnerId");
+                PartnerId.value = selectedPartnerId.value;
+
+                var totalAmount = servicePrice + additional + additionalCost;
+                console.log(additionalCost);
+                var totalPriceService = document.getElementById("totalPriceService");
+                totalPriceService.value = totalAmount;
+                document.getElementById('totalPriceService').textContent = totalPriceService.value;
+
+                function formatNumberToString(number) {
+                    return number.toLocaleString('vi-VN').replace(/\s/g, '');
+                }
+                // Display the total amount in the HTML
+                document.getElementById('totalAmountDisplay').textContent =
+                    formatNumberToString(servicePrice) + "  (dịch vụ) + " +
+                    formatNumberToString(additionalCost) + " (cân nặng) + " +
+                    formatNumberToString(additional) + "  (đối tác) " +
+                    "=" + formatNumberToString(totalAmount) + " VNĐ";
+
             } else {
                 // If "Khác" is selected, show the input field
                 inputElement.style.display = "block";

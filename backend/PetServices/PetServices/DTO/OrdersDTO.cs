@@ -26,5 +26,6 @@ namespace PetServices.DTO
         public virtual ICollection<BookingRoomDetailDTO>? BookingRoomDetails { get; set; }
         public virtual ICollection<BookingServicesDetailDTO>? BookingServicesDetails { get; set; }
         public virtual ICollection<OrderTypeDTO>? OrderTypes { get; set; }
+        public virtual ICollection<ReasonOrderDTO>? ReasonOrders { get; set; }
     }
 }
