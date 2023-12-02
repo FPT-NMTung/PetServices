@@ -20,27 +20,31 @@
         <div class="form-group row">
             <label class="col-sm-3 col-form-label">Ngày mua hàng :</label>
             <div class="col-sm-9">
-                <input type="text" readonly class="form-control-plaintext" value="@Model?.OrderDate">
+                <input type="text" readonly class="form-control-plaintext" value="@Model.OrderDate">
             </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-3 col-form-label">Trạng thái :</label>
             <div class="col-sm-9" style="padding-top:8px">
-                @if (Model?.OrderStatus.Trim() == "Confirmed")
+                @if (Model.OrderStatus.Trim() == "Confirmed")
                 {
-                    <span style="display:inline-block" class="badge badge-info">Đã trả phòng</span>
+                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đã được xác nhận và trong giai đoạn xử lý </span>
                 }
-                else if (Model?.OrderStatus.Trim() == "Refund")
+                else if (Model.OrderStatus.Trim() == "Processing")
                 {
-                    <span style="display:inline-block" class="badge badge-info">Hoàn tiên</span>
+                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đang được thực hiện</span>
                 }
-                else if (Model?.OrderStatus.Trim() == "Placed")
+                else if (Model.OrderStatus.Trim() == "Placed")
                 {
-                    <span style="display:inline-block" class="badge badge-info">Chờ nhận phòng</span>
+                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đang chờ xác nhận</span>
                 }
-                else if (Model?.OrderStatus.Trim() == "Cancelled")
+                else if (Model.OrderStatus.Trim() == "Completed")
                 {
-                    <span style="display:inline-block" class="badge badge-info">Phòng bị huỷ </span>
+                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đã hoàn thành</span>
+                }
+                else if (Model.OrderStatus.Trim() == "Cancelled")
+                {
+                    <span style="display:inline-block" class="badge badge-info">Đơn hàng bị huỷ</span>
                 }
             </div>
         </div>
@@ -72,46 +76,49 @@
             </div>
         </div>
 
-        @if (Model.BookingRoomDetails != null && Model.BookingRoomDetails.Count > 0)
+        @if (Model.OrderProductDetails != null && Model.OrderProductDetails.Count > 0)
         {
-            <h4>Thông tin phòng</h4>
+            @*Thông tin sản phẩm*@
+            <h4>Thông tin sản phẩm</h4>
             <div style="overflow-x:auto;">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Tên Phòng</th>
-                            <th>Giá phòng</th>
-                            <th>Dịch vụ trong phòng</th>
-                            <th>Thời gian</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Giá từng sản phẩm</th>
+                            <th>Số lượng</th>
                             <th>Tổng giá</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var roomDetail in Model.BookingRoomDetails)
+                        @for (int i = 0; i < Model.OrderProductDetails.Count; i++)
                         {
+                            var productDetail = Model.OrderProductDetails[i];
                             <tr>
-                                <td>@roomDetail.Room.RoomName</td>
-                                <td>
-                                    @($"{roomDetail.Price:n0}".Replace(",", ".")) VNĐ
-                                </td>
-                                <td>
-                                    @foreach (var roomService in Model.BookingRoomServices)
-                                    {
-                                        <div style="width: 250px;" class="room-info-detail-service">
-                                            <p style="font-size:.8rem;">Dịch vụ: @roomService.Service.ServiceName</p>
-                                        </div>
-                                    }
-                                </td>
-                                <td>
-                                    <div class="content-detail-time-service">
-                                        <p style="font-size:.8rem;">Thời gian bắt đầu: <br></br> @roomDetail?.StartDate</p>
-                                        <p style="font-size:.8rem;">Thời gian kêt thúc: <br></br> @roomDetail?.EndDate </p>
-                                    </div>
-                                </td>
-                                <td>
-                                    @($"{roomDetail.TotalPrice:n0}".Replace(",", ".")) VNĐ
-                                </td>
+                                <td>@productDetail.Product.ProductName</td>
+                                <td>@($"{productDetail.Price:n0}".Replace(",", ".")) VNĐ</td>
+                                <td>@productDetail.Quantity</td>
+                                <td>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</td>
                             </tr>
+
+                            @if (i == Model.OrderProductDetails.Count - 1)
+                            {
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td>
+                                        <div class="status-content-detail">
+                                            @if (productDetail?.StatusOrderProduct?.Trim() == "Placed")
+                                            {
+                                                <span class="badge badge-info">Sản phẩm đang chờ xác nhận</span>
+                                            }
+                                            else if (productDetail?.StatusOrderProduct?.Trim() == "Packaging")
+                                            {
+                                                <span class="badge badge-info">Đóng gói sản phẩm</span>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>
@@ -145,15 +152,16 @@
                 <span class="badge badge-info">Đã thanh toán</span>
             }
         </div>
-        <form method="post" asp-controller="OrdersRoom" asp-action="OrderRoomDetail">
-            @if (Model.OrderStatus.Trim() == "Placed")
+
+        <form method="post" asp-controller="Shipped" asp-action="OrderShippedDetail">
+            @if (Model.OrderStatus.Trim() == "Confirmed")
             {
                 <input type="hidden" name="Id" value="@Model?.OrderId" />
                 <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
 
                 <select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
-                    <option value="Confirmed">Xác nhận trả phòng</option>
-                    <option value="Cancelled">Xác nhận huỷ phòng</option>
+                    <option value="Processing">Giao hàng</option>
+                    <option value="Cancelled">Huỷ đơn hàng</option>
                 </select>
 
                 <button class="btn btn-primary" type="submit">Xác nhận</button>
@@ -162,7 +170,7 @@
 
         <button class="btn btn-primary" onclick="window.print()">In hoá đơn</button>
         <div class="btn-group">
-            <a class="btn btn-primary" href="~/Manager/OrdersRoom/Index">Trở lại</a>
+            <a class="btn btn-primary" href="~/Manager/Shipped/Index">Trở lại</a>
         </div>
     </div>
 </body>
