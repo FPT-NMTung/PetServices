@@ -1,4 +1,5 @@
 ﻿using FEPetServices.Form;
+using FEPetServices.Models.ErrorResult;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PetServices.Models;
@@ -91,8 +92,7 @@ namespace FEPetServices.Controllers
 
             if (product.Quantity < quantity)
             {
-                ViewBag.ErrorToast = "Số lượng đặt hàng vượt quá số lượng sản phẩm còn lại";
-                return RedirectToAction("Index", "Cart");
+                return new ErrorResult("Số lượng đặt hàng vượt quá số lượng sản phẩm còn lại");
             }
 
             var cart = GetCartItems();
