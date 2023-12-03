@@ -65,7 +65,7 @@ namespace FEPetServices.Controllers
                 {
                     client.Port = 587;
                     client.UseDefaultCredentials = false;
-                    client.Credentials = new NetworkCredential("psmsg65@gmail.com", "pfrn dczf xruz sona");
+                    client.Credentials = new NetworkCredential("psmsg65@gmail.com", "wztg xjpz szer pvmk");
                     client.EnableSsl = true;
 
                     var message = new MailMessage();
