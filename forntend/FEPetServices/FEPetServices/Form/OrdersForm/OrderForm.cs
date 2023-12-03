@@ -26,5 +26,6 @@ namespace FEPetServices.Form.OrdersForm
         public virtual ICollection<BookingServicesDetailForm>? BookingServicesDetails { get; set; }
         public virtual ICollection<BookingRoomDetailForm>? BookingRoomDetails { get; set; }
         public virtual ICollection<BookingRoomServiceForm>? BookingRoomServices { get; set; }
+        public virtual ICollection<ReasonOrdersForm>? ReasonOrders { get; set; }
     }
 }
