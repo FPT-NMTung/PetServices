@@ -42,11 +42,10 @@ namespace FEPetServices.Controllers
                     else
                     {
                         string pass = result.NewPassword;
-
                         // Gửi mật khẩu mới qua email
                         SendPasswordResetEmail(email, pass);
-                        ViewBag.SuccessToast = "Yêu cầu đặt lại mật khẩu đã được gửi thành công. Vui lòng kiểm tra email của bạn.";
-                        return View("Index");
+                        TempData["SuccessToast"] = "Yêu cầu đặt lại mật khẩu đã được gửi thành công. Vui lòng kiểm tra email của bạn.";
+                        return RedirectToAction("Index","Login");
                     }
                 }
                 else
