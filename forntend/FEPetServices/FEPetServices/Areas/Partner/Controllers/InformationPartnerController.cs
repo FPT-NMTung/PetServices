@@ -103,10 +103,10 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
             else
             {
-                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "Partner/" + email);
-                if (responseUser.IsSuccessStatusCode)
+                HttpResponseMessage responsePartner = await _client.GetAsync(DefaultApiUrl + "Partner/" + email);
+                if (responsePartner.IsSuccessStatusCode)
                 {
-                    string responseContent = await responseUser.Content.ReadAsStringAsync();
+                    string responseContent = await responsePartner.Content.ReadAsStringAsync();
 
                     var options = new JsonSerializerOptions
                     {
@@ -141,10 +141,10 @@ namespace FEPetServices.Areas.Partner.Controllers
                     partnerInfo.Lng = lng.ToString();
                 }
             }
-
-            if (partnerInfo.Province == null || partnerInfo.District == null || partnerInfo.Commune == null || partnerInfo.CardName == null)
+            HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
+            if (partnerInfo.Province == null || partnerInfo.District == null || partnerInfo.Commune == null )
             {
-                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
+                
                 if (responseUser.IsSuccessStatusCode)
                 {
                     string responseContent = await responseUser.Content.ReadAsStringAsync();
@@ -157,7 +157,20 @@ namespace FEPetServices.Areas.Partner.Controllers
                     AccountInfo managerInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
                     partnerInfo.Province = managerInfos.PartnerInfo.Province;
                     partnerInfo.District = managerInfos.PartnerInfo.District;
-                    partnerInfo.Commune = managerInfos.PartnerInfo.Province;
+                    partnerInfo.Commune = managerInfos.PartnerInfo.Province; 
+                }
+            }
+            if(partnerInfo.CardName == null)
+            {
+                if (responseUser.IsSuccessStatusCode)
+                {
+                    string responseContent = await responseUser.Content.ReadAsStringAsync();
+
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+                    AccountInfo managerInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
                     partnerInfo.CardName = managerInfos.PartnerInfo.CardName;
                 }
             }
