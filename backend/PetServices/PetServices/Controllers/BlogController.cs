@@ -57,7 +57,9 @@ namespace PetServices.Controllers
                 PublisheDate = blog.PublisheDate,
                 Content = blog.Content,
                 Status=blog.Status,
-                ImageUrl = blog.ImageUrl
+                ImageUrl = blog.ImageUrl,
+                TagId=blog.TagId
+                
 
             };
 
@@ -93,6 +95,7 @@ namespace PetServices.Controllers
             blog.Content = blogDTO.Content;
             blog.Status = blogDTO.Status;
             blog.Heading = blogDTO.Heading;
+            blog.TagId = blogDTO.TagId;
 
             try
             {

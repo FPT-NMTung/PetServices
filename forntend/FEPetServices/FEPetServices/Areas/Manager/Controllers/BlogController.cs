@@ -44,8 +44,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var json = JsonConvert.SerializeObject(blog);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Blog/GetAllBlog");
-                //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlBlogList + "/GetAllBlog");
+                /*HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Blog/GetAllBlog");*/
+                HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Blog/GetAllBlog");
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
@@ -103,12 +103,15 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     // mặc định status là true
                     blog.Status = true;
-
+                    if (blog.Heading == null)
+                    {
+                        return View(blog);
+                    }
                     var json = JsonConvert.SerializeObject(blog);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "Blog/CreateBlog", content);
-                    //HttpResponseMessage response = await client.PostAsync(DefaultApiUrlBlogAdd, content);
+                    /*HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "Blog/CreateBlog", content);*/
+                    HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/Blog/CreateBlog", content);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -191,6 +194,15 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                HttpResponseMessage TagResponse = await client.GetAsync("https://localhost:7255/api/Tag/GetAllTag");
+
+                if (TagResponse.IsSuccessStatusCode)
+                {
+                    var tag = await TagResponse.Content.ReadFromJsonAsync<List<TagDTO>>();
+                    Console.WriteLine(tag);
+
+                    ViewBag.Tag = new SelectList(tag, "TagId", "TagName");
+                }
                 // Gọi API để lấy thông tin ServiceCategory cần chỉnh sửa
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Blog/BlogID/" + blogId);
                 //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlBlogDetail + "/" + blogId);
@@ -228,6 +240,15 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                HttpResponseMessage TagResponse = await client.GetAsync("https://localhost:7255/api/Tag/GetAllTag");
+
+                if (TagResponse.IsSuccessStatusCode)
+                {
+                    var tag = await TagResponse.Content.ReadFromJsonAsync<List<TagDTO>>();
+                    Console.WriteLine(tag);
+
+                    ViewBag.Tag = new SelectList(tag, "TagId", "TagName");
+                }
                 if (image != null && image.Length > 0)
                 {
                     // An image file has been uploaded, so update the image path.
@@ -247,8 +268,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 else
                 {
 
-                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrl + "Blog/BlogID/" + blogId);
-                    //HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrlBlogDetail + "/" + blogId);
+                    /*HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrl + "Blog/BlogID/" + blogId);*/
+                    HttpResponseMessage responseForImage = await client.GetAsync("https://localhost:7255/api/Blog/BlogID/" + blogId);
 
                     if (responseForImage.IsSuccessStatusCode)
                     {
