@@ -441,19 +441,18 @@ namespace PetServices.Models
                     .ValueGeneratedNever()
                     .HasColumnName("ReasonOrderID");
 
+                entity.Property(e => e.EmailReject)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.Property(e => e.UserInfoId).HasColumnName("UserInfoID");
+                entity.Property(e => e.RejectTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.ReasonOrders)
                     .HasForeignKey(d => d.OrderId)
                     .HasConstraintName("FK_ReasonOrders_Orders");
-
-                entity.HasOne(d => d.UserInfo)
-                    .WithMany(p => p.ReasonOrders)
-                    .HasForeignKey(d => d.UserInfoId)
-                    .HasConstraintName("FK_ReasonOrders_UserInfo");
             });
 
             modelBuilder.Entity<Role>(entity =>

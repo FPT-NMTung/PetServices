@@ -61,7 +61,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                 account = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseAccContent, options);
             }
             ViewBag.PartnerId = account.PartnerInfoId;
-            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPetTraining?serCategoriesId=4");
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPartner");
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
             if (response.IsSuccessStatusCode)
@@ -103,10 +103,9 @@ namespace FEPetServices.Areas.Partner.Controllers
 
                 account = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseAccContent, options);
             }
-            int serCategoriesId = 4;
             int partnerInfoId = account?.PartnerInfoId ?? 0; // Use the null-conditional operator to provide a default value
 
-            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPetTrainingSpecial?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId);
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPartnerSpecial?partnerInfoId=" + partnerInfoId);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId + "&orderStatus" + orderStatus);
 
@@ -151,7 +150,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             int serCategoriesId = 4;
             int partnerInfoId = account?.PartnerInfoId ?? 0; // Use the null-conditional operator to provide a default value
 
-            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPetTrainingSpecial?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId);
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPartnerSpecial?partnerInfoId=" + partnerInfoId);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId + "&orderStatus" + orderStatus);
 
@@ -177,7 +176,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         //Reject
         public async Task<IActionResult> ListOrderPartnerReject()
         {
-            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPetTraining?serCategoriesId=4");
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPartner");
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTraining + "&orderStatus" + orderStatus);
             if (response.IsSuccessStatusCode)
@@ -221,7 +220,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             int serCategoriesId = 4;
             int partnerInfoId = account?.PartnerInfoId ?? 0; // Use the null-conditional operator to provide a default value
 
-            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPetTrainingSpecial?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId);
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPartnerSpecial?partnerInfoId=" + partnerInfoId);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId + "&orderStatus" + orderStatus);
 
@@ -267,7 +266,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             int serCategoriesId = 4;
             int partnerInfoId = account?.PartnerInfoId ?? 0; // Use the null-conditional operator to provide a default value
 
-            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPetTrainingSpecial?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId);
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/ListOrderPartnerSpecial?partnerInfoId=" + partnerInfoId);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderListOfPetTrainingSpecial + "?serCategoriesId=" + serCategoriesId + "&partnerInfoId=" + partnerInfoId + "&orderStatus" + orderStatus);
 
@@ -294,12 +293,12 @@ namespace FEPetServices.Areas.Partner.Controllers
         public async Task<IActionResult> OrderPartnerDetail(int orderId)
         {
             //HttpResponseMessage reasonResponse = await client.GetAsync("https://localhost:7255/api/Reason/GetAll");
-            HttpResponseMessage reasonResponse = await client.GetAsync(DefaultApiUrl + "Reason/GetAll");
-            if (reasonResponse.IsSuccessStatusCode)
-            {
-                var reaCategories = await reasonResponse.Content.ReadFromJsonAsync<List<ReasonDTO>>();
-                ViewBag.Reasons = new SelectList(reaCategories, "ReasonId", "ReasonTitle");
-            }
+            //HttpResponseMessage reasonResponse = await client.GetAsync(DefaultApiUrl + "Reason/GetAll");
+            //if (reasonResponse.IsSuccessStatusCode)
+            //{
+            //    var reaCategories = await reasonResponse.Content.ReadFromJsonAsync<List<ReasonDTO>>();
+            //    ViewBag.Reasons = new SelectList(reaCategories, "ReasonId", "ReasonTitle");
+            //}
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/" + orderId);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderPartner + "/" + orderId);
             if (response.IsSuccessStatusCode)
@@ -330,11 +329,12 @@ namespace FEPetServices.Areas.Partner.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> OrderPartnerDetail(int orderId, [FromForm] Status status)
+        public async Task<IActionResult> OrderPartnerDetail(int orderId, [FromForm] Status status, [FromForm] ReasonOrdersForm reasonOrders)
         {
             //HttpResponseMessage response = await client.PutAsJsonAsync("https://localhost:7255/api/OrderPartner/ChangeStatus?orderId=" + orderId, status);
             HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl + "OrderPartner/ChangeStatus?orderId=" + orderId, status);
-            if (response.IsSuccessStatusCode)
+            HttpResponseMessage responseReject = await client.PostAsJsonAsync("https://localhost:7255/api/ReasonOrder", reasonOrders);
+            if (response.IsSuccessStatusCode && responseReject.IsSuccessStatusCode)
             {
                 TempData["SuccessToast"] = "Cập nhật thành công";
                 return RedirectToAction("OrderPartnerDetail", new { orderId = orderId });

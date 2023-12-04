@@ -51,14 +51,14 @@ namespace PetServices.Controllers
 
             return Ok(_mapper.Map<List<OrdersDTO>>(orders));
         }
-        /*[HttpGet("ListOrderPetTrainingSpecial")]
-        public async Task<IActionResult> ListOrderPetTrainingSpecial(int serCategoriesId, int partnerInfoId)
+        [HttpGet("ListOrderPartnerSpecial")]
+        public async Task<IActionResult> ListOrderPartnerSpecial(int partnerInfoId)
         {
             List<Order> orders = await _context.Orders
                 .Include(x => x.BookingServicesDetails)
                 .ThenInclude(y => y.Service)
                 .Include(z => z.UserInfo)
-                .Include(q => q.Reason)
+                //.Include(q => q.Reason)
                 .Where(o =>o.BookingServicesDetails.All(b => b.PartnerInfoId == partnerInfoId))
                      .ToListAsync();
 
@@ -73,7 +73,7 @@ namespace PetServices.Controllers
                     .Include(b => b.UserInfo)
                     .Include(b => b.BookingServicesDetails)
                     .ThenInclude(bs => bs.Service)
-                    .Include(a => a.Reason)
+                    .Include(a => a.ReasonOrders)
                     .SingleOrDefaultAsync(b => b.OrderId == orderId);
                 return Ok(_mapper.Map<OrdersDTO>(order));
 
@@ -83,7 +83,7 @@ namespace PetServices.Controllers
                 // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
                 return StatusCode(500, ex.Message);
             }
-        }*/
+        }
         [HttpGet("UpdateOrderStatusReceived")]
         public async Task<IActionResult> UpdateOrderStatusReceived(int orderId, int partnerId)
         {
@@ -117,14 +117,44 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-       /* [HttpGet("UpdateOrderStatusRejected")]
+        [HttpGet("UpdateOrderStatusProcessing")]
+        public async Task<IActionResult> UpdateOrderStatusProcessing(int orderId)
+        {
+            try
+            {
+                Order order = await _context.Orders
+                    .Include(b => b.UserInfo)
+                    .Include(b => b.BookingServicesDetails)
+                    .ThenInclude(bs => bs.Service)
+                    .SingleOrDefaultAsync(b => b.OrderId == orderId);
+                foreach (var bookingDetail in order.BookingServicesDetails)
+                {
+                    if(bookingDetail.StatusOrderService == "Received")
+                    {
+                        bookingDetail.StatusOrderService = "Processing";
+                        bookingDetail.StartTime = DateTime.Now;
+                    }
+                }
+                _context.Update(order);
+                await _context.SaveChangesAsync();
+
+                return Ok(_mapper.Map<OrdersDTO>(order));
+
+            }
+            catch (Exception ex)
+            {
+                // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpGet("UpdateOrderStatusRejected")]
         public async Task<IActionResult> UpdateOrderStatusRejected(int orderId, int reasonId)
         {
             try
             {
                 Order order = await _context.Orders
                     .Include(a => a.BookingServicesDetails)
-                    .Include(a => a.Reason)
+                    .Include(a => a.ReasonOrders)
                     .SingleOrDefaultAsync(b => b.OrderId == orderId);
                 // Kiểm tra booking có tồn tại hay không
                 if (order == null)
@@ -145,7 +175,6 @@ namespace PetServices.Controllers
                     }
                 }
                 order.TotalPrice -= 50000;
-                order.ReasonId = reasonId;
                 _context.Orders.Update(order);
 
                 await _context.SaveChangesAsync();
@@ -156,7 +185,7 @@ namespace PetServices.Controllers
                 // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
                 return StatusCode(500, ex.Message);
             }
-        }*/
+        }
         [HttpGet("UpdateOrderStatusCompleted")]
         public async Task<IActionResult> UpdateOrderStatusCompleted(int orderId)
         {

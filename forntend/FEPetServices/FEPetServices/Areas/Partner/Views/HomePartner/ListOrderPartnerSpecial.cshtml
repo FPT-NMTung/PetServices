@@ -45,7 +45,7 @@
     });
 </script>
 
-<h1>Danh Sách Đơn Hàng Của Nhân Viên</h1>
+<h1>Danh Sách Đơn Hàng Ưu Tiên Của Nhân Viên</h1>
 
 <table id="lists" class="display">
     <thead>
@@ -66,34 +66,35 @@
             int itemCount = 0;
             foreach (var pc in Model)
             {
-                itemCount++;
-                if (pc.OrderStatus.Trim() == "Waiting")
+                foreach (var pcb in pc.BookingServicesDetails)
                 {
-                    <tr>
-                        <td>@itemCount</td>
-                        <td>@pc.UserInfo?.FirstName @pc.UserInfo?.LastName</td>
-                        <td>
-                            @foreach (var bd in pc.BookingServicesDetails)
-                            {
+                    itemCount++;
+                    if (pcb.StatusOrderService.Trim() == "Waiting")
+                    {
+                        <tr>
+                            <td>@itemCount</td>
+                            <td>@pc.UserInfo?.FirstName @pc.UserInfo?.LastName</td>
+                            <td>
                                 <div>
-                                    @bd.Service.ServiceName - @bd.Price.ToString("n0").Replace(",", ".") VNĐ <br>
+                                    @pcb.Service.ServiceName - @pcb.Price.ToString("n0").Replace(",", ".") VNĐ <br>
                                 </div>
-                            }
-                        </td>
-                        <td>@pc.OrderDate</td>
-                        <td>@pc.UserInfo.Phone</td>
-                        <td>
-                            Đang Chờ Nhận Đơn
-                        </td>
-                        <td>
-                            <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
-                        </td>
-                        <td>
-                            <button class="received-button" data-orderid="@pc.OrderId">Nhận Đơn</button>
-                            <button class="rejected-button" data-orderid="@pc.OrderId">Hủy Đơn</button>
-                        </td>
-                    </tr>
+                            </td>
+                            <td>@pc.OrderDate</td>
+                            <td>@pc.UserInfo.Phone</td>
+                            <td>
+                                Đang Chờ Nhận Đơn
+                            </td>
+                            <td>
+                                <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
+                            </td>
+                            <td>
+                                <button class="received-button" data-orderid="@pc.OrderId">Nhận Đơn</button>
+                                <button class="rejected-button" data-orderid="@pc.OrderId">Hủy Đơn</button>
+                            </td>
+                        </tr>
+                    }
                 }
+                
                 
 
             }

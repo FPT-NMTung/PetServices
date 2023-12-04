@@ -10,7 +10,6 @@ namespace PetServices.Models
             Accounts = new HashSet<Account>();
             Orders = new HashSet<Order>();
             PetInfos = new HashSet<PetInfo>();
-            ReasonOrders = new HashSet<ReasonOrder>();
         }
 
         public int UserInfoId { get; set; }
@@ -28,6 +27,5 @@ namespace PetServices.Models
         public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<PetInfo> PetInfos { get; set; }
-        public virtual ICollection<ReasonOrder> ReasonOrders { get; set; }
     }
 }
