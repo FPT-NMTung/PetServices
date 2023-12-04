@@ -29,8 +29,6 @@ namespace PetServices.Controllers
             try
             {
                 List<ReasonOrder> orders = _context.ReasonOrders
-                    .Include(o => o.UserInfo)
-                        .ThenInclude(u => u.Accounts)
                 .ToList();
                 return Ok(_mapper.Map<List<OrdersDTO>>(orders));
             }
@@ -66,9 +64,9 @@ namespace PetServices.Controllers
                     return BadRequest("Dữ liệu không hợp lệ: OrderId phải lớn hơn 0.");
                 }
 
-                if (reasonOrderDTO.UserInfoId <= 0)
+                if (reasonOrderDTO.EmailReject == null)
                 {
-                    return BadRequest("Dữ liệu không hợp lệ: UserInfoId phải lớn hơn 0.");
+                    return BadRequest("Dữ liệu không hợp lệ: Email hủy đơn là bắt buộc.");
                 }
 
                 var reasonOrder = new ReasonOrder
@@ -76,7 +74,8 @@ namespace PetServices.Controllers
                     ReasonOrderTitle = reasonOrderDTO.ReasonOrderTitle,
                     ReasonOrderDescription = reasonOrderDTO.ReasonOrderDescription,
                     OrderId = reasonOrderDTO.OrderId,
-                    UserInfoId = reasonOrderDTO.UserInfoId,
+                    EmailReject = reasonOrderDTO.EmailReject,
+                    RejectTime = DateTime.Now,
                 };
 
                 _context.ReasonOrders.Add(reasonOrder);

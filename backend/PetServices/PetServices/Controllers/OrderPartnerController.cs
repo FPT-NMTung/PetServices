@@ -73,7 +73,7 @@ namespace PetServices.Controllers
                     .Include(b => b.UserInfo)
                     .Include(b => b.BookingServicesDetails)
                     .ThenInclude(bs => bs.Service)
-                    //.Include(a => a.Reason)
+                    .Include(a => a.ReasonOrders)
                     .SingleOrDefaultAsync(b => b.OrderId == orderId);
                 return Ok(_mapper.Map<OrdersDTO>(order));
 
@@ -132,6 +132,7 @@ namespace PetServices.Controllers
                     if(bookingDetail.StatusOrderService == "Received")
                     {
                         bookingDetail.StatusOrderService = "Processing";
+                        bookingDetail.StartTime = DateTime.Now;
                     }
                 }
                 _context.Update(order);
@@ -153,7 +154,7 @@ namespace PetServices.Controllers
             {
                 Order order = await _context.Orders
                     .Include(a => a.BookingServicesDetails)
-                    //.Include(a => a.Reason)
+                    .Include(a => a.ReasonOrders)
                     .SingleOrDefaultAsync(b => b.OrderId == orderId);
                 // Kiểm tra booking có tồn tại hay không
                 if (order == null)
@@ -174,7 +175,6 @@ namespace PetServices.Controllers
                     }
                 }
                 order.TotalPrice -= 50000;
-                //order.ReasonId = reasonId;
                 _context.Orders.Update(order);
 
                 await _context.SaveChangesAsync();
