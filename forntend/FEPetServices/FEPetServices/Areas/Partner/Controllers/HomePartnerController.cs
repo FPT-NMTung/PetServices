@@ -293,12 +293,12 @@ namespace FEPetServices.Areas.Partner.Controllers
         public async Task<IActionResult> OrderPartnerDetail(int orderId)
         {
             //HttpResponseMessage reasonResponse = await client.GetAsync("https://localhost:7255/api/Reason/GetAll");
-            HttpResponseMessage reasonResponse = await client.GetAsync(DefaultApiUrl + "Reason/GetAll");
-            if (reasonResponse.IsSuccessStatusCode)
-            {
-                var reaCategories = await reasonResponse.Content.ReadFromJsonAsync<List<ReasonDTO>>();
-                ViewBag.Reasons = new SelectList(reaCategories, "ReasonId", "ReasonTitle");
-            }
+            //HttpResponseMessage reasonResponse = await client.GetAsync(DefaultApiUrl + "Reason/GetAll");
+            //if (reasonResponse.IsSuccessStatusCode)
+            //{
+            //    var reaCategories = await reasonResponse.Content.ReadFromJsonAsync<List<ReasonDTO>>();
+            //    ViewBag.Reasons = new SelectList(reaCategories, "ReasonId", "ReasonTitle");
+            //}
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/" + orderId);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderPartner + "/" + orderId);
             if (response.IsSuccessStatusCode)
