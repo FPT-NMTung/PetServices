@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = "ManaOnly")]
     public class DashBoardController : Controller
     {

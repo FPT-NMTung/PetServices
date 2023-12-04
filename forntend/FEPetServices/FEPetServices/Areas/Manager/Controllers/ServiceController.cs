@@ -53,7 +53,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var serviceList = JsonConvert.DeserializeObject<List<ServiceDTO>>(responseContent);
-                        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                        //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                         return View(serviceList);
                     }
                     else
@@ -200,7 +200,6 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 if (image != null && image.Length > 0)
                 {
-                    // Handle the case when a new image is uploaded
                     var imagePath = "/img/Service/" + image.FileName;
                     service.Picture = imagePath;
 
@@ -212,10 +211,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
                 else
                 {
-                    // Handle the case when no new image is uploaded
                     HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrl + "Service/ServiceID/" + ServiceId);
-                    //HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrlServiceDetail + "/" + ServiceId);
-
                     if (responseForImage.IsSuccessStatusCode)
                     {
                         var responseContent = await responseForImage.Content.ReadAsStringAsync();
@@ -223,10 +219,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                         if (!string.IsNullOrEmpty(responseContent))
                         {
                             var existingServiceCategory = JsonConvert.DeserializeObject<ServiceDTO>(responseContent);
-                            /*var existingServiceCategory = existingServiceCategoryList.FirstOrDefault();*/
                             if (existingServiceCategory != null)
                             {
-                                // Assign the existing image path to service.Picture.
                                 service.Picture = existingServiceCategory.Picture;
                             }
                         }

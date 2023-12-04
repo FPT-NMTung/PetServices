@@ -36,8 +36,8 @@ namespace FEPetServices.Controllers
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
 
-            /*DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
-            DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";*/
+            DefaultApiUrl = "https://localhost:7255/api/";
+            //DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";
         }
 
         [HttpGet]
@@ -134,7 +134,7 @@ namespace FEPetServices.Controllers
                 OrderForm order = new OrderForm
                 {
                     OrderDate = dateOrder,
-                    OrderStatus = "Waiting",
+                    OrderStatus = "Placed",
                     Province = orderform.Province,
                     District = orderform.District,
                     Commune = orderform.Commune,
@@ -157,7 +157,8 @@ namespace FEPetServices.Controllers
                         {
                             Quantity = cartItem.quantityProduct,
                             Price = cartItem.product.Price,
-                            ProductId = cartItem.product.ProductId
+                            ProductId = cartItem.product.ProductId,
+                            StatusOrderProduct = "Placed",
                         };
                         order.OrderProductDetails.Add(orderProductDetail);
                         totalPrice = totalPrice + (double)(cartItem.quantityProduct * cartItem.product.Price);
@@ -173,6 +174,7 @@ namespace FEPetServices.Controllers
                             PartnerInfoId = cartItem.PartnerInfoId,
                             StartTime = cartItem.StartTime,
                             EndTime = cartItem.EndTime,
+                            StatusOrderService = "Placed"
                         };
                         order.BookingServicesDetails.Add(bookingServicesDetail);
                         totalPrice = totalPrice + (double)cartItem.PriceService;

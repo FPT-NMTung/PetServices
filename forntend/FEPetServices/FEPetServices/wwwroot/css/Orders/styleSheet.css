@@ -221,6 +221,25 @@ content-detail-time-service {
     display: flex;
     justify-content: center;
 }
+
+.status-content-detail {
+    display: flex;
+    justify-content: space-between;
+    justify-content:end;
+    margin: 10px 0;
+}
+
+.search-order{
+    display :flex;
+    flex-direction:column;
+    padding:20px;
+}
+.search-order input {
+    border-radius: 10px;
+    padding: 2%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
 /* Responsive Styles */
 @media (max-width: 768px) {
     .timeline-icon {

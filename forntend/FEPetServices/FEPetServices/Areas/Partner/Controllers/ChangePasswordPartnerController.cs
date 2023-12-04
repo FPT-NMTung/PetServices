@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Partner.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = "PartnerOnly")]
     public class ChangePasswordPartnerController : Controller
     {
