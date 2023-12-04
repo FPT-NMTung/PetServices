@@ -84,9 +84,9 @@ namespace FEPetServices.Controllers
             public ServiceDTO service { set; get; }
             // Room
         }
+
         List<CartItem> GetCartItems()
         {
-
             var session = HttpContext.Session;
             string jsoncart = session.GetString(CARTKEY);
             if (jsoncart != null)
@@ -99,7 +99,6 @@ namespace FEPetServices.Controllers
         [HttpPost]
         public async Task<IActionResult> Index([FromForm] OrderForm orderform, string payment)
         {
-
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
@@ -270,38 +269,5 @@ namespace FEPetServices.Controllers
             var session = HttpContext.Session;
             session.Remove(CARTKEY);
         }
-
-      /*  public void Payment(double price, DateTime orderDate, int orderId)
-        {
-            string vnp_Returnurl = _vnpConfiguration.ReturnUrl;  // Use the configured value
-            string vnp_Url = _vnpConfiguration.Url;  // Use the configured value
-            string vnp_TmnCode = _vnpConfiguration.TmnCode;  // Use the configured value
-            string vnp_HashSecret = _vnpConfiguration.HashSecret;  // Use the configured value
-
-            VnPayLibrary vnpay = new VnPayLibrary();
-
-            vnpay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
-            vnpay.AddRequestData("vnp_Command", "pay");
-            vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
-            vnpay.AddRequestData("vnp_Amount", (price * 100).ToString());
-
-            vnpay.AddRequestData("vnp_BankCode", "VNBANK");
-
-            vnpay.AddRequestData("vnp_CreateDate", orderDate.ToString("yyyyMMddHHmmss"));
-            vnpay.AddRequestData("vnp_CurrCode", "VND");
-            vnpay.AddRequestData("vnp_IpAddr", _utils.GetIpAddress());
-
-            vnpay.AddRequestData("vnp_Locale", "vn");
-
-            vnpay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang:" + orderId);
-            vnpay.AddRequestData("vnp_OrderType", "other");
-
-            vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
-            vnpay.AddRequestData("vnp_TxnRef", orderId.ToString());
-
-            string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
-
-            return(paymentUrl);
-        }*/
     }
 }
