@@ -43,10 +43,10 @@ namespace PetServices.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var conf = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(conf.GetConnectionString("DbConnection"));
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("server=tcp:pet-services.database.windows.net,1433;Initial Catalog=PetServices;User ID=hungnv;Password=Hung@123;Integrated security=false");
             }
         }
 
@@ -441,19 +441,16 @@ namespace PetServices.Models
                     .ValueGeneratedNever()
                     .HasColumnName("ReasonOrderID");
 
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+                entity.Property(e => e.EmailReject)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.UserInfoId).HasColumnName("UserInfoID");
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.ReasonOrders)
                     .HasForeignKey(d => d.OrderId)
                     .HasConstraintName("FK_ReasonOrders_Orders");
-
-                entity.HasOne(d => d.UserInfo)
-                    .WithMany(p => p.ReasonOrders)
-                    .HasForeignKey(d => d.UserInfoId)
-                    .HasConstraintName("FK_ReasonOrders_UserInfo");
             });
 
             modelBuilder.Entity<Role>(entity =>
