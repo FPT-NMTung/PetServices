@@ -31,7 +31,6 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            //https://localhost:7255/api/Order/getOrderRoom
             HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Order/getOrderRoom");
             if (response.IsSuccessStatusCode)
             {

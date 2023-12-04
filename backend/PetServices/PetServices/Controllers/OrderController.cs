@@ -315,7 +315,7 @@ namespace PetServices.Controllers
                 }
 
                 order.OrderStatus = status.newStatus;
-
+                    
                 if (order.OrderProductDetails != null)
                 {
                     foreach (var dto in order.OrderProductDetails)
@@ -337,14 +337,39 @@ namespace PetServices.Controllers
                         }
                     }
                 }
-
-                // Update the order and its related details
+                        
                 _context.Orders.Update(order);
                 _context.OrderProductDetails.UpdateRange(order.OrderProductDetails);
                 _context.BookingServicesDetails.UpdateRange(order.BookingServicesDetails);
 
                 await _context.SaveChangesAsync();
 
+                if (order.OrderProductDetails.Count() > 0 && order.BookingServicesDetails.Count() == 0)
+                {
+                    foreach (var dto in order.OrderProductDetails)
+                    {
+                        if (status.newStatusProduct == "Delivered")
+                        {
+                            if(order.StatusPayment == false) 
+                            {
+                                order.StatusPayment = !order.StatusPayment;
+                            }
+                            order.OrderStatus = "Completed";
+                        }
+                    }
+                }
+
+                if (order.OrderProductDetails.Count() == 0 && order.BookingServicesDetails.Count() > 0)
+                { 
+                }
+
+                if (order.OrderProductDetails.Count() > 0 && order.BookingServicesDetails.Count() > 0)
+                {
+
+                }
+
+                _context.Orders.Update(order);
+                await _context.SaveChangesAsync();
                 return Ok("Đổi trạng thái thành công");
             }
             catch (Exception ex)
