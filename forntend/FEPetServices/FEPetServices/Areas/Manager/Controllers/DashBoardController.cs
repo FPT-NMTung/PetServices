@@ -27,6 +27,12 @@ namespace FEPetServices.Areas.Manager.Controllers
 
         public async Task<IActionResult> Index()
         {
+            DashBoard dashboard = new DashBoard
+            {
+                FeedbackRoom = new List<FeedbackForm>(),
+                FeedbackService = new List<FeedbackForm>(),
+                FeedbackProduct = new List<FeedbackForm>()
+            };
             try
             {
                 // số khách hàng mới trong tháng 
@@ -184,18 +190,51 @@ namespace FEPetServices.Areas.Manager.Controllers
                     var Top5CustomerArea = await Top5CustomerAreaResponse.Content.ReadFromJsonAsync<List<Quantity_RatioForm>>();
                     ViewBag.Top5CustomerArea = new SelectList(Top5CustomerArea, "date", "quantity");
                 }
+
+
+                // đánh giá của khách hàng về các phòng
+                HttpResponseMessage FeedbackOfRoomResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetFeedbackOfRoom");
+
+                if (FeedbackOfRoomResponse.IsSuccessStatusCode)
+                {
+                    var FeedbackOfRoom = await FeedbackOfRoomResponse.Content.ReadFromJsonAsync<List<FeedbackForm>>();
+
+                    dashboard.FeedbackRoom = FeedbackOfRoom;
+                }
+
+                // đánh giá của khách hàng về các sản phẩm
+                HttpResponseMessage FeedbackOfProductResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetFeedbackOfProduct");
+
+                if (FeedbackOfProductResponse.IsSuccessStatusCode)
+                {
+                    var FeedbackOfProduct = await FeedbackOfProductResponse.Content.ReadFromJsonAsync<List<FeedbackForm>>();
+
+                    dashboard.FeedbackProduct = FeedbackOfProduct;
+                }
+
+                // đánh giá của khách hàng về các dịch vụ
+                HttpResponseMessage FeedbackOfServiceResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetFeedbackOfService");
+
+                if (FeedbackOfServiceResponse.IsSuccessStatusCode)
+                {
+                    var FeedbackOfService = await FeedbackOfServiceResponse.Content.ReadFromJsonAsync<List<FeedbackForm>>();
+
+                    dashboard.FeedbackService = FeedbackOfService;
+                }
             }
             catch (Exception ex)
             {
                 ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
             }
 
-            return View();
+            return View(dashboard);
         }
 
         public class DashBoard
         {
-            
+            public List<FeedbackForm>? FeedbackRoom { get; set; }
+            public List<FeedbackForm>? FeedbackService { get; set; }
+            public List<FeedbackForm>? FeedbackProduct { get; set; }
         }
     }
 }
