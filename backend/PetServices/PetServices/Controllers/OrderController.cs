@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
 using PetServices.Form;
 using PetServices.Models;
-using System.Numerics;
 using System.Text.RegularExpressions;
 
 namespace PetServices.Controllers
@@ -550,6 +548,7 @@ namespace PetServices.Controllers
                     return BadRequest("Số lượng sản phẩm không đủ");
                 }
             }
+
             double priceProduct = 0;
             double priceRoom = 0;
             double allTotalPrice = 0;

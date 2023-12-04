@@ -33,9 +33,9 @@ namespace FEPetServices.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
             /*DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Product";*/
-            DefaultApiUrl = "https://localhost:7255/api/";
+            //DefaultApiUrl = "https://localhost:7255/api/";
         }
         public class CartItem
         {
