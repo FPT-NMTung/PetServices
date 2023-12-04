@@ -43,10 +43,10 @@ namespace PetServices.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            var conf = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=tcp:pet-services.database.windows.net,1433;Initial Catalog=PetServices;User ID=hungnv;Password=Hung@123;Integrated security=false");
+                optionsBuilder.UseSqlServer(conf.GetConnectionString("DbConnection"));
             }
         }
 
@@ -446,6 +446,8 @@ namespace PetServices.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.Property(e => e.RejectTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.ReasonOrders)

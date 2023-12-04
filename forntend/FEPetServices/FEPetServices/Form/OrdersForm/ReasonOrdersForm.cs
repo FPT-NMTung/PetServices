@@ -7,5 +7,6 @@
         public string? ReasonOrderDescription { get; set; }
         public int? OrderId { get; set; }
         public string? EmailReject { get; set; }
+        public DateTime? RejectTime { get; set; }
     }
 }

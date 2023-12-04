@@ -75,6 +75,7 @@ namespace PetServices.Controllers
                     ReasonOrderDescription = reasonOrderDTO.ReasonOrderDescription,
                     OrderId = reasonOrderDTO.OrderId,
                     EmailReject = reasonOrderDTO.EmailReject,
+                    RejectTime = DateTime.Now,
                 };
 
                 _context.ReasonOrders.Add(reasonOrder);
