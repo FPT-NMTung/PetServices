@@ -159,7 +159,6 @@ namespace FEPetServices.Controllers
                         OrderForm orderLatest = System.Text.Json.JsonSerializer.Deserialize<OrderForm>(responseContent, options);
                         orderLatestID = orderLatest.OrderId;
 
-                        //https://localhost:7255/api/Order/delete/123
                         if(orderLatest.BookingRoomDetails.Count() > 0 && orderLatest.BookingServicesDetails.Count() == 0 
                             && orderLatest.OrderProductDetails.Count() == 0)
                         {
@@ -168,19 +167,7 @@ namespace FEPetServices.Controllers
                             {
                                 checkRoom = true;
                             }
-                            else
-                            {
-                                return View("/Eroorr");
-                            }
                         }
-                        else
-                        {
-                            return View("/Eroorr");
-                        }
-                    }
-                    else
-                    {
-                        return View("/Eroorr");
                     }
 
                     ClearCart();
