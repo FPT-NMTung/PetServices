@@ -114,6 +114,10 @@
                                             else if (productDetail?.StatusOrderProduct?.Trim() == "Packaging")
                                             {
                                                 <span class="badge badge-info">Đóng gói sản phẩm</span>
+                                            } 
+                                            else if (productDetail?.StatusOrderProduct?.Trim() == "Shipped")
+                                            {
+                                                <span class="badge badge-info">Đơn hàng đang được vận chuyển</span>
                                             }
                                         </div>
                                     </td>
