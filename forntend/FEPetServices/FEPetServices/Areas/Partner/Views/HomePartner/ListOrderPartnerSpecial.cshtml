@@ -75,12 +75,9 @@
                             <td>@itemCount</td>
                             <td>@pc.UserInfo?.FirstName @pc.UserInfo?.LastName</td>
                             <td>
-                                @foreach (var bd in pc.BookingServicesDetails)
-                                {
-                                    <div>
-                                        @bd.Service.ServiceName - @bd.Price.ToString("n0").Replace(",", ".") VNĐ <br>
-                                    </div>
-                                }
+                                <div>
+                                    @pcb.Service.ServiceName - @pcb.Price.ToString("n0").Replace(",", ".") VNĐ <br>
+                                </div>
                             </td>
                             <td>@pc.OrderDate</td>
                             <td>@pc.UserInfo.Phone</td>

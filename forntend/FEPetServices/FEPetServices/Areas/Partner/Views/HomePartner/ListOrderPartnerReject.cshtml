@@ -66,45 +66,37 @@
             int itemCount = 0;
             foreach (var pc in Model)
             {
-                itemCount++;
-                if (pc.OrderStatus.Trim() == "Rejected")
+                @foreach (var bd in pc.BookingServicesDetails)
                 {
-                    <tr>
-                        <td>@itemCount</td>
-                        @*<td><img src="@pc.UserInfoId" width="50" height="50"></td>*@
-                        <td>@pc.UserInfo?.FirstName @pc.UserInfo?.LastName</td>
-                        <td>
-                            @foreach (var bd in pc.BookingServicesDetails)
-                            {
+                    itemCount++;
+                    if (pc.OrderStatus.Trim() == "Rejected")
+                    {
+                        <tr>
+                            <td>@itemCount</td>
+                            @*<td><img src="@pc.UserInfoId" width="50" height="50"></td>*@
+                            <td>@pc.UserInfo?.FirstName @pc.UserInfo?.LastName</td>
+                            <td>
                                 <div>
                                     @bd.Service.ServiceName - @bd.Price.ToString("n0").Replace(",", ".") VNĐ <br>
                                 </div>
-                            }
-                        </td>
-                        <td>@pc.OrderDate</td>
-                        <td>@pc.UserInfo.Phone</td>
-                        <td>
-                            Đơn hàng đã bị hủy
-                        </td>
-                        <td>
-                            <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
-                        </td>
-                        <td>
-                            <a href="/Partner/HomePartner/Detail?orderId=@pc.OrderId">Nhận Đơn</a>
-                            <a href="/Partner/HomePartner/Detail?orderId=@pc.OrderId">Hủy Đơn</a>
-                        </td>
-                    </tr>
+                            </td>
+                            <td>@pc.OrderDate</td>
+                            <td>@pc.UserInfo.Phone</td>
+                            <td>
+                                Đơn hàng đã bị hủy
+                            </td>
+                            <td>
+                                <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
+                            </td>
+                            <td>
+                                <a href="/Partner/HomePartner/Detail?orderId=@pc.OrderId">Nhận Đơn</a>
+                                <a href="/Partner/HomePartner/Detail?orderId=@pc.OrderId">Hủy Đơn</a>
+                            </td>
+                        </tr>
+                    }
                 }
-
-
             }
         }
-        @*        else
-        {
-        <tr>
-        <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
-        </tr>
-        }*@
     </tbody>
     <tfoot>
         @if (ViewBag.ErrorMessage != null)

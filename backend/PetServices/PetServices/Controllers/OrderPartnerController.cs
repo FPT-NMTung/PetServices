@@ -132,6 +132,7 @@ namespace PetServices.Controllers
                     if(bookingDetail.StatusOrderService == "Received")
                     {
                         bookingDetail.StatusOrderService = "Processing";
+                        bookingDetail.StartTime = DateTime.Now;
                     }
                 }
                 _context.Update(order);
