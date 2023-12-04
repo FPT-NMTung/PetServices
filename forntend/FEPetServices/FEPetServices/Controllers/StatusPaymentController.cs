@@ -37,7 +37,6 @@ namespace FEPetServices.Controllers
             //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
 
             DefaultApiUrl = "https://localhost:7255/api/";
-            /*DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";*/
         }
 
         public const string CARTKEY = "cart";
@@ -75,7 +74,6 @@ namespace FEPetServices.Controllers
 
             foreach (var queryParameter in vnpayData)
             {
-                //get all query string data
                 if (!string.IsNullOrEmpty(queryParameter.Key) && queryParameter.Key.StartsWith("vnp_"))
                 {
                     vnpay.AddResponseData(queryParameter.Key, queryParameter.Value);
@@ -132,7 +130,7 @@ namespace FEPetServices.Controllers
                         if(orderLatest.BookingRoomDetails.Count() > 0 && orderLatest.BookingServicesDetails.Count() == 0 
                             && orderLatest.OrderProductDetails.Count() == 0)
                         {
-                            HttpResponseMessage responseDeleteOrder = await _client.DeleteAsync("https://localhost:7255/api/" + "Order/delete/" + orderLatestID);
+                            HttpResponseMessage responseDeleteOrder = await _client.DeleteAsync(DefaultApiUrl + "Order/delete/" + orderLatestID);
                             if (responseDeleteOrder.IsSuccessStatusCode)
                             {
                                 checkRoom = true;

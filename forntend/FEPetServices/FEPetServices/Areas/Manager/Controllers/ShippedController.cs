@@ -36,8 +36,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 };
 
                 List<OrderForm> orderLists = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options)
-                  .Where(order => order.OrderStatus.Trim() == "Confirmed")
-                  .ToList();
+                  .Where(order => order.OrderProductDetails.Count() > 0)
+                  .ToList();    
                 return View(orderLists);
             }
             else
