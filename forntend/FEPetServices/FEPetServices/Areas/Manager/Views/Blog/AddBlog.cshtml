@@ -52,21 +52,21 @@
         <div class="form-group">
             <label>Tag <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i></label>
              <div class="service-container">
-                        @if (ViewBag.Tag != null)
-                        {
-                            @foreach (var tag in ViewBag.Tag)
+                            @if (ViewBag.Tag != null)
                             {
-                                <div>
-                                    <input type="checkbox" id="@tag.Value" name="SelectedTag" value="@tag.Value">
-                                    <label for="@tag.Value"></label>
-                                    <p>@tag.Text</p>
-                                </div>
+                                @foreach (var tag in ViewBag.Tag)
+                                {
+                                        <div>
+                                            <input type="checkbox" id="@tag.Value" name="SelectedTag" value="@tag.Value">
+                                            <label for="@tag.Value"></label>
+                                            <p>@tag.Text</p>
+                                        </div>
+                                }
                             }
-                        }
-                        else
-                        {
-                            <span class="text-danger">Lỗi: Dữ liệu không khả dụng.</span>
-                        }
+                            else
+                            {
+                                <span class="text-danger">Lỗi: Dữ liệu không khả dụng.</span>
+                            }
                     </div>
         </div>
         <div class="form-group">

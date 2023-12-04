@@ -80,7 +80,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             {
                 if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
                 {
-                    if (blog.PageTile == null) { return View(); }
+                   
                     HttpResponseMessage TagResponse = await client.GetAsync("https://localhost:7255/api/Tag/GetAllTag");
 
                     if (TagResponse.IsSuccessStatusCode)
@@ -90,10 +90,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                         ViewBag.Tag = new SelectList(tag, "TagId", "TagName");
                     }
-                    var selectedtags = Request.Form["SelectedTag"];
-                    blog.TagIds = !string.IsNullOrEmpty(selectedtags)
-                        ? selectedtags.ToString().Split(',').Select(int.Parse).ToList()
-                        : new List<int>();
+                   
                     foreach (var file in image)
                     {
                         string filename = GenerateRandomNumber(5) + file.FileName;
@@ -116,12 +113,12 @@ namespace FEPetServices.Areas.Manager.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         TempData["SuccessToast"] = "Thêm bài viết thành công!";
-                        return View(blog); 
+                        return View(blog);
                     }
                     else
                     {
                         TempData["ErrorToast"] = "Thêm bài viết thất bại. Vui lòng thử lại sau.";
-                        return View(blog); 
+                        return View(blog);
                     }
                 }
                 else
@@ -132,14 +129,14 @@ namespace FEPetServices.Areas.Manager.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
-                return View(blog); 
+                return View(blog);
             }
         }
 
         public static string GenerateRandomNumber(int length)
         {
             Random random = new Random();
-            const string chars = "0123456789"; 
+            const string chars = "0123456789";
             char[] randomChars = new char[length];
 
             for (int i = 0; i < length; i++)
@@ -240,7 +237,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     blog.ImageUrl = imagePath;
 
                     // Save the image file to a folder on your server
-                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img","Blog", image.FileName);
+                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "Blog", image.FileName);
                     using (var stream = new FileStream(physicalImagePath, FileMode.Create))
                     {
                         await image.CopyToAsync(stream);

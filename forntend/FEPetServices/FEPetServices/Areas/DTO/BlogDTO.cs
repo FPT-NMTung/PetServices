@@ -10,6 +10,6 @@
         public bool? Status { get; set; }
         public string? ImageUrl { get; set; }
         public DateTime? PublisheDate { get; set; }
-        public List<int>? TagIds { get; set; }
+        public int? TagId { get; set; }
     }
 }
