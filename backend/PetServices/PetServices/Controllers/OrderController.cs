@@ -22,7 +22,7 @@ namespace PetServices.Controllers
         {
             _context = context;
             _mapper = mapper;
-            _configuration = configuration;
+            _configuration = configuration; 
         }
 
         #region Get
@@ -132,14 +132,14 @@ namespace PetServices.Controllers
             try
             {
                 IQueryable<Order> query = _context.Orders
-                   .Include(o => o.UserInfo)
+                    .Include(o => o.UserInfo)
                         .ThenInclude(u => u.Accounts)
                     .Include(b => b.OrderProductDetails)
                         .ThenInclude(o => o.Product)
                     .Include(b => b.BookingServicesDetails)
                         .ThenInclude(bs => bs.Service)
                      .Include(b => b.BookingServicesDetails)
-                        .ThenInclude(s => s.PartnerInfo)
+                            .ThenInclude(s => s.PartnerInfo)
                     .Include(b => b.BookingRoomDetails)
                         .ThenInclude(br => br.Room)
                     .Include(b => b.BookingRoomServices)
@@ -188,7 +188,7 @@ namespace PetServices.Controllers
                     .Include(b => b.BookingServicesDetails)
                         .ThenInclude(bs => bs.Service)
                      .Include(b => b.BookingServicesDetails)
-                        .ThenInclude(s => s.PartnerInfo)
+                            .ThenInclude(s => s.PartnerInfo)
                     .Include(b => b.BookingRoomDetails)
                         .ThenInclude(br => br.Room)
                     .Include(b => b.BookingRoomServices)
@@ -322,7 +322,10 @@ namespace PetServices.Controllers
                 {
                     foreach (var dto in order.OrderProductDetails)
                     {
-                        dto.StatusOrderProduct = status.newStatusProduct;
+                        if (!string.IsNullOrEmpty(status.newStatusProduct))
+                        {
+                            dto.StatusOrderProduct = status.newStatusProduct;
+                        }
                     }
                 }
 
@@ -330,7 +333,10 @@ namespace PetServices.Controllers
                 {
                     foreach (var dto in order.BookingServicesDetails)
                     {
-                        dto.StatusOrderService = status.newStatusService;
+                        if (!string.IsNullOrEmpty(status.newStatusService))
+                        {
+                            dto.StatusOrderService = status.newStatusService;
+                        }
                     }
                 }
 
