@@ -1,0 +1,18 @@
+﻿.random-cat {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    animation: catChange 20s linear infinite;
+}
+
+@keyframes catChange {
+    0%, 25%, 50%, 75%, 100% {
+        opacity: 0;
+    }
+
+    20%, 45%, 70%, 95% {
+        opacity: 1;
+    }
+}

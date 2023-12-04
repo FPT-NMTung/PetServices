@@ -13,7 +13,7 @@
         <form method="post" asp-action="EditRoom" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div class="row">
                 <div class="col-25">
-                    <label for="RoomName">Tên Loại Phòng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                    <label for="RoomName">Tên Phòng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                 </div>
                 <div class="col-75">
                     <input type="text" id="RoomName" name="RoomName" value="@Model.RoomName" placeholder="Tên loại phòng...">
@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="col-75">
-                    <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px">
+                    <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" accept="image/*">
                     <img src="@Model?.Picture" style="float: left; height:100px; width:100px;" id="imagePreview">
                 </div>
             </div>
@@ -136,9 +136,12 @@
     </div>
     <script src="~/js/Room.js"></script>
     <style>
-.fa-asterisk{
-    color:red;
-}
+.fa-asterisk {
+            color: red;
+            font-size:6px;
+            padding-top:20px;
+            margin-right:10px;
+        }
 </style>
 </body>
 </html>

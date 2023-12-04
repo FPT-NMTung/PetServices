@@ -1,5 +1,6 @@
 ﻿using FEPetServices.Areas.DTO;
 using FEPetServices.Form;
+using FEPetServices.Models.ErrorResult;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -329,6 +330,11 @@ namespace FEPetServices.Controllers
                     PropertyNameCaseInsensitive = true
                 };
                 product = System.Text.Json.JsonSerializer.Deserialize<ProductDTO>(responseContent, option);
+            }
+
+            if (product.Quantity < quantityProduct)
+            {
+                return new ErrorResult("Số lượng đặt hàng vượt quá số lượng sản phẩm còn lại");
             }
 
             if (product != null)

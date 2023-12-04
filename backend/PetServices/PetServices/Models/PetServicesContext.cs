@@ -32,11 +32,13 @@ namespace PetServices.Models
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductCategory> ProductCategories { get; set; } = null!;
         public virtual DbSet<Reason> Reasons { get; set; } = null!;
+        public virtual DbSet<ReasonOrder> ReasonOrders { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Room> Rooms { get; set; } = null!;
         public virtual DbSet<RoomCategory> RoomCategories { get; set; } = null!;
         public virtual DbSet<Service> Services { get; set; } = null!;
         public virtual DbSet<ServiceCategory> ServiceCategories { get; set; } = null!;
+        public virtual DbSet<Tag> Tags { get; set; } = null!;
         public virtual DbSet<UserInfo> UserInfos { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -104,6 +106,11 @@ namespace PetServices.Models
                 entity.Property(e => e.PublisheDate).HasColumnType("date");
 
                 entity.Property(e => e.TagId).HasColumnName("TagID");
+
+                entity.HasOne(d => d.Tag)
+                    .WithMany(p => p.Blogs)
+                    .HasForeignKey(d => d.TagId)
+                    .HasConstraintName("FK_Blogs_Tags");
             });
 
             modelBuilder.Entity<BookingRoomDetail>(entity =>
@@ -245,16 +252,9 @@ namespace PetServices.Models
 
                 entity.Property(e => e.Province).HasMaxLength(500);
 
-                entity.Property(e => e.ReasonId).HasColumnName("ReasonID");
-
                 entity.Property(e => e.TypePay).HasMaxLength(500);
 
                 entity.Property(e => e.UserInfoId).HasColumnName("UserInfoID");
-
-                entity.HasOne(d => d.Reason)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.ReasonId)
-                    .HasConstraintName("FK_Orders_Reason");
 
                 entity.HasOne(d => d.UserInfo)
                     .WithMany(p => p.Orders)
@@ -407,6 +407,8 @@ namespace PetServices.Models
 
                 entity.Property(e => e.ProductName).HasMaxLength(500);
 
+                entity.Property(e => e.UpdateDate).HasColumnType("date");
+
                 entity.HasOne(d => d.ProCategories)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.ProCategoriesId)
@@ -431,6 +433,27 @@ namespace PetServices.Models
                 entity.ToTable("Reason");
 
                 entity.Property(e => e.ReasonId).HasColumnName("ReasonID");
+            });
+
+            modelBuilder.Entity<ReasonOrder>(entity =>
+            {
+                entity.Property(e => e.ReasonOrderId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ReasonOrderID");
+
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.Property(e => e.UserInfoId).HasColumnName("UserInfoID");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.ReasonOrders)
+                    .HasForeignKey(d => d.OrderId)
+                    .HasConstraintName("FK_ReasonOrders_Orders");
+
+                entity.HasOne(d => d.UserInfo)
+                    .WithMany(p => p.ReasonOrders)
+                    .HasForeignKey(d => d.UserInfoId)
+                    .HasConstraintName("FK_ReasonOrders_UserInfo");
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -513,6 +536,11 @@ namespace PetServices.Models
                 entity.Property(e => e.Picture).HasMaxLength(500);
 
                 entity.Property(e => e.SerCategoriesName).HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<Tag>(entity =>
+            {
+                entity.Property(e => e.TagId).HasColumnName("TagID");
             });
 
             modelBuilder.Entity<UserInfo>(entity =>

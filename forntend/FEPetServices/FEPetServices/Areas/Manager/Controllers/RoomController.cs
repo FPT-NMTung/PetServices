@@ -56,7 +56,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                     if (!string.IsNullOrEmpty(responseContent))
                     {
-                        TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
+                        //TempData["SuccessLoadingDataToast"] = "Lấy dữ liệu thành công";
                         var roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(responseContent);
 
                         return View(roomList);

@@ -114,6 +114,25 @@ namespace PetServices.Controllers
             }
             return Ok(pet);
         }
+        [HttpDelete]
+        public IActionResult DeleteServce(int petId)
+        {
+            var pet = _context.PetInfos.FirstOrDefault(p => p.PetInfoId == petId);
+            if (petId == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                _context.PetInfos.Remove(pet);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Conflict();
+            }
+            return Ok(petId);
+        }
 
 
     }

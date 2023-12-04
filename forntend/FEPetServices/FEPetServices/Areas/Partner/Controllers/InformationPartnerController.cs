@@ -7,6 +7,7 @@ using System.Text.Json;
 
 namespace FEPetServices.Areas.Partner.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = "PartnerOnly")]
     public class InformationPartnerController : Controller
     {
@@ -102,7 +103,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
             else
             {
-                HttpResponseMessage responseUser = await _client.GetAsync("https://pet-service-api.azurewebsites.net/api/Partner/" + email);
+                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "Partner/" + email);
                 if (responseUser.IsSuccessStatusCode)
                 {
                     string responseContent = await responseUser.Content.ReadAsStringAsync();

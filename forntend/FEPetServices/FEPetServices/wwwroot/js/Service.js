@@ -6,10 +6,7 @@
     const fnameErrorMessage = document.getElementById('fname-error-message');
     const timeErrorMessage = document.getElementById('time-error-message');
     const priceErrorMessage = document.getElementById('price-error-message');
-    const subjectErrorMessage = document.getElementById('subject-error-message');
-
-    console.log('Debug: fname.value', name.value);
-    console.log('Debug: subject.value', desciptions.value);
+   /* const subjectErrorMessage = document.getElementById('subject-error-message');*/
 
     const specialChars = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/; // Special character regex
     const specialChar = /[@#$%^&*{}\[\]~]/;
@@ -31,7 +28,7 @@
     if (!numbersOnly.test(price.value)) {
         priceErrorMessage.textContent = "Giá phải là số dương.";
         isValid = false;
-    } if {
+    } else {
         const priceValue = parseInt(price.value);
         if (priceValue <= 0) {
             priceErrorMessage.textContent = "Giá phải là số dương.";

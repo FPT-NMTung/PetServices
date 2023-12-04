@@ -40,19 +40,18 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpGet("ListOrderPetTraining")]
-        public async Task<IActionResult> ListOrderPetTraining(int serCategoriesId)
+        [HttpGet("ListOrderPartner")]
+        public async Task<IActionResult> ListOrderPartner()
         {
             List<Order> orders = await _context.Orders
             .Include(x => x.BookingServicesDetails)
             .ThenInclude(y => y.Service)
             .Include(z => z.UserInfo)
-            .Where(o => o.BookingServicesDetails.Any(b => b.Service.SerCategories.SerCategoriesId == serCategoriesId))
             .ToListAsync();
 
             return Ok(_mapper.Map<List<OrdersDTO>>(orders));
         }
-        [HttpGet("ListOrderPetTrainingSpecial")]
+        /*[HttpGet("ListOrderPetTrainingSpecial")]
         public async Task<IActionResult> ListOrderPetTrainingSpecial(int serCategoriesId, int partnerInfoId)
         {
             List<Order> orders = await _context.Orders
@@ -60,9 +59,7 @@ namespace PetServices.Controllers
                 .ThenInclude(y => y.Service)
                 .Include(z => z.UserInfo)
                 .Include(q => q.Reason)
-                .Where(o =>
-                    o.BookingServicesDetails.Any(b => b.Service.SerCategories.SerCategoriesId == serCategoriesId) &&
-                    o.BookingServicesDetails.All(b => b.PartnerInfoId == partnerInfoId))
+                .Where(o =>o.BookingServicesDetails.All(b => b.PartnerInfoId == partnerInfoId))
                      .ToListAsync();
 
             return Ok(_mapper.Map<List<OrdersDTO>>(orders));
@@ -86,7 +83,7 @@ namespace PetServices.Controllers
                 // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
                 return StatusCode(500, ex.Message);
             }
-        }
+        }*/
         [HttpGet("UpdateOrderStatusReceived")]
         public async Task<IActionResult> UpdateOrderStatusReceived(int orderId, int partnerId)
         {
@@ -97,12 +94,15 @@ namespace PetServices.Controllers
                     .Include(b => b.BookingServicesDetails)
                     .ThenInclude(bs => bs.Service)
                     .SingleOrDefaultAsync(b => b.OrderId == orderId);
-                order.OrderStatus = "Received_Services";
                 foreach (var bookingDetail in order.BookingServicesDetails)
                 {
                     if (bookingDetail.PartnerInfoId == null)
                     {
                         bookingDetail.PartnerInfoId = partnerId;
+                    }
+                    if(bookingDetail.StatusOrderService == "Waiting")
+                    {
+                        bookingDetail.StatusOrderService = "Received";
                     }
                 }
                 _context.Update(order);
@@ -117,7 +117,7 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpGet("UpdateOrderStatusRejected")]
+       /* [HttpGet("UpdateOrderStatusRejected")]
         public async Task<IActionResult> UpdateOrderStatusRejected(int orderId, int reasonId)
         {
             try
@@ -138,8 +138,13 @@ namespace PetServices.Controllers
                     if (bookingDetail.PartnerInfoId != null)
                     {
                         bookingDetail.PartnerInfoId = null;
+                        if(bookingDetail.PriceService != null)
+                        {
+                            bookingDetail.PriceService -= 50000;
+                        }
                     }
                 }
+                order.TotalPrice -= 50000;
                 order.ReasonId = reasonId;
                 _context.Orders.Update(order);
 
@@ -151,7 +156,7 @@ namespace PetServices.Controllers
                 // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
                 return StatusCode(500, ex.Message);
             }
-        }
+        }*/
         [HttpGet("UpdateOrderStatusCompleted")]
         public async Task<IActionResult> UpdateOrderStatusCompleted(int orderId)
         {
@@ -195,8 +200,13 @@ namespace PetServices.Controllers
                     if (bookingDetail.PartnerInfoId != null)
                     {
                         bookingDetail.PartnerInfoId = null;
+                        if(bookingDetail.PriceService != null)
+                        {
+                            bookingDetail.PriceService -= 50000;
+                        }
                     }
                 }
+                order.TotalPrice -= 50000;
                 order.OrderStatus = status.newStatus;
                 _context.Orders.Update(order);
 
