@@ -68,9 +68,13 @@
                                 <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="@Model?.Email" disabled>
                             </div>
 
-                             <div class="mb-3">
-                                <label class="small mb-1" for="inputCardName">Tên ngân hàng</label>
-                                <input class="form-control"  type="text" name="CardName" id="CardName"  value="@Model?.PartnerInfo.CardName" required>
+                             <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputBanks">Tên ngân hàng</label>
+                                    <select class="form-control" id="bankDropdown" onchange="updateSelectedValue()">
+                                        <option value="" selected disabled>@Model?.PartnerInfo.CardName</option>
+                                    </select>
+                                </div>
                             </div>
 
                              <div class="mb-3">
@@ -119,6 +123,7 @@
                             @*input ẩn, lưu thông tin cá nhân thì 2 trường này về null*@
                             <input type="hidden" name="Lat" id="inputLatt" />
                             <input type="hidden" name="Lng" id="inputLngg" />
+                            <input type="hidden" name="CardName" id="selectedCardName" />
 
 
                             <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
@@ -244,5 +249,57 @@
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="~/js/takeAddress.js"></script>
+<script>
+function loadBanks() {
+    fetch('https://api.vietqr.io/v2/banks')
+        .then(response => response.json())
+        .then(data => {
+            var banks = data.data;
+            var bankDropdown = document.getElementById('bankDropdown');
+
+            // Clear existing options in bank dropdown
+            bankDropdown.innerHTML = "";
+
+            // Add new bank options
+            for (var i = 0; i < banks.length; i++) {
+                var option = document.createElement('option');
+                option.value = banks[i].shortName;
+                option.text = banks[i].shortName;
+                bankDropdown.appendChild(option);
+            }
+            updateSelectedValue();
+            var defaultCardName = "@Model?.PartnerInfo.CardName";
+            if (defaultCardName) {
+                bankDropdown.value = defaultCardName;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+// Function to update the hidden input field with the selected value
+function updateSelectedValue() {
+    var bankDropdown = document.getElementById('bankDropdown');
+    var selectedValue = bankDropdown.options[bankDropdown.selectedIndex];
+    var selectedCardName = document.getElementById('selectedCardName');
+    selectedCardName.value = selectedValue.text;
+}
+
+// Call loadBanks function when the window loads
+window.onload = function() {
+    loadBanks();
+};
+
+// Event listener for dropdown change
+var bankDropdown = document.getElementById('bankDropdown');
+bankDropdown.addEventListener('change', function() {
+    var selectedBank = bankDropdown.value;
+    console.log('Bạn đã chọn ngân hàng có mã:', selectedBank);
+    updateSelectedValue(); 
+});
+
+</script>
+
 </body>
 </html>
