@@ -57,16 +57,11 @@ namespace FEPetServices.Controllers
             public ServiceDTO service { set; get; }
             // Room
         }
-        List<CartItem> GetCartItems()
+        private List<CartItem> GetCartItems()
         {
-
             var session = HttpContext.Session;
-            string jsoncart = session.GetString(CARTKEY);
-            if (jsoncart != null)
-            {
-                return JsonConvert.DeserializeObject<List<CartItem>>(jsoncart);
-            }
-            return new List<CartItem>();
+            string jsonCart = session.GetString(CARTKEY);
+            return jsonCart != null ? JsonConvert.DeserializeObject<List<CartItem>>(jsonCart) : new List<CartItem>();
         }
 
         public async Task<IActionResult> Index()
@@ -102,22 +97,7 @@ namespace FEPetServices.Controllers
                 if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
                 {
                     List<CartItem> cartItems = GetCartItems();
-                    foreach (var cartItem in cartItems)
-                    {
-                        if (cartItem.product != null)
-                        {
-                            /*HttpResponseMessage response = await _client.PutAsync("https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct"
-                                + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);*/
-
-                            HttpResponseMessage response = await _client.PutAsync(DefaultApiUrl + "Product/ChangeProduct"
-                                    + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);
-                        }
-                    }
-
-                    //https://localhost:7255/api/Order/changeStatusPayment?Id=45
-                    /*HttpResponseMessage responseStatusPayment = await _client.PutAsync("https://localhost:7255/api/Order/changeStatusPayment"
-                               + "?Id=" + orderId, null);*/
-
+                    await UpdateProductQuantitiesAsync(cartItems);
                     HttpResponseMessage responseStatusPayment = await _client.PutAsync(DefaultApiUrl + "Order/changeStatusPayment"
                                + "?Id=" + orderId, null);
 
@@ -132,17 +112,7 @@ namespace FEPetServices.Controllers
                 else
                 {
                     List<CartItem> cartItems = GetCartItems();
-                    foreach (var cartItem in cartItems)
-                    {
-                        if (cartItem.product != null)
-                        {
-                            /*HttpResponseMessage response = await _client.PutAsync("https://pet-service-api.azurewebsites.net/api/Product/ChangeProduct"
-                                + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);*/
-
-                            HttpResponseMessage response = await _client.PutAsync(DefaultApiUrl + "Product/ChangeProduct"
-                                + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);
-                        }
-                    }
+                    await UpdateProductQuantitiesAsync(cartItems);
 
                     int orderLatestID = 0;
                     bool checkRoom = false;
@@ -174,7 +144,7 @@ namespace FEPetServices.Controllers
                     ClearCartRoom();
                     if (!checkRoom)
                     {
-                        TempData["SuccessToast"] = "Đặt hàng thành công. Vui lòng kiểm tra lại giỏ hàng.";
+                        TempData["SuccessToast"] = "Đặt phòng thành công. Vui lòng kiểm tra lại giỏ hàng.";
                     }
                     else
                     {
@@ -190,16 +160,27 @@ namespace FEPetServices.Controllers
                 return View();
             }
         }
-        void ClearCart()
+        private void ClearCart()
         {
-            var session = HttpContext.Session;
-            session.Remove(CARTKEY);
+            HttpContext.Session.Remove(CARTKEY);
         }
 
-        void ClearCartRoom()
+        private void ClearCartRoom()
         {
-            var session = HttpContext.Session;
-            session.Remove("cartRoom");
+            HttpContext.Session.Remove("cartRoom");
+        }
+
+        private async Task UpdateProductQuantitiesAsync(List<CartItem> cartItems)
+        {
+            foreach (var cartItem in cartItems)
+            {
+                if (cartItem.product != null)
+                {
+                    HttpResponseMessage response = await _client.PutAsync(
+                        $"{DefaultApiUrl}Product/ChangeProduct" +
+                        $"?ProductId={cartItem.product.ProductId}&Quantity={cartItem.quantityProduct}", null);
+                }
+            }
         }
     }
 }
