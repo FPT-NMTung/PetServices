@@ -34,31 +34,6 @@ namespace FEPetServices.Areas.Partner.Controllers
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
-            HttpResponseMessage banksResponse = await _client.GetAsync("https://api.vietqr.io/v2/banks");
-
-            if (banksResponse.IsSuccessStatusCode)
-            {
-                var jsonString = await banksResponse.Content.ReadAsStringAsync();
-
-                if (!string.IsNullOrWhiteSpace(jsonString))
-                {
-                    var options = new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    };
-
-                    try
-                    {
-                        var banks = System.Text.Json.JsonSerializer.Deserialize<List<Bank>>(jsonString, options);
-                        ViewBag.Banks = banks.Select(bank => new SelectListItem { Value = bank.shortName, Text = bank.name }).ToList();
-                        // Gán danh sách ngân hàng vào ViewBag, chọn shortName làm giá trị, name làm hiển thị
-                    }
-                    catch (JsonException ex)
-                    {
-                        Console.WriteLine("Lỗi Phân tích JSON: " + ex.Message);
-                    }
-                }
-            }
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -167,7 +142,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                 }
             }
 
-            if (partnerInfo.Province == null || partnerInfo.District == null || partnerInfo.Commune == null)
+            if (partnerInfo.Province == null || partnerInfo.District == null || partnerInfo.Commune == null || partnerInfo.CardName == null)
             {
                 HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
                 if (responseUser.IsSuccessStatusCode)
@@ -183,6 +158,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     partnerInfo.Province = managerInfos.PartnerInfo.Province;
                     partnerInfo.District = managerInfos.PartnerInfo.District;
                     partnerInfo.Commune = managerInfos.PartnerInfo.Province;
+                    partnerInfo.CardName = managerInfos.PartnerInfo.CardName;
                 }
             }
 

@@ -71,7 +71,7 @@
                              <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputBanks">Tên ngân hàng</label>
-                                    <select class="form-control" id="bankDropdown"  onchange="loadBanks">
+                                    <select class="form-control" id="bankDropdown" name="CardName"  onchange="loadBanks">
                                         <option value="" selected disabled>@Model?.PartnerInfo.CardName</option>
                                     </select>
                                 </div>
@@ -262,10 +262,11 @@ function loadBanks() {
             // Add new bank options
             for (var i = 0; i < banks.length; i++) {
                 var option = document.createElement('option');
-                option.value = banks[i].name;
-                option.text = banks[i].code;
+                option.value = banks[i].shortName;
+                option.text = banks[i].shortName;
                 bankDropdown.appendChild(option);
             }
+            bankDropdown.dispatchEvent(new Event("change"));
         })
         .catch(error => {
             console.error('Error:', error);
@@ -277,13 +278,11 @@ window.onload = function() {
     loadBanks();
 };
 
-// Lắng nghe sự kiện change trên dropdown của ngân hàng
 var bankDropdown = document.getElementById('bankDropdown');
 bankDropdown.addEventListener('change', function() {
     var selectedBank = bankDropdown.value;
     console.log('Bạn đã chọn ngân hàng có mã:', selectedBank);
-    // Thực hiện các hành động khác tương ứng với việc chọn ngân hàng ở đây
-    // Ví dụ: Hiển thị thông tin về ngân hàng hoặc thực hiện các xử lý khác.
+   
 });
 
 
