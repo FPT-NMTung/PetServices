@@ -119,6 +119,10 @@
                                             {
                                                 <span class="badge badge-info">Đơn hàng đang được vận chuyển</span>
                                             }
+                                            else if (productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                                            {
+                                                <span class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
+                                            }
                                         </div>
                                     </td>
                                 </tr>
@@ -158,14 +162,20 @@
         </div>
 
         <form method="post" asp-controller="Shipped" asp-action="OrderShippedDetail">
+            <input type="hidden" name="Id" value="@Model?.OrderId" />
+            <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
             @if (Model.OrderStatus.Trim() == "Confirmed")
             {
-                <input type="hidden" name="Id" value="@Model?.OrderId" />
-                <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
-
                 <select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
                     <option value="Processing">Giao hàng</option>
-                    <option value="Cancelled">Huỷ đơn hàng</option>
+                </select>
+
+                <button class="btn btn-primary" type="submit">Xác nhận</button>
+            }
+            @if (Model.OrderProductDetailForm.StatusOrderProduct.Trim() == "Shipped")
+            {
+                <select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
+                    <option value="Delivered">Đã giao</option>
                 </select>
 
                 <button class="btn btn-primary" type="submit">Xác nhận</button>
