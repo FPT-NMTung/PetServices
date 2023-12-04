@@ -132,7 +132,6 @@ namespace PetServices.Controllers
                     if(bookingDetail.StatusOrderService == "Received")
                     {
                         bookingDetail.StatusOrderService = "Processing";
-                        bookingDetail.StartTime = DateTime.Now;
                     }
                 }
                 _context.Update(order);
@@ -220,12 +219,13 @@ namespace PetServices.Controllers
                 {
                     return NotFound("Booking không tồn tại!");
                 }
-                if(order.OrderStatus.Trim() != status.oldStatus)
-                {
-                    return BadRequest("Trạng thái cũ không hợp lệ");
-                }
+                
                 foreach (var bookingDetail in order.BookingServicesDetails)
                 {
+                    if (bookingDetail.StatusOrderService.Trim() != status.oldStatus)
+                    {
+                        return BadRequest("Trạng thái cũ không hợp lệ");
+                    }
                     if (bookingDetail.PartnerInfoId != null)
                     {
                         bookingDetail.PartnerInfoId = null;
@@ -237,6 +237,26 @@ namespace PetServices.Controllers
                 }
                 order.TotalPrice -= 50000;
                 order.OrderStatus = status.newStatus;
+                if(order.OrderProductDetails != null)
+                {
+                    foreach (var productDetail in order.OrderProductDetails)
+                    {
+                        if (!string.IsNullOrEmpty(status.newStatusProduct))
+                        {
+                            productDetail.StatusOrderProduct = status.newStatusProduct;
+                        }
+                    }
+                }
+                if(order.BookingServicesDetails != null)
+                {
+                    foreach (var bookingDetail in order.BookingServicesDetails)
+                    {
+                        if (!string.IsNullOrEmpty(status.newStatusService))
+                        {
+                            bookingDetail.StatusOrderService = status.newStatusService;
+                        }
+                    }
+                }
                 _context.Orders.Update(order);
 
                 await _context.SaveChangesAsync();

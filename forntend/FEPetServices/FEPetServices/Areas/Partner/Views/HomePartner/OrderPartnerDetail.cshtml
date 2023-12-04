@@ -13,32 +13,36 @@
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Ngày mua hàng :</label>
                 <div class="col-sm-9">
-                    <input type="text" readonly class="form-control-plaintext" value="@Model.OrderDate">
+                    <input type="text" readonly class="form-control-plaintext" value="@Model?.OrderDate">
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Trạng thái :</label>
                 <div class="col-sm-9" style="padding-top:8px">
-                    @if (Model.OrderStatus.Trim() == "Completed")
+                    @foreach (var status in Model.BookingServicesDetails)
                     {
-                        <span style="background-color: green; color:#fff">Đã hoàn thành</span>
+                        @if (status.StatusOrderService.Trim() == "Completed")
+                        {
+                            <span style="background-color: green; color:#fff">Đã hoàn thành</span>
+                        }
+                        else if (status.StatusOrderService.Trim() == "Rejected")
+                        {
+                            <span style="background-color: red; color:#fff">Đơn hàng bị huỷ</span>
+                        }
+                        else if (status.StatusOrderService.Trim() == "Waiting")
+                        {
+                            <span style="background-color: yellow;color:green">Đang chờ xác nhận</span>
+                        }
+                        else if (status.StatusOrderService.Trim() == "Received")
+                        {
+                            <span style="background-color: pink;color:deeppink">Đơn hàng đã được xác nhận</span>
+                        }
+                        else if (status.StatusOrderService.Trim() == "Delivering")
+                        {
+                            <span style="background-color: pink;color:deeppink">Đang giao hàng</span>
+                        }
                     }
-                    else if (Model.OrderStatus.Trim() == "Rejected")
-                    {
-                        <span style="background-color: red; color:#fff">Đơn hàng bị huỷ</span>
-                    }
-                    else if (Model.OrderStatus.Trim() == "Waiting")
-                    {
-                        <span style="background-color: yellow;color:green">Đang chờ xác nhận</span>
-                    }
-                    else if (Model.OrderStatus.Trim() == "Received_Services")
-                    {
-                        <span style="background-color: pink;color:deeppink">Đơn hàng đã được xác nhận</span>
-                    }
-                    else if (Model.OrderStatus.Trim() == "Delivering")
-                    {
-                        <span style="background-color: pink;color:deeppink">Đang giao hàng</span>
-                    }
+                    
                 </div>
             </div>
             @*Thông tin khách hàng*@
@@ -92,87 +96,104 @@
             </table>
 
 
-
-            @if (Model.OrderStatus.Trim() == "Waiting")
+            @foreach (var status in Model.BookingServicesDetails)
             {
-                <input type="hidden" name="orderId" value="@Model?.OrderId" />
-                <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
-                <div style="display:flex;">
-                    @*@if (Model.BookingServicesDetails.PartnerInfoId != null){}*@
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="receivedCheckbox" name="newStatus" value="Received_Services">
-                        <label class="form-check-label" for="receivedCheckbox" style="background-color: green; color:#fff">Nhận Đơn</label>
-                    </div>
+                @if (status.StatusOrderService.Trim() == "Waiting" && status.PartnerInfoId != null)
+                {
+                    <input type="hidden" name="orderId" value="@Model?.OrderId" />
+                    <input type="hidden" name="oldStatus" value="@status?.StatusOrderService.Trim()" />
+                    <div style="display:flex;">
+                        @*@if (Model.BookingServicesDetails.PartnerInfoId != null){}*@
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="receivedCheckbox" name="newStatus" value="Received">
+                            <label class="form-check-label" for="receivedCheckbox" style="background-color: green; color:#fff">Nhận Đơn</label>
+                        </div>
 
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="rejectedCheckbox" name="newStatus" value="Waiting" onchange="handleRejectChange()">
-                        <label class="form-check-label" for="rejectedCheckbox" style="background-color: red; color:#fff">Hủy Đơn</label>
-                    </div>
-                    <div id="reasonSelect" style="display: none;" class="form-group">
-                        <div style="display:flex;">
-                            <div class="title" style="padding-right: 10px;">
-                                <label for="ReasonId">Lý Do Hủy Đơn: </label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="rejectedCheckbox" name="newStatus" value="Waiting" onchange="handleRejectChange()">
+                            <label class="form-check-label" for="rejectedCheckbox" style="background-color: red; color:#fff">Hủy Đơn</label>
+                        </div>
+                        <div id="reasonSelect" style="display: none;" class="form-group">
+                            <div style="display:flex;">
+                                <div class="title" style="padding-right: 10px;">
+                                    <label for="ReasonId">Lý Do Hủy Đơn: </label>
+                                </div>
+                                <div class="typeinput">
+                                    @if (ViewBag.Reasons != null)
+                                    {
+                                        <select id="ReasonId" name="ReasonId" required onchange="handleReasonChange(this)">
+                                            <option value="Lý do">Chọn Lý Do Hủy Đơn</option>
+                                            @foreach (var rea in ViewBag.Reasons)
+                                            {
+                                                <option value="@rea.Value">@rea.Text</option>
+                                            }
+                                            <option value="khac">Lý Do Hủy Đơn Khác</option>
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger">Error</span>
+                                    }
+                                </div>
                             </div>
-                            <div class="typeinput">
-                                @if (ViewBag.Reasons != null)
-                                {
-                                    <select id="ReasonId" name="ReasonId" required onchange="handleReasonChange(this)">
-                                        <option value="Lý do">Chọn Lý Do Hủy Đơn</option>
-                                        @foreach (var rea in ViewBag.Reasons)
-                                        {
-                                            <option value="@rea.Value">@rea.Text</option>
-                                        }
-                                        <option value="khac">Lý Do Hủy Đơn Khác</option>
-                                    </select>
-                                }
-                                else
-                                {
-                                    <span class="text-danger">Error</span>
-                                }
-                            </div>
-                        </div> 
 
-                        
-                    </div>
-                        
-                </div>
-                <div id="lydoKhac" style="display: none;">
-                    <div>
-                        <label for="title">Tiêu Đề:</label>
-                        <input type="text" id="title" name="title" style="width:100%" placeholder="Nhập Tiêu Đề">
-                    </div>
-                    <div>
-                        <label for="description">Mô Tả:</label>
-                        <textarea id="description" name="description" style="width:100%" placeholder="Nhập Mô Tả"></textarea>
-                    </div>  
-                </div>
-                
-            @*<form method="post" asp-controller="HomePartner" asp-action="OrderPartnerDetail">*@
-                @Html.AntiForgeryToken()
-                <button class="btn btn-primary" type="submit">Xác nhận</button>
 
-                
+                        </div>
+
+                    </div>
+                    <div id="lydoKhac" style="display: none;">
+                        <div>
+                            <label for="title">Tiêu Đề:</label>
+                            <input type="text" id="ReasonOrderTitle" name="ReasonOrderTitle" style="width:100%" placeholder="Nhập Tiêu Đề">
+                        </div>
+                        <div>
+                            <label for="description">Mô Tả:</label>
+                            <textarea id="ReasonOrderDescription" name="ReasonOrderDescription" style="width:100%" placeholder="Nhập Mô Tả"></textarea>
+                        </div>
+                    </div>
+
+                    @*<form method="post" asp-controller="HomePartner" asp-action="OrderPartnerDetail">*@
+                    @Html.AntiForgeryToken()
+                    <button class="btn btn-primary" type="submit">Xác nhận</button>
+                }
+                else if (status.StatusOrderService.Trim() == "Waiting" && status.PartnerInfoId == null)
+                {
+                    <input type="hidden" name="orderId" value="@Model?.OrderId" />
+                    <input type="hidden" name="oldStatus" value="@status?.StatusOrderService.Trim()" />
+                    <div style="display:flex;">
+                        @*@if (Model.BookingServicesDetails.PartnerInfoId != null){}*@
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="receivedCheckbox" name="newStatus" value="Received">
+                            <label class="form-check-label" for="receivedCheckbox" style="background-color: green; color:#fff">Nhận Đơn</label>
+                        </div>
+                    </div>
+                }
             }
+            
         </form>
         @*<button class="btn btn-primary" onclick="window.print()">In hoá đơn</button>*@
 
         <div class="btn-group">
-            @if (Model.OrderStatus.Trim() == "Completed")
+            @foreach (var status in Model.BookingServicesDetails)
             {
-                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerComplete">Trở lại</a>
+                @if (status.StatusOrderService.Trim() == "Completed")
+                {
+                    <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerComplete">Trở lại</a>
+                }
+                else if (status.StatusOrderService.Trim() == "Waiting")
+                {
+                    <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartner">Trở lại</a>
+                }
+                else if (status.StatusOrderService.Trim() == "Received")
+                {
+                    <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerReceived">Trở lại</a>
+                }
+                else
+                {
+                    <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerSpecial">Trở lại</a>
+                }
             }
-            else if (Model.OrderStatus.Trim() == "Waiting")
-            {
-                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartner">Trở lại</a>
-            }
-            else if (Model.OrderStatus.Trim() == "Received_Services")
-            {
-                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerReceived">Trở lại</a>
-            }
-            else
-            {
-                <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerSpecial">Trở lại</a>
-            }
+            
         </div>
     </div>
     <script>
