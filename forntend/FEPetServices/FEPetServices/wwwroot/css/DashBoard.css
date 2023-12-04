@@ -143,6 +143,11 @@ p {
 }
 
 @media only screen and (max-width: 915px) {
+    .feedbacktable .option .style2 {
+        position: relative;
+        display: none;
+    }
+
     .feedbacktable .card-header .option {
         position: relative;
         display: inline-block;
@@ -199,11 +204,12 @@ p {
 }
 
 @media only screen and (max-width: 500px){
-    .feedbacktable .option{
-        display: none;
-    }
-
-        .feedbacktable .option .option-button {
-            content: '\2630';
+        .feedbacktable .option .style1{
+            position: relative;
+            display: none;
         }
+
+    .feedbacktable .option .style2 {
+        display: block;
+    }
 }
