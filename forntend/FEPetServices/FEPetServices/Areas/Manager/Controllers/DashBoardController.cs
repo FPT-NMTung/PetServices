@@ -191,18 +191,9 @@ namespace FEPetServices.Areas.Manager.Controllers
                     ViewBag.Top5CustomerArea = new SelectList(Top5CustomerArea, "date", "quantity");
                 }
 
-                // đánh giá của khách hàng về các sản phẩm
-                HttpResponseMessage FeedbackOfProductResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetFeedbackOfProduct");
-
-                if (FeedbackOfProductResponse.IsSuccessStatusCode)
-                {
-                    var FeedbackOfProduct = await FeedbackOfProductResponse.Content.ReadFromJsonAsync<List<FeedbackForm>>();
-
-                    dashboard.FeedbackProduct = FeedbackOfProduct;
-                }
 
                 // đánh giá của khách hàng về các phòng
-                HttpResponseMessage FeedbackOfRoomResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetFeedbackOfRoom");
+                HttpResponseMessage FeedbackOfRoomResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetFeedbackOfRoom");
 
                 if (FeedbackOfRoomResponse.IsSuccessStatusCode)
                 {
@@ -211,8 +202,18 @@ namespace FEPetServices.Areas.Manager.Controllers
                     dashboard.FeedbackRoom = FeedbackOfRoom;
                 }
 
+                // đánh giá của khách hàng về các sản phẩm
+                HttpResponseMessage FeedbackOfProductResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetFeedbackOfProduct");
+
+                if (FeedbackOfProductResponse.IsSuccessStatusCode)
+                {
+                    var FeedbackOfProduct = await FeedbackOfProductResponse.Content.ReadFromJsonAsync<List<FeedbackForm>>();
+
+                    dashboard.FeedbackProduct = FeedbackOfProduct;
+                }
+
                 // đánh giá của khách hàng về các dịch vụ
-                HttpResponseMessage FeedbackOfServiceResponse = await client.GetAsync("https://localhost:7255/api/Dashboard/GetFeedbackOfService");
+                HttpResponseMessage FeedbackOfServiceResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetFeedbackOfService");
 
                 if (FeedbackOfServiceResponse.IsSuccessStatusCode)
                 {
