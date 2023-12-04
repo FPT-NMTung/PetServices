@@ -80,7 +80,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             {
                 if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
                 {
-                    if (blog.PageTile == null) { return View(); }
+                   /* if (blog.PageTile == null) { return View(); }*/
                     HttpResponseMessage TagResponse = await client.GetAsync("https://localhost:7255/api/Tag/GetAllTag");
 
                     if (TagResponse.IsSuccessStatusCode)

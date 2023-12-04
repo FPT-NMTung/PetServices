@@ -3,7 +3,7 @@
 <head>
     <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
-         tinymce.init({
+        tinymce.init({
             selector: 'textarea#tiny',
             plugins: [
                 'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
@@ -16,79 +16,79 @@
     </script>
 </head>
 <body>
-<div class="title">
-    <h1>Thêm Bài Viết Mới</h1>
-</div>
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <form asp-action="AddBlog" method="post"  enctype="multipart/form-data">
-        <div class="form-group">
-          <label>Tên bài viết<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-          <input type="text" class="form-control" name="PageTile" required placeholder="Tên bài viết"/>
-        </div>
-        <div class="form-group">
-          <label>Tiêu đề bài viết<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-          <input type="text" class="form-control" name="Heading" required  placeholder="Tiêu đề bài viết"/>
-        </div>
-        <div class="form-group">
-          <label>Mô tả <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-          <input type="text" class="form-control" name="Description" required placeholder="Mô tả"/>
-        </div>
-        <div class="form-group">
-          <label>Ngày đăng <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-          <input type="date" class="form-control" name="PublisheDate" required placeholder="Title"/>
-        </div>
-        <div class="form-group">
-          <label>Ảnh <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-          <div class="input-group">
-            <input type="file" name="image" required class="form-control" accept="image/*">
-           </div>
-        </div>
-        <div class="form-group">
-            <label>Nội dung <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-          <textarea class="form-control" id="tiny" required name="Content"></textarea>
-        </div>
-        <div class="form-group">
-            <label>Tag <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i></label>
-             <div class="service-container">
-                        @if (ViewBag.Tag != null)
-                        {
-                            @foreach (var tag in ViewBag.Tag)
-                            {
-                                <div>
-                                    <input type="checkbox" id="@tag.Value" name="SelectedTag" value="@tag.Value">
-                                    <label for="@tag.Value"></label>
-                                    <p>@tag.Text</p>
-                                </div>
-                            }
-                        }
-                        else
-                        {
-                            <span class="text-danger">Lỗi: Dữ liệu không khả dụng.</span>
-                        }
-                    </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-            <div class="sub">
-            <a href="/Manager/Blog"><input  value="Trở Lại" class="btn btn-primary form-control"/></a>
-            </div>
-            <div class="sub">
-               <input type="submit" name="Submit" value="Lưu" class="btn btn-primary form-control" />
-            </div>
-            </div>
-        </div>
-      </form>
+    <div class="title">
+        <h1>Thêm Bài Viết Mới</h1>
     </div>
-  </div>
-</div>
-<style>
-.fa-asterisk {
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <form asp-action="AddBlog" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Tên bài viết<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                        <input type="text" class="form-control" name="PageTile" required placeholder="Tên bài viết" />
+                    </div>
+                    <div class="form-group">
+                        <label>Tiêu đề bài viết<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                        <input type="text" class="form-control" name="Heading" required placeholder="Tiêu đề bài viết" />
+                    </div>
+                    <div class="form-group">
+                        <label>Mô tả <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                        <input type="text" class="form-control" name="Description" required placeholder="Mô tả" />
+                    </div>
+                    <div class="form-group">
+                        <label>Ngày đăng <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                        <input type="date" class="form-control" name="PublisheDate" required placeholder="Title" />
+                    </div>
+                    <div class="form-group">
+                        <label>Ảnh <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                        <div class="input-group">
+                            <input type="file" name="image" required class="form-control" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Nội dung <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                        <textarea class="form-control" id="tiny" required name="Content"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Tag <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i></label>
+                        <div class="service-container">
+                            @if (ViewBag.Tag != null)
+                            {
+                                @foreach (var tag in ViewBag.Tag)
+                                {
+                                    <div>
+                                        <input type="checkbox" id="@tag.Value" name="SelectedTag" value="@tag.Value">
+                                        <label for="@tag.Value"></label>
+                                        <p>@tag.Text</p>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-danger">Lỗi: Dữ liệu không khả dụng.</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="sub">
+                                <a href="/Manager/Blog"><input value="Trở Lại" class="btn btn-primary form-control" /></a>
+                            </div>
+                            <div class="sub">
+                                <input type="submit" name="Submit" value="Lưu" class="btn btn-primary form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <style>
+        .fa-asterisk {
             color: red;
-            font-size:6px;
-            padding-top:20px;
-            margin-right:10px;
+            font-size: 6px;
+            padding-top: 20px;
+            margin-right: 10px;
         }
-</style>
+    </style>
 </body>
