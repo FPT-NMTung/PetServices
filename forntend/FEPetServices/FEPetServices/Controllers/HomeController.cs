@@ -81,8 +81,8 @@ namespace FEPetServices.Controllers
 
                         if (searchDTO.startdate != null && searchDTO.enddate != null)
                         {
-                            var start = searchDTO.startdate.Value.ToString("dd/MM/yyyy HH:mm");
-                            var end = searchDTO.enddate.Value.ToString("dd/MM/yyyy HH:mm");
+                            var start = searchDTO.startdate.Value.ToString("MM/dd/yyyy HH:mm");
+                            var end = searchDTO.enddate.Value.ToString("MM/dd/yyyy HH:mm");
 
                             var urlSearchRoomByDate = DefaultApiUrl + "Room/SearchRoomByDate?startDate=" + start + "&endDate=" + end;
 
@@ -148,9 +148,9 @@ namespace FEPetServices.Controllers
                         ViewBag.sortby = searchDTO.sortby;
                         ViewBag.roomname = searchDTO.roomname;
                         ViewBag.startdate = searchDTO.startdate.HasValue
-                            ? searchDTO.startdate.Value.ToString("dd/MM/yyyy HH:mm") : null;
+                            ? searchDTO.startdate.Value.ToString("MM/dd/yyyy HH:mm") : null;
                         ViewBag.enddate = searchDTO.enddate.HasValue
-                            ? searchDTO.enddate.Value.ToString("dd/MM/yyyy HH:mm") : null;
+                            ? searchDTO.enddate.Value.ToString("MM/dd/yyyy HH:mm") : null;
 
                         return View(roomList);
                     }
