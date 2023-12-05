@@ -486,12 +486,18 @@
                 let startValue = startPicker.input.value;
                 let endValue = endPicker.input.value;
 
+                console.log(startValue + " : " + endValue);
+
+
                 if (startValue && endValue) {
                     let startDate = startPicker.parseDate(startValue);
                     let endDate = endPicker.parseDate(endValue);
                     let roomId = @Model.Room.RoomId;
 
-                    let apiURL = `https://pet-service-api.azurewebsites.net/api/Room/CheckSlotInRoom?RoomId=${roomId}&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
+                    console.log(startDate);
+
+
+                    let apiURL = `https://pet-service-api.azurewebsites.net/api/Room/CheckSlotInRoom?RoomId=${roomId}&startDate=${startValue}&endDate=${endValue}`;
                     console.log(apiURL);
                     fetch(apiURL)
                         .then(response => {
@@ -506,21 +512,24 @@
                                 let timeduration = parseInt(duration / 24) + " ngày" + duration % 24 + " giờ";
                                 let timeBookingLabel = `${startDate.toLocaleString()} - ${endDate.toLocaleString()} (${timeduration})`;
                                 let priceTimeBooking = totalPrice.toLocaleString('vi-VN') + ' vnđ';
+                                console.log("timeduration: " + timeduration);
 
                                 $('.time-booking').text(timeBookingLabel);
                                 $('.price-time-booking').text(priceTimeBooking);
-
+                                document.querySelector('label[for="super-sad"]').style.display = 'none';
                                 updateTotal();
                             } else {
                                 status.textContent = "Không còn phòng";
                                 status.style.color = "#e76555";
                                 document.getElementById("super-sad").checked = true;
                                 document.querySelector('label[for="super-sad"]').style.display = 'block';
+                                document.querySelector('label[for="super-happy"]').style.display = 'none';
 
                                 if ((response.status === 400)) {
                                     response.text().then(errorMessage => {
                                         suggest.textContent = errorMessage;
                                         suggest.style.display = 'block';
+                                        document.querySelector('label[for="super-happy"]').style.display = 'none';
                                     });
                                 }
                             }
@@ -546,10 +555,12 @@
                         total += price;
                     }
                 });
+                console.log("total: " + total);
 
                 var timeBookingText = $('.price-time-booking').text();
                 var timeBookingPrice = timeBookingText ? parseInt(timeBookingText.replace(/,/g, '').replace(/\D/g, '')) : 0;
                 total += timeBookingPrice;
+                console.log("timeBookingPrice: " + timeBookingPrice);
 
                 $('.order-total-amount').text(total.toLocaleString('vi-VN') + ' vnđ');
                 var totalPrice = document.getElementById("totalPrice");
