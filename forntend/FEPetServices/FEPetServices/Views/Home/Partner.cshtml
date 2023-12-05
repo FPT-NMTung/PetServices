@@ -44,9 +44,9 @@
                             <ul class="axil-breadcrumb">
                                 <li class="axil-breadcrumb-item"><a href="/Home">Trang chủ</a></li>
                                 <li class="separator"></li>
-                                <li class="axil-breadcrumb-item active" aria-current="page">Đối tác</li>
+                                <li class="axil-breadcrumb-item active" aria-current="page">Nhân Viên</li>
                             </ul>
-                            <h1 class="title">Danh sách đối tác</h1>
+                            <h1 class="title">Danh Sách Nhân Viên</h1>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-4">
@@ -77,7 +77,7 @@
                                             </a>
                                         </div>
                                         <div class="content" >
-                                            <h5 class="title"style="text-align:center;"><a href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId">@partner.FirstName @partner.LastName (@partner.PartnerInfoId) </a></h5>
+                                            <h5 class="title"style="text-align:center;"><a href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId">@partner.FirstName @partner.LastName - Mã nhân viên: @partner.PartnerInfoId </a></h5>
 
                                             <div class="read-more-btn">
                                                 <a class="axil-btn right-icon" href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId">Tìm hiểu thêm <i class="fal fa-long-arrow-right"></i></a>
