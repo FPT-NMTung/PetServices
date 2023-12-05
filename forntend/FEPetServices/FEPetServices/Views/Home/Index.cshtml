@@ -415,9 +415,9 @@
                         @foreach (var services in Model.ListServiceCategory){
                         <div class="slick-single-layout">
                             <div class="axil-product product-style-two">
-                                <div class="service-category">
+                                <div class="service-category" style="text-align:center">
                                         <a href="~/Home/ServiceDetail?serviceCategoryId=@services.SerCategoriesId">
-                                        <img data-sal="zoom-out" data-sal-delay="200" data-sal-duration="500" src="@services.Picture" alt="Product Images">
+                                        <img data-sal="zoom-out" data-sal-delay="200" style="width:300px;"  data-sal-duration="500" src="@services.Picture" alt="Product Images">
                                     </a>
                                 </div>
                                 <div class="product-content">
