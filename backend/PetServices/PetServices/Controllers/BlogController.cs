@@ -25,10 +25,10 @@ namespace PetServices.Controllers
 
 
         [HttpGet("GetAllBlog")]
-        public IActionResult Get()
+        public async Task<ActionResult> GetAllBlog()
         {
-            List<Blog> blogs = _context.Blogs.ToList();
-            return Ok(_mapper.Map<List<BlogDTO>>(blogs));
+            var blog = await _context.Blogs.Include(r => r.Tag).ToListAsync();
+            return Ok(_mapper.Map<List<BlogDTO>>(blog));
         }
 
 
@@ -36,13 +36,21 @@ namespace PetServices.Controllers
         public IActionResult GetById(int id)
         {
             Blog blog = _context.Blogs
-                .FirstOrDefault(c => c.BlogId == id);
+                .Include(s => s.Tag)
+                .FirstOrDefault(c => c.BlogId == id) ;
+
             return Ok(_mapper.Map<BlogDTO>(blog));
         }
 
         [HttpPost("CreateBlog")]
         public async Task<IActionResult> CreateBlog(BlogDTO blog)
         {
+            var Tag = _context.Tags.FirstOrDefault(s => s.TagId == blog.TagId);
+            if (Tag == null)
+            {
+                string errorMessage = "Loại tag không tồn tại!";
+                return BadRequest(errorMessage);
+            }
             if (blog == null)
             {
                 return BadRequest("Blog data is missing.");
@@ -58,7 +66,8 @@ namespace PetServices.Controllers
                 Content = blog.Content,
                 Status=blog.Status,
                 ImageUrl = blog.ImageUrl,
-                TagId=blog.TagId
+                TagId=blog.TagId,
+                
                 
 
             };
@@ -80,7 +89,7 @@ namespace PetServices.Controllers
         [HttpPut("UpdateBlog")]
         public IActionResult Update(BlogDTO blogDTO, int blogId)
         {
-            var blog = _context.Blogs
+            var blog = _context.Blogs.Include(a => a.Tag)
                 .FirstOrDefault(p => p.BlogId == blogId);
 
             if (blog == null)
@@ -96,6 +105,9 @@ namespace PetServices.Controllers
             blog.Status = blogDTO.Status;
             blog.Heading = blogDTO.Heading;
             blog.TagId = blogDTO.TagId;
+            
+
+
 
             try
             {
@@ -128,6 +140,21 @@ namespace PetServices.Controllers
                 return Conflict();
             }
             return Ok(blog);
+        }
+        [HttpGet("GetBlogsByTagId/{tagId}")]
+        public IActionResult GetBlogsByTagId(int tagId)
+        {
+            var blogs = _context.Blogs
+                .Where(b => b.TagId == tagId)
+                .Include(b => b.Tag)
+                .ToList();
+
+            if (blogs == null || !blogs.Any())
+            {
+                return NotFound("Không có bài viết nào cho tag này.");
+            }
+
+            return Ok(_mapper.Map<List<BlogDTO>>(blogs));
         }
     }
 }
