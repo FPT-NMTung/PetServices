@@ -29,10 +29,10 @@
                         <div class="row g-5">
                               
                                  @foreach (var blog in Model.Blog)
-                                { 
-                                    @if(blog.Status){
+                                {   @if(blog.Status == true){                                  
                                     <div class="col-md-6">
                                         <div class="content-blog blog-grid">
+                                            
                                             <div class="inner">
                                                 <div class="thumbnail">
                                                     <a href="~/Home/BlogDetail?blogId=@blog.BlogId">
@@ -47,6 +47,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            
                                         </div>
                                     </div> 
                                 }
