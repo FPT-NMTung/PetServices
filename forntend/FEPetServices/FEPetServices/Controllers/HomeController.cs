@@ -963,13 +963,16 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var partList = JsonConvert.DeserializeObject<List<PartnerInfo>>(responseContent);
-                        // tìm kiếm theo tên 
-                        if (!string.IsNullOrEmpty(PartName) && partList != null)
+                        //tìm kiếm theo tên 
+                        if (!string.IsNullOrEmpty(PartName))
                         {
-                            partList = partList
-                                .Where(c => c.FirstName != null && c.FirstName.Contains(PartName, StringComparison.OrdinalIgnoreCase))
-                                .ToList();
+                            partList = partList?.Where(r =>
+                                r.FirstName.Contains(PartName, StringComparison.OrdinalIgnoreCase) ||
+                                r.LastName.Contains(PartName, StringComparison.OrdinalIgnoreCase) ||
+                                (r.FirstName + " " + r.LastName).Contains(PartName, StringComparison.OrdinalIgnoreCase)
+                            ).ToList();
                         }
+
 
 
                         int totalItems = partList.Count;
