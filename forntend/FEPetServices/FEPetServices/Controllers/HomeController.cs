@@ -323,15 +323,6 @@ namespace FEPetServices.Controllers
                             servicecategoryList = servicecategoryList?.Where(r => r.SerCategoriesName.Contains(searchDTO.servicename, StringComparison.OrdinalIgnoreCase)).ToList();
                         }
 
-                        switch (sortby)
-                        {
-                            case "name_desc":
-                                servicecategoryList = servicecategoryList.OrderByDescending(r => r.SerCategoriesName).ToList();
-                                break;
-                            default:
-                                servicecategoryList = servicecategoryList.OrderBy(r => r.SerCategoriesName).ToList();
-                                break;
-                        }
                         switch (searchDTO.sortby)
                         {
                             case "name_desc":
@@ -779,6 +770,10 @@ namespace FEPetServices.Controllers
                             blogList = blogList
                                 .Where(c => c.PageTile != null && c.PageTile.Contains(BlogName, StringComparison.OrdinalIgnoreCase))
                                 .ToList();
+                        }
+                        if (!string.IsNullOrEmpty(BlogName))
+                        {
+                            blogList = blogList?.Where(r => r.PageTile.Contains(BlogName, StringComparison.OrdinalIgnoreCase)).ToList();
                         }
 
                         int totalItems = blogList.Count;
