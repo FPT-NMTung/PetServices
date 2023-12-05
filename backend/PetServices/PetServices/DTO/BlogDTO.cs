@@ -11,5 +11,6 @@
         public DateTime? PublisheDate { get; set; }
         public bool? Status { get; set; }
         public int? TagId { get; set; }
+        public string? TagName { get; set; }
     }
 }

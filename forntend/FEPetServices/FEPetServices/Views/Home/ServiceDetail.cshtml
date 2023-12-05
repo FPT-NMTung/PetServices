@@ -104,25 +104,26 @@
                                         }
                                     </div>
                                     <div class="product-variations-wrapper">
-                                        <div class="product-variation product-size-variation">
-                                            <p class="title" style="font-family: serif; font-size: 15px;">Dịch vụ:</p>
-                                            <ul class="range-variant" style="font-family: serif">
+                                        <div class="product-variation product-size-variation" style="display:block;">
+                                            <div class="title" style="font-family: serif; font-size: 15px;">Dịch vụ:</div>
+                                            <div class="range-variant" style="font-family: serif">
                                                 @foreach (var sr in Model?.ServiceCategory.Services)
+                                            {
+                                                if (sr.Status == true)
                                                 {
-                                                    if (sr.Status)
-                                                    {
-                                                        var request = Context.Request;
-                                                        var currentPageURL = request.Path + request.QueryString;
-                                                        var linkURL = "/Home/ServiceDetail?serviceCategoryId=" + Model.ServiceCategory.SerCategoriesId + "&serviceIds=" + sr.ServiceId;
-                                                        var activeClass = currentPageURL.Equals(linkURL, System.StringComparison.InvariantCultureIgnoreCase) ? "active" : "";
+                                                    var request = Context.Request;
+                                                    var currentPageURL = request.Path + request.QueryString;
+                                                    var linkURL = "/Home/ServiceDetail?serviceCategoryId=" + Model.ServiceCategory.SerCategoriesId + "&serviceIds=" + sr.ServiceId;
+                                                    var activeClass = currentPageURL.Equals(linkURL, System.StringComparison.InvariantCultureIgnoreCase) ? "active" : "";
 
-                                                        <a href="@linkURL" class="service-link" style=" ">
-                                                        <li class="page-item @(activeClass)" style="font-size:12px;font-family: serif;">@sr.ServiceName</li>
-                                                        </a>
-                                                    }
-                                                    else { }
+                                                    <li class="page-item @(activeClass)" style="font-size:12px;font-family: serif;">
+                                                        <a href="@linkURL" class="service-link">@sr.ServiceName</a>
+                                                    </li>
                                                 }
-                                            </ul>
+                                                else { }
+                                            }
+
+                                            </div>
                                         </div>
                                     </div>
 
@@ -141,22 +142,22 @@
                                             string? userimageuser = Context.Session.GetString("UserImage");
                                             if (userimageuser is not null)
                                             {
-                                                @if (Model.account.UserInfo.PetInfos != null)
+                                                    @if (Model.account.UserInfo.PetInfos != null)
                                                 {
-                                                    <select name="PetInfoId" id="PetInfoId" class="size-option" style="font-family: serif; width: 200px; height: 30px; border: 2px solid black; margin-bottom: 5px;" onchange="updateWeight()">
-                                                        <option value=" ">Cân nặng của bé</option>
-                                                        @foreach (var petInfor in Model.account.UserInfo.PetInfos)
+                                                        <select name="PetInfoId" id="PetInfoId" class="size-option" style="font-family: serif; width: 200px; height: 30px; border: 2px solid black; margin-bottom: 5px;" onchange="updateWeight()">
+                                                            <option value=" ">Cân nặng của bé</option>
+                                                            @foreach (var petInfor in Model.account.UserInfo.PetInfos)
                                                         {
-                                                            <option value="@petInfor.Weight" data-weight="@petInfor.Weight">@petInfor.PetName @petInfor.Weight Kg</option>
+                                                                <option value="@petInfor.Weight" data-weight="@petInfor.Weight">@petInfor.PetName @petInfor.Weight Kg</option>
                                                         }
-                                                        <option value="khac">Khác</option>
-                                                    </select>
+                                                            <option value="khac">Khác</option>
+                                                        </select>
                                                 }
-                                                <input class="lgweight" id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black; display: none;" required>
+                                                    <input class="lgweight" id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black; display: none;" required>
                                             }
                                             else
                                             {
-                                                <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black;" required>
+                                                    <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black;" required>
                                             }
                                         }
                                     </div>
@@ -301,17 +302,17 @@
                                             <div class="pagination">
                                                 @{
                                                     int pagenumber = ((@ViewBag.FeedbacksCount - 1) / 5) + 1;
-                                                    @if (ViewBag.CurrentPage > 1)
+                                                        @if (ViewBag.CurrentPage > 1)
                                                     {
-                                                        <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
+                                                            <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
                                                     }
-                                                    @for (int i = 1; i <= pagenumber; i++)
+                                                        @for (int i = 1; i <= pagenumber; i++)
                                                     {
-                                                        <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = i })">@i</a>
+                                                            <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = i })">@i</a>
                                                     }
-                                                    @if (ViewBag.CurrentPage < pagenumber)
+                                                        @if (ViewBag.CurrentPage < pagenumber)
                                                     {
-                                                        <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
+                                                            <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
                                                     }
                                                 }
                                             </div>
@@ -341,7 +342,7 @@
                                         <div class="axil-product">
                                             <div class="thumbnail">
                                                 <a href="~/Home/ServiceDetail?serviceCategoryId=@sc.SerCategoriesId">
-                                                    <img style="width:300px;height:150px;" src="@sc.Picture" alt="Product Images">
+                                                    <img style="width:300px;height:170px;" src="@sc.Picture" alt="Product Images">
                                                 </a>
                                             </div>
                                             <div class="product-content">
