@@ -300,7 +300,7 @@ namespace FEPetServices.Controllers
         }
 
 
-        public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory, int page = 1, int pagesize = 6, string CategoriesName = "", string viewstyle = "grid", string sortby = "")
+        public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory,ServiceSearch searchDTO, int page = 1, int pagesize = 6, string CategoriesName = "", string viewstyle = "grid", string sortby = "")
         {
             try
             {
@@ -318,14 +318,9 @@ namespace FEPetServices.Controllers
                     {
                         var servicecategoryList = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseContent);
 
-
-
-                        if (!string.IsNullOrEmpty(CategoriesName) && servicecategoryList != null)
+                        if (!string.IsNullOrEmpty(searchDTO.servicename))
                         {
-                            servicecategoryList = servicecategoryList
-                                .Where(c => c.SerCategoriesName != null && c.SerCategoriesName.Contains(CategoriesName, StringComparison.OrdinalIgnoreCase))
-                                .ToList();
-                            Console.WriteLine(1);
+                            servicecategoryList = servicecategoryList?.Where(r => r.SerCategoriesName.Contains(searchDTO.servicename, StringComparison.OrdinalIgnoreCase)).ToList();
                         }
 
                         switch (sortby)
@@ -335,6 +330,15 @@ namespace FEPetServices.Controllers
                                 break;
                             default:
                                 servicecategoryList = servicecategoryList.OrderBy(r => r.SerCategoriesName).ToList();
+                                break;
+                        }
+                        switch (searchDTO.sortby)
+                        {
+                            case "name_desc":
+                                servicecategoryList = servicecategoryList?.OrderByDescending(r => r.SerCategoriesName).ToList();
+                                break;
+                            default:
+                                servicecategoryList = servicecategoryList?.OrderBy(r => r.SerCategoriesName).ToList();
                                 break;
                         }
 
@@ -348,8 +352,8 @@ namespace FEPetServices.Controllers
                         ViewBag.CurrentPage = page;
                         ViewBag.PageSize = pagesize;
 
-                        ViewBag.CategoriesName = CategoriesName;
-                        ViewBag.sortby = sortby;
+                        ViewBag.CategoriesName = searchDTO.servicename;
+                        ViewBag.sortby = searchDTO.sortby;
                         ViewBag.pagesize = pagesize;
                         ViewBag.viewstyle = viewstyle;
 
@@ -776,17 +780,6 @@ namespace FEPetServices.Controllers
                                 .Where(c => c.PageTile != null && c.PageTile.Contains(BlogName, StringComparison.OrdinalIgnoreCase))
                                 .ToList();
                         }
-                        //tìm kiếm tên theo bảng chữ cái từ a-z và từ z-a
-                        switch (sortby)
-                        {
-                            case "name_desc":
-                                blogList = blogList.OrderByDescending(r => r.PageTile).ToList();
-                                break;
-                            default:
-                                blogList = blogList.OrderBy(r => r.PageTile).ToList();
-                                break;
-                        }
-
 
                         int totalItems = blogList.Count;
                         int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
@@ -798,7 +791,6 @@ namespace FEPetServices.Controllers
                         ViewBag.PageSize = pagesize;
 
                         ViewBag.BlogName = BlogName;
-                        ViewBag.sortby = sortby;
                         ViewBag.pagesize = pagesize;
                         blogModel.Blog = currentPageBlogList;
 
