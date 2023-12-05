@@ -11,35 +11,68 @@
     void RenderOrder(OrderForm order)
     {
         double totalPrice = 0;
-
         <div class="work-container">
             <div class="work-container-inner">
-                <h5>Order ID : @order.OrderId</h5>
-                @if (@order.OrderStatus.Trim() == "Delivery")
+                <h5>Mã đơn hàng : @order.OrderId</h5>
+                @if ((order.OrderProductDetails.Count() > 0
+                || order.BookingServicesDetails.Count() > 0)
+                && order.BookingRoomDetails.Count() == 0)
                 {
-                    <span class="badge badge-info">Đang giao</span>
+                    @if (order.OrderStatus.Trim() == "Confirmed")
+                    {
+                        <span style="display:inline-block" class="badge badge-info">Đơn hàng đã được xác nhận và trong giai đoạn xử lý </span>
+                    }
+                    else if (order.OrderStatus.Trim() == "Processing")
+                    {
+                        <span style="display:inline-block" class="badge badge-info">Đơn hàng đang được thực hiện</span>
+                    }
+                    else if (order.OrderStatus.Trim() == "Placed")
+                    {
+                        <span style="display:inline-block" class="badge badge-info">Đơn hàng đang chờ xác nhận</span>
+                    }
+                    else if (order.OrderStatus.Trim() == "Completed")
+                    {
+                        <span style="display:inline-block" class="badge badge-info">Đơn hàng đã hoàn thành</span>
+                    }
+                    else if (order.OrderStatus.Trim() == "Cancelled")
+                    {
+                        <span style="display:inline-block" class="badge badge-info">Đơn hàng bị huỷ</span>
+                    }
+
                 }
-                else if (@order.OrderStatus.Trim() == "Reject")
+                @if ((order.OrderProductDetails.Count() == 0
+                || order.BookingServicesDetails.Count() == 0)
+                && order.BookingRoomDetails.Count() > 0)
                 {
-                    <span class="badge badge-info">Đơn hàng bị huỷ</span>
-                }
-                else if (@order.OrderStatus.Trim() == "Waiting")
-                {
-                    <span class="badge badge-info">Đơn hàng đang chờ xử lý</span>
-                }
-                else if (@order.OrderStatus.Trim() == "Received")
-                {
-                    <span class="badge badge-info">Hoàn thành</span>
+                    @if (order?.OrderStatus.Trim() == "Confirmed")
+                    {
+                        <span style="display:inline-block" class="badge badge-info">Đã trả phòng</span>
+                    }
+                    else if (order?.OrderStatus.Trim() == "Refund")
+                    {
+                        <span style="display:inline-block" class="badge badge-info">Hoàn tiên</span>
+                    }
+                    else if (order?.OrderStatus.Trim() == "Placed")
+                    {
+                        <span style="display:inline-block" class="badge badge-info">Chờ nhận phòng</span>
+                    }
+                    else if (order?.OrderStatus.Trim() == "Cancelled")
+                    {
+                        <span style="display:inline-block" class="badge badge-info">Phòng bị huỷ </span>
+                    }
                 }
             </div>
             <p><i class="far fa-calendar-alt"></i> @order.OrderDate</p>
 
+            @*Start - Product Detail*@
             @if (order.OrderProductDetails != null && order.OrderProductDetails.Count > 0)
             {
+                var productDetailsList = order.OrderProductDetails.ToList();
                 <div class="content-details">
                     <p class="bold-text">Thông tin sản phẩm đã được đặt hàng</p>
-                    @foreach (var productDetail in order.OrderProductDetails)
+                    @for (int i = 0; i < productDetailsList.Count; i++)
                     {
+                        var productDetail = productDetailsList[i];
                         totalPrice = totalPrice + (double)(productDetail.Quantity * productDetail.Price);
                         <div class="content-detail">
                             <div class="product-info">
@@ -51,11 +84,33 @@
                             </div>
                             <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
                         </div>
-                        <div></div>
+                        @if (i == order.OrderProductDetails.Count - 1)
+                        {
+                            <div class=" status-content-detail">
+                                @if (productDetail?.StatusOrderProduct?.Trim() == "Placed")
+                                {
+                                    <span class="badge badge-info">Sản phẩm đang chờ xác nhận</span>
+                                }
+                                else if (productDetail?.StatusOrderProduct?.Trim() == "Packaging")
+                                {
+                                    <span class="badge badge-info">Đóng gói sản phẩm</span>
+                                }
+                                else if (productDetail?.StatusOrderProduct?.Trim() == "Shipped")
+                                {
+                                    <span class="badge badge-info">Đơn hàng đang được vận chuyển</span>
+                                }
+                                else if (productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                                {
+                                    <span class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
+                                }
+                            </div>
+                        }
                     }
                 </div>
             }
+            @*End - Product Detail*@
 
+            @*Start - Service Detail*@
             @if (order.BookingServicesDetails != null && order.BookingServicesDetails.Count > 0)
             {
                 <div class="content-details">
@@ -69,8 +124,21 @@
                                 <div class="service-info-detail">
                                     <p style="max-width:450px">@serviceDetail.Service.ServiceName</p>
                                     <p style="font-size:.8rem;"><span>Cân nặng thú cưng: </span>@serviceDetail.Weight Kg</p>
-                                    @*     PartnerID*@
-                                    <p style="font-size:.8rem;"><span>Đối tác:</span>@serviceDetail.PartnerInfoId</p>
+
+                                    @*<button type="button" class="map-button"
+                    data-lat="@serviceDetail?.PartnerInfo?.Lat"
+                    data-lng="@serviceDetail?.PartnerInfo?.Lng">
+                    Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail.PartnerInfoId
+                    </button>*@
+
+                                    <p style="font-size:.8rem; cursor: pointer; color:blue" class="map-button clickable"
+                                       data-lat="@serviceDetail?.PartnerInfo?.Lat"
+                                       data-lng="@serviceDetail?.PartnerInfo?.Lng"
+                                       data-my-lat=""
+                                       data-my-lng="">
+                                        Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail.PartnerInfoId
+                                    </p>
+
                                 </div>
                             </div>
                             <div class="content-detail-time-service">
@@ -79,10 +147,22 @@
                             </div>
                             <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
                         </div>
+                        <div class="status-content-detail">
+                            @if (@serviceDetail?.StatusOrderService.Trim() == "Placed")
+                            {
+                                <span class="badge badge-info">Dịch vụ đang chờ xác nhận</span>
+                            }
+                            else if (@serviceDetail?.StatusOrderService?.Trim() == "Waiting")
+                            {
+                                <span class="badge badge-info">Dịch vụ đang chờ xử lý </span>
+                            }
+                        </div>
                     }
                 </div>
             }
+            @*End - Service Detail*@
 
+            @*Start - Room Detail*@
             @if (order.BookingRoomDetails != null && order.BookingRoomDetails.Count > 0)
             {
                 <div class="content-details">
@@ -112,7 +192,7 @@
                     }
                 </div>
             }
-
+            @*End - Room Detail*@
             <div class="headel-content">
                 <p>Tổng giá : </p>
                 <p>@(totalPrice.ToString("n0").Replace(",", ".")) VNĐ</p>

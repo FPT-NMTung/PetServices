@@ -34,9 +34,9 @@ namespace FEPetServices.Controllers
 
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
 
-            //DefaultApiUrl = "https://localhost:7255/api/";
+            DefaultApiUrl = "https://localhost:7255/api/";
             //DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";
         }
 
@@ -58,10 +58,8 @@ namespace FEPetServices.Controllers
                 };
 
                 AccountInfo userInfo = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
-
                 return View(userInfo);
             }
-
             return View();
         }
 
@@ -84,7 +82,6 @@ namespace FEPetServices.Controllers
             public ServiceDTO service { set; get; }
             // Room
         }
-
         List<CartItem> GetCartItems()
         {
             var session = HttpContext.Session;
