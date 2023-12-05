@@ -10,7 +10,7 @@ namespace PetServices.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrderController : ControllerBase   
     {
         private PetServicesContext _context;
         private IMapper _mapper;
@@ -362,7 +362,8 @@ namespace PetServices.Controllers
                     }
                 }
 
-                if (order.OrderProductDetails.Count() == 0 && order.BookingServicesDetails.Count() > 0)
+                if (order.OrderProductDetails.Count() == 0 
+                    && order.BookingServicesDetails.Count() > 0)
                 {
                     foreach (var dto in order.BookingServicesDetails)
                     {
@@ -377,9 +378,26 @@ namespace PetServices.Controllers
                     }
                 }
 
-                if (order.OrderProductDetails.Count() > 0 && order.BookingServicesDetails.Count() > 0)
+                if (order.OrderProductDetails.Count() > 0 
+                    && order.BookingServicesDetails.Count() > 0)
                 {
 
+                }
+
+                if (order.OrderProductDetails.Count() == 0 
+                    && order.BookingServicesDetails.Count() == 0 
+                    && order.BookingRoomDetails.Count() > 0)
+                {
+                    foreach (var dto in order.BookingRoomDetails)
+                    {
+                        if (status.newStatus == "Confirmed")
+                        {
+                            if (order.StatusPayment == false)
+                            {
+                                order.StatusPayment = !order.StatusPayment;
+                            }
+                        }
+                    }
                 }
 
                 _context.Orders.Update(order);

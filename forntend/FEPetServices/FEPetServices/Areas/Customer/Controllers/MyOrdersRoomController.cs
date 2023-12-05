@@ -1,23 +1,26 @@
 ﻿using FEPetServices.Form.OrdersForm;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Drawing.Printing;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
 
+
 namespace FEPetServices.Areas.Customer.Controllers
 {
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = "CusOnly")]
-    public class MyOrdersController : Controller
+    public class MyOrdersRoomController : Controller
     {
         private readonly HttpClient _client = null;
         private readonly string DefaultApiUrl = "";
         private readonly string DefaultApiUrlOrders = "";
         private readonly IConfiguration configuration;
 
-        public MyOrdersController(IConfiguration configuration)
+        public MyOrdersRoomController(IConfiguration configuration)
         {
             this.configuration = configuration;
             _client = new HttpClient();
@@ -40,7 +43,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             }   
             else
             {
-                HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/getOrderUser/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
+                HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/getRoomOrderUser/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -75,16 +78,13 @@ namespace FEPetServices.Areas.Customer.Controllers
                     }
                     else
                     {
-                        return View();  
+                        return View();
                     }
                 }
             }
         }
 
         [HttpGet]
-        public Task<IActionResult> AllOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
-
-        [HttpGet]
-        public Task<IActionResult> CompletedOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+        public Task<IActionResult> Index(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
     }
 }
