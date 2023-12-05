@@ -969,11 +969,10 @@ namespace FEPetServices.Controllers
                             partList = partList?.Where(r =>
                                 r.FirstName.Contains(PartName, StringComparison.OrdinalIgnoreCase) ||
                                 r.LastName.Contains(PartName, StringComparison.OrdinalIgnoreCase) ||
+                                r.PartnerInfoId == (int.TryParse(PartName, out int id) ? id : r.PartnerInfoId) ||
                                 (r.FirstName + " " + r.LastName).Contains(PartName, StringComparison.OrdinalIgnoreCase)
                             ).ToList();
                         }
-
-
 
                         int totalItems = partList.Count;
                         int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
