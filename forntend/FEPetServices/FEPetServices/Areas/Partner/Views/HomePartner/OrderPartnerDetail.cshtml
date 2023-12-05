@@ -188,6 +188,10 @@
                 {
                     <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerReceived">Trở lại</a>
                 }
+                else if (status.StatusOrderService.Trim() == "Processing")
+                {
+                    <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerProcessing">Trở lại</a>
+                }
                 else
                 {
                     <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerSpecial">Trở lại</a>

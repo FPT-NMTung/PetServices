@@ -88,7 +88,7 @@
                                 <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
                             </td>
                             <td>
-                                <button class="completed-button" data-orderid="@pc.OrderId">Hoàn thành</button>
+                                <button class="processing-button" data-orderid="@pc.OrderId">Hoàn thành</button>
                             </td>
                         </tr>
                     }
@@ -100,11 +100,11 @@
             // Hàm JavaScript để cập nhật trạng thái đơn hàng
             $(document).ready(function () {
                 // Sử dụng class để chọn button
-                var buttons_received = $('.completed-button');
+                var buttons_received = $('.processing-button');
 
                 buttons_received.click(function () {
                     var orderId = $(this).data('orderid');
-                    let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusCompleted?orderId=' + orderId;
+                    let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusProcessing?orderId=' + orderId;
                     fetch(url).then(response => {
                         if (response.status == 200) {
                             console.log("Hoàn thành đơn thành công!");
