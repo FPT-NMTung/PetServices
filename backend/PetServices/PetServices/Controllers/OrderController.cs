@@ -305,7 +305,7 @@ namespace PetServices.Controllers
                 // Kiểm tra booking có tồn tại hay không
                 if (order == null)
                 {
-                    return NotFound("Booking không tồn tại");
+                    return NotFound("Order không tồn tại");
                 }
 
                 // Kiểm tra xem trạng thái cũ có chính xác hay không
@@ -342,8 +342,6 @@ namespace PetServices.Controllers
                 _context.OrderProductDetails.UpdateRange(order.OrderProductDetails);
                 _context.BookingServicesDetails.UpdateRange(order.BookingServicesDetails);
 
-                await _context.SaveChangesAsync();
-
                 if (order.OrderProductDetails.Count() > 0 && order.BookingServicesDetails.Count() == 0)
                 {
                     foreach (var dto in order.OrderProductDetails)
@@ -360,7 +358,18 @@ namespace PetServices.Controllers
                 }
 
                 if (order.OrderProductDetails.Count() == 0 && order.BookingServicesDetails.Count() > 0)
-                { 
+                {
+                    foreach (var dto in order.BookingServicesDetails)
+                    {
+                        if (status.newStatusService == "Delivered")
+                        {
+                            if (order.StatusPayment == false)
+                            {
+                                order.StatusPayment = !order.StatusPayment;
+                            }
+                            order.OrderStatus = "Completed";
+                        }
+                    }
                 }
 
                 if (order.OrderProductDetails.Count() > 0 && order.BookingServicesDetails.Count() > 0)
@@ -378,7 +387,6 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
 
         [HttpPut("changeStatusPayment")]
         public async Task<IActionResult> ChangeStatusPayment(int Id)

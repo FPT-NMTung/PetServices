@@ -58,10 +58,8 @@ namespace FEPetServices.Controllers
                 };
 
                 AccountInfo userInfo = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
-
                 return View(userInfo);
             }
-
             return View();
         }
 
@@ -84,7 +82,6 @@ namespace FEPetServices.Controllers
             public ServiceDTO service { set; get; }
             // Room
         }
-
         List<CartItem> GetCartItems()
         {
             var session = HttpContext.Session;
