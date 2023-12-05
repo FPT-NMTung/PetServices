@@ -293,12 +293,12 @@ namespace FEPetServices.Areas.Partner.Controllers
         public async Task<IActionResult> OrderPartnerDetail(int orderId)
         {
             //HttpResponseMessage reasonResponse = await client.GetAsync("https://localhost:7255/api/Reason/GetAll");
-            //HttpResponseMessage reasonResponse = await client.GetAsync(DefaultApiUrl + "Reason/GetAll");
-            //if (reasonResponse.IsSuccessStatusCode)
-            //{
-            //    var reaCategories = await reasonResponse.Content.ReadFromJsonAsync<List<ReasonDTO>>();
-            //    ViewBag.Reasons = new SelectList(reaCategories, "ReasonId", "ReasonTitle");
-            //}
+            HttpResponseMessage reasonResponse = await client.GetAsync(DefaultApiUrl + "Reason/GetAll");
+            if (reasonResponse.IsSuccessStatusCode)
+            {
+                var reaCategories = await reasonResponse.Content.ReadFromJsonAsync<List<ReasonDTO>>();
+                ViewBag.Reasons = new SelectList(reaCategories, "ReasonId", "ReasonTitle");
+            }
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/" + orderId);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderPartner + "/" + orderId);
             if (response.IsSuccessStatusCode)
@@ -331,9 +331,23 @@ namespace FEPetServices.Areas.Partner.Controllers
         [HttpPost]
         public async Task<IActionResult> OrderPartnerDetail(int orderId, [FromForm] Status status, [FromForm] ReasonOrdersForm reasonOrders)
         {
+
+            if (status.newStatus == "Waiting")
+            {
+                status.newStatusProduct = "";
+                status.newStatusService = "Waiting";
+            }
             //HttpResponseMessage response = await client.PutAsJsonAsync("https://localhost:7255/api/OrderPartner/ChangeStatus?orderId=" + orderId, status);
-            HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl + "OrderPartner/ChangeStatus?orderId=" + orderId, status);
+            //HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl + "OrderPartner/ChangeStatus?orderId=" + orderId, status);
+            HttpResponseMessage response = await client.PutAsJsonAsync("https://localhost:7255/api/OrderPartner/ChangeStatus?orderId=" + orderId, status);
+            reasonOrders.OrderId = orderId;
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+            reasonOrders.EmailReject = email;
+
             HttpResponseMessage responseReject = await client.PostAsJsonAsync("https://localhost:7255/api/ReasonOrder", reasonOrders);
+
+
             if (response.IsSuccessStatusCode && responseReject.IsSuccessStatusCode)
             {
                 TempData["SuccessToast"] = "Cập nhật thành công";
