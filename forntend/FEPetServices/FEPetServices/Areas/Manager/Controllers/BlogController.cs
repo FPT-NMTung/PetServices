@@ -45,7 +45,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 /*HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Blog/GetAllBlog");*/
-                HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Blog/GetAllBlog");
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Blog/GetAllBlog");
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
@@ -81,7 +81,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
                 {
                    
-                    HttpResponseMessage TagResponse = await client.GetAsync("https://localhost:7255/api/Tag/GetAllTag");
+                    HttpResponseMessage TagResponse = await client.GetAsync(DefaultApiUrl + "Tag/GetAllTag");
 
                     if (TagResponse.IsSuccessStatusCode)
                     {
@@ -111,7 +111,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                     /*HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "Blog/CreateBlog", content);*/
-                    HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/Blog/CreateBlog", content);
+                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "Blog/CreateBlog", content);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -154,7 +154,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-                HttpResponseMessage categoryResponse = await client.GetAsync("https://localhost:7255/api/Tag/GetAllTag");
+                HttpResponseMessage categoryResponse = await client.GetAsync(DefaultApiUrl + "Tag/GetAllTag");
 
                 if (categoryResponse.IsSuccessStatusCode)
                 {
@@ -169,7 +169,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 tag.Status = true;
                 var json = JsonConvert.SerializeObject(tag);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/Tag/AddTag", content);
+                HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "Tag/AddTag", content);
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["SuccessToast"] = "Thêm tag thành công!";
@@ -195,7 +195,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-                HttpResponseMessage TagResponse = await client.GetAsync("https://localhost:7255/api/Tag/GetAllTag");
+                HttpResponseMessage TagResponse = await client.GetAsync(DefaultApiUrl + "Tag/GetAllTag");
 
                 if (TagResponse.IsSuccessStatusCode)
                 {
@@ -206,7 +206,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
                 // Gọi API để lấy thông tin ServiceCategory cần chỉnh sửa
                /* HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Blog/BlogID/" + blogId);*/
-                HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Blog/BlogID/" + blogId);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Blog/BlogID/" + blogId);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -241,7 +241,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-                HttpResponseMessage TagResponse = await client.GetAsync("https://localhost:7255/api/Tag/GetAllTag");
+                HttpResponseMessage TagResponse = await client.GetAsync(DefaultApiUrl + "Tag/GetAllTag");
 
                 if (TagResponse.IsSuccessStatusCode)
                 {
@@ -270,7 +270,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 {
 
                     /*HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrl + "Blog/BlogID/" + blogId);*/
-                    HttpResponseMessage responseForImage = await client.GetAsync("https://localhost:7255/api/Blog/BlogID/" + blogId);
+                    HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrl + "Blog/BlogID/" + blogId);
 
                     if (responseForImage.IsSuccessStatusCode)
                     {
@@ -302,7 +302,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 // Gửi dữ liệu lên máy chủ
                 /*HttpResponseMessage response = await client.PutAsync(DefaultApiUrl + "Blog/UpdateBlog?blogId=" + blogId, content);*/
-                HttpResponseMessage response = await client.PutAsync("https://localhost:7255/api/Blog/UpdateBlog?blogId=" + blogId, content);
+                HttpResponseMessage response = await client.PutAsync(DefaultApiUrl + "Blog/UpdateBlog?blogId=" + blogId, content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -330,7 +330,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             {
                 
                 /* HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Blog/BlogID/" + blogId);*/
-                HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Tag/TagsID/" + tagId);
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Tag/TagsID/" + tagId);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -376,7 +376,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 // Gửi dữ liệu lên máy chủ
                 /*HttpResponseMessage response = await client.PutAsync(DefaultApiUrl + "Blog/UpdateBlog?blogId=" + blogId, content);*/
-                HttpResponseMessage response = await client.PutAsync("https://localhost:7255/api/Tag/EditTag?tagID=" + tagId, content);
+                HttpResponseMessage response = await client.PutAsync(DefaultApiUrl + "Tag/EditTag?tagID=" + tagId, content);
 
                 if (response.IsSuccessStatusCode)
                 {

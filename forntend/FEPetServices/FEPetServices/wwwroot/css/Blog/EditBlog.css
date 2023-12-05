@@ -5,6 +5,16 @@
     justify-content: center;
 }
 
+.title {
+    text-align: center;
+}
+
+.title h1{
+    
+    font-size: 40px;
+    font-weight: bold;
+}
+
 .row {
     justify-content: center;
 }
