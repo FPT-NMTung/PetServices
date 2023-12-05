@@ -36,7 +36,7 @@
         <div class="search-order">
              <input type="text" id="searchInput" placeholder="Bạn có thể tìm kiếm theo mã đơn hàng, tên sản phẩm hoặc dịch vụ">
         </div>
-
+            
         <div class="card-body">
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">    
@@ -78,6 +78,7 @@
                                         </div>
                                         <p><i class="far fa-calendar-alt"></i> @order.OrderDate</p>
 
+                                        @*Start - Product Detail*@
                                         @if (order.OrderProductDetails != null && order.OrderProductDetails.Count > 0)
                                         {
                                             <div class="content-details">
@@ -107,13 +108,22 @@
                                                             {
                                                                 <span class="badge badge-info">Đóng gói sản phẩm</span>
                                                             }
-
+                                                            else if (productDetail?.StatusOrderProduct?.Trim() == "Shipped")
+                                                            {
+                                                                <span class="badge badge-info">Đơn hàng đang được vận chuyển</span>
+                                                            }
+                                                            else if (productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                                                            {
+                                                                <span class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
+                                                            }
                                                         </div>
                                                     }
                                                 }
                                             </div>
                                         }
+                                        @*End - Product Detail*@
 
+                                        @*Start - Service Detail*@
                                         @if (order.BookingServicesDetails != null && order.BookingServicesDetails.Count > 0)
                                         {
                                             <div class="content-details">
@@ -163,7 +173,9 @@
                                                 }
                                             </div>
                                         }
+                                        @*End - Service Detail*@
 
+                                        @*Start - Room Detail*@
                                         @if (order.BookingRoomDetails != null && order.BookingRoomDetails.Count > 0)
                                         {
                                             <div class="content-details">
@@ -193,6 +205,7 @@
                                                 }
                                             </div>
                                         }
+                                        @*End - Room Detail*@
 
                                         <div class="headel-content">
                                             <p>Tổng giá : </p>
