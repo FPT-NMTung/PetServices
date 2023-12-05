@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-@*<link rel="stylesheet" href="/css/Service/Service.css">*@
+    @*<link rel="stylesheet" href="/css/Service/Service.css">*@
 <link rel="stylesheet" href="/css/RoomCategory.css"></link>
 <link href="~/css/toastNotification.css" rel="stylesheet" />
 </head>
@@ -53,17 +53,17 @@
       <div class="col-75">
                     @if (ViewBag.Categories != null)
                     {
-             <select id="SerCategoriesId" name="SerCategoriesId" required>
-             <option value="">Danh sách loại dịch vụ</option>
+                     <select id="SerCategoriesId" name="SerCategoriesId" required>
+                     <option value="">Danh sách loại dịch vụ</option>
                             @foreach (var category in ViewBag.Categories)
                             {
-                            <option value="@category.Value">@category.Text</option>
+                                            <option value="@category.Value">@category.Text</option>
                             }
-            </select>
+                    </select>
                     }
                     else
                     {
-                <span class="text-danger">Error: Service Categories data not available.</span>
+                        <span class="text-danger">Error: Service Categories data not available.</span>
                     }
       </div>
     </div>

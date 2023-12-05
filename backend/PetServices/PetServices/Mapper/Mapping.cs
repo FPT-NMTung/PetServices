@@ -149,8 +149,12 @@ namespace PetServices.Mapper
                 .ForMember(dest => dest.PublisheDate, opt => opt.MapFrom(src => src.PublisheDate))
                 .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
+                .ForMember(dest => dest.TagId, opt => opt.MapFrom(src => src.TagId))
+                .ForMember(dest => dest.TagName, opt => opt.MapFrom(src => src.Tag.TagName));
             CreateMap<Tag,TagDTO>()
+                .ReverseMap();
+            CreateMap<Tag, Tag2DTO>()
                 .ReverseMap();
             #endregion
 
