@@ -726,6 +726,7 @@ namespace PetServices.Controllers
         {
             //lấy danh sách đánh giá các sản phẩm 
             var listFeedback = await _context.Feedbacks.Where(o => o.ProductId != null).ToListAsync();
+            var stt = 1;
 
             var feedback = new List<FeedbackForm>();
 
@@ -733,15 +734,21 @@ namespace PetServices.Controllers
             {
                 var product = await _context.Products.FirstOrDefaultAsync(o => o.ProductId == Feedback.ProductId);
                 var customer = await _context.UserInfos.FirstOrDefaultAsync(o => o.UserInfoId == Feedback.UserId);
+                var account = await _context.Accounts.FirstOrDefaultAsync(o => o.UserInfoId == Feedback.UserId);
+
 
                 feedback.Add(new FeedbackForm
                 {
+                    stt = stt,
                     name = product.ProductName,
+                    gmail = account.Email,
                     picture = product.Picture,
                     customerName = customer.FirstName + customer.LastName,
                     NumberStart = Feedback.NumberStart,
                     Content = Feedback.Content,
                 });
+
+                stt++;
             }
 
             return Ok(feedback);
@@ -753,6 +760,7 @@ namespace PetServices.Controllers
         {
             //lấy danh sách đánh giá các phòng 
             var listFeedback = await _context.Feedbacks.Where(o => o.RoomId != null).ToListAsync();
+            var stt = 1;
 
             var feedback = new List<FeedbackForm>();
 
@@ -760,15 +768,20 @@ namespace PetServices.Controllers
             {
                 var room = await _context.Rooms.FirstOrDefaultAsync(o => o.RoomId == Feedback.RoomId);
                 var customer = await _context.UserInfos.FirstOrDefaultAsync(o => o.UserInfoId == Feedback.UserId);
+                var account = await _context.Accounts.FirstOrDefaultAsync(o => o.UserInfoId == Feedback.UserId);
 
                 feedback.Add(new FeedbackForm
                 {
+                    stt = stt,
                     name = room.RoomName,
                     picture = room.Picture,
+                    gmail = account.Email,
                     customerName = customer.FirstName + customer.LastName,
                     NumberStart = Feedback.NumberStart,
                     Content = Feedback.Content,
                 });
+
+                stt++;
             }
 
             return Ok(feedback);
@@ -780,6 +793,7 @@ namespace PetServices.Controllers
         {
             //lấy danh sách đánh giá các dịch vụ
             var listFeedback = await _context.Feedbacks.Where(o => o.ServiceId != null && o.UserId != null).ToListAsync();
+            var stt = 1;
 
             var feedback = new List<FeedbackForm>();
 
@@ -787,15 +801,20 @@ namespace PetServices.Controllers
             {
                 var service = await _context.Services.FirstOrDefaultAsync(o => o.ServiceId == Feedback.ServiceId);
                 var customer = await _context.UserInfos.FirstOrDefaultAsync(o => o.UserInfoId == Feedback.UserId);
+                var account = await _context.Accounts.FirstOrDefaultAsync(o => o.UserInfoId == Feedback.UserId);
 
                 feedback.Add(new FeedbackForm
                 {
+                    stt = stt,
                     name = service.ServiceName ?? null,
                     picture = service.Picture ?? null,
+                    gmail = account.Email,
                     customerName = customer.FirstName + customer.LastName ?? null,
                     NumberStart = Feedback.NumberStart,
                     Content = Feedback.Content,
                 });
+
+                stt++;
             }
 
             return Ok(feedback);

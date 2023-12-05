@@ -8,10 +8,11 @@
     <link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="~/css/toastNotification.css" rel="stylesheet" />
     <link href="~/css/datatable.css" rel="stylesheet" />
+    <link href="~/css/orders/stylesheet.css" rel="stylesheet" />
 </head>
 <body>
     <div>
-        <h1>Danh sách order</h1>
+        <h1>Danh sách đơn hàng</h1>
     </div>
     <div>
         <table id="lists">
@@ -21,6 +22,7 @@
                     <th>Tên</th>
                     <th>Số điện thoại</th>
                     <th>Ngày đặt đơn</th>
+                    <th>Trạng thái đơn hàng</th>
                     <th>Chi tiết</th>
                 </tr>
             </thead>
@@ -37,6 +39,28 @@
                             <td>@orderLists?.Phone</td>
                             <td>@orderLists?.OrderDate</td>
                             <td>
+                                @if (orderLists?.OrderStatus.Trim() == "Confirmed")
+                                {
+                                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đã được xác nhận và trong giai đoạn xử lý </span>
+                                }
+                                else if (orderLists?.OrderStatus.Trim() == "Processing")
+                                {
+                                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đang được thực hiện</span>
+                                }
+                                else if (orderLists?.OrderStatus.Trim() == "Placed")
+                                {
+                                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đang chờ xác nhận</span>
+                                }
+                                else if (orderLists?.OrderStatus.Trim() == "Completed")
+                                {
+                                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đã hoàn thành</span>
+                                }
+                                else if (orderLists?.OrderStatus.Trim() == "Cancelled")
+                                {
+                                    <span style="display:inline-block" class="badge badge-info">Đơn hàng bị huỷ</span>
+                                }
+                            </td>
+                            <td>
                                 <a class="detail-button" href="~/Manager/OrderLists/OrderDetail?id=@orderLists.OrderId">Chi tiết</a>
                             </td>
                         </tr>
@@ -46,7 +70,7 @@
             <tfoot>
                 @if (!string.IsNullOrEmpty(TempData["ErrorLoadingDataToast"] as string))
                 {
-                    <div class="alert alert-danger">
+                    <div style="margin: 0 30px;" class="alert alert-danger">
                         <span style="color:red">@TempData["ErrorLoadingDataToast"]</span>
                     </div>
                 }
@@ -95,9 +119,10 @@
             "columnDefs": [
                 { "targets": [0], "width": "5%" },
                 { "targets": [1], "width": "20%" },
-                { "targets": [2], "width": "35%" },
-                { "targets": [3], "width": "25%" }, // Điều chỉnh cột này để khớp với số cột thực tế
-                { "targets": [4], "width": "15%" },
+                { "targets": [2], "width": "15%" },
+                { "targets": [3], "width": "20%" },
+                { "targets": [4], "width": "25%" },
+                { "targets": [5], "width": "15%" },
             ],
             "language": {
                 "lengthMenu": "Hiển thị _MENU_ dòng",

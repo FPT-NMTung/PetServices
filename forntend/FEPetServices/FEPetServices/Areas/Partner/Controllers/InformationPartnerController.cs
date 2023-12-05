@@ -1,12 +1,15 @@
-﻿using FEPetServices.Form;
+﻿using FEPetServices.Areas.DTO;
+using FEPetServices.Form;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
 
 namespace FEPetServices.Areas.Partner.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = "PartnerOnly")]
     public class InformationPartnerController : Controller
     {
@@ -30,9 +33,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
-
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
-
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -102,10 +103,10 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
             else
             {
-                HttpResponseMessage responseUser = await _client.GetAsync("https://pet-service-api.azurewebsites.net/api/Partner/" + email);
-                if (responseUser.IsSuccessStatusCode)
+                HttpResponseMessage responsePartner = await _client.GetAsync(DefaultApiUrl + "Partner/" + email);
+                if (responsePartner.IsSuccessStatusCode)
                 {
-                    string responseContent = await responseUser.Content.ReadAsStringAsync();
+                    string responseContent = await responsePartner.Content.ReadAsStringAsync();
 
                     var options = new JsonSerializerOptions
                     {
@@ -140,10 +141,10 @@ namespace FEPetServices.Areas.Partner.Controllers
                     partnerInfo.Lng = lng.ToString();
                 }
             }
-
-            if (partnerInfo.Province == null || partnerInfo.District == null || partnerInfo.Commune == null)
+            HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
+            if (partnerInfo.Province == null || partnerInfo.District == null || partnerInfo.Commune == null )
             {
-                HttpResponseMessage responseUser = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
+                
                 if (responseUser.IsSuccessStatusCode)
                 {
                     string responseContent = await responseUser.Content.ReadAsStringAsync();
@@ -156,7 +157,21 @@ namespace FEPetServices.Areas.Partner.Controllers
                     AccountInfo managerInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
                     partnerInfo.Province = managerInfos.PartnerInfo.Province;
                     partnerInfo.District = managerInfos.PartnerInfo.District;
-                    partnerInfo.Commune = managerInfos.PartnerInfo.Province;
+                    partnerInfo.Commune = managerInfos.PartnerInfo.Province; 
+                }
+            }
+            if(partnerInfo.CardName == null)
+            {
+                if (responseUser.IsSuccessStatusCode)
+                {
+                    string responseContent = await responseUser.Content.ReadAsStringAsync();
+
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+                    AccountInfo managerInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
+                    partnerInfo.CardName = managerInfos.PartnerInfo.CardName;
                 }
             }
 

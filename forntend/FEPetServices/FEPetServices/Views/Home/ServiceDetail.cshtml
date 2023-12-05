@@ -1,4 +1,5 @@
-﻿﻿﻿<!doctype html>
+﻿﻿﻿
+<!doctype html>
 <html class="no-js" lang="en">
 
 <head>
@@ -24,35 +25,35 @@
                                 <div class="col-lg-12">
                                     <div class="product-large-thumbnail-2 single-product-thumbnail axil-product slick-layout-wrapper--15 axil-slick-arrow arrow-both-side-3">
                                         <div class="thumbnail">
-                                           <img  src="@Model?.Service.Picture" alt="Images"  style="height:615px;">
+                                            <img src="@Model?.Service.Picture" alt="Images" style="height:615px;">
                                         </div>
 
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="small-thumb-wrapper product-small-thumb-2 small-thumb-style-two small-thumb-style-three">
-                                         @foreach(var sc in Model?.ServiceCategory.Services)
-                                         {
+                                        @foreach (var sc in Model?.ServiceCategory.Services)
+                                        {
                                             @if (sc.Status)
                                             {
                                                 <div class="small-thumb-img">
-                                                    <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sc.ServiceId"><img src="@sc.Picture" style="width:60px; height:60px;" alt="samll-thumb"></a> 
+                                                    <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sc.ServiceId"><img src="@sc.Picture" style="width:60px; height:60px;" alt="samll-thumb"></a>
                                                 </div>
                                             }
-                                            }
-                                     </div>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="axil-order-summery">
-                                     <div class="summery-table-wrap">
-                                         <h5 style="color:red">Tổng tiền cần thanh toán</h5>
-                                         <span class="order-total-amount" id="totalAmountDisplay">0 VNĐ</span>
-                                      </div>
+                                    <div class="summery-table-wrap">
+                                        <h5 style="color:red">Tổng tiền cần thanh toán</h5>
+                                        <span class="order-total-amount" id="totalAmountDisplay">0 VNĐ</span>
+                                    </div>
                                 </div>
-                             </div>
                             </div>
-                       
+                        </div>
+
                         <div class="col-lg-6 mb--40">
                             <div class="single-product-content">
                                 <div class="inner">
@@ -90,78 +91,80 @@
                                     <p class="description mb--40">@Model?.Service.Desciptions</p>
                                     <div style="margin-bottom:10px;">
                                         <p class="title" style="font-family: serif;font-size: 15px; height:1px;">Đối tác:</p>
-                                           
-                                            @if (ViewBag.Partners != null)
-                                            {
-                                                <select name="PartnerInfoId" id="PartnerInfoId"  class="size-option"  style="font-family: serif ; width: 200px; height:30px; border:2px solid black" >
-                                                    <option value=" " >Danh sách đối tác</option>
-                                                    @foreach (var category in ViewBag.Partners)
-                                                     {
-                                                     <option id="toggleSelect"  value="@category.Value">@category.Text @category.Value</option>
-                                                     }
-                                                </select>
-                                            }
+
+                                        @if (ViewBag.Partners != null)
+                                        {
+                                            <select name="PartnerInfoId" id="PartnerInfoId" class="size-option" style="font-family: serif ; width: 200px; height:30px; border:2px solid black">
+                                                <option value=" ">Danh sách đối tác</option>
+                                                @foreach (var category in ViewBag.Partners)
+                                                {
+                                                    <option id="toggleSelect" value="@category.Value">@category.Text @category.Value</option>
+                                                }
+                                            </select>
+                                        }
                                     </div>
                                     <div class="product-variations-wrapper">
-                                        <div class="product-variation product-size-variation">
-                                            <p class="title" style="font-family: serif; font-size: 15px;">Dịch vụ:</p>
-                                            <ul class="range-variant" style="font-family: serif">
-                                               @foreach(var sr in Model?.ServiceCategory.Services) { 
-                                                    if(sr.Status){
-                                                        var request = Context.Request;
-                                                        var currentPageURL = request.Path + request.QueryString;
-                                                        var linkURL = "/Home/ServiceDetail?serviceCategoryId=" + Model.ServiceCategory.SerCategoriesId + "&serviceIds=" + sr.ServiceId;
-                                                        var activeClass = currentPageURL.Equals(linkURL, System.StringComparison.InvariantCultureIgnoreCase) ? "active" : "";
+                                        <div class="product-variation product-size-variation" style="display:block;">
+                                            <div class="title" style="font-family: serif; font-size: 15px;">Dịch vụ:</div>
+                                            <div class="range-variant" style="font-family: serif">
+                                                @foreach (var sr in Model?.ServiceCategory.Services)
+                                            {
+                                                if (sr.Status == true)
+                                                {
+                                                    var request = Context.Request;
+                                                    var currentPageURL = request.Path + request.QueryString;
+                                                    var linkURL = "/Home/ServiceDetail?serviceCategoryId=" + Model.ServiceCategory.SerCategoriesId + "&serviceIds=" + sr.ServiceId;
+                                                    var activeClass = currentPageURL.Equals(linkURL, System.StringComparison.InvariantCultureIgnoreCase) ? "active" : "";
 
-                                                        <a  href="@linkURL" class="service-link" style=" ">
-                                                            <li class="page-item @(activeClass)" style="font-size:12px;font-family: serif;">@sr.ServiceName</li>
-                                                        </a>
-                                                    } else { } 
+                                                    <li class="page-item @(activeClass)" style="font-size:12px;font-family: serif;">
+                                                        <a href="@linkURL" class="service-link">@sr.ServiceName</a>
+                                                    </li>
                                                 }
-                                            </ul> 
+                                                else { }
+                                            }
+
+                                            </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div style="margin-top:5px">
                                         <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ bắt đầu:</p>
                                         <input id="datetimeStart" type="text" placeholder="Thời gian bắt đầu" style="border:2px solid black" required>
                                     </div>
                                     <div style="margin-top:5px ">
                                         <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ kết thúc:</p>
-                                        <input id="datetimeEnd" type="text" placeholder="Thời gian kết thúc" style="border:2px solid black" required> 
+                                        <input id="datetimeEnd" type="text" placeholder="Thời gian kết thúc" style="border:2px solid black" required>
                                     </div>
-                                    
+
                                     <div style="margin-top: 5px; margin-bottom: 10px;">
-                                    <p style="font-family: serif; font-size: 15px; height: 1px;">Cân nặng của thú cưng:</p>
-                                    @{
-                                        string? userimageuser = Context.Session.GetString("UserImage");
-                                         if (userimageuser is not null)
-                                          {
-                                                        @if (Model.account.UserInfo.PetInfos != null)
-                                                    {
-                                                            <select name="PetInfoId" id="PetInfoId" class="size-option" style="font-family: serif; width: 200px; height: 30px; border: 2px solid black; margin-bottom: 5px;">
-                                                                <option value=" ">Cân nặng của bé</option>
-                                                                @foreach (var petInfor in Model.account.UserInfo.PetInfos) {
-                                                                    <option value="@petInfor.PetInfoId" data-weight="@petInfor.Weight">@petInfor.PetName @petInfor.Weight</option>
-                                                            }
-                                                                <option value="khac">Khác</option>
-                                                            </select>
-                                                    }
+                                        <p style="font-family: serif; font-size: 15px; height: 1px;">Cân nặng của thú cưng:</p>
+                                        @{
+                                            string? userimageuser = Context.Session.GetString("UserImage");
+                                            if (userimageuser is not null)
+                                            {
+                                                    @if (Model.account.UserInfo.PetInfos != null)
+                                                {
+                                                        <select name="PetInfoId" id="PetInfoId" class="size-option" style="font-family: serif; width: 200px; height: 30px; border: 2px solid black; margin-bottom: 5px;" onchange="updateWeight()">
+                                                            <option value=" ">Cân nặng của bé</option>
+                                                            @foreach (var petInfor in Model.account.UserInfo.PetInfos)
+                                                        {
+                                                                <option value="@petInfor.Weight" data-weight="@petInfor.Weight">@petInfor.PetName @petInfor.Weight Kg</option>
+                                                        }
+                                                            <option value="khac">Khác</option>
+                                                        </select>
+                                                }
+                                                    <input class="lgweight" id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black; display: none;" required>
+                                            }
+                                            else
+                                            {
+                                                    <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black;" required>
+                                            }
+                                        }
+                                    </div>
 
-
-                                                       <input class="lgweight" id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black; display: none;" required>
-                                          }
-                                         else
-
-                                         {
-                                            <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black;" required> 
-                                         }
-                                     }
-                                     </div>
-                                       
                                     <div class="product-action-wrapper d-flex-center" style="margin-top:5px;">
                                         <ul class="product-action action-style-two d-flex-center mb--0" style="display:contents;">
-                                            <form method="post" action="@Url.Action("AddToCart", "Home")" >
+                                            <form method="post" action="@Url.Action("AddToCart", "Home")">
                                                 @Html.AntiForgeryToken()
                                                 <button class="axil-btn btn-bg-primary" type="button" onclick="kiemTraAndSubmit('addToCartForm', '@Model?.Service.ServiceId')"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
                                             </form>
@@ -191,7 +194,8 @@
                             <div class="col-lg-6 mb--30">
                                 <div class="single-desc">
                                     <h5 class="title">Nhân viên:</h5>
-                                    <p>Nhân viên chăm sóc thú cưng là những chuyên gia hoặc người làm việc tại cửa hàng hoặc trung tâm thú cưng, đảm bảo rằng thú cưng của khách hàng được chăm sóc và đối xử tốt. Công việc của họ bao gồm chăm sóc cơ bản, kiểm
+                                    <p>
+                                        Nhân viên chăm sóc thú cưng là những chuyên gia hoặc người làm việc tại cửa hàng hoặc trung tâm thú cưng, đảm bảo rằng thú cưng của khách hàng được chăm sóc và đối xử tốt. Công việc của họ bao gồm chăm sóc cơ bản, kiểm
                                         tra sức khỏe, tư vấn về chăm sóc và dinh dưỡng, quản lý lịch trình, tư vấn sản phẩm và dịch vụ, và đối xử yêu thương với thú cưng. Đây là công việc yêu động vật, đòi hỏi kiến thức về thú cưng và kỹ năng giao tiếp
                                         tốt.
                                     </p>
@@ -200,8 +204,10 @@
                             <div class="col-lg-6 mb--30">
                                 <div class="single-desc">
                                     <h5 class="title">Dịch vụ:</h5>
-                                    <p>Dịch vụ chăm sóc thú cưng cho cửa hàng là ngành kinh doanh cung cấp các dịch vụ chăm sóc thú cưng như tắm rửa, cắt tỉa lông, kiểm tra sức khỏe, và nhiều dịch vụ thú vị khác. Cửa hàng giới thiệu và mô tả chi tiết về
-                                        các dịch vụ, nhân viên chăm sóc thú cưng, lịch trình, và các chương trình giảm giá để thu hút khách hàng.</p>
+                                    <p>
+                                        Dịch vụ chăm sóc thú cưng cho cửa hàng là ngành kinh doanh cung cấp các dịch vụ chăm sóc thú cưng như tắm rửa, cắt tỉa lông, kiểm tra sức khỏe, và nhiều dịch vụ thú vị khác. Cửa hàng giới thiệu và mô tả chi tiết về
+                                        các dịch vụ, nhân viên chăm sóc thú cưng, lịch trình, và các chương trình giảm giá để thu hút khách hàng.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -235,8 +241,8 @@
                         <div class="row">
                             <div class="col-lg-12 mb--40">
                                 <div class="axil-comment-area pro-desc-commnet-area">
-                                        @if (Model.Feedback != null && Model.Feedback.Count > 0)
-                                        {
+                                    @if (Model.Feedback != null && Model.Feedback.Count > 0)
+                                    {
                                         <div class="feedback-title-sort">
                                             <h5 class="title">Có @ViewBag.FeedbacksCount đánh giá cho dịch vụ này</h5>
                                             <form method="get">
@@ -253,8 +259,8 @@
                                             </form>
                                         </div>
                                         <ul class="comment-list">
-                                                @foreach (var feedback in Model.Feedback)
-                                                {
+                                            @foreach (var feedback in Model.Feedback)
+                                            {
                                                 <li class="comment">
                                                     <div class="comment-body">
                                                         <div class="single-comment">
@@ -269,17 +275,17 @@
                                                                         </span>
                                                                     </a>
                                                                     <span class="commenter-rating ratiing-four-star">
-                                                                            @for (int i = 1; i <= 5; i++)
+                                                                        @for (int i = 1; i <= 5; i++)
+                                                                        {
+                                                                            if (i <= @feedback.NumberStart)
                                                                             {
-                                                                                if (i <= @feedback.NumberStart)
-                                                                                {
                                                                                 <a href="#"><i class="fas fa-star"></i></a>
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                <a href="#"><i class="fas fa-star empty-rating"></i></a>
-                                                                                }
                                                                             }
+                                                                            else
+                                                                            {
+                                                                                <a href="#"><i class="fas fa-star empty-rating"></i></a>
+                                                                            }
+                                                                        }
                                                                     </span>
                                                                 </h6>
                                                                 <div class="comment-text">
@@ -289,33 +295,33 @@
                                                         </div>
                                                     </div>
                                                 </li>
-                                                }
+                                            }
 
                                         </ul>
                                         <div style="text-align: center">
                                             <div class="pagination">
                                                 @{
                                                     int pagenumber = ((@ViewBag.FeedbacksCount - 1) / 5) + 1;
-                                                    @if (ViewBag.CurrentPage > 1)
+                                                        @if (ViewBag.CurrentPage > 1)
                                                     {
-                                                        <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
+                                                            <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
                                                     }
-                                                    @for (int i = 1; i <= pagenumber; i++)
+                                                        @for (int i = 1; i <= pagenumber; i++)
                                                     {
-                                                        <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = i })">@i</a>
+                                                            <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = i })">@i</a>
                                                     }
-                                                    @if (ViewBag.CurrentPage < pagenumber)
+                                                        @if (ViewBag.CurrentPage < pagenumber)
                                                     {
-                                                        <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
+                                                            <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
                                                     }
                                                 }
                                             </div>
                                         </div>
-                                        }
-                                        else
-                                        {
+                                    }
+                                    else
+                                    {
                                         <h5 class="title">Hiện chưa có đánh giá cho dịch vụ này.</h5>
-                                        }
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -328,7 +334,7 @@
                         <h2 class="title">Các dịch vụ bạn có thể tham khảo</h2>
                     </div>
                     <div class="recent-product-activation slick-layout-wrapper--15 axil-slick-arrow arrow-top-slide">
-                           @foreach (var sc in Model.CaServices)
+                        @foreach (var sc in Model.CaServices)
                             @if (sc.Status)
                             {
                                 {
@@ -336,7 +342,7 @@
                                         <div class="axil-product">
                                             <div class="thumbnail">
                                                 <a href="~/Home/ServiceDetail?serviceCategoryId=@sc.SerCategoriesId">
-                                                    <img style="width:300px;height:150px;" src="@sc.Picture" alt="Product Images">
+                                                    <img style="width:300px;height:170px;" src="@sc.Picture" alt="Product Images">
                                                 </a>
                                             </div>
                                             <div class="product-content">
@@ -354,216 +360,279 @@
         </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        const input = document.getElementById('petWeight');
+        input.addEventListener('change', function () {
+            if (input.value && !input.value.endsWith('kg')) {
+                input.value += ' kg';
+            }
+        });
 
-  <script>
-   const input = document.getElementById('petWeight');
-    input.addEventListener('change', function() {
-     if (input.value && !input.value.endsWith('kg')) {
-       input.value += ' kg';
-     }
-     });
-      function kiemTra() {
-        var datetimeStart = document.getElementById('datetimeStart').value;
-        var datetimeEnd = document.getElementById('datetimeEnd').value;
-        var petWeight = document.getElementById('petWeight').value;
-
-        if (datetimeStart === '' || datetimeEnd === ''|| petWeight === '') {
-            showErrorToastCheckInput();
-            return false; // Ngăn form submit nếu thông tin chưa được điền đầy đủ
+        function showErrorToastCheckInput() {
+            // Add your error toast implementation here
+            // This function should handle showing an error message to the user
         }
 
-        // Nếu thông tin đã điền đầy đủ, cho phép form submit
-        return true;
-    }
-    function kiemTraAndSubmit(formId, serviceId) {
-        var form = document.getElementById(formId);
-        var datetimeStart = document.getElementById('datetimeStart').value;
-        var datetimeEnd = document.getElementById('datetimeEnd').value;
-        var petWeight = document.getElementById('petWeight').value;
+        function kiemTra() {
+            var datetimeStart = document.getElementById('datetimeStart').value;
+            var datetimeEnd = document.getElementById('datetimeEnd').value;
+            var petWeight = document.getElementById('petWeight').value;
 
-        if (datetimeStart === '' || datetimeEnd === '' || petWeight === '') {
+            if (datetimeStart === '' || datetimeEnd === '' || petWeight === '') {
+                alert('Vui lòng điền đầy đủ thông tin.');
+                return false; // Prevent form submission if information is not filled out completely
+            }
+            // If information is filled out completely, allow form submission
+            return true;
+        }
+
+        function kiemTraAndSubmit(formId, serviceId) {
+            var form = document.getElementById(formId);
+            var datetimeStart = document.getElementById('datetimeStart').value;
+            var datetimeEnd = document.getElementById('datetimeEnd').value;
+            var petWeight = document.getElementById('petWeight').value;
+
+            if (datetimeStart === '' || datetimeEnd === '' || petWeight === '') {
                 showErrorToastCheckInput();
-
-            return false;
-        } else {
-            // Thực hiện hành động thêm vào giỏ hàng sau khi kiểm tra thành công
-            addToCartService(serviceId); // Gọi hàm thêm vào giỏ hàng
-            form.submit(); // Gửi form
+                return false; // Prevent form submission if information is not filled out completely
+            } else {
+                // Perform the action (e.g., addToCartService) after successful validation
+                // addToCartService(serviceId); // Uncomment this line if addToCartService is defined
+                form.submit(); // Submit the form
+            }
         }
-    }
-    // cân nặng khi đặt cho người khác
-    document.getElementById("PetInfoId").addEventListener("change", function () {
-    // Lấy giá trị được chọn từ dropdown
-    var selectedValue = this.value;
-    
-    // Lấy tất cả các phần tử có class "lgweight"
-    var petWeightInputs = document.getElementsByClassName("lgweight");
-    
-    // Nếu giá trị được chọn là "khac", hiển thị tất cả các phần tử có class "lgweight"
-    if (selectedValue === "khac") {
-        for (var i = 0; i < petWeightInputs.length; i++) {
-            petWeightInputs[i].style.display = "block";
-            petWeightInputs[i].setAttribute("required", "required");
-        }
-    } else {
-        // Ngược lại, ẩn tất cả các phần tử có class "lgweight"
-        for (var i = 0; i < petWeightInputs.length; i++) {
-            petWeightInputs[i].style.display = "none";
-            petWeightInputs[i].removeAttribute("required");
-        }
-    }
-});
 
-  </script>
-  <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const fpStart = flatpickr("#datetimeStart", {
-        minDate: "today",
-        enableTime: true,
-        dateFormat: "Y-m-d H:i",
-        onClose: function(selectedDates, dateStr, instance) {
-            const currentTime = new Date(); // Thời gian hiện tại
-            const selectedTime = new Date(dateStr);
-            const serviceTime = @Model.Service.Time * 60 * 60 * 1000; // thời gian làm dịch vụ
-            const openingTime = new Date(selectedTime.toDateString() + " " + "07:30");
-            const closingTime = new Date(selectedTime.toDateString() + " " + "19:00");
+        // Cân nặng khi đặt cho người khác
+        document.getElementById("PetInfoId").addEventListener("change", function () {
+            var selectedValue = this.value;
+            var petWeightInputs = document.getElementsByClassName("lgweight");
 
-            // Kiểm tra nếu thời gian đặt lịch nhỏ hơn thời gian hiện tại
-            if (selectedTime <= currentTime) {
-                alert("Bạn không thể chọn thời gian trước hiện tại.");
-                return;
+            if (selectedValue === "khac") {
+                for (var i = 0; i < petWeightInputs.length; i++) {
+                    petWeightInputs[i].style.display = "block";
+                    petWeightInputs[i].setAttribute("required", "required");
+                }
+            } else {
+                for (var i = 0; i < petWeightInputs.length; i++) {
+                    petWeightInputs[i].style.display = "none";
+                    petWeightInputs[i].removeAttribute("required");
+                }
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const fpStart = flatpickr("#datetimeStart", {
+                minDate: "today",
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                onClose: function (selectedDates, dateStr, instance) {
+                    const currentTime = new Date(); // Thời gian hiện tại
+                    const selectedTime = new Date(dateStr);
+                    const serviceTime = @Model.Service.Time * 60 * 60 * 1000; // thời gian làm dịch vụ
+                    const openingTime = new Date(selectedTime.toDateString() + " " + "07:30");
+                    const closingTime = new Date(selectedTime.toDateString() + " " + "19:00");
+
+                    // Kiểm tra nếu thời gian đặt lịch nhỏ hơn thời gian hiện tại
+                    if (selectedTime <= currentTime) {
+                        alert("Bạn không thể chọn thời gian trước hiện tại.");
+                        return;
+                    }
+
+
+                    if (selectedTime < openingTime) {
+                        const nextDay = new Date(selectedTime);
+                        nextDay.setDate(selectedTime.getDate());
+                        nextDay.setHours(7);
+                        nextDay.setMinutes(30);
+                        selectedTime.setDate(nextDay.getDate());
+                        selectedTime.setHours(nextDay.getHours());
+                        selectedTime.setMinutes(nextDay.getMinutes());
+                    }
+
+
+                    // Nếu thời gian kết thúc vượt quá thời gian đóng cửa (19:00)
+                    if (selectedTime > closingTime || selectedTime.getTime() + serviceTime > closingTime.getTime()) {
+                        const nextDay = new Date(selectedTime);
+                        nextDay.setDate(selectedTime.getDate() + 1);
+                        nextDay.setHours(7);
+                        nextDay.setMinutes(30);
+                        selectedTime.setDate(nextDay.getDate());
+                        selectedTime.setHours(nextDay.getHours());
+                        selectedTime.setMinutes(nextDay.getMinutes());
+                    }
+                    const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+                    const endTime = new Date(selectedTime.getTime() + serviceTime);
+
+                    document.getElementById("datetimeEnd").value = endTime.toLocaleString('en-US', options);
+                    var endDateInput = document.getElementById("EndTime");
+                    endDateInput.value = endTime.toLocaleString('en-US', options);
+
+                    document.getElementById("datetimeStart").value = selectedTime.toLocaleString('en-US', options);
+                    var startDateInput = document.getElementById("StartTime");
+                    startDateInput.value = selectedTime.toLocaleString('en-US', options);
+
+                }
+            });
+
+        });
+    </script>
+    <script>
+        function updateWeight() {
+            var selectElement = document.getElementById("PetInfoId");
+            var inputElement = document.getElementById("petWeight");
+
+            // Get the selected option
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
+
+            // Check if the selected option is not "Khác"
+            if (selectedOption.value !== "khac") {
+                // Set the input value to the data-weight attribute of the selected option
+                inputElement.value = selectedOption.getAttribute("data-weight");
+                var Weight = document.getElementById("Weight");
+                Weight.value = inputElement.value;
+
+                var servicePrice = parseFloat(document.querySelector('.price.current-price').textContent.replace(/,/g, '').replace(/\D/g, ''));
+                var additionalCost = 0;
+                var additional = 0;
+                if (document.getElementById('PartnerInfoId').value.trim() !== '') {
+                    additional += 50000;
+                }
+
+                if (inputElement.value <= 5) {
+                    additionalCost += 0;
+                } else if (inputElement.value > 5 && inputElement.value <= 10) {
+                    additionalCost += 50000;
+                } else if (inputElement.value > 10 && inputElement.value <= 20) {
+                    additionalCost += 100000;
+                } else if (inputElement.value > 20 && inputElement.value <= 40) {
+                    additionalCost += 200000;
+                } else if (inputElement.value > 40) {
+                    additionalCost += 400000;
+                }
+
+                var PartnerInfoId = document.getElementById("PartnerInfoId");
+                var selectedPartnerId = PartnerInfoId.options[PartnerInfoId.selectedIndex];
+
+                var PartnerId = document.getElementById("PartnerId");
+                PartnerId.value = selectedPartnerId.value;
+
+                var totalAmount = servicePrice + additional + additionalCost;
+                console.log(additionalCost);
+                var totalPriceService = document.getElementById("totalPriceService");
+                totalPriceService.value = totalAmount;
+                document.getElementById('totalPriceService').textContent = totalPriceService.value;
+
+                function formatNumberToString(number) {
+                    return number.toLocaleString('vi-VN').replace(/\s/g, '');
+                }
+                // Display the total amount in the HTML
+                document.getElementById('totalAmountDisplay').textContent =
+                    formatNumberToString(servicePrice) + "  (dịch vụ) + " +
+                    formatNumberToString(additionalCost) + " (cân nặng) + " +
+                    formatNumberToString(additional) + "  (đối tác) " +
+                    "=" + formatNumberToString(totalAmount) + " VNĐ";
+
+            } else {
+                // If "Khác" is selected, show the input field
+                inputElement.style.display = "block";
+                inputElement.value = ""; // You may want to clear the input value in this case
+                var Weight = document.getElementById("Weight");
+                Weight.value = inputElement.value;
+            }
+        }
+        updateWeight()
+    </script>
+    <script>
+        // Function to calculate total amount
+        function calculateTotal() {
+            var petWeight = parseFloat(document.getElementById('petWeight').value);
+            var servicePrice = parseFloat(document.querySelector('.price.current-price').textContent.replace(/,/g, '').replace(/\D/g, ''));
+            var additionalCost = 0;
+            var additional = 0;
+            if (document.getElementById('PartnerInfoId').value.trim() !== '') {
+                additional += 50000;
             }
 
 
-            if(selectedTime < openingTime){
-             const nextDay = new Date(selectedTime);
-                nextDay.setDate(selectedTime.getDate() );
-                nextDay.setHours(7);
-                nextDay.setMinutes(30);
-                selectedTime.setDate(nextDay.getDate());
-                selectedTime.setHours(nextDay.getHours());
-                selectedTime.setMinutes(nextDay.getMinutes());
+            if (petWeight <= 5) {
+                additionalCost += 0;
+            } else if (petWeight > 5 && petWeight <= 10) {
+                additionalCost += 50000;
+            } else if (petWeight > 10 && petWeight <= 20) {
+                additionalCost += 100000;
+            } else if (petWeight > 20 && petWeight <= 40) {
+                additionalCost += 200000;
+            } else if (petWeight > 40) {
+                additionalCost += 400000;
             }
-            
-
-            // Nếu thời gian kết thúc vượt quá thời gian đóng cửa (19:00)
-            if (selectedTime > closingTime||selectedTime.getTime() + serviceTime > closingTime.getTime()) {
-                const nextDay = new Date(selectedTime);
-                nextDay.setDate(selectedTime.getDate() + 1);
-                nextDay.setHours(7);
-                nextDay.setMinutes(30);
-                selectedTime.setDate(nextDay.getDate());
-                selectedTime.setHours(nextDay.getHours());
-                selectedTime.setMinutes(nextDay.getMinutes());
-            }
-            const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-            const endTime = new Date(selectedTime.getTime() + serviceTime);
-
-            document.getElementById("datetimeEnd").value = endTime.toLocaleString('en-US', options);
-            var endDateInput = document.getElementById("EndTime");
-            endDateInput.value = endTime.toLocaleString('en-US', options);
-
-            document.getElementById("datetimeStart").value = selectedTime.toLocaleString('en-US', options);
-            var startDateInput = document.getElementById("StartTime");
-            startDateInput.value = selectedTime.toLocaleString('en-US', options);
-
-        }
-    });
-
-});
-</script>
-  <script>
-     // Function to calculate total amount
-    function calculateTotal() {
-    var petWeight = parseFloat(document.getElementById('petWeight').value);
-    var servicePrice = parseFloat(document.querySelector('.price.current-price').textContent.replace(/,/g, '').replace(/\D/g, ''));
-    var additionalCost = 0;
-    var additional =0;
-    if (document.getElementById('PartnerInfoId').value.trim() !== '') {
-    additional += 50000;
-}
-
-
-    if (petWeight <= 5) {
-        additionalCost += 0;
-    } else if (petWeight > 5 && petWeight <= 10) {
-        additionalCost += 50000;
-    } else if (petWeight > 10 && petWeight <= 20) {
-        additionalCost += 100000;
-    } else if (petWeight > 20 && petWeight <= 40) {
-        additionalCost += 200000;
-    } else if(petWeight > 40) {
-        additionalCost += 400000;
-    }
-     var PartnerInfoId = document.getElementById("PartnerInfoId");
+            var PartnerInfoId = document.getElementById("PartnerInfoId");
             var selectedPartnerId = PartnerInfoId.options[PartnerInfoId.selectedIndex];
 
             var PartnerId = document.getElementById("PartnerId");
             PartnerId.value = selectedPartnerId.value;
 
-    var totalAmount = servicePrice + additional+ additionalCost;
+            var totalAmount = servicePrice + additional + additionalCost;
 
             var totalPriceService = document.getElementById("totalPriceService");
             var Weight = document.getElementById("Weight");
             totalPriceService.value = totalAmount;
             Weight.value = petWeight;
             document.getElementById('totalPriceService').textContent = totalPriceService.value;
-   
 
-   function formatNumberToString(number) {
-    return number.toLocaleString('vi-VN').replace(/\s/g, '');
-}
-    // Display the total amount in the HTML
-    document.getElementById('totalAmountDisplay').textContent = 
-    formatNumberToString(servicePrice) + "  (dịch vụ) + " +
-    formatNumberToString(additionalCost) + " (cân nặng) + " +
-    formatNumberToString(additional) + "  (đối tác) " +
-    "=" + formatNumberToString(totalAmount) + " VNĐ";
-}
 
-// Trigger the initial calculation
-calculateTotal();
+            function formatNumberToString(number) {
+                return number.toLocaleString('vi-VN').replace(/\s/g, '');
+            }
+            // Display the total amount in the HTML
+            document.getElementById('totalAmountDisplay').textContent =
+                formatNumberToString(servicePrice) + "  (dịch vụ) + " +
+                formatNumberToString(additionalCost) + " (cân nặng) + " +
+                formatNumberToString(additional) + "  (đối tác) " +
+                "=" + formatNumberToString(totalAmount) + " VNĐ";
+        }
+        // Trigger the initial calculation
+        calculateTotal();
 
-// This function is to trigger the calculation on checkbox change and input change
-document.getElementById('PartnerInfoId').addEventListener('change', calculateTotal);
-document.getElementById('petWeight').addEventListener('input', calculateTotal);
+        // This function is to trigger the calculation on checkbox change and input change
+        document.getElementById('PartnerInfoId').addEventListener('change', calculateTotal);
+        document.getElementById('petWeight').addEventListener('input', calculateTotal);
 
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
             var priceElements = document.querySelectorAll('.current-price');
             priceElements.forEach(function (priceElement) {
                 var priceText = priceElement.textContent.trim();
                 var price = parseFloat(priceText.replace(/\s/g, '').replace('VNĐ', ''));
                 var formattedPrice = price.toLocaleString('vi-VN');
                 priceElement.textContent = formattedPrice + ' VNĐ';
-});
+            });
         });
-</script>
+    </script>
 
-<script src="~/assets/js/vendor/modernizr.min.js"></script>
-<!-- jQuery JS -->
-<script src="~/assets/js/vendor/jquery.js"></script>
-<!-- Bootstrap JS -->
-<script src="~/assets/js/vendor/popper.min.js"></script>
-<script src="~/assets/js/vendor/bootstrap.min.js"></script>
-<script src="~/assets/js/vendor/slick.min.js"></script>
-<script src="~/assets/js/vendor/js.cookie.js"></script>
-<!-- <script src="~/assets/js/vendor/jquery.style.switcher.js"></script> -->
-<script src="~/assets/js/vendor/jquery-ui.min.js"></script>
-<script src="~/assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
-<script src="~/assets/js/vendor/jquery.countdown.min.js"></script>
-<script src="~/assets/js/vendor/sal.js"></script>
-<script src="~/assets/js/vendor/jquery.magnific-popup.min.js"></script>
-<script src="~/assets/js/vendor/imagesloaded.pkgd.min.js"></script>
-<script src="~/assets/js/vendor/isotope.pkgd.min.js"></script>
-<script src="~/assets/js/vendor/counterup.js"></script>
-<script src="~/assets/js/vendor/waypoints.min.js"></script>
+    <script src="~/assets/js/vendor/modernizr.min.js"></script>
+    <!-- jQuery JS -->
+    <script src="~/assets/js/vendor/jquery.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="~/assets/js/vendor/popper.min.js"></script>
+    <script src="~/assets/js/vendor/bootstrap.min.js"></script>
+    <script src="~/assets/js/vendor/slick.min.js"></script>
+    <script src="~/assets/js/vendor/js.cookie.js"></script>
+    <!-- <script src="~/assets/js/vendor/jquery.style.switcher.js"></script> -->
+    <script src="~/assets/js/vendor/jquery-ui.min.js"></script>
+    <script src="~/assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
+    <script src="~/assets/js/vendor/jquery.countdown.min.js"></script>
+    <script src="~/assets/js/vendor/sal.js"></script>
+    <script src="~/assets/js/vendor/jquery.magnific-popup.min.js"></script>
+    <script src="~/assets/js/vendor/imagesloaded.pkgd.min.js"></script>
+    <script src="~/assets/js/vendor/isotope.pkgd.min.js"></script>
+    <script src="~/assets/js/vendor/counterup.js"></script>
+    <script src="~/assets/js/vendor/waypoints.min.js"></script>
 
 
-<!-- Main JS -->
-<script src="~/assets/js/main.js"></script>
-
+    <!-- Main JS -->
+    <script src="~/assets/js/main.js"></script>
 </body>
 
 </html>

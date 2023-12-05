@@ -1,4 +1,44 @@
-﻿function changeImageSource() {
+﻿function validateForm() {
+    const fname = document.getElementById('ProCategoriesName');
+    /*const subject = document.getElementById('Desciptions');*/
+    const fnameErrorMessage = document.getElementById('fname-error-message');
+    /*const subjectErrorMessage = document.getElementById('subject-error-message');*/
+
+    console.log('Debug: fname.value', fname.value);
+    console.log('Debug: subject.value', subject.value);
+
+    const specialChars = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/;
+    const specialChar = /[@#$%^&*{}\[\]~]/;
+
+    fnameErrorMessage.textContent = "";
+    subjectErrorMessage.textContent = "";
+
+    let isValid = true;
+
+    if (subject === null) {
+        subjectErrorMessage.textContent = 'Mô tả không được để trống!';
+        isValid = false;
+    }
+
+    if (subject === null) {
+        fnameErrorMessage.textContent = 'Tên loại sản phẩm không được để trống!';
+        isValid = false;
+    }
+
+    if (specialChars.test(fname.value)) {
+        fnameErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
+        isValid = false;
+    }
+
+    if (specialChar.test(subject.value)) {
+        subjectErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
+        isValid = false;
+    }
+
+    return isValid;
+}
+
+function changeImageSource() {
     const imageInput = document.getElementById('image');
     const imagePreview = document.getElementById('imagePreview');
 
@@ -9,36 +49,4 @@
         };
         reader.readAsDataURL(imageInput.files[0]);
     }
-}
-function returnProductCategory() {
-    window.location.href = '/Manager/ProductCategory/Index';
-}
-function validateForm() {
-    const fname = document.getElementById('ProCategoriesName');
-    const subject = document.getElementById('Desciptions');
-    const fnameErrorMessage = document.getElementById('fnameErrorMessage');
-    const subjectErrorMessage = document.getElementById('subjectErrorMessage');
-
-    console.log('Debug: fname.value', fname.value);
-    console.log('Debug: subject.value', subject.value);
-
-    const specialChars = /[!#$%^&*()_+{}\[\]:;<>,.?~\\/-]/; // Regular expression kiểm tra ký tự đặc biệt
-
-    // Đặt lại thông báo lỗi
-    fnameErrorMessage.textContent = "";
-    subjectErrorMessage.textContent = "";
-
-    let isValid = true;
-
-    if (specialChars.test(fname.value)) {
-        fnameErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
-        isValid = false;
-    }
-
-    if (specialChars.test(subject.value)) {
-        subjectErrorMessage.textContent = "Không được chứa ký tự đặc biệt.";
-        isValid = false;
-    }
-
-    return isValid;
 }

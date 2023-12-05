@@ -10,6 +10,7 @@
         public bool? Status { get; set; }
         public double? Price { get; set; }
         public DateTime? CreateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
         public int? ProCategoriesId { get; set; }
         public int? Quantity { get; set; }
         public int? QuantitySold { get; set; }

@@ -6,7 +6,6 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <!-- Add your additional head elements if needed -->
 </head>
 
 <body class="sticky-header">
@@ -158,7 +157,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <a href="~/Checkout" class="axil-btn btn-bg-primary checkout-btn">Thủ tục thành toán</a>
+                                <a href="~/Checkout" class="axil-btn btn-bg-primary checkout-btn">Thủ tục thanh toán</a>
                             </div>
                         </div>
                     </div>
@@ -170,6 +169,7 @@
             </div>
         </div>
     </div>
+    <div id="toast"></div>
 </body>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -192,11 +192,23 @@
                 success: function (result) {
                     window.location.href = "@Url.Action("Index", "Cart")";
                 },
-                error: function (error) {
+                error: function (xhr, status, error) {
+                    showErrorToastQuantityCartProduct(xhr.responseText);
                     console.error("Error updating cart:", error);
                 }
             });
         });
+
+        function showErrorToastQuantityCartProduct(errorMessage) {
+            console.error(errorMessage);
+            toast({
+                title: 'Thất bại',
+                message: errorMessage,
+                type: 'error',
+                duration: 2000
+            });
+        }
+
 
         $(".removecart").click(function (event) {
             event.preventDefault();
@@ -220,6 +232,7 @@
         });
     });
 </script>
+
 <script src="~/assets/js/vendor/modernizr.min.js"></script>
 <!-- jQuery JS -->
 <script src="~/assets/js/vendor/jquery.js"></script>

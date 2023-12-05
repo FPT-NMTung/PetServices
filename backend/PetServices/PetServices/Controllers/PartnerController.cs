@@ -135,6 +135,8 @@ namespace PetServices.Controllers
                 existingAccount.PartnerInfo.Province = updateInfo.Province;
                 existingAccount.PartnerInfo.District = updateInfo.District;
                 existingAccount.PartnerInfo.Commune = updateInfo.Commune;
+                existingAccount.PartnerInfo.CardNumber = updateInfo.CardNumber;
+                existingAccount.PartnerInfo.CardName = updateInfo.CardName;
                 existingAccount.PartnerInfo.Address = updateInfo.Address;
                 existingAccount.PartnerInfo.Descriptions = updateInfo.Descriptions;
                 existingAccount.PartnerInfo.ImagePartner = updateInfo.ImagePartner;
@@ -152,5 +154,6 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+       
     }
 }

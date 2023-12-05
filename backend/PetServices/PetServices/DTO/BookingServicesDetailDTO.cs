@@ -14,6 +14,7 @@ namespace PetServices.DTO
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public bool? FeedbackStatus { get; set; }
+        public string? StatusOrderService { get; set; }
 
         public virtual PartnerInfoDTO? PartnerInfo { get; set; }
         public virtual PetInfoDTO? PetInfo { get; set; }

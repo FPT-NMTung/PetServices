@@ -1,6 +1,7 @@
 ﻿using FEPetServices.Areas.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
@@ -80,6 +81,19 @@ namespace FEPetServices.Areas.Manager.Controllers
                 if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
                 {
                     if (blog.PageTile == null) { return View(); }
+                    HttpResponseMessage TagResponse = await client.GetAsync("https://localhost:7255/api/Tag/GetAllTag");
+
+                    if (TagResponse.IsSuccessStatusCode)
+                    {
+                        var tag = await TagResponse.Content.ReadFromJsonAsync<List<TagDTO>>();
+                        Console.WriteLine(tag);
+
+                        ViewBag.Tag = new SelectList(tag, "TagId", "TagName");
+                    }
+                    var selectedtags = Request.Form["SelectedTag"];
+                    blog.TagIds = !string.IsNullOrEmpty(selectedtags)
+                        ? selectedtags.ToString().Split(',').Select(int.Parse).ToList()
+                        : new List<int>();
                     foreach (var file in image)
                     {
                         string filename = GenerateRandomNumber(5) + file.FileName;
@@ -135,6 +149,45 @@ namespace FEPetServices.Areas.Manager.Controllers
 
             return new string(randomChars);
         }
+
+        public async Task<IActionResult> AddTag([FromForm] TagDTO tag)
+        {
+            try
+            {
+                HttpResponseMessage categoryResponse = await client.GetAsync("https://localhost:7255/api/Tag/GetAllTag");
+
+                if (categoryResponse.IsSuccessStatusCode)
+                {
+                    var Tag = await categoryResponse.Content.ReadFromJsonAsync<List<TagDTO>>();
+                    ViewBag.Tag = Tag;
+                }
+                if (tag.TagName == null)
+                {
+                    TempData["ErrorToast"] = "Vui lòng điền đầy đủ thông tin";
+                    return View(tag);
+                }
+                var json = JsonConvert.SerializeObject(tag);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/Tag/AddTag", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessToast"] = "Thêm tag thành công!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["ErrorToast"] = "Thêm Tag thất bại. Vui lòng thử lại sau.";
+                    return View();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
+                return View(tag);
+            }
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> EditBlog(int blogId)

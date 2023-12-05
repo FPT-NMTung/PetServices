@@ -92,3 +92,124 @@ p {
     font-weight: 500;
     margin-bottom: 0
 }
+
+.feedbacktable .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.feedbacktable .dropdown-button {
+    padding: 10px;
+    background-color: #ffffff00;
+    color: #a3a3a3;
+    border: none;
+    cursor: pointer;
+    font-weight: 500 !important;
+}
+
+.feedbacktable .dropdown-content {
+    background-color: snow;
+    display: none;
+    position: absolute;
+    z-index: 1;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    width: 100%;
+    text-align: center;
+}
+
+.feedbacktable .dropdown-item {
+    display: block;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.feedbacktable .dropdown:hover .dropdown-button {
+    color: #ff0026;
+}
+
+.feedbacktable .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.feedbacktable .dropdown-item:hover {
+    background-color: #ededed;
+    color: #ff0026;
+}
+
+@media only screen and (min-width: 915px) {
+    .feedbacktable .card-header .option .option-button {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 915px) {
+    .feedbacktable .option .style2 {
+        position: relative;
+        display: none;
+    }
+
+    .feedbacktable .card-header .option {
+        position: relative;
+        display: inline-block;
+    }
+
+        .feedbacktable .card-header .option .option-button {
+            /*display: block;*/
+            padding: 10px;
+            background-color: #ffffff00;
+            color: #a3a3a3;
+            border: none;
+            cursor: pointer;
+            font-weight: 500 !important;
+        }
+
+        .feedbacktable .card-header .option .dropdown-option {
+            background-color: snow;
+            display: none;
+            position: absolute;
+            z-index: 1;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 120%;
+        }
+
+    .feedbacktable .dropdown-option:hover .dropdown-option-item {
+        display: block;
+        text-decoration: none;
+        color: #333;
+        text-align: center;
+    }
+
+    .feedbacktable .card-header .head .option a {
+        padding: 10px;
+        text-decoration: none;
+    }
+
+    .feedbacktable .dropdown-option:hover .dropdown-option-item:hover {
+        background-color: #ededed;
+    }
+
+    .feedbacktable .card-header .option:hover .dropdown-option {
+        display: block;
+    }
+
+    .feedbacktable .dropdown{
+        border-top: 2px dashed #a3a3a3;
+    }
+
+    .feedbacktable .dropdown-content {
+        left: -156px;
+        top: 0px;
+    }
+}
+
+@media only screen and (max-width: 500px){
+        .feedbacktable .option .style1{
+            position: relative;
+            display: none;
+        }
+
+    .feedbacktable .option .style2 {
+        display: block;
+    }
+}

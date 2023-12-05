@@ -1,9 +1,7 @@
-﻿using FEPetServices.Form;
-using FEPetServices.Form.OrdersForm;
+﻿using FEPetServices.Form.OrdersForm;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
@@ -23,13 +21,13 @@ namespace FEPetServices.Areas.Manager.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
-            //DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Order";
+            //DefaultApiUrl = "https://localhost:7255/api/";
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order");
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/getOrder");
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -75,8 +73,13 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpPost]
         public async Task<IActionResult> OrderDetail(int id, [FromForm] Status status)
         {
-            //https://pet-service-api.azurewebsites.net/api/Order/changeStatus?Id=1
-            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "Order/changeStatus?Id=" + id, status);
+            if(status.newStatus == "Confirmed")
+            {
+                status.newStatusProduct = "Packaging";
+                status.newStatusService = "Waiting";    
+            }
+
+            HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
             if (response.IsSuccessStatusCode)
             {
                 TempData["SuccessToast"] = "Cập nhật thành công";

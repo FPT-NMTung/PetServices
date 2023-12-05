@@ -42,3 +42,42 @@ input[readonly] {
     padding-top: 20px;
 }
 
+.service-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+    .service-container div {
+        display: flex;
+        width: 25%;
+    }
+
+        .service-container div label {
+            margin-right: -10px;
+        }
+
+        .service-container div p {
+            padding-top: 7px;
+        }
+
+    .service-container input {
+        display: none;
+    }
+
+        .service-container input + label {
+            position: relative;
+            padding-left: 30px;
+            cursor: pointer;
+        }
+
+            .service-container input + label:before {
+                content: '';
+                position: absolute;
+                left: 0;
+                width: 20px;
+                height: 20px;
+                border: 2px solid #4CAF50;
+                background-color: white;
+                border-radius: 5px;
+            }
+
