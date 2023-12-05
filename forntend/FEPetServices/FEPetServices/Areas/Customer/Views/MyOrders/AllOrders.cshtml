@@ -78,6 +78,7 @@
                                         </div>
                                         <p><i class="far fa-calendar-alt"></i> @order.OrderDate</p>
 
+                                        @*Start - Product Detail*@
                                         @if (order.OrderProductDetails != null && order.OrderProductDetails.Count > 0)
                                         {
                                             <div class="content-details">
@@ -107,13 +108,22 @@
                                                             {
                                                                 <span class="badge badge-info">Đóng gói sản phẩm</span>
                                                             }
-
+                                                            else if (productDetail?.StatusOrderProduct?.Trim() == "Shipped")
+                                                            {
+                                                                <span class="badge badge-info">Đơn hàng đang được vận chuyển</span>
+                                                            }
+                                                            else if (productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                                                            {
+                                                                <span class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
+                                                            }
                                                         </div>
                                                     }
                                                 }
                                             </div>
                                         }
+                                        @*End - Product Detail*@
 
+                                        @*Start - Service Detail*@
                                         @if (order.BookingServicesDetails != null && order.BookingServicesDetails.Count > 0)
                                         {
                                             <div class="content-details">
@@ -163,7 +173,9 @@
                                                 }
                                             </div>
                                         }
+                                        @*End - Service Detail*@
 
+                                        @*Start - Room Detail*@
                                         @if (order.BookingRoomDetails != null && order.BookingRoomDetails.Count > 0)
                                         {
                                             <div class="content-details">
@@ -193,6 +205,7 @@
                                                 }
                                             </div>
                                         }
+                                        @*End - Product Detail*@
 
                                         <div class="headel-content">
                                             <p>Tổng giá : </p>
