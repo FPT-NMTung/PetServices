@@ -130,6 +130,15 @@
                 window.location.href = '/Manager/Blog/AddBlog'; // Update this URL as needed
             });
 
+            // Thêm nút "Thêm dịch vụ" bên cạnh thanh tìm kiếm
+            var addServiceButton = $('<button id="addTagButton" class="btn btn-add btn-primary">Thêm tag</button>');
+            $('.dataTables_filter').append(addServiceButton);
+
+            // Đính kèm sự kiện click cho nút "Thêm dịch vụ"
+            $('#addTagButton').on('click', function () {
+                // Navigate to the "addservicecategory" page
+                window.location.href = '/Manager/Blog/AddTag'; // Update this URL as needed
+            });
         });
     </script>
 

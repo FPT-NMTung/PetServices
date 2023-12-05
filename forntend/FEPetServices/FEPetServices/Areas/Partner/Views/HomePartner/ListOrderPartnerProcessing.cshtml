@@ -69,7 +69,7 @@
                 @foreach (var bd in pc.BookingServicesDetails)
                 {
                     itemCount++;
-                    if (pc.OrderStatus.Trim() == "Rejected")
+                    if (bd.StatusOrderService.Trim() == "Processing")
                     {
                         <tr>
                             <td>@itemCount</td>
@@ -83,14 +83,13 @@
                             <td>@pc.OrderDate</td>
                             <td>@pc.UserInfo.Phone</td>
                             <td>
-                                Đơn hàng đã bị hủy
+                                Đơn hàng đang được thực hiện
                             </td>
                             <td>
                                 <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
                             </td>
                             <td>
-                                <a href="/Partner/HomePartner/Detail?orderId=@pc.OrderId">Nhận Đơn</a>
-                                <a href="/Partner/HomePartner/Detail?orderId=@pc.OrderId">Hủy Đơn</a>
+                                <button class="completed-button" data-orderid="@pc.OrderId">Hoàn thành</button>
                             </td>
                         </tr>
                     }
@@ -108,7 +107,26 @@
     </tfoot>
 
 
+    <script>
+        // Hàm JavaScript để cập nhật trạng thái đơn hàng
+        $(document).ready(function () {
+            // Sử dụng class để chọn button
+            var buttons_received = $('.completed-button');
 
+            buttons_received.click(function () {
+                var orderId = $(this).data('orderid');
+                let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusCompleted?orderId=' + orderId;
+                fetch(url).then(response => {
+                    if (response.status == 200) {
+                        console.log("Hoàn thành đơn thành công!");
+                        location.reload();
+                    } else {
+                        console.log("Hoàn thành đơn thất bại!");
+                    }
+                });
+            });
+        });
+    </script>
     <!-- Your table and data display code -->
 
 </table>

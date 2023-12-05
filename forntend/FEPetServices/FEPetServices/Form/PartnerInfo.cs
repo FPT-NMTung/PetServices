@@ -19,5 +19,6 @@
         public string? Lng { get; set; }
         public DateTime? Dob { get; set; }
 
+
     }
 }

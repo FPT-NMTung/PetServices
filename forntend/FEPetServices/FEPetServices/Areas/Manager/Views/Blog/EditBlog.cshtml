@@ -1,4 +1,4 @@
-﻿<link rel="stylesheet" href="/css/Blog/EditBlog.css"></link>
+﻿<link rel="stylesheet" href="/css/Blog/EditBlog.css">
 
 <head>
     <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
@@ -49,6 +49,25 @@
         <div class="form-group">
             <label>Nội dung <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
           <textarea class="form-control" id="tiny"  rows="20" cols="50" name="Content" required>@Model?.Content</textarea>
+        </div>
+        <div class="form-group">
+            <label>Tag <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i></label>
+             <div class="service-container">
+               @if (ViewBag.Tag != null)
+                    {
+                     <select id="TagId" name="TagId" class="form-group" required>
+                     <option value="@Model?.TagId">@Model?.TagName</option>
+                            @foreach (var tag in ViewBag.Tag)
+                            {
+                              <option value="@tag.Value">@tag.Text</option>
+                            }
+                    </select>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Error: Tag data not available.</span>
+                    }
+             </div>
         </div>
         <div class="raw">
                 <div class="col-25">

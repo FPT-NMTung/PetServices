@@ -31,6 +31,8 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            //https://localhost:7255/api/Order/getOrderRoom
+            //HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Order/getOrderRoom");
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/getOrderRoom");
             if (response.IsSuccessStatusCode)
             {
@@ -54,6 +56,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderRoomDetail(int id)
         {
+            //HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Order/" + id);
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
             if (response.IsSuccessStatusCode)
             {
@@ -79,6 +82,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             status.newStatusProduct = "";
             status.newStatusService = "";
 
+            //HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
             HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "Order/changeStatus?Id=" + id, status);
             if (response.IsSuccessStatusCode)
             {
