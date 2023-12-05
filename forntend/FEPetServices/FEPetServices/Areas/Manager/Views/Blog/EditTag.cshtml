@@ -1,0 +1,47 @@
+﻿<link rel="stylesheet" href="/css/Blog/EditBlog.css"></link>
+<body>
+<div class="title">
+    <h1>Chỉnh sửa Tag mới cho bài viết</h1>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <form asp-action="EditTag" method="post" >
+        <div class="form-group">
+          <label>Tên Tag<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+          <input type="text" class="form-control" name="TagName" value="@Model?.TagName" required placeholder="Tên tag"/>
+        </div>
+         <div class="raw">
+             <div class="col-25">
+                    <label for="Status">Trạng thái:</label>
+             </div>
+             <div class="col-75">
+                    <div class="switch">
+                        <input type="checkbox" name="Status" class="toggles" @(Model.Status ? "checked" : "") />
+                        <label class="label @(Model.Status ? "active" : "inactive")"></label>
+                    </div>
+             </div>
+          </div>
+        <div class="form-group" style="margin-top:50px;">
+            <div class="row">
+            <div class="sub">
+            <a href="/Manager/Blog/AddTag"><input  value="Trở Lại" class="btn btn-primary form-control"/></a>
+            </div>
+            <div class="sub">
+               <input type="submit" name="Submit" value="Lưu" class="btn btn-primary form-control" />
+            </div>
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<style>
+.fa-asterisk {
+            color: red;
+            font-size:6px;
+            padding-top:20px;
+            margin-right:10px;
+        }
+</style>
+</body>

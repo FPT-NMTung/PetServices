@@ -81,8 +81,17 @@ namespace FEPetServices.Controllers
 
                         if (searchDTO.startdate != null && searchDTO.enddate != null)
                         {
-                            HttpResponseMessage roomvalidResponse = await client.GetAsync(DefaultApiUrl + "Room/SearchRoomByDate?startDate=" + searchDTO.startdate + "&endDate=" + searchDTO.enddate);
-                            roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(responseContent);
+                            var start = searchDTO.startdate.Value.ToString("MM/dd/yyyy HH:mm");
+                            var end = searchDTO.enddate.Value.ToString("MM/dd/yyyy HH:mm");
+
+                            var urlSearchRoomByDate = DefaultApiUrl + "Room/SearchRoomByDate?startDate=" + start + "&endDate=" + end;
+
+                            Console.WriteLine("Url Search Room By Date: " + urlSearchRoomByDate);
+
+                            HttpResponseMessage roomvalidResponse = await client.GetAsync(urlSearchRoomByDate);
+
+                            var roomvalidContent = await roomvalidResponse.Content.ReadAsStringAsync();
+                            roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(roomvalidContent);
                         }
 
                         if (!string.IsNullOrEmpty(searchDTO.roomname))
@@ -138,15 +147,17 @@ namespace FEPetServices.Controllers
                         ViewBag.priceto = searchDTO.priceto;
                         ViewBag.sortby = searchDTO.sortby;
                         ViewBag.roomname = searchDTO.roomname;
-                        ViewBag.startdate = searchDTO.startdate.ToString();
-                        ViewBag.enddate = searchDTO.enddate.ToString();
+                        ViewBag.startdate = searchDTO.startdate.HasValue
+                            ? searchDTO.startdate.Value.ToString("MM/dd/yyyy HH:mm") : null;
+                        ViewBag.enddate = searchDTO.enddate.HasValue
+                            ? searchDTO.enddate.Value.ToString("MM/dd/yyyy HH:mm") : null;
 
                         return View(roomList);
                     }
                     else
                     {
                         ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
-                    }
+                    } 
                 }
                 else
                 {
