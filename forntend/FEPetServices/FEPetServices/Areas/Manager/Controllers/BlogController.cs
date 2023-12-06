@@ -105,7 +105,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 // Gửi dữ liệu lên máy chủ
-                HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/Blog/CreateBlog", content);
+                HttpResponseMessage response = await client.PostAsync(DefaultApiUrl+"Blog/CreateBlog", content);
                 //HttpResponseMessage response = await client.PostAsync(DefaultApiUrlServiceAdd, content);
 
                 if (response.IsSuccessStatusCode)

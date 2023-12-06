@@ -39,3 +39,16 @@
 .completed-button:hover {
     background-color: #0056b3;
 }
+.processing-button {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+.processing-button:hover {
+    background-color: #0056b3;
+}

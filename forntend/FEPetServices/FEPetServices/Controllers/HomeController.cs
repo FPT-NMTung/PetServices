@@ -1,11 +1,13 @@
 ﻿using FEPetServices.Areas.DTO;
 using FEPetServices.Form;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using PetServices.DTO;
 using PetServices.Form;
 using PetServices.Models;
+using System.Globalization;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
@@ -930,6 +932,8 @@ namespace FEPetServices.Controllers
         }
         public class PartDeatilModel
         {
+            public List<FeedbackDTO> Feedback { get; set; }
+            public VoteNumberDTO VoteNumberas { get; set; }
             public PartnerInfo Partner { get; set; }
             public List<PartnerInfo> partner { set; get; }
             public List<ProductDTO> ListProductTop3 { get; set; }
@@ -1029,7 +1033,7 @@ namespace FEPetServices.Controllers
 
             return View();
         }
-        public async Task<IActionResult> PartnerDetail(int partnerID)
+        public async Task<IActionResult> PartnerDetail(int partnerID, string sortby, int? page)
         {
             PartDeatilModel partModel = new PartDeatilModel();
             try
@@ -1038,6 +1042,60 @@ namespace FEPetServices.Controllers
                 HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
                 //HttpResponseMessage responsedetail = await client.GetAsync("https://localhost:7255/api/Partner/PartnerInfoId?PartnerInfoId=" + partnerID);
                 HttpResponseMessage responsedetail = await client.GetAsync(DefaultApiUrl + "Partner/PartnerInfoId?PartnerInfoId=" + partnerID);
+
+                //HttpResponseMessage feedbackResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetAllFeedbackInRoom?roomID=" + roomId);
+                //HttpResponseMessage feedbackResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetAllFeedbackInRoom?roomID=" + roomId);
+                HttpResponseMessage feedbackResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetAllFeedbackInPartner?partnerId=" + partnerID);
+
+                if (feedbackResponse.IsSuccessStatusCode)
+                {
+                    var feedback = await feedbackResponse.Content.ReadFromJsonAsync<List<FeedbackDTO>>();
+
+                    ViewBag.FeedbackCount = feedback?.Count();
+
+                    switch (sortby)
+                    {
+                        case "5star":
+                            feedback = feedback?.Where(f => f.NumberStart == 5).ToList();
+                            break;
+                        case "4star":
+                            feedback = feedback?.Where(f => f.NumberStart == 4).ToList();
+                            break;
+                        case "3star":
+                            feedback = feedback?.Where(f => f.NumberStart == 3).ToList();
+                            break;
+                        case "2star":
+                            feedback = feedback?.Where(f => f.NumberStart == 2).ToList();
+                            break;
+                        case "1star":
+                            feedback = feedback?.Where(f => f.NumberStart == 1).ToList();
+                            break;
+                        default:
+                            break;
+                    }
+                    ViewBag.sortby = sortby;
+                    ViewBag.FeedbacksCount = feedback?.Count();
+
+                    page = page ?? 1;
+
+                    //HttpResponseMessage paggingResponse = await client.GetAsync("https://localhost:7255/api/Feedback/PaginationInRoom?roomID=" + roomId + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
+                    //HttpResponseMessage paggingResponse = await client.GetAsync(DefaultApiUrl + "Feedback/PaginationInRoom?roomID=" + roomId + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
+
+                    HttpResponseMessage paggingResponse = await client.GetAsync("https://localhost:7255/api/Feedback/PaginationInPartner?partnerId=" + partnerID + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
+                    ViewBag.CurrentPage = page;
+
+                    if (paggingResponse.IsSuccessStatusCode)
+                    {
+                        var feedbacks = await paggingResponse.Content.ReadFromJsonAsync<List<FeedbackDTO>>();
+                        partModel.Feedback = feedbacks;
+
+                    }
+                    else
+                    {
+                        partModel.Feedback = feedback;
+                    }
+                }
+
                 if (responsedetail.IsSuccessStatusCode)
                 {
                     if (responseProduct.IsSuccessStatusCode)
@@ -1078,6 +1136,31 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(responsePartContent))
                         {
                             partModel.partner = JsonConvert.DeserializeObject<List<PartnerInfo>>(responsePartContent);
+                        }
+                    }
+
+                    //HttpResponseMessage voteNumberResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetRoomVoteNumber?roomID=" + roomId);
+                    //HttpResponseMessage voteNumberResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetRoomVoteNumber?roomID=" + roomId);
+                    HttpResponseMessage voteNumberResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetPartnerVoteNumber?partnerId=" + partnerID);
+
+                    if (voteNumberResponse.IsSuccessStatusCode)
+                    {
+                        var voteNumber = await voteNumberResponse.Content.ReadFromJsonAsync<VoteNumberDTO>();
+
+                        partModel.VoteNumberas = voteNumber;
+                    }
+
+                    //HttpResponseMessage roomStarResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetRoomStar?roomID=" + roomId);
+                    HttpResponseMessage partnerStarResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetPartnerStar?partnerId=" + partnerID);
+                    //HttpResponseMessage roomStarResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetRoomStar?roomID=" + roomId);
+
+                    if (partnerStarResponse.IsSuccessStatusCode)
+                    {
+                        var content = await partnerStarResponse.Content.ReadAsStringAsync();
+
+                        if (double.TryParse(content, out double partnerStar))
+                        {
+                            ViewBag.partnerStar = partnerStar;
                         }
                     }
 
