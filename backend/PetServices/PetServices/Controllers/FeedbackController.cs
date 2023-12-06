@@ -709,6 +709,14 @@ namespace PetServices.Controllers
                         serviceOrder.FeedbackStatus = true;
                         await _context.SaveChangesAsync();
                     }
+
+                    if (feedbackDTO.PartnerId != null)
+                    {
+                        var partnerOrder = await _context.BookingServicesDetails.FirstOrDefaultAsync(b => b.OrderId == feedbackDTO.OrderId && b.PartnerInfoId == feedbackDTO.PartnerId);
+
+                        partnerOrder.FeedbackStatus = true;
+                        await _context.SaveChangesAsync();
+                    }
                 }
 
                 await _context.Feedbacks.AddAsync(feedback);
