@@ -16,30 +16,45 @@
         <div class="card-header alert-primary">
             <ul class="nav nav-pills" id="pills-tab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="~/Customer/MyOrders/AllOrders?orderStatus=All&page=1&pageSize=5" role="tab" aria-selected="true">Tất cả</a>
+                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill"
+                       href="~/Customer/MyOrders/AllOrders?orderStatus=All&page=1&pageSize=5"
+                       role="tab" aria-selected="true">Tất cả</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-education-tab" data-toggle="pill" href="~/Customer/MyOrders/WaitingOrders?orderStatus=Waiting&page=1&pageSize=5" role="tab" aria-selected="false">Đơn hàng chờ xử lý</a>
+                    <a class="nav-link" id="pills-education-tab" data-toggle="pill"
+                       href="~/Customer/MyOrders/PlacedOrders?orderStatus=Placed&page=1&pageSize=5"
+                       role="tab" aria-selected="false">Đơn hàng đang chờ xác nhận</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-event-tab" data-toggle="pill" href="~/Customer/MyOrders/ReceivedOrders?orderStatus=Received&page=1&pageSize=5" role="tab" aria-selected="false">Đã được xác nhận</a>
+                    <a class="nav-link" id="pills-event-tab" data-toggle="pill"
+                       href="~/Customer/MyOrders/ConfirmedOrders?orderStatus=Confirmed&page=1&pageSize=5"
+                       role="tab" aria-selected="false">Đơn hàng được xác nhận </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrders/RejectOrders?orderStatus=Rejected&page=1&pageSize=5" role="tab" aria-selected="false">Đã huỷ</a>
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill"
+                       href="~/Customer/MyOrders/ProcessingOrders?orderStatus=Processing&page=1&pageSize=5"
+                       role="tab" aria-selected="false">Đơn hàng đang được thực hiện</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrders/CompletedOrders?orderStatus=Completed&page=1&pageSize=5" role="tab" aria-selected="false">Hoàn thành</a>
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill"
+                       href="~/Customer/MyOrders/CompletedOrders?orderStatus=Completed&page=1&pageSize=5"
+                       role="tab" aria-selected="false">Hoàn thành</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill"
+                       href="~/Customer/MyOrders/CancelledOrders?orderStatus=Cancelled&page=1&pageSize=5"
+                       role="tab" aria-selected="false">Huỷ</a>
                 </li>
             </ul>
         </div>
 
         <div class="search-order">
-             <input type="text" id="searchInput" placeholder="Bạn có thể tìm kiếm theo mã đơn hàng, tên sản phẩm hoặc dịch vụ">
+            <input type="text" id="searchInput" placeholder="Bạn có thể tìm kiếm theo mã đơn hàng, tên sản phẩm hoặc dịch vụ">
         </div>
-            
+
         <div class="card-body">
             <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">    
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                     @if (Model != null && Model.Count > 0)
                     {
                         <div id="orders-container">
@@ -139,10 +154,10 @@
                                                                 <p style="font-size:.8rem;"><span>Cân nặng thú cưng: </span>@serviceDetail.Weight Kg</p>
 
                                                                 @*<button type="button" class="map-button"
-                                                                        data-lat="@serviceDetail?.PartnerInfo?.Lat" 
-                                                                        data-lng="@serviceDetail?.PartnerInfo?.Lng">
-                                                                    Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail.PartnerInfoId
-                                                                </button>*@
+                                            data-lat="@serviceDetail?.PartnerInfo?.Lat"
+                                            data-lng="@serviceDetail?.PartnerInfo?.Lng">
+                                            Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail.PartnerInfoId
+                                            </button>*@
 
                                                                 <p style="font-size:.8rem; cursor: pointer; color:blue" class="map-button clickable"
                                                                    data-lat="@serviceDetail?.PartnerInfo?.Lat"
@@ -188,7 +203,7 @@
                                                             <img src="@roomDetail.Room.Picture" width="50" height="50" alt="Room Image">
                                                             <div class="room-info-detail">
                                                                 <p style="max-width:800px">@roomDetail.Room.RoomName</p>
-                                                                @foreach(var roomService in order.BookingRoomServices)
+                                                                @foreach (var roomService in order.BookingRoomServices)
                                                                 {
                                                                     <div class="room-info-detail-service">
                                                                         <p style="font-size:.8rem;">Dịch vụ: @roomService.Service.ServiceName</p>
@@ -237,7 +252,7 @@
                     else
                     {
                         <div class="work-container" style="width:100%">
-                         <p style="text-align:center">Chưa có đơn hàng</p>    
+                            <p style="text-align:center">Chưa có đơn hàng</p>
                         </div>
                     }
                 </div>
@@ -255,7 +270,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     @*Start Lazy Loading*@
-   <script>
+    <script>
         var pageIndex = 1;
         var loading = false;
         var lazyLoadingEnabled = true;
