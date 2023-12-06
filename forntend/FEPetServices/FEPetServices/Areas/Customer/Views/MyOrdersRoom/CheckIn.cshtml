@@ -15,16 +15,16 @@
         <div class="card-header alert-primary">
             <ul class="nav nav-pills" id="pills-tab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/Index?orderStatus=All&page=1&pageSize=5" role="tab" aria-selected="true">Tất cả</a>
+                    <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/Index?orderStatus=All&page=1&pageSize=5" role="tab" aria-selected="true">Tất cả</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-education-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/CheckIn?orderStatus=Placed&page=1&pageSize=5" role="tab" aria-selected="false">Chờ nhận phòng</a>
+                    <a class="nav-link active" id="pills-education-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/CheckIn?orderStatus=Placed&page=1&pageSize=5" role="tab" aria-selected="false">Chờ nhận phòng</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="pills-event-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/CheckOut?orderStatus=Confirmed&page=1&pageSize=5" role="tab" aria-selected="false">Đã trả phòng</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/Canceled?orderStatus=Cancelled&page=1&pageSize=5" role="tab" aria-selected="false">Phòng bị huỷ </a>
+                 <li class="nav-item">
+                <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/Canceled?orderStatus=Cancelled&page=1&pageSize=5" role="tab" aria-selected="false">Phòng bị huỷ </a>
                 </li>
             </ul>
         </div>
@@ -97,12 +97,6 @@
                                                         <p style="font-size:.9rem;">Thời gian bắt đầu: @roomDetail.StartDate</p>
                                                         <p style="font-size:.9rem;">Thời gian kêt thúc: @roomDetail.EndDate</p>
                                                     </div>
-                                                    @if (roomDetail.FeedbackStatus == null || roomDetail.FeedbackStatus == false)
-                                                    {
-                                                        <div class="btn-content-detail">
-                                                            <button class="btn btn-outline-primary" onclick="openPopupRoom('@roomDetail.Room.Picture', '@roomDetail.Room.RoomName', '@roomDetail.RoomId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>
-                                                        </div>
-                                                    }
                                                 }
                                             </div>
                                         }
@@ -169,7 +163,7 @@
                 $.ajax({
                     url: '/Customer/MyOrdersRoom/Index',
                     type: 'GET',
-                    data: { orderStatus: 'All', page: pageIndex + 1, pageSize: 5 },
+                    data: { orderStatus: 'Placed', page: pageIndex + 1, pageSize: 5 },
                     success: function (data) {
                         if (data.trim() !== '') {
                             $('#orders-container').append(data);
@@ -198,67 +192,6 @@
         });
     </script>
     @*End Lazy Loading*@
-
-    @*Start Orders Loading*@
-    @*<script>
-        $(document).ready(function () {
-            $('.nav-link').on('click', function () {
-                $('.nav-link').removeClass('active');
-
-                $(this).addClass('active');
-
-                var orderStatus = $(this).data('order-status');
-                loadOrders(orderStatus);
-            });
-
-            function loadOrders(orderStatus) {
-                $.ajax({
-                    url: '/Customer/MyOrdersRoom/Index',
-                    type: 'GET',
-                    data: { orderStatus: orderStatus, page: 1, pageSize: 5 },
-                    success: function (data) {
-                        $('#orders-container').html(data);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.error('AJAX error:', textStatus, errorThrown);
-                        $('#orders-container').html('<div class="work-container" style="width:100%"><p style="text-align:center">Chưa có đơn hàng</p></div>');
-                    }
-                });
-            }
-
-            function loadMore(orderStatus) {
-                if (!loading && lazyLoadingEnabled) {
-                    loading = true;
-                    $('#loading-indicator').show();
-
-                    $.ajax({
-                        url: '/Customer/MyOrdersRoom/Index',
-                        type: 'GET',
-                        data: { orderStatus: orderStatus, page: pageIndex + 1, pageSize: 5 },
-                        success: function (data) {
-                            if (data.trim() !== '') {
-                                $('#orders-container').append(data);
-                                pageIndex++;
-                            } else {
-                                lazyLoadingEnabled = false;
-                            }
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            lazyLoadingEnabled = false;
-                            console.error('AJAX error:', textStatus, errorThrown);
-                        },
-
-                        complete: function () {
-                            loading = false;
-                            $('#loading-indicator').hide();
-                        }
-                    });
-                }
-            }
-
-        });
-    </script>*@
-    @*End Orders Loading*@
 
     @*Start Search*@
     <!-- Add this script after your lazy loading script -->
