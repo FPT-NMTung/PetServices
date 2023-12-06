@@ -184,13 +184,37 @@
                                 <td colspan="5"></td>
                                 <td>
                                     <div class="status-content-detail">
-                                        @if (@serviceDetail?.StatusOrderService?.Trim() == "Placed")
+                                        @if (@serviceDetail?.StatusOrderService.Trim() == "Placed")
                                         {
                                             <span class="badge badge-info">Dịch vụ đang chờ xác nhận</span>
                                         }
                                         else if (@serviceDetail?.StatusOrderService?.Trim() == "Waiting")
                                         {
                                             <span class="badge badge-info">Dịch vụ đang chờ xử lý </span>
+                                        }
+                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Received")
+                                        {
+                                            <span class="badge badge-info">Dịch vụ được nhận bởi nhân viên</span>
+                                        }
+                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Processing")
+                                        {
+                                            <span class="badge badge-info">Đang trong quá trình thực hiện</span>
+                                        }
+                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Rejected")
+                                        {
+                                            <span class="badge badge-info">Bị huỷ bởi nhân viên bạn chọn</span>
+                                        }
+                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "ReceivedDifficult")
+                                        {
+                                            <span class="badge badge-info">Dịch vụ được nhận bởi nhân viên khác</span>
+                                        }
+                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                        {
+                                            <span class="badge badge-info">Dịch vụ đã hoàn thành</span>
+                                        }
+                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Cancelled")
+                                        {
+                                            <span class="badge badge-info">Dịch vụ bị huỷ</span>
                                         }
                                     </div>
                                 </td>
