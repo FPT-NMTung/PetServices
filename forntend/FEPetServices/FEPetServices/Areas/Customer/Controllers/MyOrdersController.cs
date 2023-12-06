@@ -25,16 +25,13 @@ namespace FEPetServices.Areas.Customer.Controllers
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
             DefaultApiUrl = "https://localhost:7255/api/";
-            DefaultApiUrlOrders = "https://localhost:7255/api/";
         }
 
         private async Task<IActionResult> GetOrders(string orderStatus, int page, int pageSize)
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
-            //https://localhost:7255/api/Order/orderstatus/Waiting?email=customer%40gmail.com
 
-            //HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrlOrders}Order/orderstatus/{orderStatus}?email={email}");
             HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderstatus/{orderStatus}?email={email}");
             if (responsecheck.StatusCode == HttpStatusCode.NotFound)
             {
@@ -43,7 +40,6 @@ namespace FEPetServices.Areas.Customer.Controllers
             }   
             else
             {
-                //HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrlOrders}Order/email/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
                 HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/getOrderUser/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
 
                 if (response.IsSuccessStatusCode)
@@ -79,7 +75,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                     }
                     else
                     {
-                        return View();
+                        return View();  
                     }
                 }
             }
