@@ -63,7 +63,6 @@
                                 }
                                 }
                         </div>
-<<<<<<< HEAD
                         <div style="text-align:center;">
                             <div class="pagination">
                                 @if (ViewBag.CurrentPage > 1)
@@ -79,25 +78,6 @@
                                     <a class="next page-numbers" href="@Url.Action("servicelist", new { page = ViewBag.CurrentPage + 1, sortby=ViewBag.sortby, BlogName=ViewBag.BlogName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })"><i class="fal fa-arrow-right"></i></a>
                                 }
                             </div>
-=======
-                        <div class="post-pagination">
-                            <nav class="navigation pagination" aria-label="Products">
-                                <ul class="page-numbers">
-                                    @if (ViewBag.CurrentPage > 1)
-                                    {
-                                      <li><a class="next page-numbers" href="@Url.Action("Bloglist", new { page = ViewBag.CurrentPage - 1, BlogName=ViewBag.BlogName, sortby=ViewBag.sortby, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle,tag=@ViewBag.Tag })"><i class="fal fa-arrow-left"></i></a></li> 
-                                    }
-                                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                                    {
-                                    <li><a class="page-numbers" href="@Url.Action("Bloglist", new { page = i, sortby=ViewBag.sortby, BlogName=ViewBag.BlogName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle,tag=@ViewBag.Tag })">@i</a></li>
-                                    }
-                                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-                                    {
-                                        <li><a class="next page-numbers" href="@Url.Action("servicelist", new { page = ViewBag.CurrentPage + 1, sortby=ViewBag.sortby, BlogName=ViewBag.BlogName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle,tag=@ViewBag.Tag })"><i class="fal fa-arrow-right"></i></a></li>
-                                    }
-                                </ul>
-                            </nav>
->>>>>>> f0d5f076dace1ecd7812725626e7fddd8f43b983
                         </div>
                     </div>
                     <div class="col-lg-4">
