@@ -105,6 +105,12 @@
                                                         </div>
                                                         <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
+                                                    @if ((productDetail.FeedbackStatus == null || productDetail.FeedbackStatus == false) && productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                                                        {
+                                                            <div class="btn-content-detail">
+                                                                <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@order.UserInfoId', '@order.OrderId', '@productDetail.FeedbackStatus')">Đánh giá</button>
+                                                            </div>
+                                                        }
                                                     @if (i == order.OrderProductDetails.Count - 1)
                                                     {
                                                         <div class=" status-content-detail">
@@ -124,12 +130,6 @@
                                                             {
                                                                 <span class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
                                                             }
-                                                        </div>
-                                                    }
-                                                    @if ((productDetail.FeedbackStatus == null || productDetail.FeedbackStatus == false) && order.OrderStatus.Trim() == "Delivered")
-                                                    {
-                                                        <div class="btn-content-detail">
-                                                            <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@order.UserInfoId', '@order.OrderId', '@productDetail.FeedbackStatus')">Đánh giá</button>
                                                         </div>
                                                     }
                                                 }
@@ -158,13 +158,21 @@
                                             Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail.PartnerInfoId
                                             </button>*@
 
-                                                                <p style="font-size:.8rem; cursor: pointer; color:blue" class="map-button clickable"
-                                                                   data-lat="@serviceDetail?.PartnerInfo?.Lat"
-                                                                   data-lng="@serviceDetail?.PartnerInfo?.Lng"
-                                                                   data-my-lat=""
-                                                                   data-my-lng="">
-                                                                    Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail.PartnerInfoId
-                                                                </p>
+                                                                <div style="display: flex ; justify-content:space-between">
+                                                                    <p style="font-size:.8rem; cursor: pointer; color:blue" class="map-button clickable"
+                                                                       data-lat="@serviceDetail?.PartnerInfo?.Lat"
+                                                                       data-lng="@serviceDetail?.PartnerInfo?.Lng"
+                                                                       data-my-lat=""
+                                                                       data-my-lng="">
+                                                                        Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail.PartnerInfoId
+                                                                    </p>
+                                                                    @if (@serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                                                    {
+                                                                        <div class="btn-content-detail">
+                                                                            <button class="btn btn-outline-primary">Đánh giá</button>
+                                                                        </div>
+                                                                    }
+                                                                </div>
 
                                                             </div>
                                                         </div>
@@ -184,7 +192,7 @@
                                                             <span class="badge badge-info">Dịch vụ đang chờ xử lý </span>
                                                         }
                                                     </div>
-                                                    @if ((serviceDetail.FeedbackStatus == null || serviceDetail.FeedbackStatus == false) && order.OrderStatus.Trim() == "Completed")
+                                                    @if ((serviceDetail.FeedbackStatus == null || serviceDetail.FeedbackStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
                                                     {
                                                         <div class="btn-content-detail">
                                                             <button class="btn btn-outline-primary" onclick="openPopupService('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>

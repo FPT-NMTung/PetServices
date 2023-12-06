@@ -34,7 +34,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
-            HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderstatus/{orderStatus}?email={email}");
+            HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderroomstatus/{orderStatus}?email={email}");
             if (responsecheck.StatusCode == HttpStatusCode.NotFound)
             {
                 return View();
@@ -54,7 +54,7 @@ namespace FEPetServices.Areas.Customer.Controllers
 
                     if (!string.IsNullOrEmpty(responseContent) && responseContent.Contains("404 Not Found"))
                     {
-                        return View();
+                        return View("Error404");
                     }
 
                     List<OrderForm> orders = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
@@ -72,7 +72,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
-                        return View();
+                        return View("Error404");
                     }
                     else
                     {
