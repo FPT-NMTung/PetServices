@@ -37,7 +37,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderstatus/{orderStatus}?email={email}");
             if (responsecheck.StatusCode == HttpStatusCode.NotFound)
             {
-                return View();
+                return View("Error404");
                 //return new ErrorResult("");
             }   
             else
