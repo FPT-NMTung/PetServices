@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="/assets/css/vendor/magnific-popup.css">
     <link rel="stylesheet" href="/assets/css/vendor/base.css">
     <link rel="stylesheet" href="/assets/css/style.min.css">
+    <link rel="stylesheet" href="~/css/Blog/BlogList.css">
 
 </head>
 
@@ -88,23 +89,21 @@
                             </div>
                             }
                         </div>
-                        <div class="post-pagination">
-                            <nav class="navigation pagination" aria-label="Products">
-                                <ul class="page-numbers">
-                                    @if (ViewBag.CurrentPage > 1)
-                                    {
-                                      <li><a class="next page-numbers" href="@Url.Action("Partner", new { page = ViewBag.CurrentPage - 1, PartName=ViewBag.PartName })"><i class="fal fa-arrow-left"></i></a></li> 
-                                    }
-                                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                                    {
-                                    <li><a class="page-numbers" href="@Url.Action("Partner", new { page = i, PartName=ViewBag.PartName, pagesize=@ViewBag.pagesize })">@i</a></li>
-                                    }
-                                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-                                    {
-                                        <li><a class="next page-numbers" href="@Url.Action("Partner", new { page = ViewBag.CurrentPage + 1, PartName=ViewBag.PartName, pagesize=@ViewBag.pagesize})"><i class="fal fa-arrow-right"></i></a></li>
-                                    }
-                                </ul>
-                            </nav>
+                        <div style="text-align:center;">
+                            <div class="pagination">
+                                @if (ViewBag.CurrentPage > 1)
+                                {
+                                    <a class="next page-numbers" href="@Url.Action("Partner", new { page = ViewBag.CurrentPage - 1, PartName=ViewBag.PartName })"><i class="fal fa-arrow-left"></i></a> 
+                                }
+                                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                {
+                                    <a class="page-numbers" href="@Url.Action("Partner", new { page = i, PartName=ViewBag.PartName, pagesize=@ViewBag.pagesize })">@i</a>
+                                }
+                                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                                {
+                                    <a class="next page-numbers" href="@Url.Action("Partner", new { page = ViewBag.CurrentPage + 1, PartName=ViewBag.PartName, pagesize=@ViewBag.pagesize})"><i class="fal fa-arrow-right"></i></a>
+                                }
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-4">

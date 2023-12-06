@@ -1045,7 +1045,8 @@ namespace FEPetServices.Controllers
 
                 //HttpResponseMessage feedbackResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetAllFeedbackInRoom?roomID=" + roomId);
                 //HttpResponseMessage feedbackResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetAllFeedbackInRoom?roomID=" + roomId);
-                HttpResponseMessage feedbackResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetAllFeedbackInPartner?partnerId=" + partnerID);
+
+                HttpResponseMessage feedbackResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetAllFeedbackInPartner?partnerId=" + partnerID);
 
                 if (feedbackResponse.IsSuccessStatusCode)
                 {
@@ -1081,7 +1082,7 @@ namespace FEPetServices.Controllers
                     //HttpResponseMessage paggingResponse = await client.GetAsync("https://localhost:7255/api/Feedback/PaginationInRoom?roomID=" + roomId + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
                     //HttpResponseMessage paggingResponse = await client.GetAsync(DefaultApiUrl + "Feedback/PaginationInRoom?roomID=" + roomId + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
 
-                    HttpResponseMessage paggingResponse = await client.GetAsync("https://localhost:7255/api/Feedback/PaginationInPartner?partnerId=" + partnerID + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
+                    HttpResponseMessage paggingResponse = await client.GetAsync(DefaultApiUrl + "Feedback/PaginationInPartner?partnerId=" + partnerID + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
                     ViewBag.CurrentPage = page;
 
                     if (paggingResponse.IsSuccessStatusCode)
@@ -1141,7 +1142,7 @@ namespace FEPetServices.Controllers
 
                     //HttpResponseMessage voteNumberResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetRoomVoteNumber?roomID=" + roomId);
                     //HttpResponseMessage voteNumberResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetRoomVoteNumber?roomID=" + roomId);
-                    HttpResponseMessage voteNumberResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetPartnerVoteNumber?partnerId=" + partnerID);
+                    HttpResponseMessage voteNumberResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetPartnerVoteNumber?partnerId=" + partnerID);
 
                     if (voteNumberResponse.IsSuccessStatusCode)
                     {
@@ -1151,7 +1152,7 @@ namespace FEPetServices.Controllers
                     }
 
                     //HttpResponseMessage roomStarResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetRoomStar?roomID=" + roomId);
-                    HttpResponseMessage partnerStarResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetPartnerStar?partnerId=" + partnerID);
+                    HttpResponseMessage partnerStarResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetPartnerStar?partnerId=" + partnerID);
                     //HttpResponseMessage roomStarResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetRoomStar?roomID=" + roomId);
 
                     if (partnerStarResponse.IsSuccessStatusCode)
