@@ -11,7 +11,6 @@ namespace PetServices.Models
         public int? OrderId { get; set; }
         public string? EmailReject { get; set; }
         public DateTime? RejectTime { get; set; }
-
         public virtual Order? Order { get; set; }
     }
 }
