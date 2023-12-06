@@ -29,7 +29,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             DefaultApiUrl = "https://localhost:7255/api/";
         }
 
-        private async Task<IActionResult> GetOrders(string orderStatus, int page, int pageSize)
+        private async Task<IActionResult> GetOrdersRoom(string orderStatus, int page, int pageSize)
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
@@ -37,9 +37,8 @@ namespace FEPetServices.Areas.Customer.Controllers
             HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderstatus/{orderStatus}?email={email}");
             if (responsecheck.StatusCode == HttpStatusCode.NotFound)
             {
-                return View("Error404");
-                //return new ErrorResult("");
-            }   
+                return View();
+            }
             else
             {
                 HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/getRoomOrderUser/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
@@ -55,8 +54,7 @@ namespace FEPetServices.Areas.Customer.Controllers
 
                     if (!string.IsNullOrEmpty(responseContent) && responseContent.Contains("404 Not Found"))
                     {
-                        return View("Error404");
-                        //return new ErrorResult("");
+                        return View();
                     }
 
                     List<OrderForm> orders = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
@@ -74,8 +72,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
-                        return View("Error404");
-                        //return new ErrorResult("");
+                        return View();
                     }
                     else
                     {
@@ -86,18 +83,18 @@ namespace FEPetServices.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public Task<IActionResult> Index(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+        public Task<IActionResult> Index(string orderStatus, int page, int pageSize) => GetOrdersRoom(orderStatus, page, pageSize);
 
         [HttpGet]
-        public Task<IActionResult> CheckIn(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+        public Task<IActionResult> CheckIn(string orderStatus, int page, int pageSize) => GetOrdersRoom(orderStatus, page, pageSize);
 
         [HttpGet]
-        public Task<IActionResult> CheckOut(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+        public Task<IActionResult> CheckOut(string orderStatus, int page, int pageSize) => GetOrdersRoom(orderStatus, page, pageSize);
 
         [HttpGet] 
-        public Task<IActionResult> Canceled(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+        public Task<IActionResult> Canceled(string orderStatus, int page, int pageSize) => GetOrdersRoom(orderStatus, page, pageSize);
 
         [HttpGet]
-        public Task<IActionResult> Processing(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+        public Task<IActionResult> Processing(string orderStatus, int page, int pageSize) => GetOrdersRoom(orderStatus, page, pageSize);
     }
 }

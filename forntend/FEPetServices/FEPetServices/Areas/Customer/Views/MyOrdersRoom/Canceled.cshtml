@@ -104,12 +104,6 @@
                                                         <p style="font-size:.9rem;">Thời gian bắt đầu: @roomDetail.StartDate</p>
                                                         <p style="font-size:.9rem;">Thời gian kêt thúc: @roomDetail.EndDate</p>
                                                     </div>
-                                                    @if (roomDetail.FeedbackStatus == null || roomDetail.FeedbackStatus == false)
-                                                    {
-                                                        <div class="btn-content-detail">
-                                                            <button class="btn btn-outline-primary" onclick="openPopupRoom('@roomDetail.Room.Picture', '@roomDetail.Room.RoomName', '@roomDetail.RoomId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>
-                                                        </div>
-                                                    }
                                                 }
                                             </div>
                                         }
