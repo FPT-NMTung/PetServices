@@ -381,10 +381,10 @@ namespace PetServices.Controllers
             return Ok(averageStars); ;
         }
 
-        /*[HttpGet("GetServiceVoteNumber")]
-        public async Task<ActionResult> GetServiceVoteNumber(int serviceID)
+        [HttpGet("GetPartnerVoteNumber")]
+        public async Task<ActionResult> GetPartnerVoteNumber(int partnerId)
         {
-            var feedbacks = await _context.Feedbacks.Where(f => f.ServiceId == serviceID).ToListAsync();
+            var feedbacks = await _context.Feedbacks.Where(f => f.PartnerId == partnerId).ToListAsync();
 
             var feedback = new VoteNumberDTO
             {
@@ -398,13 +398,13 @@ namespace PetServices.Controllers
             return Ok(feedback);
         }
 
-        [HttpGet("PaginationInService")]
-        public async Task<ActionResult> PaginationInService(int serviceID, string starnumber, int pagenumber)
+        [HttpGet("PaginationInPartner")]
+        public async Task<ActionResult> PaginationInPartner(int partnerId, string starnumber, int pagenumber)
         {
             var pageSize = 5;
             var starNumber = 0;
 
-            var feedbacks = await _context.Feedbacks.Where(f => f.ServiceId == serviceID).ToListAsync();
+            var feedbacks = await _context.Feedbacks.Where(f => f.PartnerId == partnerId).ToListAsync();
 
             if (starnumber == "5star")
             {
@@ -447,7 +447,7 @@ namespace PetServices.Controllers
             }
 
             return Ok(feedbacks1);
-        }*/
+        }
 
         [HttpGet("GetStarInTakeCarePet")]
         public async Task<ActionResult> GetStarInTakeCarePet()
