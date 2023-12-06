@@ -52,7 +52,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                 }
 
 
-                if (petInfo.PetName == null) { return View(); }
+                if (petInfo.PetName == null || petInfo.Dob==null || petInfo.ImagePet == null) { return View(); }
                     foreach (var file in image)
                     {
                         string filename = GenerateRandomNumber(5) + file.FileName;
