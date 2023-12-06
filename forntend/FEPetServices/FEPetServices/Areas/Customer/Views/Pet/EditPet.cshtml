@@ -80,10 +80,10 @@
     <input type="text" id="UserInfoId" name="UserInfoId" value="@Model?.UserInfoId" required hidden>
     <div class="row">
       <div class="col-25">
-        <label for="Descriptions">Mô Tả<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+        <label for="Descriptions">Mô Tả:</label>
       </div>
       <div class="col-75">
-        <textarea id="Descriptions" name="Descriptions" placeholder="Mô tả .." style="height:200px" required>@Model?.Descriptions</textarea>
+        <textarea id="Descriptions" name="Descriptions" placeholder="Mô tả .." style="height:200px" >@Model?.Descriptions</textarea>
         <div style="color:red" class="error-message" id="subject-error-message"></div>
       </div>
     </div>
@@ -110,5 +110,22 @@
         }
 </style>
 <script src="~/js/Service.js"></script>
+<script>
+function validateForm() {
+    // Các bước kiểm tra khác trong form nếu cần
+
+    var inputDate = document.getElementById("Dob").value;
+    var currentDate = new Date().toISOString().slice(0, 10);
+
+    if (inputDate > currentDate) {
+        alert("Ngày sinh phải trước ngày hiện tại!");
+        return false;
+    }
+
+    return true; // Nếu tất cả điều kiện đều đúng
+}
+
+</script>
+
 </body>
 </html>
