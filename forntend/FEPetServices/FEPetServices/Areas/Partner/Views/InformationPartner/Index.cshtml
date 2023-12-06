@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="~/css/toastNotification.css" rel="stylesheet" />
     <script src="~/js/map_partner.js"></script>
+    <link href="~/css/partner/infopartner.css" rel="stylesheet" />
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM"></script>
 </head>
 <body>
@@ -52,7 +53,7 @@
                                     </label> &nbsp;
                                 </div>
                                 @*Chưa thêm ảnh*@
-                                <div style="display: flex;">
+                                <div class="anh-chung-chi">
                                     @if (Model?.PartnerInfo.ImageCertificate == null)
                                     {
                                         <div class="small font-italic text-muted mb-4">JPG hoặc PNG không vượt quá 5 MB</div>
