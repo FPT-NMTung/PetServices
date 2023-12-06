@@ -19,6 +19,7 @@ namespace UnitTest
         // 1. Đăng nhập thành công
         public async Task Test_Login_Success()
         {
+            // Arrange
             var options = new DbContextOptionsBuilder<PetServicesContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
@@ -32,7 +33,8 @@ namespace UnitTest
                     Email = "hungnvhe153434@fpt.edu.vn",
                     Password = hashedPassword,
                     Role = new Role { RoleName = "CUSTOMER" },
-                    UserInfo = new UserInfo { FirstName = "Thị", LastName = "Nở" }
+                    UserInfo = new UserInfo { FirstName = "Thị", LastName = "Nở" },
+                    Status = true // Assuming the account is activated
                 };
 
                 context.Accounts.Add(testUser);
@@ -52,11 +54,13 @@ namespace UnitTest
             var loginForm = new LoginForm
             {
                 Email = "hungnvhe153434@fpt.edu.vn",
-                Password = "12345678" 
+                Password = "12345678"
             };
 
+            // Act
             var result = await controller.Login(loginForm) as ObjectResult;
 
+            // Assert
             Assert.NotNull(result);
             Assert.Equal(200, result.StatusCode);
 
