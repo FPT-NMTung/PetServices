@@ -25,11 +25,7 @@
                         {
                             <span style="background-color: green; color:#fff">Đã hoàn thành</span>
                         }
-                        else if (status.StatusOrderService.Trim() == "Rejected")
-                        {
-                            <span style="background-color: red; color:#fff">Đơn hàng bị huỷ</span>
-                        }
-                        else if (status.StatusOrderService.Trim() == "Waiting")
+                        else if (status.StatusOrderService.Trim() == "Waiting" && status.PartnerInfoId == null)
                         {
                             <span style="background-color: yellow;color:green">Đang chờ xác nhận</span>
                         }
@@ -37,9 +33,13 @@
                         {
                             <span style="background-color: pink;color:deeppink">Đơn hàng đã được xác nhận</span>
                         }
-                        else if (status.StatusOrderService.Trim() == "Delivering")
+                        else if (status.StatusOrderService.Trim() == "Processing")
                         {
-                            <span style="background-color: pink;color:deeppink">Đang giao hàng</span>
+                            <span style="background-color: pink;color:deeppink">Đơn hàng đang thực hiện</span>
+                        }
+                        else if (status.StatusOrderService.Trim() == "Waiting" && status.PartnerInfoId != null)
+                        {
+                            <span style="background-color: yellow;color:green">Đơn hàng đặc biệt đang chờ xác nhận</span>
                         }
                     }
                     
@@ -192,7 +192,7 @@
                     <div style="display:flex;">
                         @*@if (Model.BookingServicesDetails.PartnerInfoId != null){}*@
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="receivedCheckbox" name="newStatus" value="Finished">
+                            <input class="form-check-input" type="radio" id="receivedCheckbox" name="newStatus" value="Completed">
                             <label class="form-check-label" for="receivedCheckbox" style="background-color: green; color:#fff">Hoàn thành đơn</label>
                         </div>
                     </div>
