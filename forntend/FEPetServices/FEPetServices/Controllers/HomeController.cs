@@ -708,7 +708,7 @@ namespace FEPetServices.Controllers
         }
 
 
-        public async Task<IActionResult> BlogList(BlogDTO blog, int page = 1, int pagesize = 6, string BlogName = "", string sortby = "")
+        public async Task<IActionResult> BlogList(BlogDTO blog, int page = 1, int pagesize = 6, string BlogName = "", string sortby = "", string tag ="")
         {
             BlogModel blogModel = new BlogModel();
             try
@@ -760,6 +760,14 @@ namespace FEPetServices.Controllers
                             blogModel.ListBlogTop3 = newestProducts;
                         }
                     }
+                    HttpResponseMessage roomCategoryResponse = await client.GetAsync(DefaultApiUrl + "Tag/GetAllTag");
+
+                    if (roomCategoryResponse.IsSuccessStatusCode)
+                    {
+                        var categories = await roomCategoryResponse.Content.ReadFromJsonAsync<List<TagDTO>>();
+                        ViewBag.Categories = categories;
+                    }
+
                     var responseContent = await response.Content.ReadAsStringAsync();
                     if (!string.IsNullOrEmpty(responseContent))
                     {
@@ -775,7 +783,11 @@ namespace FEPetServices.Controllers
                         {
                             blogList = blogList?.Where(r => r.PageTile.Contains(BlogName, StringComparison.OrdinalIgnoreCase)).ToList();
                         }
-
+                        if (!string.IsNullOrEmpty(tag))
+                        {
+                            int tagid = int.Parse(tag);
+                            blogList = blogList?.Where(r => r.TagId == tagid).ToList();
+                        }
                         int totalItems = blogList.Count;
                         int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
                         int startIndex = (page - 1) * pagesize;
@@ -788,6 +800,7 @@ namespace FEPetServices.Controllers
                         ViewBag.BlogName = BlogName;
                         ViewBag.pagesize = pagesize;
                         blogModel.Blog = currentPageBlogList;
+                        ViewBag.Tag = tag;
 
 
                         return View(blogModel);
@@ -825,9 +838,7 @@ namespace FEPetServices.Controllers
             {
                 //HttpResponseMessage responseBlogDetail = await client.GetAsync(DefaultApiUrlBlogDetail + blogId);
                 HttpResponseMessage responseBlogDetail = await client.GetAsync(DefaultApiUrl + "Blog/BlogID/" + blogId);
-                //HttpResponseMessage responseBlogList = await client.GetAsync(DefaultApiUrlBlogList + "/GetAllBlog");
                 HttpResponseMessage responseBlogList = await client.GetAsync(DefaultApiUrl + "Blog/GetAllBlog");
-                //HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
                 HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
                 if (responseBlogDetail.IsSuccessStatusCode)
                 {
@@ -849,6 +860,7 @@ namespace FEPetServices.Controllers
                             blog.ListProductTop3 = firstPageProducts;
                         }
                     }
+                    
                     // List ra danh sách blog
                     if (responseBlogList.IsSuccessStatusCode)
                     {
