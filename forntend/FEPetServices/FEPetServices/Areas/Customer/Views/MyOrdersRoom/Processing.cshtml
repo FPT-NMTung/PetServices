@@ -21,13 +21,13 @@
                     <a class="nav-link" id="pills-education-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/CheckIn?orderStatus=Placed&page=1&pageSize=5" role="tab" aria-selected="false">Chờ nhận phòng</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/Processing?orderStatus=Processing&page=1&pageSize=5" role="tab" aria-selected="false">Phòng đã nhận</a>
+                    <a class="nav-link active" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/Processing?orderStatus=Processing&page=1&pageSize=5" role="tab" aria-selected="false">Phòng đã nhận</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="pills-event-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/CheckOut?orderStatus=Confirmed&page=1&pageSize=5" role="tab" aria-selected="false">Đã trả phòng</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/Canceled?orderStatus=Cancelled&page=1&pageSize=5" role="tab" aria-selected="false">Phòng bị huỷ </a>
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/Canceled?orderStatus=Cancelled&page=1&pageSize=5" role="tab" aria-selected="false">Phòng bị huỷ </a>
                 </li>
             </ul>
         </div>
@@ -170,7 +170,7 @@
                 $.ajax({
                     url: '/Customer/MyOrdersRoom/Index',
                     type: 'GET',
-                    data: { orderStatus: 'Canceled', page: pageIndex + 1, pageSize: 5 },
+                    data: { orderStatus: 'Processing', page: pageIndex + 1, pageSize: 5 },
                     success: function (data) {
                         if (data.trim() !== '') {
                             $('#orders-container').append(data);

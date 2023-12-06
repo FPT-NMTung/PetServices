@@ -30,7 +30,7 @@ namespace PetServices.Controllers
             {
                 List<ReasonOrder> orders = _context.ReasonOrders
                 .ToList();
-                return Ok(_mapper.Map<List<OrdersDTO>>(orders));
+                return Ok(_mapper.Map<List<ReasonOrderDTO>>(orders));
             }
             catch (Exception ex)
             {

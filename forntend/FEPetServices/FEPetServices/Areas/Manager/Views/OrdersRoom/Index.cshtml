@@ -53,7 +53,11 @@
                                 }
                                 else if (orderLists?.OrderStatus.Trim() == "Cancelled")
                                 {
-                                    <span style="display:inline-block" class="badge badge-info">Phòng bị huỷ </span>
+                                    <span style="display:inline-block" class="badge badge-info">Phòng bị huỷ</span>
+                                }
+                                else if (orderLists?.OrderStatus.Trim() == "Processing")
+                                {
+                                    <span style="display:inline-block" class="badge badge-info">Đã nhận phòng</span>
                                 }
                             </td>
                             <td>

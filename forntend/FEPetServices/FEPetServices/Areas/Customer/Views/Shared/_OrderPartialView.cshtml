@@ -60,6 +60,10 @@
                     {
                         <span style="display:inline-block" class="badge badge-info">Phòng bị huỷ </span>
                     }
+                    else if (order?.OrderStatus.Trim() == "Processing")
+                    {
+                        <span style="display:inline-block" class="badge badge-info">Đã nhận phòng</span>
+                    }
                 }
             </div>
             <p><i class="far fa-calendar-alt"></i> @order.OrderDate</p>
@@ -104,6 +108,12 @@
                                     <span class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
                                 }
                             </div>
+                            @if ((productDetail.FeedbackStatus == null || productDetail.FeedbackStatus == false) && productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                            {
+                                <div class="btn-content-detail">
+                                    <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@order.UserInfoId', '@order.OrderId', '@productDetail.FeedbackStatus')">Đánh giá</button>
+                                </div>
+                            }
                         }
                     }
                 </div>
@@ -156,7 +166,37 @@
                             {
                                 <span class="badge badge-info">Dịch vụ đang chờ xử lý </span>
                             }
+                            else if (@serviceDetail?.StatusOrderService?.Trim() == "Received")
+                            {
+                                <span class="badge badge-info">Dịch vụ được nhận bởi nhân viên</span>
+                            }
+                            else if (@serviceDetail?.StatusOrderService?.Trim() == "Processing")
+                            {
+                                <span class="badge badge-info">Đang trong quá trình thực hiện</span>
+                            }
+                            else if (@serviceDetail?.StatusOrderService?.Trim() == "Rejected")
+                            {
+                                <span class="badge badge-info">Bị huỷ bởi nhân viên bạn chọn</span>
+                            }
+                            else if (@serviceDetail?.StatusOrderService?.Trim() == "ReceivedDifficult")
+                            {
+                                <span class="badge badge-info">Dịch vụ được nhận bởi nhân viên khác</span>
+                            }
+                            else if (@serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                            {
+                                <span class="badge badge-info">Dịch vụ đã hoàn thành</span>
+                            }
+                            else if (@serviceDetail?.StatusOrderService?.Trim() == "Cancelled")
+                            {
+                                <span class="badge badge-info">Dịch vụ bị huỷ</span>
+                            }
                         </div>
+                        @if ((serviceDetail.FeedbackStatus == null || serviceDetail.FeedbackStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                        {
+                            <div class="btn-content-detail">
+                                <button class="btn btn-outline-primary" onclick="openPopupService('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>
+                            </div>
+                        }
                     }
                 </div>
             }
@@ -189,6 +229,12 @@
                             <p style="font-size:.9rem;">Thời gian bắt đầu: @roomDetail.StartDate</p>
                             <p style="font-size:.9rem;">Thời gian kêt thúc: @roomDetail.EndDate</p>
                         </div>
+                        @if ((roomDetail.FeedbackStatus == null || roomDetail.FeedbackStatus == false) && order?.OrderStatus.Trim() == "Confirmed")
+                        {
+                            <div class="btn-content-detail">
+                                <button class="btn btn-outline-primary" onclick="openPopupRoom('@roomDetail.Room.Picture', '@roomDetail.Room.RoomName', '@roomDetail.RoomId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>
+                            </div>
+                        }
                     }
                 </div>
             }
