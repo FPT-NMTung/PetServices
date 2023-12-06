@@ -2,6 +2,7 @@
 using FEPetServices.Form.OrdersForm;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
@@ -205,7 +206,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> PetInfo()
+        public async Task<IActionResult> PetInfo( int petId)
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
