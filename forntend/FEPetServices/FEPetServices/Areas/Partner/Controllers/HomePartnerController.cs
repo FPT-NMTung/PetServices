@@ -343,6 +343,16 @@ namespace FEPetServices.Areas.Partner.Controllers
                 status.newStatusProduct = "";
                 status.newStatusService = "Received";
             }
+            if (status.newStatus == "Processing")
+            {
+                status.newStatusProduct = "";
+                status.newStatusService = "Processing";
+            }
+            if (status.newStatus == "Finished")
+            {
+                status.newStatusProduct = "";
+                status.newStatusService = "Finished";
+            }
             //HttpResponseMessage response = await client.PutAsJsonAsync("https://localhost:7255/api/OrderPartner/ChangeStatus?orderId=" + orderId, status);
             //HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl + "OrderPartner/ChangeStatus?orderId=" + orderId, status);
             HttpResponseMessage response = await client.PutAsJsonAsync("https://localhost:7255/api/OrderPartner/ChangeStatus/" + email + "?orderId=" + orderId, status);
