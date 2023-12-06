@@ -30,9 +30,13 @@
                 {
                     <span style="display:inline-block" class="badge badge-info">Đã trả phòng</span>
                 }
+                else if (Model?.OrderStatus.Trim() == "Processing")
+                {
+                    <span style="display:inline-block" class="badge badge-info">Đã nhận phòng</span>
+                }
                 else if (Model?.OrderStatus.Trim() == "Refund")
                 {
-                    <span style="display:inline-block" class="badge badge-info">Hoàn tiên</span>
+                    <span style="display:inline-block" class="badge badge-info">Hoàn tiền</span>
                 }
                 else if (Model?.OrderStatus.Trim() == "Placed")
                 {
@@ -147,6 +151,18 @@
         </div>
         <form method="post" asp-controller="OrdersRoom" asp-action="OrderRoomDetail">
             @if (Model.OrderStatus.Trim() == "Placed")
+            {
+                <input type="hidden" name="Id" value="@Model?.OrderId" />
+                <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
+
+                <select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
+                    <option value="Processing">Xác nhận khách nhận phòng</option>
+                    <option value="Cancelled">Xác nhận huỷ phòng</option>
+                </select>
+
+                <button class="btn btn-primary" type="submit">Xác nhận</button>
+            }
+            @if (Model.OrderStatus.Trim() == "Processing")
             {
                 <input type="hidden" name="Id" value="@Model?.OrderId" />
                 <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />

@@ -133,6 +133,11 @@
             </div>
         }
 
+         @if (Model.BookingServicesDetails != null && Model.BookingServicesDetails.Count > 0)
+        {
+            <h4>Đơn hàng có dịch vụ</h4>
+        }
+
         <div style="margin-bottom:0" class="form-group row">
             <p class="col-sm-6 col-form-label">Hoá đơn</p>
             <p class="col-sm-6 col-form-label" style="text-align:end">Thanh toán</p>
