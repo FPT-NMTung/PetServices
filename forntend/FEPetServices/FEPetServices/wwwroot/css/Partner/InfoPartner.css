@@ -1,0 +1,15 @@
+﻿.anh-chung-chi {
+    display: flex;
+}
+@media only screen and (max-width: 400px) {
+    .card-body{
+        display: block;
+        justify-content: center;
+    }
+    .form-control{
+        width: 200%;
+    }
+    /*.anh-chung-chi{
+        display: block;
+    }*/
+}

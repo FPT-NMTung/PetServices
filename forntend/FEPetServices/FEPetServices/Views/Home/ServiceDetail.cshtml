@@ -81,7 +81,7 @@
                                         <span style="color: #7e7e7e; font-size: 17px;">@ViewBag.serviceStar</span>
                                         </div>
                                         <div class="review-link">
-                                            <a href="#">(<span>@ViewBag.FeedbackCount</span> customer reviews)</a>
+                                            <a href="#">(<span>@ViewBag.FeedbackCount</span> đánh giá của khách hàng)</a>
                                         </div>
                                     </div>
                                     <ul class="product-meta">
@@ -90,15 +90,15 @@
                                     </ul>
                                     <p class="description mb--40">@Model?.Service.Desciptions</p>
                                     <div style="margin-bottom:10px;">
-                                        <p class="title" style="font-family: serif;font-size: 15px; height:1px;">Đối tác:</p>
+                                        <p class="title" style="font-family: serif;font-size: 15px; height:1px;">Nhân Viên:</p>
 
                                         @if (ViewBag.Partners != null)
                                         {
                                             <select name="PartnerInfoId" id="PartnerInfoId" class="size-option" style="font-family: serif ; width: 200px; height:30px; border:2px solid black">
-                                                <option value=" ">Danh sách đối tác</option>
+                                                <option value=" ">Danh sách nhân viên</option>
                                                 @foreach (var category in ViewBag.Partners)
                                                 {
-                                                    <option id="toggleSelect" value="@category.Value">@category.Text @category.Value</option>
+                                                    <option id="toggleSelect" value="@category.Value">@category.Text - Mnv: @category.Value</option>
                                                 }
                                             </select>
                                         }
@@ -176,7 +176,7 @@
                                                 <input type="hidden" name="PartnerId" id="PartnerId" value="" />
                                                 <input type="hidden" name="StartTime" id="StartTime" value="" />
                                                 <input type="hidden" name="EndTime" id="EndTime" value="" />
-                                                <button class="axil-btn btn-bg-primary" style="margin-left: 5px;" type="submit"><i class="fas fa-cart-plus"></i>Mua ngay</button>
+                                                <button class="axil-btn btn-bg-primary" style="margin-left: 5px;" type="submit"><i class="fas fa-cart-plus"></i>Đặt ngay</button>
                                             </form>
                                         </ul>
                                     </div>
@@ -379,7 +379,7 @@
             var petWeight = document.getElementById('petWeight').value;
 
             if (datetimeStart === '' || datetimeEnd === '' || petWeight === '') {
-                alert('Vui lòng điền đầy đủ thông tin.');
+                showErrorToastCheckInput();
                 return false; // Prevent form submission if information is not filled out completely
             }
             // If information is filled out completely, allow form submission
@@ -530,7 +530,7 @@
                 document.getElementById('totalAmountDisplay').textContent =
                     formatNumberToString(servicePrice) + "  (dịch vụ) + " +
                     formatNumberToString(additionalCost) + " (cân nặng) + " +
-                    formatNumberToString(additional) + "  (đối tác) " +
+                    formatNumberToString(additional) + "  (nhân viên) " +
                     "=" + formatNumberToString(totalAmount) + " VNĐ";
 
             } else {
@@ -588,7 +588,7 @@
             document.getElementById('totalAmountDisplay').textContent =
                 formatNumberToString(servicePrice) + "  (dịch vụ) + " +
                 formatNumberToString(additionalCost) + " (cân nặng) + " +
-                formatNumberToString(additional) + "  (đối tác) " +
+                formatNumberToString(additional) + "  (nhân viên) " +
                 "=" + formatNumberToString(totalAmount) + " VNĐ";
         }
         // Trigger the initial calculation

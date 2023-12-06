@@ -45,12 +45,7 @@ namespace PetServices.Controllers
         [HttpPost("CreateBlog")]
         public async Task<IActionResult> CreateBlog(BlogDTO blog)
         {
-            var Tag = _context.Tags.FirstOrDefault(s => s.TagId == blog.TagId);
-            if (Tag == null)
-            {
-                string errorMessage = "Loại tag không tồn tại!";
-                return BadRequest(errorMessage);
-            }
+
             if (blog == null)
             {
                 return BadRequest("Blog data is missing.");

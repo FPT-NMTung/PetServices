@@ -15,6 +15,60 @@
     <link rel="stylesheet" href="/assets/css/style.min.css">
     <link rel="stylesheet" href="/css/Partner/PartnerDetail.css"></link>
 
+    <style>
+        .feedback-title-sort {
+            display: flex;
+            justify-content: space-between;
+        }
+
+            .feedback-title-sort select {
+                color: darkorange;
+                font-size: 18px;
+                width: 150px;
+            }
+
+        .pagination {
+            display: inline-block;
+            padding-top: 20px;
+            padding-bottom: 30px;
+        }
+
+            .pagination a {
+                font-size: 20px;
+                float: left;
+                width: 50px;
+                height: 50px;
+                padding: 8px;
+                text-decoration: none;
+                transition: background-color .3s;
+                border: 1px solid #ddd;
+                margin: 0 4px;
+                border-radius: 50%;
+                border: none;
+                background-color: #d5d5d5;
+            }
+
+                .pagination a.active:hover {
+                    background-color: lightskyblue;
+                    color: whitesmoke;
+                }
+
+                .pagination a.active {
+                    color: black;
+                    background-color: #d5d5d5;
+                }
+
+                .pagination a.active1 {
+                    background-color: lightskyblue;
+                    color: whitesmoke;
+                }
+
+                .pagination a:hover:not(.active) {
+                    background-color: lightskyblue;
+                    color: whitesmoke;
+                }
+    </style>
+
 </head>
 
 
@@ -46,8 +100,6 @@
                                       Mô tả chung về bản thân: @Model?.Partner.Descriptions
                                       
                                     </h6>
-                                    
-
                                 </div>
                             </div>
                         </div>
@@ -56,103 +108,87 @@
                             <img style="width:400px;height:200px;" src="@Model?.Partner.ImageCertificate" >
                         </div>
                         <div>
-                            <h3>Đánh giá của khách hàng</h3>
+                            <h3>Đánh giá</h3>
                             <div class="axil-comment-area pro-desc-commnet-area">
-                                <h5 class="title">03 khách hàng đánh giá</h5>
-                                <ul class="comment-list">
-                                    <!-- Start Single Comment  -->
-                                    <li class="comment">
-                                        <div class="comment-body">
-                                            <div class="single-comment">
-                                                <div class="comment-img">
-                                                    <img src="/assets/images/blog/author-image-4.png" alt="Author Images">
-                                                </div>
-                                                <div class="comment-inner">
-                                                    <h6 class="commenter">
-                                                        <a class="hover-flip-item-wrapper" href="#">
-                                                            <span class="hover-flip-item">
-                                                            <span data-text="Cameron Williamson">Eleanor Pena</span>
-                                                            </span>
-                                                        </a>
-                                                        <span class="commenter-rating ratiing-four-star">
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star empty-rating"></i></a>
-                                                    </span>
-                                                    </h6>
-                                                    <div class="comment-text">
-                                                        <p>“We’ve created a full-stack structure for our working workflow processes, were from the funny the century initial all the made, have spare to negatives. ” </p>
+                                @if (Model.Feedback != null && Model.Feedback.Count > 0)
+                                {
+                                    <div class="feedback-title-sort">
+                                        <h5 class="title">Có @ViewBag.FeedbacksCount đánh giá</h5>
+                                        <form method="get">
+                                            <input type="hidden" name="partnerID" value="@Model.Partner.PartnerInfoId">
+                                            <select name="sortby" onchange="this.form.submit();">
+                                                <!option style="color: black" value="" @(ViewBag.sortby == null ? "selected" : "")>Tất cả</!option>
+                                                <!option class="option" style="color: gold" value="5star" @(ViewBag.sortby == "5star" ? "selected" : "") @(Model.VoteNumberas.number5s == 0 ? "disabled" : "")>&#9733;&#9733;&#9733;&#9733;&#9733;&ensp; @Model.VoteNumberas.number5s</!option>
+                                                <!option class="option" style="color: gold" value="4star" @(ViewBag.sortby == "4star" ? "selected" : "") @(Model.VoteNumberas.number4s == 0 ? "disabled" : "")>&#9733;&#9733;&#9733;&#9733;&#9734;&ensp; @Model.VoteNumberas.number4s</!option>
+                                                <!option class="option" style="color: gold" value="3star" @(ViewBag.sortby == "3star" ? "selected" : "") @(Model.VoteNumberas.number3s == 0 ? "disabled" : "")>&#9733;&#9733;&#9733;&#9734;&#9734;&ensp; @Model.VoteNumberas.number3s</!option>
+                                                <!option class="option" style="color: gold" value="2star" @(ViewBag.sortby == "2star" ? "selected" : "") @(Model.VoteNumberas.number2s == 0 ? "disabled" : "")>&#9733;&#9733;&#9734;&#9734;&#9734;&ensp; @Model.VoteNumberas.number2s</!option>
+                                                <!option class="option" style="color: gold" value="1star" @(ViewBag.sortby == "1star" ? "selected" : "") @(Model.VoteNumberas.number1s == 0 ? "disabled" : "")>&#9733;&#9734;&#9734;&#9734;&#9734;&ensp; @Model.VoteNumberas.number1s</!option>
+                                            </select>
+                                        </form>
+                                    </div>
+                                    <ul class="comment-list">
+                                        @foreach (var feedback in Model.Feedback)
+                                        {
+                                            <li class="comment">
+                                                <div class="comment-body">
+                                                    <div class="single-comment">
+                                                        <div class="comment-img">
+                                                            <img src="@feedback.UserImage" alt="Author Images" style="height: 60px; width: 60px;">
+                                                        </div>
+                                                        <div class="comment-inner" style="width: 100%">
+                                                            <h6 class="commenter">
+                                                                <a class="hover-flip-item-wrapper" href="#">
+                                                                    <span class="hover-flip-item">
+                                                                        <span data-text="Cameron Williamson">@feedback.UserName</span>
+                                                                    </span>
+                                                                </a>
+                                                                <span class="commenter-rating ratiing-four-star">
+                                                                    @for (int i = 1; i <= 5; i++)
+                                                                    {
+                                                                        if (i <= @feedback.NumberStart)
+                                                                        {
+                                                                            <a><i class="fas fa-star"></i></a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a><i class="fas fa-star empty-rating"></i></a>
+                                                                        }
+                                                                    }
+                                                                </span>
+                                                            </h6>
+                                                            <div class="comment-text">
+                                                                <p>@feedback.Content</p>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                    <div style="text-align: center">
+                                        <div class="pagination">
+                                            @{
+                                                int pagenumber = ((@ViewBag.FeedbacksCount - 1) / 5) + 1;
+                                                @if (ViewBag.CurrentPage > 1)
+                                                {
+                                                    <a href="@Url.Action("PartnerDetail", new { partnerID = Model.Partner.PartnerInfoId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
+                                                }
+                                                @for (int i = 1; i <= pagenumber; i++)
+                                                {
+                                                    <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("PartnerDetail", new { partnerID = Model.Partner.PartnerInfoId, sortby = ViewBag.sortby, page = i })">@i</a>
+                                                }
+                                                @if (ViewBag.CurrentPage < pagenumber)
+                                                {
+                                                    <a href="@Url.Action("PartnerDetail", new { partnerID = Model.Partner.PartnerInfoId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
+                                                }
+                                            }
                                         </div>
-                                    </li>
-                                    <!-- End Single Comment  -->
-
-                                    <!-- Start Single Comment  -->
-                                    <li class="comment">
-                                        <div class="comment-body">
-                                            <div class="single-comment">
-                                                <div class="comment-img">
-                                                    <img src="/assets/images/blog/author-image-4.png" alt="Author Images">
-                                                </div>
-                                                <div class="comment-inner">
-                                                    <h6 class="commenter">
-                                                        <a class="hover-flip-item-wrapper" href="#">
-                                                            <span class="hover-flip-item">
-                                                            <span data-text="Rahabi Khan">Courtney Henry</span>
-                                                            </span>
-                                                        </a>
-                                                        <span class="commenter-rating ratiing-four-star">
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                    </span>
-                                                    </h6>
-                                                    <div class="comment-text">
-                                                        <p>“We’ve created a full-stack structure for our working workflow processes, were from the funny the century initial all the made, have spare to negatives. ”</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- End Single Comment  -->
-
-                                    <!-- Start Single Comment  -->
-                                    <li class="comment">
-                                        <div class="comment-body">
-                                            <div class="single-comment">
-                                                <div class="comment-img">
-                                                    <img src="/assets/images/blog/author-image-5.png" alt="Author Images">
-                                                </div>
-                                                <div class="comment-inner">
-                                                    <h6 class="commenter">
-                                                        <a class="hover-flip-item-wrapper" href="#">
-                                                            <span class="hover-flip-item">
-                                                            <span data-text="Rahabi Khan">Devon Lane</span>
-                                                            </span>
-                                                        </a>
-                                                        <span class="commenter-rating ratiing-four-star">
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                        <a href="#"><i class="fas fa-star"></i></a>
-                                                    </span>
-                                                    </h6>
-                                                    <div class="comment-text">
-                                                        <p>“We’ve created a full-stack structure for our working workflow processes, were from the funny the century initial all the made, have spare to negatives. ” </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- End Single Comment  -->
-                                </ul>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <h5 class="title">Hiện chưa có đánh giá cho nhân viên này.</h5>
+                                }
                             </div>
                         </div>
                     </div>

@@ -5,22 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <link href="~/css/common/image.css" rel="stylesheet" />
 </head>
 <body>
     <div>
         <div class="tab-content">
             <div class="tab-pane fade active show" id="account-general">
                 <div style="padding:1rem 0;" class="card-body media align-items-center">
-                    <img style="height:60px;width:58px;margin:0.5rem;" src="@Model?.UserInfo.ImageUser" alt="" class="d-block ui-w-80">
+                    <img id="previewImage" style="height:60px;width:58px;margin:0.5rem;" src="@Model?.UserInfo.ImageUser" alt="" class="d-block ui-w-80">
                     <div class="media-body ml-3">
                         <div class="text-light small mt-1">JPG hoặc PNG không vượt quá 5 MB</div>
                     </div>
                 </div>
-
                 <form method="post" asp-controller="MenuCustomer" asp-action="Information" style="margin-right:10px" enctype="multipart/form-data">
                     <div>
-                        <label for="image"></label>
-                        <input class="btn btn-outline-primary" type="file" id="image" name="image" enctype="multipart/form-data">
+                        <label for="checkimage" class="custom-file-upload">Chọn tệp tin</label>
+                        <input type="file" id="checkimage" name="image" onchange="displayImage()">
                     </div> &nbsp;
                     <div class="row gx-3 mb-3">
                         <div class="col-md-6">
@@ -87,7 +87,8 @@
         </div>
     </div>
 </body>
-    <script src="~/js/takeAddress.js"></script>
-    <script src="~/js/toastnotification.js"></script>
-    <script src="~/js/checkpassword.js"></script>
+<script src="~/js/takeAddress.js"></script>
+<script src="~/js/toastnotification.js"></script>
+<script src="~/js/checkpassword.js"></script>
+<script src="~/js/common/image.js"></script>
 </html>

@@ -168,7 +168,9 @@
                 <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
 
                 <select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
-                    <option value="Confirmed">Xác nhận trả phòng</option>
+                    @if (Model?.OrderStatus.Trim() != "Processing"){
+                        <option value="Confirmed">Xác nhận trả phòng</option>
+                    }
                     <option value="Cancelled">Xác nhận huỷ phòng</option>
                 </select>
 
