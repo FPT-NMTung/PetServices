@@ -73,66 +73,56 @@ namespace FEPetServices.Areas.Manager.Controllers
 
             return View();
         }
-
+ 
         public async Task<IActionResult> AddBlog([FromForm] BlogDTO blog, List<IFormFile> image)
         {
             try
             {
-                if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
+
+                HttpResponseMessage TagResponse = await client.GetAsync(DefaultApiUrl + "Tag/GetAllTag");
+
+                if (TagResponse.IsSuccessStatusCode)
                 {
-                   
-                    HttpResponseMessage TagResponse = await client.GetAsync(DefaultApiUrl + "Tag/GetAllTag");
+                    var tag = await TagResponse.Content.ReadFromJsonAsync<List<TagDTO>>();
+                    ViewBag.Tag = new SelectList(tag, "TagId", "TagName");
 
-                    if (TagResponse.IsSuccessStatusCode)
-                    {
-                        var tag = await TagResponse.Content.ReadFromJsonAsync<List<TagDTO>>();
-                        Console.WriteLine(tag);
+                }
 
-                        ViewBag.Tag = new SelectList(tag, "TagId", "TagName");
-                    }
-                   
-                    foreach (var file in image)
-                    {
-                        string filename = GenerateRandomNumber(5) + file.FileName;
-                        filename = Path.GetFileName(filename);
-                        string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Blog/", filename);
-                        var stream = new FileStream(uploadfile, FileMode.Create);
-                        file.CopyToAsync(stream);
-                        blog.ImageUrl = "/img/Blog/" + filename;
-                    }
+                if (blog.Heading == null) { return View(); }
+                foreach (var file in image)
+                {
+                    string filename = GenerateRandomNumber(5) + file.FileName;
+                    filename = Path.GetFileName(filename);
+                    string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Blog/", filename);
+                    var stream = new FileStream(uploadfile, FileMode.Create);
+                    file.CopyToAsync(stream);
+                    blog.ImageUrl = "/img/Blog/" + filename;
+                }
 
-                    // mặc định status là true
-                    blog.Status = true;
-                    if (blog.Heading == null)
-                    {
-                        return View(blog);
-                    }
-                    var json = JsonConvert.SerializeObject(blog);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                blog.Status = true;
 
-                    /*HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "Blog/CreateBlog", content);*/
-                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "Blog/CreateBlog", content);
+                var json = JsonConvert.SerializeObject(blog);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        TempData["SuccessToast"] = "Thêm bài viết thành công!";
-                        return View(blog);
-                    }
-                    else
-                    {
-                        TempData["ErrorToast"] = "Thêm bài viết thất bại. Vui lòng thử lại sau.";
-                        return View(blog);
-                    }
+                // Gửi dữ liệu lên máy chủ
+                HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/Blog/CreateBlog", content);
+                //HttpResponseMessage response = await client.PostAsync(DefaultApiUrlServiceAdd, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessToast"] = "Thêm bài viết thành công!";
+                    return View(); // Chuyển hướng đến trang thành công hoặc trang danh sách
                 }
                 else
                 {
-                    return View(blog);
+                    TempData["ErrorToast"] = "Thêm bài viết thất bại. Vui lòng thử lại sau.";
+                    return View(); // Hiển thị lại biểu mẫu với dữ liệu đã điền
                 }
             }
             catch (Exception ex)
             {
                 TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
-                return View(blog);
+                return View(blog); // Hiển thị lại biểu mẫu với dữ liệu đã điền
             }
         }
 

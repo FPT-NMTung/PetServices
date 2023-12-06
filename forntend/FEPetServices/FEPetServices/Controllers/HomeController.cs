@@ -317,6 +317,7 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var servicecategoryList = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseContent);
+                        servicecategoryList = servicecategoryList.Where(r => r.Status == true).ToList();
 
                         if (!string.IsNullOrEmpty(searchDTO.servicename))
                         {
@@ -627,6 +628,7 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(responseCategoryContent))
                     {
                         var serviceCategories = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
+                        serviceCategories = serviceCategories.Where(r => r.Status == true).ToList();
                         model.CaServices = serviceCategories;
                     }
                 }
@@ -718,7 +720,7 @@ namespace FEPetServices.Controllers
 
                 //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlBlogList + "/GetAllBlog");
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Blog/GetAllBlog");
-
+                
                 if (response.IsSuccessStatusCode)
                 {
                     //HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
@@ -730,7 +732,8 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(rep))
                         {
                             blogModel.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
-
+                            //check khi status bằng true thì mới list ra dữ liệu
+                            blogModel.ListProductTop3 = blogModel.ListProductTop3.Where(r => r.Status == true).ToList();
                             int currentPage = 1;
                             int pageSize = 3;
 
@@ -747,6 +750,7 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(rep))
                         {
                             blogModel.ListBlogTop3 = JsonConvert.DeserializeObject<List<BlogDTO>>(rep);
+                            blogModel.ListBlogTop3 = blogModel.ListBlogTop3.Where(r => r.Status == true).ToList();
 
                             int currentPage = 1;
                             int pageSize = 3;
@@ -760,11 +764,12 @@ namespace FEPetServices.Controllers
                             blogModel.ListBlogTop3 = newestProducts;
                         }
                     }
-                    HttpResponseMessage roomCategoryResponse = await client.GetAsync(DefaultApiUrl + "Tag/GetAllTag");
+                    HttpResponseMessage tagCategoryResponse = await client.GetAsync(DefaultApiUrl + "Tag/GetAllTag");
 
-                    if (roomCategoryResponse.IsSuccessStatusCode)
+                    if (tagCategoryResponse.IsSuccessStatusCode)
                     {
-                        var categories = await roomCategoryResponse.Content.ReadFromJsonAsync<List<TagDTO>>();
+                        var categories = await tagCategoryResponse.Content.ReadFromJsonAsync<List<TagDTO>>();
+                        categories = categories.Where(r => r.Status == true).ToList();
                         ViewBag.Categories = categories;
                     }
 
@@ -772,6 +777,7 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var blogList = JsonConvert.DeserializeObject<List<BlogDTO>>(responseContent);
+                        blogList = blogList.Where(r => r.Status == true).ToList();
                         // tìm kiếm theo tên 
                         if (!string.IsNullOrEmpty(BlogName) && blogList != null)
                         {
@@ -849,7 +855,7 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(product))
                         {
                             blog.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(product);
-
+                            blog.ListProductTop3 = blog.ListProductTop3.Where(r => r.Status == true).ToList();
                             int currentPage = 1;
                             int pageSize = 3;
 
@@ -868,6 +874,7 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(Blog))
                         {
                             blog.Blog = JsonConvert.DeserializeObject<List<BlogDTO>>(Blog);
+                            blog.Blog = blog.Blog.Where(r => r.Status == true).ToList();
                         }
                     }
                     // list ra detail của id đó 
@@ -882,6 +889,7 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(rep))
                         {
                             blog.ListBlogTop3 = JsonConvert.DeserializeObject<List<BlogDTO>>(rep);
+                            blog.ListBlogTop3 = blog.ListBlogTop3.Where(r => r.Status == true).ToList();
 
                             int currentPage = 1;
                             int pageSize = 3;
@@ -944,7 +952,7 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(rep))
                     {
                         partModel.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
-
+                        partModel.ListProductTop3 = partModel.ListProductTop3.Where(r => r.Status == true).ToList();
                         int currentPage = 1;
                         int pageSize = 3;
 
@@ -964,6 +972,7 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(responseCategoryContent))
                     {
                         var serviceCategories = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
+                        serviceCategories = serviceCategories.Where(r => r.Status == true).ToList();
                         partModel.CaServices = serviceCategories;
                     }
                 }
@@ -975,6 +984,7 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var partList = JsonConvert.DeserializeObject<List<PartnerInfo>>(responseContent);
+                        
                         //tìm kiếm theo tên 
                         if (!string.IsNullOrEmpty(PartName))
                         {
@@ -1036,7 +1046,7 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(rep))
                         {
                             partModel.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
-
+                            partModel.ListProductTop3 = partModel.ListProductTop3.Where(r => r.Status == true).ToList();
                             int currentPage = 1;
                             int pageSize = 3;
 
@@ -1056,6 +1066,7 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(responseCategoryContent))
                         {
                             var serviceCategories = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
+                            serviceCategories = serviceCategories.Where(r => r.Status == true).ToList();
                             partModel.CaServices = serviceCategories;
                         }
                     }
