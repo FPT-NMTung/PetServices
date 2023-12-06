@@ -228,6 +228,15 @@
         }
         @*End - Base ViewBag*@
         @*-------------------------------------------------------*@
+        @*Start - Image ViewBag*@
+            function showErrorToastImage() {
+                toast({
+                    title: 'Thất bại',
+                    message: 'Vui lòng chọn tệp tin hình ảnh có định dạng PNG hoặc JPG.',
+                    type: 'error',
+                    duration: 2000
+                });
+        @*End - Image ViewBag*@
     </script>
 
     <style>

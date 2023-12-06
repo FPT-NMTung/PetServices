@@ -18,11 +18,19 @@
 
         // Kiểm tra nếu loại tệp tin không phải là PNG hoặc JPG
         if (!(fileType === 'image/png' || fileType === 'image/jpeg')) {
-            alert('Vui lòng chọn tệp tin hình ảnh có định dạng PNG hoặc JPG.');
+            showErrorToastImage();
             input.value = ''; // Đặt lại giá trị của input để ngăn người dùng tải lên tệp không hợp lệ
             previewImage.src = ''; // Xóa hình ảnh xem trước
         }
     }
 }
-
 displayImage()
+
+function showErrorToastImage() {
+    toast({
+        title: 'Thất bại',
+        message: 'Vui lòng chọn tệp tin hình ảnh có định dạng PNG hoặc JPG.',
+        type: 'error',
+        duration: 2000
+    })
+}
