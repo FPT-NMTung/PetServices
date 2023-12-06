@@ -115,6 +115,7 @@ namespace FEPetServices.Areas.Partner.Controllers
 
                     AccountInfo managerInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
                     partnerInfo.ImagePartner = managerInfos.PartnerInfo.ImagePartner;
+                    partnerInfo.ImageCertificate = managerInfos.PartnerInfo.ImageCertificate;
                 }
             }
 
