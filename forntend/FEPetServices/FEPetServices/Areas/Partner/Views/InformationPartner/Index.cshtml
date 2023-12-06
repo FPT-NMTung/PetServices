@@ -39,83 +39,107 @@
             <div class="col-xl-8">
                 <div class="card mb-4">
                     <div class="card-header">Thông tin người dùng</div>
-                    <div class="card-body">
+                    <div class="card-body-info">
                         <form method="post" asp-controller="InformationPartner" asp-action="Index" enctype="multipart/form-data">
-                            <div>
+                            <div class="card-body">
                                 <label for="image"></label>
                                 <input type="file" id="image" name="image" value="@Model?.PartnerInfo.ImagePartner" enctype="multipart/form-data" accept="image/*">
                             </div>
-
-                            <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputFirstName">Họ</label>
-                                    <input class="form-control" name="FirstName" id="inputFirstName" type="text" placeholder="Nhập họ hoặc tên đệm của bạn" value="@Model?.PartnerInfo.FirstName" required>
+                            <div class="card-body media align-items-center" style=" display: block;">
+                                <div style="margin-bottom:1%;" class="media-body">
+                                    <label for="image">
+                                        Hình ảnh giấy chứng nhận
+                                    </label> &nbsp;
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputLastName">Tên</label>
-                                    <input class="form-control" name="LastName" id="inputLastName" type="text" placeholder="Nhập tên của bạn" value="@Model?.PartnerInfo.LastName" required>
+                                @*Chưa thêm ảnh*@
+                                <div>
+                                    @if (Model?.PartnerInfo.ImageCertificate == null)
+                                    {
+                                        <div class="small font-italic text-muted mb-4">JPG hoặc PNG không vượt quá 5 MB</div>
+                                    }
+                                    else
+                                    {
+                                        <img style="width:100%;height:100%" src="@Model?.PartnerInfo.ImageCertificate" alt="" class="d-block ui-w-80">
+                                    }
+                                    <input type="file" id="image" name="image" value="@Model?.PartnerInfo.ImageCertificate" enctype="multipart/form-data" accept="image/*">
                                 </div>
+                               
                             </div>
+                            <div class="card-body">
+                                <div style="margin-right: 5px;">
+                                    <div class="row gx-3 mb-3">
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="inputFirstName">Họ</label>
+                                            <input class="form-control" name="FirstName" id="inputFirstName" type="text" placeholder="Nhập họ hoặc tên đệm của bạn" value="@Model?.PartnerInfo.FirstName" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="inputLastName">Tên</label>
+                                            <input class="form-control" name="LastName" id="inputLastName" type="text" placeholder="Nhập tên của bạn" value="@Model?.PartnerInfo.LastName" required>
+                                        </div>
+                                    </div>
 
-                            <div class="mb-3">
-                                <label class="small mb-1" for="inputDob">Ngày Sinh</label>
-                                <input class="form-control" name="Dob" id="inputDob" type="date" value="@Model?.PartnerInfo.Dob?.ToString("yyyy-MM-dd")" required>
-                            </div>
+                                    <div class="mb-3">
+                                        <label class="small mb-1" for="inputDob">Ngày Sinh</label>
+                                        <input class="form-control" name="Dob" id="inputDob" type="date" value="@Model?.PartnerInfo.Dob?.ToString("yyyy-MM-dd")" required>
+                                    </div>
 
                             
-                            <div class="mb-3">
-                                <label class="small mb-1" for="inputEmailAddress">Email</label>
-                                <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="@Model?.Email" disabled>
-                            </div>
+                                    <div class="mb-3">
+                                        <label class="small mb-1" for="inputEmailAddress">Email</label>
+                                        <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="@Model?.Email" disabled>
+                                    </div>
 
-                             <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputBanks">Tên ngân hàng</label>
-                                    <select class="form-control" id="bankDropdown" onchange="updateSelectedValue()">
-                                        <option value="" selected disabled>@Model?.PartnerInfo.CardName</option>
-                                    </select>
-                                </div>
-                            </div>
+                                     <div class="row gx-3 mb-3">
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="inputBanks">Tên ngân hàng</label>
+                                            <select class="form-control" id="bankDropdown" onchange="updateSelectedValue()">
+                                                <option value="" selected disabled>@Model?.PartnerInfo.CardName</option>
+                                            </select>
+                                        </div>
+                                    </div>
 
-                             <div class="mb-3">
-                                <label class="small mb-1" for="inputCardNumber">Số tài khoản</label>
-                                <input class="form-control" id="CardNumber" type="text" name="CardNumber" value="@Model?.PartnerInfo.CardNumber" required>
-                            </div>
+                                     <div class="mb-3">
+                                        <label class="small mb-1" for="inputCardNumber">Số tài khoản</label>
+                                        <input class="form-control" id="CardNumber" type="text" name="CardNumber" value="@Model?.PartnerInfo.CardNumber" required>
+                                    </div>
+                                </div>
+                                <div style="margin-left: 5px;">
+                                    <div class="row gx-3 mb-3">
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="inputProvince">Tỉnh</label>
+                                            <select class="form-control" id="provinceDropdown" onchange="loadDistricts()">
+                                                <option value="" selected disabled>@Model?.PartnerInfo.Province</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="inputDistrict">Huyện/Thành Phố</label>
+                                            <select class="form-control" id="districtDropdown" onchange="loadWards()">
+                                                <option value="" selected disabled>@Model?.PartnerInfo.District</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row gx-3 mb-3">
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="inputWard">Xã/Quận</label>
+                                            <select class="form-control" id="wardDropdown">
+                                                <option value="" selected disabled>@Model?.PartnerInfo.Commune</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="inputAddress">Địa chỉ cụ thể</label>
+                                            <input class="form-control" name="Address" id="inputAddress" type="text" placeholder="Nhập địa chỉ" value="@Model?.PartnerInfo.Address" required>
+                                        </div>
+                                    </div>
 
-                            <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputProvince">Tỉnh</label>
-                                    <select class="form-control" id="provinceDropdown" onchange="loadDistricts()">
-                                        <option value="" selected disabled>@Model?.PartnerInfo.Province</option>
-                                    </select>
+                                    <div class="mb-3">
+                                        <label class="small mb-1" for="inputPhone">Số điện thoại </label>
+                                        <input class="form-control" name="Phone" id="inputPhone" type="text" placeholder="Nhập số điện thoại của bạn" value="@Model?.PartnerInfo.Phone" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="small mb-1" for="inputDescriptions">Mô tả </label>
+                                        <textarea class="form-control" name="Descriptions" id="inputDesciptions" placeholder="Mô tả về bạn">@Model?.PartnerInfo.Descriptions</textarea>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputDistrict">Huyện/Thành Phố</label>
-                                    <select class="form-control" id="districtDropdown" onchange="loadWards()">
-                                        <option value="" selected disabled>@Model?.PartnerInfo.District</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputWard">Xã/Quận</label>
-                                    <select class="form-control" id="wardDropdown">
-                                        <option value="" selected disabled>@Model?.PartnerInfo.Commune</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputAddress">Địa chỉ cụ thể</label>
-                                    <input class="form-control" name="Address" id="inputAddress" type="text" placeholder="Nhập địa chỉ" value="@Model?.PartnerInfo.Address" required>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="small mb-1" for="inputPhone">Số điện thoại </label>
-                                <input class="form-control" name="Phone" id="inputPhone" type="text" placeholder="Nhập số điện thoại của bạn" value="@Model?.PartnerInfo.Phone" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="small mb-1" for="inputDescriptions">Mô tả </label>
-                                <textarea class="form-control" name="Descriptions" id="inputDesciptions" placeholder="Mô tả về bạn">@Model?.PartnerInfo.Descriptions</textarea>
                             </div>
                             <input type="hidden" name="Province" id="provinceNameInput" />
                             <input type="hidden" name="District" id="districtNameInput" />
