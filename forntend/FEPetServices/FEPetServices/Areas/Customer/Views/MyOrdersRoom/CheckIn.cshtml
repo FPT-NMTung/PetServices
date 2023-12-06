@@ -21,6 +21,9 @@
                     <a class="nav-link active" id="pills-education-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/CheckIn?orderStatus=Placed&page=1&pageSize=5" role="tab" aria-selected="false">Chờ nhận phòng</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/Processing?orderStatus=Processing&page=1&pageSize=5" role="tab" aria-selected="false">Phòng đã nhận</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" id="pills-event-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/CheckOut?orderStatus=Confirmed&page=1&pageSize=5" role="tab" aria-selected="false">Đã trả phòng</a>
                 </li>
                  <li class="nav-item">
@@ -66,6 +69,10 @@
                                             else if (order?.OrderStatus.Trim() == "Cancelled")
                                             {
                                                 <span style="display:inline-block" class="badge badge-info">Phòng bị huỷ </span>
+                                            }
+                                            else if (order?.OrderStatus.Trim() == "Processing")
+                                            {
+                                                <span style="display:inline-block" class="badge badge-info">Đã nhận phòng</span>
                                             }
                                         </div>
                                         <p><i class="far fa-calendar-alt"></i> @order.OrderDate</p>
