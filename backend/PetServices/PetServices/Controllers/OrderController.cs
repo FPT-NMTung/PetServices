@@ -234,10 +234,81 @@ namespace PetServices.Controllers
                 if (orderstatus != "All")
                 {
                     List<Order> orders = _context.Orders
-                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) && o.OrderStatus == orderstatus)
-                                         .ToList();
+                                        .Include(o => o.UserInfo)
+                                            .ThenInclude(u => u.Accounts)
+                                        .Include(b => b.OrderProductDetails)
+                                            .ThenInclude(o => o.Product)
+                                        .Include(b => b.BookingServicesDetails)
+                                            .ThenInclude(bs => bs.Service)
+                                         .Include(b => b.BookingServicesDetails)
+                                                .ThenInclude(s => s.PartnerInfo)
+                                        .Include(b => b.BookingRoomDetails)
+                                            .ThenInclude(br => br.Room)
+                                        .Include(b => b.BookingRoomServices)
+                                            .ThenInclude(br => br.Service)
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) 
+                                         && o.OrderStatus == orderstatus 
+                                         && o.BookingRoomDetails.Count() == 0 
+                                         && (o.BookingServicesDetails.Count() > 0 
+                                         || o.OrderProductDetails.Count() > 0
+                                         )).ToList();
 
+                    if (orders.Count == 0 )
+                    {
+                        return NotFound("No orders found with the specified status");
+                    }
+                    else 
+                    {
+                        return Ok();
+                    }
+                }
+                else
+                {
+                    List<Order> orders = _context.Orders
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email))
+                                         .ToList();
                     if (orders.Count == 0)
+                    {
+                        return NotFound("No orders found with the specified status");
+                    }
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("orderroomstatus/{orderstatus}")]
+        public IActionResult CheckRoomStatusOrder(string email, string orderstatus)
+        {
+            try
+            {
+                if (orderstatus != "All")
+                {
+                    List<Order> ordersRoom = _context.Orders
+                                        .Include(o => o.UserInfo)
+                                            .ThenInclude(u => u.Accounts)
+                                        .Include(b => b.OrderProductDetails)
+                                            .ThenInclude(o => o.Product)
+                                        .Include(b => b.BookingServicesDetails)
+                                            .ThenInclude(bs => bs.Service)
+                                         .Include(b => b.BookingServicesDetails)
+                                                .ThenInclude(s => s.PartnerInfo)
+                                        .Include(b => b.BookingRoomDetails)
+                                            .ThenInclude(br => br.Room)
+                                        .Include(b => b.BookingRoomServices)
+                                            .ThenInclude(br => br.Service)
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email)
+                                         && o.OrderStatus == orderstatus
+                                         && o.BookingRoomDetails.Count() > 0
+                                         && (o.BookingServicesDetails.Count() == 0
+                                         && o.OrderProductDetails.Count() == 0
+                                         )).ToList();
+
+
+                    if (ordersRoom.Count == 0)
                     {
                         return NotFound("No orders found with the specified status");
                     }

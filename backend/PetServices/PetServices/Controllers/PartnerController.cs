@@ -140,6 +140,7 @@ namespace PetServices.Controllers
                 existingAccount.PartnerInfo.Address = updateInfo.Address;
                 existingAccount.PartnerInfo.Descriptions = updateInfo.Descriptions;
                 existingAccount.PartnerInfo.ImagePartner = updateInfo.ImagePartner;
+                existingAccount.PartnerInfo.ImageCertificate = updateInfo.ImageCertificate;
                 existingAccount.PartnerInfo.Lat = updateInfo.Lat;
                 existingAccount.PartnerInfo.Lng = updateInfo.Lng;
                 existingAccount.PartnerInfo.Dob = updateInfo.Dob;

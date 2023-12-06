@@ -110,7 +110,7 @@ namespace PetServices.Models
                 entity.HasOne(d => d.Tag)
                     .WithMany(p => p.Blogs)
                     .HasForeignKey(d => d.TagId)
-                    .HasConstraintName("FK_Blogs_Tags");
+                    .HasConstraintName("FK_Blogs_Tags1");
             });
 
             modelBuilder.Entity<BookingRoomDetail>(entity =>
@@ -437,9 +437,7 @@ namespace PetServices.Models
 
             modelBuilder.Entity<ReasonOrder>(entity =>
             {
-                entity.Property(e => e.ReasonOrderId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ReasonOrderID");
+                entity.Property(e => e.ReasonOrderId).HasColumnName("ReasonOrderID");
 
                 entity.Property(e => e.EmailReject)
                     .HasMaxLength(100)
