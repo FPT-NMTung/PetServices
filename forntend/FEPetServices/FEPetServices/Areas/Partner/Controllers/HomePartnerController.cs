@@ -21,7 +21,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         private string DefaultApiUrl = "";
         //private string DefaultApiUrlOrderPartner = "";
         //private string DefaultApiUrlOrderListOfPetTraining = "";
-        private string DefaultApiUrlOrderListOfPetTrainingSpecial = "";
+        //private string DefaultApiUrlOrderListOfPetTrainingSpecial = "";
         private readonly IConfiguration configuration;
 
         public HomePartnerController(IConfiguration configuration)
@@ -331,24 +331,29 @@ namespace FEPetServices.Areas.Partner.Controllers
         [HttpPost]
         public async Task<IActionResult> OrderPartnerDetail(int orderId, [FromForm] Status status, [FromForm] ReasonOrdersForm reasonOrders)
         {
-
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             if (status.newStatus == "Waiting")
             {
                 status.newStatusProduct = "";
                 status.newStatusService = "Waiting";
             }
+            if (status.newStatus == "Received")
+            {
+                status.newStatusProduct = "";
+                status.newStatusService = "Received";
+            }
             //HttpResponseMessage response = await client.PutAsJsonAsync("https://localhost:7255/api/OrderPartner/ChangeStatus?orderId=" + orderId, status);
             //HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl + "OrderPartner/ChangeStatus?orderId=" + orderId, status);
-            HttpResponseMessage response = await client.PutAsJsonAsync("https://localhost:7255/api/OrderPartner/ChangeStatus?orderId=" + orderId, status);
+            HttpResponseMessage response = await client.PutAsJsonAsync("https://localhost:7255/api/OrderPartner/ChangeStatus/" + email + "?orderId=" + orderId, status);
             reasonOrders.OrderId = orderId;
-            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
-            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+            
             reasonOrders.EmailReject = email;
-
+            
             HttpResponseMessage responseReject = await client.PostAsJsonAsync("https://localhost:7255/api/ReasonOrder", reasonOrders);
 
 
-            if (response.IsSuccessStatusCode && responseReject.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode || responseReject.IsSuccessStatusCode)
             {
                 TempData["SuccessToast"] = "Cập nhật thành công";
                 return RedirectToAction("OrderPartnerDetail", new { orderId = orderId });

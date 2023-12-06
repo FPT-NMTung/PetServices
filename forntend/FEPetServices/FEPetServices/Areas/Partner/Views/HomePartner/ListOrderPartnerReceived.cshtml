@@ -66,17 +66,18 @@
             int itemCount = 0;
             foreach (var pc in Model)
             {
-                @foreach (var bd in pc.BookingServicesDetails)
+                foreach (var pcb in pc.BookingServicesDetails)
                 {
                     itemCount++;
-                    if (pc.StatusOrderService.Trim() == "Received")
+                    if (pcb.StatusOrderService.Trim() == "Received")
                     {
                         <tr>
                             <td>@itemCount</td>
+                            @*<td><img src="@pc.UserInfoId" width="50" height="50"></td>*@
                             <td>@pc.UserInfo?.FirstName @pc.UserInfo?.LastName</td>
                             <td>
                                 <div>
-                                    @bd.Service.ServiceName - @bd.Price.ToString("n0").Replace(",", ".") VNĐ <br>
+                                    @pcb.Service.ServiceName - @pcb.Price.ToString("n0").Replace(",", ".") VNĐ <br>
                                 </div>
                             </td>
                             <td>@pc.OrderDate</td>
@@ -94,7 +95,10 @@
                     }
                 }
 
+
+
             }
+
         }
         <script>
             // Hàm JavaScript để cập nhật trạng thái đơn hàng
