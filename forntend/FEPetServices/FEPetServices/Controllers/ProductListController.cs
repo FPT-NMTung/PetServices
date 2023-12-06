@@ -59,6 +59,7 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(rep))
                     {
                         var productList = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
+                        productList = productList.Where(r => r.Status == true).ToList();
 
                         if (!string.IsNullOrEmpty(searchDTO.productname))
                         {

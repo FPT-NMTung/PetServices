@@ -379,7 +379,7 @@
             var petWeight = document.getElementById('petWeight').value;
 
             if (datetimeStart === '' || datetimeEnd === '' || petWeight === '') {
-                alert('Vui lòng điền đầy đủ thông tin.');
+                showErrorToastCheckInput();
                 return false; // Prevent form submission if information is not filled out completely
             }
             // If information is filled out completely, allow form submission
