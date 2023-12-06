@@ -171,14 +171,18 @@
                                                                    data-lng="@serviceDetail?.PartnerInfo?.Lng"
                                                                    data-my-lat=""
                                                                    data-my-lng="">
-                                                                    Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail.PartnerInfoId
+                                                                    Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail?.PartnerInfoId
                                                                 </p>
-                                                                    @if(@serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                                                @{
+                                                                    var partnerName = serviceDetail?.PartnerInfo?.FirstName + " " + serviceDetail?.PartnerInfo?.LastName + " - " + serviceDetail?.PartnerInfoId;
+                                                                
+                                                                    if ((serviceDetail.FeedbackPartnerStatus == null || serviceDetail.FeedbackPartnerStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
                                                                     {
                                                                         <div class="btn-content-detail">
-                                                                            <button class="btn btn-outline-primary">Đánh giá</button>
+                                                                            <button class="btn btn-outline-primary" onclick="openPopupPartner('@serviceDetail?.PartnerInfo.ImagePartner', '@partnerName', '@serviceDetail.PartnerInfo.PartnerInfoId', '@serviceDetail.ServiceId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>
                                                                         </div>
                                                                     }
+                                                                }
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -365,6 +369,7 @@
                                     <input type="hidden" id="serviceIdInput" value="" />
                                     <input type="hidden" id="productIdInput" value="" />
                                     <input type="hidden" id="roomIdInput" value="" />
+                                    <input type="hidden" id="partnerIdInput" value="" />
                                     <input type="hidden" id="ratingInput" value="" />
                                     <input type="hidden" id="userIdInput" value="" />
                                     <input type="hidden" id="orderIdInput" value="" />
@@ -564,22 +569,22 @@
     @*End Search*@
 
     <script>
-            //Hiện popup đánh giá service
-            function openPopupService(image, serviceName, weight, serviceId, userId, orderId) {
-                document.getElementById('overlay').style.display = 'block';
-                document.getElementById('popup').style.display = 'block';
+        //Hiện popup đánh giá service
+        function openPopupService(image, serviceName, weight, serviceId, userId, orderId) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
 
-                document.getElementById('popupImage').src = image;
-                document.getElementById('popupServiceName').innerText = serviceName;
-                document.getElementById('popupServiceInfo').innerText = 'Cân nặng: ' + weight + ' Kg';
+            document.getElementById('popupImage').src = image;
+            document.getElementById('popupServiceName').innerText = serviceName;
+            document.getElementById('popupServiceInfo').innerText = 'Cân nặng: ' + weight + ' Kg';
 
-                document.getElementById('serviceIdInput').value = serviceId;
-                document.getElementById('userIdInput').value = userId;
-                document.getElementById('orderIdInput').value = orderId;
-                document.getElementById('productIdInput').value = null;
-                document.getElementById('roomIdInput').value = null;
-
-            }
+            document.getElementById('serviceIdInput').value = serviceId;
+            document.getElementById('userIdInput').value = userId;
+            document.getElementById('orderIdInput').value = orderId;
+            document.getElementById('productIdInput').value = null;
+            document.getElementById('roomIdInput').value = null;
+            document.getElementById('partnerIdInput').value = null;
+        }
 
         //Hiện popup đánh giá product
         function openPopupProduct(image, productName, quantity, productId, userId, orderId, status) {
@@ -595,6 +600,7 @@
             document.getElementById('orderIdInput').value = orderId;
             document.getElementById('serviceIdInput').value = null;
             document.getElementById('roomIdInput').value = null;
+            document.getElementById('partnerIdInput').value = null;
         }
 
         //Hiện popup đánh giá room
@@ -610,6 +616,23 @@
             document.getElementById('orderIdInput').value = orderId;
             document.getElementById('serviceIdInput').value = null;
             document.getElementById('productIdInput').value = null;
+            document.getElementById('partnerIdInput').value = null;
+        }
+
+        //Hiện popup đánh giá partner
+        function openPopupPartner(image, partnerName, partnerId, serviceId, userId, orderId, status) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+
+            document.getElementById('popupImage').src = image;
+            document.getElementById('popupServiceName').innerText = partnerName;
+
+            document.getElementById('partnerIdInput').value = partnerId;
+            document.getElementById('userIdInput').value = userId;
+            document.getElementById('orderIdInput').value = orderId;
+            document.getElementById('serviceIdInput').value = serviceId;
+            document.getElementById('productIdInput').value = null;
+            document.getElementById('roomIdInput').value = null;
         }
 
         // Ẩn popup đánh giá
@@ -661,6 +684,7 @@
             var serviceId = document.getElementById('serviceIdInput').value;
             var productId = document.getElementById('productIdInput').value;
             var roomId = document.getElementById('roomIdInput').value;
+            var partnerId = document.getElementById('partnerIdInput').value;
             var rating = document.getElementById('ratingInput').value;
             var userId = document.getElementById('userIdInput').value;
             var orderId = document.getElementById('orderIdInput').value;
@@ -681,6 +705,9 @@
                 }
                 if (roomId !== null) {
                     data.RoomId = parseInt(roomId);
+                }
+                if (partnerId !== null) {
+                    data.PartnerId = parseInt(partnerId);
                 }
 
                 $.ajax({

@@ -710,11 +710,11 @@ namespace PetServices.Controllers
                         await _context.SaveChangesAsync();
                     }
 
-                    if (feedbackDTO.PartnerId != null)
+                    if (feedbackDTO.PartnerId != null && feedbackDTO.ServiceId != null)
                     {
-                        var partnerOrder = await _context.BookingServicesDetails.FirstOrDefaultAsync(b => b.OrderId == feedbackDTO.OrderId && b.PartnerInfoId == feedbackDTO.PartnerId);
+                        var partnerOrder = await _context.BookingServicesDetails.FirstOrDefaultAsync(b => b.OrderId == feedbackDTO.OrderId && b.PartnerInfoId == feedbackDTO.PartnerId && b.ServiceId == feedbackDTO.ServiceId);
 
-                        partnerOrder.FeedbackStatus = true;
+                        partnerOrder.FeedbackPartnerStatus = true;
                         await _context.SaveChangesAsync();
                     }
                 }
