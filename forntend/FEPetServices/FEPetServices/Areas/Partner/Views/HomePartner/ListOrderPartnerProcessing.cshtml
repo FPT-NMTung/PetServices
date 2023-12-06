@@ -9,7 +9,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
 <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
-
+<link href="~/css/partner/listorderpartner.css" rel="stylesheet" />
 <script>
     $(document).ready(function () {
         // Khởi tạo DataTables
@@ -25,10 +25,10 @@
                 { "targets": [1], "width": "15%" },
                 { "targets": [2], "width": "25%" },
                 { "targets": [3], "width": "10%" }, // Điều chỉnh cột này để khớp với số cột thực tế
-                { "targets": [4], "width": "15%" },
-                { "targets": [5], "width": "10%" },
-                { "targets": [6], "width": "10%" },
-                { "targets": [7], "width": "10%" },
+                { "targets": [4], "width": "10%" },
+                { "targets": [5], "width": "15%" },
+                { "targets": [6], "width": "8%" },
+                { "targets": [7], "width": "12%" },
             ],
             "language": {
                 "lengthMenu": "Hiển thị _MENU_ dòng",
@@ -45,7 +45,7 @@
     });
 </script>
 
-<h1>Danh Sách Đơn Hàng Của Nhân Viên</h1>
+<h1>Danh Sách Đơn Hàng Đang Thực Hiện Của Nhân Viên</h1>
 
 <table id="lists" class="display">
     <thead>
@@ -66,36 +66,59 @@
             int itemCount = 0;
             foreach (var pc in Model)
             {
-                @foreach (var bd in pc.BookingServicesDetails)
+                foreach (var pcb in pc.BookingServicesDetails)
                 {
                     itemCount++;
-                    if (bd.StatusOrderService.Trim() == "Processing")
+                    if (pcb.StatusOrderService.Trim() == "Processing")
                     {
                         <tr>
                             <td>@itemCount</td>
-                            @*<td><img src="@pc.UserInfoId" width="50" height="50"></td>*@
                             <td>@pc.UserInfo?.FirstName @pc.UserInfo?.LastName</td>
                             <td>
                                 <div>
-                                    @bd.Service.ServiceName - @bd.Price.ToString("n0").Replace(",", ".") VNĐ <br>
+                                    @pcb.Service.ServiceName - @pcb.Price.ToString("n0").Replace(",", ".") VNĐ <br>
                                 </div>
                             </td>
                             <td>@pc.OrderDate</td>
                             <td>@pc.UserInfo.Phone</td>
                             <td>
-                                Đơn hàng đang được thực hiện
+                                Đang Chờ Nhận Đơn
                             </td>
                             <td>
                                 <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
                             </td>
                             <td>
-                                <button class="completed-button" data-orderid="@pc.OrderId">Hoàn thành</button>
+                                <button class="completed-button" data-orderid="@pc.OrderId">Hoàn Thành Đơn</button>
                             </td>
                         </tr>
                     }
                 }
+                
+                
+
             }
         }
+        <script>
+            // Hàm JavaScript để cập nhật trạng thái đơn hàng
+            $(document).ready(function () {
+                // Sử dụng class để chọn button
+                var buttons_received = $('.completed-button');
+
+                buttons_received.click(function () {
+                    var orderId = $(this).data('orderid');
+                    let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusCompleted?orderId=' + orderId;
+                    fetch(url).then(response => {
+                        if (response.status == 200) {
+                            console.log("Nhận đơn thành công!");
+                            location.reload();
+                        } else {
+                            console.log("Nhận đơn thất bại!");
+                        }
+                    });
+                });
+
+            });
+        </script>
     </tbody>
     <tfoot>
         @if (ViewBag.ErrorMessage != null)
@@ -107,26 +130,7 @@
     </tfoot>
 
 
-    <script>
-        // Hàm JavaScript để cập nhật trạng thái đơn hàng
-        $(document).ready(function () {
-            // Sử dụng class để chọn button
-            var buttons_received = $('.completed-button');
 
-            buttons_received.click(function () {
-                var orderId = $(this).data('orderid');
-                let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusCompleted?orderId=' + orderId;
-                fetch(url).then(response => {
-                    if (response.status == 200) {
-                        console.log("Hoàn thành đơn thành công!");
-                        location.reload();
-                    } else {
-                        console.log("Hoàn thành đơn thất bại!");
-                    }
-                });
-            });
-        });
-    </script>
     <!-- Your table and data display code -->
 
 </table>

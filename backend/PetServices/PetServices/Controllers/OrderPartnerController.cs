@@ -207,35 +207,56 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpPut("ChangeStatus")]
-        public async Task<IActionResult> ChangeStatus(int orderId, [FromBody] Status status)
+        [HttpPut("ChangeStatus/{email}")]
+        public async Task<IActionResult> ChangeStatus(int orderId, [FromBody] Status status, string email)
         {
             try
             {
                 Order order = await _context.Orders
                     .Include(c => c.BookingServicesDetails)
+                    .ThenInclude(c => c.PartnerInfo)
                     .SingleOrDefaultAsync(b => b.OrderId == orderId);
                 if(order == null)
                 {
                     return NotFound("Booking không tồn tại!");
                 }
-                
-                foreach (var bookingDetail in order.BookingServicesDetails)
+                PartnerInfo partner = await _context.PartnerInfos
+                    .Include(c => c.Accounts)
+                    .SingleOrDefaultAsync(c => c.Accounts.Any(c => c.Email == email));
+                if (status.newStatusService == "Waiting")
                 {
-                    if (bookingDetail.StatusOrderService.Trim() != status.oldStatus)
+                    foreach (var bookingDetail in order.BookingServicesDetails)
                     {
-                        return BadRequest("Trạng thái cũ không hợp lệ");
-                    }
-                    if (bookingDetail.PartnerInfoId != null)
-                    {
-                        bookingDetail.PartnerInfoId = null;
-                        if(bookingDetail.PriceService != null)
+                        if (bookingDetail.StatusOrderService.Trim() != status.oldStatus)
                         {
-                            bookingDetail.PriceService -= 50000;
+                            return BadRequest("Trạng thái cũ không hợp lệ");
+                        }
+                        if (bookingDetail.PartnerInfoId != null)
+                        {
+                            bookingDetail.PartnerInfoId = null;
+                            if (bookingDetail.PriceService != null)
+                            {
+                                bookingDetail.PriceService -= 50000;
+                            }
+                        }
+                    }
+                    order.TotalPrice -= 50000;
+                }
+                else if(status.newStatusService == "Received")
+                {
+                    foreach (var bk in order.BookingServicesDetails)
+                    {
+                        if (bk.StatusOrderService.Trim() != status.oldStatus)
+                        {
+                            return BadRequest("Trạng thái cũ không hợp lệ");
+                        }
+                        if(bk.PartnerInfoId == null)
+                        {
+                            bk.PartnerInfoId = partner.PartnerInfoId;
                         }
                     }
                 }
-                order.TotalPrice -= 50000;
+                
                 order.OrderStatus = status.newStatus;
                 if(order.OrderProductDetails != null)
                 {
