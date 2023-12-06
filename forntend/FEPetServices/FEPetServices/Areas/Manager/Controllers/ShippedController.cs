@@ -78,6 +78,13 @@ namespace FEPetServices.Areas.Manager.Controllers
                 status.newStatusService = "";
             }
 
+            else if(status.newStatus == "Delivered")
+            {
+                status.newStatus = "Processing";
+                status.newStatusProduct = "Delivered";
+                status.newStatusService = "";
+            }
+
             HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
             if (response.IsSuccessStatusCode)
             {
