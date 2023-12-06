@@ -1,4 +1,7 @@
 ﻿<html class="no-js" lang="en">
+<head>
+    <link rel="stylesheet" href="~/css/Blog/BlogList.css">
+</head>
 <body class="sticky-header">
 
     <!-- End Header -->
@@ -60,23 +63,21 @@
                                 }
                                 }
                         </div>
-                        <div class="post-pagination">
-                            <nav class="navigation pagination" aria-label="Products">
-                                <ul class="page-numbers">
-                                    @if (ViewBag.CurrentPage > 1)
-                                    {
-                                      <li><a class="next page-numbers" href="@Url.Action("Bloglist", new { page = ViewBag.CurrentPage - 1, BlogName=ViewBag.BlogName, sortby=ViewBag.sortby, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })"><i class="fal fa-arrow-left"></i></a></li> 
-                                    }
-                                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                                    {
-                                    <li><a class="page-numbers" href="@Url.Action("Bloglist", new { page = i, sortby=ViewBag.sortby, BlogName=ViewBag.BlogName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">@i</a></li>
-                                    }
-                                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-                                    {
-                                        <li><a class="next page-numbers" href="@Url.Action("servicelist", new { page = ViewBag.CurrentPage + 1, sortby=ViewBag.sortby, BlogName=ViewBag.BlogName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })"><i class="fal fa-arrow-right"></i></a></li>
-                                    }
-                                </ul>
-                            </nav>
+                        <div style="text-align:center;">
+                            <div class="pagination">
+                                @if (ViewBag.CurrentPage > 1)
+                                {
+                                    <a class="next page-numbers" href="@Url.Action("Bloglist", new { page = ViewBag.CurrentPage - 1, BlogName=ViewBag.BlogName, sortby=ViewBag.sortby, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })"><i class="fal fa-arrow-left"></i></a>
+                                }
+                                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                {
+                                    <a class="page-numbers" href="@Url.Action("Bloglist", new { page = i, sortby=ViewBag.sortby, BlogName=ViewBag.BlogName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">@i</a>
+                                }
+                                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                                {
+                                    <a class="next page-numbers" href="@Url.Action("servicelist", new { page = ViewBag.CurrentPage + 1, sortby=ViewBag.sortby, BlogName=ViewBag.BlogName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })"><i class="fal fa-arrow-right"></i></a>
+                                }
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
