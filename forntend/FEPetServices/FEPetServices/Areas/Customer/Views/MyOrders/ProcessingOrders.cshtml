@@ -16,7 +16,7 @@
         <div class="card-header alert-primary">
             <ul class="nav nav-pills" id="pills-tab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill"
+                    <a class="nav-link" id="pills-home-tab" data-toggle="pill"
                        href="~/Customer/MyOrders/AllOrders?orderStatus=All&page=1&pageSize=5"
                        role="tab" aria-selected="true">Tất cả</a>
                 </li>
@@ -31,7 +31,7 @@
                        role="tab" aria-selected="false">Đơn hàng được xác nhận </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill"
+                    <a class="nav-link active" id="pills-tasks-tab" data-toggle="pill"
                        href="~/Customer/MyOrders/ProcessingOrders?orderStatus=Processing&page=1&pageSize=5"
                        role="tab" aria-selected="false">Đơn hàng đang được thực hiện</a>
                 </li>
@@ -325,7 +325,7 @@
                 $.ajax({
                     url: '/Customer/MyOrders/AllOrders',
                     type: 'GET',
-                    data: { orderStatus: 'All', page: pageIndex + 1, pageSize: 5 },
+                    data: { orderStatus: 'Processing', page: pageIndex + 1, pageSize: 5 },
                     success: function (data) {
                         if (data.trim() !== '') {
                             $('#orders-container').append(data);

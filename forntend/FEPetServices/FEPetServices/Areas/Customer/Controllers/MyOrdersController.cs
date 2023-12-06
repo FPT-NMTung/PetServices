@@ -85,6 +85,18 @@ namespace FEPetServices.Areas.Customer.Controllers
         public Task<IActionResult> AllOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
 
         [HttpGet]
+        public Task<IActionResult> PlacedOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+
+        [HttpGet]
+        public Task<IActionResult> ConfirmedOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+
+        [HttpGet]
+        public Task<IActionResult> ProcessingOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+
+        [HttpGet]
         public Task<IActionResult> CompletedOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+
+        [HttpGet]
+        public Task<IActionResult> CancelledOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
     }
 }
