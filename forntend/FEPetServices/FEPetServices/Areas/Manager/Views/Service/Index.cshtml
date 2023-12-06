@@ -2,121 +2,167 @@
 <link href="~/css/toastNotification.css" rel="stylesheet" />
 <link href="~/css/datatable.css" rel="stylesheet" />
 
-<script>
-    $(document).ready(function () {
-        // Khởi tạo DataTables
-        var table = $('#lists').DataTable({
-            "responsive": true,
-            "paging": true,
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "columnDefs": [
-                { "targets": [0], "width": "5%" },
-                { "targets": [1], "width": "20%" },
-                { "targets": [2], "width": "30%" },
-                { "targets": [3], "width": "20%" },
-                { "targets": [4], "width": "15%" },
-                { "targets": [5], "width": "10%" },
-            ],
-            "language": {
-                "lengthMenu": "Hiển thị _MENU_ dòng",
-                "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
-                "search": "Tìm kiếm:",
-                "paginate": {
-                    "first": "Đầu",
-                    "last": "Cuối",
-                    "next": "Tiếp",
-                    "previous": "Trước"
-                }
-            },
-        });
+  <h1>Danh sách dịch vụ</h1>
 
-        // Thêm nút "Thêm dịch vụ" bên cạnh thanh tìm kiếm
-        var addServiceButton = $('<button  id="addServiceButton" class="btn btn-primary">Thêm dịch vụ</button>');
-        $('.dataTables_filter').append(addServiceButton);
-
-        // Đính kèm sự kiện click cho nút "Thêm dịch vụ"
-        $('#addServiceButton').on('click', function () {
-            // Navigate to the "addservicecategory" page
-            window.location.href = '/Manager/Service/AddService'; // Update this URL as needed
-        });
-
-    });
-</script>
-
-<h1>Danh sách dịch vụ cho thú cưng</h1>
-
-<table id="lists" class="display">
-    <thead>
-        <tr>
-            <th>No.</th>
-            <th>Tên dịch vụ</th>
-            <th>Mô tả</th>
-            <th>Ảnh</th>
-            <th>Trạng thái</th>
-            <th>Chi tiết</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Count > 0)
-        {
-            int itemCount = 0;
-            foreach (var service in Model)
-            {
-                itemCount++;
-                string description = service.Desciptions;
-
-                 if (description != null)
-                  {
-                      if (description.Length > 100)
-                       {
-                         int lastSpace = description.LastIndexOf(' ', 100);
-                         description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
-                        }
-                       else
-                         {
-                          description = service.Desciptions;
-                          }
-                        }
-                        else
-                        {
-                          description = string.Empty;
-                        }                     
-
+        <table id="lists" class="display">
+            <thead>
                 <tr>
-                    <td>@itemCount</td>
-                    <td>@service.ServiceName</td>
-                    <td>@description</td>
-                    <td><img src="@service.Picture" width="50" height="50"></td>
-                    <td>
-                        @if (@service.Status)
+                    <th>No.</th>
+                    <th>Tên dịch vụ</th>
+                    <th>Mô tả</th>
+                    <th>Ảnh</th>
+                    <th>Trạng thái</th>
+                    <th>Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if ( Model.Count > 0)
+                {
+                    int itemCount = 0;
+                    foreach (var service in Model)
+                    {
+
+                        itemCount++;
+                        string description = service.Desciptions;
+
+                        if (description != null)
                         {
-                            <button class="btn-active" onclick="toggleStatus(this)">Đang hoạt động</button>
+                            if (description.Length > 100)
+                            {
+                                int lastSpace = description.LastIndexOf(' ', 100);
+                                description = (lastSpace > 0) ? description.Substring(0, lastSpace) + "..." : description.Substring(0, 100) + "...";
+                            }
+                            else
+                            {
+                                description = service.Desciptions;
+                            }
                         }
                         else
                         {
-                            <button class="btn-inactive" onclick="toggleStatus(this)">Ngưng hoạt động</button>
+                            description = string.Empty;
                         }
-                    </td>
-                    <td>
-                        <a href="/Manager/Service/EditService?serviceId=@service.ServiceId">Chi tiết</a>
-                    </td>
 
-                </tr>
-            }
-        }
-    </tbody>
-</table>
-<style>
-    h1{
+                    <tr>
+                        <td>@itemCount</td>
+                        <td>@service.ServiceName</td>
+                        <td>@description</td>
+                        <td><img src="@service.Picture" width="50" height="50"></td>
+                        <td>
+                            @if (@service.Status)
+                            {
+                                    <button class="btn-active" onclick="toggleStatus(this)">Đang hoạt động</button>
+                            }
+                            else
+                            {
+                                    <button class="btn-inactive" onclick="toggleStatus(this)">Ngưng hoạt động</button>
+                            }
+                        </td>
+                        <td>
+                            <a class="btn-detail" href="/Manager/Service/EditService?serviceId=@service.ServiceId">Chi tiết</a>
+                        </td>
+
+                                </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <script>
+        $(document).ready(function () {
+            // Khởi tạo DataTables
+            var table = $('#lists').DataTable({
+                "responsive": true,
+                "paging": true,
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "columnDefs": [
+                    { "targets": [0], "width": "5%" },
+                    { "targets": [1], "width": "20%" },
+                    { "targets": [2], "width": "30%" },
+                    { "targets": [3], "width": "20%" },
+                    { "targets": [4], "width": "15%" },
+                    { "targets": [5], "width": "10%" },
+                ],
+                "language": {
+                    "lengthMenu": "Hiển thị _MENU_ dòng " ,
+                    "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
+                    "search": "Tìm kiếm:",
+                    "paginate": {
+                        "first": "Đầu",
+                        "last": "Cuối",
+                        "next": "Tiếp",
+                        "previous": "Trước"
+                    }
+                },
+            });
+
+            // Thêm nút "Thêm dịch vụ" bên cạnh thanh tìm kiếm
+            var addServiceButton = $('<button  id="addServiceButton" class="btn btn-add btn-primary">Thêm dịch vụ</button>');
+            $('.dataTables_filter').append(addServiceButton);
+
+            // Đính kèm sự kiện click cho nút "Thêm dịch vụ"
+            $('#addServiceButton').on('click', function () {
+                // Navigate to the "addservicecategory" page
+                window.location.href = '/Manager/Service/AddService'; // Update this URL as needed
+            });
+
+        });
+    </script>
+    <script src="/js/ServiceCategory.js"></script>
+    <style>
+    h1 {
         text-align: center;
-        font-size: 40px;
-        font-weight: bold;
-        margin-top: 10px;
     }
+
+    .future-status {
+        color: gray;
+    }
+
+    .complete-status {
+        color: green;
+    }
+
+    .dataTables_wrapper .dataTables_filter {
+        float: right;
+        margin-bottom: 10px;
+    }
+
+    .btn-add {
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        border-radius: 4px;
+        background-color: #E21033;
+        border: none;
+        color: white;
+        padding: 7px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 0px 10px;
+        cursor: pointer;
+        float: right;
+        margin-right: 30px;
+        margin-bottom: 20px;
+    }
+
+        .btn-add:hover {
+            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+            background-color: #ff6347;
+        }
+
+    .dataTables_wrapper .dataTables_filter input[type="search"] {
+        margin-left: 10px;
+        background-color: white;
+    }
+
+    .dataTables_wrapper {
+        margin: 30px;
+    }
+
     .btn-active {
         background-color: #43e240;
         color: white;
@@ -146,4 +192,24 @@
         background-color: #d30f0b;
         color: black;
     }
+
+    .btn-detail {
+        text-align: center;
+        border-radius: 5px;
+        font-size: 15px;
+        color: white;
+        display: inline-block;
+        padding: 8px;
+        border: 1px solid ;
+        width: 100px;
+        height: 40px;
+        background-color: #E21033;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn-detail:hover{
+            color: black;
+        }
+
 </style>

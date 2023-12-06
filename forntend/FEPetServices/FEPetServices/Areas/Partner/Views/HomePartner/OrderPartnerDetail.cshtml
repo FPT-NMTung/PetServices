@@ -107,12 +107,12 @@
                         @*@if (Model.BookingServicesDetails.PartnerInfoId != null){}*@
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" id="receivedCheckbox" name="newStatus" value="Received">
-                            <label class="form-check-label" for="receivedCheckbox" style="background-color: green; color:#fff">Nhận Đơn</label>
+                            <label class="form-check-label" for="receivedCheckbox">Nhận Đơn</label>
                         </div>
 
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" id="rejectedCheckbox" name="newStatus" value="Waiting" onchange="handleRejectChange()">
-                            <label class="form-check-label" for="rejectedCheckbox" style="background-color: red; color:#fff">Hủy Đơn</label>
+                            <label class="form-check-label" for="rejectedCheckbox">Hủy Đơn</label>
                         </div>
                         <div id="reasonSelect" style="display: none;" class="form-group">
                             <div style="display:flex;">
@@ -155,7 +155,8 @@
 
                     @*<form method="post" asp-controller="HomePartner" asp-action="OrderPartnerDetail">*@
                     @Html.AntiForgeryToken()
-                    <button class="btn btn-primary" type="submit">Xác nhận</button>
+                    <button class="btn btn-primary" style="margin-top: 20px;" type="submit">Xác nhận</button>
+                    <a class="btn btn-primary" style="margin-top: 20px;" href="~/Partner/HomePartner/ListOrderPartnerSpecial">Trở lại</a>
                 }
                 else if (status.StatusOrderService.Trim() == "Waiting" && status.PartnerInfoId == null)
                 {
@@ -165,11 +166,12 @@
                         @*@if (Model.BookingServicesDetails.PartnerInfoId != null){}*@
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" id="receivedCheckbox" name="newStatus" value="Received">
-                            <label class="form-check-label" for="receivedCheckbox" style="background-color: green; color:#fff">Nhận Đơn</label>
+                            <label class="form-check-label" for="receivedCheckbox">Nhận Đơn</label>
                         </div>
                     </div>
                     @Html.AntiForgeryToken()
-                    <button class="btn btn-primary" type="submit">Xác nhận</button>
+                    <button class="btn btn-primary" style="margin-top: 20px;" type="submit">Xác nhận</button>
+                    <a class="btn btn-primary" style="margin-top: 20px;" href="~/Partner/HomePartner/ListOrderPartner">Trở lại</a>
                 }
                 else if (status.StatusOrderService.Trim() == "Received")
                 {
@@ -179,11 +181,12 @@
                         @*@if (Model.BookingServicesDetails.PartnerInfoId != null){}*@
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" id="receivedCheckbox" name="newStatus" value="Processing">
-                            <label class="form-check-label" for="receivedCheckbox" style="background-color: green; color:#fff">Bắt đầu đơn</label>
+                            <label class="form-check-label" for="receivedCheckbox">Bắt đầu đơn</label>
                         </div>
                     </div>
                     @Html.AntiForgeryToken()
-                    <button class="btn btn-primary" type="submit">Xác nhận</button>
+                    <button class="btn btn-primary" style="margin-top: 20px;" type="submit">Xác nhận</button>
+                    <a class="btn btn-primary" style="margin-top: 20px;" href="~/Partner/HomePartner/ListOrderPartnerReceived">Trở lại</a>
                 }
                 else if (status.StatusOrderService.Trim() == "Processing")
                 {
@@ -193,43 +196,23 @@
                         @*@if (Model.BookingServicesDetails.PartnerInfoId != null){}*@
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" id="receivedCheckbox" name="newStatus" value="Completed">
-                            <label class="form-check-label" for="receivedCheckbox" style="background-color: green; color:#fff">Hoàn thành đơn</label>
+                            <label class="form-check-label" for="receivedCheckbox">Hoàn thành đơn</label>
                         </div>
                     </div>
                     @Html.AntiForgeryToken()
-                    <button class="btn btn-primary" type="submit">Xác nhận</button>
+
+                    <button class="btn btn-primary" style="margin-top: 20px;" type="submit">Xác nhận</button>
+                    <a class="btn btn-primary" style="margin-top: 20px;" href="~/Partner/HomePartner/ListOrderPartnerProcessing">Trở lại</a>
+                }
+                else if (status.StatusOrderService.Trim() == "Completed")
+                {
+                    <a class="btn btn-primary" style="margin-top: 20px;" href="~/Partner/HomePartner/ListOrderPartnerComplete">Trở lại</a>
                 }
             }
             
         </form>
         @*<button class="btn btn-primary" onclick="window.print()">In hoá đơn</button>*@
 
-        <div class="btn-group">
-            @foreach (var status in Model.BookingServicesDetails)
-            {
-                @if (status.StatusOrderService.Trim() == "Completed")
-                {
-                    <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerComplete">Trở lại</a>
-                }
-                else if (status.StatusOrderService.Trim() == "Waiting")
-                {
-                    <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartner">Trở lại</a>
-                }
-                else if (status.StatusOrderService.Trim() == "Received")
-                {
-                    <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerReceived">Trở lại</a>
-                }
-                else if (status.StatusOrderService.Trim() == "Processing")
-                {
-                    <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerProcessing">Trở lại</a>
-                }
-                else
-                {
-                    <a class="btn btn-primary" href="~/Partner/HomePartner/ListOrderPartnerSpecial">Trở lại</a>
-                }
-            }
-            
-        </div>
     </div>
     <script>
         // Xử lý sự kiện khi chọn nút radio "Rejected"
