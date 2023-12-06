@@ -170,7 +170,6 @@
             </div>
         </div>
     </header>
-    <div class="cat-container"></div>
     <div>
         @RenderBody()
     </div>
@@ -530,22 +529,4 @@
     }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM"></script>
-<script src="~/js/order/cart.js"></script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const cat = document.createElement("div");
-        cat.classList.add("random-cat");
-        document.body.appendChild(cat);
-
-        function changeCatImage() {
-            cat.style.backgroundImage = `url('https://cdn-icons-png.flaticon.com/512/6611/6611181.png')`;
-
-            cat.style.top = Math.floor(Math.random() * (window.innerHeight - 50)) + "px";
-            cat.style.left = Math.floor(Math.random() * (window.innerWidth - 50)) + "px";
-        }
-
-        setInterval(changeCatImage, 5000); 
-    });
-</script>
 </html>
