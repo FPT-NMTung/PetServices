@@ -60,6 +60,7 @@
         </div>
     </div>
 
+    @*Toast notification design*@
     <div id="toast"></div>
     @*Start - Base TempData*@
     @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))
@@ -78,8 +79,16 @@
             });
         </script>
     }
+    @if (!string.IsNullOrEmpty(TempData["WatingToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showWatingToast();
+            });
+        </script>
+    }
     @*End - Base *@
-     @*-------------------------------------------------------*@
+    @*-------------------------------------------------------*@
     @*Start - Loading data TempData*@
     @if (!string.IsNullOrEmpty(TempData["SuccessLoadingDataToast"] as string))
     {
@@ -98,7 +107,7 @@
         </script>
     }
     @*End - Loading data TempData*@
-     @*-------------------------------------------------------*@
+    @*-------------------------------------------------------*@
     @*Start - Login TempData*@
     @if (!string.IsNullOrEmpty(TempData["SuccessLoginToast"] as string))
     {
@@ -109,7 +118,7 @@
         </script>
     }
     @*End - Login TempData*@
-     @*-------------------------------------------------------*@
+    @*-------------------------------------------------------*@
     @*Start - Base ViewBag*@
     @if (!string.IsNullOrEmpty(ViewBag.SuccessToast))
     {
@@ -129,6 +138,8 @@
     }
     @*End - Base ViewBag*@
     @*-------------------------------------------------------*@
+
+
     <script>
         @*Start - Base TempData*@
             function showSuccessToast() {
@@ -139,14 +150,22 @@
                     duration: 2000
                 });
             }
-            function showErrorToast() {
-                toast({
-                    title: 'Thất bại',
-                    message: '@TempData["ErrorToast"]',
-                    type: 'error',
-                    duration: 2000
-                });
-            }
+        function showErrorToast() {
+            toast({
+                title: 'Thất bại',
+                message: '@TempData["ErrorToast"]',
+                type: 'error',
+                duration: 2000
+            });
+        }
+        function showWatingToast() {
+            toast({
+                title: 'Thất bại',
+                message: '@TempData["WatingToast"]',
+                type: 'wating',
+                duration: 2000
+            });
+        }
         @*End - Base *@
         @*-------------------------------------------------------*@
         @*Start - LoadingData TempData*@
@@ -189,54 +208,27 @@
                 });
             }
 
-            function showErrorToastViewBag() {
-                toast({
-                    title: 'Thất bại',
-                    message: '@ViewBag.ErrorToast',
-                    type: 'error',
-                    duration: 2000
-                });
-            }
-        @*End - Base ViewBag*@
-        @*-------------------------------------------------------*@
-        @*Start - Feedback ViewBag*@
-            function showSuccessFeedbackViewBag() {
-                toast({
-                    title: 'Thành công',
-                    message: 'Thêm đánh giá thành công!',
-                    type: 'success',
-                    duration: 2000
-                });
-            }
-
-        function showErrorToastFeedbackViewBag() {
+        function showErrorToastViewBag() {
             toast({
                 title: 'Thất bại',
-                message: 'Bạn cần nhập trên 20 kí tự!',
-                type: 'wating',
-                duration: 3000
-            });
-        }
-
-        function showErrorToastFeedback2ViewBag() {
-            toast({
-                title: 'Thất bại',
-                message: 'Bạn hãy nhập nội dung đánh giá để tiếp tục!',
+                message: '@ViewBag.ErrorToast',
                 type: 'error',
                 duration: 2000
             });
         }
         @*End - Base ViewBag*@
         @*-------------------------------------------------------*@
-        @*Start - Image ViewBag*@
-            function showErrorToastImage() {
+        @*Start - Base ViewBag*@
+            function showErrorToastCheckInput() {
                 toast({
                     title: 'Thất bại',
-                    message: 'Vui lòng chọn tệp tin hình ảnh có định dạng PNG hoặc JPG.',
-                    type: 'error',
+                    message: 'Vui lòng điền đầy đủ thông tin.',
+                    type: 'wating',
                     duration: 2000
                 });
-        @*End - Image ViewBag*@
+            }
+        @*End - Base ViewBag*@
+        @*-------------------------------------------------------*@
     </script>
 
     <style>
