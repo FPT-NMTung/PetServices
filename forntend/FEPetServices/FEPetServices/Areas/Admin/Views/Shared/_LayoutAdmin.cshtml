@@ -23,28 +23,8 @@
                 <h1 class="fw-bold mb-0 me-auto"></h1>
                 <div class="dropdown">
                     <div class="d-flex align-items-center cursor-pointer dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        @{
-                            string? username = Context.Session.GetString("UserName");
-                            if (username != "-a")
-                            {
-                                <span class="me-2 d-none d-sm-block">@username</span>
-                            }
-                            else
-                            {
-                                <span class="me-2 d-none d-sm-block">Xin Chào</span>
-                            }
-                        }
-                        @{
-                            string? userimage = Context.Session.GetString("UserImage");
-                            if (userimage != "-a")
-                            {
-                                <img class="navbar-profile-image" src="@userimage" alt="Image">
-                            }
-                            else
-                            {
-                                <img class="navbar-profile-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPzVNWWirLZJ6H95_YOLsLkxju6ZNaSxdj37F7nXfd29TXvBVI9PeZWrTfYEin-XBDnkk&usqp=CAU" alt="Image">
-                            }
-                        }
+                        <span class="me-2 d-none d-sm-block">Xin Chào: Admin</span>
+                        <img class="navbar-profile-image" src="~/img/avtadmin.jpg" alt="Image">
                     </div>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li><a class="dropdown-item" href="~/Logout/Index">Đăng xuất @RenderSection("Logout", required: false)</a></li>

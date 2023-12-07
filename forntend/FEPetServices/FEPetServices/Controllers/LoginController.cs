@@ -121,7 +121,7 @@ namespace FEPetServices.Controllers
                 }
                 else
                 {
-                    ViewBag.ErrorToast = "Lỗi hệ thống vui lòng thử lại sau hoặc tài khoản mật khẩu không chính xác";
+                    ViewBag.ErrorToast = "Tài khoản mật khẩu không chính xác hoặc lỗi hệ thống vui lòng thử lại sau";
                     return View();
                 }
                 return View();
