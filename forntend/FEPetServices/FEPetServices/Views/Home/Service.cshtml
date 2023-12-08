@@ -1,0 +1,256 @@
+﻿﻿<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="robots" content="noindex, follow" />
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="~/css/flatpickr.css">
+    <link rel="stylesheet" href="~/css/RoomCustomer.css">
+    <link href="~/css/productlist.css" rel="stylesheet" />
+</head>
+
+<body class="sticky-header">
+    <main class="main-wrapper">
+        <div class="axil-breadcrumb-area">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="inner">
+                            <ul class="axil-breadcrumb">
+                                <li class="axil-breadcrumb-item"><a href="/Home">Trang chủ</a></li>
+                                <li class="separator"></li>
+                                <li class="axil-breadcrumb-item active" aria-current="page">Dịch vụ</li>
+                            </ul>
+                            <h1 class="title">Dịch vụ cho thú cưng</h1>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-4">
+                        <div class="inner">
+                            <div class="bradcrumb-thumb">
+                                <img src="~/img/Service/Service_preview_rev_2.png" galt="Image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="axil-shop-area axil-section-gap bg-color-white">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="axil-shop-sidebar">
+                            <div class="d-lg-none">
+                                <button class="sidebar-close filter-close-btn"><i class="fas fa-times"></i></button>
+                            </div>
+                            <div class="toggle-list product-categories active">
+                                <h6 class="title">Loại dịch vụ</h6>
+                                <div class="shop-submenu">
+                                    <ul>
+                                        @{
+                                            var url = "/Home/Service";
+                                            if (!string.IsNullOrEmpty(ViewBag.sortby))
+                                            {
+                                                url += "?sortby=" + ViewBag.sortby;
+                                            }
+                                            if (!string.IsNullOrEmpty(ViewBag.Servicename))
+                                            {
+                                                url += (url.Contains("?") ? "&" : "?") + "servicename=" + ViewBag.Servicename;
+                                            }
+                                            if (!string.IsNullOrEmpty(ViewBag.priceto))
+                                            {
+                                                url += (url.Contains("?") ? "&" : "?") + "priceto=" + ViewBag.priceto;
+                                            }
+                                            if (!string.IsNullOrEmpty(ViewBag.pricefrom))
+                                            {
+                                                url += (url.Contains("?") ? "&" : "?") + "pricefrom=" + ViewBag.pricefrom;
+                                            }
+                                                    <li class="@(string.IsNullOrEmpty(ViewBag.Servicecategory) ? "current-cat" : "")"><a href="@url">Tất cả</a></li>
+                                                    @foreach (var category in ViewBag.Categories)
+                                            {
+                                                        <li class="@(ViewBag.Servicecategory == category.Value ? "current-cat" : "")">
+                                                            <a href="@(url + (url.Contains("?") ? "&" : "?") + "sevicecategory=" + category.Value)">@category.Text</a>
+                                                        </li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="toggle-list product-price-range active">
+                                <h6 class="title">Giá dịch vụ</h6>
+                                <div class="shop-submenu">
+                                    <form id="search-price" action="#" class="mt--25">
+                                        <div id="slider-range"></div>
+                                        <div class="flex-center mt--20">
+                                            <span class="input-range"></span>
+                                            <input type="text" id="amount" class="amount-range" readonly>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="axil-shop-top mb--40">
+                                    <div class="category-select align-items-center justify-content-lg-end justify-content-between">
+                                        <span class="filter-results">
+                                            <form method="get">
+                                                @{
+                                                    if (!string.IsNullOrEmpty(ViewBag.sortby))
+                                                    {
+                                                                <input type="hidden" name="sortby" value="@ViewBag.sortby">
+                                                    }
+                                                    if (!string.IsNullOrEmpty(ViewBag.productcategory))
+                                                    {
+                                                                <input type="hidden" name="sevicecategory" value="@ViewBag.Servicecategory">
+                                                    }
+                                                    if (!string.IsNullOrEmpty(ViewBag.priceto))
+                                                    {
+                                                                <input type="hidden" name="priceto" value="@ViewBag.priceto">
+                                                    }
+                                                    if (!string.IsNullOrEmpty(ViewBag.pricefrom))
+                                                    {
+                                                                <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
+                                                    }
+                                                            <div class="relative">
+                                                                <input class="input-cal input-base" value="@(ViewBag.Servicename)" name="servicename" id="input" placeholder="" type="text">
+                                                                <label id="label-input">Tên dịch vụ</label>
+                                                            </div>
+                                                }
+                                            </form>
+                                        </span>
+                                        <form method="get">
+                                            @{
+                                                if (!string.IsNullOrEmpty(ViewBag.Servicename))
+                                                {
+                                                            <input type="hidden" name="servicename" value="@ViewBag.Servicename">
+                                                }
+                                                if (!string.IsNullOrEmpty(ViewBag.Servicecategory))
+                                                {
+                                                            <input type="hidden" name="sevicecategory" value="@ViewBag.Servicecategory">
+                                                }
+                                                if (!string.IsNullOrEmpty(ViewBag.priceto))
+                                                {
+                                                            <input type="hidden" name="priceto" value="@ViewBag.priceto">
+                                                }
+                                                if (!string.IsNullOrEmpty(ViewBag.pricefrom))
+                                                {
+                                                            <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
+                                                }
+                                                        <select id="sortby" name="sortby" class="single-select" onchange="this.form.submit();">
+                                                            <!option value="name_asc" @(ViewBag.sortby == "name_asc" ? "selected" : "")>Tên từ A-Z</!option>
+                                                            <!option value="name_desc" @(ViewBag.sortby == "name_desc" ? "selected" : "")>Tên từ Z-A</!option>
+                                                            <!option value="price" @(ViewBag.sortby == "price" ? "selected" : "")>Giá từ thấp đến cao</!option>
+                                                            <!option value="price_desc" @(ViewBag.sortby == "price_desc" ? "selected" : "")>Giá từ cao đến thấp</!option>
+                                                        </select>
+                                            }
+                                        </form>
+                                    </div>
+                                    <div class="d-lg-none">
+                                        <button class="product-filter-mobile filter-toggle"><i class="fas fa-filter"></i> Bộ lọc</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row--15">
+                            @foreach (var service in Model)
+                            {
+                                if (service.Status == true)
+                                {
+                                    <div class="col-xl-4 col-sm-6">
+                                        <div class="axil-product product-style-one mb--30">
+                                            <div class="thumbnail">
+                                                <a style="height:300px;" href="/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId&serviceIds=@service.ServiceId">
+                                                    <img  src="@service.Picture" alt="Product Images" style="height:300px;">
+                                                </a>
+                                            </div>
+                                            <div class="product-content" data-room-category="@service.SerCategoriesId">
+                                                <div class="inner">
+                                                    <h5 class="title" style="height:50px;"><a href="/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId&serviceIds=@service.ServiceId">@service.ServiceName</a></h5>
+                                                    <div class="product-price-variant">
+                                                        <span class="price current-price">@service.Price VNĐ</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }else{}
+                            }
+                        </div>
+                        <div style="text-align:center;">
+                            <div class="pagination">
+                                @if (ViewBag.CurrentPage > 1)
+                                {
+                                    <a href="@Url.Action("Service", new { page = ViewBag.CurrentPage - 1, sevicecategory=ViewBag.Servicecategory , pricefrom=ViewBag.pricefrom, priceto=ViewBag.priceto, sortby=ViewBag.sortby, servicename=ViewBag.Servicename, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">&laquo;</a>
+                                }
+
+                                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                {
+                                    <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("Service", new { page = i, sevicecategory=ViewBag.Servicecategory, pricefrom=ViewBag.pricefrom, priceto=ViewBag.priceto, sortby=ViewBag.sortby, servicename=ViewBag.Servicename, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">@i</a>
+                                }
+                                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                                {
+                                    <a href="@Url.Action("Service", new { page = ViewBag.CurrentPage + 1, sevicecategory=ViewBag.Servicecategory , pricefrom=ViewBag.pricefrom, priceto=ViewBag.priceto, sortby=ViewBag.sortby, servicename=ViewBag.Servicename, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">&raquo;</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        var sevicecategory = "@(ViewBag.Servicecategory )";
+        var sortby = "@(ViewBag.sortby)";
+        var servicename = "@(ViewBag.Servicename)";
+        var pricefrom = "@(ViewBag.pricefrom)";
+        var priceto = "@(ViewBag.priceto)";
+        var CurrentPage = "@(ViewBag.CurrentPage)";
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var priceElements = document.querySelectorAll('.current-price');
+            priceElements.forEach(function (priceElement) {
+                var priceText = priceElement.textContent.trim();
+                var price = parseFloat(priceText.replace(/\s/g, '').replace('VNĐ/h', ''));
+                var formattedPrice = price.toLocaleString('vi-VN');
+                priceElement.textContent = formattedPrice + ' VNĐ';
+
+            });
+        });
+    </script>
+    <style>
+    .axil-shop-sidebar {
+     padding-right: 0px; 
+
+    }
+    </style>
+</body>
+
+
+<script src="~/assets/js/vendor/modernizr.min.js"></script>
+<!-- jQuery JS -->
+<script src="~/assets/js/vendor/jquery.js"></script>
+<!-- Bootstrap JS -->
+<script src="~/assets/js/vendor/popper.min.js"></script>
+<script src="~/assets/js/vendor/bootstrap.min.js"></script>
+<script src="~/assets/js/vendor/slick.min.js"></script>
+<script src="~/assets/js/vendor/js.cookie.js"></script>
+<!-- <script src="~/assets/js/vendor/jquery.style.switcher.js"></script> -->
+<script src="~/assets/js/vendor/jquery-ui.min.js"></script>
+<script src="~/assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
+<script src="~/assets/js/vendor/jquery.countdown.min.js"></script>
+<script src="~/assets/js/vendor/sal.js"></script>
+<script src="~/assets/js/vendor/jquery.magnific-popup.min.js"></script>
+<script src="~/assets/js/vendor/imagesloaded.pkgd.min.js"></script>
+<script src="~/assets/js/vendor/isotope.pkgd.min.js"></script>
+<script src="~/assets/js/vendor/counterup.js"></script>
+<script src="~/assets/js/vendor/waypoints.min.js"></script>
+<!-- Main JS -->
+
+<script src="~/js/servicehome.js"></script>
+</html>

@@ -380,20 +380,11 @@
                 });
             });
         });
-         function validateQuantity() {
-        var quantityInput = document.getElementById('quantityInput');
-        var quantityError = document.getElementById('quantityError');
-        var quantity = parseInt(quantityInput.value);
+        
 
-        // Check if the input is a number
-        if (isNaN(quantity) || quantity < 1) {
-            quantityError.style.display = 'inline'; // Display the error message
-            quantityInput.value = 1; // Reset to minimum value
-        } else {
-            quantityError.style.display = 'none'; // Hide the error message
-        }
-    }
+
     </script>
+
 
     <script src="~/assets/js/vendor/modernizr.min.js"></script>
     <!-- jQuery JS -->
