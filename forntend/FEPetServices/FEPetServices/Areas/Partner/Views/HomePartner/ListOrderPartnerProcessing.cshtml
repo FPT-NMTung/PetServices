@@ -15,19 +15,19 @@
         // Khởi tạo DataTables
         var table = $('#lists').DataTable({
             "paging": true,
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
             "searching": true,
             "ordering": true,
             "info": true,
             "autoWidth": false,
             "columnDefs": [
-                { "targets": [0], "width": "5%" },
+                { "targets": [0], "width": "4%" },
                 { "targets": [1], "width": "15%" },
-                { "targets": [2], "width": "25%" },
-                { "targets": [3], "width": "10%" }, // Điều chỉnh cột này để khớp với số cột thực tế
+                { "targets": [2], "width": "27%" },
+                { "targets": [3], "width": "17%" }, // Điều chỉnh cột này để khớp với số cột thực tế
                 { "targets": [4], "width": "10%" },
-                { "targets": [5], "width": "15%" },
-                { "targets": [6], "width": "8%" },
+                { "targets": [5], "width": "9%" },
+                { "targets": [6], "width": "6%" },
                 { "targets": [7], "width": "12%" },
             ],
             "language": {
@@ -57,7 +57,7 @@
             <th>Số Điện Thoại</th>
             <th>Trạng Thái</th>
             <th>Chi Tiết</th>
-            <th>Button</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -82,13 +82,13 @@
                             <td>@pc.OrderDate</td>
                             <td>@pc.UserInfo.Phone</td>
                             <td>
-                                Đang Chờ Nhận Đơn
+                                Đang Thực Hiện
                             </td>
                             <td>
-                                <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
+                                <a class="detail-button" href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
                             </td>
                             <td>
-                                <button class="completed-button" data-orderid="@pc.OrderId">Hoàn Thành</button>
+                                <a class="completed-button" data-orderid="@pc.OrderId">Hoàn Thành</a>
                             </td>
                         </tr>
                     }

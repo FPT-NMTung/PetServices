@@ -1,6 +1,14 @@
 ﻿.anh-chung-chi {
     display: flex;
 }
+.anh-chung-chi img{
+    width: 100%;
+    height: 100%;
+}
+.ui-w-80 {
+    width: 400px !important;
+    height: 200px !important;
+}
 @media only screen and (max-width: 400px) {
     .card-body{
         display: block;
@@ -12,4 +20,5 @@
     /*.anh-chung-chi{
         display: block;
     }*/
+
 }
