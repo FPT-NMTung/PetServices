@@ -119,6 +119,7 @@ namespace FEPetServices.Controllers
                 {
                     cart.Remove(productCartItem);
                     SaveCartSession(cart);
+                    ClearCart();
                 }
             }
 
@@ -130,6 +131,7 @@ namespace FEPetServices.Controllers
                 {
                     cart.Remove(serviceCartItem);
                     SaveCartSession(cart);
+                    ClearCart();
                 }
             }
             return RedirectToAction("Index", "Cart");
