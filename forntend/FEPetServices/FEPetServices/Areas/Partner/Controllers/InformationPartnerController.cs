@@ -65,7 +65,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index([FromForm] PartnerInfo partnerInfo, IFormFile image)
+        public async Task<IActionResult> Index([FromForm] PartnerInfo partnerInfo, IFormFile image, IFormFile imagePartner)
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
@@ -115,6 +115,32 @@ namespace FEPetServices.Areas.Partner.Controllers
 
                     AccountInfo managerInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
                     partnerInfo.ImagePartner = managerInfos.PartnerInfo.ImagePartner;
+                }
+            }
+            if (imagePartner != null)
+            {
+                string filename = GenerateRandomNumber(5) + imagePartner.FileName;
+                filename = Path.GetFileName(filename);
+                string uploadfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Certificate/", filename);
+                using (var stream = new FileStream(uploadfile, FileMode.Create))
+                {
+                    await imagePartner.CopyToAsync(stream);
+                }
+                partnerInfo.ImageCertificate = "/img/Certificate/" + filename;
+            }
+            else
+            {
+                HttpResponseMessage responsePartner = await _client.GetAsync(DefaultApiUrl + "Partner/" + email);
+                if (responsePartner.IsSuccessStatusCode)
+                {
+                    string responseContent = await responsePartner.Content.ReadAsStringAsync();
+
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+
+                    AccountInfo managerInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
                     partnerInfo.ImageCertificate = managerInfos.PartnerInfo.ImageCertificate;
                 }
             }

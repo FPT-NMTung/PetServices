@@ -324,12 +324,12 @@ namespace FEPetServices.Areas.Partner.Controllers
             }
             //HttpResponseMessage response = await client.PutAsJsonAsync("https://localhost:7255/api/OrderPartner/ChangeStatus?orderId=" + orderId, status);
             //HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl + "OrderPartner/ChangeStatus?orderId=" + orderId, status);
-            HttpResponseMessage response = await client.PutAsJsonAsync("https://localhost:7255/api/OrderPartner/ChangeStatus/" + email + "?orderId=" + orderId, status);
+            HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl+"OrderPartner/ChangeStatus/" + email + "?orderId=" + orderId, status);
             reasonOrders.OrderId = orderId;
             
             reasonOrders.EmailReject = email;
             
-            HttpResponseMessage responseReject = await client.PostAsJsonAsync("https://localhost:7255/api/ReasonOrder", reasonOrders);
+            HttpResponseMessage responseReject = await client.PostAsJsonAsync(DefaultApiUrl + "ReasonOrder", reasonOrders);
 
 
             if (response.IsSuccessStatusCode || responseReject.IsSuccessStatusCode)
