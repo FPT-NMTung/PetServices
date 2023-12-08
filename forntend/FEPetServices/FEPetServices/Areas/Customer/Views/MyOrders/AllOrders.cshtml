@@ -70,6 +70,7 @@
                                     double totalPrice = 0;
                                     <div class="work-container">
                                         <div class="work-container-inner">
+                                            <a class="detail-button" href="~/Customer/MyOrders/OrderDetail?id=@order.OrderId">Chi tiết</a>
                                             <h5>Mã đơn hàng : @order.OrderId</h5>
                                             @if (order.OrderStatus.Trim() == "Confirmed")
                                             {

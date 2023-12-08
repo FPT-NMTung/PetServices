@@ -1,0 +1,133 @@
+﻿.card-header.alert-primary {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back-list {
+    cursor: pointer;
+}
+
+.header-contents {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content-code {
+    font-weight: bold;
+}
+
+.header-content-status .badge {
+    margin-left: 10px;
+}
+
+.card {
+    border: none;
+}
+
+.card-body {
+    background-color: #fff;
+    border-radius: 50px;
+    max-height: 90px;
+}
+
+ul {
+    margin-bottom: 5px;
+}
+
+#progressbar-2 {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+    #progressbar-2 li {
+        max-width: 56px;
+        position: relative;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        #progressbar-2 li i {
+            font-size: 30px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            padding: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+            #progressbar-2 li i.fa-receipt,
+            #progressbar-2 li i.fa-check,
+            #progressbar-2 li i.fa-truck,
+            #progressbar-2 li i.fa-star {
+                color: #333;
+                border: 2.5px solid #333;
+            }
+
+        #progressbar-2 li.active i.fa-receipt,
+        #progressbar-2 li.active i.fa-check,
+        #progressbar-2 li.active i.fa-truck,
+        #progressbar-2 li.active i.fa-star {
+            color: #4caf50;
+            border: 2.5px solid #4caf50;
+        }
+
+        #progressbar-2 li .icon-label-container {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+.step-label {
+    margin-top: 10px;
+}
+
+#progressbar-2 li .connector {
+    height: 2.5px;
+    background-color: #333;
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translateY(-1px);
+}
+
+#progressbar-2 li.active .connector {
+    background-color: #4caf50;
+}
+
+.d-lg-flex {
+    max-width: 120px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Add this CSS to your stylesheet or in a style block */
+.d-flex.justify-content-between {
+    align-items: center; /* Vertical alignment in the flex container */
+}
+
+.d-lg-flex {
+    flex: 1; /* Distribute available space equally among the child elements */
+}
+
+.d-flex.justify-content-between > div {
+    margin-right: 10px; /* Adjust the margin as needed */
+}
+
+/* Optional: To make the text centered vertically */
+.d-flex.justify-content-between p {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+

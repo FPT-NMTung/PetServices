@@ -1,5 +1,156 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using FEPetServices.Form.OrdersForm;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <link href="~/css/orders/stylesheet.css" rel="stylesheet" />
+    <link href="~/css/map.css" rel="stylesheet" />
+    <link href="~/css/OrderDetail.css" rel="stylesheet" />
+    <link href="~/css/orders/detail.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="card right-profile-card">
+        <div class="card-header alert-primary">
+            <div class="back-list" onclick="goBack()">
+                <span><i class="fa-solid fa-chevron-left"></i></span>
+                Trở lại
+            </div>
+            <div class="header-contents">
+                <div class="header-content-code"> Mã đơn hàng : @Model.OrderId | </div>
+                <div class="header-content-status">
+                    @if (Model.OrderStatus.Trim() == "Confirmed")
+                    {
+                        <span style="display:inline-block" class="badge badge-info">Đơn hàng đã được xác nhận và trong giai đoạn xử lý</span>
+                    }
+                    else if (Model.OrderStatus.Trim() == "Processing")
+                    {
+                        <span style="display:inline-block" class="badge badge-info">Đơn hàng đang được thực hiện</span>
+                    }
+                    else if (Model.OrderStatus.Trim() == "Placed")
+                    {
+                        <span style="display:inline-block" class="badge badge-info">Đơn hàng đang chờ xác nhận</span>
+                    }
+                    else if (Model.OrderStatus.Trim() == "Completed")
+                    {
+                        <span style="display:inline-block" class="badge badge-info">Đơn hàng đã hoàn thành</span>
+                    }
+                    else if (Model.OrderStatus.Trim() == "Cancelled")
+                    {
+                        <span style="display:inline-block" class="badge badge-info">Đơn hàng bị huỷ</span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <section class="vh-25">
+            <div class="container h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12">
+                        <div class="card card-stepper text-black" style="border-radius: 16px;">
+                            <div class="card-body">
+                                <ul id="progressbar-2" class="d-flex justify-content-between mx-0 mt-0 mb-5 px-0 pt-0 pb-2">
+                                    <li class="step0 @if(Model.OrderStatus.Trim() == "Placed" || Model.OrderStatus.Trim() == "Processing"
+                                        || Model.OrderStatus.Trim() == "Confirmed" || Model.OrderStatus.Trim() == "Completed"
+                                        ) {
+                                    <text>active</text>
+                                    } text-center" id="step1">
+                                        <i class="fa-solid fa-receipt"></i>
+                                    </li>
+                                            <li class="step0 @if(Model.OrderStatus.Trim() == "Confirmed" || Model.OrderStatus.Trim() == "Processing"
+                                                || Model.OrderStatus.Trim() == "Completed") {
+                                    <text>active</text>
+                                    } text-center" id="step2">
+                                        <i class="fa-solid fa-check"></i>
+                                    </li>
+                                            <li class="step0 @if(Model.OrderStatus.Trim() == "Processing" ||  Model.OrderStatus.Trim() == "Completed") {
+                                    <text>active</text>
+                                    } text-center" id="step3">
+                                        <i class="fa-solid fa-truck"></i>
+                                    </li>
+                                            <li class="step0 @if(Model.OrderStatus.Trim() == "Completed") {
+                                    <text>active</text>
+                                    }  text-center" id="step4">
+                                        <i class="fa-solid fa-check"></i>
+                                    </li>
+                                            <li class="step0 @if(Model.OrderStatus.Trim() == "Cancelled") {
+                                    <text>active</text>
+                                     }  text-end" id="step5">
+                                        <i class="fa-regular fa-star"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <div class="d-lg-flex">
+                                <div>   
+                                    <p class="mb-0">Đơn hàng đang chờ xác nhận</p>
+                                </div>
+                            </div>
+                            <div class="d-lg-flex">
+                                <div>
+                                    <p class="mb-0">Đơn hàng đã được xác nhận và trong giai đoạn xử lý</p>
+                                </div>
+                            </div>
+                            <div class="d-lg-flex">
+                                <div>
+                                    <p class="mb-0">Đơn hàng đang được thực hiện</p>
+                                </div>
+                            </div>
+                            <div class="d-lg-flex">
+                                <div>
+                                    <p class="mb-0">Đơn hàng đã hoàn thành</p>
+                                </div>
+                            </div>
+                            <div class="d-lg-flex">
+                                <div>
+                                    <p class="mb-0">Đánh giá</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </div>
+</body>
+<script src="~/js/map.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM"></script>
+<script>
+    function goBack() {
+        window.history.go(-1);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        updateConnectorWidth();
+    });
+
+    window.addEventListener("resize", function () {
+        updateConnectorWidth();
+    });
+
+    function updateConnectorWidth() {
+        var progressBar = document.getElementById("progressbar-2");
+        var steps = progressBar.getElementsByTagName("li");
+
+        for (var i = 0; i < steps.length - 1; i++) {
+            var connector = document.createElement("div");
+            connector.classList.add("connector");
+            steps[i].appendChild(connector);
+
+            var nextStepLeft = steps[i + 1].offsetLeft;
+            var currentStepRight = steps[i].offsetLeft + steps[i].offsetWidth;
+
+            var connectorWidth = nextStepLeft - currentStepRight;
+            connector.style.width = connectorWidth + "px";
+        }
+    }
+
+    updateConnectorWidth()
+</script>
+</html>
