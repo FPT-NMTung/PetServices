@@ -74,6 +74,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 if (proCateResponse.IsSuccessStatusCode)
                 {
                     var proCategories = await proCateResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
+                    proCategories = proCategories.Where(r => r.Status == true).ToList();
                     ViewBag.ProCategories = new SelectList(proCategories, "ProCategoriesId", "ProCategoriesName");
                 }
 
@@ -143,6 +144,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 if (proCateResponse.IsSuccessStatusCode)
                 {
                     var proCategories = await proCateResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
+                    proCategories = proCategories.Where(r => r.Status == true).ToList();
                     ViewBag.ProCategories = new SelectList(proCategories, "ProCategoriesId", "ProCategoriesName");
                 }
                 if (response.IsSuccessStatusCode)
