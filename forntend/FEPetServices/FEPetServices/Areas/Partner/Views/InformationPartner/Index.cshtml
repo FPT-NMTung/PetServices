@@ -90,13 +90,11 @@
                                         <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="@Model?.Email" disabled>
                                     </div>
 
-                                     <div class="row gx-3 mb-3">
-                                        <div class="col-md-6">
-                                            <label class="small mb-1" for="inputBanks">Tên ngân hàng</label>
-                                            <select class="form-control" id="bankDropdown" onchange="updateSelectedValue()">
-                                                <option value="" selected disabled>@Model?.PartnerInfo.CardName</option>
-                                            </select>
-                                        </div>
+                                     <div class="mb-3">
+                                        <label class="small mb-1" for="inputBanks">Tên ngân hàng</label>
+                                        <select class="form-control" id="bankDropdown" onchange="updateSelectedValue()">
+                                            <option value="" selected disabled>@Model?.PartnerInfo.CardName</option>
+                                        </select>
                                     </div>
 
                                      <div class="mb-3">
