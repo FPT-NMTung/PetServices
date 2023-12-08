@@ -69,7 +69,6 @@ namespace FEPetServices.Controllers
         public IActionResult Index()
         {
             var cartItems = GetCartItems();
-
             return View(cartItems); 
         }
 
