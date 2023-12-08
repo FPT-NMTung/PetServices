@@ -56,10 +56,11 @@
 
 .shop-submenu li {
     height: 36px;
+    width: max-content;
 }
 
 .shop-submenu ul {
-    max-height: 360px;
+    max-height: 369px;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: lightskyblue #888;
@@ -67,6 +68,7 @@
 
     .shop-submenu ul::-webkit-scrollbar {
         width: 9px;
+        height: 9px;
     }
 
     .shop-submenu ul::-webkit-scrollbar-track {
