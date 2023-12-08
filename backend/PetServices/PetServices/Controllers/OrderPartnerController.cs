@@ -195,6 +195,7 @@ namespace PetServices.Controllers
                     .Include(b => b.BookingServicesDetails)
                     .ThenInclude(bs => bs.Service)
                     .SingleOrDefaultAsync(b => b.OrderId == orderId);
+
                 foreach (var bookingDetail in order.BookingServicesDetails)
                 {
                     if (bookingDetail.StatusOrderService == "Processing")
