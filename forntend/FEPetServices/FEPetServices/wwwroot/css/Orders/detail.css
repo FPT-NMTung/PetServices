@@ -30,7 +30,6 @@
 .card-body {
     background-color: #fff;
     border-radius: 50px;
-    max-height: 90px;
 }
 
 ul {
@@ -54,7 +53,7 @@ ul {
     }
 
         #progressbar-2 li i {
-            font-size: 30px;
+            font-size: 28px;
             width: 52px;
             height: 52px;
             border-radius: 50%;
@@ -66,17 +65,24 @@ ul {
             #progressbar-2 li i.fa-receipt,
             #progressbar-2 li i.fa-check,
             #progressbar-2 li i.fa-truck,
+            #progressbar-2 li i.fa-download,
             #progressbar-2 li i.fa-star {
-                color: #333;
-                border: 2.5px solid #333;
+                color: rgba(0, 0, 0, 0.6);
+                border: 3.5px solid rgba(0, 0, 0, 0.6);
             }
 
         #progressbar-2 li.active i.fa-receipt,
         #progressbar-2 li.active i.fa-check,
         #progressbar-2 li.active i.fa-truck,
-        #progressbar-2 li.active i.fa-star {
+        #progressbar-2 li.active i.fa-download{
             color: #4caf50;
-            border: 2.5px solid #4caf50;
+            border: 3.5px solid #4caf50;
+        }
+
+        #progressbar-2 li.active i.fa-star {
+            color: #fff;
+            background-color: #4caf50;
+            border: 3.5px solid #4caf50;
         }
 
         #progressbar-2 li .icon-label-container {
@@ -91,8 +97,8 @@ ul {
 }
 
 #progressbar-2 li .connector {
-    height: 2.5px;
-    background-color: #333;
+    height: 3.5px;
+    background-color: rgba(0, 0, 0, 0.3);
     position: absolute;
     top: 50%;
     left: 100%;
@@ -110,24 +116,57 @@ ul {
     flex-direction: column;
 }
 
-/* Add this CSS to your stylesheet or in a style block */
-.d-flex.justify-content-between {
-    align-items: center; /* Vertical alignment in the flex container */
+@media (min-width: 992px) {
+    .d-lg-flex {
+        margin-right: 10px;
+    }
+}
+    
+.card-order-infomation {
+    position: relative;
+    margin-top:15px;
+    padding:0 20px;
 }
 
-.d-lg-flex {
-    flex: 1; /* Distribute available space equally among the child elements */
+    .card-order-infomation::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3.3px;
+        background: linear-gradient(90deg, #3498db, #e74c3c, #2ecc71, #f39c12, #9b59b6); 
+        animation: borderAnimation 3s infinite; 
+    }
+
+@keyframes borderAnimation {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: 100% 0%;
+    }
 }
 
-.d-flex.justify-content-between > div {
-    margin-right: 10px; /* Adjust the margin as needed */
+.card-order-infomation:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Optional: To make the text centered vertically */
-.d-flex.justify-content-between p {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0;
+.card-order-header {
+    padding-top: 10px;
 }
 
+    .card-order-header p{
+        margin-bottom: 0px;
+        font-size: 20px;
+    }
+    .card-order-detail {
+        padding: 15px 0;
+    }
+
+    .card-order-detail p {
+        margin: 0;
+        padding: 3px 0;
+    }
 

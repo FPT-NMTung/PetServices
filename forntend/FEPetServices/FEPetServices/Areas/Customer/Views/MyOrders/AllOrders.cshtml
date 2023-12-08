@@ -70,8 +70,9 @@
                                     double totalPrice = 0;
                                     <div class="work-container">
                                         <div class="work-container-inner">
-                                            <a class="detail-button" href="~/Customer/MyOrders/OrderDetail?id=@order.OrderId">Chi tiết</a>
-                                            <h5>Mã đơn hàng : @order.OrderId</h5>
+                                            <h5>Mã đơn hàng : @order.OrderId                                             
+                                                <a style="font-size:18px; text-decoration:none; font-weight:600" class="detail-button" href="~/Customer/MyOrders/OrderDetail?id=@order.OrderId"> Xem thêm</a>
+                                            </h5>
                                             @if (order.OrderStatus.Trim() == "Confirmed")
                                             {
                                                 <span style="display:inline-block" class="badge badge-info">Đơn hàng đã được xác nhận và trong giai đoạn xử lý </span>

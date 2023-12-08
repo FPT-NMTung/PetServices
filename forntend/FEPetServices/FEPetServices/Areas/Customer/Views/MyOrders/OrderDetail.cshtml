@@ -45,12 +45,12 @@
             </div>
         </div>
 
-        <section class="vh-25">
+        <section class="vh-25 p-1">
             <div class="container h-100">
                 <div class="row d-flex justify-content-center align-items-center h-100">
                     <div class="col-12">
                         <div class="card card-stepper text-black" style="border-radius: 16px;">
-                            <div class="card-body">
+                            <div class="card-body" style="max-height: 90px;">
                                 <ul id="progressbar-2" class="d-flex justify-content-between mx-0 mt-0 mb-5 px-0 pt-0 pb-2">
                                     <li class="step0 @if(Model.OrderStatus.Trim() == "Placed" || Model.OrderStatus.Trim() == "Processing"
                                         || Model.OrderStatus.Trim() == "Confirmed" || Model.OrderStatus.Trim() == "Completed"
@@ -73,15 +73,15 @@
                                             <li class="step0 @if(Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                     }  text-center" id="step4">
-                                        <i class="fa-solid fa-check"></i>
+                                        <i class="fa-solid fa-download"></i>
                                     </li>
-                                            <li class="step0 @if(Model.OrderStatus.Trim() == "Cancelled") {
+                                    <li class="step0 @if(Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                      }  text-end" id="step5">
                                         <i class="fa-regular fa-star"></i>
                                     </li>
                                 </ul>
-                            </div>
+                            </div>  
                         </div>
 
                         <div class="d-flex justify-content-between">
@@ -116,7 +116,218 @@
             </div>
         </section>
 
+        <div class="card-order-infomation">
+            <div class="card-order-header">
+                <p>Địa chỉ nhận hàng</p>
+            </div>
+            <div class="card-order-detail">
+                <p>@Model.FullName</p>  
+                <p style="color:rgba(0, 0, 0, 0.6)">@Model.Phone</p>
+                <p style="color:rgba(0, 0, 0, 0.6)">@Model.Province , @Model.District , @Model.Commune, @Model.Address</p>
+            </div>
+        </div>
 
+        <div class="card-body" style="background-color:rgba(0, 0, 0, 0.03); border-radius:0px">
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+
+                    @*Start - Product Detail*@
+                    @if (Model.OrderProductDetails != null && Model.OrderProductDetails.Count > 0)
+                    {
+                        <div class="content-details">
+                            <p class="bold-text">Thông tin sản phẩm đã được đặt hàng</p>
+                            @for (int i = 0; i < Model.OrderProductDetails.Count; i++)
+                            {
+                                var productDetail = Model.OrderProductDetails[i];
+                                <div class="content-detail">
+                                    <div class="product-info">
+                                        <img src="@productDetail.Product.Picture" width="50" height="50" alt="Product Image">
+                                        <div class="product-info-detail">
+                                            <p style="max-width:450px">@productDetail.Product.ProductName</p>
+                                            <p style="font-size:.8rem;"><span>x</span>@productDetail.Quantity</p>
+                                        </div>
+                                    </div>
+                                    <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
+                                </div>
+                                @if ((productDetail.FeedbackStatus == null || productDetail.FeedbackStatus == false) && productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                                {
+                                    <div class="btn-content-detail">
+                                        <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@Model.UserInfoId', '@Model.OrderId', '@productDetail.FeedbackStatus')">Đánh giá</button>
+                                    </div>
+                                }
+                                @if (i == Model.OrderProductDetails.Count - 1)
+                                {
+                                    <div class=" status-content-detail">
+                                        @if (productDetail?.StatusOrderProduct?.Trim() == "Placed")
+                                        {
+                                            <span class="badge badge-info">Sản phẩm đang chờ xác nhận</span>
+                                        }
+                                        else if (productDetail?.StatusOrderProduct?.Trim() == "Packaging")
+                                        {
+                                            <span class="badge badge-info">Đóng gói sản phẩm</span>
+                                        }
+                                        else if (productDetail?.StatusOrderProduct?.Trim() == "Shipped")
+                                        {
+                                            <span class="badge badge-info">Đơn hàng đang được vận chuyển</span>
+                                        }
+                                        else if (productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                                        {
+                                            <span class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
+                                        }
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                    @*End - Product Detail*@
+
+                    @*Start - Service Detail*@
+                    @if (Model.BookingServicesDetails != null && Model.BookingServicesDetails.Count > 0)
+                    {
+                        <div class="content-details">
+                            <p class="bold-text">Thông tin dịch vụ đã được đặt hàng</p>
+                            @foreach (var serviceDetail in Model.BookingServicesDetails)
+                            {
+                                <div class="content-detail">
+                                    <div class="service-info">
+                                        <img src="@serviceDetail.Service.Picture" width="50" height="50" alt="Service Image">
+                                        <div class="service-info-detail">
+                                            <p style="max-width:450px">@serviceDetail.Service.ServiceName</p>
+                                            <p style="font-size:.8rem;"><span>Cân nặng thú cưng: </span>@serviceDetail.Weight Kg</p>
+                                            <div style="display: flex ; justify-content:space-between">
+                                                <p style="font-size:.8rem; cursor: pointer; color:blue" class="map-button clickable"
+                                                   data-lat="@serviceDetail?.PartnerInfo?.Lat"
+                                                   data-lng="@serviceDetail?.PartnerInfo?.Lng"
+                                                   data-my-lat=""
+                                                   data-my-lng="">
+                                                    Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail?.PartnerInfoId
+                                                </p>
+                                                @{
+                                                    var partnerName = serviceDetail?.PartnerInfo?.FirstName + " " + serviceDetail?.PartnerInfo?.LastName + " - " + serviceDetail?.PartnerInfoId;
+
+                                                    if ((serviceDetail.FeedbackPartnerStatus == null || serviceDetail.FeedbackPartnerStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                                    {
+                                                        <div class="btn-content-detail">
+                                                            <button class="btn btn-outline-primary" onclick="openPopupPartner('@serviceDetail?.PartnerInfo.ImagePartner', '@partnerName', '@serviceDetail.PartnerInfo.PartnerInfoId', '@serviceDetail.ServiceId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="content-detail-time-service">
+                                        <p style="font-size:.8rem;">Thời gian bắt đầu: @serviceDetail?.StartTime</p>
+                                        <p style="font-size:.8rem;">Thời gian kêt thúc: @serviceDetail?.EndTime</p>
+                                    </div>
+                                    <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
+                                </div>
+                                <div class="status-content-detail">
+                                    @if (@serviceDetail?.StatusOrderService.Trim() == "Placed")
+                                    {
+                                        <span class="badge badge-info">Dịch vụ đang chờ xác nhận</span>
+                                    }
+                                    else if (@serviceDetail?.StatusOrderService?.Trim() == "Waiting")
+                                    {
+                                        <span class="badge badge-info">Dịch vụ đang chờ xử lý </span>
+                                    }
+                                    else if (@serviceDetail?.StatusOrderService?.Trim() == "Received")
+                                    {
+                                        <span class="badge badge-info">Dịch vụ được nhận bởi nhân viên</span>
+                                    }
+                                    else if (@serviceDetail?.StatusOrderService?.Trim() == "Processing")
+                                    {
+                                        <span class="badge badge-info">Đang trong quá trình thực hiện</span>
+                                    }
+                                    else if (@serviceDetail?.StatusOrderService?.Trim() == "Rejected")
+                                    {
+                                        <span class="badge badge-info">Bị huỷ bởi nhân viên bạn chọn</span>
+                                    }
+                                    else if (@serviceDetail?.StatusOrderService?.Trim() == "ReceivedDifficult")
+                                    {
+                                        <span class="badge badge-info">Dịch vụ được nhận bởi nhân viên khác</span>
+                                    }
+                                    else if (@serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                    {
+                                        <span class="badge badge-info">Dịch vụ đã hoàn thành</span>
+                                    }
+                                    else if (@serviceDetail?.StatusOrderService?.Trim() == "Cancelled")
+                                    {
+                                        <span class="badge badge-info">Dịch vụ bị huỷ</span>
+                                    }
+                                </div>
+                                @if ((serviceDetail.FeedbackStatus == null || serviceDetail.FeedbackStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                {
+                                    <div class="btn-content-detail">
+                                        <button class="btn btn-outline-primary" onclick="openPopupService('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                    @*End - Service Detail*@
+
+                    @*Start - Room Detail*@
+                    @if (Model.BookingRoomDetails != null && Model.BookingRoomDetails.Count > 0)
+                    {
+                        <div class="content-details">
+                            <p class="bold-text">Thông tin phòng đã được đặt hàng</p>
+                            @foreach (var roomDetail in Model.BookingRoomDetails)
+                            {
+                                <div class="content-detail">
+                                    <div class="room-info">
+                                        <img src="@roomDetail.Room.Picture" width="50" height="50" alt="Room Image">
+                                        <div class="room-info-detail">
+                                            <p style="max-width:800px">@roomDetail.Room.RoomName</p>
+                                            @foreach (var roomService in Model.BookingRoomServices)
+                                            {
+                                                <div class="room-info-detail-service">
+                                                    <p style="font-size:.8rem;">Dịch vụ: @roomService.Service.ServiceName</p>
+                                                    <p class="price-service-rooom" style="font-size:.8rem;">@($"{(roomService.PriceService):n0}".Replace(",", ".")) VNĐ</p>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="content-detail-time">
+                                    <p style="font-size:.9rem;">Thời gian bắt đầu: @roomDetail.StartDate</p>
+                                    <p style="font-size:.9rem;">Thời gian kêt thúc: @roomDetail.EndDate</p>
+                                </div>
+                                @if (roomDetail.FeedbackStatus == null || roomDetail.FeedbackStatus == false)
+                                {
+                                    <div class="btn-content-detail">
+                                        <button class="btn btn-outline-primary" onclick="openPopupRoom('@roomDetail.Room.Picture', '@roomDetail.Room.RoomName', '@roomDetail.RoomId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                    @*End - Room Detail*@
+
+                    <div class="headel-content">
+                        <p>Tổng giá : </p>
+                        <p>@(Model.TotalPrice.ToString("n0").Replace(",", ".")) VNĐ</p>
+                    </div>
+                    <div class="work-container-inner">
+                        @if (Model != null && Model.TypePay != null && Model.TypePay.Trim() == "cash")
+                        {
+                            <p>Thanh toán trực tiếp</p>
+                        }
+                        @if (Model != null && Model.TypePay != null && @Model.TypePay.Trim() == "vnpay")
+                        {
+                            <p>Thanh toán bằng hình thức chuyển khoản</p>
+                        }
+                        @if (!@Model.StatusPayment)
+                        {
+                            <span class="badge badge-info">Chưa thanh toán</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-info">Đã thanh toán</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 <script src="~/js/map.js"></script>
