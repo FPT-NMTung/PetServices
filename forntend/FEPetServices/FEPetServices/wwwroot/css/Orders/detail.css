@@ -36,6 +36,9 @@ ul {
     margin-bottom: 5px;
 }
 
+.card.card-stepper{
+    margin-top:15px;
+}
 #progressbar-2 {
     list-style: none;
     padding: 0;
@@ -67,8 +70,8 @@ ul {
             #progressbar-2 li i.fa-truck,
             #progressbar-2 li i.fa-download,
             #progressbar-2 li i.fa-star {
-                color: rgba(0, 0, 0, 0.6);
-                border: 3.5px solid rgba(0, 0, 0, 0.6);
+                color: rgba(0, 0, 0, 0.5);
+                border: 3.5px solid rgba(0, 0, 0, 0.5);
             }
 
         #progressbar-2 li.active i.fa-receipt,
@@ -98,7 +101,7 @@ ul {
 
 #progressbar-2 li .connector {
     height: 3.5px;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.5);
     position: absolute;
     top: 50%;
     left: 100%;
@@ -159,7 +162,7 @@ ul {
 
     .card-order-header p{
         margin-bottom: 0px;
-        font-size: 20px;
+        font-size: 18px;
     }
     .card-order-detail {
         padding: 15px 0;
@@ -169,4 +172,62 @@ ul {
         margin: 0;
         padding: 3px 0;
     }
+
+.card-body.cancelled-order {
+    margin: 15px 0 0 0;
+    background-color: #ffeace;
+    color: #ff0202b0;
+    font-weight: 700;
+    font-size: 18px;
+}
+.cancelled-order {
+    display: flex;
+    align-content: center;
+}
+.card-body.cancelled-order p {
+    margin: 0px;
+}
+
+
+.card-body.cancelled-order-footer {
+    border-radius: 0px;
+}
+.reason-order-content {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+@media (max-width: 991px) {
+    .d-lg-flex {
+        margin: 0;
+        display:none;
+    }
+
+    .card-order-infomation::before {
+        height: 1.5px; 
+    }
+
+    .card-order-header p {
+        font-size: 18px; 
+    }
+
+    .card-order-detail {
+        padding: 10px 0; 
+    }
+}
+
+@media (max-width: 767px) {
+    .card-order-infomation::before {
+        height: 1px; 
+    }
+
+    .card-order-header p {
+        font-size: 16px;
+    }
+
+    .card-order-detail {
+        padding: 5px 0; 
+    }
+}
 
