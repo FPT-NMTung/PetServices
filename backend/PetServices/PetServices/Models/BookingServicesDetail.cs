@@ -11,7 +11,7 @@ namespace PetServices.Models
         public double? Weight { get; set; }
         public double? PriceService { get; set; }
         public int? PetInfoId { get; set; }
-        public int? PartnerInfoIdf { get; set; }
+        public int? PartnerInfoId { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public bool? FeedbackPartnerStatus { get; set; }
