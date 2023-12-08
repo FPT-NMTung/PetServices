@@ -238,6 +238,19 @@ namespace PetServices.Controllers
             }
         }
 
+        [HttpGet("GetAllServiceWhenCategoryTrue")]
+        public IActionResult GetServceWhenCategoryTrue()
+        {
+            // Filter services based on the status of their associated service categories
+            List<Service> services = _context.Services
+                .Include(s => s.SerCategories)
+                .Where(s => s.SerCategories.Status == true) // Filter based on service category status
+                .ToList();
+
+            return Ok(_mapper.Map<List<ServiceDTO>>(services));
+        }
+
+
         [HttpDelete]
         public IActionResult DeleteServce(int serviceId)
         {
