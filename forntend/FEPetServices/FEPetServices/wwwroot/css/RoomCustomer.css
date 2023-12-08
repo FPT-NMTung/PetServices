@@ -53,3 +53,32 @@
 .ui-slider-range.ui-widget-header.ui-corner-all {
     background: #4454fc none repeat scroll 0 0;
 }
+
+.shop-submenu li {
+    height: 36px;
+}
+
+.shop-submenu ul {
+    max-height: 360px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: lightskyblue #888;
+}
+
+    .shop-submenu ul::-webkit-scrollbar {
+        width: 9px;
+    }
+
+    .shop-submenu ul::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .shop-submenu ul::-webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 10px;
+    }
+
+        .shop-submenu ul::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+        }
