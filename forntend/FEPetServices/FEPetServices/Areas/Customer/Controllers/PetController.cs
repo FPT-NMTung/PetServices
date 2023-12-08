@@ -71,7 +71,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         TempData["SuccessToast"] = "Thêm thông tin thú cưng thành công!";
-                        return View(petInfo);
+                        return  RedirectToAction("/MenuCustomer/PetInfo");
                     }
                     else
                     {

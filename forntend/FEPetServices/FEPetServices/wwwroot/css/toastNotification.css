@@ -1,4 +1,5 @@
-﻿.toast {
+﻿/* General Styles */
+.toast {
     display: flex;
     max-width: 420px;
     width: 420px;
@@ -7,9 +8,10 @@
     background-color: white;
     border-radius: 16px;
     border-left: 6px solid;
-    box-shadow: 0 5px 12px rgba(0,0,0,0.8);
-    padding: 5px 0;
-    transition: all linear 3s;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    padding-bottom:8px;
+    transition: all linear 0.3s;
 }
 
 #toast {
@@ -19,10 +21,11 @@
     z-index: 9999;
 }
 
+/* Animation Keyframes */
 @keyframes slideInLeft {
     from {
         opacity: 0;
-        transform: translateX(calc(100% + 20px));
+        transform: translateX(100%);
     }
 
     to {
@@ -34,55 +37,63 @@
 @keyframes fadeOut {
     to {
         opacity: 0;
+        transform: translateX(100%);
     }
 }
 
+
+/* Spacing between toasts */
 .toast + .toast {
-    margin-top: 25px;
+    margin-top: 15px;
 }
 
+/* Icon and Body */
 .toast_icon {
     font-size: 30px;
 }
 
 .toast_body {
     flex-grow: 1;
+    margin-left: 15px; /* Add some spacing between icon and text */
 }
 
+/* Title and Message */
 .toast_title {
     font-size: 18px;
     color: #333;
     font-weight: 600;
-    padding-top: 5px;
+    margin-bottom: 5px;
 }
 
 .toast_msg {
     font-size: 16px;
     color: #888;
-    margin-top: 4px;
 }
 
-.toast_close, .toast_icon {
-    padding: 0 20px;
+/* Close Button and Icon */
+.toast_close,
+.toast_icon {
+    padding: 0 15px;
 }
 
 .toast_close {
     font-size: 25px;
-    color: rgba(0,0,0,0.3);
+    color: rgba(0, 0, 0, 0.3);
     cursor: pointer;
 }
 
+/* Toast States */
 .toast:not(.showing):not(.show) {
     opacity: 1;
 }
 
 .toast:not(.show) {
-     display: flex; 
+    display: flex;
 }
 
+/* Toast Types */
 .toast--success {
     border-color: #47d864;
-    opacity: 1;
 }
 
     .toast--success .toast_icon {
@@ -91,7 +102,6 @@
 
 .toast--error {
     border-color: #ff623d;
-    opacity: 1;
 }
 
     .toast--error .toast_icon {
@@ -107,7 +117,8 @@
         color: #ffd43b;
     }
 
-h3{
-    padding-bottom:12px;
-    margin-bottom:0px;
+/* Heading Styles */
+h3 {
+    padding-bottom: 10px;
+    margin-bottom: 0;
 }

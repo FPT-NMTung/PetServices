@@ -15,11 +15,6 @@
         background-color: #5cb85c;
     }
 
-.fa-solid {
-    font-size: 40px;
-    color: #fff;
-}
-
 a.axil-btn.btn-bg-secondary.success:before, button.axil-btn.btn-bg-secondary.success:before {
     background-color: #5cb85c;
 }

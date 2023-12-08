@@ -79,13 +79,16 @@
                                         <h6 class="title">Số lượng:</h6>
                                         <div class="pro-qty mr--20">
                                             <input 
-                                                   id="quantityInput"
-                                                   class="form-control"
-                                                   type="number"
-                                                   value="1"
-                                                   min="1"
-                                                   oninput="validity.valid||(value='1');" />
+                                                id="quantityInput"
+                                                class="form-control"
+                                                type="number"
+                                                value="1"
+                                                min="1"
+                                                oninput="validateQuantity()"
+                                            />
+                                            <span id="quantityError" style="color: red; display: none;">Số lượng phải lớn hơn hoặc bằng 1</span>
                                         </div>
+
                                         <span>@Model.Product.Quantity sản phẩm có sẵn</span>
                                     </div>
                                     <div class="product-action-wrapper d-flex-center">
@@ -274,7 +277,7 @@
                         <div class="axil-product">
                             <div class="thumbnail">
                                 <a href="/ProductList/Detail?proId=@product.ProductId">
-                                    <img src="@product.Picture" alt="Product Images">
+                                    <img src="@product.Picture" alt="Product Images">   
                                 </a>
                                 <div class="product-hover-action">
                                     <ul class="cart-action">
@@ -285,8 +288,6 @@
                                                     <i class="fas fa-cart-plus"></i>Mua ngay
                                                 </button>
                                             </form>
-                                       @* <li class="select-option"><a href="cart.html">Add to Cart</a></li>*@
-                                        @*<li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>*@
                                     </ul>
                                 </div>
                             </div>
@@ -379,7 +380,11 @@
                 });
             });
         });
+        
+
+
     </script>
+
 
     <script src="~/assets/js/vendor/modernizr.min.js"></script>
     <!-- jQuery JS -->

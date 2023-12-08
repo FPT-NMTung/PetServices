@@ -103,7 +103,7 @@
                                             </select>
                                         }
                                     </div>
-                                    <div class="product-variations-wrapper">
+@*                                    <div class="product-variations-wrapper">
                                         <div class="product-variation product-size-variation" style="display:block;">
                                             <div class="title" style="font-family: serif; font-size: 15px;">Dịch vụ:</div>
                                             <div class="range-variant" style="font-family: serif">
@@ -125,7 +125,7 @@
 
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>*@
 
                                     <div style="margin-top:5px">
                                         <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ bắt đầu:</p>
@@ -133,7 +133,7 @@
                                     </div>
                                     <div style="margin-top:5px ">
                                         <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ kết thúc:</p>
-                                        <input id="datetimeEnd" type="text" placeholder="Thời gian kết thúc" style="border:2px solid black" required>
+                                        <input id="datetimeEnd" type="text" placeholder="Thời gian kết thúc" style="border:2px solid black" disabled required>
                                     </div>
 
                                     <div style="margin-top: 5px; margin-bottom: 10px;">
@@ -334,20 +334,20 @@
                         <h2 class="title">Các dịch vụ bạn có thể tham khảo</h2>
                     </div>
                     <div class="recent-product-activation slick-layout-wrapper--15 axil-slick-arrow arrow-top-slide">
-                        @foreach (var sc in Model.CaServices)
+                        @foreach (var sc in Model.ListServices)
                             @if (sc.Status)
                             {
                                 {
                                     <div class="slick-single-layout">
                                         <div class="axil-product">
                                             <div class="thumbnail">
-                                                <a href="~/Home/ServiceDetail?serviceCategoryId=@sc.SerCategoriesId">
+                                                <a href="/Home/ServiceDetail?serviceCategoryId=@sc.SerCategoriesId&serviceIds=@sc.ServiceId">
                                                     <img style="width:300px;height:170px;" src="@sc.Picture" alt="Product Images">
                                                 </a>
                                             </div>
                                             <div class="product-content">
                                                 <div class="inner">
-                                                    <h5 class="title"><a href="~/Home/ServiceDetail?serviceCategoryId=@sc.SerCategoriesId">@sc.SerCategoriesName</a></h5>
+                                                    <h5 class="title"><a href="/Home/ServiceDetail?serviceCategoryId=@sc.SerCategoriesId&serviceIds=@sc.ServiceId">@sc.SerCategoriesName</a></h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -379,7 +379,7 @@
             var petWeight = document.getElementById('petWeight').value;
 
             if (datetimeStart === '' || datetimeEnd === '' || petWeight === '') {
-                alert('Vui lòng điền đầy đủ thông tin.');
+                showErrorToastCheckInput();
                 return false; // Prevent form submission if information is not filled out completely
             }
             // If information is filled out completely, allow form submission
