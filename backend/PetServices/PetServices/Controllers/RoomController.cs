@@ -98,6 +98,17 @@ namespace PetServices.Controllers
 
             return Ok(_mapper.Map<List<RoomCategoryDTO>>(roomCategory));
         }
+        [HttpGet("GetAllRoomWhenCategoryTrue")]
+        public IActionResult GetRoomWhenCategoryTrue()
+        {
+            // Filter services based on the status of their associated service categories
+            List<Room> room = _context.Rooms
+                .Include(s => s.RoomCategories)
+                .Where(s => s.RoomCategories.Status == true) // Filter based on service category status
+                .ToList();
+
+            return Ok(_mapper.Map<List<RoomDTO>>(room));
+        }
 
         [HttpGet("GetAllService")]
         public async Task<ActionResult> GetAllService()

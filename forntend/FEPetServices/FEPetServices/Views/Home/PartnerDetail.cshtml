@@ -206,12 +206,12 @@
                                 {
                                 <div class="content-blog post-list-view mb--20">
                                     <div class="thumbnail">
-                                        <a href="~/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId">
+                                        <a href="~/Home/Service?sevicecategory=@service.SerCategoriesId">
                                             <img src="@service.Picture" alt="Blog Images">
                                         </a>
                                     </div>
                                     <div class="content">
-                                        <h6 class="title"><a href="~/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId">@service.SerCategoriesName</a></h6>
+                                        <h6 class="title"><a href="~/Home/Service?sevicecategory=@service.SerCategoriesId">@service.SerCategoriesName</a></h6>
                                     </div>
                                 </div>
                                 }
@@ -257,7 +257,7 @@
         <div class="related-blog-area bg-color-white pb--60 pb_sm--40">
             <div class="container">
                 <div class="section-title-wrapper mb--70 mb_sm--40 pr--110">
-                    <span class="title-highlighter highlighter-primary mb--10"> <i class="fal fa-bell"></i>Các hướng dẫn khác bạn có thể tham khảo</span>
+                    <span class="title-highlighter highlighter-primary mb--10"> <i class="fal fa-bell"></i>Các nhân viên khác bạn có thể tham khảo</span>
                 </div>
                 <div class="related-blog-activation slick-layout-wrapper--15 axil-slick-arrow  arrow-top-slide">
                     @foreach (var partner in Model.partner)
@@ -269,7 +269,7 @@
                                     <!-- Start Single Thumb  -->
                                     <div class="thumbnail">
                                         <a href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId">
-                                            <img src="@partner?.ImagePartner" alt="Blog Images" style="height:300px; width:300px;">
+                                            <img src="@partner?.ImagePartner" style="height:300px; width:300px;">
                                         </a>
                                     </div>
                                     <!-- End Single Thumb  -->

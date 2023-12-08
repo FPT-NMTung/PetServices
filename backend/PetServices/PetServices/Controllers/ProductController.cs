@@ -44,6 +44,19 @@ namespace PetServices.Controllers
 
             return Ok(productlist);
         }
+
+        [HttpGet("GetAllProductWhenCategoryTrue")]
+        public IActionResult GetProductWhenCategoryTrue()
+        {
+            // Filter services based on the status of their associated service categories
+            List<Product> product = _context.Products
+                .Include(s => s.ProCategories)
+                .Where(s => s.ProCategories.Status == true) // Filter based on service category status
+                .ToList();
+
+            return Ok(_mapper.Map<List<ProductDTO>>(product));
+        }
+
         [HttpGet("ProductID/{id}")]
         public IActionResult GetById(int id)
         {
