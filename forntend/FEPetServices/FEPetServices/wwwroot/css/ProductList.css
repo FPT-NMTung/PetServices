@@ -39,4 +39,24 @@
                 color: whitesmoke;
             }
 
+.out-of-stock-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 0, 0, 0.5);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .out-of-stock-overlay::before {
+        content: 'Hết hàng';
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
 

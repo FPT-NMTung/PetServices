@@ -98,5 +98,27 @@ namespace FEPetServices.Areas.Customer.Controllers
 
         [HttpGet]
         public Task<IActionResult> CancelledOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+
+        [HttpGet]
+        public async Task<IActionResult> OrderDetail(int id)
+        {
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                OrderForm orderDetail = System.Text.Json.JsonSerializer.Deserialize<OrderForm>(responseContent, options);
+                return View(orderDetail);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
     }
 }
