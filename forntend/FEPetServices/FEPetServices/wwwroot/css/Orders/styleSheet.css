@@ -241,6 +241,7 @@ content-detail-time-service {
     border: 1px solid #ccc;
 }
 /* Responsive Styles */
+
 @media (max-width: 768px) {
     .timeline-icon {
         top: 10px;

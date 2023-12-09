@@ -86,6 +86,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 if (categoryResponse.IsSuccessStatusCode)
                 {
                     var categories = await categoryResponse.Content.ReadFromJsonAsync<List<ServiceCategoryDTO>>();
+                    categories = categories.Where(r => r.Status == true).ToList();
                     ViewBag.Categories = new SelectList(categories, "SerCategoriesId", "SerCategoriesName");
                 }
 
@@ -151,6 +152,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 if (categoryResponse.IsSuccessStatusCode)
                 {
                     var categories = await categoryResponse.Content.ReadFromJsonAsync<List<ServiceCategoryDTO>>();
+                    categories = categories.Where(r => r.Status == true).ToList();
                     ViewBag.Categories = new SelectList(categories, "SerCategoriesId", "SerCategoriesName");
                 }
                 //goi api de lay thong tin can sua

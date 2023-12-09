@@ -27,6 +27,7 @@
     <Folder Include="wwwroot\img\banner\" />
     <Folder Include="wwwroot\img\about\" />
     <Folder Include="wwwroot\img\Auth\" />
+    <Folder Include="wwwroot\img\Certificate\" />
     <Folder Include="wwwroot\img\Pet\" />
     <Folder Include="wwwroot\img\Profile\" />
     <Folder Include="wwwroot\img\RoomCategory\" />
