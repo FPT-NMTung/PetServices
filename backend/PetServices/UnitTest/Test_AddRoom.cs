@@ -308,6 +308,90 @@ namespace UnitTest
                 Assert.Equal(400, result.StatusCode);
                 Assert.Equal("Loại phòng không tồn tại!", result.Value);
             }
-        }       
+        }
+
+        [Fact]
+        // 8. Slot = 0
+        public async Task Test_AddRoom_Slotzero()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var roomCategory = new RoomCategory
+                {
+                    RoomCategoriesId = 1
+                };
+
+                context.RoomCategories.Add(roomCategory);
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new RoomController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var testAddRoom = new RoomDTO
+                {
+                    RoomName = "Phòng cho Chó",
+                    Desciptions = "Phòng dành cho những chú chó đáng yêu",
+                    Picture = "https://s.net.vn/NsSG",
+                    Price = 10000,
+                    RoomCategoriesId = 1,
+                    Slot = 0,
+                    ServiceIds = new List<int>()
+                };
+
+                var result = await controller.AddRoom(testAddRoom) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Equal("Số lượng Slot phải lớn hơn 0!", result.Value);
+            }
+        }
+
+        [Fact]
+        // 9. Price = 0
+        public async Task Test_AddRoom_Pricezero()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var roomCategory = new RoomCategory
+                {
+                    RoomCategoriesId = 1
+                };
+
+                context.RoomCategories.Add(roomCategory);
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new RoomController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var testAddRoom = new RoomDTO
+                {
+                    RoomName = "Phòng cho Chó",
+                    Desciptions = "Phòng dành cho những chú chó đáng yêu",
+                    Picture = "https://s.net.vn/NsSG",
+                    Price = 0,
+                    RoomCategoriesId = 1,
+                    Slot = 3,
+                    ServiceIds = new List<int>()
+                };
+
+                var result = await controller.AddRoom(testAddRoom) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Equal("Giá phải lớn hơn 0!", result.Value);
+            }
+        }
     }
 }
