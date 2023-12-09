@@ -127,6 +127,12 @@ namespace FEPetServices.Controllers
                 // Lấy thông tin CartItems từ Session
                 List<CartItem> cartItems = GetCartItems();
 
+                if(cartItems.Count() == 0)
+                {
+                    TempData["ErrorToast"] = "Giỏ hàng không tồn tại";
+                    return RedirectToAction("Index", "Checkout");
+                }
+
                 foreach (var cartItem in cartItems)
                 {
                     if (cartItem.product != null)
