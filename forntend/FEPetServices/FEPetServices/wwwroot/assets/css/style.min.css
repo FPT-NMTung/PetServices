@@ -7084,15 +7084,29 @@ a.axil-btn.btn-size-md, button.axil-btn.btn-size-md {
     display: block
 }
 
+    .header-brand a img {
+        width: 240px;
+        height: 80px;
+    }
+
 @media only screen and (max-width: 991px) {
     .header-brand a img {
-        max-height: 35px
+        width: 180px;
+        height: 60px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .header-brand a img {
+        width: 150px;
+        height: 50px;
     }
 }
 
 @media only screen and (max-width: 320px) {
     .header-brand a img {
-        max-height: 30px
+        width: 130px;
+        height: 45px;
     }
 }
 

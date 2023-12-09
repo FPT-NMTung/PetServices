@@ -62,8 +62,8 @@ namespace FEPetServices.Controllers
                 var json = JsonConvert.SerializeObject(roomDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                //HttpResponseMessage response = await client.GetAsync(ApiUrlRoomList);
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Room/GetAllRoomCustomer");
+                //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Room/GetAllRoomWhenCategoryTrue");
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Room/GetAllRoomWhenCategoryTrue");
                 if (response.IsSuccessStatusCode)
                 {
                     //HttpResponseMessage roomCategoryResponse = await client.GetAsync(ApiUrlRoomCategoryList);
@@ -432,8 +432,8 @@ namespace FEPetServices.Controllers
                 //HttpResponseMessage responseCategoryProduct = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll");
                 HttpResponseMessage responseCategoryProduct = await client.GetAsync(DefaultApiUrl + "ProductCategory/GetAll");
 
-                //HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
-                HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
+                //HttpResponseMessage responseProduct = await client.GetAsync("https://localhost:7255/api/Product/GetAllProductWhenCategoryTrue");
+                HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrl + "Product/GetAllProductWhenCategoryTrue");
                 if (responseProduct.IsSuccessStatusCode && responseCategoryProduct.IsSuccessStatusCode)
                 {
                     //HttpResponseMessage responseCategory = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
@@ -449,19 +449,23 @@ namespace FEPetServices.Controllers
                             if (!string.IsNullOrEmpty(responseRoomCategoryContent))
                             {
                                 homeModel.ListRoomCategory = JsonConvert.DeserializeObject<List<RoomCategoryDTO>>(responseRoomCategoryContent);
+                                homeModel.ListRoomCategory = homeModel.ListRoomCategory.Where(r => r.Status == true).ToList();
                             }
                         }
                         var responseCategoryContent = await responseCategory.Content.ReadAsStringAsync();
+
                         var responseCategoryProductContent = await responseCategoryProduct.Content.ReadAsStringAsync();
 
 
                         if (!string.IsNullOrEmpty(responseCategoryContent))
                         {
                             homeModel.ListServiceCategory = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
+                            homeModel.ListServiceCategory = homeModel.ListServiceCategory.Where(r => r.Status == true).ToList();
                         }
                         if (!string.IsNullOrEmpty(responseCategoryProductContent))
                         {
                             homeModel.ListProductCategories = JsonConvert.DeserializeObject<List<ProductCategoryDTO>>(responseCategoryProductContent);
+                            homeModel.ListProductCategories = homeModel.ListProductCategories.Where(r => r.Status == true).ToList();
                         }
 
                     }
@@ -469,7 +473,7 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(rep))
                     {
                         homeModel.ListProductTop8 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
-
+                        homeModel.ListProductTop8 = homeModel.ListProductTop8.Where(r => r.Status == true).ToList();
                         int currentPage = 1;
                         int pageSize = 8;
 
@@ -515,13 +519,14 @@ namespace FEPetServices.Controllers
             {
                 var json = JsonConvert.SerializeObject(serviceDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Service/GetAllService");
+                //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Service/GetAllServiceWhenCategoryTrue");
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Service/GetAllServiceWhenCategoryTrue");
                 //HttpResponseMessage ProductCategoryResponse = await client.GetAsync(DefaultApiUrlProductCategoryList);
                 HttpResponseMessage SerCategoryResponse = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
                 if (SerCategoryResponse.IsSuccessStatusCode)
                 {
                     var categories = await SerCategoryResponse.Content.ReadFromJsonAsync<List<ServiceCategoryDTO>>();
+                    categories = categories.Where(r => r.Status == true).ToList();
                     ViewBag.categories = new SelectList(categories, "SerCategoriesId", "SerCategoriesName");
                 }
                 if (response.IsSuccessStatusCode)
@@ -613,6 +618,9 @@ namespace FEPetServices.Controllers
             }
             return View();
         }
+
+
+
 
         public async Task<IActionResult> ServiceDetail(int serviceCategoryId, int serviceIds, string sortby, int? page)
         {

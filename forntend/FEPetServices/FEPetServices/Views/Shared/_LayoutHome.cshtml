@@ -80,11 +80,8 @@
             <div class="container">
                 <div class="header-navbar">
                     <div class="header-brand">
-                        <a href="/Home" class="logo logo-dark">
-                            <img style="width: 138px;height: 100%;" src="~/img/icon/logo-2.png" >
-                        </a>
-                        <a href="/Home" class="logo logo-light">
-                            <img style="width: 138px;height: 100%;" src="~/img/icon/logo-2.png">
+                        <a href="/Home" class="logo">
+                            <img src="~/img/icon/logo-2.png" >
                         </a>
                     </div>
                     <div class="header-main-nav">
@@ -144,7 +141,7 @@
                                                     <a href="~/Customer/MenuCustomer/Information">Thông tin cá nhân</a>
                                                 </li>
                                                 <li>
-                                                    <a href="~/Customer/MenuCustomer/ChangePasssword">Đổi mật khẩu</a>
+                                                    <a href="~/Customer/MenuCustomer/ChangePassword">Đổi mật khẩu</a>
                                                 </li>
                                                 <li>
                                                     <a href="~/Logout/Index" style="border-bottom : none!important">Đăng xuất  @RenderSection("Logout", required: false)</a>
@@ -511,6 +508,17 @@
             toast({
                 title: 'Thất bại',
                 message: 'Vui lòng điền đầy đủ thông tin.',
+                type: 'wating',
+                duration: 2000
+            });
+        }
+    @*End - Base ViewBag*@
+    @*-------------------------------------------------------*@
+    @*Start - Base ViewBag*@
+        function showErrorToastInvalidTimeRoom() {
+            toast({
+                title: 'Thất bại',
+                message: 'Đặt phòng thất bại, vui lòng kiểm tra lại ngày đặt phòng.',
                 type: 'wating',
                 duration: 2000
             });
