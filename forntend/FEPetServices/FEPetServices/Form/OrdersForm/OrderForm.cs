@@ -16,7 +16,7 @@ namespace FEPetServices.Form.OrdersForm
         public string? FullName { get; set; }
         public int? UserInfoId { get; set; }
         public bool? StatusPayment { get; set; }
-        public int? ReasonId { get; set; }
+        public int? ReasonId { get; set; }  
         public double? TotalPrice { get; set; }
        // public int? ReasonId { get; set; }
 

@@ -1,5 +1,18 @@
 ﻿﻿<!doctype html>
 <html class="no-js" lang="en">
+    <head>
+    <meta property="og:url" content="https://pet-service.azurewebsites.net/home/BlogDetail?blogId=@Model.BlogDetail.BlogId" />
+    <meta property="og:type" content="Pet Service" />
+    <meta property="og:title" content="@Model.BlogDetail.Heading" />
+    <meta property="og:description" content="@Model.BlogDetail.Description" />
+    <meta property="og:image" content="https://pet-service.azurewebsites.net@Model.BlogDetail.ImageUrl" />
+
+    <!-- Thẻ meta Twitter Card cho Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@Model.BlogDetail.Heading">
+    <meta name="twitter:description" content="@Model.BlogDetail.Description">
+    <meta name="twitter:image" content="https://pet-service.azurewebsites.net@Model.BlogDetail.ImageUrl">
+    </head>
 <body class="sticky-header overflow-md-visible">
     <!-- End Header -->
 
@@ -11,7 +24,7 @@
                     <div class="content-block">
                         <div class="inner">
                             <div class="post-thumbnail">
-                                <img style="width: 1300px; height: 600px;" src="@Model.BlogDetail.ImageUrl" alt="blog Images">
+                                <img class="pinterest-img" style="width: 1300px; height: 600px;" src="@Model.BlogDetail.ImageUrl" alt="blog Images">
                             </div>
                             <!-- End .thumbnail -->
                         </div>
@@ -29,18 +42,22 @@
                                     <div class="post-details__social-share">
                                         <span class="share-on-text">Share on:</span>
                                         <div class="social-share">
-                                            <a href="#" class="share-button" data-network="facebook"><i class="fab fa-facebook-f"></i></a>
-                                            <a href="#" class="share-button" data-network="instagram"><i class="fab fa-instagram"></i></a>
-                                            <a href="#" class="share-button" data-network="twitter"><i class="fab fa-twitter"></i></a>
-                                            <a href="#" class="share-button" data-network="linkedin"><i class="fab fa-linkedin-in"></i></a>
-                                            <a href="#" class="share-button" data-network="discord"><i class="fab fa-discord"></i></a>
+                                            <a class="st_facebook" 
+                                                st_url="https://pet-service.azurewebsites.net/home/BlogDetail?blogId=@Model.BlogDetail.BlogId"
+                                                st_title="@Model.BlogDetail.Heading"
+                                                st_image="https://pet-service.azurewebsites.net@Model.BlogDetail.ImageUrl">
+                                            </a>
+                                            <span class="st_twitter" 
+                                                st_url="https://pet-service.azurewebsites.net/home/BlogDetail?blogId=@Model.BlogDetail.BlogId"
+                                                st_title="@Model.BlogDetail.Heading"
+                                                st_image="https://pet-service.azurewebsites.net@Model.BlogDetail.ImageUrl">
+                                            </span>
+                                            <span class="st_linkedin" 
+                                                st_url="https://pet-service.azurewebsites.net/home/BlogDetail?blogId=@Model.BlogDetail.BlogId"
+                                                st_title="@Model.BlogDetail.Heading"
+                                                st_image="https://pet-service.azurewebsites.net@Model.BlogDetail.ImageUrl">
+                                            </span>
                                         </div>
-                                        <!-- Thêm thẻ a cho mỗi mạng xã hội -->
-                                        <a href="#" class="share-link" data-network="facebook" target="_blank"></a>
-                                        <a href="#" class="share-link" data-network="instagram" target="_blank"></a>
-                                        <a href="#" class="share-link" data-network="twitter" target="_blank"></a>
-                                        <a href="#" class="share-link" data-network="linkedin" target="_blank"></a>
-                                        <a href="#" class="share-link" data-network="discord" target="_blank"></a>
 
                                     </div>
                                 </div>
@@ -74,13 +91,13 @@
                                     @foreach (var blog in Model.ListBlogTop3)
                                     {
                                     <div class="content-blog post-list-view mb--20">
-                                        <div class="thumbnail">
+                                        <div id="iamgeURL" class="thumbnail">
                                             <a href="~/Home/BlogDetail?blogId=@blog.BlogId">
                                                 <img src="@blog.ImageUrl" alt="Blog Images">
                                             </a>
                                         </div>
                                         <div class="content">
-                                            <h6 class="title"><a href="~/Home/BlogDetail?blogId=@blog.BlogId">@blog.PageTile</a></h6>
+                                            <h6 id="title" class="title"><a href="~/Home/BlogDetail?blogId=@blog.BlogId">@blog.PageTile</a></h6>
                                             <div class="axil-post-meta">
                                                 <div class="post-meta-content">
                                                     <ul href="~/Home/BlogDetail?blogId=@blog.BlogId">
@@ -141,66 +158,43 @@
                 <div class="related-blog-activation slick-layout-wrapper--15 axil-slick-arrow  arrow-top-slide">
                     
                         @foreach (var blog in Model.Blog)
-                        {   @if (@blog.Status == true)
+                        {   
+                            @if (@blog.Status == true)
                                 {
-                                    <div class="slick-single-layout">
-                                        <div class="content-blog">
-                                            <div class="inner">
-                                                <div class="axil-gallery-activation axil-slick-arrow arrow-between-side">
+                             <div class="slick-single-layout">
+                               <div class="content-blog">
+                                 <div class="inner">
+                                     <div class="axil-gallery-activation axil-slick-arrow arrow-between-side">
                                                     <!-- Start Single Thumb  -->
-                                                    <div class="thumbnail">
-                                                        <a href="~/Home/BlogDetail?blogId=@blog.BlogId">
-                                                            <img src="@blog.ImageUrl" style="height:200px;width:100%;" alt="Blog Images">
-                                                        </a>
-                                                    </div>
+                                     <div class="thumbnail">
+                                        <a href="~/Home/BlogDetail?blogId=@blog.BlogId">
+                                          <img src="@blog.ImageUrl" style="height:200px;width:100%;" alt="Blog Images">
+                                        </a>
+                                     </div>
                                                     <!-- End Single Thumb  -->
-                                                </div>
-                                                <div class="content"  style="margin-top:50px;">
-                                                    <h5 class="title"><a href="~/Home/BlogDetail?blogId=@blog.BlogId">@blog.PageTile</a></h5>
-                                                    <div class="axil-post-meta">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                     </div>
+                                     <div class="content"  style="margin-top:50px;">
+                                         <h5 class="title"><a href="~/Home/BlogDetail?blogId=@blog.BlogId">@blog.PageTile</a></h5>
+                                           <div class="axil-post-meta">
+                                      </div>
+                                  </div>
+                                </div>
+                               </div>
+                           </div>
                         }
                     }
                 </div>
             </div>
         </div>
+
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">
+        stLight.options({
+                publisher:'12345'
+        });
+</script>
+
     </main>
-    <script>
-    document.querySelectorAll('.share-button').forEach(function(button) {
-    button.addEventListener('click', function(event) {
-        event.preventDefault();
-        var network = button.getAttribute('data-network');
-        var shareURL = 'https://localhost:7247/Home/BlogDetail?blogId=6'; // Đường link của bài viết
-
-        // Tùy chỉnh URL chia sẻ cho từng mạng xã hội
-        var shareLinks = {
-            facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareURL),
-            instagram: 'URL_INSTAGRAM', // Thay thế bằng URL Instagram thực tế
-            twitter: 'https://twitter.com/intent/tweet?url=' + encodeURIComponent(shareURL),
-            linkedin: 'URL_LINKEDIN', // Thay thế bằng URL LinkedIn thực tế
-            discord: 'URL_DISCORD' // Thay thế bằng URL Discord thực tế
-        };
-
-        if (shareLinks[network]) {
-            // Tìm thẻ a tương ứng và thiết lập giá trị href
-            var shareLinkElement = document.querySelector('.share-link[data-network="' + network + '"]');
-            if (shareLinkElement) {
-                shareLinkElement.href = shareLinks[network];
-                window.open(shareLinkElement.href, '_blank');
-            }
-        } else {
-            alert('Mạng xã hội không được hỗ trợ.');
-        }
-    });
-});
-
-
-
-    </script>
 </body>
 <script src="~/assets/js/vendor/modernizr.min.js"></script>
 <!-- jQuery JS -->

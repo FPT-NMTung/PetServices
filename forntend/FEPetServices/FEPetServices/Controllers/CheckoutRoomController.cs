@@ -331,6 +331,7 @@ namespace FEPetServices.Controllers
                 {
                     cart.Remove(serviceCartItem);
                     SaveCartSession(cart);
+                    ClearCart();
                 }
             }
 
