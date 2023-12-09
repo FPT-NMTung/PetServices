@@ -19,7 +19,7 @@
                                     <h1 class="title">Chăm sóc thú cưng</h1>
                                     <div class="slide-action">
                                         <div class="shop-btn">
-                                            <a href="~/Home/ServiceList" class="axil-btn btn-bg-white"><i class="fal fa-shopping-cart"></i>Xem ngay</a>
+                                            <a href="~/Home/Service" class="axil-btn btn-bg-white"><i class="fal fa-shopping-cart"></i>Xem ngay</a>
                                         </div>
                                         <div class="item-rating">
                                             <div class="thumb">
@@ -103,7 +103,7 @@
                                     <h1 class="title">Dắt thú đi dạo</h1>
                                     <div class="slide-action">
                                         <div class="shop-btn">
-                                            <a href="~/Home/ServiceList" class="axil-btn btn-bg-white"><i class="fal fa-shopping-cart"></i>Xem ngay</a>
+                                            <a href="~/Home/Service" class="axil-btn btn-bg-white"><i class="fal fa-shopping-cart"></i>Xem ngay</a>
                                         </div>
                                         <div class="item-rating">
                                             <div class="thumb">
@@ -416,8 +416,8 @@
                         <div class="slick-single-layout">
                             <div class="axil-product product-style-two">
                                 <div class="service-category" style="text-align:center">
-                                        <a href="~/Home/ServiceDetail?serviceCategoryId=@services.SerCategoriesId">
-                                        <img data-sal="zoom-out" data-sal-delay="200" style="width:275px;"  data-sal-duration="500" src="@services.Picture" alt="Product Images">
+                                        <a href="~/Home/Service?sevicecategory=@services.SerCategoriesId">
+                                        <img data-sal="zoom-out" data-sal-delay="200" style="width:275px;border-radius:10px;"  data-sal-duration="500" src="@services.Picture" alt="Product Images">
                                     </a>
                                 </div>
                                 <div class="product-content">
@@ -442,11 +442,11 @@
                                                 </span>
                                                 <span class="rating-number">(@services.NumberVoter)</span>
                                             </div>
-                                            <h5 style="height:60px" class="title"><a href="~/Home/ServiceDetail?serviceCategoryId=@services.SerCategoriesId">@services.SerCategoriesName</a></h5>
+                                            <h5 style="height:60px" class="title"><a href="~/Home/Service?sevicecategory=@services.SerCategoriesId">@services.SerCategoriesName</a></h5>
                                         <div class="product-hover-action">
                                             <ul class="cart-action">
                                                 @*<li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>*@
-                                                    <li class="select-option"><a href="~/Home/ServiceDetail?serviceCategoryId=@services.SerCategoriesId">Xem chi tiết</a></li>
+                                                    <li class="select-option"><a href="~/Home/Service?sevicecategory=@services.SerCategoriesId">Xem chi tiết</a></li>
                                                 @*<li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>*@
                                             </ul>
                                         </div>

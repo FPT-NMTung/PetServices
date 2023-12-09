@@ -7,9 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.102.1" />
+    <PackageReference Include="EPPlus" Version="7.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.20" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.IO" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +27,7 @@
     <Folder Include="wwwroot\img\banner\" />
     <Folder Include="wwwroot\img\about\" />
     <Folder Include="wwwroot\img\Auth\" />
+    <Folder Include="wwwroot\img\Certificate\" />
     <Folder Include="wwwroot\img\Pet\" />
     <Folder Include="wwwroot\img\Profile\" />
     <Folder Include="wwwroot\img\RoomCategory\" />

@@ -195,7 +195,14 @@ namespace PetServices.Controllers
                     .Include(b => b.BookingServicesDetails)
                     .ThenInclude(bs => bs.Service)
                     .SingleOrDefaultAsync(b => b.OrderId == orderId);
-                order.OrderStatus = "Completed";
+
+                foreach (var bookingDetail in order.BookingServicesDetails)
+                {
+                    if (bookingDetail.StatusOrderService == "Processing")
+                    {
+                        bookingDetail.StatusOrderService = "Completed";
+                    }
+                }
                 _context.Update(order);
                 await _context.SaveChangesAsync();
                 return Ok(_mapper.Map<OrdersDTO>(order));

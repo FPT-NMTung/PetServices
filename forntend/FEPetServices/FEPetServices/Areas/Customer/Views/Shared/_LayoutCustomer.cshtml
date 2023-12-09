@@ -45,7 +45,7 @@
         
         <div class="card overflow-hidden">
             <div class="row no-gutters row-bordered row-border-light">
-                <div class="col-md-3 pt-0">
+                <div class="col-md-3 pt-0" style="margin: 20px 0px;">
                     <div class="list-group list-group-flush account-settings-links">
                         <a class="list-group-item" href="~/Customer/MenuCustomer/Information">Thông tin cá nhân</a>
                         <a class="list-group-item" href="~/Customer/MenuCustomer/ChangePassword">Đổi mật khẩu</a>
@@ -228,6 +228,35 @@
                     duration: 2000
                 });
             }
+        @*End - Base ViewBag*@
+        @*-------------------------------------------------------*@
+        @*Start - Feedback ViewBag*@
+            function showSuccessFeedbackViewBag() {
+                toast({
+                    title: 'Thành công',
+                    message: 'Thêm đánh giá thành công!',
+                    type: 'success',
+                    duration: 2000
+                });
+            }
+
+        function showErrorToastFeedbackViewBag() {
+            toast({
+                title: 'Thất bại',
+                message: 'Bạn cần nhập trên 20 kí tự!',
+                type: 'wating',
+                duration: 3000
+            });
+        }
+
+        function showErrorToastFeedback2ViewBag() {
+            toast({
+                title: 'Thất bại',
+                message: 'Bạn hãy nhập nội dung đánh giá để tiếp tục!',
+                type: 'error',
+                duration: 2000
+            });
+        }
         @*End - Base ViewBag*@
         @*-------------------------------------------------------*@
     </script>

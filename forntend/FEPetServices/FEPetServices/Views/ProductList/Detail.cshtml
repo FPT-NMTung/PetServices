@@ -79,13 +79,16 @@
                                         <h6 class="title">Số lượng:</h6>
                                         <div class="pro-qty mr--20">
                                             <input 
-                                                   id="quantityInput"
-                                                   class="form-control"
-                                                   type="number"
-                                                   value="1"
-                                                   min="1"
-                                                   oninput="validity.valid||(value='1');" />
+                                                id="quantityInput"
+                                                class="form-control"
+                                                type="number"
+                                                value="1"
+                                                min="1"
+                                                oninput="validateQuantity()"
+                                            />
+                                            <span id="quantityError" style="color: red; display: none;">Số lượng phải lớn hơn hoặc bằng 1</span>
                                         </div>
+
                                         <span>@Model.Product.Quantity sản phẩm có sẵn</span>
                                     </div>
                                     <div class="product-action-wrapper d-flex-center">
@@ -150,19 +153,19 @@
                                 <ul class="pro-des-features">
                                     <li class="single-features">
                                         <div class="icon">
-                                            <img src="/assets/images/product/product-thumb/icon-3.png" alt="icon">
+                                            <img src="~/img/Product/iconproduct1.png" alt="icon">
                                         </div>
                                         Dễ đổi trả hàng
                                     </li>
                                     <li class="single-features">
                                         <div class="icon">
-                                            <img src="/assets/images/product/product-thumb/icon-2.png" alt="icon">
+                                            <img src="~/img/Product/iconproduct2.png" alt="icon">
                                         </div>
                                         Sản phẩm chất lượng
                                     </li>
                                     <li class="single-features">
                                         <div class="icon">
-                                            <img src="/assets/images/product/product-thumb/icon-1.png" alt="icon">
+                                            <img src="~/img/Product/iconproduct3.png" alt="icon">
                                         </div>
                                         Phục vụ tận tình
                                     </li>
@@ -172,7 +175,7 @@
                     </div>
 
                     <div class="reviews-wrapper">
-                        <h4 class="mb--60">Reviews</h4>
+                        <h4 class="mb--60">Đánh giá</h4>
                         <div class="row">
                             <div class="col-lg-12 mb--40">
                                 <div class="axil-comment-area pro-desc-commnet-area">
@@ -274,7 +277,7 @@
                         <div class="axil-product">
                             <div class="thumbnail">
                                 <a href="/ProductList/Detail?proId=@product.ProductId">
-                                    <img src="@product.Picture" alt="Product Images">
+                                    <img src="@product.Picture" alt="Product Images">   
                                 </a>
                                 <div class="product-hover-action">
                                     <ul class="cart-action">
@@ -285,8 +288,6 @@
                                                     <i class="fas fa-cart-plus"></i>Mua ngay
                                                 </button>
                                             </form>
-                                       @* <li class="select-option"><a href="cart.html">Add to Cart</a></li>*@
-                                        @*<li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>*@
                                     </ul>
                                 </div>
                             </div>
@@ -379,7 +380,11 @@
                 });
             });
         });
+        
+
+
     </script>
+
 
     <script src="~/assets/js/vendor/modernizr.min.js"></script>
     <!-- jQuery JS -->

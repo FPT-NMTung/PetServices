@@ -43,13 +43,14 @@ namespace FEPetServices.Controllers
             {
                 var json = JsonConvert.SerializeObject(productDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
+                //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Product/GetAllProductWhenCategoryTrue");
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product/GetAllProductWhenCategoryTrue");
                 //HttpResponseMessage ProductCategoryResponse = await client.GetAsync(DefaultApiUrlProductCategoryList);
                 HttpResponseMessage ProductCategoryResponse = await client.GetAsync(DefaultApiUrl + "ProductCategory/GetAll");
                 if (ProductCategoryResponse.IsSuccessStatusCode)
                 {
                     var categories = await ProductCategoryResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
+                    categories = categories.Where(r => r.Status == true).ToList();
                     ViewBag.categories = new SelectList(categories, "ProCategoriesId", "ProCategoriesName");
                 }
                 if (response.IsSuccessStatusCode)

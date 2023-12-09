@@ -243,6 +243,7 @@ content-detail-time-service {
 
 
 /* Responsive Styles */
+
 @media (max-width: 768px) {
     .timeline-icon {
         top: 10px;

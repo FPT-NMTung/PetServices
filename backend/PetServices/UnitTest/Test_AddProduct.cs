@@ -302,6 +302,88 @@ namespace UnitTest
                 Assert.Equal(400, result.StatusCode);
                 Assert.Equal("Loại sản phẩm không tồn tại!", result.Value);
             }
-        }       
+        }
+
+        [Fact]
+        // 8. Price = 0
+        public async Task Test_AddProduct_Pricezero()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var proCategory = new ProductCategory
+                {
+                    ProCategoriesId = 1
+                };
+
+                context.ProductCategories.Add(proCategory);
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var testAddProduct = new ProductDTO
+                {
+                    ProductName = "Sản phẩm cho Chó",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
+                    Picture = "https://s.net.vn/NsSG",
+                    Price = 0,
+                    ProCategoriesId = 1,
+                    Quantity = 3
+                };
+
+                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Equal("Giá phải lớn hơn 0!", result.Value);
+            }
+        }
+
+        [Fact]
+        // 9. Price = 0
+        public async Task Test_AddProduct_Quantityzero()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var proCategory = new ProductCategory
+                {
+                    ProCategoriesId = 1
+                };
+
+                context.ProductCategories.Add(proCategory);
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new ProductController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var testAddProduct = new ProductDTO
+                {
+                    ProductName = "Sản phẩm cho Chó",
+                    Desciption = "Sản phẩm dành cho những chú chó đáng yêu",
+                    Picture = "https://s.net.vn/NsSG",
+                    Price = 1000,
+                    ProCategoriesId = 1,
+                    Quantity = 0
+                };
+
+                var result = await controller.CreateProduct(testAddProduct) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Equal("Số lượng phải lớn hơn 0!", result.Value);
+            }
+        }
     }
 }

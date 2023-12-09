@@ -1,4 +1,7 @@
 ﻿<html class="no-js" lang="en">
+<head>
+    <link rel="stylesheet" href="~/css/Blog/BlogList.css">
+</head>
 <body class="sticky-header">
 
     <!-- End Header -->
@@ -28,15 +31,17 @@
             </div>
         </div>
         <!-- End Breadcrumb Area  -->
+        
         <!-- Start Blog Area  -->
         <div class="axil-blog-area axil-section-gap">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8">
+                       
                         <div class="row g-5">
                               
                                  @foreach (var blog in Model.Blog)
-                                {   @if(blog.Status == true){                                  
+                                {                                
                                     <div class="col-md-6">
                                         <div class="content-blog blog-grid">
                                             
@@ -58,25 +63,23 @@
                                         </div>
                                     </div> 
                                 }
-                                }
+                                
                         </div>
-                        <div class="post-pagination">
-                            <nav class="navigation pagination" aria-label="Products">
-                                <ul class="page-numbers">
-                                    @if (ViewBag.CurrentPage > 1)
-                                    {
-                                      <li><a class="next page-numbers" href="@Url.Action("Bloglist", new { page = ViewBag.CurrentPage - 1, BlogName=ViewBag.BlogName, sortby=ViewBag.sortby, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle,tag=@ViewBag.Tag })"><i class="fal fa-arrow-left"></i></a></li> 
-                                    }
-                                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                                    {
-                                    <li><a class="page-numbers" href="@Url.Action("Bloglist", new { page = i, sortby=ViewBag.sortby, BlogName=ViewBag.BlogName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle,tag=@ViewBag.Tag })">@i</a></li>
-                                    }
-                                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-                                    {
-                                        <li><a class="next page-numbers" href="@Url.Action("servicelist", new { page = ViewBag.CurrentPage + 1, sortby=ViewBag.sortby, BlogName=ViewBag.BlogName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle,tag=@ViewBag.Tag })"><i class="fal fa-arrow-right"></i></a></li>
-                                    }
-                                </ul>
-                            </nav>
+                        <div style="text-align:center;">
+                            <div class="pagination">
+                                @if (ViewBag.CurrentPage > 1)
+                                {
+                                    <a class="next page-numbers" href="@Url.Action("Bloglist", new { page = ViewBag.CurrentPage - 1, BlogName=ViewBag.BlogName, sortby=ViewBag.sortby, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })"><i class="fal fa-arrow-left"></i></a>
+                                }
+                                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                {
+                                    <a class="page-numbers" href="@Url.Action("Bloglist", new { page = i, sortby=ViewBag.sortby, BlogName=ViewBag.BlogName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })">@i</a>
+                                }
+                                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                                {
+                                    <a class="next page-numbers" href="@Url.Action("servicelist", new { page = ViewBag.CurrentPage + 1, sortby=ViewBag.sortby, BlogName=ViewBag.BlogName, pagesize=@ViewBag.pagesize, viewstyle=@ViewBag.viewstyle })"><i class="fal fa-arrow-right"></i></a>
+                                }
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -90,7 +93,28 @@
                                 </form>
                             </div>
                          <!-- Kết thúc Thanh tìm kiếm -->
+                          <div class="axil-single-widget mt--40 widget_tag_cloud">
+                                <h6 class="widget-title">Tags</h6>
+                                @{
+                                    var url ="/Home/BlogList";
+                                
+                                        <div class="@(string.IsNullOrEmpty(ViewBag.roomcategory) ? "tagcloud" : " ")">
+                                            <a href="@url">Tất cả</a>
+                                              @foreach (var category in ViewBag.Categories)
+                                            {
+                                                if(category.Status==true){
 
+                                                    <a href="@(url + (url.Contains("?") ? "&" : "?") + "tag=" + category.TagId)">@category.TagName</a>
+                                            }
+                                            else
+                                            {
+                                                
+                                            }
+
+                                            }
+                                        </div>
+                                }
+                            </div>
                             <!-- Start Sidebar Area  -->
                         <aside class="axil-sidebar-area">
 
@@ -152,28 +176,6 @@
                             </div>
                             <!-- End Single Widget  -->
                             <!-- Start Single Widget  -->
-                            <div class="axil-single-widget mt--40 widget_tag_cloud">
-                                <h6 class="widget-title">Tags</h6>
-                                @{
-                                    var url ="/Home/BlogList";
-                                
-                                    <div class="@(string.IsNullOrEmpty(ViewBag.roomcategory) ? "tagcloud" : " ")">
-                                        <a href="@url">Tất cả</a>
-                                          @foreach (var category in ViewBag.Categories)
-                                            {
-                                                if(category.Status==true){
-
-                                                <a href="@(url + (url.Contains("?") ? "&" : "?") + "tag=" + category.TagId)">@category.TagName</a>
-                                            }
-                                            else
-                                            {
-                                                
-                                            }
-
-                                            }
-                                    </div>
-                                }
-                            </div>
                             <!-- End Single Widget  -->
 
                         </aside>

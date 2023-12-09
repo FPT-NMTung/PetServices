@@ -36,9 +36,9 @@ namespace FEPetServices.Controllers
 
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
 
-            DefaultApiUrl = "https://localhost:7255/api/";
+            //DefaultApiUrl = "https://localhost:7255/api/";
             //DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";
         }
 

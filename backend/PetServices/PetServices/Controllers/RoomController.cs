@@ -98,6 +98,17 @@ namespace PetServices.Controllers
 
             return Ok(_mapper.Map<List<RoomCategoryDTO>>(roomCategory));
         }
+        [HttpGet("GetAllRoomWhenCategoryTrue")]
+        public IActionResult GetRoomWhenCategoryTrue()
+        {
+            // Filter services based on the status of their associated service categories
+            List<Room> room = _context.Rooms
+                .Include(s => s.RoomCategories)
+                .Where(s => s.RoomCategories.Status == true) // Filter based on service category status
+                .ToList();
+
+            return Ok(_mapper.Map<List<RoomDTO>>(room));
+        }
 
         [HttpGet("GetAllService")]
         public async Task<ActionResult> GetAllService()
@@ -136,6 +147,18 @@ namespace PetServices.Controllers
             else if (roomDTO.Picture.Contains(" "))
             {
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            // check số lượng Slot
+            if (roomDTO.Slot <= 0)
+            {
+                string errorMessage = "Số lượng Slot phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+            // check giá
+            if (roomDTO.Price <= 0)
+            {
+                string errorMessage = "Giá phải lớn hơn 0!";
                 return BadRequest(errorMessage);
             }
             // check loại phòng           
@@ -210,6 +233,18 @@ namespace PetServices.Controllers
             else if (roomDTO.Picture.Contains(" "))
             {
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            // check số lượng Slot
+            if (roomDTO.Slot <= 0)
+            {
+                string errorMessage = "Số lượng Slot phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+            // check giá
+            if (roomDTO.Price <= 0)
+            {
+                string errorMessage = "Giá phải lớn hơn 0!";
                 return BadRequest(errorMessage);
             }
             // check loại phòng           

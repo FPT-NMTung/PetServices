@@ -44,6 +44,19 @@ namespace PetServices.Controllers
 
             return Ok(productlist);
         }
+
+        [HttpGet("GetAllProductWhenCategoryTrue")]
+        public IActionResult GetProductWhenCategoryTrue()
+        {
+            // Filter services based on the status of their associated service categories
+            List<Product> product = _context.Products
+                .Include(s => s.ProCategories)
+                .Where(s => s.ProCategories.Status == true) // Filter based on service category status
+                .ToList();
+
+            return Ok(_mapper.Map<List<ProductDTO>>(product));
+        }
+
         [HttpGet("ProductID/{id}")]
         public IActionResult GetById(int id)
         {
@@ -116,6 +129,18 @@ namespace PetServices.Controllers
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
                 return BadRequest(errorMessage);
             }
+            // check số lượng Slot
+            if (productDTO.Quantity <= 0)
+            {
+                string errorMessage = "Số lượng phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+            // check giá
+            if (productDTO.Price <= 0)
+            {
+                string errorMessage = "Giá phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
             // check loại sản phẩm            
             var proCategoriesId = _context.ProductCategories.FirstOrDefault(p => p.ProCategoriesId == productDTO.ProCategoriesId);
             if (proCategoriesId == null)
@@ -176,6 +201,18 @@ namespace PetServices.Controllers
             else if (productDTO.Picture.Contains(" "))
             {
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            // check số lượng Slot
+            if (productDTO.Quantity <= 0)
+            {
+                string errorMessage = "Số lượng phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+            // check giá
+            if (productDTO.Price <= 0)
+            {
+                string errorMessage = "Giá phải lớn hơn 0!";
                 return BadRequest(errorMessage);
             }
             // check loại sản phẩm            

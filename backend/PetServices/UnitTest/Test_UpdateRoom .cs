@@ -521,5 +521,131 @@ namespace UnitTest
                 Assert.Equal("Không tìm thấy phòng cần thay đổi.", result.Value);
             }
         }
+
+        [Fact]
+        // 10. Update Price = 0
+        public async Task Test_UpdateRoom_PriceZero()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var roomCategory = new RoomCategory
+                {
+                    RoomCategoriesId = 1
+                };
+
+                context.RoomCategories.Add(roomCategory);
+
+                var service = new Service
+                {
+                    ServiceId = 1
+                };
+
+                context.Services.Add(service);
+
+                var room = new Room
+                {
+                    RoomId = 1,
+                    RoomName = "Phòng cho Mèo",
+                    Desciptions = "Phòng dành cho những chú mèo đáng yêu",
+                    Picture = "https://s.net.vn/M9F4",
+                    Price = 12000,
+                    RoomCategoriesId = 1,
+                    Slot = 2
+                };
+
+                context.Rooms.Add(room);
+
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new RoomController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var testUpdateRoom = new RoomDTO
+                {
+                    RoomName = "Phòng mới cho Mèo",
+                    Desciptions = "Phòng dành cho những chú mèo dễ thương",
+                    Picture = "https://s.net.vn/M9F5",
+                    Price = 0,
+                    RoomCategoriesId = 1,
+                    Slot = 3,
+                    ServiceIds = new List<int> { 1 }
+                };
+
+                var result = await controller.UpdateRoom(testUpdateRoom, 1) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Equal("Giá phải lớn hơn 0!", result.Value);
+            }
+        }
+
+        [Fact]
+        // 11. Update Price = 0
+        public async Task Test_UpdateRoom_SlotZero()
+        {
+            var options = new DbContextOptionsBuilder<PetServicesContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new PetServicesContext(options))
+            {
+                var roomCategory = new RoomCategory
+                {
+                    RoomCategoriesId = 1
+                };
+
+                context.RoomCategories.Add(roomCategory);
+
+                var service = new Service
+                {
+                    ServiceId = 1
+                };
+
+                context.Services.Add(service);
+
+                var room = new Room
+                {
+                    RoomId = 1,
+                    RoomName = "Phòng cho Mèo",
+                    Desciptions = "Phòng dành cho những chú mèo đáng yêu",
+                    Picture = "https://s.net.vn/M9F4",
+                    Price = 12000,
+                    RoomCategoriesId = 1,
+                    Slot = 2
+                };
+
+                context.Rooms.Add(room);
+
+                context.SaveChanges();
+
+                var mockMapper = new Mock<IMapper>();
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                var controller = new RoomController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
+
+                var testUpdateRoom = new RoomDTO
+                {
+                    RoomName = "Phòng mới cho Mèo",
+                    Desciptions = "Phòng dành cho những chú mèo dễ thương",
+                    Picture = "https://s.net.vn/M9F5",
+                    Price = 12000,
+                    RoomCategoriesId = 1,
+                    Slot = 0,
+                    ServiceIds = new List<int> { 1 }
+                };
+
+                var result = await controller.UpdateRoom(testUpdateRoom, 1) as ObjectResult;
+
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
+                Assert.Equal("Số lượng Slot phải lớn hơn 0!", result.Value);
+            }
+        }
     }
 }
