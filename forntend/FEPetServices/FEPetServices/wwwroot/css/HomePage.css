@@ -8,3 +8,11 @@
     width:40px;
     height:40px;
 }
+a.axil-btn.btn-bg-lighter:before,
+button.axil-btn.btn-bg-lighter:before {
+    background-color: #FF497C;
+}
+a.axil-btn.btn-bg-lighter,
+button.axil-btn.btn-bg-lighter {
+    color: white
+}
