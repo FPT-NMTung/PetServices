@@ -33,7 +33,7 @@
         </div>
 
         <div class="search-order">
-            <input type="text" id="searchInput" placeholder="Bạn có thể tìm kiếm theo mã đơn hàng, tên sản phẩm hoặc dịch vụ">
+            <input type="text" id="searchInput" placeholder="Bạn có thể tìm kiếm theo mã đơn hàng, tên phòng">
         </div>
 
         <div class="card-body">
@@ -53,7 +53,9 @@
                                     double totalPrice = 0;
                                     <div class="work-container">
                                         <div class="work-container-inner">
-                                            <h5>Mã đơn hàng : @order.OrderId</h5>
+                                            <h5>Mã đơn hàng : @order.OrderId
+                                                <a style="font-size:18px; text-decoration:none; font-weight:600" class="detail-button" href="~/Customer/MyOrdersRoom/OrderRoomDetail?id=@order.OrderId"> Xem thêm</a>
+                                            </h5>
                                             @if (order?.OrderStatus.Trim() == "Confirmed")
                                             {
                                                 <span style="display:inline-block" class="badge badge-info">Đã trả phòng</span>
