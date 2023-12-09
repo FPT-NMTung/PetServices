@@ -129,6 +129,18 @@ namespace PetServices.Controllers
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
                 return BadRequest(errorMessage);
             }
+            // check số lượng Slot
+            if (productDTO.Quantity <= 0)
+            {
+                string errorMessage = "Số lượng phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+            // check giá
+            if (productDTO.Price <= 0)
+            {
+                string errorMessage = "Giá phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
             // check loại sản phẩm            
             var proCategoriesId = _context.ProductCategories.FirstOrDefault(p => p.ProCategoriesId == productDTO.ProCategoriesId);
             if (proCategoriesId == null)
@@ -189,6 +201,18 @@ namespace PetServices.Controllers
             else if (productDTO.Picture.Contains(" "))
             {
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            // check số lượng Slot
+            if (productDTO.Quantity <= 0)
+            {
+                string errorMessage = "Số lượng phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+            // check giá
+            if (productDTO.Price <= 0)
+            {
+                string errorMessage = "Giá phải lớn hơn 0!";
                 return BadRequest(errorMessage);
             }
             // check loại sản phẩm            
