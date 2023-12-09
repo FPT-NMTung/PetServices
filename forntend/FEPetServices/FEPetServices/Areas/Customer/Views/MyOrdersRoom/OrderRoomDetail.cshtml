@@ -9,7 +9,7 @@
     <link href="~/css/orders/stylesheet.css" rel="stylesheet" />
     <link href="~/css/map.css" rel="stylesheet" />
     <link href="~/css/OrderDetail.css" rel="stylesheet" />
-    <link href="~/css/orders/detail.css" rel="stylesheet" />
+    <link href="~/css/orders/roomdetail.css" rel="stylesheet" />
 </head>
 <body>
     <div class="card right-profile-card">
@@ -55,24 +55,24 @@
                                         ) {
                                     <text>active</text>
                                     } text-center" id="step1">
-                                                <i class="fa-solid fa-receipt"></i>
-                                            </li>
+                                                    <i class="fa-solid fa-house-medical-circle-exclamation"></i>
+                                                </li>
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Confirmed" || Model.OrderStatus.Trim() == "Processing"
                                         ) {
                                     <text>active</text>
                                     } text-center" id="step2">
-                                                <i class="fa-solid fa-check"></i>
-                                            </li>
+                                        <i class="fa-solid fa-house-circle-check"></i>
+                                                </li>
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Confirmed" ) {
                                     <text>active</text>
                                     } text-center" id="step3">
-                                                <i class="fa-solid fa-truck"></i>
-                                            </li>
+                                        <i class="fa-solid fa-house-chimney-crack"></i>
+                                                </li>
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Confirmed") {
                                     <text>active</text>
                                      }  text-end" id="step5">
-                                                <i class="fa-regular fa-star"></i>
-                                            </li>
+                                                    <i class="fa-regular fa-star"></i>
+                                                </li>
                                     </ul>
                                 </div>
                             </div>
