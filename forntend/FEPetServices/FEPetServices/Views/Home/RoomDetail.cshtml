@@ -375,6 +375,10 @@
                 showErrorToastCheckInput();
                 return false; // Ngăn form submit nếu thông tin chưa được điền đầy đủ
             }
+            if (document.querySelector(".status").textContent == "Không còn phòng") {
+                showErrorToastInvalidTimeRoom();
+                return false;
+            }
 
             return true;
         }
