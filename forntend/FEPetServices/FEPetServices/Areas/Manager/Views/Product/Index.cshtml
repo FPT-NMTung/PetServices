@@ -1,49 +1,75 @@
 ﻿<link href="~/css/toastNotification.css" rel="stylesheet" />
 <link href="~/css/datatable.css" rel="stylesheet" />
-    <script>
-        $(document).ready(function () {
-            // Khởi tạo DataTables
-            var table = $('#lists').DataTable({
-                "responsive": true,
-                "paging": true,
-                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "columnDefs": [
-                    { "targets": [0], "width": "5%" },
-                    { "targets": [1], "width": "20%" },
-                    { "targets": [2], "width": "20%" },
-                    { "targets": [3], "width": "25%" }, // Điều chỉnh cột này để khớp với số cột thực tế
-                    { "targets": [4], "width": "15%" },
-                    { "targets": [5], "width": "15%" },
-                ],
-                "language": {
-                    "lengthMenu": "Hiển thị _MENU_ dòng",
-                    "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
-                    "search": "Tìm kiếm:",
-                    "paginate": {
-                        "first": "Đầu",
-                        "last": "Cuối",
-                        "next": "Tiếp",
-                        "previous": "Trước"
-                    }
-                },
-            });
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 
-            // Thêm nút "Thêm dịch vụ" bên phải thanh tìm kiếm
-            var addButton = $('<button id="addButton" class="btn btn-add btn-primary">Thêm Sản Phẩm</button>');
-            $('.dataTables_filter').append(addButton);
-
-            // Đính kèm sự kiện click cho nút "Thêm dịch vụ"
-            $('#addButton').on('click', function () {
-                // Navigate to the "addservicecategory" page
-                window.location.href = '/Manager/Product/Add'; // Update this URL as needed
-            });
-
+<script>
+    $(document).ready(function () {
+        // Khởi tạo DataTables
+        var table = $('#lists').DataTable({
+            "responsive": true,
+            "paging": true,
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "columnDefs": [
+                { "targets": [0], "width": "5%" },
+                { "targets": [1], "width": "20%" },
+                { "targets": [2], "width": "20%" },
+                { "targets": [3], "width": "25%" }, // Điều chỉnh cột này để khớp với số cột thực tế
+                { "targets": [4], "width": "15%" },
+                { "targets": [5], "width": "15%" },
+            ],
+            "language": {
+                "lengthMenu": "Hiển thị _MENU_ dòng",
+                "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
+                "search": "Tìm kiếm:",
+                "paginate": {
+                    "first": "Đầu",
+                    "last": "Cuối",
+                    "next": "Tiếp",
+                    "previous": "Trước"
+                }
+            },
         });
-    </script>
+
+        // Thêm nút "Thêm dịch vụ" bên phải thanh tìm kiếm
+        var addButton = $('<button id="addButton" class="btn btn-add btn-primary">Thêm Sản Phẩm</button>');
+        $('.dataTables_filter').append(addButton);
+
+        var exportExcelbtn = $('<button id="exportExcel" class="btn btn-add btn-primary">Xuất Excel</button>');
+        $('.dataTables_filter').append(exportExcelbtn);
+
+        // Đính kèm sự kiện click cho nút "Thêm dịch vụ"
+        $('#addButton').on('click', function () {
+            // Navigate to the "addservicecategory" page
+            window.location.href = '/Manager/Product/Add'; // Update this URL as needed
+        });
+
+        $('#exportExcel').on('click', function () {
+            // Lấy toàn bộ dữ liệu từ DataTable (bao gồm cả các trang)
+            var allData = table.rows().data().toArray();
+
+            // Tạo một HTML table chứa toàn bộ dữ liệu
+            var exportTable = $('<table>').append($('#lists thead').clone()).append(allData.map(function (row) {
+                return $('<tr>').append(row.map(function (cell) {
+                    return $('<td>').text(cell);
+                }));
+            }));
+
+            // Tạo worksheet từ table mới
+            var ws = XLSX.utils.table_to_sheet(exportTable[0]);
+
+            // Tạo workbook và thêm worksheet vào đó
+            var wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+            // Xuất file Excel
+            XLSX.writeFile(wb, 'DanhSachPhongChoThuCung.xlsx');
+        });
+    });
+</script>
 
 <h1>Danh Sách Sản Phẩm Cho Thú Cưng</h1>
 
