@@ -149,6 +149,18 @@ namespace PetServices.Controllers
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
                 return BadRequest(errorMessage);
             }
+            // check số lượng Slot
+            if (roomDTO.Slot <= 0)
+            {
+                string errorMessage = "Số lượng Slot phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+            // check giá
+            if (roomDTO.Price <= 0)
+            {
+                string errorMessage = "Giá phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
             // check loại phòng           
             var roomcategory = _context.RoomCategories.FirstOrDefault(r => r.RoomCategoriesId == roomDTO.RoomCategoriesId);
 
@@ -221,6 +233,18 @@ namespace PetServices.Controllers
             else if (roomDTO.Picture.Contains(" "))
             {
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            // check số lượng Slot
+            if (roomDTO.Slot <= 0)
+            {
+                string errorMessage = "Số lượng Slot phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+            // check giá
+            if (roomDTO.Price <= 0)
+            {
+                string errorMessage = "Giá phải lớn hơn 0!";
                 return BadRequest(errorMessage);
             }
             // check loại phòng           
