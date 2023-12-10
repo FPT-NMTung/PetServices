@@ -55,8 +55,8 @@ namespace FEPetServices.Areas.Manager.Controllers
         public async Task<IActionResult> DetailPartner(string email)
         {
 
-            //HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Partner/" + email);
-            HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Partner/" + email);
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Partner/" + email);
+            //HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Partner/" + email);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
