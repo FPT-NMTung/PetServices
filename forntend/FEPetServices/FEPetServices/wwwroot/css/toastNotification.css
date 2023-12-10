@@ -79,10 +79,10 @@
         transform: translateX(0%);
     }
     80% {
-        transform: translateX(0);
+        transform: translateX(-5%);
     }
     100% {
-        transform: translateX(calc(100% + 20px));
+        transform: translateX(calc(100% + 50px));
     }
 }
 
