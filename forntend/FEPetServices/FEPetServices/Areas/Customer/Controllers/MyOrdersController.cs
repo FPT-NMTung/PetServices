@@ -1,4 +1,5 @@
 ﻿using FEPetServices.Form.OrdersForm;
+using FEPetServices.Models.ErrorResult;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -53,7 +54,7 @@ namespace FEPetServices.Areas.Customer.Controllers
 
                     if (!string.IsNullOrEmpty(responseContent) && responseContent.Contains("404 Not Found"))
                     {
-                        return View();
+                        return new ErrorResult("");
                     }
 
                     List<OrderForm> orders = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
@@ -71,7 +72,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
-                        return View();
+                        return new ErrorResult("");
                     }
                     else
                     {

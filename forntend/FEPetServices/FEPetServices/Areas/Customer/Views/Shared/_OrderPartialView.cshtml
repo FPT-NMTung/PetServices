@@ -18,7 +18,7 @@
                 && order.BookingRoomDetails.Count() == 0)
                 {
                     <h5>Mã đơn hàng : @order.OrderId
-                        <a style="font-size:18px; text-decoration:none; font-weight:600" class="detail-button" href="Customer/MyOrders/OrderDetail?id=@order.OrderId"> Xem thêm</a>
+                        <a style="font-size:18px; text-decoration:none; font-weight:600" class="detail-button" href="OrderDetail?id=@order.OrderId"> Xem thêm</a>
                     </h5>
                     @if (order.OrderStatus.Trim() == "Confirmed")
                     {
@@ -47,7 +47,7 @@
                 && order.BookingRoomDetails.Count() > 0)
                 {
                     <h5>Mã đơn hàng : @order.OrderId
-                        <a style="font-size:18px; text-decoration:none; font-weight:600" class="detail-button" href="Customer/MyOrdersRoom/OrderRoomDetail?id=@order.OrderId"> Xem thêm</a>
+                        <a style="font-size:18px; text-decoration:none; font-weight:600" class="detail-button" href="OrderRoomDetail?id=@order.OrderId"> Xem thêm</a>
                     </h5>
                     @if (order?.OrderStatus.Trim() == "Confirmed")
                     {
