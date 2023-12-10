@@ -49,7 +49,7 @@ namespace FEPetServices.Controllers
                     var sendOtpResult = await CallSendOTP(registerInfo.Email);
                     if (!string.IsNullOrEmpty(sendOtpResult) && sendOtpResult == "Gửi OTP thành công.")
                     {
-                        TempData["SuccessRegisterToast"] = "Mã OTP đã được gửi đến hòm thư của bạn.";
+                        TempData["SuccessToast"] = "Mã OTP đã được gửi đến hòm thư của bạn.";
                     }
                     else
                     {
