@@ -2,6 +2,7 @@
 using FEPetServices.Form.OrdersForm;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Plugins;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
@@ -142,6 +143,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "UserInfo/updateInfo?email=" + email, userInfo);
             if (response.IsSuccessStatusCode)
             {
+                HttpContext.Session.SetString("UserImage", userInfo.ImageUser);
                 TempData["SuccessToast"] = "Cập nhật thông tin thành công";
                 return RedirectToAction("Information");
             }
