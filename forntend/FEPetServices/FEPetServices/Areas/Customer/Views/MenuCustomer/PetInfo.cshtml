@@ -75,7 +75,7 @@
     function deletePet(petId) {
         var confirmDelete = confirm("Bạn có chắc chắn muốn xóa thú cưng không?");
         if (confirmDelete) {
-            fetch(`https://localhost:7255/api/PetInfo?petId=${petId}`, {
+                fetch(`https://pet-service-api.azurewebsites.net/api/PetInfo?petId=${petId}`, {                   
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
