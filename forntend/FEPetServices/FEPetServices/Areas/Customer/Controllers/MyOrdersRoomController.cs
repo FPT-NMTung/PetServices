@@ -25,8 +25,8 @@ namespace FEPetServices.Areas.Customer.Controllers
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
-            //DefaultApiUrl = "https://localhost:7255/api/";
+           // DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            DefaultApiUrl = "https://localhost:7255/api/";
         }
 
         private async Task<IActionResult> GetOrdersRoom(string orderStatus, int page, int pageSize)
@@ -54,7 +54,7 @@ namespace FEPetServices.Areas.Customer.Controllers
 
                     if (!string.IsNullOrEmpty(responseContent) && responseContent.Contains("404 Not Found"))
                     {
-                        return View("Error404");
+                        return View();
                     }
 
                     List<OrderForm> orders = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
@@ -72,7 +72,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
-                        return View("Error404");
+                        return View();
                     }
                     else
                     {
@@ -96,5 +96,27 @@ namespace FEPetServices.Areas.Customer.Controllers
 
         [HttpGet]
         public Task<IActionResult> Processing(string orderStatus, int page, int pageSize) => GetOrdersRoom(orderStatus, page, pageSize);
+
+        [HttpGet]
+        public async Task<IActionResult> OrderRoomDetail(int id)
+        {
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                OrderForm orderDetail = System.Text.Json.JsonSerializer.Deserialize<OrderForm>(responseContent, options);
+                return View(orderDetail);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
     }
 }

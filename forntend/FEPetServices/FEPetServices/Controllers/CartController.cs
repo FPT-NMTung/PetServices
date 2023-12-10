@@ -69,7 +69,6 @@ namespace FEPetServices.Controllers
         public IActionResult Index()
         {
             var cartItems = GetCartItems();
-
             return View(cartItems); 
         }
 
@@ -120,6 +119,7 @@ namespace FEPetServices.Controllers
                 {
                     cart.Remove(productCartItem);
                     SaveCartSession(cart);
+                    ClearCart();
                 }
             }
 
@@ -131,6 +131,7 @@ namespace FEPetServices.Controllers
                 {
                     cart.Remove(serviceCartItem);
                     SaveCartSession(cart);
+                    ClearCart();
                 }
             }
             return RedirectToAction("Index", "Cart");
