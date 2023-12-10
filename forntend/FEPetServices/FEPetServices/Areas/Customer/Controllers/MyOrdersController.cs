@@ -66,7 +66,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                     {
                         return View(orders);
                     }
-                }
+                }   
                 else
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)

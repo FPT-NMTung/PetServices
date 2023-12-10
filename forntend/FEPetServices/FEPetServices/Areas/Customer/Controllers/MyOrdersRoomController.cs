@@ -25,8 +25,8 @@ namespace FEPetServices.Areas.Customer.Controllers
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-           // DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
-            DefaultApiUrl = "https://localhost:7255/api/";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = "https://localhost:7255/api/";
         }
 
         private async Task<IActionResult> GetOrdersRoom(string orderStatus, int page, int pageSize)
@@ -54,7 +54,7 @@ namespace FEPetServices.Areas.Customer.Controllers
 
                     if (!string.IsNullOrEmpty(responseContent) && responseContent.Contains("404 Not Found"))
                     {
-                        return View();
+                        return View("Error404");
                     }
 
                     List<OrderForm> orders = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
@@ -72,7 +72,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
-                        return View();
+                        return View("Error404");
                     }
                     else
                     {

@@ -265,8 +265,11 @@ namespace PetServices.Controllers
                 else
                 {
                     List<Order> orders = _context.Orders
-                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email))
-                                         .ToList();
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) 
+                                         && o.BookingRoomDetails.Count() == 0
+                                         && (o.BookingServicesDetails.Count() > 0
+                                         || o.OrderProductDetails.Count() > 0
+                                         )).ToList();
                     if (orders.Count == 0)
                     {
                         return NotFound("No orders found with the specified status");
@@ -306,8 +309,6 @@ namespace PetServices.Controllers
                                          && (o.BookingServicesDetails.Count() == 0
                                          && o.OrderProductDetails.Count() == 0
                                          )).ToList();
-
-
                     if (ordersRoom.Count == 0)
                     {
                         return NotFound("No orders found with the specified status");
@@ -320,8 +321,11 @@ namespace PetServices.Controllers
                 else
                 {
                     List<Order> orders = _context.Orders
-                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email))
-                                         .ToList();
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email)
+                                          && o.BookingRoomDetails.Count() > 0
+                                         && (o.BookingServicesDetails.Count() == 0
+                                         && o.OrderProductDetails.Count() == 0
+                                         )).ToList();
                     if (orders.Count == 0)
                     {
                         return NotFound("No orders found with the specified status");
