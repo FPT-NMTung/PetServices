@@ -283,12 +283,13 @@
                                             @if (item.product != null)
                                             {
                                                 <a><img src="@item.product.Picture" alt="@item.product.ProductName"></a>
+                                                <button class="close-btn removecart" data-productid="@item.product.ProductId"><i class="fas fa-times"></i></button>
                                             }
                                             @if (item.service != null)
                                             {
                                                 <a><img src="@item.service.Picture" alt="@item.service.ServiceName"></a>
+                                                <button class="close-btn removecart" data-serviceid="@item.service.ServiceId"><i class="fas fa-times"></i></button>
                                             }
-                                            <button class="close-btn"><i class="fas fa-times"></i></button>
                                         </div>
                                         <div class="item-content">
                                             @if (item.product != null)
@@ -537,4 +538,29 @@
     }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".removecart").click(function (event) {
+            event.preventDefault();
+            var productid = $(this).attr("data-productid");
+            var serviceid = $(this).attr("data-serviceid");
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("RemoveCart", "Cart")",
+                data: {
+                    productid: productid,
+                    serviceid: serviceid
+                },
+                success: function (result) {
+                    window.location.href = "@Url.Action("Index", "Cart")";
+                },
+                error: function (error) {
+                    console.error("Error removing item from cart:", error);
+                }
+            });
+        });
+    });
+</script>
 </html>
