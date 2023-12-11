@@ -14,7 +14,7 @@
         <label for="PetName">Tên thú cưng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
-        <input type="text" id="PetName" name="PetName" placeholder="Tên thú cưng.." required>
+        <input type="text" id="PetName"  value="@Model?.PetName" name="PetName" placeholder="Tên thú cưng.." required>
         <div style="color:red" class="error-message" id="fname-error-message"></div>
       </div>
     </div>
@@ -24,8 +24,15 @@
       </div>
       <div class="col-75">
         <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" required>
-        <img src="~/img/icon/addicon.png" style="float: left;" id="imagePreview" >
-      </div>
+                    @if (@Model?.ImagePet == null)
+                    {
+                        <img src="~/img/icon/addicon.png" style="float: left;" id="imagePreview" >
+                    }
+                    else{
+                        <img src="src="@Model?.ImagePet"" style="float: left;" id="imagePreview" >
+                        
+                        }
+                    </div>
     </div>
     <div class="row">
       <div class="col-25">
@@ -33,7 +40,19 @@
       </div>
       <div class="col-75">
         <select name="Gender" id="Gender" required>
-            <option>Chọn giới tính cho bé <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i> </option>
+                        @if (@Model?.Gender == null)
+                        {
+                            <option>Chọn giới tính cho bé <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i> </option>
+                        }else{
+            <option>
+             @if(@Model?.Gender == true)
+             {
+              <p>Đực</p>
+             }
+             else
+             {
+              <p>Cái</p>
+             }</option>}
             <option value="true">Đực</option>
             <option value="false">Cái</option>
         </select>
@@ -45,7 +64,7 @@
         <label for="Price">Giống thú cưng <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
-        <input type="text" id="Species" name="Species" placeholder="Giống thú cưng" required>
+        <input type="text" id="Species" name="Species" value="@Model?.Species" placeholder="Giống thú cưng" required>
         <div style="color:red" class="error-message" id="price-error-message"></div> 
       </div>
     </div>
@@ -54,8 +73,8 @@
         <label for="Dob">Ngày sinh<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
-        <input type="date" id="Dob" name="Dob"  required>
-        <div style="color:red" class="error-message" id="price-error-message"></div> 
+        <input type="date" id="Dob" class="toinput" name="Dob"  required>
+        <div style="color:red" class="error-message" value="@Model?.Dob?.ToString("yyyy-MM-dd")" id="price-error-message"></div> 
       </div>
     </div>
     <div class="row">
@@ -63,7 +82,7 @@
         <label for="Weight">Cân nặng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
-        <input type="number" id="Weight" name="Weight" min="0" required>
+        <input type="number" class="toinput" id="Weight" name="Weight"  value="@Model?.Weight" min="0" required>
         <div style="color:red" class="error-message" id="price-error-message"></div> 
       </div>
     </div>
@@ -73,7 +92,7 @@
         <label for="Descriptions">Mô Tả:</label>
       </div>
       <div class="col-75">
-        <textarea id="Descriptions" name="Descriptions" placeholder="Mô tả .." style="height:200px" ></textarea>
+        <textarea id="Descriptions" name="Descriptions" placeholder="Mô tả .." style="height:200px" >@Model?.Descriptions</textarea>
         <div style="color:red" class="error-message" id="subject-error-message"></div>
       </div>
     </div>
@@ -98,6 +117,13 @@
             padding-top:20px;
             margin-right:10px;
         }
+      .toinput{
+    width: 609px;
+    height: 50px;
+    border: px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+      }
 </style>
 <script src="~/js/Service.js"></script>
 <script>

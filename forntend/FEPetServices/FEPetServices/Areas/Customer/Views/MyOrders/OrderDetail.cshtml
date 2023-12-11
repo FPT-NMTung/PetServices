@@ -203,7 +203,7 @@
                                         <div class="service-info-detail">
                                             <p style="max-width:450px">@serviceDetail.Service.ServiceName</p>
                                             <p style="font-size:.8rem;"><span>Cân nặng thú cưng: </span>@serviceDetail.Weight Kg</p>
-                                            <div style="display: flex ; justify-content:space-between">
+                                            <div>
                                                 <p style="font-size:.8rem; cursor: pointer; color:blue" class="map-button clickable"
                                                    data-lat="@serviceDetail?.PartnerInfo?.Lat"
                                                    data-lng="@serviceDetail?.PartnerInfo?.Lng"
@@ -211,16 +211,19 @@
                                                    data-my-lng="">
                                                     Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail?.PartnerInfoId
                                                 </p>
-                                                @{
-                                                    var partnerName = serviceDetail?.PartnerInfo?.FirstName + " " + serviceDetail?.PartnerInfo?.LastName + " - " + serviceDetail?.PartnerInfoId;
+                                                <div style="display:flex; align-items:center">
+                                                    <p style="font-size:.8rem;">Đánh giá về nhân viên của chúng tôi :  </p>
+                                                    @{
+                                                        var partnerName = serviceDetail?.PartnerInfo?.FirstName + " " + serviceDetail?.PartnerInfo?.LastName + " - " + serviceDetail?.PartnerInfoId;
 
-                                                    if ((serviceDetail.FeedbackPartnerStatus == null || serviceDetail.FeedbackPartnerStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
-                                                    {
-                                                        <div class="btn-content-detail">
-                                                            <button class="btn btn-outline-primary" onclick="openPopupPartner('@serviceDetail?.PartnerInfo.ImagePartner', '@partnerName', '@serviceDetail.PartnerInfo.PartnerInfoId', '@serviceDetail.ServiceId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
-                                                        </div>
+                                                        if ((serviceDetail.FeedbackPartnerStatus == null || serviceDetail.FeedbackPartnerStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                                        {
+                                                            <div style="margin-bottom:0px; margin-left:.2rem"  class="btn-content-detail">
+                                                                <button class="btn btn-outline-primary" onclick="openPopupPartner('@serviceDetail?.PartnerInfo.ImagePartner', '@partnerName', '@serviceDetail.PartnerInfo.PartnerInfoId', '@serviceDetail.ServiceId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
+                                                            </div>
+                                                        }
                                                     }
-                                                }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -465,6 +468,102 @@
         function goBack() {
             window.history.go(-1);
         };
+
+        @*Open Map*@
+            $('.clickable').click(function () {
+                var partnerLatitude = parseFloat($(this).data("lat"));
+                var partnerLongitude = parseFloat($(this).data("lng"));
+                var myLatitude = parseFloat($(this).data("my-lat"));
+                var myLongitude = parseFloat($(this).data("my-lng"));
+
+                if (isNaN(myLatitude) || isNaN(myLongitude)) {
+                    // Nếu vị trí của bạn không được xác định trước đó, hãy lấy lại
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            myLatitude = position.coords.latitude;
+                            myLongitude = position.coords.longitude;
+
+                            // Lưu trữ vị trí của bạn để sử dụng cho các lần click sau
+                            $(this).data("my-lat", myLatitude);
+                            $(this).data("my-lng", myLongitude);
+
+                            showPosition(partnerLatitude, partnerLongitude, myLatitude, myLongitude);
+                        }, function (error) {
+                            console.error("Error getting current location:", error);
+                        });
+                    } else {
+                        alert("Trình duyệt không hỗ trợ lấy vị trí.");
+                    }
+                } else {
+                    showPosition(partnerLatitude, partnerLongitude, myLatitude, myLongitude);
+                }
+            });
+
+        $(".close").click(function () {
+            closeMapModal();
+        });
+
+        $(window).click(function (event) {
+            if (event.target.id === "mapModal") {
+                closeMapModal();
+            }
+        });
+
+        function showPosition(partnerLatitude, partnerLongitude, myLatitude, myLongitude) {
+            initMap(partnerLatitude, partnerLongitude, myLatitude, myLongitude);
+            openMapModal();
+            calculateAndDisplayRoute(directionsService, directionsDisplay, { lat: myLatitude, lng: myLongitude }, { lat: partnerLatitude, lng: partnerLongitude });
+        }
+
+        function openMapModal() {
+            $("#mapModal").css("display", "block");
+        }
+
+        function closeMapModal() {
+            $("#mapModal").css("display", "none");
+        }
+
+        function initMap(latitude, longitude, myLatitude, myLongitude) {
+            var directionsService = new google.maps.DirectionsService();
+            var directionsDisplay = new google.maps.DirectionsRenderer();
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: latitude, lng: longitude },
+                zoom: 15
+            });
+
+            var marker = new google.maps.Marker({
+                position: { lat: latitude, lng: longitude },
+                map: map,
+                title: 'Vị trí đối tác',
+                icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+            });
+
+            var myMarker = new google.maps.Marker({
+                position: { lat: myLatitude, lng: myLongitude },
+                map: map,
+                title: 'Vị trí của tôi',
+                icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+            });
+
+            directionsDisplay.setMap(map);
+            calculateAndDisplayRoute(directionsService, directionsDisplay, { lat: myLatitude, lng: myLongitude }, { lat: latitude, lng: longitude });
+        }
+
+        function calculateAndDisplayRoute(directionsService, directionsDisplay, start, end) {
+            directionsService.route({
+                origin: start,
+                destination: end,
+                travelMode: 'DRIVING'
+            }, function (response, status) {
+                if (status === 'OK') {
+                    directionsDisplay.setDirections(response);
+                } else {
+                    window.alert('Không thể hiển thị tuyến đường do: ' + status);
+                }
+            });
+        }
+        @*End Map*@
     </script>
 
     @*Đánh giá*@

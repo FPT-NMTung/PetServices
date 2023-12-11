@@ -147,19 +147,9 @@
                     </button>*@
 
                                     <div style="display: flex ; justify-content:space-between">
-                                        <p style="font-size:.8rem; cursor: pointer; color:blue" class="map-button clickable"
-                                           data-lat="@serviceDetail?.PartnerInfo?.Lat"
-                                           data-lng="@serviceDetail?.PartnerInfo?.Lng"
-                                           data-my-lat=""
-                                           data-my-lng="">
-                                            Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail.PartnerInfoId
+                                        <p style="font-size:.8rem;">
+                                            Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail?.PartnerInfoId
                                         </p>
-                                        @if (@serviceDetail?.StatusOrderService?.Trim() == "Completed")
-                                        {
-                                            <div class="btn-content-detail">
-                                                <button class="btn btn-outline-primary">Đánh giá</button>
-                                            </div>
-                                        }
                                     </div>
 
                                 </div>
