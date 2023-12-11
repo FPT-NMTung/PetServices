@@ -21,8 +21,9 @@
 </div>
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
-      <form asp-action="EditBlog" method="post"  enctype="multipart/form-data">
+    <div class="col-md-12" style="width: 120%; height: 100%; border-radius: 5px; background-color: #F2F2F2;margin-bottom: 5%;">
+      <form asp-action="EditBlog" method="post"  enctype="multipart/form-data" style=" margin-left: 5%; width: 90%; margin-bottom: 2%;
+    margin-top: 2%;">
         <div class="form-group">
           <label for="PageTile" >Tên bài viết <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:<span class="fr-icon required fr-label-note" aria-hidden="true"></span></label>
           <input type="text" class="form-control" name="PageTile" value="@Model?.PageTile" required placeholder="Tên bài viết"/>
@@ -55,7 +56,7 @@
              <div class="service-container">
                @if (ViewBag.Tag != null)
                     {
-                     <select id="TagId" name="TagId" class="form-group" required>
+                     <select id="TagId" name="TagId" class="form-group" style="border-radius: 7px; width: 200px; height: 40px;" required>
                      <option value="@Model?.TagId">@Model?.TagName</option>
                             @foreach (var tag in ViewBag.Tag)
                             {
@@ -83,10 +84,10 @@
         <div class="form-group">
             <div class="row">
             <div class="sub">
-            <a href="/Manager/Blog"><input value="Trở Lại" class="btn btn-primary form-control"/></a>
+            <a href="/Manager/Blog"><input style="background: red; border-color: red;" value="Trở Lại" class="btn btn-primary form-control"/></a>
             </div>
             <div class="sub">
-               <input type="submit" name="Submit" value="Lưu" class="btn btn-primary form-control" />
+               <input type="submit" name="Submit" style="background: #43e240; border-color: #43e240; width:150px;" value="Lưu chỉnh sửa" class="btn btn-primary form-control" />
             </div>
             </div>
         </div>

@@ -15,43 +15,46 @@
         <div class="card-body tab-content" style="display:block;">
             <div class="tab-pane fade active show" id="account-petinfo">
                 <form method="post" asp-controller="MenuCustomer" asp-action="PetInfo" enctype="multipart/form-data">
-                    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" style="margin-left: 10%; width: 70%;">
-                        <div class="carousel-indicators">
-                            @for (int i = 0; i < Model.UserInfo.PetInfos.Count; i++)
-                            {
-                                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="@i" @(i == 0 ? "class=active" : "") aria-label="Slide @(i + 1)"></button>
-                            }
-                        </div>
-                        <div class="carousel-inner">
-                            @for (int i = 0; i < Model.UserInfo.PetInfos.Count; i++)
-                            {
-                                <div  class="carousel-item @(i == 0 ? "active" : "")">
-                                  <img src="https://propertyxvn.com/wp-content/uploads/2022/10/Mau-trang-la-gi-Y-nghia-cua-mau-trang-trong-cac-linh-vuc.jpg" class="d-block w-100" alt="...">
-                                  <div style="color:black; margin-left:20%" class="carousel-caption d-none d-md-block">
-                                        <img src="@Model?.UserInfo.PetInfos[i].ImagePet" style="width:40% ;height:60%;" alt="pet"></img>
-                                        <div>
-                                            <p>Tên : @Model?.UserInfo.PetInfos[i].PetName</p>
-                                            <p>Giống : @Model?.UserInfo.PetInfos[i].Species</p>
-                                            <p>Cân nặng : @Model?.UserInfo.PetInfos[i].Weight Kg</p>
-                                            <a style="margin-bottom:2%;" href="~/Customer/Pet/EditPet?petId=@Model.UserInfo.PetInfos[i].PetInfoId" class="btn btn-primary" type="submit">Chi tiết thông tin</a>
-                                            <!-- Thêm nút delete -->
-                                            <button class="btn btn-danger deletePetBtn" style="margin-bottom:15px;" onclick="deletePet('@Model?.UserInfo.PetInfos[i].PetInfoId')">Xóa thú cưng</button>
+                    @if (Model.UserInfo.PetInfos.Count > 0)
+                    {
+                        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" style="margin-left: 10%; width: 70%;">
+                            <div class="carousel-indicators">
+                                @for (int i = 0; i < Model.UserInfo.PetInfos.Count; i++)
+                                {
+                                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="@i" @(i == 0 ? "class=active" : "") aria-label="Slide @(i + 1)"></button>
+                                }
+                            </div>
+                            <div class="carousel-inner">
+                                @for (int i = 0; i < Model.UserInfo.PetInfos.Count; i++)
+                                {
+                                    <div  class="carousel-item @(i == 0 ? "active" : "")">
+                                        <img src="https://propertyxvn.com/wp-content/uploads/2022/10/Mau-trang-la-gi-Y-nghia-cua-mau-trang-trong-cac-linh-vuc.jpg" class="d-block w-100" alt="...">
+                                        <div style=" margin-left:20%" class="carousel-caption d-none d-md-block">
+                                            <img src="@Model?.UserInfo.PetInfos[i].ImagePet" style="width:40% ;height:60%;" alt="pet"></img>
+                                            <div style="color:black;">
+                                                <p>Tên : @Model?.UserInfo.PetInfos[i].PetName</p>
+                                                <p>Giống : @Model?.UserInfo.PetInfos[i].Species</p>
+                                                <p>Cân nặng : @Model?.UserInfo.PetInfos[i].Weight Kg</p>
+                                                <a style="margin-bottom:2%;" href="~/Customer/Pet/EditPet?petId=@Model.UserInfo.PetInfos[i].PetInfoId" class="btn btn-primary" type="submit">Chi tiết thông tin</a>
+                                                <!-- Thêm nút delete -->
+                                                <button class="btn btn-danger deletePetBtn" style="margin-bottom:10px;" onclick="deletePet('@Model?.UserInfo.PetInfos[i].PetInfoId')">Xóa thú cưng</button>
 
 
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            }
+                                }
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
+                    }
                     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
                         <div class="carousel-indicators">
                             @for (int i = 0; i < Model.UserInfo.PetInfos.Count; i++)
@@ -68,9 +71,34 @@
             </div>
         </div>
     </div>
+    <style>
+           .w-100{
+
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg);
+}
+    </style>
 </body>
 <script src="~/js/toastnotification.js"></script>
 <script>
+<<<<<<< HEAD
+function deletePet(petId) {
+    var confirmDelete = confirm("Bạn có chắc chắn muốn xóa thú cưng không?");
+    if (confirmDelete) {
+        fetch(`https://localhost:7255/api/PetInfo/Delete?petId=${petId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("Xóa thú cưng thành công!");
+                    window.location.href = 'http://localhost:7247/Customer/MenuCustomer/PetInfo'; // Chuyển hướng đến trang PetInfo
+                } else {
+                    alert("Xóa thú cưng thất bại. Vui lòng thử lại sau.");
+                    window.location.href = '/Customer/MenuCustomer/PetInfo'; // Chuyển hướng đến trang PetInfo
+                }
+=======
      @*Chỉ định hàm xóa cho từng nút xóa thú cưng*@
     function deletePet(petId) {
         var confirmDelete = confirm("Bạn có chắc chắn muốn xóa thú cưng không?");
@@ -80,20 +108,13 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
+>>>>>>> 011cc2df7c5373326a7f3cb4c71e4001e220de5c
             })
-                .then(response => {
-                    if (response.ok) {
-                        alert("Xóa thú cưng thành công!");
-                        window.location.href = '/Customer/MenuCustomer/PetInfo';
-                    } else {
-                        alert("Xóa thú cưng thất bại. Vui lòng thử lại sau.");
-                        window.location.href = '/Customer/MenuCustomer/PetInfo';
-                    }
-                })
-        } else {
-            window.location.href = '/Customer/MenuCustomer/PetInfo';
-        }
+    } else {
+        // Không làm gì khi người dùng không xác nhận xóa
     }
+}
+
 </script>
 
 
