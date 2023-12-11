@@ -307,12 +307,12 @@
                 <div style="display:flex;">
                     @*@if (Model.BookingServicesDetails.PartnerInfoId != null){}*@
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="confirmedCheckbox" name="newStatus" value="Confirmed">
+                        <input class="form-check-input" type="radio" id="confirmedCheckbox" name="newStatus" value="Confirmed" onchange="handleStatusChange()">
                         <label class="form-check-label" for="confirmedCheckbox">Nhận Đơn</label>
                     </div>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="cancelledCheckbox" name="newStatus" value="Cancelled" onchange="handleCancelledChange()">
+                        <input class="form-check-input" type="radio" id="cancelledCheckbox" name="newStatus" value="Cancelled" onchange="handleStatusChange()" onchange="handleCancelledChange()">
                         <label class="form-check-label" for="cancelledCheckbox">Hủy Đơn</label>
                     </div>
                     <div id="reasonSelect" style="display: none;" class="form-group">
@@ -368,13 +368,24 @@
     </div>
     <script>
         // Xử lý sự kiện khi chọn nút radio "Rejected"
-        $('#cancelledCheckbox').on('change', function () {
-            if ($(this).prop('checked')) {
-                $('#reasonSelect').show();  // Hiển thị select dropdown khi nút radio "Rejected" được chọn
+        function handleStatusChange() {
+            var receivedCheckbox = $('#confirmedCheckbox');
+            var reasonSelectDiv = $('#reasonSelect');
+            var lydoKhacDiv = $('#lydoKhac');
+
+            if (receivedCheckbox.prop('checked')) {
+                reasonSelectDiv.hide();  // Ẩn select dropdown khi nút radio "Received" được chọn
+                lydoKhacDiv.hide();      // Ẩn div "lydoKhac" khi nút radio "Received" được chọn
             } else {
-                $('#reasonSelect').hide();  // Ẩn select dropdown khi nút radio "Rejected" không được chọn
+                reasonSelectDiv.show();  // Hiển thị select dropdown khi nút radio "Rejected" được chọn
+                // Kiểm tra nếu "Lý Do Hủy Đơn Khác" đã được chọn, thì hiển thị "lydoKhacDiv"
+                if ($('#ReasonId').val() === 'khac') {
+                    lydoKhacDiv.show();
+                } else {
+                    lydoKhacDiv.hide();
+                }
             }
-        });
+        }
     </script>
 
     <script>
@@ -382,13 +393,17 @@
             // Hiển thị hoặc ẩn phần lý do hủy đơn tùy thuộc vào giá trị chọn
             var reasonSelectDiv = document.getElementById('reasonSelect');
             var lydoKhacDiv = document.getElementById('lydoKhac');
-            if (document.getElementById('cancelledCheckbox').checked) {
+            var rejectedCheckbox = document.getElementById('cancelledCheckbox');
+
+            if (rejectedCheckbox.checked) {
                 reasonSelectDiv.style.display = 'block';
+                lydoKhacDiv.style.display = 'block';
             } else {
                 reasonSelectDiv.style.display = 'none';
                 lydoKhacDiv.style.display = 'none';
             }
         }
+
         function handleReasonChange(selectElement) {
             var lydoKhacDiv = document.getElementById('lydoKhac');
 
