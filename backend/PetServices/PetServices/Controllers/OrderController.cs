@@ -399,7 +399,8 @@ namespace PetServices.Controllers
                 UpdateProductDetailsStatus(order, status.newStatusProduct);
                 UpdateServiceDetailsStatus(order, status.newStatusService);
 
-                if (order.OrderProductDetails.Count() > 0 && order.BookingServicesDetails.Count() == 0)
+                if (order.OrderProductDetails.Count() > 0 && 
+                    order.BookingServicesDetails.Count() == 0)
                 {
                     foreach (var dto in order.OrderProductDetails)
                     {
@@ -419,7 +420,7 @@ namespace PetServices.Controllers
                 {
                     foreach (var dto in order.BookingServicesDetails)
                     {
-                        if (status.newStatusService == "Delivered")
+                        if (status.newStatusService == "Completed")
                         {
                             if (order.StatusPayment == false)
                             {
