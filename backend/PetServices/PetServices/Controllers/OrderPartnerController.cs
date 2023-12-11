@@ -302,6 +302,86 @@ namespace PetServices.Controllers
                         }
                     }
                 }
+                if (order.OrderProductDetails.Count() > 0
+                    && order.BookingServicesDetails.Count() > 0)
+                {
+                    int checkProduct = -1;
+                    int checkService = -1;
+                    foreach (var dto in order.OrderProductDetails)
+                    {
+                        if (status.newStatusProduct == "Delivered")
+                        {
+                            checkProduct = 0;
+                        }
+                        else if (status.newStatusProduct == "Cancelled")
+                        {
+                            checkProduct = 4;
+                        }
+                        else
+                        {
+                            checkProduct = 1;
+                        }
+                    }
+                    foreach (var dto in order.BookingServicesDetails)
+                    {
+                        if (status.newStatusService == "Completed")
+                        {
+                            checkService = 0;
+                        }
+                        else if (status.newStatusService == "Cancelled")
+                        {
+                            checkService = 4;
+                        }
+                        else
+                        {
+                            checkService = 1;
+                        }
+
+                    }
+
+                    if (checkProduct == 0 && checkService == 0)
+                    {
+                        if (order.StatusPayment == false)
+                        {
+                            order.StatusPayment = !order.StatusPayment;
+                        }
+                        order.OrderStatus = "Completed";
+                    }
+
+                    if (checkProduct == 0 && checkService == 4)
+                    {
+                        if (order.StatusPayment == false)
+                        {
+                            order.StatusPayment = !order.StatusPayment;
+                        }
+                        order.OrderStatus = "Completed";
+                    }
+
+                    if (checkProduct == 4 && checkService == 0)
+                    {
+                        if (order.StatusPayment == false)
+                        {
+                            order.StatusPayment = !order.StatusPayment;
+                        }
+                        order.OrderStatus = "Completed";
+                    }
+
+                    if (checkProduct == 4 && checkService == 4)
+                    {
+                        order.OrderStatus = "Cancelled";
+                    }
+
+                    if (checkProduct == 0 && checkService == 1)
+                    {
+                        order.OrderStatus = order.OrderStatus;
+                    }
+
+                    if (checkProduct == 1 && checkService == 0)
+                    {
+                        order.OrderStatus = order.OrderStatus;
+                    }
+                }
+
                 _context.Orders.Update(order);
 
                 await _context.SaveChangesAsync();

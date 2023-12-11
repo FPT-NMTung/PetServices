@@ -15,8 +15,6 @@ namespace FEPetServices.Areas.Customer.Controllers
     {
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
-        //private string DefaultApiUrlPet = "";
-        //private string DefaultApiUrlOrders = "";
         private readonly IConfiguration configuration;
 
         public MenuCustomerController(IConfiguration configuration)
@@ -79,7 +77,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             if (userInfo.Dob.HasValue && userInfo.Dob.Value > DateTime.Now)
             {
                 TempData["ErrorToast"] = "Ngày sinh không thể lớn hơn ngày hiện tại";
-                return RedirectToAction("Index");
+                return RedirectToAction("Information");
             }
             if (userInfo.Address == null)
             {
