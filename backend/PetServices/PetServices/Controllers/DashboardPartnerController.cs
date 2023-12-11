@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PetServices.Form;
 using PetServices.Models;
 
 namespace PetServices.Controllers
@@ -19,7 +20,7 @@ namespace PetServices.Controllers
             _mapper = mapper;
             _configuration = configuration;
         }
-        [HttpGet("GetAllOrderCompleted")]
+        [HttpGet("GetAllOrderCompleted/{partnerId}")]
         public async Task<ActionResult> GetAllOrderCompleted(int partnerId)
         {
             var orderCompleted = await _context.Orders
@@ -31,7 +32,7 @@ namespace PetServices.Controllers
         }
 
         // số đơn hàng trong tháng
-        [HttpGet("OrderInMonth")]
+        [HttpGet("OrderInMonth/{partnerId}")]
         public async Task<ActionResult> OrderInMonth(int partnerId)
         {
             int curMonth = DateTime.Now.Month;
@@ -47,7 +48,7 @@ namespace PetServices.Controllers
         }
 
         // % số đơn hàng trong tháng so với tháng trước
-        [HttpGet("GetPercentOrderInMonth")]
+        [HttpGet("GetPercentOrderInMonth/{partnerId}")]
         public async Task<ActionResult> GetPercentOrderInMonth(int partnerId)
         {
             int curMonth = DateTime.Now.Month;
@@ -91,7 +92,7 @@ namespace PetServices.Controllers
         }
 
         // tổng thu nhập trong tháng
-        [HttpGet("GetIncomeInMonth")]
+        [HttpGet("GetIncomeInMonth/{partnerId}")]
         public async Task<ActionResult> GetIncomeInMonth(int partnerId)
         {
             int currentMonth = DateTime.Now.Month;
@@ -115,7 +116,7 @@ namespace PetServices.Controllers
         }
 
         // % tổng thu nhập trong tháng so với tháng trước
-        [HttpGet("GetPercentIncomePreviousMonth")]
+        [HttpGet("GetPercentIncomePreviousMonth/{partnerId}")]
         public async Task<ActionResult> GetPercentIncomePreviousMonth(int partnerId)
         {
             int curMonth = DateTime.Now.Month;
@@ -139,17 +140,12 @@ namespace PetServices.Controllers
             var ordersInMonth = await _context.Orders
                 .Where(o => o.OrderDate.Value.Month == curMonth 
                 && o.OrderDate.Value.Year == curYear
-                && o.BookingServicesDetails
-                .Any(x => x.StatusOrderService == "Completed"
-                && x.PartnerInfoId == partnerId))
+                && o.OrderStatus == "Completed")
                 .ToListAsync();
 
             var ordersPreviousMonth = await _context.Orders
                 .Where(o => o.OrderDate.Value.Month == previousMonth 
-                && o.OrderDate.Value.Year == newYear
-                && o.BookingServicesDetails
-                .Any(x => x.StatusOrderService == "Completed"
-                && x.PartnerInfoId == partnerId))
+                && o.OrderDate.Value.Year == newYear && o.OrderStatus == "Completed")
                 .ToListAsync();
 
             foreach (var order in ordersInMonth)
@@ -170,6 +166,48 @@ namespace PetServices.Controllers
             double percent = (double)(totalIncome - totalIncomePreviousMonth) / totalIncomePreviousMonth * 100;
 
             return Ok(percent.ToString("F2"));
+        }
+
+        // đánh giá của khách hàng về các dịch vụ
+        [HttpGet("GetFeedbackOfService/{partnerId}")]
+        public async Task<ActionResult> GetFeedbackOfService(int partnerId)
+        {
+            var listFeedback = await _context.Feedbacks
+                .Where(o => o.PartnerId == partnerId)
+                .ToListAsync();
+
+            var stt = 1;
+            var feedback = new List<FeedbackForm>();
+
+            foreach (var feedbackItem in listFeedback)
+            {
+                var service = await _context.Services
+                    .FirstOrDefaultAsync(o => o.ServiceId == feedbackItem.ServiceId);
+
+                var customer = await _context.UserInfos
+                    .FirstOrDefaultAsync(o => o.UserInfoId == feedbackItem.UserId);
+
+                var partner = await _context.PartnerInfos
+                    .FirstOrDefaultAsync(o => o.PartnerInfoId == feedbackItem.PartnerId);
+
+                var account = await _context.Accounts
+                    .FirstOrDefaultAsync(o => o.UserInfoId == feedbackItem.UserId);
+
+                feedback.Add(new FeedbackForm
+                {
+                    stt = stt,
+                    name = (partner.FirstName + " " + partner.LastName) ?? null,
+                    picture = partner.ImagePartner ?? null,
+                    gmail = account.Email,
+                    customerName = customer.FirstName + customer.LastName ?? null,
+                    NumberStart = feedbackItem.NumberStart,
+                    Content = feedbackItem.Content,
+                });
+
+                stt++;
+            }
+
+            return Ok(feedback);
         }
     }
 }
