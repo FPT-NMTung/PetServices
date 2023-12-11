@@ -2,7 +2,7 @@
 using FEPetServices.Form.OrdersForm;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using NuGet.Protocol.Plugins;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
@@ -15,8 +15,6 @@ namespace FEPetServices.Areas.Customer.Controllers
     {
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
-        //private string DefaultApiUrlPet = "";
-        //private string DefaultApiUrlOrders = "";
         private readonly IConfiguration configuration;
 
         public MenuCustomerController(IConfiguration configuration)
@@ -79,7 +77,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             if (userInfo.Dob.HasValue && userInfo.Dob.Value > DateTime.Now)
             {
                 TempData["ErrorToast"] = "Ngày sinh không thể lớn hơn ngày hiện tại";
-                return RedirectToAction("Index");
+                return RedirectToAction("Information");
             }
             if (userInfo.Address == null)
             {
@@ -143,6 +141,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "UserInfo/updateInfo?email=" + email, userInfo);
             if (response.IsSuccessStatusCode)
             {
+                HttpContext.Session.SetString("UserImage", userInfo.ImageUser);
                 TempData["SuccessToast"] = "Cập nhật thông tin thành công";
                 return RedirectToAction("Information");
             }

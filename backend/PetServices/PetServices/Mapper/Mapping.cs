@@ -154,8 +154,7 @@ namespace PetServices.Mapper
                 .ForMember(dest => dest.TagName, opt => opt.MapFrom(src => src.Tag.TagName));
             CreateMap<Tag,TagDTO>()
                 .ReverseMap();
-            CreateMap<Tag, Tag2DTO>()
-                .ReverseMap();
+           
             #endregion
 
             CreateMap<Feedback, FeedbackDTO>()

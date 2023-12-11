@@ -1,13 +1,11 @@
 ﻿using FEPetServices.Areas.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using PetServices.Models;
 using System.Net.Http.Headers;
 using System.Text;
-using Microsoft.AspNetCore.Authorization;
-using System.Net;
-using ClosedXML.Excel;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {

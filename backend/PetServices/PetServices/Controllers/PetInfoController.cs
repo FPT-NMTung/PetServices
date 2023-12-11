@@ -114,7 +114,7 @@ namespace PetServices.Controllers
             }
             return Ok(pet);
         }
-        [HttpDelete]
+        [HttpDelete("Delete")]
         public IActionResult DeleteServce(int petId)
         {
             var pet = _context.PetInfos.FirstOrDefault(p => p.PetInfoId == petId);

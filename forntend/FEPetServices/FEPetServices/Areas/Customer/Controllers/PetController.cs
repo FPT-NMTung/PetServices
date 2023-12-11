@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using PetServices.Models;
-using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
@@ -28,13 +26,9 @@ namespace FEPetServices.Areas.Customer.Controllers
             DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
         }
 
-       public class PetModel{
-            public AccountInfo AccountInfo { get; set; }
-          
-        }
+       
         public async Task<IActionResult> AddPet([FromForm] PetInfo petInfo, List<IFormFile> image)
         {     
-            PetModel model = new PetModel();
             try
             {
                 ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
@@ -52,7 +46,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                 }
 
 
-                if (petInfo.PetName == null || petInfo.Dob==null || petInfo.ImagePet == null) { return View(); }
+                if (petInfo.PetName == null || petInfo.Dob==null ) { return View(); }
                     foreach (var file in image)
                     {
                         string filename = GenerateRandomNumber(5) + file.FileName;
@@ -65,13 +59,13 @@ namespace FEPetServices.Areas.Customer.Controllers
 
                     var json = JsonConvert.SerializeObject(petInfo);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    //HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/PetInfo/CreatePet", content);
-                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "PetInfo/CreatePet", content);
+                    HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/PetInfo/CreatePet", content);
+                    //HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "PetInfo/CreatePet", content);
 
                     if (response.IsSuccessStatusCode)
                     {
                         TempData["SuccessToast"] = "Thêm thông tin thú cưng thành công!";
-                        return  RedirectToAction("/MenuCustomer/PetInfo");
+                        return  View(petInfo);
                     }
                     else
                     {
