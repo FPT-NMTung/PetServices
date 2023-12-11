@@ -95,7 +95,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             else
             {
                 //{DefaultApiUrl}
-                HttpResponseMessage response = await _client.GetAsync($"https://localhost:7255/api/Order/getRoomOrderUserNoneFeedback/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
+                HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/getRoomOrderUserNoneFeedback/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
 
                 if (response.IsSuccessStatusCode)
                 {
