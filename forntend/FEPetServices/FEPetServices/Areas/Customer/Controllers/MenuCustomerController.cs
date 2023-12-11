@@ -79,7 +79,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             if (userInfo.Dob.HasValue && userInfo.Dob.Value > DateTime.Now)
             {
                 TempData["ErrorToast"] = "Ngày sinh không thể lớn hơn ngày hiện tại";
-                return RedirectToAction("Information");
+                return RedirectToAction("Index");
             }
             if (userInfo.Address == null)
             {

@@ -69,7 +69,7 @@
                 foreach (var pcb in pc.BookingServicesDetails)
                 {
                     itemCount++;
-                    if (pcb.StatusOrderService?.Trim() == "Processing")
+                    if (pcb.StatusOrderService.Trim() == "Processing")
                     {
                         <tr>
                             <td>@itemCount</td>
