@@ -28,6 +28,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
         }
 
+       
         public async Task<IActionResult> AddPet([FromForm] PetInfo petInfo, List<IFormFile> image)
         {     
             try
@@ -66,7 +67,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         TempData["SuccessToast"] = "Thêm thông tin thú cưng thành công!";
-                        return  RedirectToAction("/Customer/MenuCustomer/PetInfo");
+                        return  View(petInfo);
                     }
                     else
                     {

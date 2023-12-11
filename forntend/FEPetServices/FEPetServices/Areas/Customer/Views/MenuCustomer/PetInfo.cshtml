@@ -71,32 +71,38 @@
             </div>
         </div>
     </div>
+    <style>
+           .w-100{
+
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg);
+}
+    </style>
 </body>
 <script src="~/js/toastnotification.js"></script>
 <script>
-     @*Chỉ định hàm xóa cho từng nút xóa thú cưng*@
-    function deletePet(petId) {
-        var confirmDelete = confirm("Bạn có chắc chắn muốn xóa thú cưng không?");
-        if (confirmDelete) {
-            fetch(`https://localhost:7255/api/PetInfo?petId=${petId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+function deletePet(petId) {
+    var confirmDelete = confirm("Bạn có chắc chắn muốn xóa thú cưng không?");
+    if (confirmDelete) {
+        fetch(`https://localhost:7255/api/PetInfo/Delete?petId=${petId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("Xóa thú cưng thành công!");
+                    window.location.href = 'http://localhost:7247/Customer/MenuCustomer/PetInfo'; // Chuyển hướng đến trang PetInfo
+                } else {
+                    alert("Xóa thú cưng thất bại. Vui lòng thử lại sau.");
+                    window.location.href = '/Customer/MenuCustomer/PetInfo'; // Chuyển hướng đến trang PetInfo
+                }
             })
-                .then(response => {
-                    if (response.ok) {
-                        alert("Xóa thú cưng thành công!");
-                        window.location.href = '/Customer/MenuCustomer/PetInfo';
-                    } else {
-                        alert("Xóa thú cưng thất bại. Vui lòng thử lại sau.");
-                        window.location.href = '/Customer/MenuCustomer/PetInfo';
-                    }
-                })
-        } else {
-            window.location.href = '/Customer/MenuCustomer/PetInfo';
-        }
+    } else {
+        // Không làm gì khi người dùng không xác nhận xóa
     }
+}
+
 </script>
 
 
