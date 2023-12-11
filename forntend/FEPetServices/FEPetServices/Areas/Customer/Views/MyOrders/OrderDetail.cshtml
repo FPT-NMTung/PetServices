@@ -519,7 +519,21 @@
             document.getElementById('partnerIdInput').value = null;
         }
 
-        
+        //Hiện popup đánh giá partner
+        function openPopupPartner(image, partnerName, partnerId, serviceId, userId, orderId, status) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+
+            document.getElementById('popupImage').src = image;
+            document.getElementById('popupServiceName').innerText = partnerName;
+
+            document.getElementById('partnerIdInput').value = partnerId;
+            document.getElementById('userIdInput').value = userId;
+            document.getElementById('orderIdInput').value = orderId;
+            document.getElementById('serviceIdInput').value = serviceId;
+            document.getElementById('productIdInput').value = null;
+            document.getElementById('roomIdInput').value = null;
+        }
 
         // Ẩn popup đánh giá
         function closePopup() {
