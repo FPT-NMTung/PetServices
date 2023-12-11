@@ -82,6 +82,60 @@ namespace FEPetServices.Areas.Customer.Controllers
             }
         }
 
+        private async Task<IActionResult> GetOrdersRoomNoneFeedback(string orderStatus, int page, int pageSize)
+        {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+            HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderroomstatus/{orderStatus}?email={email}");
+            if (responsecheck.StatusCode == HttpStatusCode.NotFound)
+            {
+                return View();
+            }
+            else
+            {
+                //{DefaultApiUrl}
+                HttpResponseMessage response = await _client.GetAsync($"https://localhost:7255/api/Order/getRoomOrderUserNoneFeedback/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+
+                    if (!string.IsNullOrEmpty(responseContent) && responseContent.Contains("404 Not Found"))
+                    {
+                        return new ErrorResult("");
+                    }
+
+                    List<OrderForm> orders = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
+
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return PartialView("_OrderPartialView", orders);
+                    }
+                    else
+                    {
+                        return View(orders);
+                    }
+                }
+                else
+                {
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        return new ErrorResult("");
+                    }
+                    else
+                    {
+                        return View();
+                    }
+                }
+            }
+        }
+
         [HttpGet]
         public Task<IActionResult> Index(string orderStatus, int page, int pageSize) => GetOrdersRoom(orderStatus, page, pageSize);
 
@@ -96,6 +150,9 @@ namespace FEPetServices.Areas.Customer.Controllers
 
         [HttpGet]
         public Task<IActionResult> Processing(string orderStatus, int page, int pageSize) => GetOrdersRoom(orderStatus, page, pageSize);
+
+        [HttpGet]
+        public Task<IActionResult> NoneFeedback(string orderStatus, int page, int pageSize) => GetOrdersRoomNoneFeedback(orderStatus, page, pageSize);
 
         [HttpGet]
         public async Task<IActionResult> OrderRoomDetail(int id)
