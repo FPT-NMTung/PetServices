@@ -1,4 +1,4 @@
-﻿@using FEPetServices.Form.OrdersForm;
+﻿﻿@using FEPetServices.Form.OrdersForm;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,7 +57,8 @@
                                     double totalPrice = 0;
                                     <div class="work-container">
                                         <div class="work-container-inner">
-                                            <h5>Mã đơn hàng : @order.OrderId
+                                            <h5>
+                                                Mã đơn hàng : @order.OrderId
                                                 <a style="font-size:18px; text-decoration:none; font-weight:600" class="detail-button" href="~/Customer/MyOrdersRoom/OrderRoomDetail?id=@order.OrderId"> Xem thêm</a>
                                             </h5>
                                             @if (order?.OrderStatus.Trim() == "Confirmed")
@@ -288,62 +289,62 @@
 
     @*Start Orders Loading*@
     @*<script>
-        $(document).ready(function () {
-            $('.nav-link').on('click', function () {
-                $('.nav-link').removeClass('active');
+    $(document).ready(function () {
+    $('.nav-link').on('click', function () {
+    $('.nav-link').removeClass('active');
 
-                $(this).addClass('active');
+    $(this).addClass('active');
 
-                var orderStatus = $(this).data('order-status');
-                loadOrders(orderStatus);
-            });
+    var orderStatus = $(this).data('order-status');
+    loadOrders(orderStatus);
+    });
 
-            function loadOrders(orderStatus) {
-                $.ajax({
-                    url: '/Customer/MyOrdersRoom/Index',
-                    type: 'GET',
-                    data: { orderStatus: orderStatus, page: 1, pageSize: 5 },
-                    success: function (data) {
-                        $('#orders-container').html(data);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.error('AJAX error:', textStatus, errorThrown);
-                        $('#orders-container').html('<div class="work-container" style="width:100%"><p style="text-align:center">Chưa có đơn hàng</p></div>');
-                    }
-                });
-            }
+    function loadOrders(orderStatus) {
+    $.ajax({
+    url: '/Customer/MyOrdersRoom/Index',
+    type: 'GET',
+    data: { orderStatus: orderStatus, page: 1, pageSize: 5 },
+    success: function (data) {
+    $('#orders-container').html(data);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+    console.error('AJAX error:', textStatus, errorThrown);
+    $('#orders-container').html('<div class="work-container" style="width:100%"><p style="text-align:center">Chưa có đơn hàng</p></div>');
+    }
+    });
+    }
 
-            function loadMore(orderStatus) {
-                if (!loading && lazyLoadingEnabled) {
-                    loading = true;
-                    $('#loading-indicator').show();
+    function loadMore(orderStatus) {
+    if (!loading && lazyLoadingEnabled) {
+    loading = true;
+    $('#loading-indicator').show();
 
-                    $.ajax({
-                        url: '/Customer/MyOrdersRoom/Index',
-                        type: 'GET',
-                        data: { orderStatus: orderStatus, page: pageIndex + 1, pageSize: 5 },
-                        success: function (data) {
-                            if (data.trim() !== '') {
-                                $('#orders-container').append(data);
-                                pageIndex++;
-                            } else {
-                                lazyLoadingEnabled = false;
-                            }
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            lazyLoadingEnabled = false;
-                            console.error('AJAX error:', textStatus, errorThrown);
-                        },
+    $.ajax({
+    url: '/Customer/MyOrdersRoom/Index',
+    type: 'GET',
+    data: { orderStatus: orderStatus, page: pageIndex + 1, pageSize: 5 },
+    success: function (data) {
+    if (data.trim() !== '') {
+    $('#orders-container').append(data);
+    pageIndex++;
+    } else {
+    lazyLoadingEnabled = false;
+    }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+    lazyLoadingEnabled = false;
+    console.error('AJAX error:', textStatus, errorThrown);
+    },
 
-                        complete: function () {
-                            loading = false;
-                            $('#loading-indicator').hide();
-                        }
-                    });
-                }
-            }
+    complete: function () {
+    loading = false;
+    $('#loading-indicator').hide();
+    }
+    });
+    }
+    }
 
-        });
+    });
     </script>*@
     @*End Orders Loading*@
 

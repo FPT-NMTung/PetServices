@@ -128,7 +128,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     );
             }
 
-            using ( XLWorkbook wb = new XLWorkbook())
+            using (XLWorkbook wb = new XLWorkbook())
             {
                 wb.Worksheets.Add(dataTable);
                 using (MemoryStream stream = new MemoryStream())
@@ -177,7 +177,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
                 else
                 {
-                    return View(roomDTO); 
+                    return View(roomDTO);
                 }
                 roomDTO.Status = true;
 
@@ -301,7 +301,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     var imagePath = "/img/Room/" + image.FileName;
                     roomDTO.Picture = imagePath;
 
-                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img","Room", image.FileName);
+                    var physicalImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "Room", image.FileName);
                     using (var stream = new FileStream(physicalImagePath, FileMode.Create))
                     {
                         await image.CopyToAsync(stream);

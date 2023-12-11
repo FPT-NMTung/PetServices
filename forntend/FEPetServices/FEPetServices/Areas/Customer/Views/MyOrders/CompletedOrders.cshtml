@@ -1,4 +1,4 @@
-﻿﻿@using FEPetServices.Form.OrdersForm;
+﻿﻿﻿@using FEPetServices.Form.OrdersForm;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,7 +67,8 @@
                                     double totalPrice = 0;
                                     <div class="work-container">
                                         <div class="work-container-inner">
-                                            <h5>Mã đơn hàng : @order.OrderId
+                                            <h5>
+                                                Mã đơn hàng : @order.OrderId
                                                 <a style="font-size:18px; text-decoration:none; font-weight:600" class="detail-button" href="~/Customer/MyOrders/OrderDetail?id=@order.OrderId"> Xem thêm</a>
                                             </h5>
                                             @if (order.OrderStatus.Trim() == "Confirmed")
@@ -113,11 +114,11 @@
                                                         <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
                                                     @if ((productDetail.FeedbackStatus == null || productDetail.FeedbackStatus == false) && productDetail?.StatusOrderProduct?.Trim() == "Delivered")
-                                                        {
-                                                            <div class="btn-content-detail">
-                                                                <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@order.UserInfoId', '@order.OrderId', '@productDetail.FeedbackStatus')">Đánh giá</button>
-                                                            </div>
-                                                        }
+                                                    {
+                                                        <div class="btn-content-detail">
+                                                            <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@order.UserInfoId', '@order.OrderId', '@productDetail.FeedbackStatus')">Đánh giá</button>
+                                                        </div>
+                                                    }
                                                     @if (i == order.OrderProductDetails.Count - 1)
                                                     {
                                                         <div class=" status-content-detail">
@@ -314,7 +315,7 @@
             </div>
         </div>
     </div>
-    
+
 
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>

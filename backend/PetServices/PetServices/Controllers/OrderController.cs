@@ -10,7 +10,7 @@ namespace PetServices.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase   
+    public class OrderController : ControllerBase
     {
         private PetServicesContext _context;
         private IMapper _mapper;
@@ -245,7 +245,7 @@ namespace PetServices.Controllers
                         .ThenInclude(br => br.Service)
                         .Include(o => o.ReasonOrders)
                     .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) &&
-                    o.BookingRoomDetails.Count() > 0 && o.BookingServicesDetails.Count() == 0 && o.OrderProductDetails.Count() == 0 
+                    o.BookingRoomDetails.Count() > 0 && o.BookingServicesDetails.Count() == 0 && o.OrderProductDetails.Count() == 0
                     );
 
                 if (!string.IsNullOrEmpty(orderstatus) && orderstatus.ToLower() != "all")
@@ -343,18 +343,18 @@ namespace PetServices.Controllers
                                             .ThenInclude(br => br.Room)
                                         .Include(b => b.BookingRoomServices)
                                             .ThenInclude(br => br.Service)
-                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) 
-                                         && o.OrderStatus == orderstatus 
-                                         && o.BookingRoomDetails.Count() == 0 
-                                         && (o.BookingServicesDetails.Count() > 0 
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email)
+                                         && o.OrderStatus == orderstatus
+                                         && o.BookingRoomDetails.Count() == 0
+                                         && (o.BookingServicesDetails.Count() > 0
                                          || o.OrderProductDetails.Count() > 0
                                          )).ToList();
 
-                    if (orders.Count == 0 )
+                    if (orders.Count == 0)
                     {
                         return NotFound("No orders found with the specified status");
                     }
-                    else 
+                    else
                     {
                         return Ok();
                     }
@@ -362,7 +362,7 @@ namespace PetServices.Controllers
                 else
                 {
                     List<Order> orders = _context.Orders
-                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) 
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email)
                                          && o.BookingRoomDetails.Count() == 0
                                          && (o.BookingServicesDetails.Count() > 0
                                          || o.OrderProductDetails.Count() > 0
@@ -496,7 +496,7 @@ namespace PetServices.Controllers
                 UpdateProductDetailsStatus(order, status.newStatusProduct);
                 UpdateServiceDetailsStatus(order, status.newStatusService);
 
-                if (order.OrderProductDetails.Count() > 0 && 
+                if (order.OrderProductDetails.Count() > 0 &&
                     order.BookingServicesDetails.Count() == 0)
                 {
                     foreach (var dto in order.OrderProductDetails)
@@ -609,7 +609,7 @@ namespace PetServices.Controllers
                 }
 
                 if (order.OrderProductDetails.Count() == 0
-                    && order.BookingServicesDetails.Count() == 0    
+                    && order.BookingServicesDetails.Count() == 0
                     && order.BookingRoomDetails.Count() > 0)
                 {
                     foreach (var dto in order.BookingRoomDetails)

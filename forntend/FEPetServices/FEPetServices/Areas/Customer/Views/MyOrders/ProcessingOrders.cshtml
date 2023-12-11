@@ -1,4 +1,4 @@
-﻿@using FEPetServices.Form.OrdersForm;
+﻿﻿@using FEPetServices.Form.OrdersForm;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,7 +74,8 @@
                                     double totalPrice = 0;
                                     <div class="work-container">
                                         <div class="work-container-inner">
-                                            <h5>Mã đơn hàng : @order.OrderId
+                                            <h5>
+                                                Mã đơn hàng : @order.OrderId
                                                 <a style="font-size:18px; text-decoration:none; font-weight:600" class="detail-button" href="~/Customer/MyOrders/OrderDetail?id=@order.OrderId"> Xem thêm</a>
                                             </h5>
                                             @if (order.OrderStatus.Trim() == "Confirmed")
@@ -145,7 +146,7 @@
                                                                 <span class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
                                                             }
                                                         </div>
-                                                    } 
+                                                    }
                                                 }
                                             </div>
                                         }

@@ -36,9 +36,9 @@ namespace FEPetServices.Areas.Customer.Controllers
             HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderstatus/{orderStatus}?email={email}");
             if (responsecheck.StatusCode == HttpStatusCode.NotFound)
             {
-                
+
                 return View();
-            }   
+            }
             else
             {
                 HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/getOrderUser/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
@@ -67,7 +67,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                     {
                         return View(orders);
                     }
-                }   
+                }
                 else
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)

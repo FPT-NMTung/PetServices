@@ -1,4 +1,4 @@
-﻿@using FEPetServices.Form.OrdersForm;
+﻿﻿@using FEPetServices.Form.OrdersForm;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,7 +76,8 @@
                                     double totalPrice = 0;
                                     <div class="work-container">
                                         <div class="work-container-inner">
-                                            <h5>Mã đơn hàng : @order.OrderId                                             
+                                            <h5>
+                                                Mã đơn hàng : @order.OrderId
                                                 <a style="font-size:18px; text-decoration:none; font-weight:600" class="detail-button" href="~/Customer/MyOrders/OrderDetail?id=@order.OrderId"> Xem thêm</a>
                                             </h5>
                                             @if (order.OrderStatus.Trim() == "Confirmed")
@@ -174,9 +175,9 @@
                                             Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail.PartnerInfoId
                                             </button>*@
                                                                 <div style="display: flex ; justify-content:space-between">
-                                                                <p style="font-size:.8rem;">
-                                                                    Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail?.PartnerInfoId
-                                                                </p>
+                                                                    <p style="font-size:.8rem;">
+                                                                        Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail?.PartnerInfoId
+                                                                    </p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -565,22 +566,22 @@
 
     @*Đánh giá*@
     <script>
-        //Hiện popup đánh giá service
-        function openPopupService(image, serviceName, weight, serviceId, userId, orderId) {
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('popup').style.display = 'block';
+            //Hiện popup đánh giá service
+            function openPopupService(image, serviceName, weight, serviceId, userId, orderId) {
+                document.getElementById('overlay').style.display = 'block';
+                document.getElementById('popup').style.display = 'block';
 
-            document.getElementById('popupImage').src = image;
-            document.getElementById('popupServiceName').innerText = serviceName;
-            document.getElementById('popupServiceInfo').innerText = 'Cân nặng: ' + weight + ' Kg';
+                document.getElementById('popupImage').src = image;
+                document.getElementById('popupServiceName').innerText = serviceName;
+                document.getElementById('popupServiceInfo').innerText = 'Cân nặng: ' + weight + ' Kg';
 
-            document.getElementById('serviceIdInput').value = serviceId;
-            document.getElementById('userIdInput').value = userId;
-            document.getElementById('orderIdInput').value = orderId;
-            document.getElementById('productIdInput').value = null;
-            document.getElementById('roomIdInput').value = null;
-            document.getElementById('partnerIdInput').value = null;
-        }
+                document.getElementById('serviceIdInput').value = serviceId;
+                document.getElementById('userIdInput').value = userId;
+                document.getElementById('orderIdInput').value = orderId;
+                document.getElementById('productIdInput').value = null;
+                document.getElementById('roomIdInput').value = null;
+                document.getElementById('partnerIdInput').value = null;
+            }
 
         //Hiện popup đánh giá product
         function openPopupProduct(image, productName, quantity, productId, userId, orderId, status) {

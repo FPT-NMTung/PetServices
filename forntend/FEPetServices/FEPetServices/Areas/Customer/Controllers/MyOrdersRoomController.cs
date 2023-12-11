@@ -145,7 +145,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         [HttpGet]
         public Task<IActionResult> CheckOut(string orderStatus, int page, int pageSize) => GetOrdersRoom(orderStatus, page, pageSize);
 
-        [HttpGet] 
+        [HttpGet]
         public Task<IActionResult> Canceled(string orderStatus, int page, int pageSize) => GetOrdersRoom(orderStatus, page, pageSize);
 
         [HttpGet]

@@ -438,7 +438,7 @@ namespace PetServices.Controllers
                 var room = await _context.Rooms.FirstOrDefaultAsync(p => p.RoomId == RoomId);
 
                 //tìm các hóa đơn của phòng được đặt trong khoảng thời gian 
-                var orders = await _context.BookingRoomDetails.Where(o => o.RoomId == RoomId 
+                var orders = await _context.BookingRoomDetails.Where(o => o.RoomId == RoomId
                                             && ((startDate >= o.StartDate && startDate < o.EndDate) // time bắt đầu khách đặt nằm trong khoảng thời gian trong hóa đơn
                                             || (endDate > o.StartDate && endDate <= o.EndDate) // time kết thúc khách đặt nằm trong khoảng thời gian trong hóa đơn
                                             || (startDate <= o.StartDate && endDate >= o.EndDate))) // thời gian trong hóa đơn nằm trong khoảng thời gian khách đặt
@@ -456,17 +456,18 @@ namespace PetServices.Controllers
                     {
                         return NotFound("Không tìm thấy phòng hợp lệ!");
                     }
-                    else if ( orders == null) // Nếu ko thấy hóa đơn nào thì đồng nghĩa với trong khoảng thời gian đó chưa có phòng nào được đặt
+                    else if (orders == null) // Nếu ko thấy hóa đơn nào thì đồng nghĩa với trong khoảng thời gian đó chưa có phòng nào được đặt
                     {
                         return Ok("Còn phòng trống.");
                     }
-                    else if (orders.Count() < a){ // small check nếu số hóa đơn nhỏ hơn số phòng thì giả sử mỗi hóa đơn 1 phòng thì vẫn còn phòng trống 
+                    else if (orders.Count() < a)
+                    { // small check nếu số hóa đơn nhỏ hơn số phòng thì giả sử mỗi hóa đơn 1 phòng thì vẫn còn phòng trống 
                         return Ok("Còn phòng trống.");
                     }
                     else
                     {
                         // tạo room ảo lưu trữ và gán hóa đơn cho các phòng ( áp dụng thuật toán greedy algorithm )
-                        List<List<BookingRoomDetail>> rooms  = new List<List<BookingRoomDetail>>();
+                        List<List<BookingRoomDetail>> rooms = new List<List<BookingRoomDetail>>();
 
                         foreach (var order in orders)
                         {
