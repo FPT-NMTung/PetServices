@@ -18,9 +18,9 @@
         <div class="card-header alert-primary">
             <ul class="nav nav-pills" id="pills-tab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill"
+                    <a class="nav-link" id="pills-home-tab" data-toggle="pill"
                        href="~/Customer/MyOrders/AllOrders?orderStatus=All&page=1&pageSize=5"
-                       role="tab" aria-selected="true">Tất cả</a>
+                       role="tab" aria-selected="false">Tất cả</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="pills-education-tab" data-toggle="pill"
@@ -48,9 +48,9 @@
                        role="tab" aria-selected="false">Huỷ</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill"
+                    <a class="nav-link active" id="pills-tasks-tab" data-toggle="pill"
                        href="~/Customer/MyOrders/NoneFeedback?orderStatus=Completed&page=1&pageSize=5"
-                       role="tab" aria-selected="false">Đơn hàng chưa đánh giá</a>
+                       role="tab" aria-selected="true">Đơn hàng chưa đánh giá</a>
                 </li>
             </ul>
         </div>
@@ -121,7 +121,7 @@
                                                         </div>
                                                         <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
                                                     </div>
-                                                    @if ((productDetail.FeedbackStatus == null || productDetail.FeedbackStatus == false) && productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                                                    @if ((productDetail.FeedbackStatus == null || productDetail.FeedbackStatus == false))
                                                     {
                                                         <div class="btn-content-detail">
                                                             <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@order.UserInfoId', '@order.OrderId', '@productDetail.FeedbackStatus')">Đánh giá</button>
@@ -184,7 +184,7 @@
                                                                 @{
                                                                     var partnerName = serviceDetail?.PartnerInfo?.FirstName + " " + serviceDetail?.PartnerInfo?.LastName + " - " + serviceDetail?.PartnerInfoId;
                                                                 
-                                                                    if ((serviceDetail.FeedbackPartnerStatus == null || serviceDetail.FeedbackPartnerStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                                                    if ((serviceDetail.FeedbackPartnerStatus == null || serviceDetail.FeedbackPartnerStatus == false))
                                                                     {
                                                                         <div class="btn-content-detail">
                                                                             <button class="btn btn-outline-primary" onclick="openPopupPartner('@serviceDetail?.PartnerInfo.ImagePartner', '@partnerName', '@serviceDetail.PartnerInfo.PartnerInfoId', '@serviceDetail.ServiceId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>
@@ -234,7 +234,7 @@
                                                             <span class="badge badge-info">Dịch vụ bị huỷ</span>
                                                         }
                                                     </div>
-                                                    @if ((serviceDetail.FeedbackStatus == null || serviceDetail.FeedbackStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                                    @if ((serviceDetail.FeedbackStatus == null || serviceDetail.FeedbackStatus == false))
                                                     {
                                                         <div class="btn-content-detail">
                                                             <button class="btn btn-outline-primary" onclick="openPopupService('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>
@@ -313,7 +313,7 @@
                     else
                     {
                         <div class="work-container" style="width:100%">
-                            <p style="text-align:center">Chưa có đơn hàng</p>
+                            <p style="text-align:center">Hiện chưa có đơn hàng nào ko đánh giá</p>
                         </div>
                     }
                 </div>
@@ -419,9 +419,9 @@
                 $('#loading-indicator').show();
 
                 $.ajax({
-                    url: '/Customer/MyOrders/AllOrders',
+                    url: '/Customer/MyOrders/NoneFeedback',
                     type: 'GET',
-                    data: { orderStatus: 'All', page: pageIndex + 1, pageSize: 5 },
+                    data: { orderStatus: 'Completed', page: pageIndex + 1, pageSize: 5 },
                     success: function (data) {
                         if (data.trim() !== '') {
                             $('#orders-container').append(data);

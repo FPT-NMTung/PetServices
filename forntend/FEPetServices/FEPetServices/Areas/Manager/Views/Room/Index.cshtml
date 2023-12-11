@@ -3,7 +3,6 @@
         text-align: center;
         font-size: 40px;
         font-weight: bold;
-        margin-top: 10px;
     }
 
     .future-status {
@@ -73,7 +72,6 @@
 <link href="~/css/toastNotification.css" rel="stylesheet" />
 <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="~/css/datatable.css" rel="stylesheet" />
-@*<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>*@
 
 
 <script>
@@ -115,11 +113,34 @@
         $('#addRoomButton').on('click', function () {
             window.location.href = '/Manager/Room/AddRoom';
         });
+
+        var exportfile = $('<button class="btn btn-primary" id="exportBtn">Download excel</button>');
+        $('.dataTables_filter').append(exportfile);
+
+        $('#exportBtn').on('click', function () {
+            $.ajax({
+                url: '/Manager/Room/ExportToExcel',
+                method: 'GET',
+                success: function (data) {
+                    // Trigger the download of the generated Excel file
+                    var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'Danh_Sach_Phong.xlsx'; // Specify the desired file name
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function () {
+                    // Handle errors if needed
+                    console.log('Error exporting to Excel');
+                }
+            });
+        });
     });
 </script>
 <div class="bg">
     <h1>Danh sách các phòng cho thú cưng</h1>
-
     <table id="lists" class="display">
         <thead>
             <tr>

@@ -90,6 +90,26 @@ namespace PetServices.Controllers
             return Ok(roomDto);
         }
 
+        [HttpGet("GetAllRoomDetail")]
+        public async Task<ActionResult> GetAllRoomDetail()
+        {
+            var roomList = await _context.Rooms
+                .Include(r => r.Services)
+                .Include(r => r.RoomCategories)
+                .ToListAsync();
+
+            var roomlist = _mapper.Map<List<RoomDTO>>(roomList);
+
+            foreach (var room in roomlist)
+            {
+                var roomservice = roomList.FirstOrDefault(r => r.RoomId == room.RoomId);
+
+                room.ServiceIds = roomservice.Services.Select(s => s.ServiceId).ToList();
+            }
+
+            return Ok(roomlist);
+        }
+
         [HttpGet("GetRoomCategory")]
         public async Task<ActionResult> GetRoomCategory()
         {
@@ -98,6 +118,7 @@ namespace PetServices.Controllers
 
             return Ok(_mapper.Map<List<RoomCategoryDTO>>(roomCategory));
         }
+
         [HttpGet("GetAllRoomWhenCategoryTrue")]
         public IActionResult GetRoomWhenCategoryTrue()
         {
