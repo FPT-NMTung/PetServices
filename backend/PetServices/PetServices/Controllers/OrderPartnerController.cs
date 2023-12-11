@@ -203,6 +203,23 @@ namespace PetServices.Controllers
                         bookingDetail.StatusOrderService = "Completed";
                     }
                 }
+
+                if (order.OrderProductDetails.Count() == 0
+                    && order.BookingServicesDetails.Count() > 0)
+                {
+                    foreach (var bookingDetail in order.BookingServicesDetails)
+                    {
+                        if (bookingDetail.StatusOrderService == "Processing")
+                        {
+                            if (order.StatusPayment == false)
+                            {
+                                order.StatusPayment = !order.StatusPayment;
+                            }
+                            bookingDetail.StatusOrderService = "Completed";
+                        }
+                    }
+                }
+
                 _context.Update(order);
                 await _context.SaveChangesAsync();
                 return Ok(_mapper.Map<OrdersDTO>(order));
