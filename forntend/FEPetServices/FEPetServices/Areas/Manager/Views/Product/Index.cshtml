@@ -14,12 +14,14 @@
             "info": true,
             "autoWidth": false,
             "columnDefs": [
-                { "targets": [0], "width": "5%" },
-                { "targets": [1], "width": "20%" },
-                { "targets": [2], "width": "20%" },
-                { "targets": [3], "width": "25%" }, // Điều chỉnh cột này để khớp với số cột thực tế
-                { "targets": [4], "width": "15%" },
+                { "targets": [0], "width": "2%" },
+                { "targets": [1], "width": "13%" },
+                { "targets": [2], "width": "25%" },
+                { "targets": [3], "width": "15%" },
+                { "targets": [4], "width": "10%" },
                 { "targets": [5], "width": "15%" },
+                { "targets": [6], "width": "10%" },
+                { "targets": [7], "width": "10%" },
             ],
             "language": {
                 "lengthMenu": "Hiển thị _MENU_ dòng",
@@ -77,9 +79,11 @@
     <thead>
         <tr>
             <th>No.</th>
-            <th>Ảnh</th>
             <th>Tên Sản Phẩm</th>
             <th>Mô Tả</th>
+            <th>Ảnh</th>
+            <th>Giá</th>
+            <th>Loại Sản Phẩm</th>
             <th>Trạng Thái</th>
             <th>Chi Tiết</th>
         </tr>
@@ -100,9 +104,11 @@
                 }
                 <tr>
                     <td>@product.ProductId</td>
-                    <td><img src="@product.Picture" width="50" height="50"></td>
                     <td>@product.ProductName</td>
                     <td>@description</td>
+                    <td><img src="@product.Picture" width="50" height="50"></td>
+                    <td>@string.Format("{0:#,##0} đ", product.Price).ToString().Replace(',', '.')</td>
+                    <td>@product.ProCategoriesName</td>
                     <td>
                         @if (@product.Status)
                         {
