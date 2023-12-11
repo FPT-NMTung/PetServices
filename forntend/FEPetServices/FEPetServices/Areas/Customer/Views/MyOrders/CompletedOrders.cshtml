@@ -43,6 +43,11 @@
                        href="~/Customer/MyOrders/CancelledOrders?orderStatus=Cancelled&page=1&pageSize=5"
                        role="tab" aria-selected="false">Huỷ</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill"
+                       href="~/Customer/MyOrders/NoneFeedback?orderStatus=Completed&page=1&pageSize=5"
+                       role="tab" aria-selected="false">Đơn hàng chưa đánh giá</a>
+                </li>
             </ul>
         </div>
         <div class="card-body">
@@ -507,10 +512,8 @@
                     data.RoomId = parseInt(roomId);
                 }
                 if (partnerId !== null) {
-                    data.PartnerId = partnerId;
+                    data.PartnerId = parseInt(partnerId);
                 }
-
-                //console.log("serviceId: " + serviceId + "productId: " + productId + "roomId: " + roomId + "partnerId: " + partnerId + "rating: " + rating + "userId: " + userId + "orderId: " + orderId + "feedbackMessage: " + feedbackMessage);
 
                 $.ajax({
                     url: 'https://pet-service-api.azurewebsites.net/api/Feedback/AddFeedBack',
