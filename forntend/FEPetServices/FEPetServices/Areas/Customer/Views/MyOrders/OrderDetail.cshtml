@@ -486,6 +486,25 @@
             document.getElementById('partnerIdInput').value = null;
         }
 
+        //Hiện popup đánh giá product
+        function openPopupProduct(image, productName, quantity, productId, userId, orderId, status) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+
+            document.getElementById('popupImage').src = image;
+            document.getElementById('popupServiceName').innerText = productName;
+            document.getElementById('popupServiceInfo').innerText = 'x' + quantity;
+
+            document.getElementById('productIdInput').value = productId;
+            document.getElementById('userIdInput').value = userId;
+            document.getElementById('orderIdInput').value = orderId;
+            document.getElementById('serviceIdInput').value = null;
+            document.getElementById('roomIdInput').value = null;
+            document.getElementById('partnerIdInput').value = null;
+        }
+
+        
+
         // Ẩn popup đánh giá
         function closePopup() {
             document.getElementById('overlay').style.display = 'none';
@@ -533,9 +552,9 @@
             var feedbackMessage = document.getElementById('feedbackMessage').value;
 
             var serviceId = document.getElementById('serviceIdInput').value;
-            //var productId = document.getElementById('productIdInput').value;
-            //var roomId = document.getElementById('roomIdInput').value;
-            ////var partnerId = document.getElementById('partnerIdInput').value;
+            var productId = document.getElementById('productIdInput').value;
+            var roomId = document.getElementById('roomIdInput').value;
+            //var partnerId = document.getElementById('partnerIdInput').value;
             var rating = document.getElementById('ratingInput').value;
             var userId = document.getElementById('userIdInput').value;
             var orderId = document.getElementById('orderIdInput').value;
@@ -575,7 +594,6 @@
                         location.reload();
                     },
                     error: function (error) {
-                        console.log(error.responseText);
                         showErrorToastFeedbackViewBag();
                     }
                 });
