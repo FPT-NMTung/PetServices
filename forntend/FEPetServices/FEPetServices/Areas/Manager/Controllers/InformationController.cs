@@ -154,7 +154,6 @@ namespace FEPetServices.Areas.Manager.Controllers
             HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "UserInfo/updateInfo?email=" + email, userInfo);
             if (response.IsSuccessStatusCode)
             {
-                HttpContext.Session.SetString("UserImage", userInfo.ImageUser);
                 TempData["SuccessToast"] = "Cập nhật thông tin thành công";
                 return RedirectToAction("Index");
             }

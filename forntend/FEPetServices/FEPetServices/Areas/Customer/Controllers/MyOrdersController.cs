@@ -156,9 +156,6 @@ namespace FEPetServices.Areas.Customer.Controllers
         public Task<IActionResult> CancelledOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
 
         [HttpGet]
-        public Task<IActionResult> NoneFeedback(string orderStatus, int page, int pageSize) => GetOrdersNoneStatus(orderStatus, page, pageSize);
-
-        [HttpGet]
         public async Task<IActionResult> OrderDetail(int id)
         {
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
