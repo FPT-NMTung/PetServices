@@ -29,20 +29,5 @@ namespace PetServices.Controllers
                 .ToListAsync();
             return Ok(orderCompleted);
         }
-
-        // số đơn hàng trong tháng
-        [HttpGet("OrderInMonth")]
-        public async Task<ActionResult> OrderInMonth(int partnerId)
-        {
-            int curMonth = DateTime.Now.Month;
-            int curYear = DateTime.Now.Year;
-
-            var numOrder = await _context.Orders
-                .Where(o => o.OrderDate.Value.Month == curMonth && o.OrderDate.Value.Year == curYear 
-                && o.BookingServicesDetails.Any(x => x.StatusOrderService == "Completed" && x.PartnerInfoId == partnerId))
-                .ToListAsync();
-
-            return Ok(numOrder.Count);
-        }
     }
 }

@@ -54,7 +54,7 @@
                     @if (ViewBag.Categories != null)
                     {
                      <select id="SerCategoriesId" name="SerCategoriesId" required>
-                     <option value="">Chọn loại dịch vụ</option>
+                     <option value="">Danh sách loại dịch vụ</option>
                             @foreach (var category in ViewBag.Categories)
                             {
                                             <option value="@category.Value">@category.Text</option>
@@ -84,7 +84,7 @@
                         <a type="submit" value="Cancal" href="/Manager/Service" class="cancel">Trở lại</a>
                     </div>
                     <div class="btn-submit">
-                        <input type="submit" value="Thêm dịch vụ">
+                        <input type="submit" value="Thêm mới dịch vụ">
                     </div>
                 </div>
      </div>
