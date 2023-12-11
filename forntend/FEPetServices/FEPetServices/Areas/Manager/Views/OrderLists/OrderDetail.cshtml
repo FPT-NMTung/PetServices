@@ -307,12 +307,12 @@
                 <div style="display:flex;">
                     @*@if (Model.BookingServicesDetails.PartnerInfoId != null){}*@
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="confirmedCheckbox" name="newStatus" value="Confirmed">
+                        <input class="form-check-input" type="radio" id="confirmedCheckbox" name="newStatus" value="Confirmed" onchange="handleStatusChange()">
                         <label class="form-check-label" for="confirmedCheckbox">Nhận Đơn</label>
                     </div>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="cancelledCheckbox" name="newStatus" value="Cancelled" onchange="handleCancelledChange()">
+                        <input class="form-check-input" type="radio" id="cancelledCheckbox" name="newStatus" value="Cancelled" onchange="handleStatusChange()" onchange="handleCancelledChange()">
                         <label class="form-check-label" for="cancelledCheckbox">Hủy Đơn</label>
                     </div>
                     <div id="reasonSelect" style="display: none;" class="form-group">
@@ -369,7 +369,7 @@
     <script>
         // Xử lý sự kiện khi chọn nút radio "Rejected"
         function handleStatusChange() {
-            var receivedCheckbox = $('#receivedCheckbox');
+            var receivedCheckbox = $('#confirmedCheckbox');
             var reasonSelectDiv = $('#reasonSelect');
             var lydoKhacDiv = $('#lydoKhac');
 
@@ -389,13 +389,11 @@
     </script>
 
     <script>
-        function handleRejectChange() {
-            var partnerIdInput = document.getElementById('partnerId');
-            partnerIdInput.value = null;
+        function handleCancelledChange() {
             // Hiển thị hoặc ẩn phần lý do hủy đơn tùy thuộc vào giá trị chọn
             var reasonSelectDiv = document.getElementById('reasonSelect');
             var lydoKhacDiv = document.getElementById('lydoKhac');
-            var rejectedCheckbox = document.getElementById('rejectedCheckbox');
+            var rejectedCheckbox = document.getElementById('cancelledCheckbox');
 
             if (rejectedCheckbox.checked) {
                 reasonSelectDiv.style.display = 'block';
