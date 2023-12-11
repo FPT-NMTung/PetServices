@@ -24,7 +24,6 @@
         }
     }
 }
-
 displayImage()
 
 function showErrorToastImage() {
