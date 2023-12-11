@@ -33,8 +33,9 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <form asp-action="AddBlog" method="post" enctype="multipart/form-data">
+            <div class="col-md-12" style="width: 120%; height: 100%; border-radius: 5px; background-color: #F2F2F2; margin-bottom: 5%;">
+                <form asp-action="AddBlog" method="post" enctype="multipart/form-data" style="    margin-left: 5%; width: 90%; margin-bottom: 2%;
+    margin-top: 2%;">
                     <div class="form-group">
                         <label for="PageTile">Tên bài viết <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                         <input type="text" class="form-control" name="PageTile" value="@Model?.PageTile" required placeholder="Tên bài viết"/>
