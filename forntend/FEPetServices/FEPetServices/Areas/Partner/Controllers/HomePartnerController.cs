@@ -19,9 +19,6 @@ namespace FEPetServices.Areas.Partner.Controllers
     {
         private readonly HttpClient client = null;
         private string DefaultApiUrl = "";
-        //private string DefaultApiUrlOrderPartner = "";
-        //private string DefaultApiUrlOrderListOfPetTraining = "";
-        //private string DefaultApiUrlOrderListOfPetTrainingSpecial = "";
         private readonly IConfiguration configuration;
 
         public HomePartnerController(IConfiguration configuration)
@@ -32,9 +29,6 @@ namespace FEPetServices.Areas.Partner.Controllers
             client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
             //DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/Partner";
-            //DefaultApiUrlOrderPartner = "https://pet-service-api.azurewebsites.net/api/OrderPartner";
-            //DefaultApiUrlOrderListOfPetTraining = "https://pet-service-api.azurewebsites.net/api/OrderPartner/ListOrderPetTraining?serCategoriesId=4";
-            //DefaultApiUrlOrderListOfPetTrainingSpecial = "https://pet-service-api.azurewebsites.net/api/OrderPartner/ListOrderPetTrainingSpecial";
 
         }
         public async Task<IActionResult> Index()
@@ -322,8 +316,6 @@ namespace FEPetServices.Areas.Partner.Controllers
                 status.newStatusProduct = "";
                 status.newStatusService = "Completed";
             }
-            //HttpResponseMessage response = await client.PutAsJsonAsync("https://localhost:7255/api/OrderPartner/ChangeStatus?orderId=" + orderId, status);
-            //HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl + "OrderPartner/ChangeStatus?orderId=" + orderId, status);
             HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl+"OrderPartner/ChangeStatus/" + email + "?orderId=" + orderId, status);
             reasonOrders.OrderId = orderId;
             

@@ -94,7 +94,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 status.newStatusProduct = "Cancelled";
                 status.newStatusService = "Cancelled";
             }
-            HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
+            //HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
+            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "Order/changeStatus?Id=" + id, status);
             reasonOrders.OrderId = id;
 
             reasonOrders.EmailReject = email;
