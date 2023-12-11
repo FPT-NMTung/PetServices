@@ -584,7 +584,7 @@
             var serviceId = document.getElementById('serviceIdInput').value;
             var productId = document.getElementById('productIdInput').value;
             var roomId = document.getElementById('roomIdInput').value;
-            //var partnerId = document.getElementById('partnerIdInput').value;
+            var partnerId = document.getElementById('partnerIdInput').value;
             var rating = document.getElementById('ratingInput').value;
             var userId = document.getElementById('userIdInput').value;
             var orderId = document.getElementById('orderIdInput').value;
@@ -606,9 +606,9 @@
                 if (roomId !== null) {
                     data.RoomId = parseInt(roomId);
                 }
-                //if (partnerId !== null) {
-                //    data.PartnerId = partnerId;
-                //}
+                if (partnerId !== null) {
+                    data.PartnerId = partnerId;
+                }
 
                 //console.log("serviceId: " + serviceId + "productId: " + productId + "roomId: " + roomId + "partnerId: " + partnerId + "rating: " + rating + "userId: " + userId + "orderId: " + orderId + "feedbackMessage: " + feedbackMessage);
 

@@ -299,6 +299,7 @@
                                     <input type="hidden" id="serviceIdInput" value="" />
                                     <input type="hidden" id="productIdInput" value="" />
                                     <input type="hidden" id="roomIdInput" value="" />
+                                    <input type="hidden" id="partnerIdInput" value="" />
                                     <input type="hidden" id="ratingInput" value="" />
                                     <input type="hidden" id="userIdInput" value="" />
                                     <input type="hidden" id="orderIdInput" value="" />
@@ -506,8 +507,10 @@
                     data.RoomId = parseInt(roomId);
                 }
                 if (partnerId !== null) {
-                    data.PartnerId = parseInt(partnerId);
+                    data.PartnerId = partnerId;
                 }
+
+                //console.log("serviceId: " + serviceId + "productId: " + productId + "roomId: " + roomId + "partnerId: " + partnerId + "rating: " + rating + "userId: " + userId + "orderId: " + orderId + "feedbackMessage: " + feedbackMessage);
 
                 $.ajax({
                     url: 'https://pet-service-api.azurewebsites.net/api/Feedback/AddFeedBack',
