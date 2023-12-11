@@ -138,7 +138,7 @@ namespace FEPetServices.Controllers
                                                         <p style=""margin: 0px; padding: 0px;"">Đây là mật khẩu mới của bạn !!!</p>
                                                         <p style=""margin: 0px; padding: 0px; font-size: 17px; text-align: center;"">Mật khẩu của bạn là: " + newPassword + @"</p>
                                                         <p class=""text-right"" style=""text-align: right; margin: 0px; padding: 0px;"">
-                                                            <a href=""#"" style=""color: #16c2d0; font-size: 14px; font-family: Helvetica, Arial, sans-serif; text-decoration: none;""><span><u>Đăng nhập ngay&gt;&gt;</u></span></a>
+                                                            <a href=""https://pet-service.azurewebsites.net/Login"" style=""color: #16c2d0; font-size: 14px; font-family: Helvetica, Arial, sans-serif; text-decoration: none;""><span><u>Đăng nhập ngay&gt;&gt;</u></span></a>
                                                         </p>
                                                     </td>
                                                 </tr>
