@@ -168,6 +168,9 @@
                                                 <a style="height:300px;" href="/ProductList/Detail?proId=@product.ProductId">
                                                     <img  src="@product.Picture" alt="Product Images" style="height:300px;">
                                                 </a>
+                                                @if(product.Quantity == 0) {
+                                                    <div class="out-of-stock-overlay"></div>
+                                                }
                                             </div>
                                             <div class="product-content" data-room-category="@product.ProCategoriesId">
                                                 <div class="inner">

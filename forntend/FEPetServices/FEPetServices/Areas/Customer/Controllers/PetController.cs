@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using PetServices.Models;
-using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;

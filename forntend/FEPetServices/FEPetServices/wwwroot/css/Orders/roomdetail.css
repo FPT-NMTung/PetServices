@@ -1,0 +1,236 @@
+﻿.card-header.alert-primary {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back-list {
+    cursor: pointer;
+}
+
+.header-contents {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content-code {
+    font-weight: bold;
+}
+
+.header-content-status .badge {
+    margin-left: 10px;
+}
+
+.card {
+    border: none;
+}
+
+.card-body {
+    background-color: #fff;
+    border-radius: 50px;
+}
+
+ul {
+    margin-bottom: 5px;
+}
+
+.card.card-stepper {
+    margin-top: 15px;
+}
+
+#progressbar-2 {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+    #progressbar-2 li {
+        max-width: 56px;
+        position: relative;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        #progressbar-2 li i {
+            font-size: 28px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            padding: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+            #progressbar-2 li i.fa-house-medical-circle-exclamation,
+            #progressbar-2 li i.fa-house-circle-check,
+            #progressbar-2 li i.fa-house-chimney-crack,
+            #progressbar-2 li i.fa-star {
+                color: rgba(0, 0, 0, 0.5);
+                border: 3.5px solid rgba(0, 0, 0, 0.5);
+            }
+
+        #progressbar-2 li.active i.fa-house-medical-circle-exclamation,
+        #progressbar-2 li.active i.fa-house-circle-check,
+        #progressbar-2 li.active i.fa-house-chimney-crack,
+        #progressbar-2 li.active i.fa-download {
+            color: #4caf50;
+            border: 3.5px solid #4caf50;
+        }
+
+        #progressbar-2 li.active i.fa-star {
+            color: #fff;
+            background-color: #4caf50;
+            border: 3.5px solid #4caf50;
+        }
+
+        #progressbar-2 li .icon-label-container {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+.step-label {
+    margin-top: 10px;
+}
+
+#progressbar-2 li .connector {
+    height: 3.5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translateY(-1px);
+}
+
+#progressbar-2 li.active .connector {
+    background-color: #4caf50;
+}
+
+.d-lg-flex {
+    max-width: 120px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 992px) {
+    .d-lg-flex {
+        margin-right: 30px;
+    }
+}
+
+.card-order-infomation {
+    position: relative;
+    margin-top: 15px;
+    padding: 0 20px;
+}
+
+    .card-order-infomation::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3.3px;
+        background: linear-gradient(90deg, #3498db, #e74c3c, #2ecc71, #f39c12, #9b59b6);
+        animation: borderAnimation 3s infinite;
+    }
+
+@keyframes borderAnimation {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: 100% 0%;
+    }
+}
+
+.card-order-infomation:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-order-header {
+    padding-top: 10px;
+}
+
+    .card-order-header p {
+        margin-bottom: 0px;
+        font-size: 18px;
+    }
+
+.card-order-detail {
+    padding: 15px 0;
+}
+
+    .card-order-detail p {
+        margin: 0;
+        padding: 3px 0;
+    }
+
+.card-body.cancelled-order {
+    margin: 15px 0 0 0;
+    background-color: #f8d7da;
+    color: #842029;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.cancelled-order {
+    display: flex;
+    align-content: center;
+}
+
+.card-body.cancelled-order p {
+    margin: 0px;
+}
+
+
+.card-body.cancelled-order-footer {
+    border-radius: 0px;
+}
+
+.reason-order-content {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+@media (max-width: 991px) {
+    .d-lg-flex {
+        margin: 0;
+        display: none;
+    }
+
+    .card-order-infomation::before {
+        height: 1.5px;
+    }
+
+    .card-order-header p {
+        font-size: 18px;
+    }
+
+    .card-order-detail {
+        padding: 10px 0;
+    }
+}
+
+@media (max-width: 767px) {
+    .card-order-infomation::before {
+        height: 1px;
+    }
+
+    .card-order-header p {
+        font-size: 16px;
+    }
+
+    .card-order-detail {
+        padding: 5px 0;
+    }
+}

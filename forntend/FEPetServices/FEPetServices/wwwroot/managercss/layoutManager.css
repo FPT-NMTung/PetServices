@@ -239,7 +239,7 @@ nav {
             display: none;
         }
 */
-
+    
         .sidebar.collapsed:hover .sidebar-logo {
             display: block;
         }
@@ -260,13 +260,15 @@ nav {
             transition: opacity .2s;
             opacity: 1;
             visibility: visible;
+            text-align:left;
         }
 
-        .sidebar.collapsed .sidebar-menu-divider {
-            opacity: 1;
-            visibility: visible;
-            font-size: 10px;
-        }
+            .sidebar.collapsed .sidebar-menu-divider {
+                opacity: 1;
+                visibility: visible;
+                font-size: 10px;
+                text-align: center;
+            }
 
     main {
         transition: padding-left .2s;

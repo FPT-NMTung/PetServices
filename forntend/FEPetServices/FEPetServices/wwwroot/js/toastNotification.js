@@ -12,10 +12,11 @@
             wating: 'fa-solid fa-circle-info',
         }
 
+        const newDuration = duration + 3000;
         const icon = icons[type];
         const autoRemoveId = setTimeout(function () {
             main.removeChild(toast);
-        }, duration + 3000);
+        }, newDuration + 800);
 
         toast.onclick = function (e) {
             if (e.target.closest('.toast_close')) {
@@ -23,8 +24,10 @@
                 clearTimeout(autoRemoveId);
             }
         }
+
+        toast.style.setProperty('--animation-duration', `${newDuration}ms`);
         toast.classList.add('toast', `toast--${type}`);
-        toast.style.animation = `slideInLeft ease .5s, fadeOut linear 3s ${duration}ms forwards`;
+        toast.style.animation = `slideInLeft ease .8s forwards, toastHide ease .3s ${newDuration}ms forwards`;
         toast.innerHTML = `
                                  <div class="toast_icon">
                                     <i class="${icon}"></i>

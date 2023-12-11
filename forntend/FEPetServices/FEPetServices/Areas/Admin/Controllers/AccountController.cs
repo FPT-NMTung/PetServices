@@ -1,4 +1,5 @@
 ﻿using FEPetServices.Areas.Admin.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PetServices.DTO;
@@ -6,7 +7,6 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Web;
-using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Admin.Controllers
 {
