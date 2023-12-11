@@ -503,6 +503,22 @@
             document.getElementById('partnerIdInput').value = null;
         }
 
+        //Hiện popup đánh giá room
+        function openPopupRoom(image, roomName, roomId, userId, orderId, status) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+
+            document.getElementById('popupImage').src = image;
+            document.getElementById('popupServiceName').innerText = roomName;
+
+            document.getElementById('roomIdInput').value = roomId;
+            document.getElementById('userIdInput').value = userId;
+            document.getElementById('orderIdInput').value = orderId;
+            document.getElementById('serviceIdInput').value = null;
+            document.getElementById('productIdInput').value = null;
+            document.getElementById('partnerIdInput').value = null;
+        }
+
         
 
         // Ẩn popup đánh giá
