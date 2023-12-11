@@ -26,6 +26,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
             //DefaultApiUrl = "https://pet-service-api.azurewebsites.net/api/UserInfo";
+            //DefaultApiUrlPartner = "https://pet-service-api.azurewebsites.net/api/Partner/updateInfo";
         }
         [HttpGet]
         public async Task<IActionResult> Index()

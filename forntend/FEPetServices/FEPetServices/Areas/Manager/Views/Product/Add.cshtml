@@ -69,7 +69,7 @@
                     @if (ViewBag.ProCategories != null)
                     {
                         <select id="ProCategoriesId" name="ProCategoriesId" required>
-                            <option value="">Chọn loại sản phẩm</option>
+                            <option value="">Chọn một loại sản phẩm</option>
                             @foreach (var category in ViewBag.ProCategories)
                             {
                                 <option value="@category.Value">@category.Text</option>
