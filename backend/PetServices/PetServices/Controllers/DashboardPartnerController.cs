@@ -41,7 +41,9 @@ namespace PetServices.Controllers
             var numOrder = await _context.Orders
                 .Where(o => o.OrderDate.Value.Month == curMonth 
                 && o.OrderDate.Value.Year == curYear 
-                && o.BookingServicesDetails.Any(x => x.StatusOrderService == "Completed" && x.PartnerInfoId == partnerId))
+                && o.BookingServicesDetails.
+                Any(x => x.StatusOrderService == "Completed" 
+                && x.PartnerInfoId == partnerId))
                 .ToListAsync();
 
             return Ok(numOrder.Count);
@@ -92,12 +94,12 @@ namespace PetServices.Controllers
         }
 
         // tổng thu nhập trong tháng
-        [HttpGet("GetIncomeInMonth/{partnerId}")]
-        public async Task<ActionResult> GetIncomeInMonth(int partnerId)
+        [HttpGet("GetTotalPriceInMonth/{partnerId}")]
+        public async Task<ActionResult> GetTotalPriceInMonth(int partnerId)
         {
             int currentMonth = DateTime.Now.Month;
             int currentYear = DateTime.Now.Year;
-            double totalIncome = 0;
+            double totalPrice = 0;
 
             var ordersInMonth = await _context.Orders
                 .Where(o => o.OrderDate.Value.Month == currentMonth 
@@ -109,22 +111,22 @@ namespace PetServices.Controllers
 
             foreach (var order in ordersInMonth)
             {
-                totalIncome += order.TotalPrice ?? 0;
+                totalPrice += order.TotalPrice ?? 0;
             }
 
-            return Ok(totalIncome);
+            return Ok(totalPrice);
         }
 
         // % tổng thu nhập trong tháng so với tháng trước
-        [HttpGet("GetPercentIncomePreviousMonth/{partnerId}")]
-        public async Task<ActionResult> GetPercentIncomePreviousMonth(int partnerId)
+        [HttpGet("GetPercentTotalPriceInMonthAndInPreMonth/{partnerId}")]
+        public async Task<ActionResult> GetPercentTotalPriceInMonthAndInPreMonth(int partnerId)
         {
             int curMonth = DateTime.Now.Month;
             int curYear = DateTime.Now.Year;
             int previousMonth;
             int newYear;
-            double totalIncome = 0;
-            double totalIncomePreviousMonth = 0;
+            double totalPrice = 0;
+            double totalPricePreviousMonth = 0;
 
             if (curMonth == 1)
             {
@@ -140,37 +142,42 @@ namespace PetServices.Controllers
             var ordersInMonth = await _context.Orders
                 .Where(o => o.OrderDate.Value.Month == curMonth 
                 && o.OrderDate.Value.Year == curYear
-                && o.OrderStatus == "Completed")
+                && o.BookingServicesDetails
+                .Any(x => x.StatusOrderService == "Completed"
+                && x.PartnerInfoId == partnerId))
                 .ToListAsync();
 
             var ordersPreviousMonth = await _context.Orders
                 .Where(o => o.OrderDate.Value.Month == previousMonth 
-                && o.OrderDate.Value.Year == newYear && o.OrderStatus == "Completed")
+                && o.OrderDate.Value.Year == newYear 
+                && o.BookingServicesDetails
+                .Any(x => x.StatusOrderService == "Completed"
+                && x.PartnerInfoId == partnerId))
                 .ToListAsync();
 
             foreach (var order in ordersInMonth)
             {
-                totalIncome += order.TotalPrice ?? 0;
+                totalPrice += order.TotalPrice ?? 0;
             }
 
             foreach (var order in ordersPreviousMonth)
             {
-                totalIncomePreviousMonth += order.TotalPrice ?? 0;
+                totalPricePreviousMonth += order.TotalPrice ?? 0;
             }
 
-            if (totalIncomePreviousMonth == 0)
+            if (totalPricePreviousMonth == 0)
             {
-                return Ok(totalIncome / 1 * 100);
+                return Ok(totalPrice / 1 * 100);
             }
 
-            double percent = (double)(totalIncome - totalIncomePreviousMonth) / totalIncomePreviousMonth * 100;
+            double percent = (double)(totalPrice - totalPricePreviousMonth) / totalPricePreviousMonth * 100;
 
             return Ok(percent.ToString("F2"));
         }
 
         // đánh giá của khách hàng về các dịch vụ
-        [HttpGet("GetFeedbackOfService/{partnerId}")]
-        public async Task<ActionResult> GetFeedbackOfService(int partnerId)
+        [HttpGet("GetFeedbackOfCustomer/{partnerId}")]
+        public async Task<ActionResult> GetFeedbackOfCustomer(int partnerId)
         {
             var listFeedback = await _context.Feedbacks
                 .Where(o => o.PartnerId == partnerId)
