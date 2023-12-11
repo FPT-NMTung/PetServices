@@ -13,10 +13,11 @@
                 "autoWidth": false,
                 "columnDefs": [
                     { "targets": [0], "width": "5%" },
-                    { "targets": [1], "width": "20%" },
+                    { "targets": [1], "width": "25%" },
                     { "targets": [2], "width": "35%" },
-                    { "targets": [3], "width": "25%" }, // Điều chỉnh cột này để khớp với số cột thực tế
+                    { "targets": [3], "width": "10%" }, 
                     { "targets": [4], "width": "15%" },
+                    { "targets": [5], "width": "10%" },
                 ],
                 "language": {
                     "lengthMenu": "Hiển thị _MENU_ dòng",
@@ -50,9 +51,9 @@
     <thead>
         <tr>
             <th>No.</th>
-            <th>Ảnh</th>
             <th>Tên Loại Sản Phẩm</th>
             <th>Mô Tả</th>
+            <th>Ảnh</th>
             <th>Trạng thái</th>
             <th>Chi Tiết</th>
         </tr>
@@ -85,9 +86,9 @@
                         }
                 <tr>
                     <td>@itemCount</td>
-                    <td><img src="@pc.Picture" width="50" height="50"></td>
                     <td>@pc.ProCategoriesName</td>
                     <td>@description</td>
+                    <td><img src="@pc.Picture" width="50" height="50"></td>
                     <td>
                         @if (@pc.Status)
                         {
@@ -125,7 +126,6 @@
         text-align: center;
         font-size: 40px;
         font-weight: bold;
-        margin-top: 10px;
     }
 
     .future-status {
