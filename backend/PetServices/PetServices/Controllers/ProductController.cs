@@ -25,6 +25,7 @@ namespace PetServices.Controllers
         public IActionResult GetAllProduct()
         {
             List<Product> products = _context.Products.Include(s => s.ProCategories)
+                .OrderByDescending(p => p.ProductId)
                 .ToList();
 
             var productlist = _mapper.Map<List<ProductDTO>>(products);
@@ -51,6 +52,7 @@ namespace PetServices.Controllers
             // Filter services based on the status of their associated service categories
             List<Product> product = _context.Products
                 .Include(s => s.ProCategories)
+                .OrderByDescending(x => x.ProductId)
                 .Where(s => s.ProCategories.Status == true) // Filter based on service category status
                 .ToList();
 
@@ -81,6 +83,7 @@ namespace PetServices.Controllers
                 List<Product> products = _context.Products
                     .Include(s => s.ProCategories)
                     .Where(p => p.ProCategoriesId == categoryId)
+                    .OrderByDescending(x => x.ProductId)
                     .ToList();
 
                 // Kiểm tra xem có sản phẩm nào thuộc loại đó hay không

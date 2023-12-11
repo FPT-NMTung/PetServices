@@ -25,7 +25,9 @@ namespace PetServices.Controllers
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
-            List<ProductCategory> productCategories = _context.ProductCategories.ToList();
+            List<ProductCategory> productCategories = _context.ProductCategories
+                .OrderByDescending(x => x.ProCategoriesId)
+                .ToList();
             return Ok(_mapper.Map<List<ProductCategoryDTO>>(productCategories));
         }
         [HttpGet("ProductCategorysID/{id}")]
