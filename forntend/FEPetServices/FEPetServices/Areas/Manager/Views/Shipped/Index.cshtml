@@ -61,6 +61,10 @@
                                             {
                                                 <span class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
                                             }
+                                            else if (orderLists?.OrderStatus.Trim() == "Cancelled")
+                                            {
+                                                <span style="display:inline-block" class="badge badge-info">Đơn hàng bị huỷ</span>
+                                            }
                                         </div>
                                     }
                                 }

@@ -235,9 +235,9 @@
                     <span class="title-highlighter highlighter-secondary"> <i class="far fa-tags"></i> Loại mặt hàng</span>
                     <h2 class="title">Loại sản phẩm</h2>
                 </div>
-                <div class="categrie-product-activation slick-layout-wrapper--15 axil-slick-arrow  arrow-top-slide">
+                <div class="categrie-product-activation-3 slick-layout-wrapper--15 axil-slick-arrow arrow-top-slide">
                     @foreach(var cateProduct in Model.ListProductCategories){
-                    <div class="slick-single-layout">
+                        <div class="slick-single-layout">
                         <div class="categrie-product" data-sal="zoom-out" data-sal-delay="300" data-sal-duration="500">
                             <a href="/ProductList?productcategory=@cateProduct.ProCategoriesId">
                                 <img class="img-cat" src="@cateProduct.Picture" alt="product categorie">
@@ -535,5 +535,5 @@
 <script src="~/assets/js/vendor/waypoints.min.js"></script>
 <!-- Main JS -->
 <script src="~/assets/js/main.js"></script>
-<link href="~/css/homepage.css" rel="stylesheet" />
+<link href="~/css/HomePage.css" rel="stylesheet" />
 </html>

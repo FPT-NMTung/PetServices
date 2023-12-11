@@ -265,8 +265,11 @@ namespace PetServices.Controllers
                 else
                 {
                     List<Order> orders = _context.Orders
-                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email))
-                                         .ToList();
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) 
+                                         && o.BookingRoomDetails.Count() == 0
+                                         && (o.BookingServicesDetails.Count() > 0
+                                         || o.OrderProductDetails.Count() > 0
+                                         )).ToList();
                     if (orders.Count == 0)
                     {
                         return NotFound("No orders found with the specified status");
@@ -306,8 +309,6 @@ namespace PetServices.Controllers
                                          && (o.BookingServicesDetails.Count() == 0
                                          && o.OrderProductDetails.Count() == 0
                                          )).ToList();
-
-
                     if (ordersRoom.Count == 0)
                     {
                         return NotFound("No orders found with the specified status");
@@ -320,8 +321,11 @@ namespace PetServices.Controllers
                 else
                 {
                     List<Order> orders = _context.Orders
-                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email))
-                                         .ToList();
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email)
+                                          && o.BookingRoomDetails.Count() > 0
+                                         && (o.BookingServicesDetails.Count() == 0
+                                         && o.OrderProductDetails.Count() == 0
+                                         )).ToList();
                     if (orders.Count == 0)
                     {
                         return NotFound("No orders found with the specified status");
@@ -392,31 +396,8 @@ namespace PetServices.Controllers
 
                 order.OrderStatus = status.newStatus;
 
-                if (order.OrderProductDetails != null)
-                {
-                    foreach (var dto in order.OrderProductDetails)
-                    {
-                        if (!string.IsNullOrEmpty(status.newStatusProduct))
-                        {
-                            dto.StatusOrderProduct = status.newStatusProduct;
-                        }
-                    }
-                }
-
-                if (order.BookingServicesDetails != null)
-                {
-                    foreach (var dto in order.BookingServicesDetails)
-                    {
-                        if (!string.IsNullOrEmpty(status.newStatusService))
-                        {
-                            dto.StatusOrderService = status.newStatusService;
-                        }
-                    }
-                }
-
-                _context.Orders.Update(order);
-                _context.OrderProductDetails.UpdateRange(order.OrderProductDetails);
-                _context.BookingServicesDetails.UpdateRange(order.BookingServicesDetails);
+                UpdateProductDetailsStatus(order, status.newStatusProduct);
+                UpdateServiceDetailsStatus(order, status.newStatusService);
 
                 if (order.OrderProductDetails.Count() > 0 && order.BookingServicesDetails.Count() == 0)
                 {
@@ -433,7 +414,7 @@ namespace PetServices.Controllers
                     }
                 }
 
-                if (order.OrderProductDetails.Count() == 0 
+                if (order.OrderProductDetails.Count() == 0
                     && order.BookingServicesDetails.Count() > 0)
                 {
                     foreach (var dto in order.BookingServicesDetails)
@@ -449,14 +430,88 @@ namespace PetServices.Controllers
                     }
                 }
 
-                if (order.OrderProductDetails.Count() > 0 
+                if (order.OrderProductDetails.Count() > 0
                     && order.BookingServicesDetails.Count() > 0)
                 {
+                    int checkProduct = -1;
+                    int checkService = -1;
+                    foreach (var dto in order.OrderProductDetails)
+                    {
+                        if (status.newStatusProduct == "Delivered")
+                        {
+                            checkProduct = 0;
+                        }
+                        else if (status.newStatusProduct == "Cancelled")
+                        {
+                            checkProduct = 4;
+                        }
+                        else
+                        {
+                            checkProduct = 1;
+                        }
+                    }
+                    foreach (var dto in order.BookingServicesDetails)
+                    {
+                        if (status.newStatusService == "Completed")
+                        {
+                            checkService = 0;
+                        }
+                        else if (status.newStatusService == "Cancelled")
+                        {
+                            checkService = 4;
+                        }
+                        else
+                        {
+                            checkService = 1;
+                        }
 
+                    }
+
+                    if (checkProduct == 0 && checkService == 0)
+                    {
+                        if (order.StatusPayment == false)
+                        {
+                            order.StatusPayment = !order.StatusPayment;
+                        }
+                        order.OrderStatus = "Completed";
+                    }
+
+                    if (checkProduct == 0 && checkService == 4)
+                    {
+                        if (order.StatusPayment == false)
+                        {
+                            order.StatusPayment = !order.StatusPayment;
+                        }
+                        order.OrderStatus = "Completed";
+                    }
+
+                    if (checkProduct == 4 && checkService == 0)
+                    {
+                        if (order.StatusPayment == false)
+                        {
+                            order.StatusPayment = !order.StatusPayment;
+                        }
+                        order.OrderStatus = "Completed";
+                    }
+
+                    if (checkProduct == 4 && checkService == 4)
+                    {
+                        order.OrderStatus = "Cancelled";
+                    }
+
+                    if (checkProduct == 0 && checkService == 1)
+                    {
+                        order.OrderStatus = order.OrderStatus;
+                    }
+
+                    if (checkProduct == 1 && checkService == 0)
+                    {
+                        order.OrderStatus = order.OrderStatus;
+                    }
                 }
 
-                if (order.OrderProductDetails.Count() == 0 
-                    && order.BookingServicesDetails.Count() == 0 
+                if (order.OrderProductDetails.Count() == 0
+                    && order.BookingServicesDetails.Count() == 0    
                     && order.BookingRoomDetails.Count() > 0)
                 {
                     foreach (var dto in order.BookingRoomDetails)
@@ -472,6 +527,8 @@ namespace PetServices.Controllers
                 }
 
                 _context.Orders.Update(order);
+                _context.OrderProductDetails.UpdateRange(order.OrderProductDetails);
+                _context.BookingServicesDetails.UpdateRange(order.BookingServicesDetails);
                 await _context.SaveChangesAsync();
                 return Ok("Đổi trạng thái thành công");
             }
@@ -479,6 +536,28 @@ namespace PetServices.Controllers
             {
                 // Trả về lỗi 500 nếu xảy ra lỗi trong quá trình xử lý
                 return StatusCode(500, ex.Message);
+            }
+        }
+
+        private void UpdateProductDetailsStatus(Order order, string newStatusProduct)
+        {
+            if (order.OrderProductDetails != null && !string.IsNullOrEmpty(newStatusProduct))
+            {
+                foreach (var dto in order.OrderProductDetails)
+                {
+                    dto.StatusOrderProduct = newStatusProduct;
+                }
+            }
+        }
+
+        private void UpdateServiceDetailsStatus(Order order, string newStatusService)
+        {
+            if (order.BookingServicesDetails != null && !string.IsNullOrEmpty(newStatusService))
+            {
+                foreach (var dto in order.BookingServicesDetails)
+                {
+                    dto.StatusOrderService = newStatusService;
+                }
             }
         }
 
