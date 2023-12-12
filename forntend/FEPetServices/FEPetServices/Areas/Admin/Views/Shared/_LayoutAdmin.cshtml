@@ -34,37 +34,15 @@
             @RenderBody()
         </div>
     </main>*@
-    <main class="bg-light">
+    <main>
         <div class="p-2">
             <nav class="px-3 py-2 bg-white rounded shadow nav_menu">
-                <h1 class="fw-bold mb-0 me-auto"></h1>
                 <div class="dropdown">
-                    <div class="d-flex align-items-center cursor-pointer dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        @{
-                            string? username = Context.Session.GetString("UserName");
-                            if (username != null)
-                            {
-                                <span class="me-2 d-none d-sm-block">Xin Chào: @username</span>
-                            }
-                            else if (username is null)
-                            {
-                                <span class="me-2 d-none d-sm-block">Xin Chào: Admin</span>
-                            }
-                        }
-                        @{
-                            string? userimage = Context.Session.GetString("UserImage");
-                            if (userimage != null)
-                            {
-                                <img class="navbar-profile-image" src="@userimage" alt="Image">
-                            }
-                            else if (userimage is null)
-                            {
-                                <img class="navbar-profile-image" src="~/img/avtadmin.jpg" alt="Image">
-                            }
-                        }
+                    <div class="d-flex align-items-center cursor-pointer dropdown-toggle" style="justify-content: space-between;"  data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="me-2">Xin Chào: Admin</span>
+                        <img class="navbar-profile-image" src="~/img/avtadmin.jpg">
                     </div>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="~/Manager/Information">Thông tin người dùng</a></li>
                         <li><a class="dropdown-item" href="~/Logout/Index">Đăng xuất @RenderSection("Logout", required: false)</a></li>
                     </ul>
                 </div>
