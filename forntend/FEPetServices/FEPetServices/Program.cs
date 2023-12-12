@@ -63,7 +63,7 @@ if (app.Environment.IsDevelopment())
 else
 {
 }
-app.UseStatusCodePagesWithRedirects("/Home/NotFound");
+/*app.UseStatusCodePagesWithRedirects("/Home/NotFound");*/
 
 app.UseCors(builder =>
 {
