@@ -50,13 +50,28 @@ namespace PetServices.Controllers
         public IActionResult GetProductWhenCategoryTrue()
         {
             // Filter services based on the status of their associated service categories
-            List<Product> product = _context.Products
+            List<Product> products = _context.Products
                 .Include(s => s.ProCategories)
                 .OrderByDescending(x => x.ProductId)
                 .Where(s => s.ProCategories.Status == true) // Filter based on service category status
                 .ToList();
 
-            return Ok(_mapper.Map<List<ProductDTO>>(product));
+            var productlist = _mapper.Map<List<ProductDTO>>(products);
+
+            foreach (var product in productlist)
+            {
+                var averageStars = _context.Feedbacks.Where(f => f.ProductId == product.ProductId).Average(f => f.NumberStart);
+
+                if (averageStars.HasValue)
+                {
+                    averageStars = Math.Round(averageStars.Value, 1);
+                }
+
+                product.NumberStar = averageStars ?? 0;
+                product.NumberVoter = _context.Feedbacks.Where(f => f.ProductId == product.ProductId).ToList().Count();
+            }
+
+            return Ok(productlist);
         }
 
         [HttpGet("ProductID/{id}")]
