@@ -45,7 +45,7 @@ namespace FEPetServices.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessRegisterSuccessToast"] = "Vui lòng chờ đợi quản trị viên xét duyệt thông tin tài khoản của bạn";
+                    TempData["SuccessToast"] = "Vui lòng chờ đợi quản trị viên xét duyệt thông tin tài khoản của bạn";
                     return RedirectToAction("Index", "Login");
                 }
                 else
