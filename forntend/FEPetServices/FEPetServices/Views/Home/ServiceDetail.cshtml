@@ -440,8 +440,7 @@
             const fpStart = flatpickr("#datetimeStart", {
                 minDate: "today",
                 enableTime: true,
-                dateFormat: "d/m/Y H:i",
-
+                dateFormat: "Y-m-d H:i",
                 onClose: function (selectedDates, dateStr, instance) {
                     const currentTime = new Date(); // Thời gian hiện tại
                     const selectedTime = new Date(dateStr);
@@ -476,21 +475,10 @@
                         selectedTime.setDate(nextDay.getDate());
                         selectedTime.setHours(nextDay.getHours());
                         selectedTime.setMinutes(nextDay.getMinutes());
-                   
-                    } 
-                    @*const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };*@
-                   const options = {  year: 'numeric',  month: 'numeric',  day: 'numeric',  hour: 'numeric',  minute: 'numeric',  hour12: false };
-
-
+                    }
+                    const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false  };
                     const endTime = new Date(selectedTime.getTime() + serviceTime);
 
-                    @*document.getElementById("datetimeEnd").value = endTime.toLocaleString('en-US', options);
-                    var endDateInput = document.getElementById("EndTime");
-                    endDateInput.value = endTime.toLocaleString('en-US', options);
-
-                    document.getElementById("datetimeStart").value = selectedTime.toLocaleString('en-US', options);
-                    var startDateInput = document.getElementById("StartTime");
-                    startDateInput.value = selectedTime.toLocaleString('en-US', options);*@
                     document.getElementById("datetimeEnd").value = endTime.toLocaleString('en-US', options);
                     var endDateInput = document.getElementById("EndTime");
                     endDateInput.value = endTime.toLocaleString('en-US', options);
@@ -498,11 +486,11 @@
                     document.getElementById("datetimeStart").value = selectedTime.toLocaleString('en-US', options);
                     var startDateInput = document.getElementById("StartTime");
                     startDateInput.value = selectedTime.toLocaleString('en-US', options);
+
                 }
             });
 
-        });
-
+        }); 
     </script>
     <script>
         function updateWeight() {
