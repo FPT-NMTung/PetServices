@@ -26,8 +26,8 @@ namespace FEPetServices.Areas.Partner.Controllers
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
-            //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
-            DefaultApiUrl = "https://localhost:7255/api/";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = "https://localhost:7255/api/";
         }
         public class DashBoardPartner
         {
