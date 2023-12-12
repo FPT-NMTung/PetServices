@@ -3,6 +3,7 @@ using FEPetServices.Areas.DTO;
 using FEPetServices.Form;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PetServices.DTO;
 using PetServices.Form;
 using System.Net.Http.Headers;
@@ -96,6 +97,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                     var StarInPartner = await StarInPartnerResponse.Content.ReadFromJsonAsync<int>();
                     ViewBag.StarInPartner = StarInPartner;
                 }
+                //lấy số lượng đánh giá
                 HttpResponseMessage voteNumberResponse = await client.GetAsync(DefaultApiUrl + "DashboardPartner/GetPartnerVoteNumber/" + partnerInfoId);
 
                 if (voteNumberResponse.IsSuccessStatusCode)
@@ -104,7 +106,7 @@ namespace FEPetServices.Areas.Partner.Controllers
 
                     model.VoteNumberas = voteNumber;
                 }
-
+                //lấy số sao
                 HttpResponseMessage PartnerStarResponse = await client.GetAsync(DefaultApiUrl + "DashboardPartner/GetPartnerStar/" + partnerInfoId);
 
                 if (PartnerStarResponse.IsSuccessStatusCode)
@@ -115,6 +117,25 @@ namespace FEPetServices.Areas.Partner.Controllers
                     {
                         ViewBag.PartnerStar = PartnerStar;
                     }
+                }
+
+                //doanh thu theo ngày
+                HttpResponseMessage TotalPriceIn7DayResponse = await client.GetAsync(DefaultApiUrl + "DashboardPartner/GetTotalPriceIn7Day/" + partnerInfoId);
+
+                if (TotalPriceIn7DayResponse.IsSuccessStatusCode)
+                {
+                    var TotalPriceIn7Day = await TotalPriceIn7DayResponse.Content.ReadFromJsonAsync<List<ReceiveInDayForm>>();
+                    ViewBag.TotalPriceIn7Day = new SelectList(TotalPriceIn7Day, "Date", "Receive");
+                }
+
+                // Số đơn hàng hoàn thành trong tháng 
+                HttpResponseMessage NumberOrderCompleteInMonthResponse = await client.GetAsync(DefaultApiUrl + "DashboardPartner/GetNumberOrderCompleteInMonth/" + partnerInfoId);
+
+                if (NumberOrderCompleteInMonthResponse.IsSuccessStatusCode)
+                {
+                    var NumberOrderCompleteInMonth = await NumberOrderCompleteInMonthResponse.Content.ReadFromJsonAsync<List<Quantity_RatioForm>>();
+                    ViewBag.NumberOrderCompleteInMonth = new SelectList(NumberOrderCompleteInMonth, "date", "quantity");
+                    ViewBag.NumberOrderCompleteInMonth1 = new SelectList(NumberOrderCompleteInMonth, "quantity", "Ratio");
                 }
             }
             catch (Exception ex)

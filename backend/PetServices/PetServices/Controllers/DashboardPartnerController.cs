@@ -295,5 +295,93 @@ namespace PetServices.Controllers
 
             return Ok(feedback);
         }
+
+        // Doanh thu theo ngày
+        [HttpGet("GetTotalPriceIn7Day/{partnerId}")]
+        public async Task<ActionResult> GetTotalPriceIn7Day(int partnerId)
+        {
+            DateTime now = DateTime.Now;
+
+            var ReceiveData = new List<ReceiveInDayForm>();
+
+            for (int i = 7; i >= 1; i--)
+            {
+                DateTime date = now.AddDays(-i);
+                double total = 0;
+
+                var orders = await _context.Orders
+                    .Where(o => o.OrderDate.Value.Date == date.Date 
+                    && o.BookingServicesDetails
+                    .Any(x => x.StatusOrderService == "Completed"
+                    && x.PartnerInfoId == partnerId))
+                    .ToListAsync();
+
+                foreach (var order in orders)
+                {
+                    var services = await _context.BookingServicesDetails.Where(b => b.OrderId == order.OrderId).ToListAsync();
+
+                    foreach (var service in services)
+                    {
+                        total += (service.Price ?? 0) * (service.Weight ?? 0);
+                    }
+                }
+
+                ReceiveData.Add(new ReceiveInDayForm { Date = date.ToShortDateString(), Receive = total });
+            }
+
+            return Ok(ReceiveData);
+        }
+
+        // Số đơn hàng hoàn thành trong tháng 
+        [HttpGet("GetNumberOrderCompleteInMonth/{partnerId}")]
+        public async Task<ActionResult> GetNumberOrderCompleteInMonth(int partnerId)
+        {
+            DateTime now = DateTime.Now;
+
+            var NumberOrderComplete = new List<Quantity_RatioForm>();
+
+            for (int i = 0; i < 3; i++)
+            {
+                var curMonth = now.AddMonths(-i);
+                var preMonth = curMonth.AddMonths(-1);
+
+                var orders = await _context.Orders
+                    .Where(o => o.BookingServicesDetails
+                                .Any(x => x.StatusOrderService == "Completed"
+                                && x.PartnerInfoId == partnerId)
+                                && o.OrderDate.Value.Month == curMonth.Month
+                                && o.OrderDate.Value.Year == curMonth.Year)
+                    .ToListAsync();
+
+                var ordersPrevious = await _context.Orders
+                    .Where(o => o.BookingServicesDetails
+                                .Any(x => x.StatusOrderService == "Completed"
+                                && x.PartnerInfoId == partnerId)
+                                && o.OrderDate.Value.Month == preMonth.Month
+                                && o.OrderDate.Value.Year == preMonth.Year)
+                    .ToListAsync();
+
+                double percent = 0;
+
+                if (ordersPrevious.Count == 0)
+                {
+                    percent = orders.Count / 1 * 100;
+                }
+                else
+                {
+                    percent = (double)(orders.Count - ordersPrevious.Count) / ordersPrevious.Count * 100;
+                }
+
+                NumberOrderComplete.Add(new Quantity_RatioForm
+                {
+                    date = curMonth.ToString("yyyy-MM"),
+                    quantity = orders.Count,
+                    Ratio = percent.ToString("F2")
+                });
+            }
+
+            return Ok(NumberOrderComplete);
+        }
+
     }
 }
