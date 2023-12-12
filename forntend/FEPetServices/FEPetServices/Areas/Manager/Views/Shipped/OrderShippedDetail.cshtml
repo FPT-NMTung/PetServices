@@ -169,12 +169,20 @@
         <form method="post" asp-controller="Shipped" asp-action="OrderShippedDetail">
             <input type="hidden" name="Id" value="@Model?.OrderId" />
             <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
-            @if (Model.OrderStatus.Trim() == "Confirmed" || Model.OrderStatus.Trim() == "Processing")
+            @for (int i = 0; i < Model.OrderProductDetails.Count; i++)
             {
-                <select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
-                    <option value="Processing">Giao hàng</option>
-                </select>
-                <button class="btn btn-primary" type="submit">Xác nhận</button>
+                var productDetail = Model.OrderProductDetails[i];
+
+                @if (i == Model.OrderProductDetails.Count - 1)
+                {
+                    if (productDetail?.StatusOrderProduct?.Trim() == "Packaging" || Model.OrderStatus.Trim() == "Confirmed")
+                    {
+                        <select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
+                            <option value="Processing">Giao hàng</option>
+                        </select>
+                        <button class="btn btn-primary" type="submit">Xác nhận</button>
+                    }
+                }
             }
             @for (int i = 0; i < Model.OrderProductDetails.Count; i++)
             {

@@ -548,6 +548,7 @@ namespace PetServices.Controllers
                             checkProduct = 1;
                         }
                     }
+
                     foreach (var dto in order.BookingServicesDetails)
                     {
                         if (status.newStatusService == "Completed" || dto.StatusOrderService == "Completed")

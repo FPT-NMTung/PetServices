@@ -302,6 +302,23 @@ namespace PetServices.Controllers
                         }
                     }
                 }
+
+                if (order.OrderProductDetails.Count() == 0
+                    && order.BookingServicesDetails.Count() > 0)
+                {
+                    foreach (var dto in order.BookingServicesDetails)
+                    {
+                        if (status.newStatusService == "Completed")
+                        {
+                            if (order.StatusPayment == false)
+                            {
+                                order.StatusPayment = !order.StatusPayment;
+                            }
+                            order.OrderStatus = "Completed";
+                        }
+                    }
+                }
+
                 if (order.OrderProductDetails.Count() > 0
                     && order.BookingServicesDetails.Count() > 0)
                 {
@@ -322,6 +339,7 @@ namespace PetServices.Controllers
                             checkProduct = 1;
                         }
                     }
+
                     foreach (var dto in order.BookingServicesDetails)
                     {
                         if (status.newStatusService == "Completed" || dto.StatusOrderService == "Completed")
@@ -382,8 +400,10 @@ namespace PetServices.Controllers
                     }
                 }
 
-                _context.Orders.Update(order);
 
+                _context.Orders.Update(order);
+                _context.OrderProductDetails.UpdateRange(order.OrderProductDetails);
+                _context.BookingServicesDetails.UpdateRange(order.BookingServicesDetails);
                 await _context.SaveChangesAsync();
                 return Ok("Đổi trạng thái thành công");
             }

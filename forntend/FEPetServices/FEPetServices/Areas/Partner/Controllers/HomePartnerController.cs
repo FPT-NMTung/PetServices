@@ -317,7 +317,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                 status.newStatus = "Processing";
                 status.newStatusService = "Completed";
             }
-            HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl+"OrderPartner/ChangeStatus/" + email + "?orderId=" + orderId, status);
+            HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl+ "OrderPartner/ChangeStatus/" + email + "?orderId=" + orderId, status);
             reasonOrders.OrderId = orderId;
             
             reasonOrders.EmailReject = email;
