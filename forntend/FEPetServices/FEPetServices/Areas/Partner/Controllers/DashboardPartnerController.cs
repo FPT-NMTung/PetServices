@@ -9,6 +9,7 @@ using PetServices.Form;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
+using static FEPetServices.Areas.Manager.Controllers.DashBoardController;
 
 namespace FEPetServices.Areas.Partner.Controllers
 {
@@ -136,6 +137,16 @@ namespace FEPetServices.Areas.Partner.Controllers
                     var NumberOrderCompleteInMonth = await NumberOrderCompleteInMonthResponse.Content.ReadFromJsonAsync<List<Quantity_RatioForm>>();
                     ViewBag.NumberOrderCompleteInMonth = new SelectList(NumberOrderCompleteInMonth, "date", "quantity");
                     ViewBag.NumberOrderCompleteInMonth1 = new SelectList(NumberOrderCompleteInMonth, "quantity", "Ratio");
+                }
+
+                // đánh giá của khách hàng về các nhân viên
+                HttpResponseMessage FeedbackOfPartnerResponse = await client.GetAsync(DefaultApiUrl + "DashboardPartner/GetFeedbackOfPartner/" + partnerInfoId);
+
+                if (FeedbackOfPartnerResponse.IsSuccessStatusCode)
+                {
+                    var FeedbackOfPartner = await FeedbackOfPartnerResponse.Content.ReadFromJsonAsync<List<FeedbackForm>>();
+
+                    dashBoardPartner.FeedbackCustomer = FeedbackOfPartner;
                 }
             }
             catch (Exception ex)

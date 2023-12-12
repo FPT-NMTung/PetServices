@@ -382,6 +382,37 @@ namespace PetServices.Controllers
 
             return Ok(NumberOrderComplete);
         }
+        // đánh giá của khách hàng về nhân viên
+        [HttpGet("GetFeedbackOfPartner/{partnerId}")]
+        public async Task<ActionResult> GetFeedbackOfPartner(int partnerId)
+        {
+            //lấy danh sách đánh giá các sản phẩm 
+            var listFeedback = await _context.Feedbacks.Where(o => o.PartnerId == partnerId).ToListAsync();
+            var stt = 1;
 
+            var feedback = new List<FeedbackForm>();
+
+            foreach (var Feedback in listFeedback)
+            {
+                var partner = await _context.Orders.FirstOrDefaultAsync(o => o.BookingServicesDetails.Any(x => x.PartnerInfoId == Feedback.PartnerId));
+                var customer = await _context.UserInfos.FirstOrDefaultAsync(o => o.UserInfoId == Feedback.UserId);
+                var account = await _context.Accounts.FirstOrDefaultAsync(o => o.UserInfoId == Feedback.UserId);
+
+
+                feedback.Add(new FeedbackForm
+                {
+                    stt = stt,
+                    name = partner.FullName,
+                    gmail = account.Email,
+                    customerName = customer.FirstName + customer.LastName,
+                    NumberStart = Feedback.NumberStart,
+                    Content = Feedback.Content,
+                });
+
+                stt++;
+            }
+
+            return Ok(feedback);
+        }
     }
 }

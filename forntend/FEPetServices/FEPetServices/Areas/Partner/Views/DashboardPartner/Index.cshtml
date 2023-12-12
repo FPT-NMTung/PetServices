@@ -27,6 +27,40 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdn.jsdelivr.net/npm/react-apexcharts@1.3.6/dist/react-apexcharts.iife.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // DataTable cho bảng FeedbackProduct
+            var tableProduct = $('#FeedbackCustomer').DataTable({
+                "responsive": true,
+                "paging": true,
+                "ordering": true,
+                "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
+                "searching": true,
+                "info": true,
+                "autoWidth": false,
+                "columnDefs": [
+                    { "targets": [0], "width": "5%" },
+                    { "targets": [1], "width": "20%" },
+                    { "targets": [2], "width": "16%" },
+                    { "orderable": false, "targets": [3], "width": "15%" },
+                    { "orderable": false, "targets": [4], "width": "44%" },
+                    { "targets": [5], "visible": false }
+                ],
+                "language": {
+                    "lengthMenu": "Hiển thị  _MENU_  dòng",
+                    "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
+                    "search": "Tìm kiếm: ",
+                    "paginate": {
+                        "first": "Đầu",
+                        "last": "Cuối",
+                        "next": "Tiếp",
+                        "previous": "Trước"
+                    }
+                },
+            });
+        });
+    </script>
+
 </head>
 <body>
     <div class="DashboardPartner">
@@ -202,8 +236,133 @@
                     </div>
                 </div>
             </div>
+            <div class="row feedbacktable" style="margin-bottom: 30px; padding: 10px;">
+                <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                    <div class="card-header" style="background-color: rgb(255, 255, 255); height: 60px;">
+                        <div class="head">
+                            <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Đánh giá của khách hàng</h6>
+                            <div class="option">
+                                <button class="option-button style1">Loại đánh giá</button>
+                                <button class="option-button style2">&#9776;</button>
+                                <div class="dropdown-option">
+                                    <input hidden value="" />
+                                    <a class="dropdown-option-item fw-normal title clicked" id="partnerFB" style="font-weight: 500!important" onclick="showFeedbackPartner()">Khách Hàng</a>
+                                    <div class="dropdown-option-item dropdown">
+                                        <button class="dropdown-button">Đánh giá</button>
+                                        <div class="dropdown-content">
+                                            <div id="star5" class="dropdown-item 5" onclick="SortStar(5)">5 sao</div>
+                                            <div id="star4" class="dropdown-item 4" onclick="SortStar(4)">4 sao</div>
+                                            <div id="star3" class="dropdown-item 3" onclick="SortStar(3)">3 sao</div>
+                                            <div id="star2" class="dropdown-item 2" onclick="SortStar(2)">2 sao</div>
+                                            <div id="star1" class="dropdown-item 1" onclick="SortStar(1)">1 sao</div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="typeTable" value="FeedbackCustomer" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body" style="display:block;">
+                        @*Danh sách feedback của sản phẩm*@
+                        <table id="FeedbackCustomer" class="display lists">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Thông tin sản phẩm</th>
+                                    <th>Thông tin khách hàng</th>
+                                    <th>Đánh giá</th>
+                                    <th>Nội dung đánh giá</th>
+                                    <th>Số sao</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.FeedbackCustomer != null)
+                                {
+                                    @foreach (var item in Model.FeedbackCustomer)
+                                    {
+                                        <tr>
+                                            <td>@item.stt</td>
+                                            <td>
+                                                <div class="d-flex name-service">
+                                                    <p class="name">@item.name</p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="name-cus">
+                                                    <p class="name">@item.customerName</p>
+                                                    <p class="email">@item.gmail</p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    @for (int i = 0; i < 5; i++)
+                                                    {
+                                                        if (i < item.NumberStart)
+                                                        {
+                                                            <i class="fas fa-star"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="far fa-star"></i>
+                                                        }
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @item.Content
+                                            </td>
+                                            <td>@item.NumberStart</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <script src="~/assets/js/vendor/jquery.js "></script>
+    <script src="~/assets/js/vendor/slick.min.js "></script>
+    <script src="~/assets/js/vendor/jquery-ui.min.js "></script>
+    <script src="~/assets/js/vendor/sal.js "></script>
+    <script src="~/assets/js/vendor/imagesloaded.pkgd.min.js "></script>
+    <script src="~/assets/js/vendor/counterup.js "></script>
+    <script src="~/assets/js/vendor/waypoints.min.js "></script>
+    <script src="~/assets/js/main.js "></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js "></script>
+    <script>
+        function showFeedbackPartner() {
+            // Ẩn tất cả các bảng
+            $('#FeedbackCustomer').hide();
+
+            // Hiển thị bảng FeedbackProduct
+            $('#FeedbackCustomer').show();
+
+            // Hiển thị DataTable đã được khởi tạo
+            $('#FeedbackProduct_wrapper').show();
+
+            // Xóa class 'clicked' từ tất cả các tùy chọn
+            $('.option .title').removeClass('clicked');
+
+            // Thêm class 'clicked' vào tùy chọn được chọn
+            $('#partnerFB').addClass('clicked');
+
+            // Cập nhật giá trị của phần tử input
+            $('#typeTable').val('FeedbackCustomer');
+        }
+        // Sort theo số sao
+        function SortStar(star) {
+            $('.dropdown-item').removeClass('clicked');
+            $('.dropdown-item .' + star).addClass('clicked');
+            var value = $('#typeTable').val();
+
+            var table = $('#' + value).DataTable();
+
+            table.column(5).search(star).draw();
+        }
+    </script>
     @*Thống kê doanh số bán trong 7 ngày gần nhất*@
     <script>
         var totalPriceData = [];
