@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <link href="~/css/partner/dashboardpartner.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/font-awesome.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/flaticon/flaticon.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/slick.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/slick-theme.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/sal.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/magnific-popup.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/base.css">
+
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/react@16.12/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@16.12/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prop-types@15.7.2/prop-types.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-apexcharts@1.3.6/dist/react-apexcharts.iife.min.js"></script>
+</head>
+<body>
+    <div class="DashboardPartner">
+        <div class="container-fluid">
+            <div class="page-header">
+                <h1>Thống Kê Doanh Số</h1>
+            </div>
+            <div class="row" style="margin-bottom: 30px;">
+                @*thong ke tong don hang*@
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xl-4" style="padding: 10px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-body d-flex">
+                            <div class="d-flex single-counter">
+                                <div class="card-body" style="padding: 13px 0px 0px 20px;">
+                                    <h7 class="fw-normal title">Tổng đơn hàng</h7>
+                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count">@ViewBag.OrderInMonth</h3>
+                                </div>
+                            </div>
+                            <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
+                                <div class="chart-wrapper mt-1" style="color: #f478f4">
+                                    <i class="fad fa-file-invoice-dollar" style="font-size: 70px;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
+                            <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
+                                @if (ViewBag.PercentOrderInMonthAndInPreMonth < 0)
+                                {
+                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                }
+                                <p style="color: #f478f4">&ensp;@ViewBag.PercentOrderInMonthAndInPreMonth%</p>&nbspSo với tháng trước
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*thong ke tong thu nhap*@
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xl-4" style="padding: 10px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-body d-flex">
+                            <div class="d-flex single-counter">
+                                <div class="card-body" style="padding: 13px 0px 0px 20px;">
+                                    <h7 class="fw-normal title">Tổng thu nhập</h7>
+                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count">@ViewBag.OrderInMonth</h3>
+                                </div>
+                            </div>
+                            <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
+                                <div class="chart-wrapper mt-1" style="color: #f478f4">
+                                    <i class="fad fa-file-invoice-dollar" style="font-size: 70px;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
+                            <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
+                                @if (ViewBag.PercentOrderInMonthAndInPreMonth < 0)
+                                {
+                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                }
+                                <p style="color: #f478f4">&ensp;@ViewBag.PercentOrderInMonthAndInPreMonth%</p>&nbspSo với tháng trước
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*thong ke tong feedback*@
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xl-4" style="padding: 10px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-body d-flex">
+                            <div class="d-flex single-counter">
+                                <div class="card-body" style="padding: 13px 0px 0px 20px;">
+                                    <h7 class="fw-normal title">Đánh giá của khách hàng</h7>
+                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count">@ViewBag.OrderInMonth</h3>
+                                </div>
+                            </div>
+                            <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
+                                <div class="chart-wrapper mt-1" style="color: #f478f4">
+                                    <i class="fad fa-file-invoice-dollar" style="font-size: 70px;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
+                            <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
+                                @if (ViewBag.PercentOrderInMonthAndInPreMonth < 0)
+                                {
+                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                }
+                                <p style="color: #f478f4">&ensp;@ViewBag.PercentOrderInMonthAndInPreMonth%</p>&nbspSo với tháng trước
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

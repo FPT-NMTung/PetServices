@@ -21,8 +21,8 @@ namespace FEPetServices.Areas.Partner.Controllers
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
-            //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
-            DefaultApiUrl = "https://localhost:7255/api/";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = "https://localhost:7255/api/";
         }
         public class DashBoardPartner
         {
@@ -56,13 +56,19 @@ namespace FEPetServices.Areas.Partner.Controllers
                 int partnerInfoId = account?.PartnerInfoId ?? 0; // Use the null-conditional operator to provide a default value
 
                 //so don hang trong thang
-                HttpResponseMessage NumberOrderInMonthResponse = await client.GetAsync(DefaultApiUrl + "OrderInMonth/" + partnerInfoId);
+                HttpResponseMessage NumberOrderInMonthResponse = await client.GetAsync(DefaultApiUrl + "DashboardPartner/OrderInMonth/" + partnerInfoId);
                 if (NumberOrderInMonthResponse.IsSuccessStatusCode)
                 {
                     var OrderInMonth = await NumberOrderInMonthResponse.Content.ReadFromJsonAsync<int>();
                     ViewBag.OrderInMonth = OrderInMonth;
                 }
-
+                //% so don hang trong thang so vs thang trc
+                HttpResponseMessage PercentOrderInMonthAndInPreMonthResponse = await client.GetAsync(DefaultApiUrl + "DashboardPartner/GetPercentOrderInMonth/" + partnerInfoId);
+                if (PercentOrderInMonthAndInPreMonthResponse.IsSuccessStatusCode)
+                {
+                    var PercentOrderInMonthAndInPreMonth = await PercentOrderInMonthAndInPreMonthResponse.Content.ReadFromJsonAsync<double>();
+                    ViewBag.PercentOrderInMonthAndInPreMonth = PercentOrderInMonthAndInPreMonth;
+                }
             }
             catch (Exception ex)
             {
