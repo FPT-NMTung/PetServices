@@ -314,6 +314,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             if (status.newStatus == "Completed")
             {
                 status.newStatusProduct = "";
+                status.newStatus = "Processing";
                 status.newStatusService = "Completed";
             }
             HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl+"OrderPartner/ChangeStatus/" + email + "?orderId=" + orderId, status);
