@@ -27,7 +27,11 @@ namespace PetServices.Controllers
         [HttpGet("GetAllRoom")]
         public async Task<ActionResult> GetAllRoom()
         {
-            var rooms = await _context.Rooms.Include(r => r.RoomCategories).ToListAsync();
+            var rooms = await _context.Rooms
+                .Include(r => r.RoomCategories)
+                .OrderByDescending(o => o.RoomId)
+                .ToListAsync();
+
             return Ok(_mapper.Map<List<RoomDTO>>(rooms));
         }
 

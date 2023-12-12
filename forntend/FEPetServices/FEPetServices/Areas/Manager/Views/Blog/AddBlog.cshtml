@@ -3,21 +3,6 @@
 <head>
     <title>Thêm Bài Viết mới</title>
     <link rel="stylesheet" href="/css/Blog/EditBlog.css">
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            tinymce.init({
-                selector: 'textarea#tiny',
-                plugins: [
-                    'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
-                    'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                    'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
-                ],
-                toolbar: 'undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify |' +
-                    'bullist numlist checklist outdent indent | removeformat | code table help'
-            });
-        });
-    </script>
     <style>
         .fa-asterisk {
             color: red;
@@ -34,8 +19,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12" style="width: 120%; height: 100%; border-radius: 5px; background-color: #F2F2F2; margin-bottom: 5%;">
-                <form asp-action="AddBlog" method="post" enctype="multipart/form-data" style="    margin-left: 5%; width: 90%; margin-bottom: 2%;
-    margin-top: 2%;">
+                <form asp-action="AddBlog" method="post" enctype="multipart/form-data" style="margin-left: 5%; width: 90%; margin-bottom: 2%;
+    margin-top: 2%;" novalidate>
                     <div class="form-group">
                         <label for="PageTile">Tên bài viết <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
                         <input type="text" class="form-control" name="PageTile" value="@Model?.PageTile" required placeholder="Tên bài viết"/>
@@ -60,7 +45,7 @@
                     </div>
                     <div class="form-group">
                         <label>Nội dung <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-                        <textarea class="form-control" id="tiny" name="Content" required>@Model?.Content</textarea>
+                        <textarea class="form-control" asp-for="Content" name="Content" required></textarea>
                     </div>
                     <div class="form-group">
                         <label>Tag <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i></label>
@@ -87,7 +72,7 @@
                                 <a href="/Manager/Blog"><input style="    background: red;border-color: red;" value="Trở Lại" class="btn btn-primary form-control"/></a>
                             </div>
                             <div class="sub">
-                                <input type="submit" name="Submit"style="    background: #43e240 ; border-color:#43e240; width:150px;" value="Thêm bài viết mới" class="btn btn-primary form-control" />
+                                <input type="submit" style="background: #43e240 ; border-color:#43e240; width:150px;" value="Thêm bài viết mới" class="btn btn-primary form-control" />
                             </div>
                         </div>
                     </div>
@@ -96,4 +81,20 @@
         </div>
     </div>
 </body>
+
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>tinymce.init({ selector: 'textarea' });</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        tinymce.init({
+            plugins: [
+                'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
+            ],
+            toolbar: 'undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify |' +
+                'bullist numlist checklist outdent indent | removeformat | code table help'
+        });
+    });
+</script>
 </html>

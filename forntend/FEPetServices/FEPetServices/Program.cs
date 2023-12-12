@@ -96,7 +96,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapAreaControllerRoute(
     name: "partner",
     areaName: "Partner",
-    pattern: "Partner/{controller=HomePartner}/{action=Index}/{id?}");
+    pattern: "Partner/{controller=DashboardPartner}/{action=Index}/{id?}");
 
     endpoints.MapAreaControllerRoute(
     name: "admin",

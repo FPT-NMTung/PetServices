@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width" />
     <title>Pet Home Service</title>
 </head>
-    <body>
-        <main class="main-wrapper">
+<body>
+    <main class="main-wrapper">
         @*Start - Banner*@
         <div class="axil-main-slider-area main-slider-style-1">
             <div class="container">
@@ -191,29 +191,29 @@
                                 <div class="single-slide slick-slide" data-sal="slide-up" data-sal-delay="600" data-sal-duration="1500">
                                     <img src="~/img/banner/banner-1.png" alt="Product">
                                     @*<div class="product-price">
-                                        <span class="text">From</span>
-                                        <span class="price-amount">$49.00</span>
+                                    <span class="text">From</span>
+                                    <span class="price-amount">$49.00</span>
                                     </div>*@
                                 </div>
                                 <div class="single-slide slick-slide" data-sal="slide-up" data-sal-delay="600" data-sal-duration="1500">
                                     <img src="~/img/banner/banner-2.png" alt="Product">
                                     @*<div class="product-price">
-                                        <span class="text">From</span>
-                                        <span class="price-amount">$49.00</span>
+                                    <span class="text">From</span>
+                                    <span class="price-amount">$49.00</span>
                                     </div>*@
                                 </div>
                                 <div class="single-slide slick-slide">
                                     <img src="~/img/banner/banner-3.png" alt="Product">
                                     @*<div class="product-price">
-                                        <span class="text">From</span>
-                                        <span class="price-amount">$49.00</span>
+                                    <span class="text">From</span>
+                                    <span class="price-amount">$49.00</span>
                                     </div>*@
                                 </div>
                                 <div class="single-slide slick-slide">
                                     <img src="~/img/banner/banner-4.png" alt="Product">
                                     @*<div class="product-price">
-                                        <span class="text">From</span>
-                                        <span class="price-amount">$49.00</span>
+                                    <span class="text">From</span>
+                                    <span class="price-amount">$49.00</span>
                                     </div>*@
                                 </div>
                             </div>
@@ -236,20 +236,21 @@
                     <h2 class="title">Loại sản phẩm</h2>
                 </div>
                 <div class="categrie-product-activation-3 slick-layout-wrapper--15 axil-slick-arrow arrow-top-slide">
-                    @foreach(var cateProduct in Model.ListProductCategories){
+                    @foreach (var cateProduct in Model.ListProductCategories)
+                    {
                         <div class="slick-single-layout">
-                        <div class="categrie-product" data-sal="zoom-out" data-sal-delay="300" data-sal-duration="500">
-                            <a href="/ProductList?productcategory=@cateProduct.ProCategoriesId">
-                                <img class="img-cat" src="@cateProduct.Picture" alt="product categorie">
-                                <h6 class="cat-title">@cateProduct.ProCategoriesName</h6>
-                            </a>
+                            <div class="categrie-product" data-sal="zoom-out" data-sal-delay="300" data-sal-duration="500">
+                                <a href="/ProductList?productcategory=@cateProduct.ProCategoriesId">
+                                    <img class="img-cat" src="@cateProduct.Picture" alt="product categorie">
+                                    <h6 class="cat-title">@cateProduct.ProCategoriesName</h6>
+                                </a>
+                            </div>
                         </div>
-                    </div>
                     }
                 </div>
             </div>
         </div>
-         @*End Categorie Product *@
+        @*End Categorie Product *@
 
         @*Start Product*@
         <div class="axil-product-area bg-color-white axil-section-gap">
@@ -280,12 +281,12 @@
                                                     <li class="select-option">
                                                         <form method="post" action="@Url.Action("AddToCart", "ProductList")">
                                                             @Html.AntiForgeryToken()
-                                                            <input type="hidden" name="ProductId" value="@product.ProductId" />
-                                                            <button class="add-to-card" type="button" onclick="addToCart('@product.ProductId')"><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
+                                                            <input type="hidden" name="ProductId" id="productId" value="@product.ProductId" />
+                                                            <button class="add-to-card btn-bg-primary updateProductQuantityCart" type="button"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
                                                         </form>
                                                     </li>
                                                     @*<li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>*@
-                                                    
+
                                                 </ul>
                                             </div>
                                         </div>
@@ -346,8 +347,8 @@
                                                     <li class="select-option">
                                                         <form method="post" action="@Url.Action("AddToCart", "ProductList")">
                                                             @Html.AntiForgeryToken()
-                                                            <input type="hidden" name="ProductId" value="@product.ProductId" />
-                                                            <button class="add-to-card" type="button" onclick="addToCart('@product.ProductId')"><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
+                                                            <input type="hidden" name="ProductId" id="productId" value="@product.ProductId" />
+                                                            <button class="add-to-card btn-bg-primary updateProductQuantityCart" type="button"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
                                                         </form>
                                                     </li>
                                                     @*<li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>*@
@@ -412,16 +413,17 @@
                     </div>
 
                     <div class="new-arrivals-product-activation slick-layout-wrapper--30 axil-slick-arrow  arrow-top-slide">
-                        @foreach (var services in Model.ListServiceCategory){
-                        <div class="slick-single-layout">
-                            <div class="axil-product product-style-two">
-                                <div class="service-category" style="text-align:center">
+                        @foreach (var services in Model.ListServiceCategory)
+                        {
+                            <div class="slick-single-layout">
+                                <div class="axil-product product-style-two">
+                                    <div class="service-category" style="text-align:center">
                                         <a href="~/Home/Service?sevicecategory=@services.SerCategoriesId">
-                                        <img data-sal="zoom-out" data-sal-delay="200" style="width:275px;border-radius:10px;"  data-sal-duration="500" src="@services.Picture" alt="Product Images">
-                                    </a>
-                                </div>
-                                <div class="product-content">
-                                    <div class="inner">
+                                            <img data-sal="zoom-out" data-sal-delay="200" style="width:275px;border-radius:10px;" data-sal-duration="500" src="@services.Picture" alt="Product Images">
+                                        </a>
+                                    </div>
+                                    <div class="product-content">
+                                        <div class="inner">
                                             <div class="product-rating">
                                                 <span class="icon">
                                                     @for (int i = 1; i <= 5; i++)
@@ -443,17 +445,17 @@
                                                 <span class="rating-number">(@services.NumberVoter)</span>
                                             </div>
                                             <h5 style="height:60px" class="title"><a href="~/Home/Service?sevicecategory=@services.SerCategoriesId">@services.SerCategoriesName</a></h5>
-                                        <div class="product-hover-action">
-                                            <ul class="cart-action">
-                                                @*<li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>*@
+                                            <div class="product-hover-action">
+                                                <ul class="cart-action">
+                                                    @*<li class="quickview"><a href="#" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>*@
                                                     <li class="select-option"><a href="~/Home/Service?sevicecategory=@services.SerCategoriesId">Xem chi tiết</a></li>
-                                                @*<li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>*@
-                                            </ul>
+                                                    @*<li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>*@
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         }
                     </div>
                 </div>
@@ -513,8 +515,51 @@
             </div>
         </div>
         @*End End*@
-        </main>
-    </body>
+    </main>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        function showErrorToastQuantityProduct(errorMessage) {
+            console.error(errorMessage);
+            toast({
+                title: 'Thất bại',
+                message: errorMessage,
+                type: 'error',
+                duration: 2000
+            });
+        }
+
+        $(".updateProductQuantityCart").click(function (event) {
+            event.preventDefault();
+            var productid = $("#productId").val();
+            var quantity = $("#quantityInput").val();
+            console.log(productid);
+            console.log(quantity);
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddToCart", "ProductList")",
+                data: {
+                    productid: productid,
+                    quantityProduct: quantity
+                },
+                headers: {
+                    RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (result) {
+                    $('#successModal').modal('show');
+                    console.log(result);
+                    updateCartCount(result.totalQuantity);
+                },
+                error: function (xhr, status, error) {
+                    showErrorToast(xhr.responseText);
+                    console.error("Error updating cart:", error);
+                }
+            });
+        });
+    });
+
+</script>
 <script src="~/assets/js/vendor/modernizr.min.js"></script>
 <!-- jQuery JS -->
 <script src="~/assets/js/vendor/jquery.js"></script>

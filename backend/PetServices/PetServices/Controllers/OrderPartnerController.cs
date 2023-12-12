@@ -302,6 +302,23 @@ namespace PetServices.Controllers
                         }
                     }
                 }
+
+                if (order.OrderProductDetails.Count() == 0
+                    && order.BookingServicesDetails.Count() > 0)
+                {
+                    foreach (var dto in order.BookingServicesDetails)
+                    {
+                        if (status.newStatusService == "Completed")
+                        {
+                            if (order.StatusPayment == false)
+                            {
+                                order.StatusPayment = !order.StatusPayment;
+                            }
+                            order.OrderStatus = "Completed";
+                        }
+                    }
+                }
+
                 if (order.OrderProductDetails.Count() > 0
                     && order.BookingServicesDetails.Count() > 0)
                 {
@@ -309,11 +326,11 @@ namespace PetServices.Controllers
                     int checkService = -1;
                     foreach (var dto in order.OrderProductDetails)
                     {
-                        if (status.newStatusProduct == "Delivered")
+                        if (status.newStatusProduct == "Delivered" || dto.StatusOrderProduct == "Delivered")
                         {
                             checkProduct = 0;
                         }
-                        else if (status.newStatusProduct == "Cancelled")
+                        else if (status.newStatusProduct == "Cancelled" || dto.StatusOrderProduct == "Cancelled")
                         {
                             checkProduct = 4;
                         }
@@ -322,13 +339,14 @@ namespace PetServices.Controllers
                             checkProduct = 1;
                         }
                     }
+
                     foreach (var dto in order.BookingServicesDetails)
                     {
-                        if (status.newStatusService == "Completed")
+                        if (status.newStatusService == "Completed" || dto.StatusOrderService == "Completed")
                         {
                             checkService = 0;
                         }
-                        else if (status.newStatusService == "Cancelled")
+                        else if (status.newStatusService == "Cancelled" || dto.StatusOrderService == "Cancelled")
                         {
                             checkService = 4;
                         }
@@ -382,8 +400,10 @@ namespace PetServices.Controllers
                     }
                 }
 
-                _context.Orders.Update(order);
 
+                _context.Orders.Update(order);
+                _context.OrderProductDetails.UpdateRange(order.OrderProductDetails);
+                _context.BookingServicesDetails.UpdateRange(order.BookingServicesDetails);
                 await _context.SaveChangesAsync();
                 return Ok("Đổi trạng thái thành công");
             }
