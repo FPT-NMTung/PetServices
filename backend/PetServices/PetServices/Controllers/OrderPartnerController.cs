@@ -203,6 +203,23 @@ namespace PetServices.Controllers
                         bookingDetail.StatusOrderService = "Completed";
                     }
                 }
+
+                if (order.OrderProductDetails.Count() == 0
+                    && order.BookingServicesDetails.Count() > 0)
+                {
+                    foreach (var bookingDetail in order.BookingServicesDetails)
+                    {
+                        if (bookingDetail.StatusOrderService == "Processing")
+                        {
+                            if (order.StatusPayment == false)
+                            {
+                                order.StatusPayment = !order.StatusPayment;
+                            }
+                            bookingDetail.StatusOrderService = "Completed";
+                        }
+                    }
+                }
+
                 _context.Update(order);
                 await _context.SaveChangesAsync();
                 return Ok(_mapper.Map<OrdersDTO>(order));
@@ -292,11 +309,11 @@ namespace PetServices.Controllers
                     int checkService = -1;
                     foreach (var dto in order.OrderProductDetails)
                     {
-                        if (status.newStatusProduct == "Delivered")
+                        if (status.newStatusProduct == "Delivered" || dto.StatusOrderProduct == "Delivered")
                         {
                             checkProduct = 0;
                         }
-                        else if (status.newStatusProduct == "Cancelled")
+                        else if (status.newStatusProduct == "Cancelled" || dto.StatusOrderProduct == "Cancelled")
                         {
                             checkProduct = 4;
                         }
@@ -307,11 +324,11 @@ namespace PetServices.Controllers
                     }
                     foreach (var dto in order.BookingServicesDetails)
                     {
-                        if (status.newStatusService == "Completed")
+                        if (status.newStatusService == "Completed" || dto.StatusOrderService == "Completed")
                         {
                             checkService = 0;
                         }
-                        else if (status.newStatusService == "Cancelled")
+                        else if (status.newStatusService == "Cancelled" || dto.StatusOrderService == "Cancelled")
                         {
                             checkService = 4;
                         }

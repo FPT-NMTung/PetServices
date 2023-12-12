@@ -176,6 +176,55 @@ namespace PetServices.Controllers
             }
         }
 
+        [HttpGet("GetOrderUserNoneFeedback/{email}")]
+        public IActionResult GetOrderUserNoneFeedback(string email, int page = 1, int pageSize = 5)
+        {
+            try
+            {
+                IQueryable<Order> query = _context.Orders
+                    .Include(o => o.UserInfo)
+                        .ThenInclude(u => u.Accounts)
+                    .Include(b => b.OrderProductDetails)
+                        .ThenInclude(o => o.Product)
+                    .Include(b => b.BookingServicesDetails)
+                        .ThenInclude(bs => bs.Service)
+                     .Include(b => b.BookingServicesDetails)
+                            .ThenInclude(s => s.PartnerInfo)
+                    .Include(b => b.BookingRoomDetails)
+                        .ThenInclude(br => br.Room)
+                    .Include(b => b.BookingRoomServices)
+                        .ThenInclude(br => br.Service)
+                    .Include(o => o.ReasonOrders)
+                    .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) &&
+                    o.BookingRoomDetails.Count() == 0 && (o.BookingServicesDetails.Count() > 0 || o.OrderProductDetails.Count() > 0)
+                    && (o.BookingServicesDetails.Any(bs => bs.FeedbackStatus == null) || o.OrderProductDetails.Any(bs => bs.FeedbackStatus == null)
+                    || o.BookingServicesDetails.Any(bs => bs.FeedbackPartnerStatus == null))
+                    );
+
+                query = query.Where(o => o.OrderStatus == "Completed");
+
+                query = query.OrderByDescending(o => o.OrderDate);
+
+                var paginatedOrders = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+                bool hasOrders = paginatedOrders.Any();
+
+                if (hasOrders)
+                {
+                    List<OrdersDTO> ordersDTOList = _mapper.Map<List<OrdersDTO>>(paginatedOrders);
+                    return Ok(ordersDTOList);
+                }
+                else
+                {
+                    return NotFound("No orders found with the specified status");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpGet("getRoomOrderUser/{email}")]
         public IActionResult GetRoomOrderUser(string email, string orderstatus, int page = 1, int pageSize = 5)
         {
@@ -196,13 +245,61 @@ namespace PetServices.Controllers
                         .ThenInclude(br => br.Service)
                         .Include(o => o.ReasonOrders)
                     .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) &&
-                    o.BookingRoomDetails.Count() > 0 && o.BookingServicesDetails.Count() == 0 && o.OrderProductDetails.Count() == 0
+                    o.BookingRoomDetails.Count() > 0 && o.BookingServicesDetails.Count() == 0 && o.OrderProductDetails.Count() == 0 
                     );
 
                 if (!string.IsNullOrEmpty(orderstatus) && orderstatus.ToLower() != "all")
                 {
                     query = query.Where(o => o.OrderStatus == orderstatus);
                 }
+
+                query = query.OrderByDescending(o => o.OrderDate);
+
+                var paginatedOrders = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+                bool hasOrders = paginatedOrders.Any();
+
+                if (hasOrders)
+                {
+                    List<OrdersDTO> ordersDTOList = _mapper.Map<List<OrdersDTO>>(paginatedOrders);
+                    return Ok(ordersDTOList);
+                }
+                else
+                {
+                    return NotFound("No orders found with the specified status");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("getRoomOrderUserNoneFeedback/{email}")]
+        public IActionResult getRoomOrderUserNoneFeedback(string email, int page = 1, int pageSize = 5)
+        {
+            try
+            {
+                IQueryable<Order> query = _context.Orders
+                   .Include(o => o.UserInfo)
+                        .ThenInclude(u => u.Accounts)
+                    .Include(b => b.OrderProductDetails)
+                        .ThenInclude(o => o.Product)
+                    .Include(b => b.BookingServicesDetails)
+                        .ThenInclude(bs => bs.Service)
+                     .Include(b => b.BookingServicesDetails)
+                            .ThenInclude(s => s.PartnerInfo)
+                    .Include(b => b.BookingRoomDetails)
+                        .ThenInclude(br => br.Room)
+                    .Include(b => b.BookingRoomServices)
+                        .ThenInclude(br => br.Service)
+                        .Include(o => o.ReasonOrders)
+                    .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) &&
+                    o.BookingRoomDetails.Count() > 0 && o.BookingServicesDetails.Count() == 0 && o.OrderProductDetails.Count() == 0 &&
+                    o.BookingRoomDetails.Any(bs => bs.FeedbackStatus == null)
+                    );
+
+                query = query.Where(o => o.OrderStatus == "Confirmed");
 
                 query = query.OrderByDescending(o => o.OrderDate);
 
@@ -399,7 +496,8 @@ namespace PetServices.Controllers
                 UpdateProductDetailsStatus(order, status.newStatusProduct);
                 UpdateServiceDetailsStatus(order, status.newStatusService);
 
-                if (order.OrderProductDetails.Count() > 0 && order.BookingServicesDetails.Count() == 0)
+                if (order.OrderProductDetails.Count() > 0 && 
+                    order.BookingServicesDetails.Count() == 0)
                 {
                     foreach (var dto in order.OrderProductDetails)
                     {
@@ -419,7 +517,7 @@ namespace PetServices.Controllers
                 {
                     foreach (var dto in order.BookingServicesDetails)
                     {
-                        if (status.newStatusService == "Delivered")
+                        if (status.newStatusService == "Completed")
                         {
                             if (order.StatusPayment == false)
                             {
@@ -437,11 +535,11 @@ namespace PetServices.Controllers
                     int checkService = -1;
                     foreach (var dto in order.OrderProductDetails)
                     {
-                        if (status.newStatusProduct == "Delivered")
+                        if (status.newStatusProduct == "Delivered" || dto.StatusOrderProduct == "Delivered")
                         {
                             checkProduct = 0;
                         }
-                        else if (status.newStatusProduct == "Cancelled")
+                        else if (status.newStatusProduct == "Cancelled" || dto.StatusOrderProduct == "Cancelled")
                         {
                             checkProduct = 4;
                         }
@@ -452,11 +550,11 @@ namespace PetServices.Controllers
                     }
                     foreach (var dto in order.BookingServicesDetails)
                     {
-                        if (status.newStatusService == "Completed")
+                        if (status.newStatusService == "Completed" || dto.StatusOrderService == "Completed")
                         {
                             checkService = 0;
                         }
-                        else if (status.newStatusService == "Cancelled")
+                        else if (status.newStatusService == "Cancelled" || dto.StatusOrderService == "Cancelled")
                         {
                             checkService = 4;
                         }
