@@ -70,13 +70,21 @@
                             <label for="">Mật khẩu</label>
                         </div>
                     </div>
-                    <div class="forget">
-                        <label for="">
-                            <input type="checkbox" id="agreeCheckbox" onchange="toggleContent()" required>Tôi đồng ý với các
-                            <a href="" style="color:blue">điều khoản</a>
-                            của hệ thống
+                    <div class="input-group">
+                        <label for="checkimage" style="height:25px" class="custom-file-upload">Chọn tệp tin</label>
+                        <input type="file" id="checkimage" name="image" required onchange="displayImage()">
+                        <br />
+                        <img id="previewImage" style="max-width: 100%; max-height: 250px; margin-top: 10px;" alt="Preview Image">
+                    </div>
+
+                    <div class="forget" style="margin-top:30px;">
+                        <label for="agreeCheckbox">
+                            <input type="checkbox" required>
+                            Tôi đồng ý với các
+                            <a href="#" onclick="toggleContent()" style="color: blue">điều khoản</a> của hệ thống
                         </label>
                     </div>
+
                     <button id="registerButton">Đăng ký</button>
                     <div class="register">
                         <p>Quay trở lại <a href="~/Login/Index">Đăng nhập</a></p>
@@ -110,12 +118,6 @@
                             <div class="ruleinfo">
                                 <p>Điều 6: Cam kết cung cấp chính xác thông tin</p>
                             </div>
-                        </div>
-                        <div class="image">
-                            <label for="checkimage" class="custom-file-upload">Chọn tệp tin</label>
-                            <input type="file" id="checkimage" name="image" required onchange="displayImage()">
-                            <br />
-                            <img id="previewImage" style="max-width: 100%; max-height: 250px; margin-top: 10px;" alt="Preview Image">
                         </div>
                     </div>
                 </div>
