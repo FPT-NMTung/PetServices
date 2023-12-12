@@ -7,3 +7,8 @@
 .single-counter .card-body{
     display: block;
 }
+.product-rating .star-rating {
+    margin-right: 8px;
+    font-size: 14px;
+    color: #ffdc60;
+}

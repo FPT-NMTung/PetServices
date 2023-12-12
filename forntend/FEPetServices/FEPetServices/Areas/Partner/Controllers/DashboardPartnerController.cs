@@ -1,6 +1,9 @@
-﻿using FEPetServices.Form;
+﻿using DocumentFormat.OpenXml.EMMA;
+using FEPetServices.Areas.DTO;
+using FEPetServices.Form;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetServices.DTO;
 using PetServices.Form;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -34,6 +37,7 @@ namespace FEPetServices.Areas.Partner.Controllers
             {
                 FeedbackCustomer = new List<FeedbackForm>()
             };
+            PartnerFeedbackModel model = new PartnerFeedbackModel();
             try
             {
                 //lay thong tin cua partner
@@ -84,12 +88,48 @@ namespace FEPetServices.Areas.Partner.Controllers
                     var PercentTotalPriceInMonthAndInPreMonth = await PercentTotalPriceInMonthAndInPreMonthResponse.Content.ReadFromJsonAsync<double>();
                     ViewBag.PercentTotalPriceInMonthAndInPreMonth = PercentTotalPriceInMonthAndInPreMonth;
                 }
+
+                //tổng đánh giá
+                HttpResponseMessage StarInPartnerResponse = await client.GetAsync(DefaultApiUrl + "DashboardPartner/GetStarInPartner/" + partnerInfoId);
+                if (StarInPartnerResponse.IsSuccessStatusCode)
+                {
+                    var StarInPartner = await StarInPartnerResponse.Content.ReadFromJsonAsync<int>();
+                    ViewBag.StarInPartner = StarInPartner;
+                }
+                HttpResponseMessage voteNumberResponse = await client.GetAsync(DefaultApiUrl + "DashboardPartner/GetPartnerVoteNumber/" + partnerInfoId);
+
+                if (voteNumberResponse.IsSuccessStatusCode)
+                {
+                    var voteNumber = await voteNumberResponse.Content.ReadFromJsonAsync<VoteNumberDTO>();
+
+                    model.VoteNumberas = voteNumber;
+                }
+
+                HttpResponseMessage PartnerStarResponse = await client.GetAsync(DefaultApiUrl + "DashboardPartner/GetPartnerStar/" + partnerInfoId);
+
+                if (PartnerStarResponse.IsSuccessStatusCode)
+                {
+                    var content = await PartnerStarResponse.Content.ReadAsStringAsync();
+
+                    if (double.TryParse(content, out double PartnerStar))
+                    {
+                        ViewBag.PartnerStar = PartnerStar;
+                    }
+                }
             }
             catch (Exception ex)
             {
                 ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
             }
             return View(dashBoardPartner);
+        }
+
+        public class PartnerFeedbackModel
+        {
+            public List<FeedbackDTO> Feedback { get; set; }
+            public VoteNumberDTO VoteNumberas { get; set; }
+            public PartnerInfo Partner { get; set; }
+            public List<PartnerInfo> partners { get; set; }
         }
     }
 }

@@ -104,7 +104,25 @@
                             <div class="d-flex single-counter">
                                 <div class="card-body" style="padding: 13px 0px 0px 20px;">
                                     <h7 class="fw-normal title">Đánh giá của khách hàng</h7>
-                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count">@ViewBag.OrderInMonth</h3>
+                                    <div class="product-rating">
+                                        <div class="star-rating" style="padding-top: 20px">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= (ViewBag.PartnerStar ?? 5))
+                                                {
+                                                    <i class="fas fa-star"></i>
+                                                }
+                                                else if (i - ViewBag.PartnerStar < 1)
+                                                {
+                                                    <i class="fas fa-star-half-alt"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="far fa-star"></i>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
@@ -115,15 +133,8 @@
                         </div>
                         <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
                             <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
-                                @if (ViewBag.PercentOrderInMonthAndInPreMonth < 0)
-                                {
-                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
-                                }
-                                else
-                                {
-                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
-                                }
-                                <p style="color: #f478f4">&ensp;@ViewBag.PercentOrderInMonthAndInPreMonth%</p>&nbspSo với tháng trước
+                                <i class="fa-solid fa-star" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                <p style="color: #f478f4">&ensp;@ViewBag.PartnerStar</p>&nbspĐánh giá của khách hàng
                             </div>
                         </div>
                     </div>

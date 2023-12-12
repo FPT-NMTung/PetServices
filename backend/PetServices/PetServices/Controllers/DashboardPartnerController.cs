@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PetServices.DTO;
 using PetServices.Form;
 using PetServices.Models;
 
@@ -265,6 +266,34 @@ namespace PetServices.Controllers
                 };
                 return Ok(feedbackData);
             }
+        }
+        [HttpGet("GetPartnerStar/{partnerId}")]
+        public async Task<ActionResult> GetPartnerStar(int partnerId)
+        {
+            var averageStars = _context.Feedbacks.Where(f => f.PartnerId == partnerId).Average(f => f.NumberStart);
+
+            if (averageStars.HasValue)
+            {
+                averageStars = Math.Round(averageStars.Value, 1);
+            }
+
+            return Ok(averageStars);
+        }
+        [HttpGet("GetPartnerVoteNumber/{partnerId}")]
+        public async Task<ActionResult> GetPartnerVoteNumber(int partnerId)
+        {
+            var feedbacks = await _context.Feedbacks.Where(f => f.PartnerId == partnerId).ToListAsync();
+
+            var feedback = new VoteNumberDTO
+            {
+                number5s = feedbacks.Count(f => f.NumberStart == 5),
+                number4s = feedbacks.Count(f => f.NumberStart == 4),
+                number3s = feedbacks.Count(f => f.NumberStart == 3),
+                number2s = feedbacks.Count(f => f.NumberStart == 2),
+                number1s = feedbacks.Count(f => f.NumberStart == 1),
+            };
+
+            return Ok(feedback);
         }
     }
 }
