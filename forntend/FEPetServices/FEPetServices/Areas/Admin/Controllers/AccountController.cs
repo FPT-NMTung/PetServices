@@ -32,7 +32,6 @@ namespace FEPetServices.Areas.Admin.Controllers
             //ApiUrlAddAccount = "https://pet-service-api.azurewebsites.net/api/Admin/AddAccount";
             //ApiUrlUpdateAccount = "https://pet-service-api.azurewebsites.net/api/UpdateAccount";
         }
-
         public async Task<IActionResult> Index()
         {
             var accountList = await client.GetAsync(DefaultApiUrl + "Admin/GetAllAccountByAdmin");
