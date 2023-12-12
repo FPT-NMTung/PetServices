@@ -81,7 +81,6 @@ namespace FEPetServices.Areas.Manager.Controllers
             {
                
                 HttpResponseMessage categoryResponse = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
-                //HttpResponseMessage categoryResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory");
 
                 if (categoryResponse.IsSuccessStatusCode)
                 {

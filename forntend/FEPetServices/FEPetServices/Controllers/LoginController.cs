@@ -95,7 +95,7 @@ namespace FEPetServices.Controllers
                                     return LocalRedirect(returnUrl);
                                 }
                                 TempData["SuccessLoginToast"] = "Đăng nhập thành công.";
-                                return RedirectToAction("Index", "HomePartner", new { area = "Partner" });
+                                return RedirectToAction("Index", "DashboardPartner", new { area = "Partner" });
                             }
                             else if (roleName == "ADMIN")
                             {

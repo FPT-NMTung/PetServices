@@ -88,7 +88,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 }
 
-                if (blog.Heading == null) { return View(); }
+                if (blog.Heading == null || blog.ImageUrl==null||blog.PageTile==null) { return View(); }
                 foreach (var file in image)
                 {
                     string filename = GenerateRandomNumber(5) + file.FileName;
