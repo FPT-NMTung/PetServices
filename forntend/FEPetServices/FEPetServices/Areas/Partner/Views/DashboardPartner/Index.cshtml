@@ -73,7 +73,7 @@
                             <div class="d-flex single-counter">
                                 <div class="card-body" style="padding: 13px 0px 0px 20px;">
                                     <h7 class="fw-normal title">Tổng thu nhập</h7>
-                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count">@ViewBag.OrderInMonth</h3>
+                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count">@ViewBag.TotalPriceInMonth</h3>
                                 </div>
                             </div>
                             <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
@@ -84,7 +84,7 @@
                         </div>
                         <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
                             <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
-                                @if (ViewBag.PercentOrderInMonthAndInPreMonth < 0)
+                                @if (ViewBag.PercentTotalPriceInMonthAndInPreMonth < 0)
                                 {
                                     <i class="fa fa-arrow-alt-circle-down" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
                                 }
@@ -92,7 +92,7 @@
                                 {
                                     <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
                                 }
-                                <p style="color: #f478f4">&ensp;@ViewBag.PercentOrderInMonthAndInPreMonth%</p>&nbspSo với tháng trước
+                                <p style="color: #f478f4">&ensp;@ViewBag.PercentTotalPriceInMonthAndInPreMonth%</p>&nbspSo với tháng trước
                             </div>
                         </div>
                     </div>

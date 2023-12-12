@@ -216,5 +216,55 @@ namespace PetServices.Controllers
 
             return Ok(feedback);
         }
+
+        //tổng số đánh giá của partner
+        [HttpGet("GetStarInProductPet/{partnerId}")]
+        public async Task<ActionResult> GetStarInPartner(int partnerId)
+        {
+            var partners = await _context.PartnerInfos
+                .Where(x => x.PartnerInfoId == partnerId)
+                .ToListAsync();
+
+            double totalStars = 0;
+            int totalFeedbackCount = 0;
+            int count = 0;
+
+
+            foreach (var partner in partners)
+            {
+                var feedbacks = _context.Feedbacks
+                    .Where(f => f.PartnerId == partner.PartnerInfoId)
+                    .ToList();
+
+                if (feedbacks.Any())
+                {
+                    totalStars += feedbacks.Average(f => f.NumberStart) ?? 0;
+                    totalFeedbackCount += feedbacks.Count;
+                    count++;
+                }
+            }
+
+            if (count > 0)
+            {
+                double averageStars = totalFeedbackCount > 0 ? Math.Round(totalStars / count, 1) : 0;
+
+                var feedbackData = new FeedbackDataForm
+                {
+                    AverageStars = averageStars,
+                    TotalFeedbackCount = totalFeedbackCount
+                };
+
+                return Ok(feedbackData);
+            }
+            else
+            {
+                var feedbackData = new FeedbackDataForm
+                {
+                    AverageStars = 0,
+                    TotalFeedbackCount = 0
+                };
+                return Ok(feedbackData);
+            }
+        }
     }
 }

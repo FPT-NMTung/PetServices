@@ -21,8 +21,8 @@ namespace FEPetServices.Areas.Partner.Controllers
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
-            //DefaultApiUrl = "https://localhost:7255/api/";
+            //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            DefaultApiUrl = "https://localhost:7255/api/";
         }
         public class DashBoardPartner
         {
@@ -68,6 +68,21 @@ namespace FEPetServices.Areas.Partner.Controllers
                 {
                     var PercentOrderInMonthAndInPreMonth = await PercentOrderInMonthAndInPreMonthResponse.Content.ReadFromJsonAsync<double>();
                     ViewBag.PercentOrderInMonthAndInPreMonth = PercentOrderInMonthAndInPreMonth;
+                }
+
+                //thu nhap trong thang
+                HttpResponseMessage TotalPriceInMonthResponse = await client.GetAsync(DefaultApiUrl + "DashboardPartner/GetTotalPriceInMonth/" + partnerInfoId);
+                if (TotalPriceInMonthResponse.IsSuccessStatusCode)
+                {
+                    var TotalPriceInMonth = await TotalPriceInMonthResponse.Content.ReadFromJsonAsync<int>();
+                    ViewBag.TotalPriceInMonth = TotalPriceInMonth;
+                }
+                //% thu nhap trong thang so vs thang trc
+                HttpResponseMessage PercentTotalPriceInMonthAndInPreMonthResponse = await client.GetAsync(DefaultApiUrl + "DashboardPartner/GetPercentTotalPriceInMonthAndInPreMonth/" + partnerInfoId);
+                if (PercentTotalPriceInMonthAndInPreMonthResponse.IsSuccessStatusCode)
+                {
+                    var PercentTotalPriceInMonthAndInPreMonth = await PercentTotalPriceInMonthAndInPreMonthResponse.Content.ReadFromJsonAsync<double>();
+                    ViewBag.PercentTotalPriceInMonthAndInPreMonth = PercentTotalPriceInMonthAndInPreMonth;
                 }
             }
             catch (Exception ex)
