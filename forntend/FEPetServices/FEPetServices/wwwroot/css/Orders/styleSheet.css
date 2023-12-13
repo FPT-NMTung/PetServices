@@ -99,12 +99,7 @@ body {
 
 /* Badge Styles */
 .badge-info {
-    background-color: #43e240;
-    color: white;
-    font-size: 13px;
-    height: 40px;
-    border-radius: 5px;
-    border: none;
+    background-color: #17a2b8;
 }
 span.badge {
     display: flex;
@@ -256,6 +251,9 @@ content-detail-time-service {
     background-color: #E21033;
     text-decoration: none;
     cursor: pointer;
+}
+.btn-detail:hover{
+    color: black;
 }
 /* Responsive Styles */
 @media (max-width: 768px) {

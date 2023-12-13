@@ -41,23 +41,23 @@
                             <td>
                                 @if (orderLists?.OrderStatus.Trim() == "Confirmed")
                                 {
-                                    <span style="display:inline-block; " class="badge badge-info">Đơn hàng đã được xác nhận và trong giai đoạn xử lý </span>
+                                    <span style="display:inline-block;background-color: #43e240;" class="badge badge-info">Đơn hàng đã được xác nhận và trong giai đoạn xử lý </span>
                                 }
                                 else if (orderLists?.OrderStatus.Trim() == "Processing")
                                 {
-                                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đang được thực hiện</span>
+                                    <span style="display:inline-block;background-color: #43e240;" class="badge badge-info">Đơn hàng đang được thực hiện</span>
                                 }
                                 else if (orderLists?.OrderStatus.Trim() == "Placed")
                                 {
-                                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đang chờ xác nhận</span>
+                                    <span style="display:inline-block;background-color: #43e240;" class="badge badge-info">Đơn hàng đang chờ xác nhận</span>
                                 }
                                 else if (orderLists?.OrderStatus.Trim() == "Completed")
                                 {
-                                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đã hoàn thành</span>
+                                    <span style="display:inline-block;background-color: #43e240;" class="badge badge-info">Đơn hàng đã hoàn thành</span>
                                 }
                                 else if (orderLists?.OrderStatus.Trim() == "Cancelled")
                                 {
-                                    <span style="display:inline-block" class="badge badge-info">Đơn hàng bị huỷ</span>
+                                    <span style="display:inline-block;background-color: #43e240;" class="badge badge-info">Đơn hàng bị huỷ</span>
                                 }
                             </td>
                             <td>

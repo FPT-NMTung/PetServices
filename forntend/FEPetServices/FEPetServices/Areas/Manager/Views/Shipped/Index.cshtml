@@ -49,23 +49,23 @@
                                         <div class="status-content-detail">
                                             @if (productDetail?.StatusOrderProduct?.Trim() == "Placed")
                                             {
-                                                <span class="badge badge-info">Sản phẩm đang chờ xác nhận</span>
+                                                <span style="background-color: #43e240;" class="badge badge-info">Sản phẩm đang chờ xác nhận</span>
                                             }
                                             else if (productDetail?.StatusOrderProduct?.Trim() == "Packaging")
                                             {
-                                                <span class="badge badge-info">Đóng gói sản phẩm</span>
+                                                <span style="background-color: #43e240;" class="badge badge-info">Đóng gói sản phẩm</span>
                                             }
                                              else if (productDetail?.StatusOrderProduct?.Trim() == "Shipped")
                                             {
-                                                <span class="badge badge-info">Đơn hàng đang được vận chuyển</span>
+                                                <span style="background-color: #43e240;" class="badge badge-info">Đơn hàng đang được vận chuyển</span>
                                             }
                                             else if (productDetail?.StatusOrderProduct?.Trim() == "Delivered")
                                             {
-                                                <span class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
+                                                <span style="background-color: #43e240;" class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
                                             }
                                             else if (orderLists?.OrderStatus.Trim() == "Cancelled")
                                             {
-                                                <span style="display:inline-block" class="badge badge-info">Đơn hàng bị huỷ</span>
+                                                <span style="background-color: #43e240;"  class="badge badge-info">Đơn hàng bị huỷ</span>
                                             }
                                         </div>
                                     }
