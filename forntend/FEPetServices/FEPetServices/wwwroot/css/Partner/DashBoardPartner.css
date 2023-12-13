@@ -12,12 +12,12 @@
     font-size: 14px;
     color: #ffdc60;
 }
-.Dashboard {
+.DashboardPartner {
     background-color: rgb(242, 242, 242);
     padding: 10px;
 }
 
-    .Dashboard .row {
+    .DashboardPartner .row {
         display: flex;
     }
 

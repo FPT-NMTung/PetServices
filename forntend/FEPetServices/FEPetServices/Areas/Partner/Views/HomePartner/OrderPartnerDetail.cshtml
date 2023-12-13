@@ -23,23 +23,23 @@
                     {
                         @if (status.StatusOrderService.Trim() == "Completed")
                         {
-                            <span style="background-color: green; color:#fff">Đã hoàn thành</span>
+                            <span style="display:inline-block;background-color: #17a2b8;color: white;">Đã hoàn thành</span>
                         }
                         else if (status.StatusOrderService.Trim() == "Waiting" && status.PartnerInfoId == null)
                         {
-                            <span style="background-color: yellow;color:green">Đang chờ xác nhận</span>
+                            <span style="display:inline-block;background-color: #17a2b8;color: white;">Đang chờ xác nhận</span>
                         }
                         else if (status.StatusOrderService.Trim() == "Received")
                         {
-                            <span style="background-color: pink;color:deeppink">Đơn hàng đã được xác nhận</span>
+                            <span style="display:inline-block;background-color: #17a2b8;color: white;">Đơn hàng đã được xác nhận</span>
                         }
                         else if (status.StatusOrderService.Trim() == "Processing")
                         {
-                            <span style="background-color: pink;color:deeppink">Đơn hàng đang thực hiện</span>
+                            <span style="display:inline-block;background-color: #17a2b8;color: white;">Đơn hàng đang thực hiện</span>
                         }
                         else if (status.StatusOrderService.Trim() == "Waiting" && status.PartnerInfoId != null)
                         {
-                            <span style="background-color: yellow;color:green">Đơn hàng đặc biệt đang chờ xác nhận</span>
+                            <span style="display:inline-block;background-color: #17a2b8;color: white;">Đơn hàng đặc biệt đang chờ xác nhận</span>
                         }
                     }
                     
