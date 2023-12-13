@@ -13,14 +13,15 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function toggleContent() {
-    var checkbox = document.getElementById('agreeCheckbox');
-    var content = document.getElementById('contentToShow');
-    if (checkbox.checked) {
-        content.classList.add('show-content');
+    var contentToShow = document.getElementById("contentToShow");
+
+    if (contentToShow.style.display === "none" || contentToShow.style.display === "") {
+        contentToShow.style.display = "block";
     } else {
-        content.classList.remove('show-content');
+        contentToShow.style.display = "none";
     }
 }
+
 toggleContent()
 
 function displayImage() {
