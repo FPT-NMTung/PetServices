@@ -41,7 +41,7 @@
                             <td>
                                 @if (orderLists?.OrderStatus.Trim() == "Confirmed")
                                 {
-                                    <span style="display:inline-block" class="badge badge-info">Đơn hàng đã được xác nhận và trong giai đoạn xử lý </span>
+                                    <span style="display:inline-block; " class="badge badge-info">Đơn hàng đã được xác nhận và trong giai đoạn xử lý </span>
                                 }
                                 else if (orderLists?.OrderStatus.Trim() == "Processing")
                                 {
@@ -61,7 +61,7 @@
                                 }
                             </td>
                             <td>
-                                <a class="detail-button" href="~/Manager/OrderLists/OrderDetail?id=@orderLists.OrderId">Chi tiết</a>
+                                <a class="btn-detail" href="~/Manager/OrderLists/OrderDetail?id=@orderLists.OrderId">Chi tiết</a>
                             </td>
                         </tr>
                     }

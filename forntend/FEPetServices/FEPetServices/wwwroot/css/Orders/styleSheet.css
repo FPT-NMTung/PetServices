@@ -99,8 +99,12 @@ body {
 
 /* Badge Styles */
 .badge-info {
-    background-color: #17a2b8;
-    
+    background-color: #43e240;
+    color: white;
+    font-size: 13px;
+    height: 40px;
+    border-radius: 5px;
+    border: none;
 }
 span.badge {
     display: flex;
@@ -224,8 +228,6 @@ content-detail-time-service {
 
 .status-content-detail {
     display: flex;
-    justify-content: space-between;
-    justify-content:end;
     margin: 10px 0;
 }
 
@@ -241,9 +243,21 @@ content-detail-time-service {
     border: 1px solid #ccc;
 }
 
-
+.btn-detail {
+    text-align: center;
+    border-radius: 5px;
+    font-size: 15px;
+    color: white;
+    display: inline-block;
+    padding: 8px;
+    border: 1px solid;
+    width: 100px;
+    height: 40px;
+    background-color: #E21033;
+    text-decoration: none;
+    cursor: pointer;
+}
 /* Responsive Styles */
-
 @media (max-width: 768px) {
     .timeline-icon {
         top: 10px;
