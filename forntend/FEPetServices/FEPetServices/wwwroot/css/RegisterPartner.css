@@ -27,11 +27,14 @@ input[type="file"] {
 
 /* Tạo kiểu cho nút tùy chỉnh thay thế */
 .custom-file-upload {
-    border: 1px solid #ccc;
+    border: 1px solid #fff;
     display: inline-block;
     padding: 6px 12px;
     cursor: pointer;
-    background-color: #f8f8f8;
+    /*background-color: #f8f8f8;*/
+    background: transparent;
+    backdrop-filter: blur(15px);
+    border-radius: 10px;
 }
 
     /* Tạo kiểu khi di chuột vào nút tùy chỉnh */
