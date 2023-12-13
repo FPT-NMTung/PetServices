@@ -507,7 +507,7 @@ namespace PetServices.Controllers
             // Lấy ra danh sách các đơn đặt hàng trong tháng hiện tại đã hoàn thành
             var orders = await _context.Orders
                 .Include(o => o.BookingRoomDetails)
-                .Where(o => o.OrderStatus == "Completed" && o.OrderDate.Value.Month == now.Month && o.OrderDate.Value.Year == now.Year)
+                .Where(o => o.OrderStatus == "Confirmed" && o.OrderDate.Value.Month == now.Month && o.OrderDate.Value.Year == now.Year)
                 .ToListAsync();
 
             // Lấy ra danh sách các phòng theo các đơn đặt hàng đó
