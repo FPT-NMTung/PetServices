@@ -12,6 +12,9 @@
     @*<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">*@
     <link rel="stylesheet" href="~/css/flatpickr.css">
     <link rel="stylesheet" href="/css/Service/ServiceDetail.css">
+    @*<script src="~/js/showallmap.js"></script>*@
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM"></script>
+    @*<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM&callback=initMap"></script>*@
 </head>
 
 <body class="sticky-header">
@@ -91,42 +94,22 @@
                                     </ul>
                                     <p class="description mb--40">@Model?.Service.Desciptions</p>
                                     <div style="margin-bottom:10px;">
-                                        <p class="title" style="font-family: serif;font-size: 15px; height:1px;">Nhân Viên:</p>
-
-                                        @if (ViewBag.Partners != null)
+                                        <p class="title" style="font-family: serif; font-size: 15px; height:1px;">
+                                            Nhân Viên: <a style="color: blue; cursor: pointer;" onclick="showMap()">Xem bản đồ</a>
+                                        </p>
+                                        @if (Model.Partners != null)
                                         {
                                             <select name="PartnerInfoId" id="PartnerInfoId" class="size-option" style="font-family: serif ; width: 200px; height:30px; border:2px solid black">
                                                 <option value=" ">Danh sách nhân viên</option>
-                                                @foreach (var category in ViewBag.Partners)
+                                                @foreach (var partner in Model.Partners)
                                                 {
-                                                    <option id="toggleSelect" value="@category.Value">@category.Text - Mnv: @category.Value</option>
+                                                    <option value="@partner.PartnerInfoId" data-lat="@partner.Lat" data-lng="@partner.Lng">@partner.LastName - Mnv: @partner.PartnerInfoId</option>
                                                 }
                                             </select>
                                         }
                                     </div>
-@*                                    <div class="product-variations-wrapper">
-                                        <div class="product-variation product-size-variation" style="display:block;">
-                                            <div class="title" style="font-family: serif; font-size: 15px;">Dịch vụ:</div>
-                                            <div class="range-variant" style="font-family: serif">
-                                                @foreach (var sr in Model?.ServiceCategory.Services)
-                                            {
-                                                if (sr.Status == true)
-                                                {
-                                                    var request = Context.Request;
-                                                    var currentPageURL = request.Path + request.QueryString;
-                                                    var linkURL = "/Home/ServiceDetail?serviceCategoryId=" + Model.ServiceCategory.SerCategoriesId + "&serviceIds=" + sr.ServiceId;
-                                                    var activeClass = currentPageURL.Equals(linkURL, System.StringComparison.InvariantCultureIgnoreCase) ? "active" : "";
 
-                                                    <li class="page-item @(activeClass)" style="font-size:12px;font-family: serif;">
-                                                        <a href="@linkURL" class="service-link">@sr.ServiceName</a>
-                                                    </li>
-                                                }
-                                                else { }
-                                            }
 
-                                            </div>
-                                        </div>
-                                    </div>*@
 
                                     <div style="margin-top:5px">
                                         <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ bắt đầu:</p>
@@ -359,10 +342,20 @@
                 </div>
             </div>
         </div>
+
+       @* ModelMap*@
+        <div id="mapModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeMapModal()">&times;</span>
+                <div id="map" style="width: 100%; height: 400px;"></div>
+            </div>
+            <div id="directionsPanel"></div>
+        </div>
+        @*<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>*@
+        @* ModelMap*@
     </main>
    @* <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>*@
    <script src="~/js/flatpickr.js"></script>
-
     <script>
     const datetimeStartInput = document.getElementById('datetimeStart');
     let previousValue = '';
@@ -624,6 +617,79 @@
                 priceElement.textContent = formattedPrice + ' VNĐ';
             });
         });
+    </script>    
+
+    <script>
+        function showMap() {
+            var partnerSelect = document.getElementById("PartnerInfoId");
+            var mapModal = document.getElementById("mapModal");
+
+            // Lấy vị trí hiện tại của bạn
+            var myLatitude;
+            var myLongitude;
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    myLatitude = position.coords.latitude;
+                    myLongitude = position.coords.longitude;
+
+                    // Tạo một đối tượng bản đồ
+                    var map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 10, // Điều chỉnh mức độ thu phóng
+                        center: { lat: myLatitude, lng: myLongitude } // Trung tâm của bản đồ
+                    });
+
+                    // Marker cho vị trí hiện tại của bạn
+                    var myMarker = new google.maps.Marker({
+                        position: { lat: myLatitude, lng: myLongitude },
+                        map: map,
+                        title: 'Vị trí của tôi',
+                        icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+                    });
+
+                    // Duyệt qua danh sách đối tác và thêm đánh dấu cho mỗi đối tác
+                    for (var i = 0; i < partnerSelect.options.length; i++) {
+                        var partnerOption = partnerSelect.options[i];
+                        var lat = partnerOption.getAttribute("data-lat");
+                        var lng = partnerOption.getAttribute("data-lng");
+                        var lastName = partnerOption.text.split(" - ")[0];
+
+                        if (lat && lng) {
+                            // Tạo một đối tượng LatLng cho mỗi đối tác
+                            var latLng = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+
+                            // Thêm đánh dấu cho mỗi đối tác trên bản đồ
+                            var marker = new google.maps.Marker({
+                                position: latLng,
+                                map: map,
+                                title: lastName
+                            });
+
+                            // Tạo một cửa sổ thông tin để hiển thị tên của đối tác khi nhấp vào đánh dấu
+                            var infowindow = new google.maps.InfoWindow({
+                                content: lastName
+                            });
+
+                            marker.addListener('click', function () {
+                                infowindow.open(map, marker);
+                            });
+                        }
+                    }
+
+                    // Mở modal
+                    mapModal.style.display = "block";
+                }, function (error) {
+                    console.error("Error getting current location:", error);
+                });
+            } else {
+                alert("Trình duyệt không hỗ trợ lấy vị trí.");
+            }
+        }
+
+        function closeMapModal() {
+            var mapModal = document.getElementById("mapModal");
+            mapModal.style.display = "none";
+        }
     </script>
 
     <script src="~/assets/js/vendor/modernizr.min.js"></script>

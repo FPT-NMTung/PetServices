@@ -655,7 +655,9 @@ namespace FEPetServices.Controllers
                 if (!string.IsNullOrEmpty(responsepartnerContent))
                 {
                     var partners = JsonConvert.DeserializeObject<List<PartnerInfo>>(responsepartnerContent);
-                    ViewBag.Partners = new SelectList(partners, "PartnerInfoId", "LastName");
+                    //ViewBag.Partners = new SelectList(partners, "PartnerInfoId", "LastName", "Lat", "Lng");
+                    //ViewBag.Partners = partners;
+                    model.Partners = partners;
                 }
             }
 
