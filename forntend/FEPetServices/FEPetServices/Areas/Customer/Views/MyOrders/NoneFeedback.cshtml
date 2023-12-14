@@ -173,24 +173,23 @@
                                             data-lng="@serviceDetail?.PartnerInfo?.Lng">
                                             Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail.PartnerInfoId
                                             </button>*@
-                                                                <div style="display: flex ; justify-content:space-between">
-                                                                <p style="font-size:.8rem; cursor: pointer; color:blue" class="map-button clickable"
-                                                                   data-lat="@serviceDetail?.PartnerInfo?.Lat"
-                                                                   data-lng="@serviceDetail?.PartnerInfo?.Lng"
-                                                                   data-my-lat=""
-                                                                   data-my-lng="">
-                                                                    Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail?.PartnerInfoId
-                                                                </p>
-                                                                @{
-                                                                    var partnerName = serviceDetail?.PartnerInfo?.FirstName + " " + serviceDetail?.PartnerInfo?.LastName + " - " + serviceDetail?.PartnerInfoId;
-                                                                
-                                                                    if ((serviceDetail.FeedbackPartnerStatus == null || serviceDetail.FeedbackPartnerStatus == false))
-                                                                    {
-                                                                        <div class="btn-content-detail">
-                                                                            <button class="btn btn-outline-primary" onclick="openPopupPartner('@serviceDetail?.PartnerInfo.ImagePartner', '@partnerName', '@serviceDetail.PartnerInfo.PartnerInfoId', '@serviceDetail.ServiceId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>
-                                                                        </div>
-                                                                    }
-                                                                }
+                                                                <div>
+                                                                    <p style="font-size:.8rem;">
+                                                                        Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail?.PartnerInfoId
+                                                                    </p>
+                                                                    <div style="display:flex; align-items:center">
+                                                                        @{
+                                                                            var partnerName = serviceDetail?.PartnerInfo?.FirstName + " " + serviceDetail?.PartnerInfo?.LastName + " - " + serviceDetail?.PartnerInfoId;
+
+                                                                            if ((serviceDetail.FeedbackPartnerStatus == null || serviceDetail.FeedbackPartnerStatus == false))
+                                                                            {
+                                                                                <p style="font-size:.8rem;">Đánh giá về nhân viên của chúng tôi :  </p>
+                                                                                <div class="btn-content-detail">
+                                                                                    <button class="btn btn-outline-primary" onclick="openPopupPartner('@serviceDetail?.PartnerInfo.ImagePartner', '@partnerName', '@serviceDetail.PartnerInfo.PartnerInfoId', '@serviceDetail.ServiceId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>
+                                                                                </div>
+                                                                            }
+                                                                        }
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
