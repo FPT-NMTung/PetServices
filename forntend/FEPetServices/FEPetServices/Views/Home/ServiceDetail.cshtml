@@ -644,7 +644,8 @@
                         position: { lat: myLatitude, lng: myLongitude },
                         map: map,
                         title: 'Vị trí của tôi',
-                        icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+                        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+                        @*label: 'Bạn'*@
                     });
 
                     // Duyệt qua danh sách đối tác và thêm đánh dấu cho mỗi đối tác
@@ -653,26 +654,15 @@
                         var lat = partnerOption.getAttribute("data-lat");
                         var lng = partnerOption.getAttribute("data-lng");
                         var lastName = partnerOption.text.split(" - ")[0];
+                        var mnv = partnerOption.text.split(" - ")[1];
 
                         if (lat && lng) {
                             // Tạo một đối tượng LatLng cho mỗi đối tác
                             var latLng = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
 
                             // Thêm đánh dấu cho mỗi đối tác trên bản đồ
-                            var marker = new google.maps.Marker({
-                                position: latLng,
-                                map: map,
-                                title: lastName
-                            });
-
-                            // Tạo một cửa sổ thông tin để hiển thị tên của đối tác khi nhấp vào đánh dấu
-                            var infowindow = new google.maps.InfoWindow({
-                                content: lastName
-                            });
-
-                            marker.addListener('click', function () {
-                                infowindow.open(map, marker);
-                            });
+                            addMarker(map, latLng, lastName, mnv);
+                            
                         }
                     }
 
@@ -684,6 +674,25 @@
             } else {
                 alert("Trình duyệt không hỗ trợ lấy vị trí.");
             }
+        }
+
+        function addMarker(map, position, lastName, mnv) {
+            // Thêm đánh dấu cho mỗi đối tác trên bản đồ
+            var marker = new google.maps.Marker({
+                position: position,
+                map: map,
+                title: lastName,
+                label: {
+                    text: lastName,
+                    color: 'yellow'
+                }
+            });
+
+            // Thêm sự kiện click cho marker để hiển thị thông tin
+            marker.addListener('click', function () {
+                // Hiển thị thông tin của đối tác
+                alert(lastName + ' - ' + mnv);
+            });
         }
 
         function closeMapModal() {
