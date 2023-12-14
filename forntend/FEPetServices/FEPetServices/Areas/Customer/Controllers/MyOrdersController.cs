@@ -36,7 +36,6 @@ namespace FEPetServices.Areas.Customer.Controllers
             HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderstatus/{orderStatus}?email={email}");
             if (responsecheck.StatusCode == HttpStatusCode.NotFound)
             {
-                
                 return View();
             }   
             else
@@ -88,7 +87,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
             HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderstatus/{orderStatus}?email={email}");
-            if (responsecheck.StatusCode == HttpStatusCode.NotFound)
+            if (!responsecheck.IsSuccessStatusCode)
             {
 
                 return View(); 
@@ -127,11 +126,14 @@ namespace FEPetServices.Areas.Customer.Controllers
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
-                        return new ErrorResult("");
+                        //return new ErrorResult("");
+                        return View();
+
                     }
                     else
                     {
-                        return View();
+                        return new ErrorResult("");
+                        //return View();
                     }
                 }
             }
