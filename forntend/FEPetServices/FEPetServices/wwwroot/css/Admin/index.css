@@ -199,3 +199,8 @@
 .table {
     font-size: 15px;
 }
+
+#myTable_wrapper {
+    width: 1400px;
+    margin: 0 auto;
+}

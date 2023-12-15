@@ -17,14 +17,16 @@
 <link href="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+
 <script>
     $(document).ready(function () {
         $('#myTable').DataTable({
+            "responsive": true,
+            "scrollX": true,
             "paging": true,
             "searching": true,
             "ordering": true,
             "info": true,
-            "responsive": true,
             "autoWidth": true,
             "columnDefs": [
                 { "targets": [0], "width": "5%" },
@@ -143,7 +145,7 @@
 </script>
 
 <script>
-    function showSuccessToast(messages = '') {
+    function showSuccessToast1() {
         toast({
             title: 'Thành công',
             message: 'Cập nhật tài khoản thành công',
