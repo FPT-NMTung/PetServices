@@ -105,7 +105,7 @@ namespace FEPetServices.Areas.Admin.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    string apiUrl = DefaultApiUrl + "UpdateAccount" + "?Email=" + email + "&RoleId=" + roleId + "&Status=" + status;
+                    string apiUrl = DefaultApiUrl + "Admin/UpdateAccount";
                     //string apiUrl = ApiUrlUpdateAccount + "?Email=" + email + "&RoleId=" + roleId + "&Status=" + status;
                     var acc = new UpdateAccountDTO
                     {
@@ -122,15 +122,17 @@ namespace FEPetServices.Areas.Admin.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
+                        TempData["SuccessToast"] = response.Content.ReadAsStringAsync();
+
                         return Json(new
                         {
                             Success = true
-                        }); 
+                        });
                     }
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
                         var errorMessage = await response.Content.ReadAsStringAsync();
-                        ViewBag.ErrorMessage = errorMessage;
+                        TempData["WatingToast"] = errorMessage;
                         return Json(new
                         {
                             Success = false
@@ -139,6 +141,7 @@ namespace FEPetServices.Areas.Admin.Controllers
                     else
                     {
                         var errorMessage = await response.Content.ReadAsStringAsync();
+                        TempData["ErrorToast"] = errorMessage;
                         return Json(new
                         {
                             Success = false
@@ -155,7 +158,7 @@ namespace FEPetServices.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
                 return View();
             }
         }
