@@ -648,6 +648,47 @@
 
     <!-- Main JS -->
     <script src="~/assets/js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            function showErrorToastQuantityProduct(errorMessage) {
+                console.error(errorMessage);
+                toast({
+                    title: 'Thất bại',
+                    message: errorMessage,
+                    type: 'error',
+                    duration: 2000
+                });
+            }
+
+            $(".updateServiceCart").click(function (event) {
+                event.preventDefault();
+                var productid = $("#productId").val();
+                var quantity = $("#quantityInput").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AddToCart", "ProductList")",
+                    data: {
+                        productid: productid,
+                        quantityProduct: quantity
+                    },
+                    headers: {
+                        RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (result) {
+                        $('#successModal').modal('show');
+                        console.log(result);
+                        updateCartCount(result.totalQuantity);
+                    },
+                    error: function (xhr, status, error) {
+                        showErrorToast(xhr.responseText);
+                        console.error("Error updating cart:", error);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
