@@ -287,7 +287,7 @@ namespace PetServices.Controllers
 
             var ReceiveData = new List<ReceiveInDayForm>();
 
-            for (int i = 7; i >= 1; i--)
+            for (int i = 6; i >= 0; i--)
             {
                 DateTime date = now.AddDays(-i);
                 double total = 0;
@@ -319,7 +319,7 @@ namespace PetServices.Controllers
 
             var ReceiveData = new List<ReceiveInDayForm>();
 
-            for (int i = 7; i >= 1; i--)
+            for (int i = 6; i >= 0; i--)
             {
                 DateTime date = now.AddDays(-i);
                 double total = 0;
@@ -350,7 +350,7 @@ namespace PetServices.Controllers
 
             var ReceiveData = new List<ReceiveInDayForm>();
 
-            for (int i = 7; i >= 1; i--)
+            for (int i = 6; i >= 0; i--)
             {
                 DateTime date = now.AddDays(-i);
                 double total = 0;
