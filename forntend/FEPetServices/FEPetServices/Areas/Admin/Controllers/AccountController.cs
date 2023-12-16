@@ -69,7 +69,7 @@ namespace FEPetServices.Areas.Admin.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        ViewBag.Success = "Thêm tài khoản thành công!";
+                        TempData["SuccessToast"] = "Thêm tài khoản thành công!";
 
                         return View(addAccount);
                     }
@@ -77,13 +77,23 @@ namespace FEPetServices.Areas.Admin.Controllers
                     {
                         var errorMessage = await response.Content.ReadAsStringAsync();
                         errorMessage = RemoveUnwantedCharacters(errorMessage);
-                        ViewBag.ErrorMessage = errorMessage;
+                        TempData["WatingToast"] = errorMessage;
+
+                        ViewBag.Email = addAccount.Email;
+                        ViewBag.Password = addAccount.Password;
+                        ViewBag.RoleId = addAccount.RoleId;
+
                         return View(addAccount);
                     }
                     else
                     {
                         var errorMessage = await response.Content.ReadAsStringAsync();
-                        ViewBag.ErrorMessage = "Thêm tài khoản thất bại!";
+                        TempData["ErrorToast"] = "Thêm tài khoản thất bại!";
+
+                        ViewBag.Email = addAccount.Email;
+                        ViewBag.Password = addAccount.Password;
+                        ViewBag.RoleId = addAccount.RoleId;
+
                         return View(addAccount);
                     }
                 }
@@ -94,7 +104,7 @@ namespace FEPetServices.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
                 return View(addAccount);
             }
         }
