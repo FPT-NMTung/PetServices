@@ -16,7 +16,7 @@
         const icon = icons[type];
         const autoRemoveId = setTimeout(function () {
             main.removeChild(toast);
-        }, newDuration + 800);
+        }, newDuration + 380);
 
         toast.onclick = function (e) {
             if (e.target.closest('.toast_close')) {

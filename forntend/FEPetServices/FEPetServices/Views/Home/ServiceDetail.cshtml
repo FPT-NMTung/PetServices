@@ -668,6 +668,7 @@
 
             $(".updateServiceCart").click(function (event) {
                 event.preventDefault();
+
                 var ServiceId = $("#ServiceId").val();
                 var PriceService = $("#totalPriceService").val();
                 var Weight = $("#Weight").val();
@@ -675,6 +676,10 @@
                 var StartTime = $("#StartTime").val();
                 var EndTime = $("#EndTime").val();
 
+                if (!ServiceId || !PriceService || !Weight || !StartTime || !EndTime) {
+                    showErrorToastCheckInput();
+                    return; 
+                }
 
                 $.ajax({
                     type: "POST",
