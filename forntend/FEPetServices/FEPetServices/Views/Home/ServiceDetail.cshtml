@@ -166,17 +166,22 @@
                                     <div class="product-action-wrapper d-flex-center" style="margin-top:5px;">
                                         <ul class="product-action action-style-two d-flex-center mb--0" style="display:contents;">
                                             <form method="post" action="@Url.Action("AddToCart", "Home")">
-                                                @Html.AntiForgeryToken()
+                                                @*@Html.AntiForgeryToken()
                                                 <button class="axil-btn btn-bg-primary" type="button" onclick="kiemTraAndSubmit('addToCartForm', '@Model?.Service.ServiceId')"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
+*@
+                                                @Html.AntiForgeryToken()
+                                                <button class="axil-btn btn-bg-primary updateServiceCart" type="button" style="width:300px;">
+                                                    <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
+                                                </button>
                                             </form>
                                             <form method="post" action="@Url.Action("AddToCart", "Home")" class="buynow" onsubmit="return kiemTra()">
                                                 @Html.AntiForgeryToken()
-                                                <input type="hidden" name="ServiceId" value="@Model?.Service.ServiceId" />
+                                                <input type="hidden" id="ServiceId" name="ServiceId" value="@Model?.Service.ServiceId" />
                                                 <input type="hidden" name="PriceService" id="totalPriceService" value="" />
                                                 <input type="hidden" name="Weight" id="Weight" value="" />
                                                 <input type="hidden" name="PartnerId" id="PartnerId" value="" />
                                                 <input type="hidden" name="StartTime" id="StartTime" value="" />
-                                                <input type="hidden" name="EndTime" id="EndTime" value="" />
+                                                <input type="hidden"  name="EndTime" id="EndTime" value="" />
                                                 <button class="axil-btn btn-bg-primary" style="margin-left: 5px;" type="submit"><i class="fas fa-cart-plus"></i>Đặt ngay</button>
                                             </form>
                                         </ul>
@@ -663,15 +668,24 @@
 
             $(".updateServiceCart").click(function (event) {
                 event.preventDefault();
-                var productid = $("#productId").val();
-                var quantity = $("#quantityInput").val();
+                var ServiceId = $("#ServiceId").val();
+                var PriceService = $("#totalPriceService").val();
+                var Weight = $("#Weight").val();
+                var PartnerId = $("#PartnerId").val();
+                var StartTime = $("#StartTime").val();
+                var EndTime = $("#EndTime").val();
+
 
                 $.ajax({
                     type: "POST",
-                    url: "@Url.Action("AddToCart", "ProductList")",
+                    url: "@Url.Action("AddToCart", "Home")",
                     data: {
-                        productid: productid,
-                        quantityProduct: quantity
+                        ServiceId: ServiceId,
+                        PriceService: PriceService,
+                        Weight: Weight,
+                        PartnerId: PartnerId,
+                        StartTime: StartTime,
+                        EndTime: EndTime
                     },
                     headers: {
                         RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
@@ -679,7 +693,6 @@
                     success: function (result) {
                         $('#successModal').modal('show');
                         console.log(result);
-                        updateCartCount(result.totalQuantity);
                     },
                     error: function (xhr, status, error) {
                         showErrorToast(xhr.responseText);
@@ -690,6 +703,5 @@
         });
     </script>
 </body>
-
 </html>
 
