@@ -213,3 +213,7 @@ p {
         display: block;
     }
 }
+
+.apexcharts-canvas {
+    margin: auto;
+}

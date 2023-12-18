@@ -355,7 +355,7 @@ namespace PetServices.Controllers
                 DateTime date = now.AddDays(-i);
                 double total = 0;
 
-                var orders = await _context.Orders.Where(o => o.OrderDate.Value.Date == date.Date && o.OrderStatus == "Completed").ToListAsync();
+                var orders = await _context.Orders.Where(o => o.OrderDate.Value.Date == date.Date && o.OrderStatus == "Confirmed").ToListAsync();
 
                 foreach (var order in orders)
                 {
