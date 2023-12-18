@@ -383,47 +383,6 @@ namespace UnitTest
                 Assert.Equal(400, result.StatusCode);
                 Assert.Equal("Thời gian phải lớn hơn 0!", result.Value);
             }
-        }
-
-        [Fact]
-        // 10. Time = 2p
-        public async Task Test_AddService_Time2p()
-        {
-            var options = new DbContextOptionsBuilder<PetServicesContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-                .Options;
-
-            using (var context = new PetServicesContext(options))
-            {
-                var serCategory = new ServiceCategory
-                {
-                    SerCategoriesId = 1
-                };
-
-                context.ServiceCategories.Add(serCategory);
-                context.SaveChanges();
-
-                var mockMapper = new Mock<IMapper>();
-                var mockConfiguration = new Mock<IConfiguration>();
-
-                var controller = new ServiceController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
-
-                var testAddService = new ServiceDTO
-                {
-                    ServiceName = "Dịch vụ Spa",
-                    Desciptions = "Dịch vụ chăm sóc sắc đẹp cho thú cưng",
-                    Picture = "https://s.net.vn/NsSG",
-                    Price = 10000,
-                    Time = 2,
-                    SerCategoriesId = 1
-                };
-
-                var result = await controller.CreateService(testAddService) as ObjectResult;
-
-                Assert.NotNull(result);
-                Assert.Equal(400, result.StatusCode);
-                Assert.Equal("Thời gian thực hiện dịch vụ phải lớn hơn hoặc bằng 1 giờ!", result.Value);
-            }
-        }
+        }       
     }
 }

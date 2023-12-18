@@ -131,7 +131,7 @@ namespace PetServices.Controllers
             }
 
             // Check thời gian lớn hơn 1 giờ
-            if (serviceDTO.Time < 60)
+            if (serviceDTO.Time < 1)
             {
                 string errorMessage = "Thời gian thực hiện dịch vụ phải lớn hơn hoặc bằng 1 giờ!";
                 return BadRequest(errorMessage);
@@ -208,13 +208,7 @@ namespace PetServices.Controllers
                 string errorMessage = "Thời gian phải lớn hơn 0!";
                 return BadRequest(errorMessage);
             }
-
-            // Check thời gian lớn hơn 1 giờ
-            if (serviceDTO.Time < 60)
-            {
-                string errorMessage = "Thời gian thực hiện dịch vụ phải lớn hơn hoặc bằng 1 giờ!";
-                return BadRequest(errorMessage);
-            }
+           
             var serviceCategory = _context.ServiceCategories.FirstOrDefault(s => s.SerCategoriesId == serviceDTO.SerCategoriesId);
             if (serviceCategory == null)
             {

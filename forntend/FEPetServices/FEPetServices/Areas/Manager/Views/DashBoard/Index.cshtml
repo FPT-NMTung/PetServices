@@ -360,7 +360,7 @@
             </div>
             <div class="row" style="margin-bottom: 30px;">
                 @*Top 5 phòng được book nhiều nhất trong tháng*@
-                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 400px;">
+                <div class="col" style="padding: 10px; border: none; ">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
                             <div>
@@ -374,7 +374,7 @@
                 </div>
 
                 @*Top 5 dịch vụ được book nhiều nhất trong tháng*@
-                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 400px;">
+                <div class="col" style="padding: 10px; border: none;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
                             <div>
@@ -388,7 +388,7 @@
                 </div>
 
                 @*Top 5 sản phẩm bán chạy nhất trong tháng*@
-                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 400px;">
+                <div class="col" style="padding: 10px; border: none;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
                             <div>
@@ -402,7 +402,7 @@
                 </div>
 
                 @*Top 5 khu vực đông khách hàng nhất*@
-                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 400px;">
+                <div class="col" style="padding: 10px; border: none;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
                             <div>
@@ -997,10 +997,14 @@
             }
         };
 
+        console.log("ProductData:", ProductData);
+        console.log("ProductName:", ProductName);
+
         var options = {
             series: ProductData,
             chart: {
-                height: 280,
+                //height: 280,
+                width: 350,
                 type: 'radialBar',
             },
             labels: ProductName,

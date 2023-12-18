@@ -1,0 +1,206 @@
+﻿.content {
+    padding-top: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.toggle-container {
+    width: 50px;
+    height: 25px;
+    border: 2px solid black;
+    border-radius: 12.5px;
+    position: relative;
+    cursor: pointer;
+    background-color: #df0303;
+}
+
+.toggle-btn {
+    width: 23px;
+    height: 23px;
+    border: 2px solid black;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -0.5px;
+    left: -0.5px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    background-color: #d7d7d7;
+}
+
+.toggle-container.active {
+    background-color: #38df03;
+}
+
+    .toggle-container.active .toggle-btn {
+        left: 25px;
+    }
+
+.checkbox-btn {
+    height: 20px;
+    width: 20px;
+}
+
+.iconUser {
+    width: 29px;
+    height: 29px;
+    position: absolute;
+    right: 0;
+    margin-right: 30px;
+    top: 0;
+    margin-top: 20px;
+}
+
+.title {
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+    display: block;
+    text-decoration: none;
+    color: #666;
+}
+
+    .title:hover {
+        color: #666;
+    }
+
+.btn-add {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    border-radius: 4px;
+    background-color: crimson;
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: -1px 10px;
+    cursor: pointer;
+    margin-right: 30px;
+    margin-bottom: 20px;
+}
+
+    .btn-add:hover {
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+        background-color: #ff6347;
+    }
+
+@media only screen and (max-width: 570px) {
+    .dataTables_filter {
+        text-align: center;
+    }
+
+    .btn-add {
+        margin-top: 10px;
+    }
+}
+
+.btn-status-active {
+    background-color: green;
+    color: white;
+}
+
+.btn-status-inactive {
+    background-color: red;
+    color: white;
+}
+
+.form-select1 {
+    background-color: white;
+    border: 2px solid black;
+    font-size: 16px;
+    line-height: 20px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+    height: 40px;
+    border-radius: 5px;
+}
+
+.switch {
+    position: relative;
+    width: 50px;
+    height: 25px;
+    margin: 20px auto;
+}
+
+.toggle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: inherit;
+    opacity: 0;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.label {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background-color: #C84444;
+    border-radius: 24px;
+    transition: background-color .2s ease-in-out;
+}
+
+    .label::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        width: 25px;
+        height: 25px;
+        background-color: white;
+        border-radius: inherit;
+        border: 1px solid grey;
+    }
+
+.toggle:checked + .label {
+    background-color: #66bb6a;
+}
+
+    .toggle:checked + .label::before {
+        transform: translateX(100%);
+    }
+
+.td-switch {
+    display: flex;
+    align-items: center;
+}
+
+    .td-switch .label {
+        width: 25px;
+        height: 25px;
+    }
+
+        .td-switch .label.active {
+            background-color: #66bb6a;
+        }
+
+        .td-switch .label.inactive {
+            background-color: #C84444;
+        }
+
+.btn-edit {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 15px;
+}
+
+    .btn-edit:hover {
+        background-color: #45a049;
+    }
+
+.table {
+    font-size: 15px;
+}
+
+#myTable_wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+}

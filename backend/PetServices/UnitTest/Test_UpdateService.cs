@@ -521,66 +521,10 @@ namespace UnitTest
                 Assert.Equal(400, result.StatusCode);
                 Assert.Equal("Giá phải lớn hơn 0!", result.Value);
             }
-        }
+        }       
 
         [Fact]
-        // 11. Time=2
-        public async Task Test_UpdateService_Time2p()
-        {
-            var options = new DbContextOptionsBuilder<PetServicesContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-                .Options;
-
-            using (var context = new PetServicesContext(options))
-            {
-                var serCategory = new ServiceCategory
-                {
-                    SerCategoriesId = 1
-                };
-
-                context.ServiceCategories.Add(serCategory);
-                context.SaveChanges();
-
-                var Service = new Service
-                {
-                    ServiceName = "Dịch vụ Spa",
-                    Desciptions = "Dịch vụ chăm sóc sắc đẹp cho thú cưng",
-                    Picture = "https://s.net.vn/NsSG",
-                    Price = 10000,
-                    Time = 60,
-                    SerCategoriesId = 1
-                };
-
-                context.Services.Add(Service);
-
-                context.SaveChanges();
-
-                var mockMapper = new Mock<IMapper>();
-                var mockConfiguration = new Mock<IConfiguration>();
-
-                var controller = new ServiceController(new PetServicesContext(options), mockMapper.Object, mockConfiguration.Object);
-
-                var longServiceName = new string('A', 501);
-                var testUpdateService = new ServiceDTO
-                {
-                    ServiceName = "Dịch vụ Spa",
-                    Desciptions = "Dịch vụ chăm sóc sắc đẹp cho thú cưng",
-                    Picture = "https://s.net.vn/NsSG",
-                    Price = 10000,
-                    Time = 2,
-                    SerCategoriesId = 2
-                };
-
-                var result = await controller.UpdateServce(testUpdateService, 1) as ObjectResult;
-
-                Assert.NotNull(result);
-                Assert.Equal(400, result.StatusCode);
-                Assert.Equal("Thời gian thực hiện dịch vụ phải lớn hơn hoặc bằng 1 giờ!", result.Value);
-            }
-        }
-
-        [Fact]
-        // 12. Time=0
+        // 11. Time=0
         public async Task Test_UpdateService_Timezero()
         {
             var options = new DbContextOptionsBuilder<PetServicesContext>()

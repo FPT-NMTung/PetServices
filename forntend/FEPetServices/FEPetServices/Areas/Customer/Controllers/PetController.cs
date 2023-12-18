@@ -228,7 +228,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         {
             try
             {
-                HttpResponseMessage response = await client.DeleteAsync("https://localhost:7255/api/PetInfo/Delete?petId=" + petId);
+                HttpResponseMessage response = await client.DeleteAsync(DefaultApiUrl + "PetInfo/Delete?petId=" + petId);
 
                 if (response.IsSuccessStatusCode)
                 {
