@@ -85,8 +85,8 @@ namespace FEPetServices.Areas.Customer.Controllers
 
                     var json = JsonConvert.SerializeObject(petInfo);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/PetInfo/CreatePet", content);
-                    //HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "PetInfo/CreatePet", content);
+                   // HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/PetInfo/CreatePet", content);
+                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "PetInfo/CreatePet", content);
 
                     if (response.IsSuccessStatusCode)
                     {
