@@ -131,7 +131,7 @@ namespace PetServices.Controllers
             }
 
             // Check thời gian lớn hơn 1 giờ
-            if (serviceDTO.Time < 60)
+            if (serviceDTO.Time < 1)
             {
                 string errorMessage = "Thời gian thực hiện dịch vụ phải lớn hơn hoặc bằng 1 giờ!";
                 return BadRequest(errorMessage);
@@ -210,7 +210,7 @@ namespace PetServices.Controllers
             }
 
             // Check thời gian lớn hơn 1 giờ
-            if (serviceDTO.Time < 60)
+            if (serviceDTO.Time < 1)
             {
                 string errorMessage = "Thời gian thực hiện dịch vụ phải lớn hơn hoặc bằng 1 giờ!";
                 return BadRequest(errorMessage);
