@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách đơn hàng</title>
+
     @*<link href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">*@
     <link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="~/css/toastNotification.css" rel="stylesheet" />
@@ -47,30 +49,30 @@
                                         <div class="status-content-detail">
                                             @if (productDetail?.StatusOrderProduct?.Trim() == "Placed")
                                             {
-                                                <span class="badge badge-info">Sản phẩm đang chờ xác nhận</span>
+                                                <span style="background-color: #43e240;" class="badge badge-info">Sản phẩm đang chờ xác nhận</span>
                                             }
                                             else if (productDetail?.StatusOrderProduct?.Trim() == "Packaging")
                                             {
-                                                <span class="badge badge-info">Đóng gói sản phẩm</span>
+                                                <span style="background-color: #43e240;" class="badge badge-info">Đóng gói sản phẩm</span>
                                             }
                                              else if (productDetail?.StatusOrderProduct?.Trim() == "Shipped")
                                             {
-                                                <span class="badge badge-info">Đơn hàng đang được vận chuyển</span>
+                                                <span style="background-color: #43e240;" class="badge badge-info">Đơn hàng đang được vận chuyển</span>
                                             }
                                             else if (productDetail?.StatusOrderProduct?.Trim() == "Delivered")
                                             {
-                                                <span class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
+                                                <span style="background-color: #43e240;" class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
                                             }
                                             else if (orderLists?.OrderStatus.Trim() == "Cancelled")
                                             {
-                                                <span style="display:inline-block" class="badge badge-info">Đơn hàng bị huỷ</span>
+                                                <span style="background-color: #43e240;"  class="badge badge-info">Đơn hàng bị huỷ</span>
                                             }
                                         </div>
                                     }
                                 }
                             </td>
                             <td>
-                                <a class="detail-button" href="~/Manager/Shipped/OrderShippedDetail?id=@orderLists.OrderId">Chi tiết</a>
+                                <a class="btn-detail" href="~/Manager/Shipped/OrderShippedDetail?id=@orderLists.OrderId">Chi tiết</a>
                             </td>
                         </tr>
                     }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PetServices.DTO;
 using PetServices.Form;
 using PetServices.Models;
 
@@ -41,7 +42,9 @@ namespace PetServices.Controllers
             var numOrder = await _context.Orders
                 .Where(o => o.OrderDate.Value.Month == curMonth 
                 && o.OrderDate.Value.Year == curYear 
-                && o.BookingServicesDetails.Any(x => x.StatusOrderService == "Completed" && x.PartnerInfoId == partnerId))
+                && o.BookingServicesDetails.
+                Any(x => x.StatusOrderService == "Completed" 
+                && x.PartnerInfoId == partnerId))
                 .ToListAsync();
 
             return Ok(numOrder.Count);
@@ -92,12 +95,12 @@ namespace PetServices.Controllers
         }
 
         // tổng thu nhập trong tháng
-        [HttpGet("GetIncomeInMonth/{partnerId}")]
-        public async Task<ActionResult> GetIncomeInMonth(int partnerId)
+        [HttpGet("GetTotalPriceInMonth/{partnerId}")]
+        public async Task<ActionResult> GetTotalPriceInMonth(int partnerId)
         {
             int currentMonth = DateTime.Now.Month;
             int currentYear = DateTime.Now.Year;
-            double totalIncome = 0;
+            double totalPrice = 0;
 
             var ordersInMonth = await _context.Orders
                 .Where(o => o.OrderDate.Value.Month == currentMonth 
@@ -109,22 +112,22 @@ namespace PetServices.Controllers
 
             foreach (var order in ordersInMonth)
             {
-                totalIncome += order.TotalPrice ?? 0;
+                totalPrice += order.TotalPrice ?? 0;
             }
 
-            return Ok(totalIncome);
+            return Ok(totalPrice);
         }
 
         // % tổng thu nhập trong tháng so với tháng trước
-        [HttpGet("GetPercentIncomePreviousMonth/{partnerId}")]
-        public async Task<ActionResult> GetPercentIncomePreviousMonth(int partnerId)
+        [HttpGet("GetPercentTotalPriceInMonthAndInPreMonth/{partnerId}")]
+        public async Task<ActionResult> GetPercentTotalPriceInMonthAndInPreMonth(int partnerId)
         {
             int curMonth = DateTime.Now.Month;
             int curYear = DateTime.Now.Year;
             int previousMonth;
             int newYear;
-            double totalIncome = 0;
-            double totalIncomePreviousMonth = 0;
+            double totalPrice = 0;
+            double totalPricePreviousMonth = 0;
 
             if (curMonth == 1)
             {
@@ -140,37 +143,42 @@ namespace PetServices.Controllers
             var ordersInMonth = await _context.Orders
                 .Where(o => o.OrderDate.Value.Month == curMonth 
                 && o.OrderDate.Value.Year == curYear
-                && o.OrderStatus == "Completed")
+                && o.BookingServicesDetails
+                .Any(x => x.StatusOrderService == "Completed"
+                && x.PartnerInfoId == partnerId))
                 .ToListAsync();
 
             var ordersPreviousMonth = await _context.Orders
                 .Where(o => o.OrderDate.Value.Month == previousMonth 
-                && o.OrderDate.Value.Year == newYear && o.OrderStatus == "Completed")
+                && o.OrderDate.Value.Year == newYear 
+                && o.BookingServicesDetails
+                .Any(x => x.StatusOrderService == "Completed"
+                && x.PartnerInfoId == partnerId))
                 .ToListAsync();
 
             foreach (var order in ordersInMonth)
             {
-                totalIncome += order.TotalPrice ?? 0;
+                totalPrice += order.TotalPrice ?? 0;
             }
 
             foreach (var order in ordersPreviousMonth)
             {
-                totalIncomePreviousMonth += order.TotalPrice ?? 0;
+                totalPricePreviousMonth += order.TotalPrice ?? 0;
             }
 
-            if (totalIncomePreviousMonth == 0)
+            if (totalPricePreviousMonth == 0)
             {
-                return Ok(totalIncome / 1 * 100);
+                return Ok(totalPrice / 1 * 100);
             }
 
-            double percent = (double)(totalIncome - totalIncomePreviousMonth) / totalIncomePreviousMonth * 100;
+            double percent = (double)(totalPrice - totalPricePreviousMonth) / totalPricePreviousMonth * 100;
 
             return Ok(percent.ToString("F2"));
         }
 
         // đánh giá của khách hàng về các dịch vụ
-        [HttpGet("GetFeedbackOfService/{partnerId}")]
-        public async Task<ActionResult> GetFeedbackOfService(int partnerId)
+        [HttpGet("GetFeedbackOfCustomer/{partnerId}")]
+        public async Task<ActionResult> GetFeedbackOfCustomer(int partnerId)
         {
             var listFeedback = await _context.Feedbacks
                 .Where(o => o.PartnerId == partnerId)
@@ -202,6 +210,203 @@ namespace PetServices.Controllers
                     customerName = customer.FirstName + customer.LastName ?? null,
                     NumberStart = feedbackItem.NumberStart,
                     Content = feedbackItem.Content,
+                });
+
+                stt++;
+            }
+
+            return Ok(feedback);
+        }
+
+        //tổng số đánh giá của partner
+        [HttpGet("GetStarInProductPet/{partnerId}")]
+        public async Task<ActionResult> GetStarInPartner(int partnerId)
+        {
+            var partners = await _context.PartnerInfos
+                .Where(x => x.PartnerInfoId == partnerId)
+                .ToListAsync();
+
+            double totalStars = 0;
+            int totalFeedbackCount = 0;
+            int count = 0;
+
+
+            foreach (var partner in partners)
+            {
+                var feedbacks = _context.Feedbacks
+                    .Where(f => f.PartnerId == partner.PartnerInfoId)
+                    .ToList();
+
+                if (feedbacks.Any())
+                {
+                    totalStars += feedbacks.Average(f => f.NumberStart) ?? 0;
+                    totalFeedbackCount += feedbacks.Count;
+                    count++;
+                }
+            }
+
+            if (count > 0)
+            {
+                double averageStars = totalFeedbackCount > 0 ? Math.Round(totalStars / count, 1) : 0;
+
+                var feedbackData = new FeedbackDataForm
+                {
+                    AverageStars = averageStars,
+                    TotalFeedbackCount = totalFeedbackCount
+                };
+
+                return Ok(feedbackData);
+            }
+            else
+            {
+                var feedbackData = new FeedbackDataForm
+                {
+                    AverageStars = 0,
+                    TotalFeedbackCount = 0
+                };
+                return Ok(feedbackData);
+            }
+        }
+        [HttpGet("GetPartnerStar/{partnerId}")]
+        public async Task<ActionResult> GetPartnerStar(int partnerId)
+        {
+            var averageStars = _context.Feedbacks.Where(f => f.PartnerId == partnerId).Average(f => f.NumberStart);
+
+            if (averageStars.HasValue)
+            {
+                averageStars = Math.Round(averageStars.Value, 1);
+            }
+
+            return Ok(averageStars);
+        }
+        [HttpGet("GetPartnerVoteNumber/{partnerId}")]
+        public async Task<ActionResult> GetPartnerVoteNumber(int partnerId)
+        {
+            var feedbacks = await _context.Feedbacks.Where(f => f.PartnerId == partnerId).ToListAsync();
+
+            var feedback = new VoteNumberDTO
+            {
+                number5s = feedbacks.Count(f => f.NumberStart == 5),
+                number4s = feedbacks.Count(f => f.NumberStart == 4),
+                number3s = feedbacks.Count(f => f.NumberStart == 3),
+                number2s = feedbacks.Count(f => f.NumberStart == 2),
+                number1s = feedbacks.Count(f => f.NumberStart == 1),
+            };
+
+            return Ok(feedback);
+        }
+
+        // Doanh thu theo ngày
+        [HttpGet("GetTotalPriceIn7Day/{partnerId}")]
+        public async Task<ActionResult> GetTotalPriceIn7Day(int partnerId)
+        {
+            DateTime now = DateTime.Now;
+
+            var ReceiveData = new List<ReceiveInDayForm>();
+
+            for (int i = 7; i >= 1; i--)
+            {
+                DateTime date = now.AddDays(-i);
+                double total = 0;
+
+                var orders = await _context.Orders
+                    .Where(o => o.OrderDate.Value.Date == date.Date 
+                    && o.BookingServicesDetails
+                    .Any(x => x.StatusOrderService == "Completed"
+                    && x.PartnerInfoId == partnerId))
+                    .ToListAsync();
+
+                foreach (var order in orders)
+                {
+                    var services = await _context.BookingServicesDetails.Where(b => b.OrderId == order.OrderId).ToListAsync();
+
+                    foreach (var service in services)
+                    {
+                        total += (service.Price ?? 0) * (service.Weight ?? 0);
+                    }
+                }
+
+                ReceiveData.Add(new ReceiveInDayForm { Date = date.ToShortDateString(), Receive = total });
+            }
+
+            return Ok(ReceiveData);
+        }
+
+        // Số đơn hàng hoàn thành trong tháng 
+        [HttpGet("GetNumberOrderCompleteInMonth/{partnerId}")]
+        public async Task<ActionResult> GetNumberOrderCompleteInMonth(int partnerId)
+        {
+            DateTime now = DateTime.Now;
+
+            var NumberOrderComplete = new List<Quantity_RatioForm>();
+
+            for (int i = 0; i < 3; i++)
+            {
+                var curMonth = now.AddMonths(-i);
+                var preMonth = curMonth.AddMonths(-1);
+
+                var orders = await _context.Orders
+                    .Where(o => o.BookingServicesDetails
+                                .Any(x => x.StatusOrderService == "Completed"
+                                && x.PartnerInfoId == partnerId)
+                                && o.OrderDate.Value.Month == curMonth.Month
+                                && o.OrderDate.Value.Year == curMonth.Year)
+                    .ToListAsync();
+
+                var ordersPrevious = await _context.Orders
+                    .Where(o => o.BookingServicesDetails
+                                .Any(x => x.StatusOrderService == "Completed"
+                                && x.PartnerInfoId == partnerId)
+                                && o.OrderDate.Value.Month == preMonth.Month
+                                && o.OrderDate.Value.Year == preMonth.Year)
+                    .ToListAsync();
+
+                double percent = 0;
+
+                if (ordersPrevious.Count == 0)
+                {
+                    percent = orders.Count / 1 * 100;
+                }
+                else
+                {
+                    percent = (double)(orders.Count - ordersPrevious.Count) / ordersPrevious.Count * 100;
+                }
+
+                NumberOrderComplete.Add(new Quantity_RatioForm
+                {
+                    date = curMonth.ToString("yyyy-MM"),
+                    quantity = orders.Count,
+                    Ratio = percent.ToString("F2")
+                });
+            }
+
+            return Ok(NumberOrderComplete);
+        }
+        // đánh giá của khách hàng về nhân viên
+        [HttpGet("GetFeedbackOfPartner/{partnerId}")]
+        public async Task<ActionResult> GetFeedbackOfPartner(int partnerId)
+        {
+            //lấy danh sách đánh giá các sản phẩm 
+            var listFeedback = await _context.Feedbacks.Where(o => o.PartnerId == partnerId).ToListAsync();
+            var stt = 1;
+
+            var feedback = new List<FeedbackForm>();
+
+            foreach (var Feedback in listFeedback)
+            {
+                var partner = await _context.Orders.FirstOrDefaultAsync(o => o.BookingServicesDetails.Any(x => x.PartnerInfoId == Feedback.PartnerId));
+                var customer = await _context.UserInfos.FirstOrDefaultAsync(o => o.UserInfoId == Feedback.UserId);
+                var account = await _context.Accounts.FirstOrDefaultAsync(o => o.UserInfoId == Feedback.UserId);
+
+
+                feedback.Add(new FeedbackForm
+                {
+                    stt = stt,
+                    name = partner.FullName,
+                    gmail = account.Email,
+                    customerName = customer.FirstName + customer.LastName,
+                    NumberStart = Feedback.NumberStart,
+                    Content = Feedback.Content,
                 });
 
                 stt++;

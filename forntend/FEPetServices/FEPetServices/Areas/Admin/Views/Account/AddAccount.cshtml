@@ -1,122 +1,7 @@
-﻿<style>
-    .header {
-        padding-top: 10px;
-        top: 0;
-        display: flex;
-        align-items: center;
-    }
-
-        .header .image {
-            width: 50px;
-            height: 50px;
-            align-items: center;
-            padding-left: 10px;
-            font-size: 10px;
-        }
-
-        .header .text {
-            font-weight: bold;
-            font-size: 20px;
-            padding-left: 15px;
-        }
-
-    .iconUser {
-        width: 29px;
-        height: 29px;
-        position: absolute;
-        right: 0;
-        margin-right: 30px;
-        top: 0;
-        margin-top: 20px;
-    }
-
-    .title {
-        text-align: center;
-        font-size: 40px;
-        font-weight: bold;
-        display: block;
-    }
-
-    .container1 {
-        width: 600px; 
-        margin: auto;
-    }
-
-    h1 {
-        text-align: center; 
-        margin-bottom: 50px;
-    }
-
-    .form-group {
-        margin: 10px;
-        display: flex;
-    }
-
-    .input-field {
-        width: 100%;
-        padding: 5px; 
-        border: 1px solid black; 
-    }
-
-    .btn-submit {
-        background-color: pink; 
-        border-radius: 10px;
-        margin-right: 50px;
-    }
-
-    .btn-back {
-        background-color: lightblue; 
-        border-radius: 10px; 
-        margin-left: 10px;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    .form-control {
-        width: 80%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-
-    label {
-        display: inline-block;
-        width: 15%;
-        font-weight: bold;
-    }
-
-    .form-control:focus {
-        border-color: #66afe9;
-        outline: none;
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-    }
-
-    .btn {
-        display: inline-block;
-        padding: 10px 20px;
-        color: white;
-        background-color: #3CBC8D;
-        border: none;
-        border-radius: 5px;
-    }
-
-        .btn:hover {
-            background-color: #2E8B57;
-        }
-
-    .btn-back {
-        margin-left: 10px;
-    }
-
-    .buttons{
-        text-align: center;
-        margin-top: 30px;
-    }
-</style>
-<link href="~/css/toastNotification.css" rel="stylesheet" />
+﻿<link href="~/css/toastNotification.css" rel="stylesheet" />
+<link href="~/css/Admin/Add.css" rel="stylesheet" />
 <script src="~/js/toastnotification.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <body>
     <div class="container" id="container">
         <div class="container1" >
@@ -124,29 +9,37 @@
             <form id="addAccountForm" action="AddAccount" method="post">
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
+                    <input type="email" class="form-control" id="email" name="email" value="@(!string.IsNullOrEmpty(ViewBag.Email) ? ViewBag.Email : "")" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Mật khẩu:</label>
-                    <input type="password" class="form-control" id="password showPassword" name="password" required>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" name="password" value="@(!string.IsNullOrEmpty(ViewBag.Password) ? ViewBag.Password : "")" required>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <i class="fas fa-eye-slash"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="roleId">Vai trò:</label>
                     <select class="form-control" id="roleId" name="roleId">
-                        <option value="2">Khách hàng</option>
-                        <option value="3">Quản lý</option>
-                        <option value="4">Đối tác</option>
+                        <option value="2" @(ViewBag.RoleId == 2 ? "selected" : "")>Khách hàng</option>
+                        <option value="3" @(ViewBag.RoleId == 3 ? "selected" : "")>Quản lý</option>
+                        <option value="4" @(ViewBag.RoleId == 4 ? "selected" : "")>Đối tác</option>
                     </select>
                 </div>
                 <div class="buttons">
                     <button type="submit" class="btn btn-submit">Thêm tài khoản</button>
                     <button id="BackBtn" type="button" class="btn btn-back">Trở lại</button>
+
                 </div>
             </form>
         </div>
     </div>
     <div id="toast"></div>
-    @if (!string.IsNullOrEmpty(ViewBag.Success))
+    @*@if (!string.IsNullOrEmpty(ViewBag.Success))
     {
         <script>
             document.addEventListener("DOMContentLoaded", function () {
@@ -161,18 +54,33 @@
                 showErrorToast();
             });
         </script>
-    }
+    }*@
     <script>
         document.getElementById("BackBtn").addEventListener("click", function () {
             window.location.href = "/admin/account";
         });
     </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#togglePassword').on('click', function () {
+                var passwordField = $('#password');
+                var passwordFieldType = passwordField.attr('type');
+
+                // Đảo ngược giá trị của thuộc tính type
+                passwordField.attr('type', passwordFieldType === 'password' ? 'text' : 'password');
+
+                // Đảo ngược biểu tượng mắt
+                $(this).find('i').toggleClass('fa-eye fa-eye-slash');
+            });
+        });
+    </script>
 </body>
 <script>
-    function showSuccessToast() {
+    function showSuccessToast2() {
         toast({
             title: 'Thành công',
-            message: '@ViewBag.Success',
+            message: 'Thêm tài khoản thành công',
             type: 'success',
             duration: 2000
         });

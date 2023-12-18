@@ -41,27 +41,27 @@
                             <td>
                                 @if (orderLists?.OrderStatus.Trim() == "Confirmed")
                                 {
-                                    <span style="display:inline-block" class="badge badge-info">Đã trả phòng</span>
+                                    <span style="display:inline-block;background-color: #43e240;" class="badge badge-info">Đã trả phòng</span>
                                 }
                                 else if (orderLists?.OrderStatus.Trim() == "Refund")
                                 {
-                                    <span style="display:inline-block" class="badge badge-info">Hoàn tiên</span>
+                                    <span style="display:inline-block;background-color: #43e240;" class="badge badge-info">Hoàn tiên</span>
                                 }
                                 else if (orderLists?.OrderStatus.Trim() == "Placed")
                                 {
-                                    <span style="display:inline-block" class="badge badge-info">Chờ nhận phòng</span>
+                                    <span style="display:inline-block;background-color: #43e240;" class="badge badge-info">Chờ nhận phòng</span>
                                 }
                                 else if (orderLists?.OrderStatus.Trim() == "Cancelled")
                                 {
-                                    <span style="display:inline-block" class="badge badge-info">Phòng bị huỷ</span>
+                                    <span style="display:inline-block;background-color: #43e240;" class="badge badge-info">Phòng bị huỷ</span>
                                 }
                                 else if (orderLists?.OrderStatus.Trim() == "Processing")
                                 {
-                                    <span style="display:inline-block" class="badge badge-info">Đã nhận phòng</span>
+                                    <span style="display:inline-block;background-color: #43e240;" class="badge badge-info">Đã nhận phòng</span>
                                 }
                             </td>
                             <td>
-                                <a class="detail-button" href="~/Manager/OrdersRoom/OrderRoomDetail?id=@orderLists.OrderId">Chi tiết</a>
+                                <a class="btn-detail" href="~/Manager/OrdersRoom/OrderRoomDetail?id=@orderLists.OrderId">Chi tiết</a>
                             </td>
                         </tr>
                     }

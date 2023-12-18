@@ -287,7 +287,7 @@ namespace PetServices.Controllers
 
             var ReceiveData = new List<ReceiveInDayForm>();
 
-            for (int i = 7; i >= 1; i--)
+            for (int i = 6; i >= 0; i--)
             {
                 DateTime date = now.AddDays(-i);
                 double total = 0;
@@ -319,7 +319,7 @@ namespace PetServices.Controllers
 
             var ReceiveData = new List<ReceiveInDayForm>();
 
-            for (int i = 7; i >= 1; i--)
+            for (int i = 6; i >= 0; i--)
             {
                 DateTime date = now.AddDays(-i);
                 double total = 0;
@@ -350,12 +350,12 @@ namespace PetServices.Controllers
 
             var ReceiveData = new List<ReceiveInDayForm>();
 
-            for (int i = 7; i >= 1; i--)
+            for (int i = 6; i >= 0; i--)
             {
                 DateTime date = now.AddDays(-i);
                 double total = 0;
 
-                var orders = await _context.Orders.Where(o => o.OrderDate.Value.Date == date.Date && o.OrderStatus == "Completed").ToListAsync();
+                var orders = await _context.Orders.Where(o => o.OrderDate.Value.Date == date.Date && o.OrderStatus == "Confirmed").ToListAsync();
 
                 foreach (var order in orders)
                 {
@@ -507,7 +507,7 @@ namespace PetServices.Controllers
             // Lấy ra danh sách các đơn đặt hàng trong tháng hiện tại đã hoàn thành
             var orders = await _context.Orders
                 .Include(o => o.BookingRoomDetails)
-                .Where(o => o.OrderStatus == "Completed" && o.OrderDate.Value.Month == now.Month && o.OrderDate.Value.Year == now.Year)
+                .Where(o => o.OrderStatus == "Confirmed" && o.OrderDate.Value.Month == now.Month && o.OrderDate.Value.Year == now.Year)
                 .ToListAsync();
 
             // Lấy ra danh sách các phòng theo các đơn đặt hàng đó
