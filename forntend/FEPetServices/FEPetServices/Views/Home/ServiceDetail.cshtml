@@ -751,7 +751,7 @@
                 var StartTime = $("#StartTime").val();
                 var EndTime = $("#EndTime").val();
 
-                if (!ServiceId || !PriceService || !Weight || !StartTime || !EndTime) {
+                if (!ServiceId || !PriceService || Weight == "NaN" || !StartTime || !EndTime) {
                     showErrorToastCheckInput();
                     return; 
                 }
