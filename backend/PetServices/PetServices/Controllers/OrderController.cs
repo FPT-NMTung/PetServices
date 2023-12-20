@@ -477,6 +477,8 @@ namespace PetServices.Controllers
                 Order order = await _context.Orders
                     .Include(o => o.OrderProductDetails)
                     .Include(o => o.BookingServicesDetails)
+                    .Include(o => o.BookingRoomDetails)
+                    .Include(o => o.BookingServicesDetails)
                     .SingleOrDefaultAsync(b => b.OrderId == Id);
 
                 // Kiểm tra booking có tồn tại hay không
@@ -628,6 +630,8 @@ namespace PetServices.Controllers
                 _context.Orders.Update(order);
                 _context.OrderProductDetails.UpdateRange(order.OrderProductDetails);
                 _context.BookingServicesDetails.UpdateRange(order.BookingServicesDetails);
+                _context.BookingRoomDetails.UpdateRange(order.BookingRoomDetails);
+                _context.BookingRoomServices.UpdateRange(order.BookingRoomServices);
                 await _context.SaveChangesAsync();
                 return Ok("Đổi trạng thái thành công");
             }

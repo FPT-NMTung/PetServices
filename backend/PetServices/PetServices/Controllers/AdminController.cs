@@ -174,7 +174,7 @@ namespace PetServices.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
+                return NotFound($"Đã xảy ra lỗi: {ex.Message}");
             }
         }
 

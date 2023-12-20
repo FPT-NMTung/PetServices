@@ -702,7 +702,7 @@ namespace PetServices.Controllers
                         await _context.SaveChangesAsync();
                     }
 
-                    if (feedbackDTO.ServiceId != null)
+                    if (feedbackDTO.ServiceId != null && feedbackDTO.PartnerId == null)
                     {
                         var serviceOrder = await _context.BookingServicesDetails.FirstOrDefaultAsync(b => b.OrderId == feedbackDTO.OrderId && b.ServiceId == feedbackDTO.ServiceId);
 
