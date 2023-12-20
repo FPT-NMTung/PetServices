@@ -41,6 +41,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Danh sách dịch vụ";
                 var json = JsonConvert.SerializeObject(service);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -79,7 +80,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-               
+                ViewBag.Title = "Thêm dịch vụ mới";
                 HttpResponseMessage categoryResponse = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
 
                 if (categoryResponse.IsSuccessStatusCode)
@@ -145,6 +146,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Chỉnh sửa thông tin dịch vụ";
                 HttpResponseMessage categoryResponse = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
                 //HttpResponseMessage categoryResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory");
 

@@ -25,6 +25,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            ViewBag.Title = "Danh sách đơn hàng vận chuyển";
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/getOrder");
             if (response.IsSuccessStatusCode)
             {
@@ -50,6 +51,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderShippedDetail(int id)
         {
+            ViewBag.Title = "Chi tiết đơn hàng vận chuyển";
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
             if (response.IsSuccessStatusCode)
             {

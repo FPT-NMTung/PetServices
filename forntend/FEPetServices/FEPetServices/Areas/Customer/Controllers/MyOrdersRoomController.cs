@@ -31,6 +31,7 @@ namespace FEPetServices.Areas.Customer.Controllers
 
         private async Task<IActionResult> GetOrdersRoom(string orderStatus, int page, int pageSize)
         {
+            ViewBag.Title = "Danh sách phòng đã đặt";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
@@ -126,13 +127,11 @@ namespace FEPetServices.Areas.Customer.Controllers
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
-                        return View();
                         return new ErrorResult("");
                     }
                     else
                     {
-                        return new ErrorResult("");
-                        //return View();
+                        return View();
                     }
                 }
             }
@@ -159,6 +158,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderRoomDetail(int id)
         {
+            ViewBag.Title = "Chi tiết phòng đã đặt";
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
             if (response.IsSuccessStatusCode)
             {

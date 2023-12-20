@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
@@ -12,19 +13,21 @@ namespace PetServices.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "ADMIN")]
+
     public class AdminController : ControllerBase
     {
         private PetServicesContext _context;
         private IMapper _mapper;
         private readonly IConfiguration _configuration;
 
+        
         public AdminController(PetServicesContext context, IMapper mapper, IConfiguration configuration)
         {
             _context = context;
             _mapper = mapper;
             _configuration = configuration;
         }
-
         [HttpGet("GetAllAccount")]
         public async Task<ActionResult> GetAllAccountTest()
         {
@@ -32,7 +35,6 @@ namespace PetServices.Controllers
 
             return Ok(acc);
         }
-
         [HttpGet("GetAllUser")]
         public async Task<ActionResult> GetAllUser()
         {
@@ -40,7 +42,6 @@ namespace PetServices.Controllers
 
             return Ok(user);
         }
-
         [HttpGet("GetAllPartner")]
         public async Task<ActionResult> GetAllPartner()
         {
@@ -48,7 +49,6 @@ namespace PetServices.Controllers
 
             return Ok(partner);
         }
-
         [HttpGet]
         public async Task<ActionResult> GetRole()
         {
@@ -56,7 +56,6 @@ namespace PetServices.Controllers
 
             return Ok(roles);
         }
-
         [HttpGet("GetAllAccountByAdmin")]
         public async Task<ActionResult> GetAllAccount()
         {
@@ -71,7 +70,6 @@ namespace PetServices.Controllers
 
             return Ok(accountsViewModel);
         }
-        
         [HttpGet("{methodName}")]
         public IActionResult GetMethod(string methodName)
         {
@@ -80,7 +78,6 @@ namespace PetServices.Controllers
                 .ToList();
             return Ok(_mapper.Map<List<UpdateAccountDTO>>(acc));
         }
-
         [HttpPut("UpdateAccount")]
         public async Task<ActionResult> UpdateAccount(AccountByAdminDTO accountchange)
         {
@@ -177,7 +174,6 @@ namespace PetServices.Controllers
                 return NotFound($"Đã xảy ra lỗi: {ex.Message}");
             }
         }
-
         [HttpPost("AddAccount")]
         public async Task<ActionResult> AddAccount(string email, string password, int roleId)
         {
@@ -238,7 +234,6 @@ namespace PetServices.Controllers
         {
             return !string.IsNullOrWhiteSpace(password) && password.Length >= 8 && !password.Contains(" ");
         }
-
         [HttpGet("UpdateOrderStatusReceived")]
         public async Task<IActionResult> UpdateOrderStatusReceived(int orderId)
         {

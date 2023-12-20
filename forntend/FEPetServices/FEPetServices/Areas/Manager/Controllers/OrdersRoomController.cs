@@ -29,6 +29,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            ViewBag.Title = "Danh sách đơn phòng đã đặt";
             //https://localhost:7255/api/Order/getOrderRoom
             //HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Order/getOrderRoom");
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/getOrderRoom");
@@ -54,6 +55,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderRoomDetail(int id)
         {
+            ViewBag.Title = "Chi tiết phòng đã đặt";
             //HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Order/" + id);
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
             if (response.IsSuccessStatusCode)
