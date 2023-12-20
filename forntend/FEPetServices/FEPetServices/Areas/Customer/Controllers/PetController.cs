@@ -1,4 +1,5 @@
 ﻿using FEPetServices.Form;
+using FEPetServices.Models.ErrorResult;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -27,7 +28,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> PetInfo(int petId)
+        public async Task<IActionResult> PetInfo()
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
@@ -85,7 +86,7 @@ namespace FEPetServices.Areas.Customer.Controllers
 
                     var json = JsonConvert.SerializeObject(petInfo);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                   // HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/PetInfo/CreatePet", content);
+                    //HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/PetInfo/CreatePet", content);
                     HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "PetInfo/CreatePet", content);
 
                     if (response.IsSuccessStatusCode)
@@ -222,7 +223,35 @@ namespace FEPetServices.Areas.Customer.Controllers
                 return View(petInfo); 
             }
         }
-        
+
+        [HttpPost]
+        public async Task<IActionResult> DeletePet(int petId)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.DeleteAsync(DefaultApiUrl + "PetInfo/Delete?petId=" + petId);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return Json(new { success = true, message = "Xoá thú cưng thành công."});
+                    }
+                    else
+                    {
+                        return new ErrorResult("");
+                    }
+                }
+                else
+                {
+                    return new ErrorResult("");
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ErrorResult("");
+            }
+        }
 
 
     }

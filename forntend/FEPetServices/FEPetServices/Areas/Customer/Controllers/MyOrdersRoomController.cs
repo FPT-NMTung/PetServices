@@ -127,13 +127,11 @@ namespace FEPetServices.Areas.Customer.Controllers
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
-                        return View();
                         return new ErrorResult("");
                     }
                     else
                     {
-                        return new ErrorResult("");
-                        //return View();
+                        return View();
                     }
                 }
             }

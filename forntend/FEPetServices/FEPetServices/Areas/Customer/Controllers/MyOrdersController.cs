@@ -91,7 +91,6 @@ namespace FEPetServices.Areas.Customer.Controllers
             HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderstatus/{orderStatus}?email={email}");
             if (!responsecheck.IsSuccessStatusCode)
             {
-
                 return View(); 
             }
             else
@@ -128,14 +127,14 @@ namespace FEPetServices.Areas.Customer.Controllers
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
-                        //return new ErrorResult("");
-                        return View();
+                        return new ErrorResult("");
+                        //return View();
 
                     }
                     else
                     {
-                        return new ErrorResult("");
-                        //return View();
+                        //return new ErrorResult("");
+                        return View();
                     }
                 }
             }

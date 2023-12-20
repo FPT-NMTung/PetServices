@@ -31,6 +31,7 @@ namespace PetServices.Controllers
                 List<Order> orders = _context.Orders.Include(b => b.UserInfo)
                     .Include(x => x.BookingServicesDetails)
                     .ThenInclude(y => y.Service)
+                    .OrderByDescending(o => o.OrderDate)
                     .ToList();
                 return Ok(_mapper.Map<List<OrdersDTO>>(orders));
             }
@@ -47,6 +48,7 @@ namespace PetServices.Controllers
             .Include(x => x.BookingServicesDetails)
             .ThenInclude(y => y.Service)
             .Include(z => z.UserInfo)
+            .OrderByDescending(o => o.OrderDate)
             .ToListAsync();
 
             return Ok(_mapper.Map<List<OrdersDTO>>(orders));
@@ -58,6 +60,7 @@ namespace PetServices.Controllers
                 .Include(x => x.BookingServicesDetails)
                 .ThenInclude(y => y.Service)
                 .Include(z => z.UserInfo)
+                .OrderByDescending(o => o.OrderDate)
                 //.Include(q => q.Reason)
                 .Where(o =>o.BookingServicesDetails.All(b => b.PartnerInfoId == partnerInfoId))
                      .ToListAsync();
