@@ -322,7 +322,7 @@ namespace PetServices.Controllers
 
                     foreach (var service in services)
                     {
-                        total += (service.Price ?? 0) * (service.Weight ?? 0);
+                        total += service.PriceService ?? 0;
                     }
                 }
 
