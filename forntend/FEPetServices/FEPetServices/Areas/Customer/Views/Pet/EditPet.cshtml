@@ -64,7 +64,7 @@
         <label for="Dob">Ngày sinh<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
-        <input type="date" id="Dob" name="Dob" value="@Model?.Dob?.ToString("yyyy-MM-dd")" required>
+        <input type="date" id="Dob" name="Dob" class="toinput" value="@Model?.Dob?.ToString("yyyy-MM-dd")" required>
         <div style="color:red" class="error-message" id="price-error-message"></div> 
       </div>
     </div>
@@ -73,7 +73,7 @@
         <label for="Weight">Cân nặng<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
-        <input type="number" id="Weight" name="Weight" value="@Model?.Weight"  required>
+        <input type="number" id="Weight" name="Weight" class="toinput" value="@Model?.Weight"  required>
         <div style="color:red" class="error-message" id="price-error-message"></div> 
       </div>
     </div>
@@ -108,6 +108,13 @@
             padding-top:20px;
             margin-right:10px;
         }
+    .toinput{
+    width: 609px;
+    height: 50px;
+    border: px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+      }
 </style>
 <script src="~/js/Service.js"></script>
 <script>
