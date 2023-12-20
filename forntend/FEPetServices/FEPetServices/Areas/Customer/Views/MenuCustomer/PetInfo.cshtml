@@ -33,20 +33,20 @@
                                 {
                                     <div  class="carousel-item @(i == 0 ? "active" : "")">
                                         <img src="https://propertyxvn.com/wp-content/uploads/2022/10/Mau-trang-la-gi-Y-nghia-cua-mau-trang-trong-cac-linh-vuc.jpg" class="d-block w-100" alt="...">
-                                        <div style=" margin-left:20%" class="carousel-caption d-none d-md-block">
+                                        <div  class="carousel-caption d-none d-md-block">
                                             <img src="@Model?.UserInfo.PetInfos[i].ImagePet" style="width:40% ;height:60%;" alt="pet"></img>
                                             <div style="color:black;">
                                                 <p>Tên : @Model?.UserInfo.PetInfos[i].PetName</p>
                                                 <p>Giống : @Model?.UserInfo.PetInfos[i].Species</p>
                                                 <p>Cân nặng : @Model?.UserInfo.PetInfos[i].Weight Kg</p>
-                                                <a style="margin-bottom:2%;" href="~/Customer/Pet/EditPet?petId=@Model.UserInfo.PetInfos[i].PetInfoId" class="btn btn-primary" type="submit">Chi tiết thông tin</a>
+                                                <div class="but">
+                                                <a  href="~/Customer/Pet/EditPet?petId=@Model.UserInfo.PetInfos[i].PetInfoId" class="btn btn1 btn-primary" type="submit">Chi tiết thông tin</a>
                                                 <!-- Thêm nút delete -->
-                                                @*<button class="btn btn-danger deletePetBtn" style="margin-bottom:10px;" onclick="prepareDelete('@Model?.UserInfo.PetInfos[i].PetInfoId')">Xóa thú cưng</button>*@
                                                 <form method="post" action="/Customer/MenuCustomerController/DeletePet">
                                                     <input type="hidden" name="petId" value="@Model?.UserInfo.PetInfos[i].PetInfoId" />
-                                                    <button class="btn btn-danger deletePetBtn" onclick="return confirm('Bạn có muốn xóa thú cưng này không?')">Xóa thú cưng</button>
+                                                    <button class="btn btn1 btn-danger deletePetBtn" onclick="return confirm('Bạn có muốn xóa thú cưng này không?')">Xóa thú cưng</button>
                                                 </form>
-
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
