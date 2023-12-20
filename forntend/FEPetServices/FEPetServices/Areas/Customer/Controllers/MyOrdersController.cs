@@ -30,6 +30,7 @@ namespace FEPetServices.Areas.Customer.Controllers
 
         private async Task<IActionResult> GetOrders(string orderStatus, int page, int pageSize)
         {
+            ViewBag.Title = "Danh sách đơn hàng";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
@@ -83,6 +84,7 @@ namespace FEPetServices.Areas.Customer.Controllers
 
         private async Task<IActionResult> GetOrdersNoneStatus(string orderStatus, int page, int pageSize)
         {
+            
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
@@ -163,6 +165,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderDetail(int id)
         {
+            ViewBag.Title = "Chi tiết đơn hàng";
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
             if (response.IsSuccessStatusCode)
             {

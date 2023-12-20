@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -114,7 +115,6 @@ namespace PetServices.Controllers
                 return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
             }
         }
-
 
         [HttpPost("Add")]
         public async Task<IActionResult> CreateProduct(ProductDTO productDTO)
@@ -324,6 +324,8 @@ namespace PetServices.Controllers
                 return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
             }
         }
+
+
         [HttpDelete]
         public IActionResult DeleteServce(int serviceId)
         {

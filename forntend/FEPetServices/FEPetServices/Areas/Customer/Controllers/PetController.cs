@@ -33,7 +33,6 @@ namespace FEPetServices.Areas.Customer.Controllers
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "PetInfo/" + email);
-            //HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlPet + "/" + email);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -57,6 +56,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         {     
             try
             {
+                ViewBag.Title = "Thêm thông tin thú cưng";
                 ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
                 string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
                 HttpResponseMessage PetInfo = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/PetInfo/" + email);
@@ -127,7 +127,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         {
             try
             {
-
+                ViewBag.Title = "Chỉnh sửa thông tin thú cưng";
                 //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/PetInfo/PetID/" + petId);
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "PetInfo/PetID/" + petId);
 
@@ -222,31 +222,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                 return View(petInfo); 
             }
         }
-
-        [HttpPost]
-        public async Task<IActionResult> DeletePet(int petId)
-        {
-            try
-            {
-                HttpResponseMessage response = await client.DeleteAsync(DefaultApiUrl + "PetInfo/Delete?petId=" + petId);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    TempData["SuccessToast"] = "Xóa thông tin thú cưng thành công!";
-                    return RedirectToAction("PetInfo", "Pet"); 
-                }
-                else
-                {
-                    TempData["ErrorToast"] = "Xóa thông tin thú cưng thất bại. Vui lòng thử lại sau.";
-                    return RedirectToAction("PetInfo", "Pet"); // Redirect to a suitable page after deletion failure
-                }
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
-                return RedirectToAction("PetInfo", "Pet"); // Redirect to a suitable page in case of exception
-            }
-        }
+        
 
 
     }

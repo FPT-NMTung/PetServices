@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
@@ -84,7 +85,6 @@ namespace PetServices.Controllers
             return Ok(serviceDTO);
         }
 
-
         [HttpPost("CreateService")]
         public async Task<IActionResult> CreateService(ServiceDTO serviceDTO)
         {
@@ -167,7 +167,6 @@ namespace PetServices.Controllers
   
         }
 
-        
         [HttpPut("UpdateServices")]
         public async Task<IActionResult> UpdateServce(ServiceDTO serviceDTO, int serviceId)
         {
@@ -281,7 +280,6 @@ namespace PetServices.Controllers
 
             return Ok(_mapper.Map<List<ServiceDTO>>(services));
         }
-
 
         [HttpDelete]
         public IActionResult DeleteServce(int serviceId)

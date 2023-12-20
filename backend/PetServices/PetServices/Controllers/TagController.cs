@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +41,7 @@ namespace PetServices.Controllers
             return Ok(_mapper.Map<TagDTO>(tag));
         }
 
-
+        
         [HttpPost("AddTag")]
         public async Task<IActionResult> CreateTag(TagDTO tagDTO)
         {
@@ -67,6 +68,8 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.InnerException.Message);
             }
         }
+
+
         [HttpPut("EditTag")]
         public IActionResult UpdateTag(TagDTO tagDTO, int tagID)
         {

@@ -28,6 +28,7 @@ namespace FEPetServices.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Title = "Đăng nhập";
             return View();
         }
 

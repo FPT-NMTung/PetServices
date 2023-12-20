@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.Execution;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Template;
@@ -14,12 +15,14 @@ namespace PetServices.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+   
     public class DashboardController : ControllerBase
     {
         private PetServicesContext _context;
         private IMapper _mapper;
         private readonly IConfiguration _configuration;
 
+       
         public DashboardController(PetServicesContext context, IMapper mapper, IConfiguration configuration)
         {
             _context = context;

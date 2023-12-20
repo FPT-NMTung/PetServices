@@ -30,6 +30,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            ViewBag.Title = "Danh sách nhân viên";
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Partner");
             if (response.IsSuccessStatusCode)
             {
@@ -54,7 +55,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> DetailPartner(string email)
         {
-
+            ViewBag.Title = "Thông tin nhân viên";
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Partner/" + email);
             //HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Partner/" + email);
             if (response.IsSuccessStatusCode)

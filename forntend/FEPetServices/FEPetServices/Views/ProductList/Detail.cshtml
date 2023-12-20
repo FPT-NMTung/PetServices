@@ -24,13 +24,13 @@
                                 <div class="col-lg-12">
                                     <div class="product-large-thumbnail-2 single-product-thumbnail axil-product slick-layout-wrapper--15 axil-slick-arrow arrow-both-side-3">
                                         <div class="thumbnail">
-                                            <img src="@Model.Product.Picture" alt="Product Images">
+                                            <img src="@Model?.Product.Picture" alt="Product Images">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="small-thumb-wrapper product-small-thumb-2 small-thumb-style-two small-thumb-style-three">
-                                        @foreach (var cateProduct in Model.CateProduct)
+                                        @foreach (var cateProduct in Model?.CateProduct)
                                         {
                                         <div class="small-thumb-img ">
                                            <a href="/ProductList/Detail?proId=@cateProduct.ProductId"> <img src="@cateProduct.Picture" alt="samll-thumb"> </a>
