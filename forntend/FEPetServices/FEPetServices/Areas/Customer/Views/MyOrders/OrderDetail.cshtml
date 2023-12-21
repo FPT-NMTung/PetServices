@@ -10,6 +10,7 @@
     <link href="~/css/map.css" rel="stylesheet" />
     <link href="~/css/OrderDetail.css" rel="stylesheet" />
     <link href="~/css/orders/detail.css" rel="stylesheet" />
+
 </head>
 <body>
     <div class="card right-profile-card">
@@ -59,29 +60,29 @@
                                         ) {
                                     <text>active</text>
                                     } text-center" id="step1">
-                                                    <i class="fa-solid fa-receipt"></i>
-                                                </li>
+                                                        <i class="fa-solid fa-receipt"></i>
+                                                    </li>
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Confirmed" || Model.OrderStatus.Trim() == "Processing"
                                         || Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                     } text-center" id="step2">
-                                                    <i class="fa-solid fa-check"></i>
-                                                </li>
+                                                        <i class="fa-solid fa-check"></i>
+                                                    </li>
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Processing" ||  Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                     } text-center" id="step3">
-                                                    <i class="fa-solid fa-truck"></i>
-                                                </li>
+                                                        <i class="fa-solid fa-truck"></i>
+                                                    </li>
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                     }  text-center" id="step4">
-                                                    <i class="fa-solid fa-download"></i>
-                                                </li>
+                                                        <i class="fa-solid fa-download"></i>
+                                                    </li>
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                      }  text-end" id="step5">
-                                                    <i class="fa-regular fa-star"></i>
-                                                </li>
+                                                        <i class="fa-regular fa-star"></i>
+                                                    </li>
                                     </ul>
                                 </div>
                             </div>
@@ -162,6 +163,21 @@
                                 {
                                     <div class="btn-content-detail">
                                         <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@Model.UserInfoId', '@Model.OrderId', '@productDetail.FeedbackStatus')">Đánh giá</button>
+                                    </div>
+                                }
+                                @if (Model.OrderStatus.Trim() == "Placed" || Model.OrderStatus.Trim() == "Packaging" || Model.OrderStatus.Trim() == "Confirmed" && !Model.StatusPayment)
+                                {
+                                    <div class="btn-content-detail">
+                                        <button class="btn btn-outline-primary" 
+                                                onclick="openPopupCancel('@productDetail.Product.Picture', 
+                                                                        '@productDetail.Product.ProductName', 
+                                                                        '@productDetail.Quantity', 
+                                                                        '@productDetail.ProductId', 
+                                                                        '@Model.UserInfoId', 
+                                                                        '@Model.OrderId', 
+                                                                        '@productDetail.FeedbackStatus')">
+                                            Đánh giá
+                                        </button>
                                     </div>
                                 }
                                 @if (i == Model.OrderProductDetails.Count - 1)
@@ -357,20 +373,22 @@
             </div>
         }
 
-        <div class="card-body" style="background-color:rgba(0, 0, 0, 0.03); border-radius:0px">
+        <div class="card-body" style="display:block;background-color:rgba(0, 0, 0, 0.03); border-radius:0px">
             <form method="post" asp-controller="MyOrders" asp-action="OrderDetail">
-                @if (Model.OrderStatus.Trim() == "Placed" || Model.OrderStatus.Trim() == "Packaging" 
-                || Model.OrderStatus.Trim() == "Confirmed" && Model.StatusPayment == false)
+                @if (Model.OrderStatus.Trim() == "Placed" || Model.OrderStatus.Trim() == "Packaging" || Model.OrderStatus.Trim() == "Confirmed" && !Model.StatusPayment)
                 {
                     <input type="hidden" name="Id" value="@Model?.OrderId" />
                     <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
 
-                    <div style="display:block;">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="cancelledCheckbox" name="newStatus" value="Cancelled" onchange="handleCancelledChange()">
-                            <label class="form-check-label" for="cancelledCheckbox">Hủy Đơn</label>
-                        </div>
-                        <div id="lydoKhac" style="display: none;">
+                    <button type="button" class="btn btn-danger" onclick="openCancelOrderPopup()">
+                        Hủy Đơn
+                    </button>
+
+                    <!-- Popup -->
+                    <div id="cancelOrderPopup" class="custom-popup">
+                        <div class="popup-content">
+                            <span class="close" onclick="closeCancelOrderPopup()">&times;</span>
+                            <h5>Hủy Đơn</h5>
                             <div>
                                 <label for="title">Tiêu Đề:</label>
                                 <input type="text" id="ReasonOrderTitle" name="ReasonOrderTitle" style="width:100%" placeholder="Nhập Tiêu Đề">
@@ -379,12 +397,64 @@
                                 <label for="description">Mô Tả:</label>
                                 <textarea id="ReasonOrderDescription" name="ReasonOrderDescription" style="width:100%" placeholder="Nhập Mô Tả"></textarea>
                             </div>
+                            <button type="submit" class="btn btn-danger">Xác nhận Hủy Đơn</button>
                         </div>
-
-                        <button class="btn btn-primary" style="margin-top: 20px;" type="submit">Xác nhận</button>
                     </div>
                 }
             </form>
+        </div>
+        <div class="popup">
+            <div id="overlay" class="overlay"></div>
+            <div class="feedback popup-container" id="popup">
+                <div class="mb--40">
+                    <!-- Start Comment Respond  -->
+                    <div class="comment-respond pro-des-commend-respond mt--0">
+                        <h3 class="title mb--30">Hủy Đơn Hàng</h3>
+                        <div class="information">
+                            <img id="popupImage" style="width: 50px; height: 50px;" />
+                            <div>
+                                <p id="popupServiceName"></p>
+                                <p id="popupServiceInfo"></p>
+                            </div>
+                        </div>
+                        <form>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>Tiêu Đề: </label>
+                                        @*<input type="hidden" id="serviceIdInput" value="" />
+                                        <input type="hidden" id="productIdInput" value="" />
+                                        <input type="hidden" id="roomIdInput" value="" />
+                                        <input type="hidden" id="partnerIdInput" value="" />
+                                        <input type="hidden" id="ratingInput" value="" />
+                                        <input type="hidden" id="userIdInput" value="" />
+                                        <input type="hidden" id="orderIdInput" value="" />*@
+                                        <textarea name="message" id="reasonOrderTitle" placeholder="Hãy viết tiêu đề lý do hủy đơn hàng cho chúng tôi biết nhé." cols="300" rows="1"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Nội Dung: </label>
+                                        @*<input type="hidden" id="serviceIdInput" value="" />
+                                        <input type="hidden" id="productIdInput" value="" />
+                                        <input type="hidden" id="roomIdInput" value="" />
+                                        <input type="hidden" id="partnerIdInput" value="" />
+                                        <input type="hidden" id="ratingInput" value="" />
+                                        <input type="hidden" id="userIdInput" value="" />
+                                        <input type="hidden" id="orderIdInput" value="" />*@
+                                        <textarea name="message" id="reasonOrderDescription" placeholder="Hãy viết nội dung lý do hủy đơn hàng cho chúng tôi biết nhé." cols="300" rows="5"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-submit">
+                                        <button type="button" class="back" onclick="closePopup()">Trở lại</button>
+                                        <button type="button" id="submit-feedback" class="done">Hoàn thành</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- End Comment Respond  -->
+                </div>
+            </div>
         </div>
     </div>
 
@@ -674,6 +744,22 @@
             document.getElementById('roomIdInput').value = null;
         }
 
+        //Hiện popup hủy đơn
+        function openPopupCancel(reasonOrderTitle, reasonOrderDescription) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+
+            document.getElementById('reasonOrderTitle').src = reasonOrderTitle;
+            document.getElementById('reasonOrderDescription').innerText = reasonOrderDescription;
+
+            document.getElementById('partnerIdInput').value = partnerId;
+            document.getElementById('userIdInput').value = userId;
+            document.getElementById('orderIdInput').value = orderId;
+            document.getElementById('serviceIdInput').value = serviceId;
+            document.getElementById('productIdInput').value = null;
+            document.getElementById('roomIdInput').value = null;
+        }
+
         // Ẩn popup đánh giá
         function closePopup() {
             document.getElementById('overlay').style.display = 'none';
@@ -773,63 +859,72 @@
         });
     </script>
     @*<script>
-        // Xử lý sự kiện khi chọn nút radio "Rejected"
-        function handleStatusChange() {
-            var receivedCheckbox = $('#confirmedCheckbox');
-            var reasonSelectDiv = $('#reasonSelect');
-            var lydoKhacDiv = $('#lydoKhac');
+    // Xử lý sự kiện khi chọn nút radio "Rejected"
+    function handleStatusChange() {
+    var receivedCheckbox = $('#confirmedCheckbox');
+    var reasonSelectDiv = $('#reasonSelect');
+    var lydoKhacDiv = $('#lydoKhac');
 
-            if (receivedCheckbox.prop('checked')) {
-                reasonSelectDiv.hide();  // Ẩn select dropdown khi nút radio "Received" được chọn
-                lydoKhacDiv.hide();      // Ẩn div "lydoKhac" khi nút radio "Received" được chọn
-            } else {
-                reasonSelectDiv.show();  // Hiển thị select dropdown khi nút radio "Rejected" được chọn
-                // Kiểm tra nếu "Lý Do Hủy Đơn Khác" đã được chọn, thì hiển thị "lydoKhacDiv"
-                if ($('#ReasonId').val() === 'khac') {
-                    lydoKhacDiv.show();
-                } else {
-                    lydoKhacDiv.hide();
-                }
-            }
-        }
+    if (receivedCheckbox.prop('checked')) {
+    reasonSelectDiv.hide();  // Ẩn select dropdown khi nút radio "Received" được chọn
+    lydoKhacDiv.hide();      // Ẩn div "lydoKhac" khi nút radio "Received" được chọn
+    } else {
+    reasonSelectDiv.show();  // Hiển thị select dropdown khi nút radio "Rejected" được chọn
+    // Kiểm tra nếu "Lý Do Hủy Đơn Khác" đã được chọn, thì hiển thị "lydoKhacDiv"
+    if ($('#ReasonId').val() === 'khac') {
+    lydoKhacDiv.show();
+    } else {
+    lydoKhacDiv.hide();
+    }
+    }
+    }
     </script>
 
     <script>
-        function handleCancelledChange() {
-            // Hiển thị hoặc ẩn phần lý do hủy đơn tùy thuộc vào giá trị chọn
-            var reasonSelectDiv = document.getElementById('reasonSelect');
-            var lydoKhacDiv = document.getElementById('lydoKhac');
-            var rejectedCheckbox = document.getElementById('cancelledCheckbox');
+    function handleCancelledChange() {
+    // Hiển thị hoặc ẩn phần lý do hủy đơn tùy thuộc vào giá trị chọn
+    var reasonSelectDiv = document.getElementById('reasonSelect');
+    var lydoKhacDiv = document.getElementById('lydoKhac');
+    var rejectedCheckbox = document.getElementById('cancelledCheckbox');
 
-            if (rejectedCheckbox.checked) {
-                reasonSelectDiv.style.display = 'block';
-                lydoKhacDiv.style.display = 'block';
-            } else {
-                reasonSelectDiv.style.display = 'none';
-                lydoKhacDiv.style.display = 'none';
-            }
-        }
+    if (rejectedCheckbox.checked) {
+    reasonSelectDiv.style.display = 'block';
+    lydoKhacDiv.style.display = 'block';
+    } else {
+    reasonSelectDiv.style.display = 'none';
+    lydoKhacDiv.style.display = 'none';
+    }
+    }
 
-        function handleReasonChange(selectElement) {
-            var lydoKhacDiv = document.getElementById('lydoKhac');
+    function handleReasonChange(selectElement) {
+    var lydoKhacDiv = document.getElementById('lydoKhac');
 
-            if (selectElement.value == 'khac') {
-                lydoKhacDiv.style.display = 'block';  // Hiển thị div khi chọn lựa chọn "Lý Do Hủy Đơn Khác"
-            } else {
-                lydoKhacDiv.style.display = 'none';   // Ẩn div khi chọn bất kỳ lựa chọn khác
-            }
-        }
+    if (selectElement.value == 'khac') {
+    lydoKhacDiv.style.display = 'block';  // Hiển thị div khi chọn lựa chọn "Lý Do Hủy Đơn Khác"
+    } else {
+    lydoKhacDiv.style.display = 'none';   // Ẩn div khi chọn bất kỳ lựa chọn khác
+    }
+    }
+    </script>*@
+    @*<script>
+    function handleCancelledChange() {
+    var lydoKhacDiv = document.getElementById('lydoKhac');
+    var cancelledCheckbox = document.getElementById('cancelledCheckbox');
+
+    if (cancelledCheckbox.checked) {
+    lydoKhacDiv.style.display = 'block';
+    } else {
+    lydoKhacDiv.style.display = 'none';
+    }
+    }
     </script>*@
     <script>
-        function handleCancelledChange() {
-            var lydoKhacDiv = document.getElementById('lydoKhac');
-            var cancelledCheckbox = document.getElementById('cancelledCheckbox');
+        function openCancelOrderPopup() {
+            document.getElementById('cancelOrderPopup').style.display = 'block';
+        }
 
-            if (cancelledCheckbox.checked) {
-                lydoKhacDiv.style.display = 'block';
-            } else {
-                lydoKhacDiv.style.display = 'none';
-            }
+        function closeCancelOrderPopup() {
+            document.getElementById('cancelOrderPopup').style.display = 'none';
         }
     </script>
 </body>
