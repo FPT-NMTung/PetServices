@@ -28,7 +28,7 @@
                     { "targets": [4], "width": "10%" },
                     { "targets": [5], "width": "10%" },
                     { "targets": [6], "width": "6%" },
-                    { "targets": [7], "width": "11%" },
+                    //{ "targets": [7], "width": "11%" },
                 ],
                 "language": {
                     "lengthMenu": "Hiển thị _MENU_ dòng",
@@ -57,11 +57,11 @@
             <th>Số Điện Thoại</th>
             <th>Trạng Thái</th>
             <th>Chi Tiết</th>
-            <th></th>
+            @*<th></th>*@
         </tr>
     </thead>
     <tbody>
-        <script>
+        @*<script>
             // Hàm JavaScript để cập nhật trạng thái đơn hàng
             $(document).ready(function () {
                 // Sử dụng class để chọn button
@@ -81,7 +81,7 @@
                     });
                 });
             });
-        </script>
+        </script>*@
         @if (Model != null && Model.Count > 0)
         {
             int itemCount = 0;
@@ -108,9 +108,9 @@
                             <td>
                                 <a class="detail-button" href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
                             </td>
-                            <td>
+                            @*<td>
                                 <a class="received-button" data-orderid="@pc.OrderId" data-partnerinfoid="@ViewBag.PartnerId">Nhận Đơn</a>
-                            </td>
+                            </td>*@
 
                         </tr>
                     }

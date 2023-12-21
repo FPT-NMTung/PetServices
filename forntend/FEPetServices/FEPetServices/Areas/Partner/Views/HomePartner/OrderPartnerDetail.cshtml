@@ -89,7 +89,7 @@
                             <td>@serviceDetail.Service.ServiceName</td>
                             <td>@serviceDetail.Weight</td>
                             <td>@(serviceDetail.Price.ToString("n0").Replace(",", ".")) VNĐ</td>
-                            <td>@((serviceDetail.Price * serviceDetail.Weight).ToString("n0").Replace(",", ".")) VNĐ</td>
+                            <td>@(serviceDetail.PriceService.ToString("n0").Replace(",", ".")) VNĐ</td>
                         </tr>
                     }
                 </tbody>

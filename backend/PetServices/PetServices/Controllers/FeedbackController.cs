@@ -672,18 +672,6 @@ namespace PetServices.Controllers
 
             try
             {
-                var feedback = new Feedback
-                {
-                    Content = feedbackDTO.Content,
-                    NumberStart = feedbackDTO.NumberStart,
-                    ServiceId = feedbackDTO.ServiceId,
-                    RoomId = feedbackDTO.RoomId,
-                    PartnerId = feedbackDTO.PartnerId,
-                    ProductId = feedbackDTO.ProductId,
-                    UserId = feedbackDTO.UserId,
-                    OrderId = feedbackDTO.OrderId,
-                };
-
                 if (feedbackDTO.OrderId != null)
                 {
                     if (feedbackDTO.RoomId != null)
@@ -718,6 +706,22 @@ namespace PetServices.Controllers
                         await _context.SaveChangesAsync();
                     }
                 }
+
+                if (feedbackDTO.PartnerId != null && feedbackDTO.ServiceId != null){
+                    feedbackDTO.ServiceId = null;
+                }
+
+                var feedback = new Feedback
+                {
+                    Content = feedbackDTO.Content,
+                    NumberStart = feedbackDTO.NumberStart,
+                    ServiceId = feedbackDTO.ServiceId,
+                    RoomId = feedbackDTO.RoomId,
+                    PartnerId = feedbackDTO.PartnerId,
+                    ProductId = feedbackDTO.ProductId,
+                    UserId = feedbackDTO.UserId,
+                    OrderId = feedbackDTO.OrderId,
+                };
 
                 await _context.Feedbacks.AddAsync(feedback);
                 await _context.SaveChangesAsync();
