@@ -34,6 +34,7 @@ namespace FEPetServices.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            ViewBag.Title = "Danh sách tài khoản";
             var accountList = await client.GetAsync(DefaultApiUrl + "Admin/GetAllAccountByAdmin");
             //var accountList = await client.GetAsync(ApiUrlAccountList);
             if (accountList.IsSuccessStatusCode)
@@ -55,6 +56,7 @@ namespace FEPetServices.Areas.Admin.Controllers
         {
             try
             {
+                ViewBag.Title = "Thêm tài khoản mới";
                 if (ModelState.IsValid)
                 {
                     var json = JsonConvert.SerializeObject(addAccount);
@@ -113,6 +115,7 @@ namespace FEPetServices.Areas.Admin.Controllers
         {
             try
             {
+                ViewBag.Title = "";
                 if (ModelState.IsValid)
                 {
                     string apiUrl = DefaultApiUrl + "Admin/UpdateAccount";
