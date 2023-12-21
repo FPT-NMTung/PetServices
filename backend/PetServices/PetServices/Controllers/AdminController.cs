@@ -13,7 +13,6 @@ namespace PetServices.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "ADMIN")]
 
     public class AdminController : ControllerBase
     {
