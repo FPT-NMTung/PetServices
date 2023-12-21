@@ -59,29 +59,29 @@
                                         ) {
                                     <text>active</text>
                                     } text-center" id="step1">
-                                            <i class="fa-solid fa-receipt"></i>
-                                        </li>
+                                                    <i class="fa-solid fa-receipt"></i>
+                                                </li>
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Confirmed" || Model.OrderStatus.Trim() == "Processing"
                                         || Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                     } text-center" id="step2">
-                                            <i class="fa-solid fa-check"></i>
-                                        </li>
+                                                    <i class="fa-solid fa-check"></i>
+                                                </li>
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Processing" ||  Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                     } text-center" id="step3">
-                                            <i class="fa-solid fa-truck"></i>
-                                        </li>
+                                                    <i class="fa-solid fa-truck"></i>
+                                                </li>
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                     }  text-center" id="step4">
-                                            <i class="fa-solid fa-download"></i>
-                                        </li>
+                                                    <i class="fa-solid fa-download"></i>
+                                                </li>
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                      }  text-end" id="step5">
-                                            <i class="fa-regular fa-star"></i>
-                                        </li>
+                                                    <i class="fa-regular fa-star"></i>
+                                                </li>
                                     </ul>
                                 </div>
                             </div>
@@ -205,10 +205,10 @@
                                             <p style="font-size:.8rem;"><span>Cân nặng thú cưng: </span>@serviceDetail.Weight Kg</p>
                                             <div>
                                                 <p style="font-size:.8rem; cursor: pointer; color:blue" class="map-button clickable"
-                                                   data-lat="@serviceDetail?.PartnerInfo?.Lat"
-                                                   data-lng="@serviceDetail?.PartnerInfo?.Lng"
-                                                   data-my-lat=""
-                                                   data-my-lng="">
+                                           data-lat="@serviceDetail?.PartnerInfo?.Lat"
+                                           data-lng="@serviceDetail?.PartnerInfo?.Lng"
+                                           data-my-lat=""
+                                           data-my-lng="">
                                                     Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail?.PartnerInfoId
                                                 </p>
                                                 <div style="display:flex; align-items:center">
@@ -218,7 +218,7 @@
 
                                                         if ((serviceDetail.FeedbackPartnerStatus == null || serviceDetail.FeedbackPartnerStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
                                                         {
-                                                            <div style="margin-bottom:0px; margin-left:.2rem"  class="btn-content-detail">
+                                                            <div style="margin-bottom:0px; margin-left:.2rem" class="btn-content-detail">
                                                                 <button class="btn btn-outline-primary" onclick="openPopupPartner('@serviceDetail?.PartnerInfo.ImagePartner', '@partnerName', '@serviceDetail.PartnerInfo.PartnerInfoId', '@serviceDetail.ServiceId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
                                                             </div>
                                                         }
@@ -356,7 +356,39 @@
                 }
             </div>
         }
+
+        <div class="card-body" style="background-color:rgba(0, 0, 0, 0.03); border-radius:0px">
+            <form method="post" asp-controller="MyOrders" asp-action="OrderDetail">
+                @if (Model.OrderStatus.Trim() == "Placed" || Model.OrderStatus.Trim() == "Packaging" 
+                || Model.OrderStatus.Trim() == "Confirmed" && Model.StatusPayment == false)
+                {
+                    <input type="hidden" name="Id" value="@Model?.OrderId" />
+                    <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
+
+                    <div style="display:block;">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="cancelledCheckbox" name="newStatus" value="Cancelled" onchange="handleCancelledChange()">
+                            <label class="form-check-label" for="cancelledCheckbox">Hủy Đơn</label>
+                        </div>
+                        <div id="lydoKhac" style="display: none;">
+                            <div>
+                                <label for="title">Tiêu Đề:</label>
+                                <input type="text" id="ReasonOrderTitle" name="ReasonOrderTitle" style="width:100%" placeholder="Nhập Tiêu Đề">
+                            </div>
+                            <div>
+                                <label for="description">Mô Tả:</label>
+                                <textarea id="ReasonOrderDescription" name="ReasonOrderDescription" style="width:100%" placeholder="Nhập Mô Tả"></textarea>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary" style="margin-top: 20px;" type="submit">Xác nhận</button>
+                    </div>
+                }
+            </form>
+        </div>
     </div>
+
+
 
     <div class="popup">
         <div id="overlay" class="overlay"></div>
@@ -576,22 +608,22 @@
 
     @*Đánh giá*@
     <script>
-        //Hiện popup đánh giá service
-        function openPopupService(image, serviceName, weight, serviceId, userId, orderId) {
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('popup').style.display = 'block';
+            //Hiện popup đánh giá service
+            function openPopupService(image, serviceName, weight, serviceId, userId, orderId) {
+                document.getElementById('overlay').style.display = 'block';
+                document.getElementById('popup').style.display = 'block';
 
-            document.getElementById('popupImage').src = image;
-            document.getElementById('popupServiceName').innerText = serviceName;
-            document.getElementById('popupServiceInfo').innerText = 'Cân nặng: ' + weight + ' Kg';
+                document.getElementById('popupImage').src = image;
+                document.getElementById('popupServiceName').innerText = serviceName;
+                document.getElementById('popupServiceInfo').innerText = 'Cân nặng: ' + weight + ' Kg';
 
-            document.getElementById('serviceIdInput').value = serviceId;
-            document.getElementById('userIdInput').value = userId;
-            document.getElementById('orderIdInput').value = orderId;
-            document.getElementById('productIdInput').value = null;
-            document.getElementById('roomIdInput').value = null;
-            document.getElementById('partnerIdInput').value = null;
-        }
+                document.getElementById('serviceIdInput').value = serviceId;
+                document.getElementById('userIdInput').value = userId;
+                document.getElementById('orderIdInput').value = orderId;
+                document.getElementById('productIdInput').value = null;
+                document.getElementById('roomIdInput').value = null;
+                document.getElementById('partnerIdInput').value = null;
+            }
 
         //Hiện popup đánh giá product
         function openPopupProduct(image, productName, quantity, productId, userId, orderId, status) {
@@ -740,6 +772,65 @@
             }
         });
     </script>
+    @*<script>
+        // Xử lý sự kiện khi chọn nút radio "Rejected"
+        function handleStatusChange() {
+            var receivedCheckbox = $('#confirmedCheckbox');
+            var reasonSelectDiv = $('#reasonSelect');
+            var lydoKhacDiv = $('#lydoKhac');
 
+            if (receivedCheckbox.prop('checked')) {
+                reasonSelectDiv.hide();  // Ẩn select dropdown khi nút radio "Received" được chọn
+                lydoKhacDiv.hide();      // Ẩn div "lydoKhac" khi nút radio "Received" được chọn
+            } else {
+                reasonSelectDiv.show();  // Hiển thị select dropdown khi nút radio "Rejected" được chọn
+                // Kiểm tra nếu "Lý Do Hủy Đơn Khác" đã được chọn, thì hiển thị "lydoKhacDiv"
+                if ($('#ReasonId').val() === 'khac') {
+                    lydoKhacDiv.show();
+                } else {
+                    lydoKhacDiv.hide();
+                }
+            }
+        }
+    </script>
+
+    <script>
+        function handleCancelledChange() {
+            // Hiển thị hoặc ẩn phần lý do hủy đơn tùy thuộc vào giá trị chọn
+            var reasonSelectDiv = document.getElementById('reasonSelect');
+            var lydoKhacDiv = document.getElementById('lydoKhac');
+            var rejectedCheckbox = document.getElementById('cancelledCheckbox');
+
+            if (rejectedCheckbox.checked) {
+                reasonSelectDiv.style.display = 'block';
+                lydoKhacDiv.style.display = 'block';
+            } else {
+                reasonSelectDiv.style.display = 'none';
+                lydoKhacDiv.style.display = 'none';
+            }
+        }
+
+        function handleReasonChange(selectElement) {
+            var lydoKhacDiv = document.getElementById('lydoKhac');
+
+            if (selectElement.value == 'khac') {
+                lydoKhacDiv.style.display = 'block';  // Hiển thị div khi chọn lựa chọn "Lý Do Hủy Đơn Khác"
+            } else {
+                lydoKhacDiv.style.display = 'none';   // Ẩn div khi chọn bất kỳ lựa chọn khác
+            }
+        }
+    </script>*@
+    <script>
+        function handleCancelledChange() {
+            var lydoKhacDiv = document.getElementById('lydoKhac');
+            var cancelledCheckbox = document.getElementById('cancelledCheckbox');
+
+            if (cancelledCheckbox.checked) {
+                lydoKhacDiv.style.display = 'block';
+            } else {
+                lydoKhacDiv.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>
