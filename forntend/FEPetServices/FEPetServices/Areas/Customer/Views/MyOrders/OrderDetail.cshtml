@@ -12,7 +12,9 @@
     <link href="~/css/orders/detail.css" rel="stylesheet" />
 </head>
 @{
-    var isStep5Active = false;
+    var isStep5ActiveProduct = false;
+    var isStep5ActiveService = false;
+    var isStep5ActivePartner = false;
 }
 <body>
     <div class="card right-profile-card">
@@ -84,9 +86,7 @@
                                                     <i class="fa-solid fa-download"></i>
                                                 </li>   
 
-                                        <li class="step0 @if(Model.OrderStatus.Trim() == "Completed") {
-                                    <text>active</text>
-                                    } text-end" id="step5">
+                                        <li class="step0 text-end" id="step5">
                                             <i class="fa-regular fa-star"></i>
                                         </li>
                                     </ul>
@@ -167,19 +167,10 @@
                                 </div>
                                 @if ((productDetail.FeedbackStatus == null || productDetail.FeedbackStatus == false) && productDetail?.StatusOrderProduct?.Trim() == "Delivered")
                                 {
+                                    isStep5ActiveProduct = true;
                                     <div class="btn-content-detail">
                                         <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@Model.UserInfoId', '@Model.OrderId', '@productDetail.FeedbackStatus')">Đánh giá</button>
                                     </div>
-                                }
-                                else if ((productDetail.FeedbackStatus != null || productDetail.FeedbackStatus != false) && productDetail?.StatusOrderProduct?.Trim() == "Delivered")
-                                {
-                                    <style>
-                                        #progressbar-2 li.active i.fa-star {
-                                            color: #4caf50;
-                                            border: 3.5px solid #4caf50;
-                                            background-color: #fff;
-                                        }
-                                    </style>
                                 }
                                 @if (i == Model.OrderProductDetails.Count - 1)
                                 {
@@ -242,20 +233,11 @@
                                                         var partnerName = serviceDetail?.PartnerInfo?.FirstName + " " + serviceDetail?.PartnerInfo?.LastName + " - " + serviceDetail?.PartnerInfoId;
                                                         if ((serviceDetail.FeedbackPartnerStatus == null || serviceDetail.FeedbackPartnerStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
                                                         {
+                                                            isStep5ActivePartner = true;
                                                             <p style="font-size:.8rem;">Đánh giá về nhân viên của chúng tôi :  </p>
                                                             <div style="margin-bottom:0px; margin-left:.2rem" class="btn-content-detail">
                                                                 <button class="btn btn-outline-primary" onclick="openPopupPartner('@serviceDetail?.PartnerInfo.ImagePartner', '@partnerName', '@serviceDetail.PartnerInfo.PartnerInfoId', '@serviceDetail.ServiceId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
                                                             </div>
-                                                        }
-                                                        else if ((serviceDetail.FeedbackPartnerStatus != null || serviceDetail.FeedbackPartnerStatus != false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
-                                                        {
-                                                            <style>
-                                                                #progressbar-2 li.active i.fa-star {
-                                                                    color: #4caf50;
-                                                                    border: 3.5px solid #4caf50;
-                                                                    background-color: #fff;
-                                                                }
-                                                            </style>
                                                         }
                                                     }
                                                 </div>
@@ -304,19 +286,10 @@
                                 </div>
                                 @if ((serviceDetail.FeedbackStatus == null || serviceDetail.FeedbackStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
                                 {
+                                    isStep5ActiveService = true;
                                     <div class="btn-content-detail">
                                         <button class="btn btn-outline-primary" onclick="openPopupService('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
                                     </div>
-                                }
-                                else if ((serviceDetail.FeedbackStatus != null || serviceDetail.FeedbackStatus != false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
-                                {
-                                    <style>
-                                        #progressbar-2 li.active i.fa-star {
-                                            color: #4caf50;
-                                            border: 3.5px solid #4caf50;
-                                            background-color: #fff;
-                                        }
-                                    </style>
                                 }
                             }
                         </div>
@@ -348,6 +321,24 @@
                 </div>
             </div>
         </div>
+        @if(isStep5ActiveService == true || isStep5ActiveProduct == true || isStep5ActivePartner == true)
+        {
+            <script>
+                document.getElementById('step5').classList.add('active');
+            </script>
+        }
+        else if (isStep5ActiveService != true && isStep5ActiveProduct != true && isStep5ActivePartner != true)
+        {
+             <script>
+                document.getElementById('step5').classList.remove('active');
+            </script>
+            <style>
+                #progressbar-2 li i.fa-star {
+                    color: #4caf50;
+                    border: 3.5px solid #4caf50;
+                }
+            </style>
+        }
         @if (Model.OrderStatus.Trim() == "Cancelled")
         {
             <div class="card-body cancelled-order-footer" style="border-radius:0px">
