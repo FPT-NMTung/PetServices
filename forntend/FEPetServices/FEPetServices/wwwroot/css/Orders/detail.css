@@ -198,6 +198,11 @@ ul {
     margin-top: 10px;
 }
 
+.payment-fail{
+    display : flex;
+    justify-content:end;
+}
+
 @media (max-width: 991px) {
     .d-lg-flex {
         margin: 0;
