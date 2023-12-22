@@ -74,6 +74,6 @@ function addMarker(map, position, lastName, mnv) {
 }
 
 function closeMapModal() {
-    var mapModal = document.getElementById("mapModal");
+    var mapModal = document.getElementById("mapModall");
     mapModal.style.display = "none";
 }
