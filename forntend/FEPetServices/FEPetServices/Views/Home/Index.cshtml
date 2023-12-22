@@ -281,7 +281,7 @@
                                                     <li class="select-option">
                                                         <form method="post" action="@Url.Action("AddToCart", "ProductList")">
                                                             @Html.AntiForgeryToken()
-                                                            <input type="hidden" name="ProductId" id="productId" value="@product.ProductId" />
+                                                            <input type="hidden" name="ProductId" id="productId_@product.ProductId" value="@product.ProductId" />
                                                             <button class="add-to-card btn-bg-primary updateProductQuantityCart" type="button"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
                                                         </form>
                                                     </li>
@@ -347,7 +347,7 @@
                                                     <li class="select-option">
                                                         <form method="post" action="@Url.Action("AddToCart", "ProductList")">
                                                             @Html.AntiForgeryToken()
-                                                            <input type="hidden" name="ProductId" id="productId" value="@product.ProductId" />
+                                                            <input type="hidden" name="ProductId" id="productId_@product.ProductId" value="@product.ProductId" />
                                                             <button class="add-to-card btn-bg-primary updateProductQuantityCart" type="button"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
                                                         </form>
                                                     </li>
@@ -532,7 +532,7 @@
 
         $(".updateProductQuantityCart").click(function (event) {
             event.preventDefault();
-            var productid = $("#productId").val();
+            var productid = $(this).closest("form").find('input[name="ProductId"]').val();
             var quantity = $("#quantityInput").val();
             console.log(productid);
             console.log(quantity);

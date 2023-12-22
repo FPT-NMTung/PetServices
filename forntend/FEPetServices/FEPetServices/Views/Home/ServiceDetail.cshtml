@@ -11,7 +11,7 @@
     @*<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">*@
     <link rel="stylesheet" href="~/css/flatpickr.css">
     <link rel="stylesheet" href="/css/Service/ServiceDetail.css">
-    <link href="~/css/map.css" rel="stylesheet" />
+    <link href="~/css/mapService.css" rel="stylesheet" />
     @*<script src="~/js/showallmap.js"></script>*@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM"></script>
     @*<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM&callback=initMap"></script>*@
@@ -347,18 +347,16 @@
         </div>
 
        @* ModelMap*@
-        <div id="mapModal" class="modal">
+        <div id="mapModall" class="modal">
             <div class="modal-content">
                 <div class="close-container">
                     <span class="close" onclick="closeMapModal()">&times;</span>
                 </div>
-                <div id="map"></div>
+                <div id="mapService" style="width: 100%; height: 180px;"></div>
             </div>
         </div>
-        @*<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>*@
-        @* ModelMap*@
+       
     </main>
-   @* <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>*@
    <script src="~/js/flatpickr.js"></script>
     <script>
     const datetimeStartInput = document.getElementById('datetimeStart');
@@ -623,87 +621,7 @@
         });
     </script>    
 
-    <script>
-        function showMap() {
-            var partnerSelect = document.getElementById("PartnerInfoId");
-            var mapModal = document.getElementById("mapModal");
-
-            // Lấy vị trí hiện tại của bạn
-            var myLatitude;
-            var myLongitude;
-
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    myLatitude = position.coords.latitude;
-                    myLongitude = position.coords.longitude;
-
-                    // Tạo một đối tượng bản đồ
-                    var map = new google.maps.Map(document.getElementById('map'), {
-                        zoom: 10, // Điều chỉnh mức độ thu phóng
-                        center: { lat: myLatitude, lng: myLongitude } // Trung tâm của bản đồ
-                    });
-
-                    // Marker cho vị trí hiện tại của bạn
-                    var myMarker = new google.maps.Marker({
-                        position: { lat: myLatitude, lng: myLongitude },
-                        map: map,
-                        title: 'Vị trí của tôi',
-                        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-                        @*label: 'Bạn'*@
-                    });
-
-                    // Duyệt qua danh sách đối tác và thêm đánh dấu cho mỗi đối tác
-                    for (var i = 0; i < partnerSelect.options.length; i++) {
-                        var partnerOption = partnerSelect.options[i];
-                        var lat = partnerOption.getAttribute("data-lat");
-                        var lng = partnerOption.getAttribute("data-lng");
-                        var lastName = partnerOption.text.split(" - ")[0];
-                        var mnv = partnerOption.text.split(" - ")[1];
-
-                        if (lat && lng) {
-                            // Tạo một đối tượng LatLng cho mỗi đối tác
-                            var latLng = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-
-                            // Thêm đánh dấu cho mỗi đối tác trên bản đồ
-                            addMarker(map, latLng, lastName, mnv);
-                            
-                        }
-                    }
-
-                    // Mở modal
-                    mapModal.style.display = "block";
-                }, function (error) {
-                    console.error("Error getting current location:", error);
-                });
-            } else {
-                alert("Trình duyệt không hỗ trợ lấy vị trí.");
-            }
-        }
-
-        function addMarker(map, position, lastName, mnv) {
-            // Thêm đánh dấu cho mỗi đối tác trên bản đồ
-            var marker = new google.maps.Marker({
-                position: position,
-                map: map,
-                title: lastName,
-                label: {
-                    text: lastName,
-                    color: 'yellow'
-                }
-            });
-
-            // Thêm sự kiện click cho marker để hiển thị thông tin
-            marker.addListener('click', function () {
-                // Hiển thị thông tin của đối tác
-                alert(lastName + ' - ' + mnv);
-            });
-        }
-
-        function closeMapModal() {
-            var mapModal = document.getElementById("mapModal");
-            mapModal.style.display = "none";
-        }
-    </script>
+   
 
     <script src="~/assets/js/vendor/modernizr.min.js"></script>
     <!-- jQuery JS -->
@@ -723,7 +641,7 @@
     <script src="~/assets/js/vendor/isotope.pkgd.min.js"></script>
     <script src="~/assets/js/vendor/counterup.js"></script>
     <script src="~/assets/js/vendor/waypoints.min.js"></script>
-
+    <script src="~/js/mapservice.js"></script>
 
     <!-- Main JS -->
     <script src="~/assets/js/main.js"></script>
