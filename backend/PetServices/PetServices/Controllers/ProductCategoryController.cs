@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,7 @@ namespace PetServices.Controllers
                 .ToList();
             return Ok(_mapper.Map<List<ProductCategoryDTO>>(productCategories));
         }
+
         [HttpPost("CreateNewProductCategory")]
         public async Task<IActionResult> CreateProCategory(ProductCategoryDTO productCategoryDTO)
         {
@@ -64,6 +66,7 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.InnerException.Message);
             }
         }
+
         [HttpPut("Update")]
         public IActionResult Update(ProductCategoryDTO productCategoryDTO, int procateId)
         {

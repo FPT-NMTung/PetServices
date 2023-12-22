@@ -41,6 +41,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Danh sách bài viết";
                 var json = JsonConvert.SerializeObject(blog);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -78,7 +79,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-
+                ViewBag.Title = "Thêm bài viết";
                 HttpResponseMessage TagResponse = await client.GetAsync(DefaultApiUrl + "Tag/GetAllTag");
 
                 if (TagResponse.IsSuccessStatusCode)
@@ -144,6 +145,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Thêm tag";
                 HttpResponseMessage categoryResponse = await client.GetAsync(DefaultApiUrl + "Tag/GetAllTag");
 
                 if (categoryResponse.IsSuccessStatusCode)
@@ -185,6 +187,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Chỉnh sửa thông tin bài viết";
                 HttpResponseMessage TagResponse = await client.GetAsync(DefaultApiUrl + "Tag/GetAllTag");
 
                 if (TagResponse.IsSuccessStatusCode)
@@ -318,7 +321,8 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-                
+                ViewBag.Title = "Chỉnh sửa thông tin tag";
+
                 /* HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Blog/BlogID/" + blogId);*/
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Tag/TagsID/" + tagId);
 

@@ -28,7 +28,7 @@
                 { "targets": [4], "width": "10%" },
                 { "targets": [5], "width": "9%" },
                 { "targets": [6], "width": "6%" },
-                { "targets": [7], "width": "12%" },
+                //{ "targets": [7], "width": "12%" },
             ],
             "language": {
                 "lengthMenu": "Hiển thị _MENU_ dòng",
@@ -57,7 +57,7 @@
             <th>Số Điện Thoại</th>
             <th>Trạng Thái</th>
             <th>Chi Tiết</th>
-            <th></th>
+            @*<th></th>*@
         </tr>
     </thead>
     <tbody>
@@ -87,9 +87,9 @@
                             <td>
                                 <a class="detail-button" href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
                             </td>
-                            <td>
+                            @*<td>
                                 <a class="completed-button" data-orderid="@pc.OrderId">Hoàn Thành</a>
-                            </td>
+                            </td>*@
                         </tr>
                     }
                 }
@@ -98,7 +98,7 @@
 
             }
         }
-        <script>
+        @*<script>
             // Hàm JavaScript để cập nhật trạng thái đơn hàng
             $(document).ready(function () {
                 // Sử dụng class để chọn button
@@ -118,7 +118,7 @@
                 });
 
             });
-        </script>
+        </script>*@
     </tbody>
     <tfoot>
         @if (ViewBag.ErrorMessage != null)

@@ -77,6 +77,7 @@ namespace FEPetServices.Controllers
         // push to test
         public async Task<IActionResult> Index(int RoomId, List<int> ServiceId, DateTime StartTime, DateTime EndTime, double totalPrice, string note)
         {
+            ViewBag.Title = "Thanh toán";
             // Thônng tin người đặt hàng
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
@@ -178,6 +179,7 @@ namespace FEPetServices.Controllers
             DateTime currentTimeInVietnam = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, vietnamTimeZone);
             try
             {
+                ViewBag.Title = "Thanh toán";
                 if (orderform.Province == null ||
                     orderform.District == null || orderform.Commune == null)
                 {

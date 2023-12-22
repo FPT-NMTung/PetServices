@@ -8,6 +8,10 @@ function initMap() {
     });
 }
 
+function closeMapModal() {
+    document.getElementById('mapModal').style.display = 'none';
+}
+
 $(document).ready(function () {
     // Open modal on button click
     $(".view-map-btn").click(function () {

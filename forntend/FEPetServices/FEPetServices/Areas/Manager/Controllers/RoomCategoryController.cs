@@ -38,6 +38,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Danh sách loại phòng";
                 var json = JsonConvert.SerializeObject(roomCategoryDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -74,6 +75,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Thêm loại phòng mới";
                 if (ModelState.IsValid)
                 {
                     if (image != null && image.Length > 0)
@@ -136,6 +138,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Chỉnh sửa chi tiết loại phòng";
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "RoomCategory/GetRoomCategory/" + roomCategoryId);
                 //HttpResponseMessage response = await client.GetAsync(ApiUrlRoomCategoryDetail + roomCategoryId);
 

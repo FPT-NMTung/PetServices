@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
@@ -98,7 +99,6 @@ namespace PetServices.Controllers
             return Ok(serviceDTO);
         }
 
-
         [HttpPost("AddServiceCategory")]
         public async Task<IActionResult> CreateSerCategories(ServiceCategoryDTO serviceCategoryDTO)
         {
@@ -129,7 +129,6 @@ namespace PetServices.Controllers
             }
         }
 
-        
         [HttpPut("EditServiceCategory")]
         public IActionResult UpdateServiceCategory(ServiceCategoryDTO serviceCategoryDTO, int serCategoriesId)
         {
@@ -190,7 +189,7 @@ namespace PetServices.Controllers
 
 
 
-
+        [Authorize(Roles = "MANAGER")]
         [HttpDelete]
         public IActionResult DeleteServiceCategory(int serCategoriesId)
         {

@@ -20,12 +20,14 @@ namespace FEPetServices.Controllers
         }
         public IActionResult Index()
         {
+            ViewBag.Title = "Đăng ký tài khoản nhân viên";
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Index([FromForm] RegisterDTO registerInfo, List<IFormFile> image)
         {
+            
             foreach (var file in image)
             {
                 string filename = GenerateRandomNumber(5) + file.FileName;

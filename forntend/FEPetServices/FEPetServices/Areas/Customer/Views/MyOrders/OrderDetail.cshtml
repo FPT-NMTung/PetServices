@@ -59,29 +59,29 @@
                                         ) {
                                     <text>active</text>
                                     } text-center" id="step1">
-                                            <i class="fa-solid fa-receipt"></i>
-                                        </li>
+                                                <i class="fa-solid fa-receipt"></i>
+                                            </li>
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Confirmed" || Model.OrderStatus.Trim() == "Processing"
                                         || Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                     } text-center" id="step2">
-                                            <i class="fa-solid fa-check"></i>
-                                        </li>
+                                                <i class="fa-solid fa-check"></i>
+                                            </li>
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Processing" ||  Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                     } text-center" id="step3">
-                                            <i class="fa-solid fa-truck"></i>
-                                        </li>
+                                                <i class="fa-solid fa-truck"></i>
+                                            </li>
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                     }  text-center" id="step4">
-                                            <i class="fa-solid fa-download"></i>
-                                        </li>
+                                                <i class="fa-solid fa-download"></i>
+                                            </li>
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                      }  text-end" id="step5">
-                                            <i class="fa-regular fa-star"></i>
-                                        </li>
+                                                <i class="fa-regular fa-star"></i>
+                                            </li>
                                     </ul>
                                 </div>
                             </div>
@@ -204,21 +204,29 @@
                                             <p style="max-width:450px">@serviceDetail.Service.ServiceName</p>
                                             <p style="font-size:.8rem;"><span>Cân nặng thú cưng: </span>@serviceDetail.Weight Kg</p>
                                             <div>
-                                                <p style="font-size:.8rem; cursor: pointer; color:blue" class="map-button clickable"
-                                                   data-lat="@serviceDetail?.PartnerInfo?.Lat"
-                                                   data-lng="@serviceDetail?.PartnerInfo?.Lng"
-                                                   data-my-lat=""
-                                                   data-my-lng="">
-                                                    Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail?.PartnerInfoId
-                                                </p>
+                                                @if (Model.OrderStatus.Trim() != "Completed")
+                                                {
+                                                    <p style="font-size:.8rem; cursor: pointer; color:blue" class="map-button clickable"
+                                                       data-lat="@serviceDetail?.PartnerInfo?.Lat"
+                                                       data-lng="@serviceDetail?.PartnerInfo?.Lng"
+                                                       data-my-lat=""
+                                                       data-my-lng="">
+                                                        Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - Mnv: @serviceDetail?.PartnerInfoId
+                                                    </p>
+                                                }
+                                                else
+                                                {
+                                                    <p style="font-size:.8rem">
+                                                        Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - Mnv: @serviceDetail?.PartnerInfoId
+                                                    </p>
+                                                }
                                                 <div style="display:flex; align-items:center">
-                                                    <p style="font-size:.8rem;">Đánh giá về nhân viên của chúng tôi :  </p>
                                                     @{
                                                         var partnerName = serviceDetail?.PartnerInfo?.FirstName + " " + serviceDetail?.PartnerInfo?.LastName + " - " + serviceDetail?.PartnerInfoId;
-
                                                         if ((serviceDetail.FeedbackPartnerStatus == null || serviceDetail.FeedbackPartnerStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
                                                         {
-                                                            <div style="margin-bottom:0px; margin-left:.2rem"  class="btn-content-detail">
+                                                            <p style="font-size:.8rem;">Đánh giá về nhân viên của chúng tôi :  </p>
+                                                            <div style="margin-bottom:0px; margin-left:.2rem" class="btn-content-detail">
                                                                 <button class="btn btn-outline-primary" onclick="openPopupPartner('@serviceDetail?.PartnerInfo.ImagePartner', '@partnerName', '@serviceDetail.PartnerInfo.PartnerInfoId', '@serviceDetail.ServiceId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
                                                             </div>
                                                         }
@@ -576,22 +584,22 @@
 
     @*Đánh giá*@
     <script>
-        //Hiện popup đánh giá service
-        function openPopupService(image, serviceName, weight, serviceId, userId, orderId) {
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('popup').style.display = 'block';
+            //Hiện popup đánh giá service
+            function openPopupService(image, serviceName, weight, serviceId, userId, orderId) {
+                document.getElementById('overlay').style.display = 'block';
+                document.getElementById('popup').style.display = 'block';
 
-            document.getElementById('popupImage').src = image;
-            document.getElementById('popupServiceName').innerText = serviceName;
-            document.getElementById('popupServiceInfo').innerText = 'Cân nặng: ' + weight + ' Kg';
+                document.getElementById('popupImage').src = image;
+                document.getElementById('popupServiceName').innerText = serviceName;
+                document.getElementById('popupServiceInfo').innerText = 'Cân nặng: ' + weight + ' Kg';
 
-            document.getElementById('serviceIdInput').value = serviceId;
-            document.getElementById('userIdInput').value = userId;
-            document.getElementById('orderIdInput').value = orderId;
-            document.getElementById('productIdInput').value = null;
-            document.getElementById('roomIdInput').value = null;
-            document.getElementById('partnerIdInput').value = null;
-        }
+                document.getElementById('serviceIdInput').value = serviceId;
+                document.getElementById('userIdInput').value = userId;
+                document.getElementById('orderIdInput').value = orderId;
+                document.getElementById('productIdInput').value = null;
+                document.getElementById('roomIdInput').value = null;
+                document.getElementById('partnerIdInput').value = null;
+            }
 
         //Hiện popup đánh giá product
         function openPopupProduct(image, productName, quantity, productId, userId, orderId, status) {

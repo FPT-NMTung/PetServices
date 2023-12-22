@@ -37,6 +37,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Danh sách sản phẩm";
                 var json = JsonConvert.SerializeObject(productDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product" + "/GetAll");
@@ -70,6 +71,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Thêm sản phẩm mới";
                 HttpResponseMessage proCateResponse = await client.GetAsync(DefaultApiUrl + "ProductCategory/GetAll");
                 if (proCateResponse.IsSuccessStatusCode)
                 {
@@ -136,6 +138,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Chỉnh sửa Thông tin sản phẩm";
                 //goi api de lay thong tin can sua
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product/ProductID/" + proId);
                 //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Product/Add" + proId);

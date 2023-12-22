@@ -205,8 +205,8 @@
             $('#slider-range').slider({
                 range: true,
                 min: 0,
-                max: 100000,
-                values: [parseInt(pricefrom) ? pricefrom : 0, parseInt(priceto) ? priceto : 100000],
+                max: 200000,
+                values: [parseInt(pricefrom) ? pricefrom : 0, parseInt(priceto) ? priceto : 200000],
                 slide: function (event, ui) {
                     var fromprice = ui.values[0].toLocaleString('vi-VN') + 'vnđ';
                     var toprice = ui.values[1].toLocaleString('vi-VN') + 'vnđ';
@@ -249,10 +249,10 @@
 
             if (pricefrom) {
                 var handleFrom = handle.eq(0);
-                var percentageFrom = (parseInt(pricefrom) / 100000) * 100;
+                var percentageFrom = (parseInt(pricefrom) / 200000) * 100;
 
                 if (priceto) {
-                    var percentageTo = (parseInt(priceto) / 100000) * 100;
+                    var percentageTo = (parseInt(priceto) / 200000) * 100;
                     var percentageCenter = percentageTo - percentageFrom;
                 }
                 else {
@@ -273,10 +273,10 @@
 
             if (priceto) {
                 var handleTo = handle.eq(1);
-                var percentageTo = (parseInt(priceto) / 100000) * 100;
+                var percentageTo = (parseInt(priceto) / 200000) * 100;
 
                 if (pricefrom) {
-                    var percentageFrom = (parseInt(pricefrom) / 100000) * 100;
+                    var percentageFrom = (parseInt(pricefrom) / 200000) * 100;
                     var percentageCenter = percentageTo - percentageFrom;
                 }
                 else {
@@ -1280,3 +1280,60 @@ function initMap() {
 
 // Gọi hàm initMap ngay sau khi trang web tải xong
 window.onload = initMap;
+
+window.onload = function () {
+    let startDateTime = document.getElementById("start-datetime");
+    let endDateTime = document.getElementById("end-datetime");
+    let status = document.querySelector(".status");
+
+    let startPicker = flatpickr(startDateTime, {
+        minDate: "today",
+        enableTime: true,
+        time_24hr: true,
+        minTime: new Date().getHours() + 1 + ":00", // Giờ hiện tại + 1 giờ
+        maxTime: "17:00",
+        dateFormat: "m-d-Y H:i",
+        onChange: function (selectedDates, dateStr, instance) {
+            let currentDate = new Date();
+            let tomorrow = new Date(currentDate);
+
+            tomorrow.setDate(currentDate.getDate() + 1);
+            tomorrow.setHours(8, 0, 0, 0);
+
+            if (currentDate.getHours() >= 16) {
+                startPicker.set("minDate", tomorrow);
+            }
+
+            if (selectedDates[0] > currentDate) {
+                startPicker.set("minTime", "08:00");
+            } else {
+                startPicker.set("minTime", currentDate.getHours() + 1 + ":00");
+            }
+
+            endPicker.set("minDate", selectedDates[0]);
+        },
+    });
+
+    let endPicker = flatpickr(endDateTime, {
+        minDate: startPicker.selectedDates[0] || "today",
+        enableTime: true,
+        time_24hr: true,
+        minTime: new Date().getHours() + 1 + ":00", // Giờ hiện tại + 1 giờ
+        maxTime: "17:00",
+        dateFormat: "m-d-Y H:i",
+        onChange: function (selectedDates, dateStr, instance) {
+            let startDate = startPicker.selectedDates[0];
+
+            if (startDate && selectedDates[0].getDate() === startDate.getDate()
+                && selectedDates[0].getMonth() === startDate.getMonth()
+                && selectedDates[0].getFullYear() === startDate.getFullYear()) {
+                if (startDate.getHours() >= 16) {
+                    startPicker.set("minDate", tomorrow);
+                }
+                endPicker.set("minTime", startDate.getHours() + 1 + ":00");
+            } else {
+                endPicker.set("minTime", "8:00");
+            }
+        },
+    });
+}

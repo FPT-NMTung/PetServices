@@ -38,6 +38,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         //Waiting
         public async Task<IActionResult> ListOrderPartner()
         {
+            ViewBag.Title = "Danh sách đơn hàng";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             HttpResponseMessage repId = await client.GetAsync(DefaultApiUrl + "Partner/" + email);
@@ -79,6 +80,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         }
         public async Task<IActionResult> ListOrderPartnerSpecial()
         {
+            ViewBag.Title = "Danh sách đơn hàng";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             HttpResponseMessage repId = await client.GetAsync(DefaultApiUrl + "Partner/" + email);
@@ -121,6 +123,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         //Complete
         public async Task<IActionResult> ListOrderPartnerComplete()
         {
+            ViewBag.Title = "Danh sách đơn hàng";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             HttpResponseMessage repId = await client.GetAsync(DefaultApiUrl + "Partner/" + email);
@@ -165,6 +168,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         //Received
         public async Task<IActionResult> ListOrderPartnerReceived()
         {
+            ViewBag.Title = "Danh sách đơn hàng";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             HttpResponseMessage repId = await client.GetAsync(DefaultApiUrl + "Partner/" + email);
@@ -210,6 +214,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         //Processing
         public async Task<IActionResult> ListOrderPartnerProcessing()
         {
+            ViewBag.Title = "Danh sách đơn hàng";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             HttpResponseMessage repId = await client.GetAsync(DefaultApiUrl + "Partner/" + email);
@@ -255,6 +260,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderPartnerDetail(int orderId)
         {
+            ViewBag.Title = "Chi tiết đơn hàng";
             //HttpResponseMessage reasonResponse = await client.GetAsync("https://localhost:7255/api/Reason/GetAll");
             HttpResponseMessage reasonResponse = await client.GetAsync(DefaultApiUrl + "Reason/GetAll");
             if (reasonResponse.IsSuccessStatusCode)
@@ -294,6 +300,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         [HttpPost]
         public async Task<IActionResult> OrderPartnerDetail(int orderId, [FromForm] Status status, [FromForm] ReasonOrdersForm reasonOrders)
         {
+            ViewBag.Title = "Chi tiết đơn hàng";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             if (status.newStatus == "Waiting")

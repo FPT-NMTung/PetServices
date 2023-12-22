@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
@@ -84,7 +85,6 @@ namespace PetServices.Controllers
             return Ok(serviceDTO);
         }
 
-
         [HttpPost("CreateService")]
         public async Task<IActionResult> CreateService(ServiceDTO serviceDTO)
         {
@@ -131,7 +131,7 @@ namespace PetServices.Controllers
             }
 
             // Check thời gian lớn hơn 1 giờ
-            if (serviceDTO.Time < 60)
+            if (serviceDTO.Time < 1)
             {
                 string errorMessage = "Thời gian thực hiện dịch vụ phải lớn hơn hoặc bằng 1 giờ!";
                 return BadRequest(errorMessage);
@@ -167,7 +167,6 @@ namespace PetServices.Controllers
   
         }
 
-        
         [HttpPut("UpdateServices")]
         public async Task<IActionResult> UpdateServce(ServiceDTO serviceDTO, int serviceId)
         {
@@ -208,13 +207,7 @@ namespace PetServices.Controllers
                 string errorMessage = "Thời gian phải lớn hơn 0!";
                 return BadRequest(errorMessage);
             }
-
-            // Check thời gian lớn hơn 1 giờ
-            if (serviceDTO.Time < 60)
-            {
-                string errorMessage = "Thời gian thực hiện dịch vụ phải lớn hơn hoặc bằng 1 giờ!";
-                return BadRequest(errorMessage);
-            }
+           
             var serviceCategory = _context.ServiceCategories.FirstOrDefault(s => s.SerCategoriesId == serviceDTO.SerCategoriesId);
             if (serviceCategory == null)
             {
@@ -287,7 +280,6 @@ namespace PetServices.Controllers
 
             return Ok(_mapper.Map<List<ServiceDTO>>(services));
         }
-
 
         [HttpDelete]
         public IActionResult DeleteServce(int serviceId)
