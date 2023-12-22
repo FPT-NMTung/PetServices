@@ -654,9 +654,9 @@ namespace PetServices.Controllers
                 string errorMessage = "Nội dung không được để trống!";
                 return BadRequest(errorMessage);
             }
-            if (feedbackDTO.Content.Length < 20)
+            if (feedbackDTO.Content.Length <= 5)
             {
-                string errorMessage = "Nội dung không được viết dưới 20 kí tự!";
+                string errorMessage = "Nội dung không được viết dưới 5 kí tự!";
                 return BadRequest(errorMessage);
             }
             if (string.IsNullOrEmpty(feedbackDTO.NumberStart.ToString()))
