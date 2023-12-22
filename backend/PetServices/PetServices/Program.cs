@@ -39,13 +39,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
-
-    // Add JWT bearer token authorization in Swagger UI
     var securityScheme = new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -78,6 +75,13 @@ var mapperConfig = new MapperConfiguration(mc =>
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ManaOnly", policy => policy.RequireRole("MANAGER"));
+    options.AddPolicy("CusOnly", policy => policy.RequireRole("CUSTOMER"));
+    options.AddPolicy("PartnerOnly", policy => policy.RequireRole("PARTNER"));
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("ADMIN"));
+});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

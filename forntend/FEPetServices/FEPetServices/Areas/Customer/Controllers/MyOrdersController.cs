@@ -32,6 +32,7 @@ namespace FEPetServices.Areas.Customer.Controllers
 
         private async Task<IActionResult> GetOrders(string orderStatus, int page, int pageSize)
         {
+            ViewBag.Title = "Danh sách đơn hàng";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
@@ -85,13 +86,13 @@ namespace FEPetServices.Areas.Customer.Controllers
 
         private async Task<IActionResult> GetOrdersNoneStatus(string orderStatus, int page, int pageSize)
         {
+            
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
             HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderstatus/{orderStatus}?email={email}");
             if (!responsecheck.IsSuccessStatusCode)
             {
-
                 return View(); 
             }
             else
@@ -128,14 +129,14 @@ namespace FEPetServices.Areas.Customer.Controllers
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
-                        //return new ErrorResult("");
-                        return View();
+                        return new ErrorResult("");
+                        //return View();
 
                     }
                     else
                     {
-                        return new ErrorResult("");
-                        //return View();
+                        //return new ErrorResult("");
+                        return View();
                     }
                 }
             }
@@ -165,12 +166,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderDetail(int id)
         {
-            HttpResponseMessage reasonResponse = await _client.GetAsync(DefaultApiUrl + "Reason/GetAll");
-            if (reasonResponse.IsSuccessStatusCode)
-            {
-                var reaCategories = await reasonResponse.Content.ReadFromJsonAsync<List<ReasonDTO>>();
-                ViewBag.Reasons = new SelectList(reaCategories, "ReasonId", "ReasonTitle");
-            }
+            ViewBag.Title = "Chi tiết đơn hàng";
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
             if (response.IsSuccessStatusCode)
             {

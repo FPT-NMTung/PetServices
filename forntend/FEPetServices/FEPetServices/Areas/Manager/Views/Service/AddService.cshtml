@@ -1,82 +1,82 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     @*<link rel="stylesheet" href="/css/Service/Service.css">*@
-<link rel="stylesheet" href="/css/RoomCategory.css"></link>
-<link href="~/css/toastNotification.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/RoomCategory.css"></link>
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
 </head>
 <body>
-<h2 style="font-size: 40px; font-weight: bold; text-align:center">Thêm Dịch Vụ Thú Cưng</h2>
-<div class="container">
-  <form asp-action="AddService" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
-    <div class="row">
-      <div class="col-25">
-        <label for="ServiceName">Tên Dịch Vụ<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-      </div>
-      <div class="col-75">
-        <input type="text" id="ServiceName" name="ServiceName" placeholder="Tên Dịch Vụ.." required>
-        <div style="color:red" class="error-message" id="fname-error-message"></div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-25">
-        <label for="image">Ảnh<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-      </div>
-      <div class="col-75">
-        <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" required accept="image/*">
-        <img src="~/img/icon/addicon.png" style="float: left;" id="imagePreview" >
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-25">
-        <label for="Price">Giá<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-      </div>
-      <div class="col-75">
-        <input type="number" id="Price" name="Price" placeholder="Giá tiền" min="0" required>
-        <div style="color:red" class="error-message" id="price-error-message"></div> 
-      </div>
-    </div>
-    <div class="row">
-        <div class="col-25">
-            <label for="Time">Thời gian làm dịch vụ<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-        </div>
-        <div class="col-75">
-            <input type="number" id="Time" name="Time" placeholder="Nhập giờ" min="0" step="any" required>
-            <div style="color:red" class="error-message" id="time-error-message"></div>
-        </div>
-    </div>
-    <div class="row">
-      <div class="col-25">
-        <label for="SerCategoriesId">Loại Dịch Vụ <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i></label>
-      </div>
-      <div class="col-75">
+    <h2 style="font-size: 40px; font-weight: bold; text-align:center">Thêm Dịch Vụ Thú Cưng</h2>
+    <div class="container">
+        <form asp-action="AddService" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <div class="row">
+                <div class="col-25">
+                    <label for="ServiceName">Tên Dịch Vụ<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="ServiceName" name="ServiceName" placeholder="Tên Dịch Vụ.." required>
+                    <div style="color:red" class="error-message" id="fname-error-message"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="image">Ảnh<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" required accept="image/*">
+                    <img src="~/img/icon/addicon.png" style="float: left;" id="imagePreview">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="Price">Giá<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <input type="number" id="Price" name="Price" placeholder="Giá tiền" min="0" required style="width:100%;height:100%;border-radius:4px;border: 1px solid #ccc;">
+                    <div style="color:red" class="error-message" id="price-error-message"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="Time">Thời gian làm dịch vụ<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <input type="number" id="Time" name="Time" placeholder="Nhập giờ" min="0" step="any" required style="width:100%;height:100%;border-radius:4px;border: 1px solid #ccc;">
+                    <div style="color:red" class="error-message" id="time-error-message"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="SerCategoriesId">Loại Dịch Vụ <i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i></label>
+                </div>
+                <div class="col-75">
                     @if (ViewBag.Categories != null)
                     {
-                     <select id="SerCategoriesId" name="SerCategoriesId" required>
-                     <option value="">Chọn loại dịch vụ</option>
+                        <select id="SerCategoriesId" name="SerCategoriesId" required>
+                            <option value="">Chọn loại dịch vụ</option>
                             @foreach (var category in ViewBag.Categories)
                             {
-                                            <option value="@category.Value">@category.Text</option>
+                                <option value="@category.Value">@category.Text</option>
                             }
-                    </select>
+                        </select>
                     }
                     else
                     {
                         <span class="text-danger">Error: Service Categories data not available.</span>
                     }
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-25">
-        <label for="Desciptions">Mô Tả<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-      </div>
-      <div class="col-75">
-        <textarea id="Desciptions" name="Desciptions" placeholder="Nội Dung .." style="height:200px" required></textarea>
-        <div style="color:red" class="error-message" id="subject-error-message"></div>
-      </div>
-    </div>
-     <div class="row">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="Desciptions">Mô Tả<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <textarea id="Desciptions" name="Desciptions" placeholder="Nội Dung .." style="height:200px" required></textarea>
+                    <div style="color:red" class="error-message" id="subject-error-message"></div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-25">
                 </div>
                 <div class="col-75 btn-row">
@@ -87,22 +87,30 @@
                         <input type="submit" value="Thêm dịch vụ">
                     </div>
                 </div>
-     </div>
-  </form>
-</div>
-<style>
-    img{
-        width:100px;
-        height:100px;
-    }
-.fa-asterisk {
-            color: red;
-            font-size:6px;
-            padding-top:20px;
-            margin-right:10px;
+            </div>
+        </form>
+    </div>
+    <style>
+        img {
+            width: 100px;
+            height: 100px;
         }
 
-</style>
-<script src="~/js/Service.js"></script>
+        .fa-asterisk {
+            color: red;
+            font-size: 6px;
+            padding-top: 20px;
+            margin-right: 10px;
+        }
+
+        input[type=number], select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+    </style>
+    <script src="~/js/Service.js"></script>
 </body>
 </html>

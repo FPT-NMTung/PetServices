@@ -25,6 +25,7 @@ namespace FEPetServices.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Title = "Đăng ký tài khoản";
             return View();
         }
 
@@ -33,6 +34,7 @@ namespace FEPetServices.Controllers
         {
             try
             {
+                ViewBag.Title = "Đăng ký tài";
                 if (registerInfo.Password.Length < 8)
                 {
                     ViewBag.ErrorToast = "Mật khẩu phải trên hoặc bằng 8 ký tự";

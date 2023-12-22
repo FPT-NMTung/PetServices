@@ -35,6 +35,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            ViewBag.Title = "Thống kê doanh số";
             DashBoardPartner dashBoardPartner = new DashBoardPartner()
             {
                 FeedbackCustomer = new List<FeedbackForm>()

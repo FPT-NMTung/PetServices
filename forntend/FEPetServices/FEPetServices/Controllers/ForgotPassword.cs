@@ -13,12 +13,14 @@ namespace FEPetServices.Controllers
     {
         public IActionResult Index()
         {
+            ViewBag.Title = "Quên mật khẩu";
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> SendResetPasswordEmail(string email)
         {
+            ViewBag.Title = "Quên mật khẩu";
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new System.Uri("https://pet-service-api.azurewebsites.net/"); 

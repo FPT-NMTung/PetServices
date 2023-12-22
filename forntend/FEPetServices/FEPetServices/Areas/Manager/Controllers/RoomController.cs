@@ -49,6 +49,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Danh sách phòng";
                 var json = JsonConvert.SerializeObject(roomDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -146,6 +147,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Thêm phòng mới";
                 HttpResponseMessage roomCategoryResponse = await client.GetAsync(DefaultApiUrl + "Room/GetRoomCategory");
                 //HttpResponseMessage roomCategoryResponse = await client.GetAsync(ApiUrlRoomCategoryList);
 
@@ -230,6 +232,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Chỉnh sửa chi tiết phòng";
                 HttpResponseMessage serviceResponse = await client.GetAsync(DefaultApiUrl + "Room/GetAllService");
                 //HttpResponseMessage serviceResponse = await client.GetAsync(ApiUrlServiceList);
 

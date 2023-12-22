@@ -27,6 +27,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
         public async Task<IActionResult> Index()
         {
+
             DashBoard dashboard = new DashBoard
             {
                 FeedbackRoom = new List<FeedbackForm>(),
@@ -35,6 +36,7 @@ namespace FEPetServices.Areas.Manager.Controllers
             };
             try
             {
+                ViewBag.Title = "Thống kê doanh số";
                 // số khách hàng mới trong tháng 
                 HttpResponseMessage NumberCustomerInMonthResponse = await client.GetAsync(DefaultApiUrl + "Dashboard/GetNumberCustomerInMonth");
 

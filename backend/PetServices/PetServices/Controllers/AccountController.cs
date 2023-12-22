@@ -541,47 +541,6 @@ namespace PetServices.Controllers
             return Ok("Đăng ký thành công! Vui lòng chờ đợi quản lý xác nhận tài khoản của bạn trước khi đăng nhập");
         }
 
-
-        /*[HttpPost("ForgotPassword")]
-        public async Task<ActionResult> ForgotPassword([FromBody] string email)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(email))
-                {
-                    return BadRequest("Email is required.");
-                }
-
-                var result = await _context.Accounts
-                    .Where(i => i.Email == email)
-                    .Select(i => new { i.AccountId })
-                    .FirstOrDefaultAsync();
-
-                if (result == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    string guid = Guid.NewGuid().ToString();
-                    string convert = Convert.ToBase64String(Encoding.UTF8.GetBytes(guid));
-                    string pass = convert.Substring(0, 15);
-
-                    Account account = await _context.Accounts.SingleAsync(i => i.AccountId == result.AccountId);
-                    account.Password = pass;
-
-                    _context.Entry(account).State = EntityState.Modified;
-                    _context.SaveChanges();
-                    var json = new { Gmail = account.Email, NewPass = pass };
-                    return Ok(json);
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("An error occurred.");
-            }
-        }*/
-
         [HttpPost("ForgotPassword")]
         public async Task<ActionResult> ForgotPassword([FromBody] string email)
         {

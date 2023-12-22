@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,7 @@ namespace PetServices.Controllers
 
             return Ok(_mapper.Map<BlogDTO>(blog));
         }
+
 
         [HttpPost("CreateBlog")]
         public async Task<IActionResult> CreateBlog(BlogDTO blog)
@@ -116,7 +118,7 @@ namespace PetServices.Controllers
             return Ok(blog);
         }
 
-
+      
         [HttpDelete]
         public IActionResult Delete(int blogId)
         {
@@ -136,6 +138,8 @@ namespace PetServices.Controllers
             }
             return Ok(blog);
         }
+
+
         [HttpGet("GetBlogsByTagId/{tagId}")]
         public IActionResult GetBlogsByTagId(int tagId)
         {

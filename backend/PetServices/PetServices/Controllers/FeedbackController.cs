@@ -707,7 +707,8 @@ namespace PetServices.Controllers
                     }
                 }
 
-                if (feedbackDTO.PartnerId != null && feedbackDTO.ServiceId != null){
+                if (feedbackDTO.PartnerId != null && feedbackDTO.ServiceId != null)
+                {
                     feedbackDTO.ServiceId = null;
                 }
 

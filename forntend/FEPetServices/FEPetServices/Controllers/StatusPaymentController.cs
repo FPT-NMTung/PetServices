@@ -65,6 +65,7 @@ namespace FEPetServices.Controllers
 
         public async Task<IActionResult> Index()
         {
+            ViewBag.Title = "Thanh toán";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 

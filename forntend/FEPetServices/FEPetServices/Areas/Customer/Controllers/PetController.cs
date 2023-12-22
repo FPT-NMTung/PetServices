@@ -1,4 +1,5 @@
 ﻿using FEPetServices.Form;
+using FEPetServices.Models.ErrorResult;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -27,13 +28,12 @@ namespace FEPetServices.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> PetInfo(int petId)
+        public async Task<IActionResult> PetInfo()
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "PetInfo/" + email);
-            //HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlPet + "/" + email);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -57,6 +57,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         {     
             try
             {
+                ViewBag.Title = "Thêm thông tin thú cưng";
                 ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
                 string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
                 HttpResponseMessage PetInfo = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/PetInfo/" + email);
@@ -85,13 +86,13 @@ namespace FEPetServices.Areas.Customer.Controllers
 
                     var json = JsonConvert.SerializeObject(petInfo);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/PetInfo/CreatePet", content);
-                    //HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "PetInfo/CreatePet", content);
+                    //HttpResponseMessage response = await client.PostAsync("https://localhost:7255/api/PetInfo/CreatePet", content);
+                    HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "PetInfo/CreatePet", content);
 
                     if (response.IsSuccessStatusCode)
                     {
                         TempData["SuccessToast"] = "Thêm thông tin thú cưng thành công!";
-                        return  View(petInfo);
+                        return  RedirectToAction("PetInfo","Pet");
                     }
                     else
                     {
@@ -127,7 +128,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         {
             try
             {
-
+                ViewBag.Title = "Chỉnh sửa thông tin thú cưng";
                 //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/PetInfo/PetID/" + petId);
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "PetInfo/PetID/" + petId);
 
@@ -224,7 +225,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeletePet(int petId)
+        /*public async Task<IActionResult> DeletePet(int petId)
         {
             try
             {
@@ -232,22 +233,76 @@ namespace FEPetServices.Areas.Customer.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessToast"] = "Xóa thông tin thú cưng thành công!";
-                    return RedirectToAction("PetInfo", "Pet"); 
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return Json(new { success = true, message = "Xoá thú cưng thành công."});
+                    }
+                    else
+                    {
+                        return new ErrorResult("");
+                    }
                 }
                 else
                 {
-                    TempData["ErrorToast"] = "Xóa thông tin thú cưng thất bại. Vui lòng thử lại sau.";
-                    return RedirectToAction("PetInfo", "Pet"); // Redirect to a suitable page after deletion failure
+                    return new ErrorResult("");
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
-                return RedirectToAction("PetInfo", "Pet"); // Redirect to a suitable page in case of exception
+                return new ErrorResult("");
+            }
+        }*/
+
+        public async Task<IActionResult> DeletePet(int petId)
+        {
+            try
+            {
+                HttpResponseMessage responseForImage = await client.GetAsync(DefaultApiUrl + "PetInfo/PetID/" + petId);
+
+                if (responseForImage.IsSuccessStatusCode)
+                {
+                    // Đọc nội dung trả về từ API
+                    var petInfoContent = await responseForImage.Content.ReadAsStringAsync();
+
+                    // Giải mã JSON thành đối tượng PetInfo hoặc cấu trúc dữ liệu tương tự
+                    var petInfo = JsonConvert.DeserializeObject<PetInfo>(petInfoContent);
+
+                    // Xác định tên file hoặc danh sách các tệp cần xóa từ thông tin thú cưng
+                    // Giả sử tên file ảnh lưu trong trường ImagePet của đối tượng petInfo
+                    string imageNameToDelete = petInfo.ImagePet; // Thay bằng trường chứa tên file ảnh của thú cưng
+
+                    // Đường dẫn đầy đủ đến file ảnh cần xóa
+                    string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Pet/", imageNameToDelete);
+
+                    // Kiểm tra xem file ảnh tồn tại trước khi xóa
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        // Xóa file ảnh
+                        System.IO.File.Delete(imagePath);
+                    }
+                }
+                HttpResponseMessage response = await client.DeleteAsync(DefaultApiUrl + "PetInfo/Delete?petId=" + petId);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return Json(new { success = true, message = "Xoá thú cưng thành công." });
+                    }
+                    else
+                    {
+                        return new ErrorResult("");
+                    }
+                }
+                else
+                {
+                    return new ErrorResult("");
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ErrorResult("");
             }
         }
-
-
     }
 }
