@@ -137,7 +137,7 @@
                                         <div class="axil-post-meta">
                                             <div class="post-meta-content">
                                                 <ul class="post-meta-list">
-                                                    <li>@blog.PublisheDate</li>
+                                                    <li>@blog.PublisheDate?.ToString("dd/MM/yyyy")</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -164,7 +164,7 @@
                                         <div class="content">
                                             <h6 class="title"><a href="/ProductList/Detail?proId=@product.ProductId">@product.ProductName</a></h6>
                                             <div class="product-meta-content">
-                                                <span class="woocommerce-Price-amount amount">@product.Price VNĐ</span>
+                                                <span class="woocommerce-Price-amount amount">@($"{product.Price:n0}".Replace(",", ".")) VNĐ</span>
                                                 <p class="price sold">Đã bán: @product.QuantitySold</p>
                                             </div>
                                         </div>

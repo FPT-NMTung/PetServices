@@ -89,7 +89,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
                 }
 
-                if (blog.Heading == null || blog.ImageUrl==null||blog.PageTile==null) { return View(); }
+                if (blog.Heading == null ||blog.PageTile==null) { return View(); }
                 foreach (var file in image)
                 {
                     string filename = GenerateRandomNumber(5) + file.FileName;
@@ -101,6 +101,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 blog.Status = true;
+                blog.PublisheDate = DateTime.Now;
+
 
                 var json = JsonConvert.SerializeObject(blog);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");

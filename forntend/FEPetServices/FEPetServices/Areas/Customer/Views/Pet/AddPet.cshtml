@@ -23,7 +23,7 @@
         <label for="image">Ảnh<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
       </div>
       <div class="col-75">
-        <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" required>
+        <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px" accept="image/*" required>
                     @if (@Model?.ImagePet == null)
                     {
                         <img src="~/img/icon/addicon.png" style="float: left;" id="imagePreview" >
@@ -98,7 +98,7 @@
     </div>
     <div class="row">
       <div class="btn-group col-2">
-         <a class="btn btn-primary btn_a" type="submit" value="Cancel" href="~/Customer/MenuCustomer/PetInfo" class="cancel">Trở lại</a>
+         <a class="btn btn-primary btn_a" type="submit" value="Cancel" href="~/Customer/Pet/PetInfo" class="cancel">Trở lại</a>
       </div>
       <div class="col-10">
         <input class="btn btn-primary" type="submit" value="Thêm thú cưng mới">

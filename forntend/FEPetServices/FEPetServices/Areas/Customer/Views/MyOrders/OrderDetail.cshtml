@@ -10,6 +10,7 @@
     <link href="~/css/map.css" rel="stylesheet" />
     <link href="~/css/OrderDetail.css" rel="stylesheet" />
     <link href="~/css/orders/detail.css" rel="stylesheet" />
+
 </head>
 @{
     var isStep5ActiveProduct = 0;
@@ -380,8 +381,43 @@
                 }
             </div>
         }
-    </div>
 
+        @if ((Model.OrderStatus.Trim() == "Placed" || Model.OrderStatus.Trim() == "Packaging" || Model.OrderStatus.Trim() == "Confirmed") && !Model.StatusPayment)
+        {
+            <div class="card-body" style="display:block;background-color:rgba(0, 0, 0, 0.03); border-radius:0px">
+                <form method="post" asp-controller="MyOrders" asp-action="OrderDetail"> 
+
+                    <input type="hidden" name="Id" value="@Model?.OrderId" />
+                    <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
+
+                    <div class="form-check form-check-inline" style="padding: 0;">
+                        <button class="btn btn-danger" type="button" onclick="handleCancelledChange()">
+                            Hủy Đơn
+                        </button>
+                    </div>
+
+                    <!-- Popup -->
+                    <div id="cancelOrderPopup" class="custom-popup">
+                        <div class="popup-content">
+                            <span class="close" onclick="closeCancelOrderPopup()">&times;</span>
+                            <h5>Hủy Đơn</h5>
+                            <input name="newStatus" value="Cancelled" type="hidden" />
+                            <div>
+                                <label for="title">Tiêu Đề:</label>
+                                <input type="text" id="ReasonOrderTitle" name="ReasonOrderTitle" style="width:100%" placeholder="Nhập Tiêu Đề">
+                            </div>
+                            <div>
+                                <label for="description">Mô Tả:</label>
+                                <textarea id="ReasonOrderDescription" name="ReasonOrderDescription" style="width:100%" placeholder="Nhập Mô Tả"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Xác nhận Hủy Đơn</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        }
+
+    </div>
     <div class="popup">
         <div id="overlay" class="overlay"></div>
         <div class="feedback popup-container" id="popup">
@@ -764,6 +800,34 @@
             }
         });
     </script>
+    @*Hủy đơn*@
+    <script>
+        function openCancelOrderPopup() {
+            document.getElementById('cancelOrderPopup').style.display = 'block';
+        }
 
+        function closeCancelOrderPopup() {
+            document.getElementById('cancelOrderPopup').style.display = 'none';
+        }
+    </script>
+    <script>
+        function handleCancelledChange() {
+            // Hiển thị popup khi nút được nhấn
+            openCancelOrderPopup();
+
+            // Thiết lập giá trị "Cancelled" cho lựa chọn newStatus (hoặc thực hiện các hành động cần thiết)
+            var newStatusInput = document.querySelector('input[name="newStatus"]');
+            if (newStatusInput) {
+                newStatusInput.value = 'Cancelled';
+            }
+
+            // Hiển thị hoặc ẩn phần lý do hủy đơn tùy thuộc vào giá trị chọn
+            var reasonSelectDiv = document.getElementById('reasonSelect');
+            var lydoKhacDiv = document.getElementById('lydoKhac');
+
+            reasonSelectDiv.style.display = 'block';
+            lydoKhacDiv.style.display = 'block';
+        }
+    </script>
 </body>
 </html>
