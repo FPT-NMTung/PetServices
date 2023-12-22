@@ -340,6 +340,46 @@
         </div>
     </main>
 
+    
+    <script>
+        var roomcategory = "@(ViewBag.roomcategory)";
+        var sortby = "@(ViewBag.sortby)";
+        var roomname = "@(ViewBag.roomname)";
+        var pricefrom = "@(ViewBag.pricefrom)";
+        var priceto = "@(ViewBag.priceto)";
+        var startdate = "@(ViewBag.startdate)";
+        var enddate = "@(ViewBag.enddate)";
+    </script>
+
+   
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script src="~/assets/js/vendor/modernizr.min.js"></script>
+<!-- jQuery JS -->
+<script src="~/assets/js/vendor/jquery.js"></script>
+<!-- Bootstrap JS -->
+<script src="~/assets/js/vendor/popper.min.js"></script>
+<script src="~/assets/js/vendor/bootstrap.min.js"></script>
+<script src="~/assets/js/vendor/slick.min.js"></script>
+<script src="~/assets/js/vendor/js.cookie.js"></script>
+<!-- <script src="~/assets/js/vendor/jquery.style.switcher.js"></script> -->
+<script src="~/assets/js/vendor/jquery-ui.min.js"></script>
+<script src="~/assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
+<script src="~/assets/js/vendor/jquery.countdown.min.js"></script>
+<script src="~/assets/js/vendor/sal.js"></script>
+<script src="~/assets/js/vendor/jquery.magnific-popup.min.js"></script>
+<script src="~/assets/js/vendor/imagesloaded.pkgd.min.js"></script>
+<script src="~/assets/js/vendor/isotope.pkgd.min.js"></script>
+<script src="~/assets/js/vendor/counterup.js"></script>
+<script src="~/assets/js/vendor/waypoints.min.js"></script>
+<!-- Main JS -->
+
+<script src="~/js/RoomCustomer.js"></script>
+<script src="~/js/flatpickr.js"></script>
+
     @*check nhập thông tin ngày bookk phòng ms dược submit *@
     <script>
         function kiemTra() {
@@ -578,41 +618,5 @@
             });
         });
     </script>
-
-    <script>
-        var roomcategory = "@(ViewBag.roomcategory)";
-        var sortby = "@(ViewBag.sortby)";
-        var roomname = "@(ViewBag.roomname)";
-        var pricefrom = "@(ViewBag.pricefrom)";
-        var priceto = "@(ViewBag.priceto)";
-        var startdate = "@(ViewBag.startdate)";
-        var enddate = "@(ViewBag.enddate)";
-    </script>
-</body>
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-<script src="~/assets/js/vendor/modernizr.min.js"></script>
-<!-- jQuery JS -->
-<script src="~/assets/js/vendor/jquery.js"></script>
-<!-- Bootstrap JS -->
-<script src="~/assets/js/vendor/popper.min.js"></script>
-<script src="~/assets/js/vendor/bootstrap.min.js"></script>
-<script src="~/assets/js/vendor/slick.min.js"></script>
-<script src="~/assets/js/vendor/js.cookie.js"></script>
-<!-- <script src="~/assets/js/vendor/jquery.style.switcher.js"></script> -->
-<script src="~/assets/js/vendor/jquery-ui.min.js"></script>
-<script src="~/assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
-<script src="~/assets/js/vendor/jquery.countdown.min.js"></script>
-<script src="~/assets/js/vendor/sal.js"></script>
-<script src="~/assets/js/vendor/jquery.magnific-popup.min.js"></script>
-<script src="~/assets/js/vendor/imagesloaded.pkgd.min.js"></script>
-<script src="~/assets/js/vendor/isotope.pkgd.min.js"></script>
-<script src="~/assets/js/vendor/counterup.js"></script>
-<script src="~/assets/js/vendor/waypoints.min.js"></script>
-<!-- Main JS -->
-
-<script src="~/js/RoomCustomer.js"></script>
-<script src="~/js/flatpickr.js"></script>
 
 </html>
