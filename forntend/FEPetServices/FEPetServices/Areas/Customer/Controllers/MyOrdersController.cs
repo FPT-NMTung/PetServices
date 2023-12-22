@@ -1,7 +1,9 @@
-﻿using FEPetServices.Form.OrdersForm;
+﻿using FEPetServices.Form;
+using FEPetServices.Form.OrdersForm;
 using FEPetServices.Models.ErrorResult;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -176,6 +178,34 @@ namespace FEPetServices.Areas.Customer.Controllers
                 };
                 OrderForm orderDetail = System.Text.Json.JsonSerializer.Deserialize<OrderForm>(responseContent, options);
                 return View(orderDetail);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> OrderDetail(int id, [FromForm] Status status, [FromForm] ReasonOrdersForm reasonOrders)
+        {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+            if (status.newStatus == "Cancelled")
+            {
+                status.newStatusProduct = "Cancelled";
+                status.newStatusService = "Cancelled";
+            }
+            //HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
+            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "Order/changeStatus?Id=" + id, status);
+            reasonOrders.OrderId = id;
+
+            reasonOrders.EmailReject = email;
+
+            HttpResponseMessage responseReject = await _client.PostAsJsonAsync(DefaultApiUrl + "ReasonOrder", reasonOrders);
+            if (response.IsSuccessStatusCode || responseReject.IsSuccessStatusCode)
+            {
+                TempData["SuccessToast"] = "Cập nhật thành công";
+                return RedirectToAction("OrderDetail", new { id = id });
             }
             else
             {
