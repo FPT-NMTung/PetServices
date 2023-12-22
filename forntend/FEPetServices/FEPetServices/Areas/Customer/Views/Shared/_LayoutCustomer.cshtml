@@ -7,7 +7,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+    <title>PetService | @ViewBag.Title</title>
     @* Thư viện chung // *@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
           integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
@@ -26,7 +26,8 @@
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-    <link rel="shortcut icon" type="image/x-icon" href="~/img/icon/icon1.png">
+    <link rel="shortcut icon" type="image/x-icon" href="~/img/icon/logo.png">
+
     <link href="~/css/toastNotification.css" rel="stylesheet" />
     <link href="~/css/menuCustomer.css" rel="stylesheet" />
 </head>
@@ -44,12 +45,13 @@
         
         <div class="card overflow-hidden">
             <div class="row no-gutters row-bordered row-border-light">
-                <div class="col-md-3 pt-0">
+                <div class="col-md-3 pt-0" style="margin: 20px 0px;">
                     <div class="list-group list-group-flush account-settings-links">
                         <a class="list-group-item" href="~/Customer/MenuCustomer/Information">Thông tin cá nhân</a>
                         <a class="list-group-item" href="~/Customer/MenuCustomer/ChangePassword">Đổi mật khẩu</a>
-                        <a class="list-group-item" href="~/Customer/MenuCustomer/PetInfo">Thông tin thú cưng</a>
+                        <a class="list-group-item" href="~/Customer/Pet/PetInfo">Thông tin thú cưng</a>
                         <a class="list-group-item" href="~/Customer/MyOrders/AllOrders?orderStatus=All&page=1&pageSize=5">Đơn đặt hàng</a>
+                        <a class="list-group-item" href="~/Customer/MyOrdersRoom/Index?orderStatus=All&page=1&pageSize=5">Phòng đã đặt</a>
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -59,6 +61,7 @@
         </div>
     </div>
 
+    @*Toast notification design*@
     <div id="toast"></div>
     @*Start - Base TempData*@
     @if (!string.IsNullOrEmpty(TempData["SuccessToast"] as string))
@@ -77,8 +80,16 @@
             });
         </script>
     }
+    @if (!string.IsNullOrEmpty(TempData["WatingToast"] as string))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showWatingToast();
+            });
+        </script>
+    }
     @*End - Base *@
-     @*-------------------------------------------------------*@
+    @*-------------------------------------------------------*@
     @*Start - Loading data TempData*@
     @if (!string.IsNullOrEmpty(TempData["SuccessLoadingDataToast"] as string))
     {
@@ -97,7 +108,7 @@
         </script>
     }
     @*End - Loading data TempData*@
-     @*-------------------------------------------------------*@
+    @*-------------------------------------------------------*@
     @*Start - Login TempData*@
     @if (!string.IsNullOrEmpty(TempData["SuccessLoginToast"] as string))
     {
@@ -108,7 +119,7 @@
         </script>
     }
     @*End - Login TempData*@
-     @*-------------------------------------------------------*@
+    @*-------------------------------------------------------*@
     @*Start - Base ViewBag*@
     @if (!string.IsNullOrEmpty(ViewBag.SuccessToast))
     {
@@ -128,6 +139,8 @@
     }
     @*End - Base ViewBag*@
     @*-------------------------------------------------------*@
+
+
     <script>
         @*Start - Base TempData*@
             function showSuccessToast() {
@@ -138,14 +151,22 @@
                     duration: 2000
                 });
             }
-            function showErrorToast() {
-                toast({
-                    title: 'Thất bại',
-                    message: '@TempData["ErrorToast"]',
-                    type: 'error',
-                    duration: 2000
-                });
-            }
+        function showErrorToast() {
+            toast({
+                title: 'Thất bại',
+                message: '@TempData["ErrorToast"]',
+                type: 'error',
+                duration: 2000
+            });
+        }
+        function showWatingToast() {
+            toast({
+                title: 'Thất bại',
+                message: '@TempData["WatingToast"]',
+                type: 'wating',
+                duration: 2000
+            });
+        }
         @*End - Base *@
         @*-------------------------------------------------------*@
         @*Start - LoadingData TempData*@
@@ -188,11 +209,22 @@
                 });
             }
 
-            function showErrorToastViewBag() {
+        function showErrorToastViewBag() {
+            toast({
+                title: 'Thất bại',
+                message: '@ViewBag.ErrorToast',
+                type: 'error',
+                duration: 2000
+            });
+        }
+        @*End - Base ViewBag*@
+        @*-------------------------------------------------------*@
+        @*Start - Base ViewBag*@
+            function showErrorToastCheckInput() {
                 toast({
                     title: 'Thất bại',
-                    message: '@ViewBag.ErrorToast',
-                    type: 'error',
+                    message: 'Vui lòng điền đầy đủ thông tin.',
+                    type: 'wating',
                     duration: 2000
                 });
             }

@@ -1,4 +1,5 @@
-﻿﻿<!doctype html>
+﻿﻿
+<!doctype html>
 <html class="no-js" lang="en">
 <head>
     <meta charset="utf-8">
@@ -75,12 +76,12 @@
                                             {
                                                 url += (url.Contains("?") ? "&" : "?") + "enddate=" + ViewBag.enddate;
                                             }
-                                                <li class="@(string.IsNullOrEmpty(ViewBag.roomcategory) ? "current-cat" : "")"><a href="@url">Tất cả</a></li>
-                                                @foreach (var category in ViewBag.Categories)
+                                            <li class="@(string.IsNullOrEmpty(ViewBag.roomcategory) ? "current-cat" : "")"><a href="@url">Tất cả</a></li>
+                                            @foreach (var category in ViewBag.Categories)
                                             {
-                                                    <li class="@(ViewBag.roomcategory == category.Value ? "current-cat" : "")">
-                                                        <a href="@(url + (url.Contains("?") ? "&" : "?") + "roomcategory=" + category.Value)">@category.Text</a>
-                                                    </li>
+                                                <li class="@(ViewBag.roomcategory == category.Value ? "current-cat" : "")">
+                                                    <a href="@(url + (url.Contains("?") ? "&" : "?") + "roomcategory=" + category.Value)">@category.Text</a>
+                                                </li>
                                             }
                                         }
                                     </ul>
@@ -105,41 +106,41 @@
                                         @{
                                             if (!string.IsNullOrEmpty(ViewBag.sortby))
                                             {
-                                                    <input type="hidden" name="sortby" value="@ViewBag.sortby">
+                                                <input type="hidden" name="sortby" value="@ViewBag.sortby">
                                             }
                                             if (!string.IsNullOrEmpty(ViewBag.roomcategory))
                                             {
-                                                    <input type="hidden" name="roomcategory" value="@ViewBag.roomcategory">
+                                                <input type="hidden" name="roomcategory" value="@ViewBag.roomcategory">
                                             }
                                             if (!string.IsNullOrEmpty(ViewBag.priceto))
                                             {
-                                                    <input type="hidden" name="priceto" value="@ViewBag.priceto">
+                                                <input type="hidden" name="priceto" value="@ViewBag.priceto">
                                             }
                                             if (!string.IsNullOrEmpty(ViewBag.pricefrom))
                                             {
-                                                    <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
+                                                <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
                                             }
-                                                <div class="part3-content-child col-lg-12">
-                                                    <div class="form-group">
-                                                        <label for='start-datetime'>Bắt đầu</label>
-                                                        <div class='input-group date'>
-                                                            <input value="@(ViewBag.startdate)" name="startdate" type='text' id='start-datetime' class="form-control" style="z-index: auto;" required/>
-                                                            <span class="input-group-addon">
-                                                                <span class="glyphicon glyphicon-calendar"></span>
-                                                            </span>
-                                                        </div>
+                                            <div class="part3-content-child col-lg-12">
+                                                <div class="form-group">
+                                                    <label for='start-datetime'>Bắt đầu</label>
+                                                    <div class='input-group date'>
+                                                        <input value="@(ViewBag.startdate)" name="startdate" type='text' id='start-datetime' class="form-control" style="z-index: auto;" required />
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for='end-datetime'>Kết thúc</label>
-                                                        <div class='input-group date'>
-                                                            <input value="@(ViewBag.enddate)" name="enddate" type='text' id='end-datetime' class="form-control" style="z-index: auto;" required />
-                                                            <span class="input-group-addon">
-                                                                <span class="glyphicon glyphicon-calendar"></span>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Tìm kiếm</button>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label for='end-datetime'>Kết thúc</label>
+                                                    <div class='input-group date'>
+                                                        <input value="@(ViewBag.enddate)" name="enddate" type='text' id='end-datetime' class="form-control" style="z-index: auto;" required />
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Tìm kiếm</button>
+                                            </div>
                                         }
                                     </form>
                                 </div>
@@ -156,32 +157,32 @@
                                                 @{
                                                     if (!string.IsNullOrEmpty(ViewBag.sortby))
                                                     {
-                                                            <input type="hidden" name="sortby" value="@ViewBag.sortby">
+                                                        <input type="hidden" name="sortby" value="@ViewBag.sortby">
                                                     }
                                                     if (!string.IsNullOrEmpty(ViewBag.roomcategory))
                                                     {
-                                                            <input type="hidden" name="roomcategory" value="@ViewBag.roomcategory">
+                                                        <input type="hidden" name="roomcategory" value="@ViewBag.roomcategory">
                                                     }
                                                     if (!string.IsNullOrEmpty(ViewBag.priceto))
                                                     {
-                                                            <input type="hidden" name="priceto" value="@ViewBag.priceto">
+                                                        <input type="hidden" name="priceto" value="@ViewBag.priceto">
                                                     }
                                                     if (!string.IsNullOrEmpty(ViewBag.pricefrom))
                                                     {
-                                                            <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
+                                                        <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
                                                     }
                                                     if (!string.IsNullOrEmpty(ViewBag.startdate))
                                                     {
-                                                            <input type="hidden" name="startdate" value="@ViewBag.startdate">
+                                                        <input type="hidden" name="startdate" value="@ViewBag.startdate">
                                                     }
                                                     if (!string.IsNullOrEmpty(ViewBag.enddate))
                                                     {
-                                                            <input type="hidden" name="enddate" value="@ViewBag.enddate">
+                                                        <input type="hidden" name="enddate" value="@ViewBag.enddate">
                                                     }
-                                                        <div class="relative">
-                                                            <input class="input-cal input-base" value="@(ViewBag.roomname)" name="roomname" id="input" placeholder="" type="text">
-                                                            <label id="label-input">Name</label>
-                                                        </div>
+                                                    <div class="relative">
+                                                        <input class="input-cal input-base" value="@(ViewBag.roomname)" name="roomname" id="input" placeholder="" type="text">
+                                                        <label id="label-input">Name</label>
+                                                    </div>
                                                 }
                                             </form>
                                         </span>
@@ -189,34 +190,34 @@
                                             @{
                                                 if (!string.IsNullOrEmpty(ViewBag.roomname))
                                                 {
-                                                        <input type="hidden" name="roomname" value="@ViewBag.roomname">
+                                                    <input type="hidden" name="roomname" value="@ViewBag.roomname">
                                                 }
                                                 if (!string.IsNullOrEmpty(ViewBag.roomcategory))
                                                 {
-                                                        <input type="hidden" name="roomcategory" value="@ViewBag.roomcategory">
+                                                    <input type="hidden" name="roomcategory" value="@ViewBag.roomcategory">
                                                 }
                                                 if (!string.IsNullOrEmpty(ViewBag.priceto))
                                                 {
-                                                        <input type="hidden" name="priceto" value="@ViewBag.priceto">
+                                                    <input type="hidden" name="priceto" value="@ViewBag.priceto">
                                                 }
                                                 if (!string.IsNullOrEmpty(ViewBag.pricefrom))
                                                 {
-                                                        <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
+                                                    <input type="hidden" name="pricefrom" value="@ViewBag.pricefrom">
                                                 }
                                                 if (!string.IsNullOrEmpty(ViewBag.startdate))
                                                 {
-                                                        <input type="hidden" name="startdate" value="@ViewBag.startdate">
+                                                    <input type="hidden" name="startdate" value="@ViewBag.startdate">
                                                 }
                                                 if (!string.IsNullOrEmpty(ViewBag.enddate))
                                                 {
-                                                        <input type="hidden" name="enddate" value="@ViewBag.enddate">
+                                                    <input type="hidden" name="enddate" value="@ViewBag.enddate">
                                                 }
-                                                    <select id="sortby" name="sortby" class="single-select" onchange="this.form.submit();">
-                                                        <!option value="name_asc" @(ViewBag.sortby == "name_asc" ? "selected" : "")>Tên từ A-Z</!option>
-                                                        <!option value="name_desc" @(ViewBag.sortby == "name_desc" ? "selected" : "")>Tên từ Z-A</!option>
-                                                        <!option value="price" @(ViewBag.sortby == "price" ? "selected" : "")>Giá từ thấp đến cao</!option>
-                                                        <!option value="price_desc" @(ViewBag.sortby == "price_desc" ? "selected" : "")>Giá từ cao đến thấp</!option>
-                                                    </select>
+                                                <select id="sortby" name="sortby" class="single-select" onchange="this.form.submit();">
+                                                    <!option value="name_asc" @(ViewBag.sortby == "name_asc" ? "selected" : "")>Tên từ A-Z</!option>
+                                                    <!option value="name_desc" @(ViewBag.sortby == "name_desc" ? "selected" : "")>Tên từ Z-A</!option>
+                                                    <!option value="price" @(ViewBag.sortby == "price" ? "selected" : "")>Giá từ thấp đến cao</!option>
+                                                    <!option value="price_desc" @(ViewBag.sortby == "price_desc" ? "selected" : "")>Giá từ cao đến thấp</!option>
+                                                </select>
                                             }
                                         </form>
                                     </div>
@@ -240,7 +241,7 @@
                                             <div class="inner">
                                                 <h5 class="title" style="height:20px"><a href="/Home/RoomDetail?roomId=@room.RoomId">@room.RoomName</a></h5>
                                                 <div class="product-price-variant" style="height:20px">
-                                                    <span class="price current-price" >@room.Price VNĐ/h</span>
+                                                    <span class="price current-price">@room.Price VNĐ/h</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -253,7 +254,7 @@
             </div>
         </div>
     </main>
-    
+
     <script>
         var roomcategory = "@(ViewBag.roomcategory)";
         var sortby = "@(ViewBag.sortby)";
@@ -290,7 +291,7 @@
             });
         });
     </script>
-    
+
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
@@ -373,6 +374,8 @@
                 }
             },
         });
+
+        initMap();
     }
 </script>
 </html>

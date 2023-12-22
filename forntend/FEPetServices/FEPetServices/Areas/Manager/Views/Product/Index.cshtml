@@ -1,49 +1,52 @@
 ﻿<link href="~/css/toastNotification.css" rel="stylesheet" />
 <link href="~/css/datatable.css" rel="stylesheet" />
-    <script>
-        $(document).ready(function () {
-            // Khởi tạo DataTables
-            var table = $('#lists').DataTable({
-                "responsive": true,
-                "paging": true,
-                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "columnDefs": [
-                    { "targets": [0], "width": "5%" },
-                    { "targets": [1], "width": "20%" },
-                    { "targets": [2], "width": "20%" },
-                    { "targets": [3], "width": "25%" }, // Điều chỉnh cột này để khớp với số cột thực tế
-                    { "targets": [4], "width": "15%" },
-                    { "targets": [5], "width": "15%" },
-                ],
-                "language": {
-                    "lengthMenu": "Hiển thị _MENU_ dòng",
-                    "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
-                    "search": "Tìm kiếm:",
-                    "paginate": {
-                        "first": "Đầu",
-                        "last": "Cuối",
-                        "next": "Tiếp",
-                        "previous": "Trước"
-                    }
-                },
-            });
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 
-            // Thêm nút "Thêm dịch vụ" bên phải thanh tìm kiếm
-            var addButton = $('<button id="addButton" class="btn btn-add btn-primary">Thêm Sản Phẩm</button>');
-            $('.dataTables_filter').append(addButton);
-
-            // Đính kèm sự kiện click cho nút "Thêm dịch vụ"
-            $('#addButton').on('click', function () {
-                // Navigate to the "addservicecategory" page
-                window.location.href = '/Manager/Product/Add'; // Update this URL as needed
-            });
-
+<script>
+    $(document).ready(function () {
+        // Khởi tạo DataTables
+        var table = $('#lists').DataTable({
+            "responsive": true,
+            "paging": true,
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "columnDefs": [
+                { "targets": [0], "width": "2%" },
+                { "targets": [1], "width": "13%" },
+                { "targets": [2], "width": "25%" },
+                { "targets": [3], "width": "15%" },
+                { "targets": [4], "width": "10%" },
+                { "targets": [5], "width": "15%" },
+                { "targets": [6], "width": "10%" },
+                { "targets": [7], "width": "10%" },
+            ],
+            "language": {
+                "lengthMenu": "Hiển thị _MENU_ dòng",
+                "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
+                "search": "Tìm kiếm:",
+                "paginate": {
+                    "first": "Đầu",
+                    "last": "Cuối",
+                    "next": "Tiếp",
+                    "previous": "Trước"
+                }
+            },
         });
-    </script>
+
+        // Thêm nút "Thêm dịch vụ" bên phải thanh tìm kiếm
+        var addButton = $('<button id="addButton" class="btn btn-add btn-primary">Thêm Sản Phẩm</button>');
+        $('.dataTables_filter').append(addButton);
+
+        // Đính kèm sự kiện click cho nút "Thêm dịch vụ"
+        $('#addButton').on('click', function () {
+            // Navigate to the "addservicecategory" page
+            window.location.href = '/Manager/Product/Add'; // Update this URL as needed
+        });
+    });
+</script>
 
 <h1>Danh Sách Sản Phẩm Cho Thú Cưng</h1>
 
@@ -51,9 +54,11 @@
     <thead>
         <tr>
             <th>No.</th>
-            <th>Ảnh</th>
             <th>Tên Sản Phẩm</th>
             <th>Mô Tả</th>
+            <th>Ảnh</th>
+            <th>Giá</th>
+            <th>Loại Sản Phẩm</th>
             <th>Trạng Thái</th>
             <th>Chi Tiết</th>
         </tr>
@@ -74,9 +79,11 @@
                 }
                 <tr>
                     <td>@product.ProductId</td>
-                    <td><img src="@product.Picture" width="50" height="50"></td>
                     <td>@product.ProductName</td>
                     <td>@description</td>
+                    <td><img src="@product.Picture" width="50" height="50"></td>
+                    <td>@string.Format("{0:#,##0} đ", product.Price).ToString().Replace(',', '.')</td>
+                    <td>@product.ProCategoriesName</td>
                     <td>
                         @if (@product.Status)
                         {
@@ -105,6 +112,8 @@
 <style>
     h1 {
         text-align: center;
+        font-size: 40px; 
+        font-weight: bold; 
     }
 
     .future-status {

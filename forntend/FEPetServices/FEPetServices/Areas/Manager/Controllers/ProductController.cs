@@ -1,11 +1,11 @@
 ﻿using FEPetServices.Form;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
-using System.Text.Json;
 using System.Text;
-using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
@@ -37,6 +37,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Danh sách sản phẩm";
                 var json = JsonConvert.SerializeObject(productDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product" + "/GetAll");
@@ -70,10 +71,12 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Thêm sản phẩm mới";
                 HttpResponseMessage proCateResponse = await client.GetAsync(DefaultApiUrl + "ProductCategory/GetAll");
                 if (proCateResponse.IsSuccessStatusCode)
                 {
                     var proCategories = await proCateResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
+                    proCategories = proCategories.Where(r => r.Status == true).ToList();
                     ViewBag.ProCategories = new SelectList(proCategories, "ProCategoriesId", "ProCategoriesName");
                 }
 
@@ -135,6 +138,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Chỉnh sửa Thông tin sản phẩm";
                 //goi api de lay thong tin can sua
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product/ProductID/" + proId);
                 //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Product/Add" + proId);
@@ -143,6 +147,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 if (proCateResponse.IsSuccessStatusCode)
                 {
                     var proCategories = await proCateResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
+                    proCategories = proCategories.Where(r => r.Status == true).ToList();
                     ViewBag.ProCategories = new SelectList(proCategories, "ProCategoriesId", "ProCategoriesName");
                 }
                 if (response.IsSuccessStatusCode)

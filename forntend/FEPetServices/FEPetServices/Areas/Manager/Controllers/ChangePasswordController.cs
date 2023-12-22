@@ -1,8 +1,8 @@
 ﻿using FEPetServices.Form;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
@@ -25,6 +25,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         }
         public async Task<IActionResult> Index([FromForm] ChangePassword changePassword)
         {
+            ViewBag.Title = "Đổi mật khẩu";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 

@@ -3,6 +3,57 @@
     padding: 0;
     font-family: 'poppins', sans-serif;
 }
+.form-box2 {
+    display: none;
+}
+
+    .form-box2.show-content {
+        display: block;
+    }
+.form-box2 {
+    display: none;
+    margin: 20px; /* Thêm khoảng cách xung quanh */
+}
+
+.form-box3 {
+    border: 1px solid #ccc; /* Đường viền xung quanh */
+    padding: 20px; /* Khoảng cách bên trong */
+}
+
+/* Ẩn nút chọn file mặc định */
+input[type="file"] {
+    display: none;
+}
+
+/* Tạo kiểu cho nút tùy chỉnh thay thế */
+.custom-file-upload {
+    border: 1px solid #fff;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    /*background-color: #f8f8f8;*/
+    background: transparent;
+    backdrop-filter: blur(15px);
+    border-radius: 10px;
+}
+
+    /* Tạo kiểu khi di chuột vào nút tùy chỉnh */
+    .custom-file-upload:hover {
+        background-color: #e0e0e0;
+    }
+
+
+.image {
+    width: 35%; /* Đặt chiều rộng của phần hình ảnh và input file */
+}
+
+#checkimage {
+    margin-top: 10px; /* Khoảng cách giữa input file và hình ảnh */
+}
+
+#previewImage {
+    margin-top: 10px; /* Khoảng cách giữa hình ảnh và các phần khác */
+}
 
 section {
     display: flex;
@@ -17,7 +68,7 @@ section {
 .form-box {
     position: relative;
     width: 600px;
-    height: 650px;
+    height: auto;
     background: transparent;
     border: 2px solid rgba(255, 255, 255, 0.5);
     border-radius: 20px;
@@ -44,11 +95,6 @@ section {
     margin-right: 20px;
     margin-top: 100px;
 }
-
-.form-box2 {
-    display: none; /* Ẩn form-box2 ban đầu */
-}
-
 
 h2 {
     font-size: 2em;
@@ -187,7 +233,6 @@ button {
 
 .image {
     border-radius: 20px;
-    text-align: center;
 }
 
     .image input {

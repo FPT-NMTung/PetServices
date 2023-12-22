@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/DashBoard.css">
     <link rel="stylesheet" href="~/assets/css/vendor/bootstrap.min.css">
     <link rel="stylesheet" href="~/assets/css/vendor/font-awesome.css">
@@ -34,7 +35,7 @@
                 "responsive": true,
                 "paging": true,
                 "ordering": true,
-                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
                 "searching": true,
                 "info": true,
                 "autoWidth": false,
@@ -64,7 +65,7 @@
                 "responsive": true,
                 "paging": true,
                 "ordering": true,
-                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
                 "searching": true,
                 "info": true,
                 "autoWidth": false,
@@ -94,7 +95,7 @@
                 "responsive": true,
                 "paging": true,
                 "ordering": true,
-                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
                 "searching": true,
                 "info": true,
                 "autoWidth": false,
@@ -359,7 +360,7 @@
             </div>
             <div class="row" style="margin-bottom: 30px;">
                 @*Top 5 phòng được book nhiều nhất trong tháng*@
-                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 400px;">
+                <div class="col" style="padding: 10px; border: none; ">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
                             <div>
@@ -373,7 +374,7 @@
                 </div>
 
                 @*Top 5 dịch vụ được book nhiều nhất trong tháng*@
-                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 400px;">
+                <div class="col" style="padding: 10px; border: none;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
                             <div>
@@ -387,7 +388,7 @@
                 </div>
 
                 @*Top 5 sản phẩm bán chạy nhất trong tháng*@
-                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 400px;">
+                <div class="col" style="padding: 10px; border: none;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
                             <div>
@@ -401,7 +402,7 @@
                 </div>
 
                 @*Top 5 khu vực đông khách hàng nhất*@
-                <div class="col" style="padding: 10px; border: none; min-width: 350px; max-width: 400px;">
+                <div class="col" style="padding: 10px; border: none;">
                     <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
                         <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
                             <div>
@@ -782,7 +783,7 @@
 
         var optionsLine = {
             chart: {
-                height: 420,
+                height: 470,
                 type: 'line',
                 zoom: {
                     enabled: false
@@ -996,10 +997,14 @@
             }
         };
 
+        console.log("ProductData:", ProductData);
+        console.log("ProductName:", ProductName);
+
         var options = {
             series: ProductData,
             chart: {
-                height: 260,
+                //height: 280,
+                width: 350,
                 type: 'radialBar',
             },
             labels: ProductName,
@@ -1077,6 +1082,7 @@
         var chart = new ApexCharts(document.querySelector("#chart-cusarea"), options);
         chart.render();
     </script>
+    <script src="~/js/toastnotification.js"></script>
 </body>
 
 </html>

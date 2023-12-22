@@ -10,7 +10,7 @@ namespace PetServices.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrderController : ControllerBase   
     {
         private PetServicesContext _context;
         private IMapper _mapper;
@@ -20,7 +20,7 @@ namespace PetServices.Controllers
         {
             _context = context;
             _mapper = mapper;
-            _configuration = configuration; 
+            _configuration = configuration;
         }
 
         #region Get
@@ -42,6 +42,7 @@ namespace PetServices.Controllers
                         .ThenInclude(br => br.Room)
                     .Include(b => b.BookingRoomServices)
                         .ThenInclude(br => br.Service)
+                        .Include(o => o.ReasonOrders)
                     .Where(o => o.BookingRoomDetails.Count() == 0 && (o.BookingServicesDetails.Count() > 0 || o.OrderProductDetails.Count() > 0))
                     .OrderByDescending(o => o.OrderDate)
                 .ToList();
@@ -72,6 +73,7 @@ namespace PetServices.Controllers
                         .ThenInclude(br => br.Room)
                     .Include(b => b.BookingRoomServices)
                         .ThenInclude(br => br.Service)
+                        .Include(o => o.ReasonOrders)
                     .Where(o => o.BookingRoomDetails.Count() > 0 && o.BookingServicesDetails.Count() == 0 && o.OrderProductDetails.Count() == 0)
                     .OrderByDescending(o => o.OrderDate)
                     .ToList();
@@ -142,6 +144,7 @@ namespace PetServices.Controllers
                         .ThenInclude(br => br.Room)
                     .Include(b => b.BookingRoomServices)
                         .ThenInclude(br => br.Service)
+                    .Include(o => o.ReasonOrders)
                     .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) &&
                     o.BookingRoomDetails.Count() == 0 && (o.BookingServicesDetails.Count() > 0 || o.OrderProductDetails.Count() > 0)
                     );
@@ -150,6 +153,55 @@ namespace PetServices.Controllers
                 {
                     query = query.Where(o => o.OrderStatus == orderstatus);
                 }
+
+                query = query.OrderByDescending(o => o.OrderDate);
+
+                var paginatedOrders = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+                bool hasOrders = paginatedOrders.Any();
+
+                if (hasOrders)
+                {
+                    List<OrdersDTO> ordersDTOList = _mapper.Map<List<OrdersDTO>>(paginatedOrders);
+                    return Ok(ordersDTOList);
+                }
+                else
+                {
+                    return NotFound("No orders found with the specified status");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("GetOrderUserNoneFeedback/{email}")]
+        public IActionResult GetOrderUserNoneFeedback(string email, int page = 1, int pageSize = 5)
+        {
+            try
+            {
+                IQueryable<Order> query = _context.Orders
+                    .Include(o => o.UserInfo)
+                        .ThenInclude(u => u.Accounts)
+                    .Include(b => b.OrderProductDetails)
+                        .ThenInclude(o => o.Product)
+                    .Include(b => b.BookingServicesDetails)
+                        .ThenInclude(bs => bs.Service)
+                     .Include(b => b.BookingServicesDetails)
+                            .ThenInclude(s => s.PartnerInfo)
+                    .Include(b => b.BookingRoomDetails)
+                        .ThenInclude(br => br.Room)
+                    .Include(b => b.BookingRoomServices)
+                        .ThenInclude(br => br.Service)
+                    .Include(o => o.ReasonOrders)
+                    .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) &&
+                    o.BookingRoomDetails.Count() == 0 && (o.BookingServicesDetails.Count() > 0 || o.OrderProductDetails.Count() > 0)
+                    && (o.BookingServicesDetails.Any(bs => bs.FeedbackStatus == null) || o.OrderProductDetails.Any(bs => bs.FeedbackStatus == null)
+                    || o.BookingServicesDetails.Any(bs => bs.FeedbackPartnerStatus == null))
+                    );
+
+                query = query.Where(o => o.OrderStatus == "Completed");
 
                 query = query.OrderByDescending(o => o.OrderDate);
 
@@ -191,14 +243,63 @@ namespace PetServices.Controllers
                         .ThenInclude(br => br.Room)
                     .Include(b => b.BookingRoomServices)
                         .ThenInclude(br => br.Service)
+                        .Include(o => o.ReasonOrders)
                     .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) &&
-                    o.BookingRoomDetails.Count() > 0 && o.BookingServicesDetails.Count() == 0 && o.OrderProductDetails.Count() == 0
+                    o.BookingRoomDetails.Count() > 0 && o.BookingServicesDetails.Count() == 0 && o.OrderProductDetails.Count() == 0 
                     );
 
                 if (!string.IsNullOrEmpty(orderstatus) && orderstatus.ToLower() != "all")
                 {
                     query = query.Where(o => o.OrderStatus == orderstatus);
                 }
+
+                query = query.OrderByDescending(o => o.OrderDate);
+
+                var paginatedOrders = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+                bool hasOrders = paginatedOrders.Any();
+
+                if (hasOrders)
+                {
+                    List<OrdersDTO> ordersDTOList = _mapper.Map<List<OrdersDTO>>(paginatedOrders);
+                    return Ok(ordersDTOList);
+                }
+                else
+                {
+                    return NotFound("No orders found with the specified status");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("getRoomOrderUserNoneFeedback/{email}")]
+        public IActionResult getRoomOrderUserNoneFeedback(string email, int page = 1, int pageSize = 5)
+        {
+            try
+            {
+                IQueryable<Order> query = _context.Orders
+                   .Include(o => o.UserInfo)
+                        .ThenInclude(u => u.Accounts)
+                    .Include(b => b.OrderProductDetails)
+                        .ThenInclude(o => o.Product)
+                    .Include(b => b.BookingServicesDetails)
+                        .ThenInclude(bs => bs.Service)
+                     .Include(b => b.BookingServicesDetails)
+                            .ThenInclude(s => s.PartnerInfo)
+                    .Include(b => b.BookingRoomDetails)
+                        .ThenInclude(br => br.Room)
+                    .Include(b => b.BookingRoomServices)
+                        .ThenInclude(br => br.Service)
+                        .Include(o => o.ReasonOrders)
+                    .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) &&
+                    o.BookingRoomDetails.Count() > 0 && o.BookingServicesDetails.Count() == 0 && o.OrderProductDetails.Count() == 0 &&
+                    o.BookingRoomDetails.Any(bs => bs.FeedbackStatus == null)
+                    );
+
+                query = query.Where(o => o.OrderStatus == "Confirmed");
 
                 query = query.OrderByDescending(o => o.OrderDate);
 
@@ -230,10 +331,82 @@ namespace PetServices.Controllers
                 if (orderstatus != "All")
                 {
                     List<Order> orders = _context.Orders
-                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) && o.OrderStatus == orderstatus)
-                                         .ToList();
+                                        .Include(o => o.UserInfo)
+                                            .ThenInclude(u => u.Accounts)
+                                        .Include(b => b.OrderProductDetails)
+                                            .ThenInclude(o => o.Product)
+                                        .Include(b => b.BookingServicesDetails)
+                                            .ThenInclude(bs => bs.Service)
+                                         .Include(b => b.BookingServicesDetails)
+                                                .ThenInclude(s => s.PartnerInfo)
+                                        .Include(b => b.BookingRoomDetails)
+                                            .ThenInclude(br => br.Room)
+                                        .Include(b => b.BookingRoomServices)
+                                            .ThenInclude(br => br.Service)
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) 
+                                         && o.OrderStatus == orderstatus 
+                                         && o.BookingRoomDetails.Count() == 0 
+                                         && (o.BookingServicesDetails.Count() > 0 
+                                         || o.OrderProductDetails.Count() > 0
+                                         )).ToList();
 
+                    if (orders.Count == 0 )
+                    {
+                        return NotFound("No orders found with the specified status");
+                    }
+                    else 
+                    {
+                        return Ok();
+                    }
+                }
+                else
+                {
+                    List<Order> orders = _context.Orders
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email) 
+                                         && o.BookingRoomDetails.Count() == 0
+                                         && (o.BookingServicesDetails.Count() > 0
+                                         || o.OrderProductDetails.Count() > 0
+                                         )).ToList();
                     if (orders.Count == 0)
+                    {
+                        return NotFound("No orders found with the specified status");
+                    }
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("orderroomstatus/{orderstatus}")]
+        public IActionResult CheckRoomStatusOrder(string email, string orderstatus)
+        {
+            try
+            {
+                if (orderstatus != "All")
+                {
+                    List<Order> ordersRoom = _context.Orders
+                                        .Include(o => o.UserInfo)
+                                            .ThenInclude(u => u.Accounts)
+                                        .Include(b => b.OrderProductDetails)
+                                            .ThenInclude(o => o.Product)
+                                        .Include(b => b.BookingServicesDetails)
+                                            .ThenInclude(bs => bs.Service)
+                                         .Include(b => b.BookingServicesDetails)
+                                                .ThenInclude(s => s.PartnerInfo)
+                                        .Include(b => b.BookingRoomDetails)
+                                            .ThenInclude(br => br.Room)
+                                        .Include(b => b.BookingRoomServices)
+                                            .ThenInclude(br => br.Service)
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email)
+                                         && o.OrderStatus == orderstatus
+                                         && o.BookingRoomDetails.Count() > 0
+                                         && (o.BookingServicesDetails.Count() == 0
+                                         && o.OrderProductDetails.Count() == 0
+                                         )).ToList();
+                    if (ordersRoom.Count == 0)
                     {
                         return NotFound("No orders found with the specified status");
                     }
@@ -245,8 +418,11 @@ namespace PetServices.Controllers
                 else
                 {
                     List<Order> orders = _context.Orders
-                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email))
-                                         .ToList();
+                                         .Where(o => o.UserInfo.Accounts.Any(a => a.Email == email)
+                                          && o.BookingRoomDetails.Count() > 0
+                                         && (o.BookingServicesDetails.Count() == 0
+                                         && o.OrderProductDetails.Count() == 0
+                                         )).ToList();
                     if (orders.Count == 0)
                     {
                         return NotFound("No orders found with the specified status");
@@ -273,11 +449,12 @@ namespace PetServices.Controllers
                     .Include(b => b.BookingServicesDetails)
                         .ThenInclude(bs => bs.Service)
                      .Include(b => b.BookingServicesDetails)
-                            .ThenInclude(s => s.PartnerInfo) 
+                            .ThenInclude(s => s.PartnerInfo)
                     .Include(b => b.BookingRoomDetails)
                         .ThenInclude(br => br.Room)
                     .Include(b => b.BookingRoomServices)
                         .ThenInclude(br => br.Service)
+                        .Include(o => o.ReasonOrders)
                     .SingleOrDefaultAsync(b => b.OrderId == Id);
 
                 return Ok(_mapper.Map<OrdersDTO>(order));
@@ -300,12 +477,14 @@ namespace PetServices.Controllers
                 Order order = await _context.Orders
                     .Include(o => o.OrderProductDetails)
                     .Include(o => o.BookingServicesDetails)
+                    .Include(o => o.BookingRoomDetails)
+                    .Include(o => o.BookingServicesDetails)
                     .SingleOrDefaultAsync(b => b.OrderId == Id);
 
                 // Kiểm tra booking có tồn tại hay không
                 if (order == null)
                 {
-                    return NotFound("Booking không tồn tại");
+                    return NotFound("Order không tồn tại");
                 }
 
                 // Kiểm tra xem trạng thái cũ có chính xác hay không
@@ -316,35 +495,144 @@ namespace PetServices.Controllers
 
                 order.OrderStatus = status.newStatus;
 
-                if (order.OrderProductDetails != null)
+                UpdateProductDetailsStatus(order, status.newStatusProduct);
+                UpdateServiceDetailsStatus(order, status.newStatusService);
+
+                if (order.OrderProductDetails.Count() > 0 && 
+                    order.BookingServicesDetails.Count() == 0)
                 {
                     foreach (var dto in order.OrderProductDetails)
                     {
-                        if (!string.IsNullOrEmpty(status.newStatusProduct))
+                        if (status.newStatusProduct == "Delivered")
                         {
-                            dto.StatusOrderProduct = status.newStatusProduct;
+                            if (order.StatusPayment == false)
+                            {
+                                order.StatusPayment = !order.StatusPayment;
+                            }
+                            order.OrderStatus = "Completed";
                         }
                     }
                 }
 
-                if (order.BookingServicesDetails != null)
+                if (order.OrderProductDetails.Count() == 0
+                    && order.BookingServicesDetails.Count() > 0)
                 {
                     foreach (var dto in order.BookingServicesDetails)
                     {
-                        if (!string.IsNullOrEmpty(status.newStatusService))
+                        if (status.newStatusService == "Completed")
                         {
-                            dto.StatusOrderService = status.newStatusService;
+                            if (order.StatusPayment == false)
+                            {
+                                order.StatusPayment = !order.StatusPayment;
+                            }
+                            order.OrderStatus = "Completed";
                         }
                     }
                 }
 
-                // Update the order and its related details
+                if (order.OrderProductDetails.Count() > 0
+                    && order.BookingServicesDetails.Count() > 0)
+                {
+                    int checkProduct = -1;
+                    int checkService = -1;
+                    foreach (var dto in order.OrderProductDetails)
+                    {
+                        if (status.newStatusProduct == "Delivered" || dto.StatusOrderProduct == "Delivered")
+                        {
+                            checkProduct = 0;
+                        }
+                        else if (status.newStatusProduct == "Cancelled" || dto.StatusOrderProduct == "Cancelled")
+                        {
+                            checkProduct = 4;
+                        }
+                        else
+                        {
+                            checkProduct = 1;
+                        }
+                    }
+
+                    foreach (var dto in order.BookingServicesDetails)
+                    {
+                        if (status.newStatusService == "Completed" || dto.StatusOrderService == "Completed")
+                        {
+                            checkService = 0;
+                        }
+                        else if (status.newStatusService == "Cancelled" || dto.StatusOrderService == "Cancelled")
+                        {
+                            checkService = 4;
+                        }
+                        else
+                        {
+                            checkService = 1;
+                        }
+
+                    }
+
+                    if (checkProduct == 0 && checkService == 0)
+                    {
+                        if (order.StatusPayment == false)
+                        {
+                            order.StatusPayment = !order.StatusPayment;
+                        }
+                        order.OrderStatus = "Completed";
+                    }
+
+                    if (checkProduct == 0 && checkService == 4)
+                    {
+                        if (order.StatusPayment == false)
+                        {
+                            order.StatusPayment = !order.StatusPayment;
+                        }
+                        order.OrderStatus = "Completed";
+                    }
+
+                    if (checkProduct == 4 && checkService == 0)
+                    {
+                        if (order.StatusPayment == false)
+                        {
+                            order.StatusPayment = !order.StatusPayment;
+                        }
+                        order.OrderStatus = "Completed";
+                    }
+
+                    if (checkProduct == 4 && checkService == 4)
+                    {
+                        order.OrderStatus = "Cancelled";
+                    }
+
+                    if (checkProduct == 0 && checkService == 1)
+                    {
+                        order.OrderStatus = order.OrderStatus;
+                    }
+
+                    if (checkProduct == 1 && checkService == 0)
+                    {
+                        order.OrderStatus = order.OrderStatus;
+                    }
+                }
+
+                if (order.OrderProductDetails.Count() == 0
+                    && order.BookingServicesDetails.Count() == 0    
+                    && order.BookingRoomDetails.Count() > 0)
+                {
+                    foreach (var dto in order.BookingRoomDetails)
+                    {
+                        if (status.newStatus == "Confirmed")
+                        {
+                            if (order.StatusPayment == false)
+                            {
+                                order.StatusPayment = !order.StatusPayment;
+                            }
+                        }
+                    }
+                }
+
                 _context.Orders.Update(order);
                 _context.OrderProductDetails.UpdateRange(order.OrderProductDetails);
                 _context.BookingServicesDetails.UpdateRange(order.BookingServicesDetails);
-
+                _context.BookingRoomDetails.UpdateRange(order.BookingRoomDetails);
+                _context.BookingRoomServices.UpdateRange(order.BookingRoomServices);
                 await _context.SaveChangesAsync();
-
                 return Ok("Đổi trạng thái thành công");
             }
             catch (Exception ex)
@@ -354,6 +642,27 @@ namespace PetServices.Controllers
             }
         }
 
+        private void UpdateProductDetailsStatus(Order order, string newStatusProduct)
+        {
+            if (order.OrderProductDetails != null && !string.IsNullOrEmpty(newStatusProduct))
+            {
+                foreach (var dto in order.OrderProductDetails)
+                {
+                    dto.StatusOrderProduct = newStatusProduct;
+                }
+            }
+        }
+
+        private void UpdateServiceDetailsStatus(Order order, string newStatusService)
+        {
+            if (order.BookingServicesDetails != null && !string.IsNullOrEmpty(newStatusService))
+            {
+                foreach (var dto in order.BookingServicesDetails)
+                {
+                    dto.StatusOrderService = newStatusService;
+                }
+            }
+        }
 
         [HttpPut("changeStatusPayment")]
         public async Task<IActionResult> ChangeStatusPayment(int Id)

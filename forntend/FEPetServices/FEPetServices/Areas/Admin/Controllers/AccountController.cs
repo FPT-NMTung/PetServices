@@ -1,4 +1,5 @@
 ﻿using FEPetServices.Areas.Admin.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PetServices.DTO;
@@ -6,7 +7,6 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Web;
-using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Admin.Controllers
 {
@@ -32,9 +32,9 @@ namespace FEPetServices.Areas.Admin.Controllers
             //ApiUrlAddAccount = "https://pet-service-api.azurewebsites.net/api/Admin/AddAccount";
             //ApiUrlUpdateAccount = "https://pet-service-api.azurewebsites.net/api/UpdateAccount";
         }
-
         public async Task<IActionResult> Index()
         {
+            ViewBag.Title = "Danh sách tài khoản";
             var accountList = await client.GetAsync(DefaultApiUrl + "Admin/GetAllAccountByAdmin");
             //var accountList = await client.GetAsync(ApiUrlAccountList);
             if (accountList.IsSuccessStatusCode)
@@ -56,6 +56,7 @@ namespace FEPetServices.Areas.Admin.Controllers
         {
             try
             {
+                ViewBag.Title = "Thêm tài khoản mới";
                 if (ModelState.IsValid)
                 {
                     var json = JsonConvert.SerializeObject(addAccount);
@@ -70,7 +71,7 @@ namespace FEPetServices.Areas.Admin.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        ViewBag.Success = "Thêm tài khoản thành công!";
+                        TempData["SuccessToast"] = "Thêm tài khoản thành công!";
 
                         return View(addAccount);
                     }
@@ -78,13 +79,23 @@ namespace FEPetServices.Areas.Admin.Controllers
                     {
                         var errorMessage = await response.Content.ReadAsStringAsync();
                         errorMessage = RemoveUnwantedCharacters(errorMessage);
-                        ViewBag.ErrorMessage = errorMessage;
+                        TempData["WatingToast"] = errorMessage;
+
+                        ViewBag.Email = addAccount.Email;
+                        ViewBag.Password = addAccount.Password;
+                        ViewBag.RoleId = addAccount.RoleId;
+
                         return View(addAccount);
                     }
                     else
                     {
                         var errorMessage = await response.Content.ReadAsStringAsync();
-                        ViewBag.ErrorMessage = "Thêm tài khoản thất bại!";
+                        TempData["ErrorToast"] = "Thêm tài khoản thất bại!";
+
+                        ViewBag.Email = addAccount.Email;
+                        ViewBag.Password = addAccount.Password;
+                        ViewBag.RoleId = addAccount.RoleId;
+
                         return View(addAccount);
                     }
                 }
@@ -95,7 +106,7 @@ namespace FEPetServices.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
                 return View(addAccount);
             }
         }
@@ -104,9 +115,10 @@ namespace FEPetServices.Areas.Admin.Controllers
         {
             try
             {
+                ViewBag.Title = "";
                 if (ModelState.IsValid)
                 {
-                    string apiUrl = DefaultApiUrl + "UpdateAccount" + "?Email=" + email + "&RoleId=" + roleId + "&Status=" + status;
+                    string apiUrl = DefaultApiUrl + "Admin/UpdateAccount";
                     //string apiUrl = ApiUrlUpdateAccount + "?Email=" + email + "&RoleId=" + roleId + "&Status=" + status;
                     var acc = new UpdateAccountDTO
                     {
@@ -123,15 +135,17 @@ namespace FEPetServices.Areas.Admin.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
+                        TempData["SuccessToast"] = response.Content.ReadAsStringAsync();
+
                         return Json(new
                         {
                             Success = true
-                        }); 
+                        });
                     }
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
                         var errorMessage = await response.Content.ReadAsStringAsync();
-                        ViewBag.ErrorMessage = errorMessage;
+                        TempData["WatingToast"] = errorMessage;
                         return Json(new
                         {
                             Success = false
@@ -140,6 +154,7 @@ namespace FEPetServices.Areas.Admin.Controllers
                     else
                     {
                         var errorMessage = await response.Content.ReadAsStringAsync();
+                        TempData["ErrorToast"] = errorMessage;
                         return Json(new
                         {
                             Success = false
@@ -156,7 +171,7 @@ namespace FEPetServices.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
                 return View();
             }
         }

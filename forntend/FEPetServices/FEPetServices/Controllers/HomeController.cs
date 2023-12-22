@@ -1,11 +1,13 @@
 ﻿using FEPetServices.Areas.DTO;
 using FEPetServices.Form;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using PetServices.DTO;
 using PetServices.Form;
 using PetServices.Models;
+using System.Globalization;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
@@ -57,11 +59,12 @@ namespace FEPetServices.Controllers
         {
             try
             {
+                ViewBag.Title = "Phòng";
                 var json = JsonConvert.SerializeObject(roomDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                //HttpResponseMessage response = await client.GetAsync(ApiUrlRoomList);
-                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Room/GetAllRoomCustomer");
+                //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Room/GetAllRoomWhenCategoryTrue");
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Room/GetAllRoomWhenCategoryTrue");
                 if (response.IsSuccessStatusCode)
                 {
                     //HttpResponseMessage roomCategoryResponse = await client.GetAsync(ApiUrlRoomCategoryList);
@@ -81,8 +84,17 @@ namespace FEPetServices.Controllers
 
                         if (searchDTO.startdate != null && searchDTO.enddate != null)
                         {
-                            HttpResponseMessage roomvalidResponse = await client.GetAsync(DefaultApiUrl + "Room/SearchRoomByDate?startDate=" + searchDTO.startdate + "&endDate=" + searchDTO.enddate);
-                            roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(responseContent);
+                            var start = searchDTO.startdate.Value.ToString("MM/dd/yyyy HH:mm");
+                            var end = searchDTO.enddate.Value.ToString("MM/dd/yyyy HH:mm");
+
+                            var urlSearchRoomByDate = DefaultApiUrl + "Room/SearchRoomByDate?startDate=" + start + "&endDate=" + end;
+
+                            Console.WriteLine("Url Search Room By Date: " + urlSearchRoomByDate);
+
+                            HttpResponseMessage roomvalidResponse = await client.GetAsync(urlSearchRoomByDate);
+
+                            var roomvalidContent = await roomvalidResponse.Content.ReadAsStringAsync();
+                            roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(roomvalidContent);
                         }
 
                         if (!string.IsNullOrEmpty(searchDTO.roomname))
@@ -138,15 +150,17 @@ namespace FEPetServices.Controllers
                         ViewBag.priceto = searchDTO.priceto;
                         ViewBag.sortby = searchDTO.sortby;
                         ViewBag.roomname = searchDTO.roomname;
-                        ViewBag.startdate = searchDTO.startdate.ToString();
-                        ViewBag.enddate = searchDTO.enddate.ToString();
+                        ViewBag.startdate = searchDTO.startdate.HasValue
+                            ? searchDTO.startdate.Value.ToString("MM/dd/yyyy HH:mm") : null;
+                        ViewBag.enddate = searchDTO.enddate.HasValue
+                            ? searchDTO.enddate.Value.ToString("MM/dd/yyyy HH:mm") : null;
 
                         return View(roomList);
                     }
                     else
                     {
                         ViewBag.ErrorMessage = "API trả về dữ liệu rỗng.";
-                    }
+                    } 
                 }
                 else
                 {
@@ -167,6 +181,7 @@ namespace FEPetServices.Controllers
 
             try
             {
+                ViewBag.Title = "Chi tiết phòng";
                 //HttpResponseMessage serviceAvailableResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/GetServiceInRoom?roomId=" + roomId);
                 HttpResponseMessage serviceAvailableResponse = await client.GetAsync(DefaultApiUrl + "Room/GetServiceInRoom?roomId=" + roomId);
 
@@ -289,10 +304,11 @@ namespace FEPetServices.Controllers
         }
 
 
-        public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory, int page = 1, int pagesize = 6, string CategoriesName = "", string viewstyle = "grid", string sortby = "")
+        public async Task<IActionResult> ServiceList(ServiceCategoryDTO serviceCategory,ServiceSearch searchDTO, int page = 1, int pagesize = 6, string CategoriesName = "", string viewstyle = "grid", string sortby = "")
         {
             try
             {
+                ViewBag.Title = "Dịch vụ";
                 var json = JsonConvert.SerializeObject(serviceCategory);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -306,24 +322,20 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var servicecategoryList = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseContent);
+                        servicecategoryList = servicecategoryList.Where(r => r.Status == true).ToList();
 
-
-
-                        if (!string.IsNullOrEmpty(CategoriesName) && servicecategoryList != null)
+                        if (!string.IsNullOrEmpty(searchDTO.servicename))
                         {
-                            servicecategoryList = servicecategoryList
-                                .Where(c => c.SerCategoriesName != null && c.SerCategoriesName.Contains(CategoriesName, StringComparison.OrdinalIgnoreCase))
-                                .ToList();
-                            Console.WriteLine(1);
+                            servicecategoryList = servicecategoryList?.Where(r => r.SerCategoriesName.Contains(searchDTO.servicename, StringComparison.OrdinalIgnoreCase)).ToList();
                         }
 
-                        switch (sortby)
+                        switch (searchDTO.sortby)
                         {
                             case "name_desc":
-                                servicecategoryList = servicecategoryList.OrderByDescending(r => r.SerCategoriesName).ToList();
+                                servicecategoryList = servicecategoryList?.OrderByDescending(r => r.SerCategoriesName).ToList();
                                 break;
                             default:
-                                servicecategoryList = servicecategoryList.OrderBy(r => r.SerCategoriesName).ToList();
+                                servicecategoryList = servicecategoryList?.OrderBy(r => r.SerCategoriesName).ToList();
                                 break;
                         }
 
@@ -337,8 +349,8 @@ namespace FEPetServices.Controllers
                         ViewBag.CurrentPage = page;
                         ViewBag.PageSize = pagesize;
 
-                        ViewBag.CategoriesName = CategoriesName;
-                        ViewBag.sortby = sortby;
+                        ViewBag.CategoriesName = searchDTO.servicename;
+                        ViewBag.sortby = searchDTO.sortby;
                         ViewBag.pagesize = pagesize;
                         ViewBag.viewstyle = viewstyle;
 
@@ -380,6 +392,7 @@ namespace FEPetServices.Controllers
             HomeModel homeModel = new HomeModel();
             try
             {
+                ViewBag.Title = "Trang chủ";
                 //"https://localhost:7255/api/Feedback/GetStarInTakeCarePet"
                 HttpResponseMessage StarInTakeCarePetResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetStarInTakeCarePet");
 
@@ -423,8 +436,8 @@ namespace FEPetServices.Controllers
                 //HttpResponseMessage responseCategoryProduct = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll");
                 HttpResponseMessage responseCategoryProduct = await client.GetAsync(DefaultApiUrl + "ProductCategory/GetAll");
 
-                //HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
-                HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
+                //HttpResponseMessage responseProduct = await client.GetAsync("https://localhost:7255/api/Product/GetAllProductWhenCategoryTrue");
+                HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrl + "Product/GetAllProductWhenCategoryTrue");
                 if (responseProduct.IsSuccessStatusCode && responseCategoryProduct.IsSuccessStatusCode)
                 {
                     //HttpResponseMessage responseCategory = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
@@ -440,19 +453,23 @@ namespace FEPetServices.Controllers
                             if (!string.IsNullOrEmpty(responseRoomCategoryContent))
                             {
                                 homeModel.ListRoomCategory = JsonConvert.DeserializeObject<List<RoomCategoryDTO>>(responseRoomCategoryContent);
+                                homeModel.ListRoomCategory = homeModel.ListRoomCategory.Where(r => r.Status == true).ToList();
                             }
                         }
                         var responseCategoryContent = await responseCategory.Content.ReadAsStringAsync();
+
                         var responseCategoryProductContent = await responseCategoryProduct.Content.ReadAsStringAsync();
 
 
                         if (!string.IsNullOrEmpty(responseCategoryContent))
                         {
                             homeModel.ListServiceCategory = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
+                            homeModel.ListServiceCategory = homeModel.ListServiceCategory.Where(r => r.Status == true).ToList();
                         }
                         if (!string.IsNullOrEmpty(responseCategoryProductContent))
                         {
                             homeModel.ListProductCategories = JsonConvert.DeserializeObject<List<ProductCategoryDTO>>(responseCategoryProductContent);
+                            homeModel.ListProductCategories = homeModel.ListProductCategories.Where(r => r.Status == true).ToList();
                         }
 
                     }
@@ -460,7 +477,7 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(rep))
                     {
                         homeModel.ListProductTop8 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
-
+                        homeModel.ListProductTop8 = homeModel.ListProductTop8.Where(r => r.Status == true).ToList();
                         int currentPage = 1;
                         int pageSize = 8;
 
@@ -500,8 +517,116 @@ namespace FEPetServices.Controllers
             return View(homeModel);
         }
 
+        public async Task<IActionResult> Service(ServiceDTO serviceDTO, ServiceSearch searchDTO)
+        {
+            try
+            {
+                ViewBag.Title = "Dịch vụ";
+                var json = JsonConvert.SerializeObject(serviceDTO);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Service/GetAllServiceWhenCategoryTrue");
+                HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Service/GetAllServiceWhenCategoryTrue");
+                //HttpResponseMessage ProductCategoryResponse = await client.GetAsync(DefaultApiUrlProductCategoryList);
+                HttpResponseMessage SerCategoryResponse = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
+                if (SerCategoryResponse.IsSuccessStatusCode)
+                {
+                    var categories = await SerCategoryResponse.Content.ReadFromJsonAsync<List<ServiceCategoryDTO>>();
+                    categories = categories.Where(r => r.Status == true).ToList();
+                    ViewBag.categories = new SelectList(categories, "SerCategoriesId", "SerCategoriesName");
+                }
+                if (response.IsSuccessStatusCode)
+                {
+                    var rep = await response.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(rep))
+                    {
+                        var serviceList = JsonConvert.DeserializeObject<List<ServiceDTO>>(rep);
+                        serviceList = serviceList.Where(r => r.Status == true).ToList();
+
+                        if (!string.IsNullOrEmpty(searchDTO.servicename))
+                        {
+                            serviceList = serviceList.Where(r => r.ServiceName.Contains(searchDTO.servicename, StringComparison.OrdinalIgnoreCase)).ToList();
+                        }
+                        if (!string.IsNullOrEmpty(searchDTO.sevicecategory))
+                        {
+                            int serviceCategoriesId = int.Parse(searchDTO.sevicecategory);
+                            serviceList = serviceList.Where(r => r.SerCategoriesId == serviceCategoriesId).ToList();
+                        }
+                        if (!string.IsNullOrEmpty(searchDTO.pricefrom) || !string.IsNullOrEmpty(searchDTO.priceto))
+                        {
+                            if (string.IsNullOrEmpty(searchDTO.pricefrom))
+                            {
+                                int priceTo = int.Parse(searchDTO.priceto);
+                                serviceList = serviceList.Where(r => r.Price < priceTo).ToList();
+                            }
+                            if (string.IsNullOrEmpty(searchDTO.priceto))
+                            {
+                                int priceFrom = int.Parse(searchDTO.pricefrom);
+                                serviceList = serviceList.Where(r => r.Price > priceFrom).ToList();
+                            }
+                            if (!string.IsNullOrEmpty(searchDTO.pricefrom) && !string.IsNullOrEmpty(searchDTO.priceto))
+                            {
+                                int PriceTo = int.Parse(searchDTO.priceto);
+                                int PriceFrom = int.Parse(searchDTO.pricefrom);
+
+                                serviceList = serviceList.Where(r => r.Price > PriceFrom && r.Price < PriceTo).ToList();
+                            }
+                        }
+                        switch (searchDTO.sortby)
+                        {
+                            case "name_desc":
+                                serviceList = serviceList.OrderByDescending(r => r.ServiceName).ToList();
+                                break;
+                            case "price":
+                                serviceList = serviceList.OrderBy(r => r.Price).ToList();
+                                break;
+                            case "price_desc":
+                                serviceList = serviceList.OrderByDescending(r => r.Price).ToList();
+                                break;
+                            default:
+                                serviceList = serviceList.OrderBy(r => r.ServiceName).ToList();
+                                break;
+                        }
+                        int page = searchDTO.page ?? 1; ;
+                        int pagesize = searchDTO.pagesize ?? 9;
+
+                        int totalItems = serviceList.Count;
+                        int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
+                        int startIndex = (page - 1) * pagesize;
+                        List<ServiceDTO> currentPageServiceList = serviceList.Skip(startIndex).Take(pagesize).ToList();
+
+                        ViewBag.TotalPages = totalPages;
+                        ViewBag.CurrentPage = searchDTO.page ?? 1;
+                        ViewBag.PageSize = searchDTO.pagesize;
+
+                        ViewBag.Servicecategory = searchDTO.sevicecategory;
+                        ViewBag.pricefrom = searchDTO.pricefrom;
+                        ViewBag.priceto = searchDTO.priceto;
+                        ViewBag.sortby = searchDTO.sortby;
+                        ViewBag.Servicename = searchDTO.servicename;
+                        ViewBag.pagesize = searchDTO.pagesize;
+                        return View(currentPageServiceList);
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "API trả về dữ liệu rỗng";
+                    }
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Tải dữ liệu lên thất bại. Vui lòng tải lại trang!";
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Đã xảy ra lỗi: " + ex.Message;
+            }
+            return View();
+        }
+
         public async Task<IActionResult> ServiceDetail(int serviceCategoryId, int serviceIds, string sortby, int? page)
         {
+            ViewBag.Title = "Chi tiết dịch vụ";
             ServiceDetailModel model = new ServiceDetailModel();
             //HttpResponseMessage response = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
@@ -533,7 +658,9 @@ namespace FEPetServices.Controllers
                 if (!string.IsNullOrEmpty(responsepartnerContent))
                 {
                     var partners = JsonConvert.DeserializeObject<List<PartnerInfo>>(responsepartnerContent);
-                    ViewBag.Partners = new SelectList(partners, "PartnerInfoId", "LastName");
+                    //ViewBag.Partners = new SelectList(partners, "PartnerInfoId", "LastName", "Lat", "Lng");
+                    //ViewBag.Partners = partners;
+                    model.Partners = partners;
                 }
             }
 
@@ -613,15 +740,16 @@ namespace FEPetServices.Controllers
             if (response.IsSuccessStatusCode)
             {
                 //HttpResponseMessage responseCategory = await client.GetAsync(DefaultApiUrlServiceCategoryList + "/GetAllServiceCategory");
-                HttpResponseMessage responseCategory = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
+                HttpResponseMessage responseCategory = await client.GetAsync(DefaultApiUrl + "Service/GetAllService");
                 if (responseCategory.IsSuccessStatusCode)
                 {
                     var responseCategoryContent = await responseCategory.Content.ReadAsStringAsync();
 
                     if (!string.IsNullOrEmpty(responseCategoryContent))
                     {
-                        var serviceCategories = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
-                        model.CaServices = serviceCategories;
+                        var serviceList = JsonConvert.DeserializeObject<List<ServiceDTO>>(responseCategoryContent);
+                        serviceList = serviceList.Where(r => r.Status == true).ToList();
+                        model.ListServices = serviceList;
                     }
                 }
                 var responseContent = await response.Content.ReadAsStringAsync();
@@ -687,7 +815,7 @@ namespace FEPetServices.Controllers
             public ServiceDTO Service { get; set; }
             public ServiceCategoryDTO ServiceCategory { get; set; }
             public ProductDTO Product { get; set; }
-            public List<ServiceCategoryDTO> CaServices { get; set; }
+            public List<ServiceDTO> ListServices { get; set; }
             public List<PartnerInfo> Partners { get; set; }
             public List<PetInfo> PetInfo { get; set; }
             public AccountInfo account { get; set; }
@@ -702,17 +830,18 @@ namespace FEPetServices.Controllers
         }
 
 
-        public async Task<IActionResult> BlogList(BlogDTO blog, int page = 1, int pagesize = 6, string BlogName = "", string sortby = "")
+        public async Task<IActionResult> BlogList(BlogDTO blog, int page = 1, int pagesize = 6, string BlogName = "", string sortby = "", string tag ="")
         {
             BlogModel blogModel = new BlogModel();
             try
             {
+                ViewBag.Title = "Bài viết";
                 var json = JsonConvert.SerializeObject(blog);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlBlogList + "/GetAllBlog");
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Blog/GetAllBlog");
-
+                
                 if (response.IsSuccessStatusCode)
                 {
                     //HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
@@ -724,7 +853,8 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(rep))
                         {
                             blogModel.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
-
+                            //check khi status bằng true thì mới list ra dữ liệu
+                            blogModel.ListProductTop3 = blogModel.ListProductTop3.Where(r => r.Status == true).ToList();
                             int currentPage = 1;
                             int pageSize = 3;
 
@@ -741,6 +871,7 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(rep))
                         {
                             blogModel.ListBlogTop3 = JsonConvert.DeserializeObject<List<BlogDTO>>(rep);
+                            blogModel.ListBlogTop3 = blogModel.ListBlogTop3.Where(r => r.Status == true).ToList();
 
                             int currentPage = 1;
                             int pageSize = 3;
@@ -754,10 +885,20 @@ namespace FEPetServices.Controllers
                             blogModel.ListBlogTop3 = newestProducts;
                         }
                     }
+                    HttpResponseMessage tagCategoryResponse = await client.GetAsync(DefaultApiUrl + "Tag/GetAllTag");
+
+                    if (tagCategoryResponse.IsSuccessStatusCode)
+                    {
+                        var categories = await tagCategoryResponse.Content.ReadFromJsonAsync<List<TagDTO>>();
+                        categories = categories.Where(r => r.Status == true).ToList();
+                        ViewBag.Categories = categories;
+                    }
+
                     var responseContent = await response.Content.ReadAsStringAsync();
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var blogList = JsonConvert.DeserializeObject<List<BlogDTO>>(responseContent);
+                        blogList = blogList.Where(r => r.Status == true).ToList();
                         // tìm kiếm theo tên 
                         if (!string.IsNullOrEmpty(BlogName) && blogList != null)
                         {
@@ -765,18 +906,15 @@ namespace FEPetServices.Controllers
                                 .Where(c => c.PageTile != null && c.PageTile.Contains(BlogName, StringComparison.OrdinalIgnoreCase))
                                 .ToList();
                         }
-                        //tìm kiếm tên theo bảng chữ cái từ a-z và từ z-a
-                        switch (sortby)
+                        if (!string.IsNullOrEmpty(BlogName))
                         {
-                            case "name_desc":
-                                blogList = blogList.OrderByDescending(r => r.PageTile).ToList();
-                                break;
-                            default:
-                                blogList = blogList.OrderBy(r => r.PageTile).ToList();
-                                break;
+                            blogList = blogList?.Where(r => r.PageTile.Contains(BlogName, StringComparison.OrdinalIgnoreCase)).ToList();
                         }
-
-
+                        if (!string.IsNullOrEmpty(tag))
+                        {
+                            int tagid = int.Parse(tag);
+                            blogList = blogList?.Where(r => r.TagId == tagid).ToList();
+                        }
                         int totalItems = blogList.Count;
                         int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
                         int startIndex = (page - 1) * pagesize;
@@ -787,9 +925,9 @@ namespace FEPetServices.Controllers
                         ViewBag.PageSize = pagesize;
 
                         ViewBag.BlogName = BlogName;
-                        ViewBag.sortby = sortby;
                         ViewBag.pagesize = pagesize;
                         blogModel.Blog = currentPageBlogList;
+                        ViewBag.Tag = tag;
 
 
                         return View(blogModel);
@@ -825,11 +963,10 @@ namespace FEPetServices.Controllers
             BlogDetailModel blog = new BlogDetailModel();
             try
             {
+                ViewBag.Title = "Chi tiết bài viết";
                 //HttpResponseMessage responseBlogDetail = await client.GetAsync(DefaultApiUrlBlogDetail + blogId);
                 HttpResponseMessage responseBlogDetail = await client.GetAsync(DefaultApiUrl + "Blog/BlogID/" + blogId);
-                //HttpResponseMessage responseBlogList = await client.GetAsync(DefaultApiUrlBlogList + "/GetAllBlog");
                 HttpResponseMessage responseBlogList = await client.GetAsync(DefaultApiUrl + "Blog/GetAllBlog");
-                //HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
                 HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
                 if (responseBlogDetail.IsSuccessStatusCode)
                 {
@@ -840,7 +977,7 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(product))
                         {
                             blog.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(product);
-
+                            blog.ListProductTop3 = blog.ListProductTop3.Where(r => r.Status == true).ToList();
                             int currentPage = 1;
                             int pageSize = 3;
 
@@ -851,6 +988,7 @@ namespace FEPetServices.Controllers
                             blog.ListProductTop3 = firstPageProducts;
                         }
                     }
+                    
                     // List ra danh sách blog
                     if (responseBlogList.IsSuccessStatusCode)
                     {
@@ -858,6 +996,7 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(Blog))
                         {
                             blog.Blog = JsonConvert.DeserializeObject<List<BlogDTO>>(Blog);
+                            blog.Blog = blog.Blog.Where(r => r.Status == true).ToList();
                         }
                     }
                     // list ra detail của id đó 
@@ -872,6 +1011,7 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(rep))
                         {
                             blog.ListBlogTop3 = JsonConvert.DeserializeObject<List<BlogDTO>>(rep);
+                            blog.ListBlogTop3 = blog.ListBlogTop3.Where(r => r.Status == true).ToList();
 
                             int currentPage = 1;
                             int pageSize = 3;
@@ -912,6 +1052,8 @@ namespace FEPetServices.Controllers
         }
         public class PartDeatilModel
         {
+            public List<FeedbackDTO> Feedback { get; set; }
+            public VoteNumberDTO VoteNumberas { get; set; }
             public PartnerInfo Partner { get; set; }
             public List<PartnerInfo> partner { set; get; }
             public List<ProductDTO> ListProductTop3 { get; set; }
@@ -925,6 +1067,7 @@ namespace FEPetServices.Controllers
             PartModel partModel = new PartModel();
             try
             {
+                ViewBag.Title = "Nhân viên";
                 //HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
                 HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
 
@@ -934,7 +1077,7 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(rep))
                     {
                         partModel.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
-
+                        partModel.ListProductTop3 = partModel.ListProductTop3.Where(r => r.Status == true).ToList();
                         int currentPage = 1;
                         int pageSize = 3;
 
@@ -954,6 +1097,7 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(responseCategoryContent))
                     {
                         var serviceCategories = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
+                        serviceCategories = serviceCategories.Where(r => r.Status == true).ToList();
                         partModel.CaServices = serviceCategories;
                     }
                 }
@@ -965,14 +1109,17 @@ namespace FEPetServices.Controllers
                     if (!string.IsNullOrEmpty(responseContent))
                     {
                         var partList = JsonConvert.DeserializeObject<List<PartnerInfo>>(responseContent);
-                        // tìm kiếm theo tên 
-                        if (!string.IsNullOrEmpty(PartName) && partList != null)
+                        
+                        //tìm kiếm theo tên 
+                        if (!string.IsNullOrEmpty(PartName))
                         {
-                            partList = partList
-                                .Where(c => c.FirstName != null && c.FirstName.Contains(PartName, StringComparison.OrdinalIgnoreCase))
-                                .ToList();
+                            partList = partList?.Where(r =>
+                                r.FirstName.Contains(PartName, StringComparison.OrdinalIgnoreCase) ||
+                                r.LastName.Contains(PartName, StringComparison.OrdinalIgnoreCase) ||
+                                r.PartnerInfoId == (int.TryParse(PartName, out int id) ? id : r.PartnerInfoId) ||
+                                (r.FirstName + " " + r.LastName).Contains(PartName, StringComparison.OrdinalIgnoreCase)
+                            ).ToList();
                         }
-
 
                         int totalItems = partList.Count;
                         int totalPages = (int)Math.Ceiling(totalItems / (double)pagesize);
@@ -1007,15 +1154,71 @@ namespace FEPetServices.Controllers
 
             return View();
         }
-        public async Task<IActionResult> PartnerDetail(int partnerID)
+        public async Task<IActionResult> PartnerDetail(int partnerID, string sortby, int? page)
         {
             PartDeatilModel partModel = new PartDeatilModel();
             try
             {
+                ViewBag.Title = "Chi tiết nhân viên";
                 //HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
                 HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
                 //HttpResponseMessage responsedetail = await client.GetAsync("https://localhost:7255/api/Partner/PartnerInfoId?PartnerInfoId=" + partnerID);
                 HttpResponseMessage responsedetail = await client.GetAsync(DefaultApiUrl + "Partner/PartnerInfoId?PartnerInfoId=" + partnerID);
+
+                //HttpResponseMessage feedbackResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetAllFeedbackInRoom?roomID=" + roomId);
+                //HttpResponseMessage feedbackResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetAllFeedbackInRoom?roomID=" + roomId);
+
+                HttpResponseMessage feedbackResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetAllFeedbackInPartner?partnerId=" + partnerID);
+
+                if (feedbackResponse.IsSuccessStatusCode)
+                {
+                    var feedback = await feedbackResponse.Content.ReadFromJsonAsync<List<FeedbackDTO>>();
+
+                    ViewBag.FeedbackCount = feedback?.Count();
+
+                    switch (sortby)
+                    {
+                        case "5star":
+                            feedback = feedback?.Where(f => f.NumberStart == 5).ToList();
+                            break;
+                        case "4star":
+                            feedback = feedback?.Where(f => f.NumberStart == 4).ToList();
+                            break;
+                        case "3star":
+                            feedback = feedback?.Where(f => f.NumberStart == 3).ToList();
+                            break;
+                        case "2star":
+                            feedback = feedback?.Where(f => f.NumberStart == 2).ToList();
+                            break;
+                        case "1star":
+                            feedback = feedback?.Where(f => f.NumberStart == 1).ToList();
+                            break;
+                        default:
+                            break;
+                    }
+                    ViewBag.sortby = sortby;
+                    ViewBag.FeedbacksCount = feedback?.Count();
+
+                    page = page ?? 1;
+
+                    //HttpResponseMessage paggingResponse = await client.GetAsync("https://localhost:7255/api/Feedback/PaginationInRoom?roomID=" + roomId + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
+                    //HttpResponseMessage paggingResponse = await client.GetAsync(DefaultApiUrl + "Feedback/PaginationInRoom?roomID=" + roomId + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
+
+                    HttpResponseMessage paggingResponse = await client.GetAsync(DefaultApiUrl + "Feedback/PaginationInPartner?partnerId=" + partnerID + "&starnumber=" + (sortby ?? "0") + "&pagenumber=" + page);
+                    ViewBag.CurrentPage = page;
+
+                    if (paggingResponse.IsSuccessStatusCode)
+                    {
+                        var feedbacks = await paggingResponse.Content.ReadFromJsonAsync<List<FeedbackDTO>>();
+                        partModel.Feedback = feedbacks;
+
+                    }
+                    else
+                    {
+                        partModel.Feedback = feedback;
+                    }
+                }
+
                 if (responsedetail.IsSuccessStatusCode)
                 {
                     if (responseProduct.IsSuccessStatusCode)
@@ -1024,7 +1227,7 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(rep))
                         {
                             partModel.ListProductTop3 = JsonConvert.DeserializeObject<List<ProductDTO>>(rep);
-
+                            partModel.ListProductTop3 = partModel.ListProductTop3.Where(r => r.Status == true).ToList();
                             int currentPage = 1;
                             int pageSize = 3;
 
@@ -1044,6 +1247,7 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(responseCategoryContent))
                         {
                             var serviceCategories = JsonConvert.DeserializeObject<List<ServiceCategoryDTO>>(responseCategoryContent);
+                            serviceCategories = serviceCategories.Where(r => r.Status == true).ToList();
                             partModel.CaServices = serviceCategories;
                         }
                     }
@@ -1055,6 +1259,31 @@ namespace FEPetServices.Controllers
                         if (!string.IsNullOrEmpty(responsePartContent))
                         {
                             partModel.partner = JsonConvert.DeserializeObject<List<PartnerInfo>>(responsePartContent);
+                        }
+                    }
+
+                    //HttpResponseMessage voteNumberResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetRoomVoteNumber?roomID=" + roomId);
+                    //HttpResponseMessage voteNumberResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetRoomVoteNumber?roomID=" + roomId);
+                    HttpResponseMessage voteNumberResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetPartnerVoteNumber?partnerId=" + partnerID);
+
+                    if (voteNumberResponse.IsSuccessStatusCode)
+                    {
+                        var voteNumber = await voteNumberResponse.Content.ReadFromJsonAsync<VoteNumberDTO>();
+
+                        partModel.VoteNumberas = voteNumber;
+                    }
+
+                    //HttpResponseMessage roomStarResponse = await client.GetAsync("https://localhost:7255/api/Feedback/GetRoomStar?roomID=" + roomId);
+                    HttpResponseMessage partnerStarResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetPartnerStar?partnerId=" + partnerID);
+                    //HttpResponseMessage roomStarResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetRoomStar?roomID=" + roomId);
+
+                    if (partnerStarResponse.IsSuccessStatusCode)
+                    {
+                        var content = await partnerStarResponse.Content.ReadAsStringAsync();
+
+                        if (double.TryParse(content, out double partnerStar))
+                        {
+                            ViewBag.partnerStar = partnerStar;
                         }
                     }
 
@@ -1214,12 +1443,14 @@ namespace FEPetServices.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            ViewBag.Title = "Lỗi trang";
             // Thực hiện chuyển hướng đến trang 404 tùy chỉnh
             return RedirectToAction("NotFound", "Home");
         }
 
         public IActionResult Privacy()
         {
+            ViewBag.Title = "Chính sách bảo mật";
             return View();
         }
 
@@ -1229,11 +1460,13 @@ namespace FEPetServices.Controllers
         }
         public IActionResult Terms()
         {
+            ViewBag.Title = "Điều khoản sử dụng";
             return View();
         }
 
         public IActionResult Introduce()
         {
+            ViewBag.Title = "Giới thiệu";
             return View();
         }
 

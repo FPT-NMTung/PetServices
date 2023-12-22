@@ -1,4 +1,5 @@
 ﻿using FEPetServices.Form.OrdersForm;
+using FEPetServices.Models.ErrorResult;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -23,27 +24,23 @@ namespace FEPetServices.Areas.Customer.Controllers
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
-            DefaultApiUrl = "https://localhost:7255/api/";
-            DefaultApiUrlOrders = "https://localhost:7255/api/";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = "https://localhost:7255/api/";
         }
 
         private async Task<IActionResult> GetOrders(string orderStatus, int page, int pageSize)
         {
+            ViewBag.Title = "Danh sách đơn hàng";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
-            //https://localhost:7255/api/Order/orderstatus/Waiting?email=customer%40gmail.com
 
-            //HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrlOrders}Order/orderstatus/{orderStatus}?email={email}");
             HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderstatus/{orderStatus}?email={email}");
             if (responsecheck.StatusCode == HttpStatusCode.NotFound)
             {
-                ViewBag.NotFound = "Error404";
                 return View();
             }   
             else
             {
-                //HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrlOrders}Order/email/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
                 HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/getOrderUser/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
 
                 if (response.IsSuccessStatusCode)
@@ -57,7 +54,62 @@ namespace FEPetServices.Areas.Customer.Controllers
 
                     if (!string.IsNullOrEmpty(responseContent) && responseContent.Contains("404 Not Found"))
                     {
-                        return View("Error404");
+                        return new ErrorResult("");
+                    }
+
+                    List<OrderForm> orders = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
+
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return PartialView("_OrderPartialView", orders);
+                    }
+                    else
+                    {
+                        return View(orders);
+                    }
+                }   
+                else
+                {
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        return new ErrorResult("");
+                    }
+                    else
+                    {
+                        return View();
+                    }
+                }
+            }
+        }
+
+        private async Task<IActionResult> GetOrdersNoneStatus(string orderStatus, int page, int pageSize)
+        {
+            
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+            HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderstatus/{orderStatus}?email={email}");
+            if (!responsecheck.IsSuccessStatusCode)
+            {
+                return View(); 
+            }
+            else
+            {
+                //HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/GetOrderUserNoneFeedback/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
+                HttpResponseMessage response = await _client.GetAsync($"{DefaultApiUrl}Order/GetOrderUserNoneFeedback/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+
+                    if (!string.IsNullOrEmpty(responseContent) && responseContent.Contains("404 Not Found"))
+                    {
+                        return new ErrorResult("");
                     }
 
                     List<OrderForm> orders = System.Text.Json.JsonSerializer.Deserialize<List<OrderForm>>(responseContent, options);
@@ -75,10 +127,13 @@ namespace FEPetServices.Areas.Customer.Controllers
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
-                        return View("Error404");
+                        return new ErrorResult("");
+                        //return View();
+
                     }
                     else
                     {
+                        //return new ErrorResult("");
                         return View();
                     }
                 }
@@ -89,6 +144,44 @@ namespace FEPetServices.Areas.Customer.Controllers
         public Task<IActionResult> AllOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
 
         [HttpGet]
+        public Task<IActionResult> PlacedOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+
+        [HttpGet]
+        public Task<IActionResult> ConfirmedOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+
+        [HttpGet]
+        public Task<IActionResult> ProcessingOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+
+        [HttpGet]
         public Task<IActionResult> CompletedOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+
+        [HttpGet]
+        public Task<IActionResult> CancelledOrders(string orderStatus, int page, int pageSize) => GetOrders(orderStatus, page, pageSize);
+
+        [HttpGet]
+        public Task<IActionResult> NoneFeedback(string orderStatus, int page, int pageSize) => GetOrdersNoneStatus(orderStatus, page, pageSize);
+
+        [HttpGet]
+        public async Task<IActionResult> OrderDetail(int id)
+        {
+            ViewBag.Title = "Chi tiết đơn hàng";
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                OrderForm orderDetail = System.Text.Json.JsonSerializer.Deserialize<OrderForm>(responseContent, options);
+                return View(orderDetail);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
+        }
     }
 }

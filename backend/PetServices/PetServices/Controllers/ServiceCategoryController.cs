@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
@@ -98,7 +99,6 @@ namespace PetServices.Controllers
             return Ok(serviceDTO);
         }
 
-
         [HttpPost("AddServiceCategory")]
         public async Task<IActionResult> CreateSerCategories(ServiceCategoryDTO serviceCategoryDTO)
         {
@@ -129,7 +129,6 @@ namespace PetServices.Controllers
             }
         }
 
-        
         [HttpPut("EditServiceCategory")]
         public IActionResult UpdateServiceCategory(ServiceCategoryDTO serviceCategoryDTO, int serCategoriesId)
         {
@@ -156,6 +155,41 @@ namespace PetServices.Controllers
             return Ok(servicecategorie);
         }
 
+        [HttpGet("GetServicesByCategory/{serviceCategoryID}")]
+        public IActionResult GetServicesByCategory(int serviceCategoryID)
+        {
+            // Find the service category by ID
+            var serviceCategory = _context.ServiceCategories.FirstOrDefault(sc => sc.SerCategoriesId == serviceCategoryID);
+
+            if (serviceCategory == null)
+            {
+                return NotFound("Service category not found.");
+            }
+
+            if (serviceCategory.Status == false)
+            {
+                return BadRequest("Service category status is currently inactive.");
+            }
+
+            // Fetch services belonging to the specified serviceCategoryID
+            List<Service> servicesInCategory = _context.Services.Include(s => s.SerCategories)
+                .Where(s => s.SerCategoriesId == serviceCategoryID)
+                .ToList();
+
+            if (servicesInCategory.Count == 0)
+            {
+                return NotFound("No services found for the specified category.");
+            }
+
+            // Map the services to ServiceDTO objects
+            List<ServiceDTO> serviceDTOs = _mapper.Map<List<ServiceDTO>>(servicesInCategory);
+
+            return Ok(serviceDTOs);
+        }
+
+
+
+        [Authorize(Roles = "MANAGER")]
         [HttpDelete]
         public IActionResult DeleteServiceCategory(int serCategoriesId)
         {

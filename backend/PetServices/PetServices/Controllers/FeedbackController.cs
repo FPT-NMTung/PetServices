@@ -332,6 +332,123 @@ namespace PetServices.Controllers
             return Ok(feedbacks1);
         }
 
+        [HttpGet("GetAllFeedbackInallPartner")]
+        public async Task<ActionResult> GetAllFeedbackInallPartner()
+        {
+            var feedbacks = await _context.Feedbacks.Where(f => f.PartnerId != null).ToListAsync();
+
+            var listFeedback = _mapper.Map<List<FeedbackDTO>>(feedbacks);
+
+            foreach (var feedback in listFeedback)
+            {
+                var user = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserInfoId == feedback.UserId);
+
+                feedback.UserName = user?.FirstName + " " + user?.LastName;
+                feedback.UserImage = user?.ImageUser;
+            }
+
+            return Ok(listFeedback);
+        }
+
+        [HttpGet("GetAllFeedbackInPartner")]
+        public async Task<ActionResult> GetAllFeedbackInPartner(int partnerId)
+        {
+            var feedbacks = await _context.Feedbacks.Where(f => f.PartnerId == partnerId).ToListAsync();
+
+            var listFeedback = _mapper.Map<List<FeedbackDTO>>(feedbacks);
+
+            foreach (var feedback in listFeedback)
+            {
+                var user = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserInfoId == feedback.UserId);
+
+                feedback.UserName = user?.FirstName + " " + user?.LastName;
+                feedback.UserImage = user?.ImageUser;
+            }
+
+            return Ok(listFeedback);
+        }
+
+        [HttpGet("GetPartnerStar")]
+        public async Task<ActionResult> GetPartnerStar(int partnerId)
+        {
+            var averageStars = _context.Feedbacks.Where(f => f.PartnerId == partnerId).Average(f => f.NumberStart);
+
+            if (averageStars.HasValue)
+            {
+                averageStars = Math.Round(averageStars.Value, 1);
+            }
+
+            return Ok(averageStars); ;
+        }
+
+        [HttpGet("GetPartnerVoteNumber")]
+        public async Task<ActionResult> GetPartnerVoteNumber(int partnerId)
+        {
+            var feedbacks = await _context.Feedbacks.Where(f => f.PartnerId == partnerId).ToListAsync();
+
+            var feedback = new VoteNumberDTO
+            {
+                number5s = feedbacks.Count(f => f.NumberStart == 5),
+                number4s = feedbacks.Count(f => f.NumberStart == 4),
+                number3s = feedbacks.Count(f => f.NumberStart == 3),
+                number2s = feedbacks.Count(f => f.NumberStart == 2),
+                number1s = feedbacks.Count(f => f.NumberStart == 1),
+            };
+
+            return Ok(feedback);
+        }
+
+        [HttpGet("PaginationInPartner")]
+        public async Task<ActionResult> PaginationInPartner(int partnerId, string starnumber, int pagenumber)
+        {
+            var pageSize = 5;
+            var starNumber = 0;
+
+            var feedbacks = await _context.Feedbacks.Where(f => f.PartnerId == partnerId).ToListAsync();
+
+            if (starnumber == "5star")
+            {
+                starNumber = 5;
+            }
+            if (starnumber == "4star")
+            {
+                starNumber = 4;
+            }
+            if (starnumber == "3star")
+            {
+                starNumber = 3;
+            }
+            if (starnumber == "2star")
+            {
+                starNumber = 2;
+            }
+            if (starnumber == "1star")
+            {
+                starNumber = 1;
+            }
+
+            if (starnumber != "0")
+            {
+                feedbacks = feedbacks.Where(f => f.NumberStart == starNumber).ToList();
+            }
+
+            var startIndex = (pagenumber - 1) * pageSize;
+
+            feedbacks = feedbacks.Skip(startIndex).Take(pageSize).ToList();
+
+            var feedbacks1 = _mapper.Map<List<FeedbackDTO>>(feedbacks);
+
+            foreach (var feedback in feedbacks1)
+            {
+                var user = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserInfoId == feedback.UserId);
+
+                feedback.UserName = user?.LastName + user?.FirstName;
+                feedback.UserImage = user?.ImageUser;
+            }
+
+            return Ok(feedbacks1);
+        }
+
         [HttpGet("GetStarInTakeCarePet")]
         public async Task<ActionResult> GetStarInTakeCarePet()
         {
@@ -555,18 +672,6 @@ namespace PetServices.Controllers
 
             try
             {
-                var feedback = new Feedback
-                {
-                    Content = feedbackDTO.Content,
-                    NumberStart = feedbackDTO.NumberStart,
-                    ServiceId = feedbackDTO.ServiceId,
-                    RoomId = feedbackDTO.RoomId,
-                    PartnerId = feedbackDTO.PartnerId,
-                    ProductId = feedbackDTO.ProductId,
-                    UserId = feedbackDTO.UserId,
-                    OrderId = feedbackDTO.OrderId,
-                };
-
                 if (feedbackDTO.OrderId != null)
                 {
                     if (feedbackDTO.RoomId != null)
@@ -585,14 +690,39 @@ namespace PetServices.Controllers
                         await _context.SaveChangesAsync();
                     }
 
-                    if (feedbackDTO.ServiceId != null)
+                    if (feedbackDTO.ServiceId != null && feedbackDTO.PartnerId == null)
                     {
                         var serviceOrder = await _context.BookingServicesDetails.FirstOrDefaultAsync(b => b.OrderId == feedbackDTO.OrderId && b.ServiceId == feedbackDTO.ServiceId);
 
                         serviceOrder.FeedbackStatus = true;
                         await _context.SaveChangesAsync();
                     }
+
+                    if (feedbackDTO.PartnerId != null && feedbackDTO.ServiceId != null)
+                    {
+                        var partnerOrder = await _context.BookingServicesDetails.FirstOrDefaultAsync(b => b.OrderId == feedbackDTO.OrderId && b.PartnerInfoId == feedbackDTO.PartnerId && b.ServiceId == feedbackDTO.ServiceId);
+
+                        partnerOrder.FeedbackPartnerStatus = true;
+                        await _context.SaveChangesAsync();
+                    }
                 }
+
+                if (feedbackDTO.PartnerId != null && feedbackDTO.ServiceId != null)
+                {
+                    feedbackDTO.ServiceId = null;
+                }
+
+                var feedback = new Feedback
+                {
+                    Content = feedbackDTO.Content,
+                    NumberStart = feedbackDTO.NumberStart,
+                    ServiceId = feedbackDTO.ServiceId,
+                    RoomId = feedbackDTO.RoomId,
+                    PartnerId = feedbackDTO.PartnerId,
+                    ProductId = feedbackDTO.ProductId,
+                    UserId = feedbackDTO.UserId,
+                    OrderId = feedbackDTO.OrderId,
+                };
 
                 await _context.Feedbacks.AddAsync(feedback);
                 await _context.SaveChangesAsync();

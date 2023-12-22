@@ -2,6 +2,7 @@
 using FEPetServices.Form.OrdersForm;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Plugins;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
@@ -14,8 +15,6 @@ namespace FEPetServices.Areas.Customer.Controllers
     {
         private readonly HttpClient _client = null;
         private string DefaultApiUrl = "";
-        //private string DefaultApiUrlPet = "";
-        //private string DefaultApiUrlOrders = "";
         private readonly IConfiguration configuration;
 
         public MenuCustomerController(IConfiguration configuration)
@@ -37,6 +36,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> Information()
         {
+            ViewBag.Title = "Thông tin người dùng";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
@@ -78,7 +78,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             if (userInfo.Dob.HasValue && userInfo.Dob.Value > DateTime.Now)
             {
                 TempData["ErrorToast"] = "Ngày sinh không thể lớn hơn ngày hiện tại";
-                return RedirectToAction("Index");
+                return RedirectToAction("Information");
             }
             if (userInfo.Address == null)
             {
@@ -142,6 +142,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "UserInfo/updateInfo?email=" + email, userInfo);
             if (response.IsSuccessStatusCode)
             {
+                HttpContext.Session.SetString("UserImage", userInfo.ImageUser);
                 TempData["SuccessToast"] = "Cập nhật thông tin thành công";
                 return RedirectToAction("Information");
             }
@@ -168,6 +169,7 @@ namespace FEPetServices.Areas.Customer.Controllers
 
         public async Task<IActionResult> ChangePassword([FromForm] ChangePassword changePassword)
         {
+            ViewBag.Title = "Đổi mật khẩu";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
@@ -205,13 +207,14 @@ namespace FEPetServices.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> PetInfo()
+        public async Task<IActionResult> PetInfo( int petId)
         {
+            
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
-
+            ViewBag.Title = "Thông tin thú cưng";
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl+ "PetInfo/" + email);
-            //HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlPet + "/" + email);
+         
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -234,6 +237,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderDetail(int id)
         {
+            ViewBag.Title = "Chi tiết đơn hàng";
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
             //HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlOrders + "/" + id);
             if (response.IsSuccessStatusCode)
@@ -278,5 +282,34 @@ namespace FEPetServices.Areas.Customer.Controllers
                 return View();
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeletePet(int petId)
+        {
+            try
+            {
+                // Send a DELETE request to the API endpoint with the petId
+                HttpResponseMessage response = await _client.DeleteAsync("https://localhost:7255/api/PetInfo/Delete?petId=" + petId);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessToast"] = "Xóa thông tin thú cưng thành công!";
+                    return RedirectToAction("PetInfo");
+                }
+                else
+                {
+                    TempData["ErrorToast"] = "Xóa thông tin thú cưng thất bại. Vui lòng thử lại sau.";
+                    return RedirectToAction("PetInfo");
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorToast"] = "Đã xảy ra lỗi: " + ex.Message;
+            }
+
+            // Redirect to the PetInfo page after deletion
+            return RedirectToAction("PetInfo");
+        }
+
     }
 }

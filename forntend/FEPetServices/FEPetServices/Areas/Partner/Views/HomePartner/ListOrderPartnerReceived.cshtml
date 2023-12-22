@@ -15,20 +15,20 @@
         // Khởi tạo DataTables
         var table = $('#lists').DataTable({
             "paging": true,
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
             "searching": true,
             "ordering": true,
             "info": true,
             "autoWidth": false,
             "columnDefs": [
-                { "targets": [0], "width": "5%" },
+                { "targets": [0], "width": "4%" },
                 { "targets": [1], "width": "15%" },
-                { "targets": [2], "width": "25%" },
-                { "targets": [3], "width": "10%" }, // Điều chỉnh cột này để khớp với số cột thực tế
+                { "targets": [2], "width": "27%" },
+                { "targets": [3], "width": "17%" }, // Điều chỉnh cột này để khớp với số cột thực tế
                 { "targets": [4], "width": "10%" },
-                { "targets": [5], "width": "15%" },
-                { "targets": [6], "width": "8%" },
-                { "targets": [7], "width": "12%" },
+                { "targets": [5], "width": "10%" },
+                { "targets": [6], "width": "6%" },
+                //{ "targets": [7], "width": "11%" },
             ],
             "language": {
                 "lengthMenu": "Hiển thị _MENU_ dòng",
@@ -57,7 +57,7 @@
             <th>Số Điện Thoại</th>
             <th>Trạng Thái</th>
             <th>Chi Tiết</th>
-            <th>Button</th>
+            @*<th></th>*@
         </tr>
     </thead>
     <tbody>
@@ -66,17 +66,18 @@
             int itemCount = 0;
             foreach (var pc in Model)
             {
-                @foreach (var bd in pc.BookingServicesDetails)
+                foreach (var pcb in pc.BookingServicesDetails)
                 {
                     itemCount++;
-                    if (pc.StatusOrderService.Trim() == "Received")
+                    if (pcb.StatusOrderService?.Trim() == "Received")
                     {
                         <tr>
                             <td>@itemCount</td>
+                            @*<td><img src="@pc.UserInfoId" width="50" height="50"></td>*@
                             <td>@pc.UserInfo?.FirstName @pc.UserInfo?.LastName</td>
                             <td>
                                 <div>
-                                    @bd.Service.ServiceName - @bd.Price.ToString("n0").Replace(",", ".") VNĐ <br>
+                                    @pcb.Service.ServiceName - @pcb.Price.ToString("n0").Replace(",", ".") VNĐ <br>
                                 </div>
                             </td>
                             <td>@pc.OrderDate</td>
@@ -85,26 +86,29 @@
                                 Đơn hàng đã được xác nhận
                             </td>
                             <td>
-                                <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
+                                <a class="detail-button" href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
                             </td>
-                            <td>
-                                <button class="completed-button" data-orderid="@pc.OrderId">Hoàn thành</button>
-                            </td>
+                            @*<td>
+                                <a class="processing-button" data-orderid="@pc.OrderId">Thực Hiện</a>
+                            </td>*@
                         </tr>
                     }
                 }
 
+
+
             }
+
         }
-        <script>
+        @*<script>
             // Hàm JavaScript để cập nhật trạng thái đơn hàng
             $(document).ready(function () {
                 // Sử dụng class để chọn button
-                var buttons_received = $('.completed-button');
+                var buttons_received = $('.processing-button');
 
                 buttons_received.click(function () {
                     var orderId = $(this).data('orderid');
-                    let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusCompleted?orderId=' + orderId;
+                    let url = 'https://pet-service-api.azurewebsites.net/api/OrderPartner/UpdateOrderStatusProcessing?orderId=' + orderId;
                     fetch(url).then(response => {
                         if (response.status == 200) {
                             console.log("Hoàn thành đơn thành công!");
@@ -115,7 +119,7 @@
                     });
                 });
             });
-        </script>
+        </script>*@
     </tbody>
     <tfoot>
         @if (ViewBag.ErrorMessage != null)

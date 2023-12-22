@@ -1,13 +1,8 @@
 ﻿@model FEPetServices.Form.RegisterDTO
 
-@{
-    ViewData["Title"] = "Index";
-}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>HASH TECHIE OFFICIAL</title>
     <link rel="stylesheet" href="~/css/Register.css">
 
     <link href="~/css/toastnotification.css" rel="stylesheet" />
@@ -70,25 +65,4 @@
         }
     </section>
 </body>
-<script>
-    function showSuccessToast() {
-        toast({
-            title: 'Thành công',
-            message: '@ViewBag.SuccessToast',
-            type: 'success',
-            duration: 2000
-        });
-    }
-    function showErrorToast() {
-        toast({
-            title: 'Thất bại',
-            message: '@ViewBag.ErrorToast',
-            type: 'error',
-            duration: 2000
-        });
-    }
-</script>
 </html>
-
-
-<script src="~/js/Register.js"></script>

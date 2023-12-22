@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,7 @@ namespace PetServices.Controllers
         public IActionResult GetAllProduct()
         {
             List<Product> products = _context.Products.Include(s => s.ProCategories)
+                .OrderByDescending(p => p.ProductId)
                 .ToList();
 
             var productlist = _mapper.Map<List<ProductDTO>>(products);
@@ -44,6 +46,35 @@ namespace PetServices.Controllers
 
             return Ok(productlist);
         }
+
+        [HttpGet("GetAllProductWhenCategoryTrue")]
+        public IActionResult GetProductWhenCategoryTrue()
+        {
+            // Filter services based on the status of their associated service categories
+            List<Product> products = _context.Products
+                .Include(s => s.ProCategories)
+                .OrderByDescending(x => x.ProductId)
+                .Where(s => s.ProCategories.Status == true) // Filter based on service category status
+                .ToList();
+
+            var productlist = _mapper.Map<List<ProductDTO>>(products);
+
+            foreach (var product in productlist)
+            {
+                var averageStars = _context.Feedbacks.Where(f => f.ProductId == product.ProductId).Average(f => f.NumberStart);
+
+                if (averageStars.HasValue)
+                {
+                    averageStars = Math.Round(averageStars.Value, 1);
+                }
+
+                product.NumberStar = averageStars ?? 0;
+                product.NumberVoter = _context.Feedbacks.Where(f => f.ProductId == product.ProductId).ToList().Count();
+            }
+
+            return Ok(productlist);
+        }
+
         [HttpGet("ProductID/{id}")]
         public IActionResult GetById(int id)
         {
@@ -68,6 +99,7 @@ namespace PetServices.Controllers
                 List<Product> products = _context.Products
                     .Include(s => s.ProCategories)
                     .Where(p => p.ProCategoriesId == categoryId)
+                    .OrderByDescending(x => x.ProductId)
                     .ToList();
 
                 // Kiểm tra xem có sản phẩm nào thuộc loại đó hay không
@@ -83,7 +115,6 @@ namespace PetServices.Controllers
                 return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
             }
         }
-
 
         [HttpPost("Add")]
         public async Task<IActionResult> CreateProduct(ProductDTO productDTO)
@@ -114,6 +145,18 @@ namespace PetServices.Controllers
             else if (productDTO.Picture.Contains(" "))
             {
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            // check số lượng Slot
+            if (productDTO.Quantity <= 0)
+            {
+                string errorMessage = "Số lượng phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+            // check giá
+            if (productDTO.Price <= 0)
+            {
+                string errorMessage = "Giá phải lớn hơn 0!";
                 return BadRequest(errorMessage);
             }
             // check loại sản phẩm            
@@ -176,6 +219,18 @@ namespace PetServices.Controllers
             else if (productDTO.Picture.Contains(" "))
             {
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            // check số lượng Slot
+            if (productDTO.Quantity <= 0)
+            {
+                string errorMessage = "Số lượng phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+            // check giá
+            if (productDTO.Price <= 0)
+            {
+                string errorMessage = "Giá phải lớn hơn 0!";
                 return BadRequest(errorMessage);
             }
             // check loại sản phẩm            
@@ -269,6 +324,8 @@ namespace PetServices.Controllers
                 return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
             }
         }
+
+
         [HttpDelete]
         public IActionResult DeleteServce(int serviceId)
         {

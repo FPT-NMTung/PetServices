@@ -13,9 +13,12 @@
     @*// Thư viện chung*@
     <link href="~/css/toastNotification.css" rel="stylesheet" />
     <link href="~/css/menuCustomer.css" rel="stylesheet" />
-
+    <link rel="shortcut icon" type="image/x-icon" href="~/img/icon/logo.png">
+    <title>Nhân viên-@ViewBag.Title</title>
     <link href="~/css/partner/layoutpartner.css" rel="stylesheet" />
     <script src="~/managerjs/layoutmanager.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
 </head>
 <body>
     <div class="sidebar position-fixed top-0 bottom-0 bg-white border-end">
@@ -37,9 +40,9 @@
         </div>
         <ul class="sidebar-menu p-3 m-0 mb-0">
             <li class="sidebar-menu-item active">
-                <a href="#">
+                <a href="/Partner/DashboardPartner">
                     <i class="fa-solid fa-square-poll-vertical sidebar-menu-item-icon"></i>
-                    Thống kê đơn hàng
+                    Thống kê doanh số
                 </a>
             </li>
             <li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">Quản lý tài khoản</li>
@@ -90,68 +93,62 @@
             <li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">Danh Sách Đơn Hàng Đã Nhận</li>
             <li class="sidebar-menu-item">
                 <a href="/Partner/HomePartner/ListOrderPartnerReceived">
-                    @*<i class="fa-solid fa-school-flag sidebar-menu-item-icon"></i>*@
+                    <i class="fa-solid fa-school-flag sidebar-menu-item-icon"></i>
                     Đơn Hàng Đã Nhận
-                    @*<i class="fa-solid fa-angle-down sidebar-menu-item-accordion ms-auto"></i>*@
                 </a>
-                @*<ul class="sidebar-dropdown-menu">
-                    <li class="sidebar-dropdown-menu-item">
-                        <a href="/Partner/HomePartner/ListOrderPetTrainingSpecialReceived">
-                            Những Đơn Hàng Ưu Tiên
-                        </a>
-                    </li>
-                    <li class="sidebar-dropdown-menu-item">
-                        <a href="/Partner/HomePartner/ListOrderPetTrainingReceived">
-                            Những Đơn Hàng Bình Thường
-                        </a>
-                    </li>
-                </ul>*@
+            </li>
+            <li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">Danh Sách Đơn Hàng Đang Thực Hiện</li>
+            <li class="sidebar-menu-item">
+                <a href="/Partner/HomePartner/ListOrderPartnerProcessing">
+                    <i class="fa-solid fa-school-flag sidebar-menu-item-icon"></i>
+                    Đơn Hàng Đang Thực Hiện
+                </a>
             </li>
             <li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">Danh Sách Đơn Hàng Đã Hoàn Thành</li>
             <li class="sidebar-menu-item">
                 <a href="/Partner/HomePartner/ListOrderPartnerComplete">
-                    @*<i class="fa-solid fa-school-flag sidebar-menu-item-icon"></i>*@
-                    Đơn Hàng Đã Hoàn Thành
-                    @*<i class="fa-solid fa-angle-down sidebar-menu-item-accordion ms-auto"></i>*@
-                </a>
-                @*<ul class="sidebar-dropdown-menu">
-                    <li class="sidebar-dropdown-menu-item">
-                        <a href="/Partner/HomePartner/ListOrderPetTrainingSpecialComplete">
-                            Những Đơn Hàng Ưu Tiên
-                        </a>
-                    </li>
-                    <li class="sidebar-dropdown-menu-item">
-                        <a href="/Partner/HomePartner/ListOrderPetTrainingComplete">
-                            Những Đơn Hàng Bình Thường
-                        </a>
-                    </li>
-                </ul>*@
-            </li>
-            @*<li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">Danh Sách Đơn Hàng Đã Hủy</li>
-            <li class="sidebar-menu-item has-dropdown">
-                <a href="#">
                     <i class="fa-solid fa-school-flag sidebar-menu-item-icon"></i>
-                    Đơn Hàng Đã Hủy
-                    <i class="fa-solid fa-angle-down sidebar-menu-item-accordion ms-auto"></i>
+                    Đơn Hàng Đã Hoàn Thành
                 </a>
-                <ul class="sidebar-dropdown-menu">
-                    <li class="sidebar-dropdown-menu-item">
-                        <a href="/Partner/HomePartner/ListOrderPetTrainingSpecialReject">
-                            Những Đơn Hàng Ưu Tiên
-                        </a>
-                    </li>
-                    <li class="sidebar-dropdown-menu-item">
-                        <a href="/Partner/HomePartner/ListOrderPetTrainingReject">
-                            Những Đơn Hàng Bình Thường
-                        </a>
-                    </li>
-                </ul>
-            </li>*@
+            </li>
         </ul>
     </div>
-    <main>
-        <div>
-            <nav></nav>
+    <main class="bg-light" style="margin-top: -20px;">
+        <div class="p-2">
+            <nav class="px-3 py-2 bg-white rounded shadow nav_menu">
+                <i class="sidebar-toggle fa-solid fa-bars me-3 d-block d-md-none"></i>
+                <h1 class="fw-bold mb-0 me-auto"></h1>
+                <div class="dropdown">
+                    <div class="d-flex align-items-center cursor-pointer dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        @{
+                            string? username = Context.Session.GetString("UserName");
+                            if (username != "aaa_a")
+                            {
+                                <span class="me-2 d-none d-sm-block">@username</span>
+                            }
+                            if(username is null)
+                            {
+                                <span class="me-2 d-none d-sm-block">Xin Chào</span>
+                            }
+                        }
+                        @{
+                            string? userimage = Context.Session.GetString("UserImage");
+                            if (userimage is not null)
+                            {
+                                <img class="navbar-profile-image" src="@userimage" alt="Image">
+                            }
+                            if (userimage is null)
+                            {
+                                <img class="navbar-profile-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPzVNWWirLZJ6H95_YOLsLkxju6ZNaSxdj37F7nXfd29TXvBVI9PeZWrTfYEin-XBDnkk&usqp=CAU" alt="Image">
+                            }
+                        }
+                         </div>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="~/Partner/InformationPartner">Thông tin người dùng</a></li>
+                        <li><a class="dropdown-item" href="~/Logout/Index">Đăng xuất @RenderSection("Logout", required: false)</a></li>
+                    </ul>
+                </div>
+            </nav>
         </div>
         <div>
             @RenderBody()
@@ -298,5 +295,16 @@
         @*-------------------------------------------------------*@
     </script>
     <script src="~/js/toastnotification.js"></script>
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+    <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
+    <script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.excel.min.js"></script>
+    <script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="//cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,12 +36,12 @@ namespace PetServices.Controllers
         [HttpGet("TagsID/{id}")]
         public IActionResult GetByIdTags(int id)
         {
-            Tag tag = _context.Tags.Include(s => s.Blogs)
+            Tag tag = _context.Tags
                 .FirstOrDefault(c => c.TagId == id);
-            return Ok(_mapper.Map<Tag>(tag));
+            return Ok(_mapper.Map<TagDTO>(tag));
         }
 
-
+        
         [HttpPost("AddTag")]
         public async Task<IActionResult> CreateTag(TagDTO tagDTO)
         {
@@ -51,7 +52,8 @@ namespace PetServices.Controllers
 
             var newTag = new Tag
             {
-                TagName = tagDTO.TagName
+                TagName = tagDTO.TagName,
+                Status=tagDTO.Status
             };
 
             _context.Tags.Add(newTag);
@@ -66,6 +68,32 @@ namespace PetServices.Controllers
                 return StatusCode(500, ex.InnerException.Message);
             }
         }
+
+
+        [HttpPut("EditTag")]
+        public IActionResult UpdateTag(TagDTO tagDTO, int tagID)
+        {
+            var existingTag = _context.Tags.FirstOrDefault(p => p.TagId == tagID);
+            if (existingTag == null)
+            {
+                return NotFound();
+            }
+            existingTag.TagName = tagDTO.TagName;
+            existingTag.Status = tagDTO.Status; 
+
+            try
+            {
+                _context.Tags.Update(existingTag); // Attach the entity and mark it as modified
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Conflict();
+            }
+
+            return Ok(existingTag);
+        }
+
 
     }
 }

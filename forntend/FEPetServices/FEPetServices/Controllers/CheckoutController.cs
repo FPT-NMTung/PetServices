@@ -1,8 +1,10 @@
 ﻿using FEPetServices.Form;
 using FEPetServices.Form.OrdersForm;
+using FEPetServices.Models.ErrorResult;
 using FEPetServices.Models.Payments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using PetServices.Models;
 using System.Globalization;
@@ -40,31 +42,6 @@ namespace FEPetServices.Controllers
             //DefaultApiUrlUserInfo = "https://pet-service-api.azurewebsites.net/api/UserInfo";
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
-            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
-
-            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
-
-            if (response.IsSuccessStatusCode)
-            {
-                string responseContent = await response.Content.ReadAsStringAsync();
-
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                };
-
-                AccountInfo userInfo = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
-
-                return View(userInfo);
-            }
-
-            return View();
-        }
-
         public const string CARTKEY = "cart";
         public class CartItem
         {
@@ -84,7 +61,6 @@ namespace FEPetServices.Controllers
             public ServiceDTO service { set; get; }
             // Room
         }
-
         List<CartItem> GetCartItems()
         {
             var session = HttpContext.Session;
@@ -96,6 +72,29 @@ namespace FEPetServices.Controllers
             return new List<CartItem>();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            ViewBag.Title = "Thanh toán";
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                AccountInfo userInfo = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
+                return View(userInfo);
+            }
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Index([FromForm] OrderForm orderform, string payment)
         {
@@ -103,9 +102,13 @@ namespace FEPetServices.Controllers
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
             double totalPrice = 0;
-            DateTime dateOrder = DateTime.Now;
+            TimeZoneInfo vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+
+            // Lấy thời gian hiện tại theo múi giờ +7
+            DateTime currentTimeInVietnam = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, vietnamTimeZone);
             try
             {
+                ViewBag.Title = "Thanh toán";
                 if (orderform.Province == null ||
                     orderform.District == null || orderform.Commune == null)
                 {
@@ -129,10 +132,40 @@ namespace FEPetServices.Controllers
                 // Lấy thông tin CartItems từ Session
                 List<CartItem> cartItems = GetCartItems();
 
+                if(cartItems.Count() == 0)
+                {
+                    TempData["ErrorToast"] = "Giỏ hàng không tồn tại";
+                    return RedirectToAction("Index", "Checkout");
+                }
+
+                foreach (var cartItem in cartItems)
+                {
+                    if (cartItem.product != null)
+                    {
+                        ProductDTO product = null;
+                        HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Product/ProductID/" + cartItem.product.ProductId);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string responseContent = await response.Content.ReadAsStringAsync();
+                            var option = new JsonSerializerOptions
+                            {
+                                PropertyNameCaseInsensitive = true
+                            };
+                            product = System.Text.Json.JsonSerializer.Deserialize<ProductDTO>(responseContent, option);
+                        }
+
+                        if (product.Quantity < cartItem.quantityProduct)
+                        {
+                            TempData["ErrorToast"] = "Sản phẩm vượt quá số lượng sản phẩm đã có trong kho, vui lòng kiểm tra lại trước khi đặt hàng";
+                            return RedirectToAction("Index", "Checkout");
+                        }
+                    }
+                }
+
                 // Tạo đối tượng OrderForm từ thông tin CartItems và orderform
                 OrderForm order = new OrderForm
                 {
-                    OrderDate = dateOrder,
+                    OrderDate = currentTimeInVietnam,
                     OrderStatus = "Placed",
                     Province = orderform.Province,
                     District = orderform.District,
@@ -162,6 +195,7 @@ namespace FEPetServices.Controllers
                         order.OrderProductDetails.Add(orderProductDetail);
                         totalPrice = totalPrice + (double)(cartItem.quantityProduct * cartItem.product.Price);
                     }
+
                     if (cartItem.service != null)
                     {
                         var bookingServicesDetail = new BookingServicesDetailForm
@@ -219,7 +253,7 @@ namespace FEPetServices.Controllers
 
                         vnpay.AddRequestData("vnp_BankCode", "VNBANK");
 
-                        vnpay.AddRequestData("vnp_CreateDate", dateOrder.ToString("yyyyMMddHHmmss"));
+                        vnpay.AddRequestData("vnp_CreateDate", currentTimeInVietnam.ToString("yyyyMMddHHmmss"));
 
                         vnpay.AddRequestData("vnp_CurrCode", "VND");
                         vnpay.AddRequestData("vnp_IpAddr", _utils.GetIpAddress());

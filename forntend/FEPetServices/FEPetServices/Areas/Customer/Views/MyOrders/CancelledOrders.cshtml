@@ -1,0 +1,488 @@
+﻿@using FEPetServices.Form.OrdersForm;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <link href="~/css/orders/stylesheet.css" rel="stylesheet" />
+    <link href="~/css/map.css" rel="stylesheet" />
+    <script src="~/js/map.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM"></script>
+</head>
+<body>
+    <div class="card right-profile-card">
+        <div class="card-header alert-primary">
+            <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-home-tab" data-toggle="pill"
+                       href="~/Customer/MyOrders/AllOrders?orderStatus=All&page=1&pageSize=5"
+                       role="tab" aria-selected="true">Tất cả</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-education-tab" data-toggle="pill"
+                       href="~/Customer/MyOrders/PlacedOrders?orderStatus=Placed&page=1&pageSize=5"
+                       role="tab" aria-selected="false">Đơn hàng đang chờ xác nhận</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-event-tab" data-toggle="pill"
+                       href="~/Customer/MyOrders/ConfirmedOrders?orderStatus=Confirmed&page=1&pageSize=5"
+                       role="tab" aria-selected="false">Đơn hàng được xác nhận </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill"
+                       href="~/Customer/MyOrders/ProcessingOrders?orderStatus=Processing&page=1&pageSize=5"
+                       role="tab" aria-selected="false">Đơn hàng đang được thực hiện</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill"
+                       href="~/Customer/MyOrders/CompletedOrders?orderStatus=Completed&page=1&pageSize=5"
+                       role="tab" aria-selected="false">Hoàn thành</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" id="pills-tasks-tab" data-toggle="pill"
+                       href="~/Customer/MyOrders/CancelledOrders?orderStatus=Cancelled&page=1&pageSize=5"
+                       role="tab" aria-selected="false">Huỷ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill"
+                       href="~/Customer/MyOrders/NoneFeedback?orderStatus=Completed&page=1&pageSize=5"
+                       role="tab" aria-selected="false">Đơn hàng chưa đánh giá</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="search-order">
+            <input type="text" id="searchInput" placeholder="Bạn có thể tìm kiếm theo mã đơn hàng, tên sản phẩm hoặc dịch vụ">
+        </div>
+
+        <div class="card-body">
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        <div id="orders-container">
+                            @if (Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                            {
+                                Html.Partial("_OrderPartialView", (List<OrderForm>)Model);
+                            }
+                            else
+                            {
+                                @foreach (var order in Model)
+                                {
+                                    double totalPrice = 0;
+                                    <div class="work-container">
+                                        <div class="work-container-inner">
+                                            <h5>Mã đơn hàng : @order.OrderId
+                                                <a style="font-size:18px; text-decoration:none; font-weight:600" class="detail-button" href="~/Customer/MyOrders/OrderDetail?id=@order.OrderId"> Xem thêm</a>
+                                            </h5>
+                                            @if (order.OrderStatus.Trim() == "Confirmed")
+                                            {
+                                                <span style="display:inline-block" class="badge badge-info">Đơn hàng đã được xác nhận và trong giai đoạn xử lý </span>
+                                            }
+                                            else if (order.OrderStatus.Trim() == "Processing")
+                                            {
+                                                <span style="display:inline-block" class="badge badge-info">Đơn hàng đang được thực hiện</span>
+                                            }
+                                            else if (order.OrderStatus.Trim() == "Placed")
+                                            {
+                                                <span style="display:inline-block" class="badge badge-info">Đơn hàng đang chờ xác nhận</span>
+                                            }
+                                            else if (order.OrderStatus.Trim() == "Completed")
+                                            {
+                                                <span style="display:inline-block" class="badge badge-info">Đơn hàng đã hoàn thành</span>
+                                            }
+                                            else if (order.OrderStatus.Trim() == "Cancelled")
+                                            {
+                                                <span style="display:inline-block" class="badge badge-info">Đơn hàng bị huỷ</span>
+                                            }
+                                        </div>
+                                        <p><i class="far fa-calendar-alt"></i> @order.OrderDate</p>
+
+                                        @*Start - Product Detail*@
+                                        @if (order.OrderProductDetails != null && order.OrderProductDetails.Count > 0)
+                                        {
+                                            <div class="content-details">
+                                                <p class="bold-text">Thông tin sản phẩm đã được đặt hàng</p>
+                                                @for (int i = 0; i < order.OrderProductDetails.Count; i++)
+                                                {
+                                                    var productDetail = order.OrderProductDetails[i];
+                                                    totalPrice = totalPrice + (productDetail.Quantity * productDetail.Price);
+                                                    <div class="content-detail">
+                                                        <div class="product-info">
+                                                            <img src="@productDetail.Product.Picture" width="50" height="50" alt="Product Image">
+                                                            <div class="product-info-detail">
+                                                                <p style="max-width:450px">@productDetail.Product.ProductName</p>
+                                                                <p style="font-size:.8rem;"><span>x</span>@productDetail.Quantity</p>
+                                                            </div>
+                                                        </div>
+                                                        <p>@($"{(productDetail.Quantity * productDetail.Price):n0}".Replace(",", ".")) VNĐ</p>
+                                                    </div>
+                                                    @if ((productDetail.FeedbackStatus == null || productDetail.FeedbackStatus == false) && productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                                                    {
+                                                        <div class="btn-content-detail">
+                                                            <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@order.UserInfoId', '@order.OrderId', '@productDetail.FeedbackStatus')">Đánh giá</button>
+                                                        </div>
+                                                    }
+                                                    @if (i == order.OrderProductDetails.Count - 1)
+                                                    {
+                                                        <div class=" status-content-detail">
+                                                            @if (productDetail?.StatusOrderProduct?.Trim() == "Placed")
+                                                            {
+                                                                <span class="badge badge-info">Sản phẩm đang chờ xác nhận</span>
+                                                            }
+                                                            else if (productDetail?.StatusOrderProduct?.Trim() == "Packaging")
+                                                            {
+                                                                <span class="badge badge-info">Đóng gói sản phẩm</span>
+                                                            }
+                                                            else if (productDetail?.StatusOrderProduct?.Trim() == "Shipped")
+                                                            {
+                                                                <span class="badge badge-info">Đơn hàng đang được vận chuyển</span>
+                                                            }
+                                                            else if (productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                                                            {
+                                                                <span class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
+                                                            }
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        }
+                                        @*End - Product Detail*@
+
+                                        @*Start - Service Detail*@
+                                        @if (order.BookingServicesDetails != null && order.BookingServicesDetails.Count > 0)
+                                        {
+                                            <div class="content-details">
+                                                <p class="bold-text">Thông tin dịch vụ đã được đặt hàng</p>
+                                                @foreach (var serviceDetail in order.BookingServicesDetails)
+                                                {
+                                                    totalPrice = totalPrice + serviceDetail.PriceService;
+                                                    <div class="content-detail">
+                                                        <div class="service-info">
+                                                            <img src="@serviceDetail.Service.Picture" width="50" height="50" alt="Service Image">
+                                                            <div class="service-info-detail">
+                                                                <p style="max-width:450px">@serviceDetail.Service.ServiceName</p>
+                                                                <p style="font-size:.8rem;"><span>Cân nặng thú cưng: </span>@serviceDetail.Weight Kg</p>
+
+                                                                @*<button type="button" class="map-button"
+                                            data-lat="@serviceDetail?.PartnerInfo?.Lat"
+                                            data-lng="@serviceDetail?.PartnerInfo?.Lng">
+                                            Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail.PartnerInfoId
+                                            </button>*@
+
+                                                                <div style="display: flex ; justify-content:space-between">
+                                                                    <p style="font-size:.8rem;">
+                                                                        Đối tác : @serviceDetail?.PartnerInfo?.FirstName @serviceDetail?.PartnerInfo?.LastName - @serviceDetail?.PartnerInfoId
+                                                                    </p>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="content-detail-time-service">
+                                                            <p style="font-size:.8rem;">Thời gian bắt đầu: @serviceDetail?.StartTime</p>
+                                                            <p style="font-size:.8rem;">Thời gian kêt thúc: @serviceDetail?.EndTime</p>
+                                                        </div>
+                                                        <p>@($"{(serviceDetail.PriceService):n0}".Replace(",", ".")) VNĐ</p>
+                                                    </div>
+                                                    <div class="status-content-detail">
+                                                        @if (@serviceDetail?.StatusOrderService.Trim() == "Placed")
+                                                        {
+                                                            <span class="badge badge-info">Dịch vụ đang chờ xác nhận</span>
+                                                        }
+                                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Waiting")
+                                                        {
+                                                            <span class="badge badge-info">Dịch vụ đang chờ xử lý </span>
+                                                        }
+                                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Received")
+                                                        {
+                                                            <span class="badge badge-info">Dịch vụ được nhận bởi nhân viên</span>
+                                                        }
+                                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Processing")
+                                                        {
+                                                            <span class="badge badge-info">Đang trong quá trình thực hiện</span>
+                                                        }
+                                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Rejected")
+                                                        {
+                                                            <span class="badge badge-info">Bị huỷ bởi nhân viên bạn chọn</span>
+                                                        }
+                                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "ReceivedDifficult")
+                                                        {
+                                                            <span class="badge badge-info">Dịch vụ được nhận bởi nhân viên khác</span>
+                                                        }
+                                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                                        {
+                                                            <span class="badge badge-info">Dịch vụ đã hoàn thành</span>
+                                                        }
+                                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Cancelled")
+                                                        {
+                                                            <span class="badge badge-info">Dịch vụ bị huỷ</span>
+                                                        }
+                                                    </div>
+                                                    @if ((serviceDetail.FeedbackStatus == null || serviceDetail.FeedbackStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                                    {
+                                                        <div class="btn-content-detail">
+                                                            <button class="btn btn-outline-primary" onclick="openPopupService('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        }
+                                        @*End - Service Detail*@
+
+                                        @*Start - Room Detail*@
+                                        @if (order.BookingRoomDetails != null && order.BookingRoomDetails.Count > 0)
+                                        {
+                                            <div class="content-details">
+                                                <p class="bold-text">Thông tin phòng đã được đặt hàng</p>
+                                                @foreach (var roomDetail in order.BookingRoomDetails)
+                                                {
+                                                    totalPrice = totalPrice + roomDetail.TotalPrice;
+                                                    <div class="content-detail">
+                                                        <div class="room-info">
+                                                            <img src="@roomDetail.Room.Picture" width="50" height="50" alt="Room Image">
+                                                            <div class="room-info-detail">
+                                                                <p style="max-width:800px">@roomDetail.Room.RoomName</p>
+                                                                @foreach (var roomService in order.BookingRoomServices)
+                                                                {
+                                                                    <div class="room-info-detail-service">
+                                                                        <p style="font-size:.8rem;">Dịch vụ: @roomService.Service.ServiceName</p>
+                                                                        <p class="price-service-rooom" style="font-size:.8rem;">@($"{(roomService.PriceService):n0}".Replace(",", ".")) VNĐ</p>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="content-detail-time">
+                                                        <p style="font-size:.9rem;">Thời gian bắt đầu: @roomDetail.StartDate</p>
+                                                        <p style="font-size:.9rem;">Thời gian kêt thúc: @roomDetail.EndDate</p>
+                                                    </div>
+                                                    @if (roomDetail.FeedbackStatus == null || roomDetail.FeedbackStatus == false)
+                                                    {
+                                                        <div class="btn-content-detail">
+                                                            <button class="btn btn-outline-primary" onclick="openPopupRoom('@roomDetail.Room.Picture', '@roomDetail.Room.RoomName', '@roomDetail.RoomId', '@order.UserInfoId', '@order.OrderId')">Đánh giá</button>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        }
+                                        @*End - Room Detail*@
+
+                                        <div class="headel-content">
+                                            <p>Tổng giá : </p>
+                                            <p>@(totalPrice.ToString("n0").Replace(",", ".")) VNĐ</p>
+                                        </div>
+                                        <div class="work-container-inner">
+                                            @if (order != null && order.TypePay != null && order.TypePay.Trim() == "cash")
+                                            {
+                                                <p>Thanh toán trực tiếp</p>
+                                            }
+                                            @if (order != null && order.TypePay != null && @order.TypePay.Trim() == "vnpay")
+                                            {
+                                                <p>Thanh toán bằng hình thức chuyển khoản</p>
+                                            }
+                                            @if (!@order.StatusPayment)
+                                            {
+                                                <span class="badge badge-info">Chưa thanh toán</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-info">Đã thanh toán</span>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="work-container" style="width:100%">
+                            <p style="text-align:center">Chưa có đơn hàng</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mapModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMapModal()">&times;</span>
+            <div id="map" style="width: 100%; height: 400px;"></div>
+        </div>
+        <div id="directionsPanel"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    @*Start Lazy Loading*@
+    <script>
+        var pageIndex = 1;
+        var loading = false;
+        var lazyLoadingEnabled = true;
+
+        function loadMore() {
+            if (!loading && lazyLoadingEnabled) {
+                loading = true;
+                $('#loading-indicator').show();
+
+                $.ajax({
+                    url: '/Customer/MyOrders/AllOrders',
+                    type: 'GET',
+                    data: { orderStatus: 'Cancelled', page: pageIndex + 1, pageSize: 5 },
+                    success: function (data) {
+                        if (data.trim() !== '') {
+                            $('#orders-container').append(data);
+                            pageIndex++;
+                        } else {
+                            lazyLoadingEnabled = false;
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        lazyLoadingEnabled = false;
+                        console.error('AJAX error:', textStatus, errorThrown);
+                    },
+
+                    complete: function () {
+                        loading = false;
+                        $('#loading-indicator').hide();
+                    }
+                });
+            }
+        }
+
+        $(window).scroll(function () {
+            if (lazyLoadingEnabled && $(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+                loadMore();
+            }
+        });
+    </script>
+    @*End Lazy Loading*@
+
+    @*Start Search*@
+    <!-- Add this script after your lazy loading script -->
+    <script>
+        $(document).ready(function () {
+            function search() {
+                var searchTerm = $('#searchInput').val().toLowerCase();
+
+                if (!searchTerm) {
+                    $('.work-container').show();
+                    return;
+                }
+
+                $('.work-container').hide();
+
+                $('.work-container').filter(function () {
+                    var orderId = $(this).find('h5').text().toLowerCase();
+                    var productName = $(this).find('.product-info-detail p').text().toLowerCase();
+                    var serviceName = $(this).find('.service-info-detail p').text().toLowerCase();
+
+                    return orderId.includes(searchTerm) || productName.includes(searchTerm) || serviceName.includes(searchTerm);
+                }).show();
+            }
+            $('#searchInput').on('keyup', function () {
+                search();
+            });
+        });
+
+        @*Open Map*@
+            $('.clickable').click(function () {
+                var partnerLatitude = parseFloat($(this).data("lat"));
+                var partnerLongitude = parseFloat($(this).data("lng"));
+                var myLatitude = parseFloat($(this).data("my-lat"));
+                var myLongitude = parseFloat($(this).data("my-lng"));
+
+                if (isNaN(myLatitude) || isNaN(myLongitude)) {
+                    // Nếu vị trí của bạn không được xác định trước đó, hãy lấy lại
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            myLatitude = position.coords.latitude;
+                            myLongitude = position.coords.longitude;
+
+                            // Lưu trữ vị trí của bạn để sử dụng cho các lần click sau
+                            $(this).data("my-lat", myLatitude);
+                            $(this).data("my-lng", myLongitude);
+
+                            showPosition(partnerLatitude, partnerLongitude, myLatitude, myLongitude);
+                        }, function (error) {
+                            console.error("Error getting current location:", error);
+                        });
+                    } else {
+                        alert("Trình duyệt không hỗ trợ lấy vị trí.");
+                    }
+                } else {
+                    showPosition(partnerLatitude, partnerLongitude, myLatitude, myLongitude);
+                }
+            });
+
+        $(".close").click(function () {
+            closeMapModal();
+        });
+
+        $(window).click(function (event) {
+            if (event.target.id === "mapModal") {
+                closeMapModal();
+            }
+        });
+
+        function showPosition(partnerLatitude, partnerLongitude, myLatitude, myLongitude) {
+            initMap(partnerLatitude, partnerLongitude, myLatitude, myLongitude);
+            openMapModal();
+            calculateAndDisplayRoute(directionsService, directionsDisplay, { lat: myLatitude, lng: myLongitude }, { lat: partnerLatitude, lng: partnerLongitude });
+        }
+
+        function openMapModal() {
+            $("#mapModal").css("display", "block");
+        }
+
+        function closeMapModal() {
+            $("#mapModal").css("display", "none");
+        }
+
+        function initMap(latitude, longitude, myLatitude, myLongitude) {
+            var directionsService = new google.maps.DirectionsService();
+            var directionsDisplay = new google.maps.DirectionsRenderer();
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: latitude, lng: longitude },
+                zoom: 15
+            });
+
+            var marker = new google.maps.Marker({
+                position: { lat: latitude, lng: longitude },
+                map: map,
+                title: 'Vị trí đối tác',
+                icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+            });
+
+            var myMarker = new google.maps.Marker({
+                position: { lat: myLatitude, lng: myLongitude },
+                map: map,
+                title: 'Vị trí của tôi',
+                icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+            });
+
+            directionsDisplay.setMap(map);
+            calculateAndDisplayRoute(directionsService, directionsDisplay, { lat: myLatitude, lng: myLongitude }, { lat: latitude, lng: longitude });
+        }
+
+        function calculateAndDisplayRoute(directionsService, directionsDisplay, start, end) {
+            directionsService.route({
+                origin: start,
+                destination: end,
+                travelMode: 'DRIVING'
+            }, function (response, status) {
+                if (status === 'OK') {
+                    directionsDisplay.setDirections(response);
+                } else {
+                    window.alert('Không thể hiển thị tuyến đường do: ' + status);
+                }
+            });
+        }
+        @*End Map*@
+    </script>
+    @*End Search*@
+</body>
+</html>

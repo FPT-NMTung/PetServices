@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,10 @@ namespace PetServices.Controllers
         [HttpGet("GetAllRoomCategory")]
         public async Task<ActionResult> GetAllRoomCategory()
         {
-            var roomCategories = await _context.RoomCategories.ToListAsync();
+            var roomCategories = await _context.RoomCategories
+                .OrderByDescending(o => o.RoomCategoriesId)
+                .ToListAsync();
+
             return Ok(_mapper.Map<List<RoomCategoryDTO>>(roomCategories));
         }
 

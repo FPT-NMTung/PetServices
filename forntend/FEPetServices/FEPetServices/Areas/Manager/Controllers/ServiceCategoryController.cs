@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PetServices.Models;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using PetServices.Models;
-using System.Security.Claims;
-using FEPetServices.Areas.DTO;
-using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
@@ -41,6 +39,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Danh sách loại dịch vụ";
                 var json = JsonConvert.SerializeObject(serviceCategory);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -78,6 +77,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Thêm loại dịch vụ mới";
                 if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
                 {
                     if (serviceCategory.SerCategoriesName == null) { return View(); }
@@ -141,6 +141,7 @@ namespace FEPetServices.Areas.Manager.Controllers
 
             try
             {
+                ViewBag.Title = "Chỉnh sửa chi tiết loại dịch vụ";
                 // Gọi API để lấy thông tin ServiceCategory cần chỉnh sửa
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ServiceCategory/ServiceCategorysID/" + serCategoriesId);
 

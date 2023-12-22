@@ -25,6 +25,7 @@ namespace FEPetServices.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Title = "Xác minh tài khoản";
             return View();
         }
 
@@ -49,7 +50,7 @@ namespace FEPetServices.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessRegisterSuccessToast"] = "Tài khoản đã được kích hoạt thành công.";
+                    TempData["SuccessToast"] = "Tài khoản đã được kích hoạt thành công.";
                     return RedirectToAction("Index", "Login");
                 }
                 else

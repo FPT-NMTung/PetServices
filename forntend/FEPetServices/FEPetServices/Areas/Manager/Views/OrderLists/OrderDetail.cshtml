@@ -119,6 +119,10 @@
                                             {
                                                 <span class="badge badge-info">Đơn hàng đang được vận chuyển</span>
                                             }
+                                            else if (productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                                            {
+                                                <span class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
+                                            }
                                         </div>
                                     </td>
                                 </tr>
@@ -180,13 +184,37 @@
                                 <td colspan="5"></td>
                                 <td>
                                     <div class="status-content-detail">
-                                        @if (@serviceDetail?.StatusOrderService?.Trim() == "Placed")
+                                        @if (@serviceDetail?.StatusOrderService.Trim() == "Placed")
                                         {
                                             <span class="badge badge-info">Dịch vụ đang chờ xác nhận</span>
                                         }
                                         else if (@serviceDetail?.StatusOrderService?.Trim() == "Waiting")
                                         {
                                             <span class="badge badge-info">Dịch vụ đang chờ xử lý </span>
+                                        }
+                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Received")
+                                        {
+                                            <span class="badge badge-info">Dịch vụ được nhận bởi nhân viên</span>
+                                        }
+                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Processing")
+                                        {
+                                            <span class="badge badge-info">Đang trong quá trình thực hiện</span>
+                                        }
+                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Rejected")
+                                        {
+                                            <span class="badge badge-info">Bị huỷ bởi nhân viên bạn chọn</span>
+                                        }
+                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "ReceivedDifficult")
+                                        {
+                                            <span class="badge badge-info">Dịch vụ được nhận bởi nhân viên khác</span>
+                                        }
+                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                        {
+                                            <span class="badge badge-info">Dịch vụ đã hoàn thành</span>
+                                        }
+                                        else if (@serviceDetail?.StatusOrderService?.Trim() == "Cancelled")
+                                        {
+                                            <span class="badge badge-info">Dịch vụ bị huỷ</span>
                                         }
                                     </div>
                                 </td>
@@ -276,12 +304,60 @@
                 <input type="hidden" name="Id" value="@Model?.OrderId" />
                 <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
 
-                <select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
-                    <option value="Confirmed">Xác nhận đơn hàng</option>
-                    <option value="Cancelled">Huỷ đơn hàng</option>
-                </select>
+                <div style="display:flex;">
+                    @*@if (Model.BookingServicesDetails.PartnerInfoId != null){}*@
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="confirmedCheckbox" name="newStatus" value="Confirmed" onchange="handleStatusChange()">
+                        <label class="form-check-label" for="confirmedCheckbox">Nhận Đơn</label>
+                    </div>
 
-                <button class="btn btn-primary" type="submit">Xác nhận</button>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="cancelledCheckbox" name="newStatus" value="Cancelled" onchange="handleStatusChange()" onchange="handleCancelledChange()">
+                        <label class="form-check-label" for="cancelledCheckbox">Hủy Đơn</label>
+                    </div>
+                    <div id="reasonSelect" style="display: none;" class="form-group">
+                        <div style="display:flex;">
+                            <div class="title" style="padding-right: 10px;">
+                                <label for="ReasonId">Lý Do Hủy Đơn: </label>
+                            </div>
+                            <div class="typeinput">
+                                @if (ViewBag.Reasons != null)
+                                {
+                                    <select id="ReasonId" name="ReasonId" required onchange="handleReasonChange(this)">
+                                        <option value="Lý do">Chọn Lý Do Hủy Đơn</option>
+                                        @foreach (var rea in ViewBag.Reasons)
+                                        {
+                                            <option value="@rea.Value">@rea.Text</option>
+                                        }
+                                        <option value="khac">Lý Do Hủy Đơn Khác</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <span class="text-danger">Error</span>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div id="lydoKhac" style="display: none;">
+                    <div>
+                        <label for="title">Tiêu Đề:</label>
+                        <input type="text" id="ReasonOrderTitle" name="ReasonOrderTitle" style="width:100%" placeholder="Nhập Tiêu Đề">
+                    </div>
+                    <div>
+                        <label for="description">Mô Tả:</label>
+                        <textarea id="ReasonOrderDescription" name="ReasonOrderDescription" style="width:100%" placeholder="Nhập Mô Tả"></textarea>
+                    </div>
+                </div>
+                @*<select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
+            <option value="Confirmed">Xác nhận đơn hàng</option>
+            <option value="Cancelled">Huỷ đơn hàng</option>
+            </select>*@
+
+                <button class="btn btn-primary" style="margin-top: 20px;" type="submit">Xác nhận</button>
             }
         </form>
 
@@ -290,5 +366,53 @@
             <a class="btn btn-primary" href="~/Manager/OrderLists/Index">Trở lại</a>
         </div>
     </div>
+    <script>
+        // Xử lý sự kiện khi chọn nút radio "Rejected"
+        function handleStatusChange() {
+            var receivedCheckbox = $('#confirmedCheckbox');
+            var reasonSelectDiv = $('#reasonSelect');
+            var lydoKhacDiv = $('#lydoKhac');
+
+            if (receivedCheckbox.prop('checked')) {
+                reasonSelectDiv.hide();  // Ẩn select dropdown khi nút radio "Received" được chọn
+                lydoKhacDiv.hide();      // Ẩn div "lydoKhac" khi nút radio "Received" được chọn
+            } else {
+                reasonSelectDiv.show();  // Hiển thị select dropdown khi nút radio "Rejected" được chọn
+                // Kiểm tra nếu "Lý Do Hủy Đơn Khác" đã được chọn, thì hiển thị "lydoKhacDiv"
+                if ($('#ReasonId').val() === 'khac') {
+                    lydoKhacDiv.show();
+                } else {
+                    lydoKhacDiv.hide();
+                }
+            }
+        }
+    </script>
+
+    <script>
+        function handleCancelledChange() {
+            // Hiển thị hoặc ẩn phần lý do hủy đơn tùy thuộc vào giá trị chọn
+            var reasonSelectDiv = document.getElementById('reasonSelect');
+            var lydoKhacDiv = document.getElementById('lydoKhac');
+            var rejectedCheckbox = document.getElementById('cancelledCheckbox');
+
+            if (rejectedCheckbox.checked) {
+                reasonSelectDiv.style.display = 'block';
+                lydoKhacDiv.style.display = 'block';
+            } else {
+                reasonSelectDiv.style.display = 'none';
+                lydoKhacDiv.style.display = 'none';
+            }
+        }
+
+        function handleReasonChange(selectElement) {
+            var lydoKhacDiv = document.getElementById('lydoKhac');
+
+            if (selectElement.value == 'khac') {
+                lydoKhacDiv.style.display = 'block';  // Hiển thị div khi chọn lựa chọn "Lý Do Hủy Đơn Khác"
+            } else {
+                lydoKhacDiv.style.display = 'none';   // Ẩn div khi chọn bất kỳ lựa chọn khác
+            }
+        }
+    </script>
 </body>
 </html>

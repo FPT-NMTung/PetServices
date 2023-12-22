@@ -15,19 +15,19 @@
         // Khởi tạo DataTables
         var table = $('#lists').DataTable({
             "paging": true,
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
             "searching": true,
             "ordering": true,
             "info": true,
             "autoWidth": false,
             "columnDefs": [
-                { "targets": [0], "width": "5%" },
-                { "targets": [1], "width": "15%" },
+                { "targets": [0], "width": "4%" },
+                { "targets": [1], "width": "20%" },
                 { "targets": [2], "width": "30%" },
                 { "targets": [3], "width": "10%" }, // Điều chỉnh cột này để khớp với số cột thực tế
-                { "targets": [4], "width": "15%" },
+                { "targets": [4], "width": "10%" },
                 { "targets": [5], "width": "17%" },
-                { "targets": [6], "width": "8%" },
+                { "targets": [6], "width": "11%" },
             ],
             "language": {
                 "lengthMenu": "Hiển thị _MENU_ dòng",
@@ -67,7 +67,7 @@
                 foreach (var pcb in pc.BookingServicesDetails)
                 {
                     itemCount++;
-                    if (pcb.StatusOrderService.Trim() == "Completed")
+                    if (pcb.StatusOrderService?.Trim() == "Completed")
                     {
                         <tr>
                             <td>@itemCount</td>
@@ -84,7 +84,7 @@
                                 Đơn hàng đã hoàn thành
                             </td>
                             <td>
-                                <a href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
+                                <a class="detail-button" href="/Partner/HomePartner/OrderPartnerDetail?orderId=@pc.OrderId">Chi tiết</a>
                             </td>
                         </tr>
                     }

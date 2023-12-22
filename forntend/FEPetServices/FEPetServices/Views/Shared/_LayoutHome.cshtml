@@ -7,15 +7,15 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+    <title>PetService | @ViewBag.Title</title>
     @* Thư viện chung // *@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
           integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="~/img/icon/icon1.png">
-
+    <link rel="shortcut icon" type="image/x-icon" href="~/img/icon/logo.png">
+ 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="~/assets/css/vendor/bootstrap.min.css">
     <link rel="stylesheet" href="~/assets/css/vendor/font-awesome.css">
@@ -34,26 +34,26 @@
 <body class="sticky-header newsletter-popup-modal">
     <a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
     <header class="header axil-header header-style-1">
-      @{
+        @{
             string? userimage = Context.Session.GetString("UserImage");
             if (userimage is null)
             {
                 <div class="axil-header-top">
                     <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-sm-6">
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="header-top-link">
-                                <ul class="quick-link">
-                                    <li><a class="btn btn-outline-primary" href="~/Login">Đăng nhập</a></li>
-                                    <li><a style="padding: 4.5px 9px;" class="btn axil-btn btn-bg-primary" href="~/Register/Index">Đăng ký</a></li>
-                                </ul>
+                        <div class="row align-items-center">
+                            <div class="col-sm-6">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="header-top-link">
+                                    <ul class="quick-link">
+                                        <li><a class="btn btn-outline-primary" href="~/Login">Đăng nhập</a></li>
+                                        <li><a style="padding: 4.5px 9px;" class="btn axil-btn btn-bg-primary" href="~/Register/Index">Đăng ký</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             }
             if (userimage is not null)
             {
@@ -76,15 +76,12 @@
         }
 
         <div id="axil-sticky-placeholder"></div>
-        <div class="axil-mainmenu"> 
+        <div class="axil-mainmenu">
             <div class="container">
                 <div class="header-navbar">
                     <div class="header-brand">
-                        <a href="/Home" class="logo logo-dark">
-                            <img style="width: 138px;height: 100%;" src="https://bizweb.dktcdn.net/100/147/060/themes/880570/assets/logo.png?1687579687145" alt="Site Logo">
-                        </a>
-                        <a href="/Home" class="logo logo-light">
-                            <img style="width: 138px;height: 100%;" src="https://bizweb.dktcdn.net/100/147/060/themes/880570/assets/logo.png?1687579687145" alt="Site Logo">
+                        <a href="/Home" class="logo">
+                            <img src="~/img/icon/logo-2.png">
                         </a>
                     </div>
                     <div class="header-main-nav">
@@ -92,21 +89,21 @@
                             <button class="mobile-close-btn mobile-nav-toggler"><i class="fas fa-times"></i></button>
                             <div class="mobile-nav-brand">
                                 <a href="/Home" class="logo">
-                                    <img style="width: 100px;height: 100%;" src="https://bizweb.dktcdn.net/100/147/060/themes/880570/assets/logo.png?1687579687145" alt="Site Logo">
+                                    <img style="width: 100px;height: 100%;" src="~/img/icon/logo-2.png">
                                 </a>
                             </div>
                             <ul class="mainmenu">
                                 <li>
-                                    <a href="~/Home">Trang chủ</a>
+                                    <a href="~/Home">Trang Chủ</a>
                                 </li>
                                 <li>
                                     <a href="~/ProductList">Sản phẩm</a>
                                 </li>
-                                <li><a href="/Home/ServiceList">Dịch vụ</a></li>
+                                <li><a href="/Home/Service">Dịch Vụ</a></li>
                                 <li><a href="/Home/Room">Phòng</a></li>
-                                <li><a href="/Home/BlogList">Bài viết</a></li>
-                                <li><a href="/Home/Partner">Đối tác</a></li>
-                                <li><a href="/Home/Introduce">Giới thiệu</a></li>
+                                <li><a href="/Home/BlogList">Bài Viết</a></li>
+                                <li><a href="/Home/Partner">Nhân Viên</a></li>
+                                <li><a href="/Home/Introduce">Giới Thiệu</a></li>
                                 @*<li><a href="contact.html">Liên hệ với chúng tôi</a></li>*@
                             </ul>
                         </nav>
@@ -144,7 +141,7 @@
                                                     <a href="~/Customer/MenuCustomer/Information">Thông tin cá nhân</a>
                                                 </li>
                                                 <li>
-                                                    <a href="~/Customer/MenuCustomer/ChangePasssword">Đổi mật khẩu</a>
+                                                    <a href="~/Customer/MenuCustomer/ChangePassword">Đổi mật khẩu</a>
                                                 </li>
                                                 <li>
                                                     <a href="~/Logout/Index" style="border-bottom : none!important">Đăng xuất  @RenderSection("Logout", required: false)</a>
@@ -156,7 +153,7 @@
                                 }
                                 if (userimageuser is null)
                                 {
-                                    
+
                                 }
                             }
                             <li class="axil-mobile-toggle">
@@ -170,7 +167,6 @@
             </div>
         </div>
     </header>
-    <div class="cat-container"></div>
     <div>
         @RenderBody()
     </div>
@@ -189,7 +185,7 @@
                                 </p>
                                 <ul class="support-list-item">
                                     <li><a href="mailto:psmsg65@gmail.com"><i class="fal fa-envelope-open"></i> psmsg65@gmail.com</a></li>
-                                    <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> 0969886688</a></li>
+                                    <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> 0969 886 688</a></li>
                                     <!-- <li><i class="fal fa-map-marker-alt"></i> 685 Market Street,  <br> Las Vegas, LA 95820, <br> United States.</li> -->
                                 </ul>
                             </div>
@@ -213,7 +209,7 @@
                     <div class="col-lg-3 col-sm-6">
                         <div class="axil-footer-widget">
                             <h5 class="widget-title">Quy định và Điều kiện </h5>
-                             <div class="inner">
+                            <div class="inner">
                                 <ul>
                                     <li><a href="~/Home/Terms">Điều khoản sử dụng</a></li>
                                     <li><a href="~/Home/Privacy">Chính sách</a></li>
@@ -233,31 +229,31 @@
             </div>
         </div>
         @*<div class="copyright-area copyright-default separator-top">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-xl-4">
-                        <div class="social-share">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#"><i class="fab fa-discord"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-12">
-                    </div>
-                    <div class="col-xl-4 col-lg-12">
-                        <div class="copyright-right d-flex flex-wrap justify-content-xl-end justify-content-center align-items-center">
-                            <span class="card-text">Accept For</span>
-                            <ul class="payment-icons-bottom quick-link">
-                                <li><img src="~/assets/images/icons/cart/cart-1.png" alt="paypal cart"></li>
-                                <li><img src="~/assets/images/icons/cart/cart-2.png" alt="paypal cart"></li>
-                                <li><img src="~/assets/images/icons/cart/cart-5.png" alt="paypal cart"></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="container">
+        <div class="row align-items-center">
+        <div class="col-xl-4">
+        <div class="social-share">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-discord"></i></a>
+        </div>
+        </div>
+        <div class="col-xl-4 col-lg-12">
+        </div>
+        <div class="col-xl-4 col-lg-12">
+        <div class="copyright-right d-flex flex-wrap justify-content-xl-end justify-content-center align-items-center">
+        <span class="card-text">Accept For</span>
+        <ul class="payment-icons-bottom quick-link">
+        <li><img src="~/assets/images/icons/cart/cart-1.png" alt="paypal cart"></li>
+        <li><img src="~/assets/images/icons/cart/cart-2.png" alt="paypal cart"></li>
+        <li><img src="~/assets/images/icons/cart/cart-5.png" alt="paypal cart"></li>
+        </ul>
+        </div>
+        </div>
+        </div>
+        </div>
         </div>*@
     </footer>
 
@@ -287,19 +283,20 @@
                                             @if (item.product != null)
                                             {
                                                 <a><img src="@item.product.Picture" alt="@item.product.ProductName"></a>
+                                                <button class="close-btn removecart" data-productid="@item.product.ProductId"><i class="fas fa-times"></i></button>
                                             }
                                             @if (item.service != null)
                                             {
                                                 <a><img src="@item.service.Picture" alt="@item.service.ServiceName"></a>
+                                                <button class="close-btn removecart" data-serviceid="@item.service.ServiceId"><i class="fas fa-times"></i></button>
                                             }
-                                            <button class="close-btn"><i class="fas fa-times"></i></button>
                                         </div>
                                         <div class="item-content">
                                             @if (item.product != null)
                                             {
                                                 <h3 class="item-title"><a>@item.product.ProductName</a></h3>
                                                 <div class="item-price"><span class="currency-symbol"></span>@($"{item.product.Price:n0}".Replace(",", ".")) VNĐ</div>
-                                                      //@($"{(item.product.Price * item.quantityProduct):n0}".Replace(",", ".")) VNĐ
+                                                //@($"{(item.product.Price * item.quantityProduct):n0}".Replace(",", ".")) VNĐ
                                                 <div class="pro-qty item-quantity">
                                                     <input type="number" class="quantity-input" value="@item.quantityProduct">
                                                 </div>
@@ -332,22 +329,22 @@
             </div>
         </div>
     </div>
-        <div class="modal" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">  
-                        <h5 class="modal-title" id="successModalLabel">Thông báo</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Thêm vào giỏ hàng thành công!
-                    </div>
-                    <div class="modal-footer">
-                    <button  type="button" style="padding:5px;font-size:15px" class="btn btn-success" data-bs-dismiss="modal">Đóng</button>
-                    </div>
+    <div class="modal" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Thông báo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Thêm vào giỏ hàng thành công!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" style="padding:5px;font-size:15px" class="btn btn-success" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>
+    </div>
     @*Toast notification design*@
     <div id="toast"></div>
     @*Start - Base TempData*@
@@ -518,6 +515,17 @@
         }
     @*End - Base ViewBag*@
     @*-------------------------------------------------------*@
+    @*Start - Base ViewBag*@
+        function showErrorToastInvalidTimeRoom() {
+            toast({
+                title: 'Thất bại',
+                message: 'Đặt phòng thất bại, vui lòng kiểm tra lại ngày đặt phòng.',
+                type: 'wating',
+                duration: 2000
+            });
+        }
+    @*End - Base ViewBag*@
+    @*-------------------------------------------------------*@
 </script>
 <script>
     function updateCartCount(totalQuantity) {
@@ -530,22 +538,29 @@
     }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM"></script>
-<script src="~/js/order/cart.js"></script>
-
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const cat = document.createElement("div");
-        cat.classList.add("random-cat");
-        document.body.appendChild(cat);
+    $(document).ready(function () {
+        $(".removecart").click(function (event) {
+            event.preventDefault();
+            var productid = $(this).attr("data-productid");
+            var serviceid = $(this).attr("data-serviceid");
 
-        function changeCatImage() {
-            cat.style.backgroundImage = `url('https://cdn-icons-png.flaticon.com/512/6611/6611181.png')`;
-
-            cat.style.top = Math.floor(Math.random() * (window.innerHeight - 50)) + "px";
-            cat.style.left = Math.floor(Math.random() * (window.innerWidth - 50)) + "px";
-        }
-
-        setInterval(changeCatImage, 5000); 
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("RemoveCart", "Cart")",
+                data: {
+                    productid: productid,
+                    serviceid: serviceid
+                },
+                success: function (result) {
+                    window.location.href = "@Url.Action("Index", "Cart")";
+                },
+                error: function (error) {
+                    console.error("Error removing item from cart:", error);
+                }
+            });
+        });
     });
 </script>
 </html>

@@ -1,9 +1,9 @@
 ﻿using FEPetServices.Form;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
-using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
@@ -37,6 +37,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Danh sách loại sản phẩm";
                 var json = JsonConvert.SerializeObject(productCategoryDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ProductCategory/GetAll");
@@ -71,6 +72,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Thêm loại sản phẩm mới";
                 if (ModelState.IsValid) // Kiểm tra xem biểu mẫu có hợp lệ không
                 {
                     if (proCategory.ProCategoriesName == null) { return View(); }
@@ -131,6 +133,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Chỉnh sửa thông tin loại sản phẩm";
                 //goi api de lay thong tin can sua
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ProductCategory/ProductCategorysID/"   + procateId);
                 if (response.IsSuccessStatusCode)

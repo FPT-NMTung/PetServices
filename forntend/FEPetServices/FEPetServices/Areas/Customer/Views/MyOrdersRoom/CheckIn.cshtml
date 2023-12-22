@@ -1,0 +1,237 @@
+﻿@using FEPetServices.Form.OrdersForm;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <link href="~/css/orders/stylesheet.css" rel="stylesheet" />
+    <link href="~/css/map.css" rel="stylesheet" />
+    <script src="~/js/map.js"></script>
+</head>
+<body>
+    <div class="card right-profile-card">
+        <div class="card-header alert-primary">
+            <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/Index?orderStatus=All&page=1&pageSize=5" role="tab" aria-selected="true">Tất cả</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" id="pills-education-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/CheckIn?orderStatus=Placed&page=1&pageSize=5" role="tab" aria-selected="false">Chờ nhận phòng</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/Processing?orderStatus=Processing&page=1&pageSize=5" role="tab" aria-selected="false">Phòng đã nhận</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-event-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/CheckOut?orderStatus=Confirmed&page=1&pageSize=5" role="tab" aria-selected="false">Đã trả phòng</a>
+                </li>
+                 <li class="nav-item">
+                <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/Canceled?orderStatus=Cancelled&page=1&pageSize=5" role="tab" aria-selected="false">Phòng bị huỷ </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="~/Customer/MyOrdersRoom/NoneFeedback?orderStatus=Confirmed&page=1&pageSize=5" role="tab" aria-selected="false">Phòng chưa đánh giá</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="search-order">
+            <input type="text" id="searchInput" placeholder="Bạn có thể tìm kiếm theo mã đơn hàng, tên phòng">
+        </div>
+
+        <div class="card-body">
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        <div id="orders-container">
+                            @if (Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                            {
+                                Html.Partial("_OrderPartialView", (List<OrderForm>)Model);
+                            }
+                            else
+                            {
+                                @foreach (var order in Model)
+                                {
+                                    double totalPrice = 0;
+                                    <div class="work-container">
+                                        <div class="work-container-inner">
+                                            <h5>Mã đơn hàng : @order.OrderId
+                                                <a style="font-size:18px; text-decoration:none; font-weight:600" class="detail-button" href="~/Customer/MyOrdersRoom/OrderRoomDetail?id=@order.OrderId"> Xem thêm</a>
+                                            </h5>
+                                            @if (order?.OrderStatus.Trim() == "Confirmed")
+                                            {
+                                                <span style="display:inline-block" class="badge badge-info">Đã trả phòng</span>
+                                            }
+                                            else if (order?.OrderStatus.Trim() == "Refund")
+                                            {
+                                                <span style="display:inline-block" class="badge badge-info">Hoàn tiên</span>
+                                            }
+                                            else if (order?.OrderStatus.Trim() == "Placed")
+                                            {
+                                                <span style="display:inline-block" class="badge badge-info">Chờ nhận phòng</span>
+                                            }
+                                            else if (order?.OrderStatus.Trim() == "Cancelled")
+                                            {
+                                                <span style="display:inline-block" class="badge badge-info">Phòng bị huỷ </span>
+                                            }
+                                            else if (order?.OrderStatus.Trim() == "Processing")
+                                            {
+                                                <span style="display:inline-block" class="badge badge-info">Đã nhận phòng</span>
+                                            }
+                                        </div>
+                                        <p><i class="far fa-calendar-alt"></i> @order.OrderDate</p>
+
+                                        @*Start - Room Detail*@
+                                        @if (order.BookingRoomDetails != null && order.BookingRoomDetails.Count > 0)
+                                        {
+                                            <div class="content-details">
+                                                <p class="bold-text">Thông tin phòng đã được đặt hàng</p>
+                                                @foreach (var roomDetail in order.BookingRoomDetails)
+                                                {
+                                                    totalPrice = totalPrice + roomDetail.TotalPrice;
+                                                    <div class="content-detail">
+                                                        <div class="room-info">
+                                                            <img src="@roomDetail.Room.Picture" width="50" height="50" alt="Room Image">
+                                                            <div class="room-info-detail">
+                                                                <p style="max-width:800px">@roomDetail.Room.RoomName</p>
+                                                                @foreach (var roomService in order.BookingRoomServices)
+                                                                {
+                                                                    <div class="room-info-detail-service">
+                                                                        <p style="font-size:.8rem;">Dịch vụ: @roomService.Service.ServiceName</p>
+                                                                        <p class="price-service-rooom" style="font-size:.8rem;">@($"{(roomService.PriceService):n0}".Replace(",", ".")) VNĐ</p>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="content-detail-time">
+                                                        <p style="font-size:.9rem;">Thời gian bắt đầu: @roomDetail.StartDate</p>
+                                                        <p style="font-size:.9rem;">Thời gian kêt thúc: @roomDetail.EndDate</p>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                        @*End - Room Detail*@
+
+                                        <div class="headel-content">
+                                            <p>Tổng giá : </p>
+                                            <p>@(totalPrice.ToString("n0").Replace(",", ".")) VNĐ</p>
+                                        </div>
+                                        <div class="work-container-inner">
+                                            @if (order != null && order.TypePay != null && order.TypePay.Trim() == "cash")
+                                            {
+                                                <p>Thanh toán trực tiếp</p>
+                                            }
+                                            @if (order != null && order.TypePay != null && @order.TypePay.Trim() == "vnpay")
+                                            {
+                                                <p>Thanh toán bằng hình thức chuyển khoản</p>
+                                            }
+                                            @if (!@order.StatusPayment)
+                                            {
+                                                <span class="badge badge-info">Chưa thanh toán</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-info">Đã thanh toán</span>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="work-container" style="width:100%">
+                            <p style="text-align:center">Chưa có đơn hàng</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mapModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMapModal()">&times;</span>
+            <div id="map" style="width: 100%; height: 400px;"></div>
+        </div>
+        <div id="directionsPanel"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    @*Start Lazy Loading*@
+    <script>
+        var pageIndex = 1;
+        var loading = false;
+        var lazyLoadingEnabled = true;
+
+        function loadMore() {
+            if (!loading && lazyLoadingEnabled) {
+                loading = true;
+                $('#loading-indicator').show();
+
+                $.ajax({
+                    url: '/Customer/MyOrdersRoom/Index',
+                    type: 'GET',
+                    data: { orderStatus: 'Placed', page: pageIndex + 1, pageSize: 5 },
+                    success: function (data) {
+                        if (data.trim() !== '') {
+                            $('#orders-container').append(data);
+                            pageIndex++;
+                        } else {
+                            lazyLoadingEnabled = false;
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        lazyLoadingEnabled = false;
+                        console.error('AJAX error:', textStatus, errorThrown);
+                    },
+
+                    complete: function () {
+                        loading = false;
+                        $('#loading-indicator').hide();
+                    }
+                });
+            }
+        }
+
+        $(window).scroll(function () {
+            if (lazyLoadingEnabled && $(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+                loadMore();
+            }
+        });
+    </script>
+    @*End Lazy Loading*@
+
+    @*Start Search*@
+    <!-- Add this script after your lazy loading script -->
+    <script>
+        $(document).ready(function () {
+            function search() {
+                var searchTerm = $('#searchInput').val().toLowerCase();
+
+                if (!searchTerm) {
+                    $('.work-container').show();
+                    return;
+                }
+
+                $('.work-container').hide();
+
+                $('.work-container').filter(function () {
+                    var orderId = $(this).find('h5').text().toLowerCase();
+                    var productName = $(this).find('.product-info-detail p').text().toLowerCase();
+                    var serviceName = $(this).find('.service-info-detail p').text().toLowerCase();
+
+                    return orderId.includes(searchTerm) || productName.includes(searchTerm) || serviceName.includes(searchTerm);
+                }).show();
+            }
+            $('#searchInput').on('keyup', function () {
+                search();
+            });
+        });
+    </script>
+    @*End Search*@
+</body>
+</html>

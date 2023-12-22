@@ -47,7 +47,7 @@
                 </div>
                 <div class="col-75">
                     <div class="quantity-container">
-                        <input type="number" class="slot" id="Slot" name="Slot" placeholder="Số lượng" min="0" required>&ensp;
+                        <input type="number" class="slot" id="Slot" name="Slot" placeholder="Số lượng" min="0" required>&ensp; VNĐ
                     </div>
                     <div style="color:red" class="error-message" id="slot-error-message"></div>
                 </div>
@@ -85,7 +85,7 @@
                     @if (ViewBag.Categories != null)
                     {
                         <select id="RoomCategoriesId" name="RoomCategoriesId" required>
-                            <option value="">Chọn một loại phòng</option>
+                            <option value="">Chọn loại phòng</option>
                             @foreach (var category in ViewBag.Categories)
                             {
                                 <option value="@category.Value">@category.Text</option>
@@ -115,7 +115,7 @@
                         <a type="submit" value="Cancal" href="/Manager/Room" class="cancel">Trở lại</a>
                     </div>
                     <div class="btn-submit">
-                        <input type="submit" value="Thêm loại dịch vụ">
+                        <input type="submit" value="Thêm phòng">
                     </div>
                 </div>
             </div>

@@ -119,6 +119,10 @@
                                             {
                                                 <span class="badge badge-info">Đơn hàng đang được vận chuyển</span>
                                             }
+                                            else if (productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                                            {
+                                                <span class="badge badge-info">Đơn hàng được giao đến khách hàng</span>
+                                            }
                                         </div>
                                     </td>
                                 </tr>
@@ -127,6 +131,11 @@
                     </tbody>
                 </table>
             </div>
+        }
+
+         @if (Model.BookingServicesDetails != null && Model.BookingServicesDetails.Count > 0)
+        {
+            <h4>Đơn hàng có dịch vụ</h4>
         }
 
         <div style="margin-bottom:0" class="form-group row">
@@ -158,17 +167,37 @@
         </div>
 
         <form method="post" asp-controller="Shipped" asp-action="OrderShippedDetail">
-            @if (Model.OrderStatus.Trim() == "Confirmed")
+            <input type="hidden" name="Id" value="@Model?.OrderId" />
+            <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
+            @for (int i = 0; i < Model.OrderProductDetails.Count; i++)
             {
-                <input type="hidden" name="Id" value="@Model?.OrderId" />
-                <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
+                var productDetail = Model.OrderProductDetails[i];
 
-                <select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
-                    <option value="Processing">Giao hàng</option>
-                    <option value="Cancelled">Huỷ đơn hàng</option>
-                </select>
-
-                <button class="btn btn-primary" type="submit">Xác nhận</button>
+                @if (i == Model.OrderProductDetails.Count - 1)
+                {
+                    if (productDetail?.StatusOrderProduct?.Trim() == "Packaging" || Model.OrderStatus.Trim() == "Confirmed")
+                    {
+                        <select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
+                            <option value="Processing">Giao hàng</option>
+                        </select>
+                        <button class="btn btn-primary" type="submit">Xác nhận</button>
+                    }
+                }
+            }
+            @for (int i = 0; i < Model.OrderProductDetails.Count; i++)
+            {
+                var productDetail = Model.OrderProductDetails[i];
+             
+                @if (i == Model.OrderProductDetails.Count - 1)
+                {
+                    if (productDetail?.StatusOrderProduct?.Trim() == "Shipped")
+                    {
+                        <select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
+                            <option value="Delivered">Đã giao</option>
+                        </select>
+                        <button class="btn btn-primary" type="submit">Xác nhận</button>
+                    }
+                }
             }
         </form>
 

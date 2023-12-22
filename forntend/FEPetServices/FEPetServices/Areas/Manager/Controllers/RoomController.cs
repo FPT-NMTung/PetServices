@@ -1,13 +1,17 @@
 ﻿using FEPetServices.Areas.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using PetServices.Models;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
+using System.Net;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using System.Diagnostics;
+using System.Data;
+using ClosedXML.Excel;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
@@ -45,6 +49,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Danh sách phòng";
                 var json = JsonConvert.SerializeObject(roomDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -79,10 +84,70 @@ namespace FEPetServices.Areas.Manager.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<FileResult> ExportToExcel()
+        {
+            Console.WriteLine("1");
+            HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Room/GetAllRoomDetail");
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            var roomList = JsonConvert.DeserializeObject<List<RoomDTO>>(responseContent);
+
+            var fileName = "Danh_Sách_Phòng.xlsx";
+
+            Console.WriteLine("2");
+
+            return GenerateExcel(fileName, roomList);
+        }
+
+        private FileResult GenerateExcel(string fileName, IEnumerable<RoomDTO> roomList)
+        {
+            var dataTable = new System.Data.DataTable("roomlist");
+
+            dataTable.Columns.AddRange(new DataColumn[]
+            {
+                new DataColumn("Tên phòng"),
+                new DataColumn("Ảnh"),
+                new DataColumn("Giá"),
+                new DataColumn("Số lượng"),
+                new DataColumn("Các dịch vụ có sẵn"),
+                new DataColumn("Loại phòng"),
+                new DataColumn("Mô tả")
+            });
+
+            foreach (var room in roomList)
+            {
+                dataTable.Rows.Add(
+                    room.RoomName,
+                    room.Picture,
+                    room.Price,
+                    room.Slot,
+                    room.ServiceIds,
+                    room.RoomCategoriesName,
+                    room.Desciptions
+                    );
+            }
+
+            using ( XLWorkbook wb = new XLWorkbook())
+            {
+                wb.Worksheets.Add(dataTable);
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    wb.SaveAs(stream);
+
+                    return File(stream.ToArray(),
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    fileName);
+                }
+            }
+        }
+
         public async Task<IActionResult> AddRoom([FromForm] RoomDTO roomDTO, IFormFile image)
         {
             try
             {
+                ViewBag.Title = "Thêm phòng mới";
                 HttpResponseMessage roomCategoryResponse = await client.GetAsync(DefaultApiUrl + "Room/GetRoomCategory");
                 //HttpResponseMessage roomCategoryResponse = await client.GetAsync(ApiUrlRoomCategoryList);
 
@@ -167,6 +232,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Chỉnh sửa chi tiết phòng";
                 HttpResponseMessage serviceResponse = await client.GetAsync(DefaultApiUrl + "Room/GetAllService");
                 //HttpResponseMessage serviceResponse = await client.GetAsync(ApiUrlServiceList);
 

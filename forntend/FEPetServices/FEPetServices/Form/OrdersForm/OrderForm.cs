@@ -16,11 +16,10 @@ namespace FEPetServices.Form.OrdersForm
         public string? FullName { get; set; }
         public int? UserInfoId { get; set; }
         public bool? StatusPayment { get; set; }
-        public int? ReasonId { get; set; }
+        public int? ReasonId { get; set; }  
         public double? TotalPrice { get; set; }
        // public int? ReasonId { get; set; }
 
-        public virtual ReasonDTO? Reason { get; set; }
         public virtual UserInfo? UserInfo { get; set; }
         public virtual ICollection<OrderProductDetailForm> OrderProductDetails { get; set; }
         public virtual ICollection<BookingServicesDetailForm>? BookingServicesDetails { get; set; }

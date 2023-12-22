@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
@@ -12,19 +13,20 @@ namespace PetServices.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class AdminController : ControllerBase
     {
         private PetServicesContext _context;
         private IMapper _mapper;
         private readonly IConfiguration _configuration;
 
+        
         public AdminController(PetServicesContext context, IMapper mapper, IConfiguration configuration)
         {
             _context = context;
             _mapper = mapper;
             _configuration = configuration;
         }
-
         [HttpGet("GetAllAccount")]
         public async Task<ActionResult> GetAllAccountTest()
         {
@@ -32,7 +34,6 @@ namespace PetServices.Controllers
 
             return Ok(acc);
         }
-
         [HttpGet("GetAllUser")]
         public async Task<ActionResult> GetAllUser()
         {
@@ -40,7 +41,6 @@ namespace PetServices.Controllers
 
             return Ok(user);
         }
-
         [HttpGet("GetAllPartner")]
         public async Task<ActionResult> GetAllPartner()
         {
@@ -48,7 +48,6 @@ namespace PetServices.Controllers
 
             return Ok(partner);
         }
-
         [HttpGet]
         public async Task<ActionResult> GetRole()
         {
@@ -56,7 +55,6 @@ namespace PetServices.Controllers
 
             return Ok(roles);
         }
-
         [HttpGet("GetAllAccountByAdmin")]
         public async Task<ActionResult> GetAllAccount()
         {
@@ -71,7 +69,6 @@ namespace PetServices.Controllers
 
             return Ok(accountsViewModel);
         }
-        
         [HttpGet("{methodName}")]
         public IActionResult GetMethod(string methodName)
         {
@@ -80,7 +77,6 @@ namespace PetServices.Controllers
                 .ToList();
             return Ok(_mapper.Map<List<UpdateAccountDTO>>(acc));
         }
-
         [HttpPut("UpdateAccount")]
         public async Task<ActionResult> UpdateAccount(AccountByAdminDTO accountchange)
         {
@@ -115,6 +111,7 @@ namespace PetServices.Controllers
                             Address = account.UserInfo?.Address ?? null,
                             Descriptions = account.UserInfo?.Descriptions ?? null,
                             ImagePartner = account.UserInfo?.ImageUser ?? null,
+                            Dob = account.UserInfo?.Dob ?? null,
                         };
                     }
 
@@ -128,7 +125,8 @@ namespace PetServices.Controllers
                         account.PartnerInfo.Commune = account.UserInfo?.Commune ?? null;
                         account.PartnerInfo.Address = account.UserInfo?.Address ?? null;
                         account.PartnerInfo.Descriptions = account.UserInfo?.Descriptions ?? null;
-                        account.PartnerInfo.ImagePartner = account.UserInfo?.ImageUser ?? null; 
+                        account.PartnerInfo.ImagePartner = account.UserInfo?.ImageUser ?? null;
+                        account.PartnerInfo.Dob = account.UserInfo?.Dob ?? null;
                     }
 
                     if (account.UserInfoId == null && accountchange.RoleId != 4)
@@ -144,6 +142,7 @@ namespace PetServices.Controllers
                             Address = account.PartnerInfo?.Address ?? null,
                             Descriptions = account.PartnerInfo?.Descriptions ?? null,
                             ImageUser = account.PartnerInfo?.ImagePartner ?? null,
+                            Dob = account.PartnerInfo?.Dob ?? null,
                         };
                     }
 
@@ -159,6 +158,7 @@ namespace PetServices.Controllers
                         account.UserInfo.Address = account.PartnerInfo?.Address ?? null;
                         account.UserInfo.Descriptions = account.PartnerInfo?.Descriptions ?? null;
                         account.UserInfo.ImageUser = account.PartnerInfo?.ImagePartner ?? null;
+                        account.UserInfo.Dob = account.PartnerInfo?.Dob ?? null;
                     }
 
                     account.RoleId = accountchange.RoleId;
@@ -174,10 +174,9 @@ namespace PetServices.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
+                return NotFound($"Đã xảy ra lỗi: {ex.Message}");
             }
         }
-
         [HttpPost("AddAccount")]
         public async Task<ActionResult> AddAccount(string email, string password, int roleId)
         {
@@ -238,7 +237,6 @@ namespace PetServices.Controllers
         {
             return !string.IsNullOrWhiteSpace(password) && password.Length >= 8 && !password.Contains(" ");
         }
-
         [HttpGet("UpdateOrderStatusReceived")]
         public async Task<IActionResult> UpdateOrderStatusReceived(int orderId)
         {

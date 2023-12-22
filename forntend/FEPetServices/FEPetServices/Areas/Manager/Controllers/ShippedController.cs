@@ -20,11 +20,12 @@ namespace FEPetServices.Areas.Manager.Controllers
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
-            DefaultApiUrl = "https://localhost:7255/api/";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = "https://localhost:7255/api/";
         }
         public async Task<IActionResult> Index()
         {
+            ViewBag.Title = "Danh sách đơn hàng vận chuyển";
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/getOrder");
             if (response.IsSuccessStatusCode)
             {
@@ -50,6 +51,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderShippedDetail(int id)
         {
+            ViewBag.Title = "Chi tiết đơn hàng vận chuyển";
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
             if (response.IsSuccessStatusCode)
             {
@@ -78,7 +80,15 @@ namespace FEPetServices.Areas.Manager.Controllers
                 status.newStatusService = "";
             }
 
-            HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
+            else if(status.newStatus == "Delivered")
+            {
+                status.newStatus = "Processing";
+                status.newStatusProduct = "Delivered";
+                status.newStatusService = "";
+            }
+
+            //HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
+            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "Order/changeStatus?Id=" + id, status);
             if (response.IsSuccessStatusCode)
             {
                 TempData["SuccessToast"] = "Cập nhật thành công";

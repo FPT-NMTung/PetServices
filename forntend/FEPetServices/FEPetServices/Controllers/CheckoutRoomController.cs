@@ -77,6 +77,7 @@ namespace FEPetServices.Controllers
         // push to test
         public async Task<IActionResult> Index(int RoomId, List<int> ServiceId, DateTime StartTime, DateTime EndTime, double totalPrice, string note)
         {
+            ViewBag.Title = "Thanh toán";
             // Thônng tin người đặt hàng
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
@@ -172,9 +173,13 @@ namespace FEPetServices.Controllers
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
             double totalPrice = 0;
-            DateTime dateOrder = DateTime.Now;
+            TimeZoneInfo vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+
+            // Lấy thời gian hiện tại theo múi giờ +7
+            DateTime currentTimeInVietnam = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, vietnamTimeZone);
             try
             {
+                ViewBag.Title = "Thanh toán";
                 if (orderform.Province == null ||
                     orderform.District == null || orderform.Commune == null)
                 {
@@ -201,7 +206,7 @@ namespace FEPetServices.Controllers
                 // Tạo đối tượng OrderForm từ thông tin CartItems và orderform
                 OrderForm order = new OrderForm
                 {
-                    OrderDate = dateOrder,
+                    OrderDate = currentTimeInVietnam,
                     OrderStatus = "Placed",
                     Province = orderform.Province,
                     District = orderform.District,
@@ -287,7 +292,7 @@ namespace FEPetServices.Controllers
 
                         vnpay.AddRequestData("vnp_BankCode", "VNBANK");
 
-                        vnpay.AddRequestData("vnp_CreateDate", dateOrder.ToString("yyyyMMddHHmmss"));
+                        vnpay.AddRequestData("vnp_CreateDate", currentTimeInVietnam.ToString("yyyyMMddHHmmss"));
 
                         vnpay.AddRequestData("vnp_CurrCode", "VND");
                         vnpay.AddRequestData("vnp_IpAddr", _utils.GetIpAddress());
@@ -331,6 +336,7 @@ namespace FEPetServices.Controllers
                 {
                     cart.Remove(serviceCartItem);
                     SaveCartSession(cart);
+                    ClearCart();
                 }
             }
 

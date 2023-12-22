@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetServices.DTO;
@@ -84,7 +85,6 @@ namespace PetServices.Controllers
             return Ok(serviceDTO);
         }
 
-
         [HttpPost("CreateService")]
         public async Task<IActionResult> CreateService(ServiceDTO serviceDTO)
         {
@@ -115,6 +115,25 @@ namespace PetServices.Controllers
             else if (serviceDTO.Picture.Contains(" "))
             {
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            // check giá
+            if (serviceDTO.Price <= 0)
+            {
+                string errorMessage = "Giá phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+            // Check thời gian
+            if (serviceDTO.Time <= 0)
+            {
+                string errorMessage = "Thời gian phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+
+            // Check thời gian lớn hơn 1 giờ
+            if (serviceDTO.Time < 1)
+            {
+                string errorMessage = "Thời gian thực hiện dịch vụ phải lớn hơn hoặc bằng 1 giờ!";
                 return BadRequest(errorMessage);
             }
             var serviceCategory = _context.ServiceCategories.FirstOrDefault(s => s.SerCategoriesId == serviceDTO.SerCategoriesId);
@@ -148,7 +167,6 @@ namespace PetServices.Controllers
   
         }
 
-        
         [HttpPut("UpdateServices")]
         public async Task<IActionResult> UpdateServce(ServiceDTO serviceDTO, int serviceId)
         {
@@ -177,6 +195,19 @@ namespace PetServices.Controllers
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
                 return BadRequest(errorMessage);
             }
+            // check giá
+            if (serviceDTO.Price <= 0)
+            {
+                string errorMessage = "Giá phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+            // Check thời gian
+            if (serviceDTO.Time <= 0)
+            {
+                string errorMessage = "Thời gian phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+           
             var serviceCategory = _context.ServiceCategories.FirstOrDefault(s => s.SerCategoriesId == serviceDTO.SerCategoriesId);
             if (serviceCategory == null)
             {
@@ -236,6 +267,18 @@ namespace PetServices.Controllers
             {
                 return BadRequest($"Đã xảy ra lỗi: {ex.Message}");
             }
+        }
+
+        [HttpGet("GetAllServiceWhenCategoryTrue")]
+        public IActionResult GetServceWhenCategoryTrue()
+        {
+            // Filter services based on the status of their associated service categories
+            List<Service> services = _context.Services
+                .Include(s => s.SerCategories)
+                .Where(s => s.SerCategories.Status == true) // Filter based on service category status
+                .ToList();
+
+            return Ok(_mapper.Map<List<ServiceDTO>>(services));
         }
 
         [HttpDelete]

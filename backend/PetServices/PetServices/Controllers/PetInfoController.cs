@@ -114,25 +114,31 @@ namespace PetServices.Controllers
             }
             return Ok(pet);
         }
-        [HttpDelete]
-        public IActionResult DeleteServce(int petId)
+        [HttpDelete("Delete")]
+        public IActionResult DeleteService(int petId)
         {
             var pet = _context.PetInfos.FirstOrDefault(p => p.PetInfoId == petId);
-            if (petId == null)
+            if (pet == null) // Kiểm tra pet có tồn tại không
             {
-                return NotFound();
+                return NotFound(); // Trả về lỗi 404 nếu không tìm thấy pet
             }
+
             try
             {
                 _context.PetInfos.Remove(pet);
                 _context.SaveChanges();
+                return Ok(petId); // Trả về ID của pet đã xóa nếu thành công
             }
             catch (DbUpdateConcurrencyException)
             {
-                return Conflict();
+                return Conflict(); // Trả về lỗi 409 trong trường hợp xung đột
             }
-            return Ok(petId);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Lỗi xóa pet: {ex.Message}"); // Xử lý lỗi khác và trả về lỗi 500
+            }
         }
+
 
 
     }

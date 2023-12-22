@@ -1,0 +1,497 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashboardPartner</title>
+
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
+    <link href="~/css/partner/dashboardpartner.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/font-awesome.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/flaticon/flaticon.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/slick.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/slick-theme.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/sal.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/magnific-popup.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/base.css">
+
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/react@16.12/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@16.12/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prop-types@15.7.2/prop-types.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-apexcharts@1.3.6/dist/react-apexcharts.iife.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // DataTable cho bảng FeedbackProduct
+            var tableProduct = $('#FeedbackCustomer').DataTable({
+                "responsive": true,
+                "paging": true,
+                "ordering": true,
+                "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
+                "searching": true,
+                "info": true,
+                "autoWidth": false,
+                "columnDefs": [
+                    { "targets": [0], "width": "5%" },
+                    { "targets": [1], "width": "20%" },
+                    { "targets": [2], "width": "16%" },
+                    { "orderable": false, "targets": [3], "width": "15%" },
+                    { "orderable": false, "targets": [4], "width": "44%" },
+                    { "targets": [5], "visible": false }
+                ],
+                "language": {
+                    "lengthMenu": "Hiển thị  _MENU_  dòng",
+                    "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
+                    "search": "Tìm kiếm: ",
+                    "paginate": {
+                        "first": "Đầu",
+                        "last": "Cuối",
+                        "next": "Tiếp",
+                        "previous": "Trước"
+                    }
+                },
+            });
+        });
+    </script>
+
+</head>
+<body>
+    <div class="DashboardPartner">
+        <div class="container-fluid">
+            <div class="page-header">
+                <h1>Thống Kê Doanh Số</h1>
+            </div>
+            <div class="row" style="margin-bottom: 30px;">
+                @*thong ke tong don hang*@
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xl-4" style="padding: 10px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-body d-flex">
+                            <div class="d-flex single-counter">
+                                <div class="card-body" style="padding: 13px 0px 0px 20px;">
+                                    <h7 class="fw-normal title">Tổng đơn hàng</h7>
+                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count">@ViewBag.OrderInMonth</h3>
+                                </div>
+                            </div>
+                            <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
+                                <div class="chart-wrapper mt-1" style="color: #f478f4">
+                                    <i class="fa-solid fa-dolly" style="font-size: 70px;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
+                            <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
+                                @if (ViewBag.PercentOrderInMonthAndInPreMonth < 0)
+                                {
+                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                }
+                                <p style="color: #f478f4">&ensp;@ViewBag.PercentOrderInMonthAndInPreMonth%</p>&nbspSo với tháng trước
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*thong ke tong thu nhap*@
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xl-4" style="padding: 10px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-body d-flex">
+                            <div class="d-flex single-counter">
+                                <div class="card-body" style="padding: 13px 0px 0px 20px;">
+                                    <h7 class="fw-normal title">Tổng thu nhập</h7>
+                                    <h3 class="mt--5 mb-0 text-dark fw-semibold count">@ViewBag.TotalPriceInMonth</h3>
+                                </div>
+                            </div>
+                            <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
+                                <div class="chart-wrapper mt-1" style="color: #f478f4">
+                                    <i class="fad fa-file-invoice-dollar" style="font-size: 70px;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
+                            <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
+                                @if (ViewBag.PercentTotalPriceInMonthAndInPreMonth < 0)
+                                {
+                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                }
+                                <p style="color: #f478f4">&ensp;@ViewBag.PercentTotalPriceInMonthAndInPreMonth%</p>&nbspSo với tháng trước
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*thong ke tong feedback*@
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xl-4" style="padding: 10px;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-body d-flex">
+                            <div class="d-flex single-counter">
+                                <div class="card-body" style="padding: 13px 0px 0px 20px;">
+                                    <h7 class="fw-normal title">Đánh giá của khách hàng</h7>
+                                    <div class="product-rating">
+                                        <div class="star-rating" style="padding-top: 20px">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= (ViewBag.PartnerStar ?? 5))
+                                                {
+                                                    <i class="fas fa-star"></i>
+                                                }
+                                                else if (i - ViewBag.PartnerStar < 1)
+                                                {
+                                                    <i class="fas fa-star-half-alt"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="far fa-star"></i>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ms-auto" style="padding: 10px 10px 0px 0px;">
+                                <div class="chart-wrapper mt-1" style="color: #f478f4">
+                                    <i class="fa-solid fa-user" style="font-size: 70px;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-muted" style="padding: 0px 0px 0px 20px;">
+                            <div class="card-body d-flex" style="padding: 0px 0px 0px 20px;">
+                                <i class="fa-solid fa-star" style="font-size: 20px; color: #f478f4; margin-top: 2.5px;"></i>
+                                <p style="color: #f478f4">&ensp;@ViewBag.PartnerStar</p>&nbspĐánh giá của khách hàng
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 30px; justify-content: space-around;">
+                @*Thống kê doanh số bán trong 7 ngày gần nhất*@
+                <div class="col-xl-9" style="padding: 10px; border: none;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
+                            <div>
+                                <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Doanh thu trong 7 ngày</h6>
+                            </div>
+                        </div>
+                        <div class="box mt-4" style="padding: 10px 10px 0px 10px;">
+                            <div id="line-adwords" style="min-width: 10px;" class=""></div>
+                        </div>
+                    </div>
+                </div>
+                @*Thong ke tong don hang trong 3 thang*@
+                <div class="col-xl-3" style="padding: 10px 10px 0px 10px; border: none;">
+                    <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                        <div class="card-header" style="background-color: rgb(255, 255, 255); height: 50px;">
+                            <div>
+                                <h6 class="fw-normal title" style="padding: 0px 10px 10px 10px; font-weight: 700!important">Đơn hàng trong 3 tháng</h6>
+                            </div>
+                        </div>
+                        <div class="box mt-4" style="padding: 10px;">
+                            <div id="column-charts-order" class=""></div>
+                        </div>
+                        <div class="card-body" style="padding: 0px 20px 0px 20px; display: block;">
+                            <div class="d-flex mb-4 mt-3">
+                                <i class="fad fa-badge-check" style="margin-top: 5px; font-size: 30px; margin-right: 10px; color: rgb(153, 255, 0);"></i>
+                                @{
+                                    foreach (var item in ViewBag.NumberOrderCompleteInMonth1)
+                                    {
+                                        bool containsMinus = item?.Text.Contains("-") ?? false;
+
+                                        <div>
+                                            <p class="mb-1 fw-semibold ">Đơn hàng hoàn thành</p>
+
+                                            <div style="display: flex;">
+                                                @if (containsMinus)
+                                                {
+                                                    <i class="fa fa-arrow-alt-circle-down" style="font-size: 15px; color: rgb(153, 255, 0); margin-top: 2.5px;"></i>
+                                                    <p class="fw-normal fs-12 mb-1" style="font-size: 13px;"><span style="color: rgb(153, 255, 0);">@item?.Text.Replace("-", string.Empty)%</span> So với tháng trước</p>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa fa-arrow-alt-circle-up" style="font-size: 15px; color: rgb(153, 255, 0); margin-top: 2.5px;"></i>
+                                                    <p class="fw-normal fs-12 mb-1" style="font-size: 13px;"><span style="color: rgb(153, 255, 0);">@item?.Text%</span> So với tháng trước</p>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div class="ms-auto mb-auto">
+                                            <p class="fw-bold mb-0" style="font-size: 22px; color: rgb(73, 64, 64);">@item?.Value</p>
+                                        </div>
+
+                                        break;
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row feedbacktable" style="margin-bottom: 30px; padding: 10px;">
+                <div class="card overflow-hidden" style="border: none; border-radius: 10px;">
+                    <div class="card-header" style="background-color: rgb(255, 255, 255); height: 60px;">
+                        <div class="head">
+                            <h6 class="fw-normal title" style="padding: 10px; font-weight: 700!important">Đánh giá của khách hàng</h6>
+                            <div class="option">
+                                <button class="option-button style1">Loại đánh giá</button>
+                                <button class="option-button style2">&#9776;</button>
+                                <div class="dropdown-option">
+                                    <input hidden value="" />
+                                    <a class="dropdown-option-item fw-normal title clicked" id="partnerFB" style="font-weight: 500!important" onclick="showFeedbackPartner()">Khách Hàng</a>
+                                    <div class="dropdown-option-item dropdown">
+                                        <button class="dropdown-button">Đánh giá</button>
+                                        <div class="dropdown-content">
+                                            <div id="star5" class="dropdown-item 5" onclick="SortStar(5)">5 sao</div>
+                                            <div id="star4" class="dropdown-item 4" onclick="SortStar(4)">4 sao</div>
+                                            <div id="star3" class="dropdown-item 3" onclick="SortStar(3)">3 sao</div>
+                                            <div id="star2" class="dropdown-item 2" onclick="SortStar(2)">2 sao</div>
+                                            <div id="star1" class="dropdown-item 1" onclick="SortStar(1)">1 sao</div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="typeTable" value="FeedbackCustomer" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body" style="display:block;">
+                        @*Danh sách feedback của sản phẩm*@
+                        <table id="FeedbackCustomer" class="display lists">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Thông tin sản phẩm</th>
+                                    <th>Thông tin khách hàng</th>
+                                    <th>Đánh giá</th>
+                                    <th>Nội dung đánh giá</th>
+                                    <th>Số sao</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.FeedbackCustomer != null)
+                                {
+                                    @foreach (var item in Model.FeedbackCustomer)
+                                    {
+                                        <tr>
+                                            <td>@item.stt</td>
+                                            <td>
+                                                <div class="d-flex name-service">
+                                                    <p class="name">@item.name</p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="name-cus">
+                                                    <p class="name">@item.customerName</p>
+                                                    <p class="email">@item.gmail</p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    @for (int i = 0; i < 5; i++)
+                                                    {
+                                                        if (i < item.NumberStart)
+                                                        {
+                                                            <i class="fas fa-star"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="far fa-star"></i>
+                                                        }
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @item.Content
+                                            </td>
+                                            <td>@item.NumberStart</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/assets/js/vendor/jquery.js "></script>
+    <script src="~/assets/js/vendor/slick.min.js "></script>
+    <script src="~/assets/js/vendor/jquery-ui.min.js "></script>
+    <script src="~/assets/js/vendor/sal.js "></script>
+    <script src="~/assets/js/vendor/imagesloaded.pkgd.min.js "></script>
+    <script src="~/assets/js/vendor/counterup.js "></script>
+    <script src="~/assets/js/vendor/waypoints.min.js "></script>
+    <script src="~/assets/js/main.js "></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js "></script>
+    <script>
+        function showFeedbackPartner() {
+            // Ẩn tất cả các bảng
+            $('#FeedbackCustomer').hide();
+
+            // Hiển thị bảng FeedbackProduct
+            $('#FeedbackCustomer').show();
+
+            // Hiển thị DataTable đã được khởi tạo
+            $('#FeedbackProduct_wrapper').show();
+
+            // Xóa class 'clicked' từ tất cả các tùy chọn
+            $('.option .title').removeClass('clicked');
+
+            // Thêm class 'clicked' vào tùy chọn được chọn
+            $('#partnerFB').addClass('clicked');
+
+            // Cập nhật giá trị của phần tử input
+            $('#typeTable').val('FeedbackCustomer');
+        }
+        // Sort theo số sao
+        function SortStar(star) {
+            $('.dropdown-item').removeClass('clicked');
+            $('.dropdown-item .' + star).addClass('clicked');
+            var value = $('#typeTable').val();
+
+            var table = $('#' + value).DataTable();
+
+            table.column(5).search(star).draw();
+        }
+    </script>
+    @*Thống kê doanh số bán trong 7 ngày gần nhất*@
+    <script>
+        var totalPriceData = [];
+        var DateData = [];
+        @foreach (var item in ViewBag.TotalPriceIn7Day)
+        {
+            @:totalPriceData.push(@item.Text);
+            @:DateData.push('@item.Value');
+        };
+
+        var optionsLine = {
+            chart: {
+                height: 420,
+                type: 'line',
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    offsetX: -15,
+                    offsetY: -15,
+                    position: 'top-right',
+                }
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 4
+            },
+            colors: ["#ffc4a4"],
+            series: [{
+                name: "&nbsp Doanh thu",
+                data: totalPriceData
+            }],
+            markers: {
+                size: 4,
+                strokeWidth: 0,
+                hover: {
+                    size: 6
+                }
+            },
+            labels: DateData,
+            xaxis: {
+                labels: {
+                    style: {
+                        fontSize: '13px',
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        fontSize: '13px',
+                    },
+                    formatter: function (value) {
+                        return Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+                    }
+                }
+            },
+            legend: {
+                offsetY: 8,
+                fontSize: '14px',
+            }
+        }
+        var chartLine = new ApexCharts(document.querySelector('#line-adwords'), optionsLine);
+        chartLine.render();
+    </script>
+
+    @*Thống kê số đơn hàng hoàn thành/ bị hủy trong 3 tháng gần nhất*@
+    <script>
+        var CompleteData = [];
+        var DateData = [];
+
+        @foreach (var item in ViewBag.NumberOrderCompleteInMonth)
+        {
+            @:CompleteData.push(@item.Text);
+            @:DateData.push('@item.Value');
+        };
+
+        var options = {
+            series: [{
+                name: 'Đơn hoàn thành',
+                data: CompleteData
+            }],
+            chart: {
+                type: 'bar',
+                height: 318,
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    offsetX: -5,
+                    offsetY: -15,
+                    position: 'top-right',
+                }
+            },
+            colors: ["#d6ff99"],
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '30%',
+                    endingShape: 'rounded'
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                show: true,
+                width: 3,
+                colors: ['transparent']
+            },
+            xaxis: {
+                categories: DateData,
+            },
+            fill: {
+                opacity: 1
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        fontSize: '13px',
+                    }
+                }
+            },
+            legend: {
+                fontSize: '14px',
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#column-charts-order"), options);
+        chart.render();
+    </script>
+</body>

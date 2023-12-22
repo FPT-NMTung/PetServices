@@ -30,6 +30,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            ViewBag.Title = "Danh sách nhân viên";
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Partner");
             if (response.IsSuccessStatusCode)
             {
@@ -54,9 +55,9 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> DetailPartner(string email)
         {
-
-            //HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Partner/" + email);
-            HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Partner/" + email);
+            ViewBag.Title = "Thông tin nhân viên";
+            HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Partner/" + email);
+            //HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Partner/" + email);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -106,116 +107,122 @@ namespace FEPetServices.Areas.Manager.Controllers
                 var message = new MailMessage();
                 message.From = new MailAddress("psmsg65@gmail.com");
                 message.Subject = "Tài khoản của bạn đã được kích hoạt";
-                message.Body = @"
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-    .commonx {
-        font-family: Arial, sans-serif;
-        background-image: url('background.jpg');
-        background-size: cover;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align:center;
-        height: 100vh;
-    }
+                message.Body = @"<body style=""padding: 0; margin: 0; background: #efefef"">
+    <table style=""height: 100%; width: 100%; background-color: #efefef;"" align=""center"">
+        <tbody>
+            <tr>
+                <td valign=""top"" id=""dbody"" data-version=""2.31"" style=""width: 100%; height: 100%; padding-top: 30px; padding-bottom: 30px; background-color: #efefef;"">
+                    <table class=""layer_1"" align=""center"" border=""0"" cellpadding=""0"" cellspacing=""0"" style=""max-width: 600px; box-sizing: border-box; width: 100%; margin: 0px auto;"">
+                        <tbody>
+                            <tr>
+                                <td class=""drow"" valign=""top"" align=""center"" style=""background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;"">
+                                    <div class=""layer_2"" style=""max-width: 600px; display: inline-block; vertical-align: top; width: 100%;"">
+                                        <table border=""0"" cellspacing=""0"" cellpadding=""0"" class=""edcontent"" style=""border-collapse: collapse; width: 100%;"">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign=""top"" class=""emptycell"" style=""padding: 10px;"">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class=""drow"" valign=""top"" align=""center"" style=""background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;"">
+                                    <div class=""layer_2"" style=""max-width: 600px; display: inline-block; vertical-align: top; width: 100%;"">
+                                        <table border=""0"" cellspacing=""0"" cellpadding=""0"" class=""edcontent"" style=""border-collapse: collapse; width: 100%;"">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign=""top"" class=""edimg"" style=""padding: 0px; box-sizing: border-box; text-align: center;"">
+                                                        <img src=""https://api.elasticemail.com/userfile/a18de9fc-4724-42f2-b203-4992ceddc1de/geometric_divider1.png"" alt=""Image"" width=""576"" style=""border-width: 0px; border-style: none; max-width: 576px; width: 100%;"">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class=""drow"" valign=""top"" align=""center"" style=""background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;"">
+                                    <div class=""layer_2"" style=""max-width: 600px; display: inline-block; vertical-align: top; width: 100%;"">
+                                        <table border=""0"" cellspacing=""0"" class=""edcontent"" style=""border-collapse: collapse; width: 100%;"">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign=""top"" class=""edtext"" style=""padding: 20px; text-align: left; color: #5f5f5f; font-size: 14px; font-family: Helvetica, Arial, sans-serif; word-break: break-word; direction: ltr; box-sizing: border-box;"">
+                                                        <p class=""style1 text-center"" style=""text-align: center; margin: 0px; padding: 0px; color: #f24656; font-size: 36px; font-family: Helvetica, Arial, sans-serif;"">
+                                                            <strong>
+                                                                Chào mừng bạn đến với hệ thống  của chúng tôi
+                                                            </strong>
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class=""drow"" valign=""top"" align=""center"" style=""background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;"">
+                                    <div class=""layer_2"" style=""max-width: 600px; display: inline-block; vertical-align: top; width: 100%;"">
+                                        <table border=""0"" cellspacing=""0"" class=""edcontent"" style=""border-collapse: collapse; width: 100%;"">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign=""top"" class=""edtext"" style=""padding: 20px; text-align: left; color: #5f5f5f; font-size: 14px; font-family: Helvetica, Arial, sans-serif; word-break: break-word; direction: ltr; box-sizing: border-box;"">
+                                                        <p style=""margin: 0px; padding: 0px;"">Email của bạn đã được Quản lý kích hoạt thành công!! ✨✨✨</p>
+                                                        <p style=""margin: 0px; padding: 0px;""><br></p>
+                                                        <p style=""margin: 0px; padding: 0px; font-size: 17px; text-align: center;"">Bạn có thể truy cập hệ thống với email đã đăng kỳ:  " + email + @"</p>
+                                                        <p class=""text-right"" style=""text-align: right; margin: 0px; padding: 0px;"">
+                                                            <a href=""https://pet-service.azurewebsites.net/Login"" style=""color: #16c2d0; font-size: 14px; font-family: Helvetica, Arial, sans-serif; text-decoration: none;""><span><u>Đăng nhập ngay&gt;&gt;</u></span></a>
+                                                        </p>
+                                                    </td>
+                                                </tr>
 
-    .container {
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-        padding: 20px;
-        max-width: 400px;
-        width: 100%;
-    }
-
-    .header {
-        text-align: center;
-        padding: 20px;
-    }
-
-    h1 {
-        font-size: 32px;
-        color: #007bff;
-    }
-
-    h4 {
-        font-size: 20px;
-        color: #555;
-    }
-
-    .content {
-        margin-top: 20px;
-    }
-
-    p {
-        font-size: 18px;
-        color: #333;
-        line-height: 1.5;
-    }
-
-    .otp {
-        background-color: #fff;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 10px;
-        margin: 20px 0;
-    }
-
-    .otp p {
-        margin: 5px 0;
-        font-size: 16px;
-        color: #555;
-    }
-
-    .login-link {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    a {
-        text-decoration: none;
-        background-color: #007bff;
-        color: #fff;
-        padding: 15px 30px;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-        font-size: 20px;
-        display: inline-block;
-    }
-
-    a:hover {
-        background-color: #0056b3;
-    }
-</style>
-</head>
-<body>
-    <div class=""commonx"">
-        <div class=""container"">
-            <div class=""header"">
-                <h1>Chào mừng bạn đã đến với chúng tôi.</h1>
-                <h4>Những người yêu động vật.</h4>
-            </div>
-            <div class=""content"">
-                <p>Chúc mừng và chào mừng bạn đã trở thành một thành viên của chúng tôi✨✨✨</p>
-                <p>Đây là tài khoản và mật khẩu của bạn:</p>
-                <div class=""otp"">
-                    <p>Tài khoản: " + email + @"</p>
-                    <p>Mật khẩu: " + password + @"</p>
-                </div>
-                <div class=""login-link"" style=""color:#ffffff;"">
-                    <a style=""color:#ffffff;"" href=""#"">Đăng nhập ngay</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
-";
+                                                <tr>
+                                                    <td valign=""top"" class=""edimg"" style=""padding: 0px; box-sizing: border-box; text-align: center;"">
+                                                        <img src=""https://api.elasticemail.com/userfile/a18de9fc-4724-42f2-b203-4992ceddc1de/geometric_divider1.png"" alt=""Image"" width=""576"" style=""border-width: 0px; border-style: none; max-width: 576px; width: 100%;"">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class=""drow"" valign=""top"" align=""center"" style=""background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;"">
+                                    <div class=""layer_2"" style=""max-width: 600px; display: inline-block; vertical-align: top; width: 100%;"">
+                                        <table border=""0"" cellspacing=""0"" class=""edcontent"" style=""border-collapse: collapse; width: 100%;"">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign=""top"" class=""emptycell"" style=""padding: 10px;"">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class=""drow"" valign=""top"" align=""center"" style=""background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;"">
+                                    <div class=""layer_2"" style=""max-width: 600px; display: inline-block; vertical-align: top; width: 100%;"">
+                                        <table border=""0"" cellspacing=""0"" class=""edcontent"" style=""border-collapse: collapse; width: 100%;"">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign=""top"" class=""emptycell"" style=""padding: 10px;"">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>";
 
                 message.IsBodyHtml = true;
                 message.To.Add(email);

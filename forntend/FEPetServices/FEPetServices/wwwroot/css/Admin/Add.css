@@ -1,0 +1,125 @@
+﻿.header {
+    padding-top: 10px;
+    top: 0;
+    display: flex;
+    align-items: center;
+}
+
+    .header .image {
+        width: 50px;
+        height: 50px;
+        align-items: center;
+        padding-left: 10px;
+        font-size: 10px;
+    }
+
+    .header .text {
+        font-weight: bold;
+        font-size: 20px;
+        padding-left: 15px;
+    }
+
+.iconUser {
+    width: 29px;
+    height: 29px;
+    position: absolute;
+    right: 0;
+    margin-right: 30px;
+    top: 0;
+    margin-top: 20px;
+}
+
+.title {
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+    display: block;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.form-group {
+    margin: 10px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid black;
+}
+
+.btn-submit {
+    background-color: orangered;
+    border-radius: 10px;
+    margin-right: 50px;
+}
+
+.btn-back {
+    background-color: cornflowerblue;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    width: auto;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-control {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+label {
+    display: inline-block;
+    width: 15%;
+    font-weight: bold;
+}
+
+.form-control:focus {
+    border-color: #66afe9;
+    outline: none;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+}
+
+.btn-submit,
+.btn-back {
+    display: inline-block;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+    .btn:hover {
+        background-color: #2E8B57;
+    }
+
+.btn-back {
+    margin-left: 10px;
+}
+
+.buttons {
+    text-align: center;
+    margin-top: 30px;
+}
+
+@media only screen and (max-width: 670px) {
+    #addAccountForm{
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+}
+
+.btn{
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+}

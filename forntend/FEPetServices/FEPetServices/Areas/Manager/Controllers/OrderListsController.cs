@@ -1,7 +1,10 @@
-﻿using FEPetServices.Form.OrdersForm;
+﻿using FEPetServices.Form;
+using FEPetServices.Form.OrdersForm;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace FEPetServices.Areas.Manager.Controllers
@@ -20,13 +23,14 @@ namespace FEPetServices.Areas.Manager.Controllers
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            //DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
-            DefaultApiUrl = "https://localhost:7255/api/";
+            DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
+            //DefaultApiUrl = "https://localhost:7255/api/";
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            ViewBag.Title = "Danh sách đơn hàng";
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/getOrder");
             if (response.IsSuccessStatusCode)
             {
@@ -50,6 +54,13 @@ namespace FEPetServices.Areas.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderDetail(int id)
         {
+            ViewBag.Title = "Chi tiết đơn hàng";
+            HttpResponseMessage reasonResponse = await _client.GetAsync(DefaultApiUrl + "Reason/GetAll");
+            if (reasonResponse.IsSuccessStatusCode)
+            {
+                var reaCategories = await reasonResponse.Content.ReadFromJsonAsync<List<ReasonDTO>>();
+                ViewBag.Reasons = new SelectList(reaCategories, "ReasonId", "ReasonTitle");
+            }
             //HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Order/" + id);
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
             if (response.IsSuccessStatusCode)
@@ -71,16 +82,28 @@ namespace FEPetServices.Areas.Manager.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> OrderDetail(int id, [FromForm] Status status)
+        public async Task<IActionResult> OrderDetail(int id, [FromForm] Status status, [FromForm] ReasonOrdersForm reasonOrders)
         {
-            if(status.newStatus == "Confirmed")
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+            if (status.newStatus == "Confirmed")
             {
                 status.newStatusProduct = "Packaging";
                 status.newStatusService = "Waiting";    
             }
+            if (status.newStatus == "Cancelled")
+            {
+                status.newStatusProduct = "Cancelled";
+                status.newStatusService = "Cancelled";
+            }
+            //HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
+            HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "Order/changeStatus?Id=" + id, status);
+            reasonOrders.OrderId = id;
 
-            HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
-            if (response.IsSuccessStatusCode)
+            reasonOrders.EmailReject = email;
+
+            HttpResponseMessage responseReject = await _client.PostAsJsonAsync(DefaultApiUrl + "ReasonOrder", reasonOrders);
+            if (response.IsSuccessStatusCode || responseReject.IsSuccessStatusCode)
             {
                 TempData["SuccessToast"] = "Cập nhật thành công";
                 return RedirectToAction("OrderDetail", new { id = id });

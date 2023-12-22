@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using PetServices.Models;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using Microsoft.AspNetCore.Authorization;
 
 namespace FEPetServices.Areas.Manager.Controllers
 {
@@ -41,6 +41,7 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Danh sách dịch vụ";
                 var json = JsonConvert.SerializeObject(service);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -79,13 +80,13 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
-               
+                ViewBag.Title = "Thêm dịch vụ mới";
                 HttpResponseMessage categoryResponse = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
-                //HttpResponseMessage categoryResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory");
 
                 if (categoryResponse.IsSuccessStatusCode)
                 {
                     var categories = await categoryResponse.Content.ReadFromJsonAsync<List<ServiceCategoryDTO>>();
+                    categories = categories.Where(r => r.Status == true).ToList();
                     ViewBag.Categories = new SelectList(categories, "SerCategoriesId", "SerCategoriesName");
                 }
 
@@ -145,12 +146,14 @@ namespace FEPetServices.Areas.Manager.Controllers
         {
             try
             {
+                ViewBag.Title = "Chỉnh sửa thông tin dịch vụ";
                 HttpResponseMessage categoryResponse = await client.GetAsync(DefaultApiUrl + "ServiceCategory/GetAllServiceCategory");
                 //HttpResponseMessage categoryResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/GetAllServiceCategory");
 
                 if (categoryResponse.IsSuccessStatusCode)
                 {
                     var categories = await categoryResponse.Content.ReadFromJsonAsync<List<ServiceCategoryDTO>>();
+                    categories = categories.Where(r => r.Status == true).ToList();
                     ViewBag.Categories = new SelectList(categories, "SerCategoriesId", "SerCategoriesName");
                 }
                 //goi api de lay thong tin can sua

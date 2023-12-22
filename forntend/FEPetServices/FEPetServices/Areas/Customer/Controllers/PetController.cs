@@ -1,9 +1,8 @@
 ﻿using FEPetServices.Form;
+using FEPetServices.Models.ErrorResult;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using PetServices.Models;
-using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
@@ -28,15 +27,37 @@ namespace FEPetServices.Areas.Customer.Controllers
             DefaultApiUrl = configuration.GetValue<string>("DefaultApiUrl");
         }
 
-       public class PetModel{
-            public AccountInfo AccountInfo { get; set; }
-          
+        [HttpGet]
+        public async Task<IActionResult> PetInfo()
+        {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+            HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "PetInfo/" + email);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                AccountInfo petInfos = System.Text.Json.JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
+                return View(petInfos);
+            }
+            else
+            {
+                TempData["ErrorLoadingDataToast"] = "Lỗi hệ thống vui lòng thử lại sau";
+                return View();
+            }
         }
+
         public async Task<IActionResult> AddPet([FromForm] PetInfo petInfo, List<IFormFile> image)
         {     
-            PetModel model = new PetModel();
             try
             {
+                ViewBag.Title = "Thêm thông tin thú cưng";
                 ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
                 string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
                 HttpResponseMessage PetInfo = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/PetInfo/" + email);
@@ -52,7 +73,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                 }
 
 
-                if (petInfo.PetName == null) { return View(); }
+                if (petInfo.PetName == null || petInfo.Dob==null ) { return View(); }
                     foreach (var file in image)
                     {
                         string filename = GenerateRandomNumber(5) + file.FileName;
@@ -71,7 +92,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         TempData["SuccessToast"] = "Thêm thông tin thú cưng thành công!";
-                        return View(petInfo);
+                        return  View(petInfo);
                     }
                     else
                     {
@@ -107,7 +128,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         {
             try
             {
-
+                ViewBag.Title = "Chỉnh sửa thông tin thú cưng";
                 //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/PetInfo/PetID/" + petId);
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "PetInfo/PetID/" + petId);
 
@@ -202,6 +223,36 @@ namespace FEPetServices.Areas.Customer.Controllers
                 return View(petInfo); 
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeletePet(int petId)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.DeleteAsync(DefaultApiUrl + "PetInfo/Delete?petId=" + petId);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return Json(new { success = true, message = "Xoá thú cưng thành công."});
+                    }
+                    else
+                    {
+                        return new ErrorResult("");
+                    }
+                }
+                else
+                {
+                    return new ErrorResult("");
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ErrorResult("");
+            }
+        }
+
 
     }
 }

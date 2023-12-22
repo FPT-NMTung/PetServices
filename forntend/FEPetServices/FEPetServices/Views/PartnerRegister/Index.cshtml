@@ -1,14 +1,10 @@
 ﻿@model FEPetServices.Form.RegisterDTO
 
-@{
-    ViewData["Title"] = "Index";
-}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="stylesheet" href="~/css/RegisterPartner.css">
-    <title>HASH TECHIE OFFICIAL</title>
     <script src="https://smtpjs.com/v3/smtp.js">
     </script>
 </head>
@@ -70,13 +66,21 @@
                             <label for="">Mật khẩu</label>
                         </div>
                     </div>
-                    <div class="forget">
-                        <label for="">
-                            <input type="checkbox" id="agreeCheckbox">Tôi đồng ý với các
-                            <a id="showTerms" href="" style="color:blue">điều khoản</a>
-                            của hệ thống
+                    <div class="input-group">
+                        <label for="checkimage" style="height:30px; margin-right: 10px" class="custom-file-upload">Vui lòng cung cấp chứng chỉ hành nghề</label>
+                        <input type="file" id="checkimage" name="image" required onchange="displayImage()">
+                        <br />
+                        <img id="previewImage" style="max-width: 100%; max-height: 250px; margin-top: 10px;" alt="Preview Image">
+                    </div>
+
+                    <div class="forget" style="margin-top:30px;">
+                        <label for="agreeCheckbox">
+                            <input type="checkbox" required>
+                            Tôi đồng ý với các
+                            <a href="#" onclick="toggleContent()" style="color: blue">điều khoản</a> của hệ thống
                         </label>
                     </div>
+
                     <button id="registerButton">Đăng ký</button>
                     <div class="register">
                         <p>Quay trở lại <a href="~/Login/Index">Đăng nhập</a></p>
@@ -87,7 +91,7 @@
                 </div>
             </div>
 
-            <div class="form-box2">
+            <div class="form-box2" id="contentToShow">
                 <div class="form-box3">
                     <div class="form-value">
                         <div class="rules">
@@ -110,9 +114,6 @@
                             <div class="ruleinfo">
                                 <p>Điều 6: Cam kết cung cấp chính xác thông tin</p>
                             </div>
-                        </div>
-                        <div class="image">
-                            <input type="file" id="checkimage" name="image">
                         </div>
                     </div>
                 </div>

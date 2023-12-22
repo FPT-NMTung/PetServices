@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,11 @@ namespace PetServices.Controllers
         [HttpGet("GetAllRoom")]
         public async Task<ActionResult> GetAllRoom()
         {
-            var rooms = await _context.Rooms.Include(r => r.RoomCategories).ToListAsync();
+            var rooms = await _context.Rooms
+                .Include(r => r.RoomCategories)
+                .OrderByDescending(o => o.RoomId)
+                .ToListAsync();
+
             return Ok(_mapper.Map<List<RoomDTO>>(rooms));
         }
 
@@ -90,6 +95,26 @@ namespace PetServices.Controllers
             return Ok(roomDto);
         }
 
+        [HttpGet("GetAllRoomDetail")]
+        public async Task<ActionResult> GetAllRoomDetail()
+        {
+            var roomList = await _context.Rooms
+                .Include(r => r.Services)
+                .Include(r => r.RoomCategories)
+                .ToListAsync();
+
+            var roomlist = _mapper.Map<List<RoomDTO>>(roomList);
+
+            foreach (var room in roomlist)
+            {
+                var roomservice = roomList.FirstOrDefault(r => r.RoomId == room.RoomId);
+
+                room.ServiceIds = roomservice.Services.Select(s => s.ServiceId).ToList();
+            }
+
+            return Ok(roomlist);
+        }
+
         [HttpGet("GetRoomCategory")]
         public async Task<ActionResult> GetRoomCategory()
         {
@@ -97,6 +122,18 @@ namespace PetServices.Controllers
                 .ToListAsync();
 
             return Ok(_mapper.Map<List<RoomCategoryDTO>>(roomCategory));
+        }
+
+        [HttpGet("GetAllRoomWhenCategoryTrue")]
+        public IActionResult GetRoomWhenCategoryTrue()
+        {
+            // Filter services based on the status of their associated service categories
+            List<Room> room = _context.Rooms
+                .Include(s => s.RoomCategories)
+                .Where(s => s.RoomCategories.Status == true) // Filter based on service category status
+                .ToList();
+
+            return Ok(_mapper.Map<List<RoomDTO>>(room));
         }
 
         [HttpGet("GetAllService")]
@@ -136,6 +173,18 @@ namespace PetServices.Controllers
             else if (roomDTO.Picture.Contains(" "))
             {
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            // check số lượng Slot
+            if (roomDTO.Slot <= 0)
+            {
+                string errorMessage = "Số lượng Slot phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+            // check giá
+            if (roomDTO.Price <= 0)
+            {
+                string errorMessage = "Giá phải lớn hơn 0!";
                 return BadRequest(errorMessage);
             }
             // check loại phòng           
@@ -210,6 +259,18 @@ namespace PetServices.Controllers
             else if (roomDTO.Picture.Contains(" "))
             {
                 string errorMessage = "URL ảnh không chứa khoảng trắng!";
+                return BadRequest(errorMessage);
+            }
+            // check số lượng Slot
+            if (roomDTO.Slot <= 0)
+            {
+                string errorMessage = "Số lượng Slot phải lớn hơn 0!";
+                return BadRequest(errorMessage);
+            }
+            // check giá
+            if (roomDTO.Price <= 0)
+            {
+                string errorMessage = "Giá phải lớn hơn 0!";
                 return BadRequest(errorMessage);
             }
             // check loại phòng           
