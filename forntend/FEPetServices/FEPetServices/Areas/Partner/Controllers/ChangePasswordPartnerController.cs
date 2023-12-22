@@ -25,6 +25,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         }
         public async Task<IActionResult> Index([FromForm] ChangePassword changePassword)
         {
+            ViewBag.Title = "Đổi mật khẩu";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 

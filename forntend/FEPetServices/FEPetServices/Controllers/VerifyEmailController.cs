@@ -25,6 +25,7 @@ namespace FEPetServices.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Title = "Xác minh tài khoản";
             return View();
         }
 

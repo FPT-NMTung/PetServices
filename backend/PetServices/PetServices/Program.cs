@@ -75,6 +75,13 @@ var mapperConfig = new MapperConfiguration(mc =>
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ManaOnly", policy => policy.RequireRole("MANAGER"));
+    options.AddPolicy("CusOnly", policy => policy.RequireRole("CUSTOMER"));
+    options.AddPolicy("PartnerOnly", policy => policy.RequireRole("PARTNER"));
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("ADMIN"));
+});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

@@ -59,6 +59,7 @@ namespace FEPetServices.Controllers
         {
             try
             {
+                ViewBag.Title = "Phòng";
                 var json = JsonConvert.SerializeObject(roomDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -180,6 +181,7 @@ namespace FEPetServices.Controllers
 
             try
             {
+                ViewBag.Title = "Chi tiết phòng";
                 //HttpResponseMessage serviceAvailableResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/Room/GetServiceInRoom?roomId=" + roomId);
                 HttpResponseMessage serviceAvailableResponse = await client.GetAsync(DefaultApiUrl + "Room/GetServiceInRoom?roomId=" + roomId);
 
@@ -306,6 +308,7 @@ namespace FEPetServices.Controllers
         {
             try
             {
+                ViewBag.Title = "Dịch vụ";
                 var json = JsonConvert.SerializeObject(serviceCategory);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -389,6 +392,7 @@ namespace FEPetServices.Controllers
             HomeModel homeModel = new HomeModel();
             try
             {
+                ViewBag.Title = "Trang chủ";
                 //"https://localhost:7255/api/Feedback/GetStarInTakeCarePet"
                 HttpResponseMessage StarInTakeCarePetResponse = await client.GetAsync(DefaultApiUrl + "Feedback/GetStarInTakeCarePet");
 
@@ -517,6 +521,7 @@ namespace FEPetServices.Controllers
         {
             try
             {
+                ViewBag.Title = "Dịch vụ";
                 var json = JsonConvert.SerializeObject(serviceDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Service/GetAllServiceWhenCategoryTrue");
@@ -621,6 +626,7 @@ namespace FEPetServices.Controllers
 
         public async Task<IActionResult> ServiceDetail(int serviceCategoryId, int serviceIds, string sortby, int? page)
         {
+            ViewBag.Title = "Chi tiết dịch vụ";
             ServiceDetailModel model = new ServiceDetailModel();
             //HttpResponseMessage response = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "ServiceCategory/ServiceCategorysID/" + serviceCategoryId);
@@ -829,6 +835,7 @@ namespace FEPetServices.Controllers
             BlogModel blogModel = new BlogModel();
             try
             {
+                ViewBag.Title = "Bài viết";
                 var json = JsonConvert.SerializeObject(blog);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -956,6 +963,7 @@ namespace FEPetServices.Controllers
             BlogDetailModel blog = new BlogDetailModel();
             try
             {
+                ViewBag.Title = "Chi tiết bài viết";
                 //HttpResponseMessage responseBlogDetail = await client.GetAsync(DefaultApiUrlBlogDetail + blogId);
                 HttpResponseMessage responseBlogDetail = await client.GetAsync(DefaultApiUrl + "Blog/BlogID/" + blogId);
                 HttpResponseMessage responseBlogList = await client.GetAsync(DefaultApiUrl + "Blog/GetAllBlog");
@@ -1059,6 +1067,7 @@ namespace FEPetServices.Controllers
             PartModel partModel = new PartModel();
             try
             {
+                ViewBag.Title = "Nhân viên";
                 //HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
                 HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
 
@@ -1150,6 +1159,7 @@ namespace FEPetServices.Controllers
             PartDeatilModel partModel = new PartDeatilModel();
             try
             {
+                ViewBag.Title = "Chi tiết nhân viên";
                 //HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
                 HttpResponseMessage responseProduct = await client.GetAsync(DefaultApiUrl + "Product/GetAll");
                 //HttpResponseMessage responsedetail = await client.GetAsync("https://localhost:7255/api/Partner/PartnerInfoId?PartnerInfoId=" + partnerID);
@@ -1433,12 +1443,14 @@ namespace FEPetServices.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            ViewBag.Title = "Lỗi trang";
             // Thực hiện chuyển hướng đến trang 404 tùy chỉnh
             return RedirectToAction("NotFound", "Home");
         }
 
         public IActionResult Privacy()
         {
+            ViewBag.Title = "Chính sách bảo mật";
             return View();
         }
 
@@ -1448,11 +1460,13 @@ namespace FEPetServices.Controllers
         }
         public IActionResult Terms()
         {
+            ViewBag.Title = "Điều khoản sử dụng";
             return View();
         }
 
         public IActionResult Introduce()
         {
+            ViewBag.Title = "Giới thiệu";
             return View();
         }
 

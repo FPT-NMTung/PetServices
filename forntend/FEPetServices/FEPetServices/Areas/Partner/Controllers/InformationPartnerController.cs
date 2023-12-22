@@ -30,6 +30,7 @@ namespace FEPetServices.Areas.Partner.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            ViewBag.Title = "Thông tin người dùng";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "UserInfo/" + email);

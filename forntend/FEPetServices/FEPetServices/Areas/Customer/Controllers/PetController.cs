@@ -34,7 +34,6 @@ namespace FEPetServices.Areas.Customer.Controllers
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "PetInfo/" + email);
-            //HttpResponseMessage response = await _client.GetAsync(DefaultApiUrlPet + "/" + email);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -58,6 +57,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         {     
             try
             {
+                ViewBag.Title = "Thêm thông tin thú cưng";
                 ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
                 string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
                 HttpResponseMessage PetInfo = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/PetInfo/" + email);
@@ -128,7 +128,7 @@ namespace FEPetServices.Areas.Customer.Controllers
         {
             try
             {
-
+                ViewBag.Title = "Chỉnh sửa thông tin thú cưng";
                 //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/PetInfo/PetID/" + petId);
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "PetInfo/PetID/" + petId);
 

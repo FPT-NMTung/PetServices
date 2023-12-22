@@ -75,6 +75,7 @@ namespace FEPetServices.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            ViewBag.Title = "Thanh toán";
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
@@ -107,6 +108,7 @@ namespace FEPetServices.Controllers
             DateTime currentTimeInVietnam = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, vietnamTimeZone);
             try
             {
+                ViewBag.Title = "Thanh toán";
                 if (orderform.Province == null ||
                     orderform.District == null || orderform.Commune == null)
                 {

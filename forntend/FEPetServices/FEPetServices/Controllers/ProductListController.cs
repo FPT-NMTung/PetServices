@@ -41,7 +41,8 @@ namespace FEPetServices.Controllers
         {
             try
             {
-                var json = JsonConvert.SerializeObject(productDTO);
+                ViewBag.Title = "Sản phẩm";
+                 var json = JsonConvert.SerializeObject(productDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Product/GetAllProductWhenCategoryTrue");
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product/GetAllProductWhenCategoryTrue");
@@ -149,6 +150,7 @@ namespace FEPetServices.Controllers
             ProductDetailModel model = new ProductDetailModel();
             try
             {
+                ViewBag.Title = "Chi tiết sản phẩm";
                 //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlProductDetail + "/" + proId);
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product/ProductID" + "/" + proId);
                 //HttpResponseMessage listResponse = await client.GetAsync(DefaultApiUrlProductList + "/GetAll");
