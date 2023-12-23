@@ -86,13 +86,15 @@
                                     </div>
                                     <ul class="product-meta">
                                         <h5 class="title">Dịch vụ có sẵn</h5>
+                                        <div style="display:flex;flex-wrap: wrap;">
                                         @if (ViewBag.ServiceAvailable != null)
                                         {
+                                            
                                             foreach (var service in ViewBag.ServiceAvailable)
                                             {
-                                                <li style="color: limegreen"><i class="fa fa-check-circle" style="color: limegreen"></i>@service.Text</li>
+                                                <li class="col-6" style="color: limegreen"><i class="fa fa-check-circle" style="color: limegreen"></i>@service.Text</li>
                                             }
-                                        }
+                                        }</div>
                                     </ul>
                                     <div class="product-desc-wrapper pt_sm--60">
                                         <div class="single-desc mb--30">
@@ -311,17 +313,17 @@
                                             <div class="pagination">
                                                 @{
                                                     int pagenumber = ((@ViewBag.FeedbacksCount - 1) / 5) + 1;
-                                                    @if (ViewBag.CurrentPage > 1)
+                                                            @if (ViewBag.CurrentPage > 1)
                                                     {
-                                                        <a href="@Url.Action("RoomDetail", new { roomId = Model.Room.RoomId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
+                                                                <a href="@Url.Action("RoomDetail", new { roomId = Model.Room.RoomId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
                                                     }
-                                                    @for (int i = 1; i <= pagenumber; i++)
+                                                            @for (int i = 1; i <= pagenumber; i++)
                                                     {
-                                                        <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("RoomDetail", new { roomId = Model.Room.RoomId, sortby = ViewBag.sortby, page = i })">@i</a>
+                                                                <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("RoomDetail", new { roomId = Model.Room.RoomId, sortby = ViewBag.sortby, page = i })">@i</a>
                                                     }
-                                                    @if (ViewBag.CurrentPage < pagenumber)
+                                                            @if (ViewBag.CurrentPage < pagenumber)
                                                     {
-                                                        <a href="@Url.Action("RoomDetail", new { roomId = Model.Room.RoomId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
+                                                                <a href="@Url.Action("RoomDetail", new { roomId = Model.Room.RoomId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
                                                     }
                                                 }
                                             </div>
