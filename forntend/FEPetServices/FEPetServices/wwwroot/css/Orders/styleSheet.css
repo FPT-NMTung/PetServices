@@ -256,6 +256,19 @@ content-detail-time-service {
     color: black;
 }
 
+/* Thêm kiểu này cho lớp phủ */
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+/* Cập nhật kiểu hiện tại cho cửa sổ popup khi nó được hiển thị */
 .custom-popup {
     display: none;
     position: fixed;
@@ -267,7 +280,7 @@ content-detail-time-service {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1;
+    z-index: 20;
 }
 
 .popup-content {
@@ -280,6 +293,11 @@ content-detail-time-service {
     right: 10px;
     font-size: 20px;
     cursor: pointer;
+}
+
+/* Cập nhật kiểu hiện tại cho cửa sổ popup khi nó được hiển thị */
+.custom-popup.show-popup {
+    display: block;
 }
 
 /* Responsive Styles */
