@@ -26,7 +26,7 @@ namespace PetServices.Controllers
         public IActionResult GetAllProduct()
         {
             List<Product> products = _context.Products.Include(s => s.ProCategories)
-                .OrderByDescending(p => p.ProductId)
+                .OrderByDescending(p => p.Quantity)
                 .ToList();
 
             var productlist = _mapper.Map<List<ProductDTO>>(products);
