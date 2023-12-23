@@ -33,6 +33,13 @@
             },
         });
 
+        var BackButton = $('<button id="BackBtn" class="axil-btn">Trở lại</button>');
+        $('.dataTables_filter').append(BackButton);
+
+        $('#BackBtn').on('click', function () {
+            window.location.href = '/Manager/OrderPartner';
+        });
+
         //var myForm = $('<form id="myForm" method="get"></form>');
 
         //var labelThang = $('<label for="thang">Chọn tháng: &nbsp;</label>');
@@ -70,36 +77,42 @@
 </script>
 <div class="bg">
     <h1>Chi tiết doanh thu của nhân viên</h1>
-    <table id="lists" class="display">
-        <thead>
-            <tr>
-                <th>STT</th>
-                <th>Tên dịch vụ</th>
-                <th>Ảnh</th>
-                <th>Ngày đặt đơn</th>
-                <th>Tổng tiền hóa đơn hàng</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Count > 0)
-            {
-                foreach (var order in Model)
-                {
-                    <tr>
-                        <td>@order.Stt</td>
-                        <td>@order.NamePartner</td>
-                        <td><img src="@order.ImagePartner" width="50" height="50"></td>
-                        <td>@order.TotalOrder</td>
-                        <td>@string.Format("{0:#,##0} đ", order.TotalSalary).ToString().Replace(',', '.')</td>
-                    </tr>
-                }
-            }
-            else
-            {
+    @if (Model != null && Model.Count > 0)
+    {
+        <table id="lists" class="display">
+            <thead>
                 <tr>
-                    <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
+                    <th>STT</th>
+                    <th>Tên dịch vụ</th>
+                    <th>Ảnh</th>
+                    <th>Ngày đặt đơn</th>
+                    <th>Tổng tiền hóa đơn hàng</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                <tr>
+                    <td>@order.Stt</td>
+                    <td>@order.NamePartner</td>
+                    <td><img src="@order.ImagePartner" width="50" height="50"></td>
+                    <td>@order.TotalOrder</td>
+                    <td>@string.Format("{0:#,##0} đ", order.TotalSalary).ToString().Replace(',', '.')</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="NoneDate">
+            <h4 style="color:red">Không có dữ liệu để hiển thị.</h4>
+            <button id="ReturnBtn" class="return-btn">Trở lại</button>
+        </div>
+    }
 </div>
+<script>
+    $('#ReturnBtn').on('click', function () {
+        window.location.href = '/Manager/OrderPartner';
+    });
+</script>

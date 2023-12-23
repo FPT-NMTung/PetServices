@@ -100,8 +100,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                     {
                         var OrderPartnerList = JsonConvert.DeserializeObject<List<OrderPartnerDTO>>(responseContent);
 
-                        ViewBag.month = month;
-                        ViewBag.year = year;
+                        //ViewBag.month = month;
+                        //ViewBag.year = year;
 
                         return View(OrderPartnerList);
                     }

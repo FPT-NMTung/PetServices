@@ -50,3 +50,20 @@
         box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
         background-color: #ff6347;
     }
+
+.NoneDate {
+    text-align: center;
+    margin-top: 100px;
+}
+
+    .NoneDate .return-btn{
+        margin-top: 29px;
+        padding: 10px 20px;
+        background-color: lightskyblue;
+        border: none;
+        border-radius: 5px;
+    }
+
+        .NoneDate .return-btn:hover {
+            background-color: #ff7b7b;
+        }
