@@ -1,0 +1,111 @@
+﻿<link href="~/css/toastNotification.css" rel="stylesheet" />
+<link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/css/datatable.css" rel="stylesheet" />
+<link href="~/css/OrderPartner.css" rel="stylesheet" />
+
+
+<script>
+    $(document).ready(function () {
+        var table = $('#lists').DataTable({
+            "responsive": true,
+            "paging": true,
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "columnDefs": [
+                { "targets": [0], "width": "5%" },
+                { "targets": [1], "width": "20%" },
+                { "targets": [2], "width": "10%" },
+                { "targets": [3], "width": "15%" },
+                { "targets": [4], "width": "15%" },
+                { "targets": [5], "width": "10%" },
+            ],
+            "language": {
+                "lengthMenu": "Hiển thị _MENU_ dòng",
+                "info": "Hiển thị _START_ - _END_ trên tổng cộng _TOTAL_ dòng",
+                "search": "Tìm kiếm:",
+                "paginate": {
+                    "first": "Đầu",
+                    "last": "Cuối",
+                    "next": "Tiếp",
+                    "previous": "Trước"
+                }
+            },
+        });
+
+        var myForm = $('<form id="myForm" method="get"></form>');
+
+        var labelThang = $('<label for="thang">Chọn tháng: &nbsp;</label>');
+        var selectThang = $('<select id="thang" name="month">' +
+            '<option value="1">Tháng 1</option>' +
+            '<option value="2">Tháng 2</option>' +
+            '<option value="3">Tháng 3</option>' +
+            '<option value="4">Tháng 4</option>' +
+            '<option value="5">Tháng 5</option>' +
+            '<option value="6">Tháng 6</option>' +
+            '<option value="7">Tháng 7</option>' +
+            '<option value="8">Tháng 8</option>' +
+            '<option value="9">Tháng 9</option>' +
+            '<option value="10">Tháng 10</option>' +
+            '<option value="11">Tháng 11</option>' +
+            '<option value="12">Tháng 12</option>' +
+            '</select>');
+
+        var labelNam = $('<label for="nam">Nhập năm: &nbsp;</label>');
+        var inputNam = $('<input min="1" type="number" id="nam" name="year" placeholder="Nhập năm..." required>');
+
+        var currentMonth = parseInt("@ViewBag.month", 10);
+        var currentYear = parseInt("@ViewBag.year", 10);
+
+        selectThang.val(currentMonth);
+        inputNam.val(currentYear);
+
+        var submitBtn = $('<button type="submit" class="axil-btn btn-bg-primary checkout-btn">Tìm kiếm</button>');
+
+        myForm.append(labelThang, selectThang, labelNam, inputNam, submitBtn);
+
+        $('.dataTables_filter').append(myForm);
+
+    });
+</script>
+<div class="bg">
+    <h1>Doanh thu nhân viên</h1>
+    <table id="lists" class="display">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên nhân viên</th>
+                <th>Ảnh</th>
+                <th>Số hóa đơn nhận</th>
+                <th>Tổng tiền đơn hàng</th>
+                <th>Chi tiết</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                foreach (var partner in Model)
+                {
+                    <tr>
+                        <td>@partner.Stt</td>
+                        <td>@partner.NamePartner</td>
+                        <td><img src="@partner.ImagePartner" width="50" height="50"></td>
+                        <td>@partner.TotalOrder</td>
+                        <td>@string.Format("{0:#,##0} đ", partner.TotalSalary).ToString().Replace(',', '.')</td>
+                        <td>
+                            <a class="btn-detail" href="/Manager/OrderPartner/OrderPartnerDetail?partnerId=@partner.PartnerId&month=@ViewBag.month&year=@ViewBag.year">Chi tiết</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
