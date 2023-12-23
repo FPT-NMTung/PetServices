@@ -1,83 +1,83 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-@*<link rel="stylesheet" href="/css/Service/Service.css"></link>*@
-<link rel="stylesheet" href="/css/Room.css"></link>
-<link href="~/css/toastNotification.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @*<link rel="stylesheet" href="/css/Service/Service.css"></link>*@
+    <link rel="stylesheet" href="/css/Room.css"></link>
+    <link href="~/css/toastNotification.css" rel="stylesheet" />
 
 </head>
 <body>
-<h2 style="font-size: 40px; font-weight: bold; text-align:center">Chỉnh Sửa Dịch Vụ Thú Cưng</h2>
-<div class="container">
-  <form asp-action="EditService" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
-    <div class="row">
-      <div class="col-25">
-        <label for="ServiceName">Tên Dịch Vụ<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-      </div>
-      <div class="col-75">
-        <input type="text" id="ServiceName" name="ServiceName" value="@Model?.ServiceName" placeholder="Tên Dịch Vụ.." required>
-        <div style="color:red" class="error-message" id="fname-error-message"></div>
-      </div>
-    </div>
-    <div class="row">
-    <div class="col-25">
-        <label for="image">Ảnh:</label>
-    </div>
+    <h2 style="font-size: 40px; font-weight: bold; text-align:center">Chỉnh Sửa Dịch Vụ Thú Cưng</h2>
+    <div class="container">
+        <form asp-action="EditService" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <div class="row">
+                <div class="col-25">
+                    <label for="ServiceName">Tên Dịch Vụ<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="ServiceName" name="ServiceName" value="@Model?.ServiceName" placeholder="Tên Dịch Vụ.." required>
+                    <div style="color:red" class="error-message" id="fname-error-message"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="image">Ảnh:</label>
+                </div>
 
-    <div class="col-75">
-        <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px;margin-left:20px;" accept="image/*">
+                <div class="col-75">
+                    <input type="file" id="image" name="image" onchange="changeImageSource()" style="margin-top:20px;margin-left:20px;" accept="image/*">
 
-        <img src="@Model?.Picture"  style="float: left; height:100px; width:100px;" id="imagePreview">
+                    <img src="@Model?.Picture" style="float: left; height:100px; width:100px;" id="imagePreview">
 
-    </div>
-    </div>
-    <div class="row">
-      <div class="col-25">
-        <label for="Price">Giá<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-      </div>
-      <div class="col-75">
-                    <input type="number" id="Price" name="Price" value="@Model?.Price" min="0" placeholder="Giá tiền" required>
-        <div style="color:red" class="error-message" id="price-error-message"></div> <!-- Lưu ý rằng id ở đây là "price-error-message" -->
-      </div>
-    </div>
-    <div class="row">
-    <div class="col-25">
-        <label for="Time">Thời gian làm dịch vụ<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-    </div>
-    <div class="col-75">
-        <input type="number" id="Time" name="Time" value="@Model?.Time" min="0" placeholder="Nhập giờ" step="any" required>
-        <div style="color:red" class="error-message" id="time-error-message"></div>
-    </div>
-</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="Price">Giá<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <input type="number" id="Price" name="Price" value="@Model?.Price" min="0" placeholder="Giá tiền" required style="width:100%;height:100%;border-radius:4px;border: 1px solid #ccc;">
+                    <div style="color:red" class="error-message" id="price-error-message"></div> <!-- Lưu ý rằng id ở đây là "price-error-message" -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="Time">Thời gian làm dịch vụ<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <input type="number" id="Time" name="Time" value="@Model?.Time" min="0" placeholder="Nhập giờ" step="any" required style="width:100%;height:100%;border-radius:4px;border: 1px solid #ccc;">
+                    <div style="color:red" class="error-message" id="time-error-message"></div>
+                </div>
+            </div>
 
-    <div class="row">
-        <div class="col-25">
+            <div class="row">
+                <div class="col-25">
                     @*<input type="hidden" name="SerCategoriesId" value="@Model.SerCategoriesId" />*@
 
-            <label for="SerCategoriesId">Loại Dịch Vụ<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i></label>
-        </div>
-        <div class="col-75">
-                <select id="SerCategoriesId" name="SerCategoriesId"  required>
-                    <option value="@Model?.SerCategoriesId" >@Model?.SerCategoriesName</option>
+                    <label for="SerCategoriesId">Loại Dịch Vụ<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i></label>
+                </div>
+                <div class="col-75">
+                    <select id="SerCategoriesId" name="SerCategoriesId" required>
+                        <option value="@Model?.SerCategoriesId">@Model?.SerCategoriesName</option>
                         @foreach (var category in ViewBag.Categories)
                         {
-                                    <option value="@category.Value">@category.Text</option>
+                            <option value="@category.Value">@category.Text</option>
                         }
-                </select>
-        </div>
-    </div>
+                    </select>
+                </div>
+            </div>
 
-    <div class="row">
-      <div class="col-25">
-        <label for="Desciptions">Mô Tả<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
-      </div>
-      <div class="col-75">
-        <textarea id="Desciptions" name="Desciptions" placeholder="Nội Dung .." style="height:200px" required>@Model?.Desciptions</textarea>
-        <div style="color:red" class="error-message" id="subject-error-message"></div>
-      </div>
-    </div>
-    <div class="row">
+            <div class="row">
+                <div class="col-25">
+                    <label for="Desciptions">Mô Tả<i class="fa-sharp fa-solid fa-asterisk fa-rotate-270 fa-xs"></i>:</label>
+                </div>
+                <div class="col-75">
+                    <textarea id="Desciptions" name="Desciptions" placeholder="Nội Dung .." style="height:200px" required>@Model?.Desciptions</textarea>
+                    <div style="color:red" class="error-message" id="subject-error-message"></div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-25">
                     <label for="Status">Trạng thái:</label>
                 </div>
@@ -88,27 +88,34 @@
                     </div>
                 </div>
             </div>
-     <div class="row">
-          <div class="col-25">
-          </div>
-          <div class="col-75 btn-row">
-          <div class="btn-back">
-             <a type="submit" value="Cancal" href="/Manager/Service" class="cancel">Trở lại</a>
-          </div>
-          <div class="btn-submit">
-            <input type="submit" value="Lưu chỉnh sửa">
-          </div>
-       </div>
-     </div>
-  </form>
-</div>
-    </body>
-    <style>
-.fa-asterisk {
-            color: red;
-            font-size:6px;
-            padding-top:20px;
-            margin-right:10px;
+            <div class="row">
+                <div class="col-25">
+                </div>
+                <div class="col-75 btn-row">
+                    <div class="btn-back">
+                        <a type="submit" value="Cancal" href="/Manager/Service" class="cancel">Trở lại</a>
+                    </div>
+                    <div class="btn-submit">
+                        <input type="submit" value="Lưu chỉnh sửa">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+<style>
+    .fa-asterisk {
+        color: red;
+        font-size: 6px;
+        padding-top: 20px;
+        margin-right: 10px;
+    }
+    input[type=number], select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
         }
 </style>
 <script src="~/js/Service.js"></script>

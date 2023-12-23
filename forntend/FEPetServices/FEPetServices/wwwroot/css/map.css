@@ -24,11 +24,11 @@
     min-width: 100px;
 }
 
-.close-container {
+.close {
     position: absolute;
-    top: -12px;
-    left: 5px;
-    z-index: 1;
+    top: -6px;
+    right: 5px;
+    z-index: 2;
 }
 
 .close {

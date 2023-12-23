@@ -10,7 +10,13 @@
     <link href="~/css/map.css" rel="stylesheet" />
     <link href="~/css/OrderDetail.css" rel="stylesheet" />
     <link href="~/css/orders/detail.css" rel="stylesheet" />
+
 </head>
+@{
+    var isStep5ActiveProduct = 0;
+    var isStep5ActiveService = 0;
+    var isStep5ActivePartner = 0;
+}
 <body>
     <div class="card right-profile-card">
         <div class="card-header alert-primary">
@@ -59,29 +65,31 @@
                                         ) {
                                     <text>active</text>
                                     } text-center" id="step1">
-                                                <i class="fa-solid fa-receipt"></i>
-                                            </li>
+                                                    <i class="fa-solid fa-receipt"></i>
+                                                </li>
+
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Confirmed" || Model.OrderStatus.Trim() == "Processing"
                                         || Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                     } text-center" id="step2">
-                                                <i class="fa-solid fa-check"></i>
-                                            </li>
+                                                    <i class="fa-solid fa-check"></i>
+                                                </li>
+
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Processing" ||  Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                     } text-center" id="step3">
-                                                <i class="fa-solid fa-truck"></i>
-                                            </li>
+                                                    <i class="fa-solid fa-truck"></i>
+                                                </li>
+
                                         <li class="step0 @if(Model.OrderStatus.Trim() == "Completed") {
                                     <text>active</text>
                                     }  text-center" id="step4">
-                                                <i class="fa-solid fa-download"></i>
-                                            </li>
-                                        <li class="step0 @if(Model.OrderStatus.Trim() == "Completed") {
-                                    <text>active</text>
-                                     }  text-end" id="step5">
-                                                <i class="fa-regular fa-star"></i>
-                                            </li>
+                                                    <i class="fa-solid fa-download"></i>
+                                                </li>   
+
+                                        <li class="step0 text-end" id="step5">
+                                            <i class="fa-regular fa-star"></i>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -160,9 +168,14 @@
                                 </div>
                                 @if ((productDetail.FeedbackStatus == null || productDetail.FeedbackStatus == false) && productDetail?.StatusOrderProduct?.Trim() == "Delivered")
                                 {
+                                    isStep5ActiveProduct = 1;
                                     <div class="btn-content-detail">
                                         <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@Model.UserInfoId', '@Model.OrderId', '@productDetail.FeedbackStatus')">Đánh giá</button>
                                     </div>
+                                }
+                                else if ((productDetail.FeedbackStatus != null || productDetail.FeedbackStatus != false) && productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                                {
+                                    isStep5ActiveProduct = 2;
                                 }
                                 @if (i == Model.OrderProductDetails.Count - 1)
                                 {
@@ -225,10 +238,15 @@
                                                         var partnerName = serviceDetail?.PartnerInfo?.FirstName + " " + serviceDetail?.PartnerInfo?.LastName + " - " + serviceDetail?.PartnerInfoId;
                                                         if ((serviceDetail.FeedbackPartnerStatus == null || serviceDetail.FeedbackPartnerStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
                                                         {
+                                                            isStep5ActivePartner = 1;
                                                             <p style="font-size:.8rem;">Đánh giá về nhân viên của chúng tôi :  </p>
                                                             <div style="margin-bottom:0px; margin-left:.2rem" class="btn-content-detail">
                                                                 <button class="btn btn-outline-primary" onclick="openPopupPartner('@serviceDetail?.PartnerInfo.ImagePartner', '@partnerName', '@serviceDetail.PartnerInfo.PartnerInfoId', '@serviceDetail.ServiceId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
                                                             </div>
+                                                        }
+                                                        else if ((serviceDetail.FeedbackPartnerStatus != null || serviceDetail.FeedbackPartnerStatus != false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                                        {
+                                                            isStep5ActivePartner = 2;
                                                         }
                                                     }
                                                 </div>
@@ -277,51 +295,19 @@
                                 </div>
                                 @if ((serviceDetail.FeedbackStatus == null || serviceDetail.FeedbackStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
                                 {
+                                    isStep5ActiveService = 1;
                                     <div class="btn-content-detail">
                                         <button class="btn btn-outline-primary" onclick="openPopupService('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
                                     </div>
+                                }
+                                else if ((serviceDetail.FeedbackStatus != null || serviceDetail.FeedbackStatus != false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                {
+                                    isStep5ActiveService = 2;                                   
                                 }
                             }
                         </div>
                     }
                     @*End - Service Detail*@
-
-                    @*Start - Room Detail*@
-                    @if (Model.BookingRoomDetails != null && Model.BookingRoomDetails.Count > 0)
-                    {
-                        <div class="content-details">
-                            <p class="bold-text">Thông tin phòng đã được đặt hàng</p>
-                            @foreach (var roomDetail in Model.BookingRoomDetails)
-                            {
-                                <div class="content-detail">
-                                    <div class="room-info">
-                                        <img src="@roomDetail.Room.Picture" width="50" height="50" alt="Room Image">
-                                        <div class="room-info-detail">
-                                            <p style="max-width:800px">@roomDetail.Room.RoomName</p>
-                                            @foreach (var roomService in Model.BookingRoomServices)
-                                            {
-                                                <div class="room-info-detail-service">
-                                                    <p style="font-size:.8rem;">Dịch vụ: @roomService.Service.ServiceName</p>
-                                                    <p class="price-service-rooom" style="font-size:.8rem;">@($"{(roomService.PriceService):n0}".Replace(",", ".")) VNĐ</p>
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="content-detail-time">
-                                    <p style="font-size:.9rem;">Thời gian bắt đầu: @roomDetail.StartDate</p>
-                                    <p style="font-size:.9rem;">Thời gian kêt thúc: @roomDetail.EndDate</p>
-                                </div>
-                                @if (roomDetail.FeedbackStatus == null || roomDetail.FeedbackStatus == false)
-                                {
-                                    <div class="btn-content-detail">
-                                        <button class="btn btn-outline-primary" onclick="openPopupRoom('@roomDetail.Room.Picture', '@roomDetail.Room.RoomName', '@roomDetail.RoomId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
-                                    </div>
-                                }
-                            }
-                        </div>
-                    }
-                    @*End - Room Detail*@
 
                     <div class="headel-content">
                         <p>Tổng giá : </p>
@@ -338,16 +324,47 @@
                         }
                         @if (!Model.StatusPayment)
                         {
-                            <span class="badge badge-info">Chưa thanh toán</span>
+                             <span class="badge badge-info">Chưa thanh toán</span>
                         }
                         else
                         {
                             <span class="badge badge-info">Đã thanh toán</span>
                         }
                     </div>
+                    <div class="payment-fail">
+                        @if (Model.TypePay.Trim() == "vnpay" && !Model.StatusPayment)
+                        {
+                            <form method="post" action="@Url.Action("CheckoutAgain", "MyOrders")">
+                                <input type="hidden" name="orderID" value="@Model?.OrderId">
+                                <input type="hidden" name="orderDate" value="@Model?.OrderDate">
+                                <input type="hidden" name="totalPrice" value="@Model?.TotalPrice">
+                                <button type="submit" class="btn btn-primary">
+                                    Thanh toán ngay
+                                </button>
+                            </form>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
+        @if(isStep5ActiveService == 1 || isStep5ActiveProduct == 1 || isStep5ActivePartner == 1)
+        {
+            <script>
+                document.getElementById('step5').classList.add('active');
+            </script>
+        }
+        else if (isStep5ActiveProduct == 2 || (isStep5ActiveService == 2 && isStep5ActivePartner == 2))
+        {
+             <script>
+                document.getElementById('step5').classList.remove('active');
+            </script>
+            <style>
+                #progressbar-2 li i.fa-star {
+                    color: #4caf50;
+                    border: 3.5px solid #4caf50;
+                }
+            </style>
+        }
         @if (Model.OrderStatus.Trim() == "Cancelled")
         {
             <div class="card-body cancelled-order-footer" style="border-radius:0px">
@@ -364,8 +381,43 @@
                 }
             </div>
         }
-    </div>
 
+        @if ((Model.OrderStatus.Trim() == "Placed" || Model.OrderStatus.Trim() == "Packaging" || Model.OrderStatus.Trim() == "Confirmed") && !Model.StatusPayment)
+        {
+            <div class="card-body" style="display:block;background-color:rgba(0, 0, 0, 0.03); border-radius:0px">
+                <form method="post" asp-controller="MyOrders" asp-action="OrderDetail"> 
+
+                    <input type="hidden" name="Id" value="@Model?.OrderId" />
+                    <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
+
+                    <div class="form-check form-check-inline" style="padding: 0;">
+                        <button class="btn btn-danger" type="button" onclick="handleCancelledChange()">
+                            Hủy Đơn
+                        </button>
+                    </div>
+
+                    <!-- Popup -->
+                    <div id="cancelOrderPopup" class="custom-popup">
+                        <div class="popup-content">
+                            <span class="close" onclick="closeCancelOrderPopup()">&times;</span>
+                            <h5>Hủy Đơn</h5>
+                            <input name="newStatus" value="Cancelled" type="hidden" />
+                            <div>
+                                <label for="title">Tiêu Đề:</label>
+                                <input type="text" id="ReasonOrderTitle" name="ReasonOrderTitle" style="width:100%" placeholder="Nhập Tiêu Đề">
+                            </div>
+                            <div>
+                                <label for="description">Mô Tả:</label>
+                                <textarea id="ReasonOrderDescription" name="ReasonOrderDescription" style="width:100%" placeholder="Nhập Mô Tả"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Xác nhận Hủy Đơn</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        }
+
+    </div>
     <div class="popup">
         <div id="overlay" class="overlay"></div>
         <div class="feedback popup-container" id="popup">
@@ -446,7 +498,7 @@
     <div id="mapModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeMapModal()">&times;</span>
-            <div id="map" style="width: 100%; height: 400px;"></div>
+            <div id="map"></div>
         </div>
         <div id="directionsPanel"></div>
     </div>
@@ -748,6 +800,34 @@
             }
         });
     </script>
+    @*Hủy đơn*@
+    <script>
+        function openCancelOrderPopup() {
+            document.getElementById('cancelOrderPopup').style.display = 'block';
+        }
 
+        function closeCancelOrderPopup() {
+            document.getElementById('cancelOrderPopup').style.display = 'none';
+        }
+    </script>
+    <script>
+        function handleCancelledChange() {
+            // Hiển thị popup khi nút được nhấn
+            openCancelOrderPopup();
+
+            // Thiết lập giá trị "Cancelled" cho lựa chọn newStatus (hoặc thực hiện các hành động cần thiết)
+            var newStatusInput = document.querySelector('input[name="newStatus"]');
+            if (newStatusInput) {
+                newStatusInput.value = 'Cancelled';
+            }
+
+            // Hiển thị hoặc ẩn phần lý do hủy đơn tùy thuộc vào giá trị chọn
+            var reasonSelectDiv = document.getElementById('reasonSelect');
+            var lydoKhacDiv = document.getElementById('lydoKhac');
+
+            reasonSelectDiv.style.display = 'block';
+            lydoKhacDiv.style.display = 'block';
+        }
+    </script>
 </body>
 </html>

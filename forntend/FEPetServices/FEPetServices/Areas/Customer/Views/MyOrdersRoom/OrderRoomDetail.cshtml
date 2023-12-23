@@ -11,6 +11,9 @@
     <link href="~/css/OrderDetail.css" rel="stylesheet" />
     <link href="~/css/orders/roomdetail.css" rel="stylesheet" />
 </head>
+@{
+    var isStep5ActiveRoom = 0;
+}
 <body>
     <div class="card right-profile-card">
         <div class="card-header alert-primary">
@@ -68,9 +71,7 @@
                                     } text-center" id="step3">
                                             <i class="fa-solid fa-house-chimney-crack"></i>
                                                     </li>
-                                        <li class="step0 @if(Model.OrderStatus.Trim() == "Confirmed") {
-                                    <text>active</text>
-                                     }  text-end" id="step5">
+                                        <li class="step0  text-end" id="step5">
                                                         <i class="fa-regular fa-star"></i>
                                                     </li>
                                     </ul>
@@ -78,22 +79,22 @@
                             </div>
 
                             <div class="d-flex justify-content-between">
-                                <div class="d-lg-flex">
+                                <div class="d-lg-flex" style="padding-left:0px">
                                     <div>
                                         <p class="mb-0">Chờ nhận phòng</p>
                                     </div>
                                 </div>
-                                <div class="d-lg-flex">
+                                <div class="d-lg-flex" style="padding-left: 10px;">
                                     <div>
                                         <p class="mb-0">Đã nhận phòng</p>
                                     </div>
                                 </div>
-                                <div class="d-lg-flex">
+                                <div class="d-lg-flex" style="padding-left: 20px;">
                                     <div>
                                         <p class="mb-0">Đã trả phòng</p>
                                     </div>
                                 </div>
-                                <div class="d-lg-flex">
+                                <div class="d-lg-flex" style="padding-left: 40px;">
                                     <div>
                                         <p class="mb-0">Đánh giá</p>
                                     </div>
@@ -154,9 +155,14 @@
                                 </div>
                                 @if ((roomDetail.FeedbackStatus == null || roomDetail.FeedbackStatus == false) && Model.OrderStatus.Trim() == "Confirmed")
                                 {
+                                    isStep5ActiveRoom = 1;
                                     <div class="btn-content-detail">
                                         <button class="btn btn-outline-primary" onclick="openPopupRoom('@roomDetail.Room.Picture', '@roomDetail.Room.RoomName', '@roomDetail.RoomId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
                                     </div>
+                                }
+                                else if ((roomDetail.FeedbackStatus != null || roomDetail.FeedbackStatus != false) && Model.OrderStatus.Trim() == "Confirmed")
+                                {
+                                    isStep5ActiveRoom = 2;                              
                                 }
                             }
                         </div>
@@ -205,6 +211,25 @@
             </div>
         }
     </div>
+
+    @if (isStep5ActiveRoom == 1 )
+    {
+        <script>
+            document.getElementById('step5').classList.add('active');
+        </script>
+    }
+    else if (isStep5ActiveRoom == 2)
+    {
+        <script>
+            document.getElementById('step5').classList.remove('active');
+        </script>
+        <style>
+            #progressbar-2 li i.fa-star {
+                color: #4caf50;
+                border: 3.5px solid #4caf50;
+            }
+        </style>
+    }
 
     <div class="popup">
         <div id="overlay" class="overlay"></div>
@@ -279,6 +304,7 @@
             </div>
         </div>
     </div>
+
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
