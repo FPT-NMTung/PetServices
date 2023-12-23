@@ -308,7 +308,7 @@ namespace FEPetServices.Areas.Partner.Controllers
                 status.newStatusProduct = "";
                 status.newStatusService = "Waiting";
             }
-            if (status.newStatus == "Received")
+            if (status.newStatus == "Confirmed")
             {
                 status.newStatusProduct = "";
                 status.newStatusService = "Received";
