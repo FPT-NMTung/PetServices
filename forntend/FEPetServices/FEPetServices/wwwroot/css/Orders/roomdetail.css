@@ -117,11 +117,12 @@ ul {
     position: relative;
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 @media (min-width: 992px) {
     .d-lg-flex {
-        margin-right: 30px;
+        padding-left: 10px;
     }
 }
 

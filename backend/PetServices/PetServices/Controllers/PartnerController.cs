@@ -49,8 +49,6 @@ namespace PetServices.Controllers
             return Ok(_mapper.Map<List<AccountInfo>>(account));
         }
 
-
-
         [HttpGet("{email}")]
         public IActionResult Get(string email)
         {
@@ -60,6 +58,69 @@ namespace PetServices.Controllers
                 return NotFound("Tài khoản không tồn tài");
             }
             return Ok(_mapper.Map<AccountInfo>(account));
+        }
+
+        [HttpGet("GetOrderPartner")]
+        public IActionResult GetOrderPartner(int month, int year)
+        {
+            var partners = _context.Accounts.Where(a => a.RoleId == 4).ToList();
+            var orderPartnersList = new List<OrderPartnerDTO>();
+
+            int stt = 1;
+
+            foreach (var partner in partners)
+            {
+                var partnerInfo = _context.PartnerInfos.Where(p => p.PartnerInfoId == partner.PartnerInfoId).FirstOrDefault();
+
+                if (partnerInfo != null)
+                {
+                    var orders = _context.BookingServicesDetails.Where(p => p.PartnerInfoId == partner.PartnerInfoId && p.StartTime.Value.Month == month && p.StartTime.Value.Year == year).ToList();
+
+                    var orderPartner = new OrderPartnerDTO
+                    {
+                        Stt = stt,
+                        PartnerId = partner.PartnerInfoId ?? 0,
+                        ImagePartner = partnerInfo.ImagePartner,
+                        NamePartner = partnerInfo.FirstName + " " + partnerInfo.LastName,
+                        TotalOrder = orders.Count().ToString(),
+                        TotalSalary = orders.Sum(p => p.PriceService),
+                    };
+
+                    orderPartnersList.Add(orderPartner);
+                    stt++;
+                }
+            }
+
+            return Ok(orderPartnersList);
+        }
+
+        [HttpGet("GetOrderDetailPartner")]
+        public IActionResult GetOrderDetailPartner(int PartnerId, int month, int year)
+        {
+            var orders = _context.BookingServicesDetails.Where(p => p.PartnerInfoId == PartnerId && p.StartTime.Value.Month == month && p.StartTime.Value.Year == year).ToList();
+            var orderPartnersList = new List<OrderPartnerDTO>();
+
+            int stt = 1;
+
+            foreach (var order in orders)
+            {
+                var service = _context.Services.FirstOrDefault(s => s.ServiceId == order.ServiceId);
+
+                var orderPartner = new OrderPartnerDTO
+                {
+                    Stt = stt,
+                    PartnerId = PartnerId,
+                    ImagePartner = service.Picture,
+                    NamePartner = service.ServiceName,
+                    TotalOrder = order.StartTime.ToString(),
+                    TotalSalary = order.PriceService,
+                };
+
+                orderPartnersList.Add(orderPartner);
+                stt++;
+            }
+
+            return Ok(orderPartnersList);
         }
 
         [HttpPut("updateAccount")]

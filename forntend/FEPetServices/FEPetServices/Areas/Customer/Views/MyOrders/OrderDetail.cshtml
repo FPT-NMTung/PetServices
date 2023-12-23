@@ -13,9 +13,9 @@
 
 </head>
 @{
-    var isStep5ActiveProduct = false;
-    var isStep5ActiveService = false;
-    var isStep5ActivePartner = false;
+    var isStep5ActiveProduct = 0;
+    var isStep5ActiveService = 0;
+    var isStep5ActivePartner = 0;
 }
 <body>
     <div class="card right-profile-card">
@@ -168,10 +168,14 @@
                                 </div>
                                 @if ((productDetail.FeedbackStatus == null || productDetail.FeedbackStatus == false) && productDetail?.StatusOrderProduct?.Trim() == "Delivered")
                                 {
-                                    isStep5ActiveProduct = true;
+                                    isStep5ActiveProduct = 1;
                                     <div class="btn-content-detail">
                                         <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@Model.UserInfoId', '@Model.OrderId', '@productDetail.FeedbackStatus')">Đánh giá</button>
                                     </div>
+                                }
+                                else if ((productDetail.FeedbackStatus != null || productDetail.FeedbackStatus != false) && productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                                {
+                                    isStep5ActiveProduct = 2;
                                 }
                                 @if (i == Model.OrderProductDetails.Count - 1)
                                 {
@@ -234,11 +238,15 @@
                                                         var partnerName = serviceDetail?.PartnerInfo?.FirstName + " " + serviceDetail?.PartnerInfo?.LastName + " - " + serviceDetail?.PartnerInfoId;
                                                         if ((serviceDetail.FeedbackPartnerStatus == null || serviceDetail.FeedbackPartnerStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
                                                         {
-                                                            isStep5ActivePartner = true;
+                                                            isStep5ActivePartner = 1;
                                                             <p style="font-size:.8rem;">Đánh giá về nhân viên của chúng tôi :  </p>
                                                             <div style="margin-bottom:0px; margin-left:.2rem" class="btn-content-detail">
                                                                 <button class="btn btn-outline-primary" onclick="openPopupPartner('@serviceDetail?.PartnerInfo.ImagePartner', '@partnerName', '@serviceDetail.PartnerInfo.PartnerInfoId', '@serviceDetail.ServiceId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
                                                             </div>
+                                                        }
+                                                        else if ((serviceDetail.FeedbackPartnerStatus != null || serviceDetail.FeedbackPartnerStatus != false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                                        {
+                                                            isStep5ActivePartner = 2;
                                                         }
                                                     }
                                                 </div>
@@ -287,10 +295,14 @@
                                 </div>
                                 @if ((serviceDetail.FeedbackStatus == null || serviceDetail.FeedbackStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
                                 {
-                                    isStep5ActiveService = true;
+                                    isStep5ActiveService = 1;
                                     <div class="btn-content-detail">
                                         <button class="btn btn-outline-primary" onclick="openPopupService('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
                                     </div>
+                                }
+                                else if ((serviceDetail.FeedbackStatus != null || serviceDetail.FeedbackStatus != false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                {
+                                    isStep5ActiveService = 2;                                   
                                 }
                             }
                         </div>
@@ -312,23 +324,36 @@
                         }
                         @if (!Model.StatusPayment)
                         {
-                            <span class="badge badge-info">Chưa thanh toán</span>
+                             <span class="badge badge-info">Chưa thanh toán</span>
                         }
                         else
                         {
                             <span class="badge badge-info">Đã thanh toán</span>
                         }
                     </div>
+                    <div class="payment-fail">
+                        @if (Model.TypePay.Trim() == "vnpay" && !Model.StatusPayment)
+                        {
+                            <form method="post" action="@Url.Action("CheckoutAgain", "MyOrders")">
+                                <input type="hidden" name="orderID" value="@Model?.OrderId">
+                                <input type="hidden" name="orderDate" value="@Model?.OrderDate">
+                                <input type="hidden" name="totalPrice" value="@Model?.TotalPrice">
+                                <button type="submit" class="btn btn-primary">
+                                    Thanh toán ngay
+                                </button>
+                            </form>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
-        @if(isStep5ActiveService == true || isStep5ActiveProduct == true || isStep5ActivePartner == true)
+        @if(isStep5ActiveService == 1 || isStep5ActiveProduct == 1 || isStep5ActivePartner == 1)
         {
             <script>
                 document.getElementById('step5').classList.add('active');
             </script>
         }
-        else if (isStep5ActiveService != true && isStep5ActiveProduct != true && isStep5ActivePartner != true)
+        else if (isStep5ActiveProduct == 2 || (isStep5ActiveService == 2 && isStep5ActivePartner == 2))
         {
              <script>
                 document.getElementById('step5').classList.remove('active');
@@ -395,9 +420,6 @@
             </div>
         }
     </div>
-
-
-
     <div class="popup">
         <div id="overlay" class="overlay"></div>
         <div class="feedback popup-container" id="popup">
@@ -478,7 +500,7 @@
     <div id="mapModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeMapModal()">&times;</span>
-            <div id="map" style="width: 100%; height: 400px;"></div>
+            <div id="map"></div>
         </div>
         <div id="directionsPanel"></div>
     </div>

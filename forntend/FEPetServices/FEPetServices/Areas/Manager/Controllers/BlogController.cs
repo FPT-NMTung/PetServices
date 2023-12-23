@@ -101,7 +101,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 }
 
                 blog.Status = true;
-               
+                blog.PublisheDate = DateTime.Now;
+
 
                 var json = JsonConvert.SerializeObject(blog);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
