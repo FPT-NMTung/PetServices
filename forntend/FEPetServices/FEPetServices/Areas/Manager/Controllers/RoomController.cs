@@ -182,6 +182,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                     return View(roomDTO); 
                 }
                 roomDTO.Status = true;
+                roomDTO.Slot = 1;
 
                 var selectedServices = Request.Form["SelectedServices"];
                 roomDTO.ServiceIds = !string.IsNullOrEmpty(selectedServices)
@@ -338,6 +339,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                 {
                     roomDTO.Status = false;
                 }
+
+                roomDTO.Slot = 1;
 
                 var json = JsonConvert.SerializeObject(roomDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
