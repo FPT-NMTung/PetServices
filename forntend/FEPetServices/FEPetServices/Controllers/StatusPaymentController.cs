@@ -40,6 +40,7 @@ namespace FEPetServices.Controllers
         }
 
         public const string CARTKEY = "cart";
+        public const string CARTKEYROOM = "cartRoom";
         public class CartItem
         {
             // Product
@@ -99,7 +100,6 @@ namespace FEPetServices.Controllers
                     await UpdateProductQuantitiesAsync(cartItems);
                     HttpResponseMessage responseStatusPayment = await _client.PutAsync(DefaultApiUrl + "Order/changeStatusPayment"
                                + "?Id=" + orderId, null);
-
                     ClearCart();
                     ClearCartRoom();
                     TempData["SuccessToast"] = "Thanh toán thành công.";
@@ -143,11 +143,11 @@ namespace FEPetServices.Controllers
                     ClearCartRoom();
                     if (!checkRoom)
                     {
-                        TempData["SuccessToast"] = "Đặt phòng thành công. Vui lòng kiểm tra lại giỏ hàng.";
+                        TempData["ErrorToast"] = "Thanh toán thất bại. Vui lòng kiểm tra lại đơn hàng trong giỏ hàng.";
                     }
                     else
                     {
-                        TempData["ErrorToast"] = "Đặt phòng thất bại. Vui lòng kiểm tra thanh toán .";
+                        TempData["ErrorToast"] = "Thanh toán thất bại. Vui lòng kiểm tra thanh toán.";
                     }
                     ViewBag.ErrorOrderID = orderId;
                     ViewBag.VNPAY = vnpayTranId;
@@ -166,7 +166,7 @@ namespace FEPetServices.Controllers
 
         private void ClearCartRoom()
         {
-            HttpContext.Session.Remove("cartRoom");
+            HttpContext.Session.Remove(CARTKEYROOM);
         }
 
         private async Task UpdateProductQuantitiesAsync(List<CartItem> cartItems)

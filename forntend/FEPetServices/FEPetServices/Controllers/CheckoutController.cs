@@ -1,13 +1,11 @@
 ﻿using FEPetServices.Form;
 using FEPetServices.Form.OrdersForm;
-using FEPetServices.Models.ErrorResult;
 using FEPetServices.Models.Payments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using PetServices.Models;
-using System.Globalization;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
