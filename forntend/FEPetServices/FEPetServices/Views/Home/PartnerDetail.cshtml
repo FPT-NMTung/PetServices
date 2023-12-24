@@ -83,29 +83,29 @@
                         <div class="post-heading">
                             <h2 class="title">Giới thiệu chung về @Model?.Partner.LastName </h2>
                             <div class="post-author-avatar" style="width: 350px; border-radius:50%;">
-                                    <img src="@Model?.Partner.ImagePartner" style="width: 250px;height:250px;" alt="Author Images">
-                             </div>
+                                <img src="@Model?.Partner.ImagePartner" style="width: 250px;height:250px;" alt="Author Images">
+                            </div>
                             <div class="axil-post-meta" style=" height: 350px;">
-                                <div class="post-meta-content" >
+                                <div class="post-meta-content">
                                     <h6 class="author-title" style="margin-bottom:20px;">
                                         Họ và tên :@Model?.Partner.FirstName @Model?.Partner.LastName - Mã nhân viên: @Model?.Partner.PartnerInfoId
                                     </h6>
                                     <h6 class="author-title" style="margin-bottom:20px;">
-                                       Địa chỉ : @Model?.Partner.Commune,@Model?.Partner.District,@Model?.Partner.Province
+                                        Địa chỉ : @Model?.Partner.Commune,@Model?.Partner.District,@Model?.Partner.Province
                                     </h6>
                                     <h6 class="author-title" style="margin-bottom:20px;">
-                                       Số điện thoại: @Model?.Partner.Phone
+                                        Số điện thoại: @Model?.Partner.Phone
                                     </h6>
-                                    <h6 class="author-title"  style="margin-bottom:30px;">
-                                      Mô tả chung về bản thân: @Model?.Partner.Descriptions
-                                      
+                                    <h6 class="author-title" style="margin-bottom:30px;">
+                                        Mô tả chung về bản thân: @Model?.Partner.Descriptions
+
                                     </h6>
                                 </div>
                             </div>
                         </div>
                         <div class="content-blog format-quote mt--10 mb--50 mb_sm--30">
                             <h2>Các bằng chứng chỉ :</h2>
-                            <img style="width:400px;height:200px;" src="@Model?.Partner.ImageCertificate" >
+                            <img style="width:400px;height:200px;" src="@Model?.Partner.ImageCertificate">
                         </div>
                         <div>
                             <h3>Đánh giá</h3>
@@ -202,18 +202,18 @@
                                 <h6 class="widget-title">các dịch vụ bạn có thể tham khảo</h6>
 
                                 <!-- Start Single Post List  -->
-                                 @foreach (var service in Model.CaServices)
+                                @foreach (var service in Model.CaServices)
                                 {
-                                <div class="content-blog post-list-view mb--20">
-                                    <div class="thumbnail">
-                                        <a href="~/Home/Service?sevicecategory=@service.SerCategoriesId">
-                                            <img src="@service.Picture" alt="Blog Images">
-                                        </a>
+                                    <div class="content-blog post-list-view mb--20">
+                                        <div class="thumbnail">
+                                            <a href="~/Home/Service?sevicecategory=@service.SerCategoriesId">
+                                                <img src="@service.Picture" alt="Blog Images">
+                                            </a>
+                                        </div>
+                                        <div class="content">
+                                            <h6 class="title"><a href="~/Home/Service?sevicecategory=@service.SerCategoriesId">@service.SerCategoriesName</a></h6>
+                                        </div>
                                     </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="~/Home/Service?sevicecategory=@service.SerCategoriesId">@service.SerCategoriesName</a></h6>
-                                    </div>
-                                </div>
                                 }
                                 <!-- End Single Post List  -->
                             </div>
@@ -224,20 +224,21 @@
                                 <ul class="product_list_widget recent-viewed-product">
                                     <!-- Start Single product_list  -->
                                     @foreach (var product in Model.ListProductTop3)
-                                    { <li>
-                                        <div class="thumbnail">
-                                            <a href="/ProductList/Detail?proId=@product.ProductId">
-                                                <img src="@product.Picture" alt="Blog Images">
-                                            </a>
-                                        </div>
-                                        <div class="content">
-                                            <h6 class="title"><a href="/ProductList/Detail?proId=@product.ProductId">@product.ProductName</a></h6>
-                                            <div class="product-meta-content">
-                                                <span class="woocommerce-Price-amount amount">@product.Price VNĐ</span>
-                                                <p class="price sold">Đã bán: @product.QuantitySold</p>
+                                    {
+                                        <li>
+                                            <div class="thumbnail">
+                                                <a href="/ProductList/Detail?proId=@product.ProductId">
+                                                    <img src="@product.Picture" alt="Blog Images">
+                                                </a>
                                             </div>
-                                        </div>
-                                    </li>
+                                            <div class="content">
+                                                <h6 class="title"><a href="/ProductList/Detail?proId=@product.ProductId">@product.ProductName</a></h6>
+                                                <div class="product-meta-content">
+                                                    <span class="woocommerce-Price-amount amount">@product.Price VNĐ</span>
+                                                    <p class="price sold">Đã bán: @product.QuantitySold</p>
+                                                </div>
+                                            </div>
+                                        </li>
                                     }
                                     <!-- End Single product_list  -->
                                 </ul>
@@ -252,7 +253,6 @@
         </div>
         </div>
         <!-- End Blog Area  -->
-
         <!-- Start Related Blog Area  -->
         <div class="related-blog-area bg-color-white pb--60 pb_sm--40">
             <div class="container">
@@ -261,35 +261,35 @@
                 </div>
                 <div class="related-blog-activation slick-layout-wrapper--15 axil-slick-arrow  arrow-top-slide">
                     @foreach (var partner in Model.partner)
-                            {
-                    <div class="slick-single-layout">
-                        <div class="content-blog">
-                            <div class="inner">
-                                <div class="axil-gallery-activation axil-slick-arrow arrow-between-side">
-                                    <!-- Start Single Thumb  -->
-                                    <div class="thumbnail">
-                                        <a href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId">
-                                            <img src="@partner?.ImagePartner" style="height:300px; width:300px;">
-                                        </a>
+                    {
+                        <div class="slick-single-layout">
+                            <div class="content-blog">
+                                <div class="inner">
+                                    <div class="axil-gallery-activation axil-slick-arrow arrow-between-side">
+                                        <!-- Start Single Thumb  -->
+                                        <div class="thumbnail">
+                                            <a href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId">
+                                                <img src="@partner?.ImagePartner" style="height:300px; width:300px;">
+                                            </a>
+                                        </div>
+                                        <!-- End Single Thumb  -->
                                     </div>
-                                    <!-- End Single Thumb  -->
-                                </div>
-                                <div class="content" style="margin-top:200px;">
-                                    <h5 class="title"><a href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId">@partner.FirstName @partner.LastName</a></h5>
+                                    <div class="content" style="margin-top:200px;">
+                                        <h5 class="title"><a href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId">@partner.FirstName @partner.LastName</a></h5>
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     }
-                    
+
                 </div>
             </div>
         </div>
         <!-- End Related Blog Area  -->
 
     </main>
-       <script src="/assets/js/vendor/modernizr.min.js"></script>
+    <script src="/assets/js/vendor/modernizr.min.js"></script>
     <!-- jQuery JS -->
     <script src="/assets/js/vendor/jquery.js"></script>
     <!-- Bootstrap JS -->

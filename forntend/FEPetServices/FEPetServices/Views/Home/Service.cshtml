@@ -1,4 +1,5 @@
-﻿﻿<!doctype html>
+﻿﻿
+<!doctype html>
 <html class="no-js" lang="en">
 <head>
     <meta charset="utf-8">
@@ -30,7 +31,7 @@
                     <div class="col-lg-6 col-md-4">
                         <div class="inner">
                             <div class="bradcrumb-thumb">
-                                <img src="~/img/Service/Service_preview_rev_2.png" galt="Image">
+                                <img style="object-fit:cover;" src="~/img/Service/Service_preview_rev_2.png" galt="Image">
                             </div>
                         </div>
                     </div>
@@ -159,24 +160,24 @@
                         <div class="row row--15">
                             @foreach (var service in Model)
                             {
-                                    <div class="col-xl-4 col-sm-6">
-                                        <div class="axil-product product-style-one mb--30">
-                                            <div class="thumbnail">
-                                                <a style="height:300px;" href="/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId&serviceIds=@service.ServiceId">
-                                                    <img  src="@service.Picture" alt="Product Images" style="height:300px;">
-                                                </a>
-                                            </div>
-                                            <div class="product-content" data-room-category="@service.SerCategoriesId">
-                                                <div class="inner">
-                                                    <h5 class="title" style="height:50px;"><a href="/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId&serviceIds=@service.ServiceId">@service.ServiceName</a></h5>
-                                                    <div class="product-price-variant">
-                                                        <span class="price current-price">@service.Price VNĐ</span>
-                                                    </div>
+                                <div class="col-xl-4 col-sm-6">
+                                    <div class="axil-product product-style-one mb--30">
+                                        <div class="thumbnail">
+                                            <a style="height:300px;" href="/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId&serviceIds=@service.ServiceId">
+                                                <img src="@service.Picture" alt="Product Images" style="height:300px; object-fit:cover;">
+                                            </a>
+                                        </div>
+                                        <div class="product-content" data-room-category="@service.SerCategoriesId">
+                                            <div class="inner">
+                                                <h5 class="title" style="height:50px;"><a href="/Home/ServiceDetail?serviceCategoryId=@service.SerCategoriesId&serviceIds=@service.ServiceId">@service.ServiceName</a></h5>
+                                                <div class="product-price-variant">
+                                                    <span class="price current-price">@service.Price VNĐ</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                            
+                                </div>
+
                             }
                         </div>
                         <div style="text-align:center;">
@@ -210,9 +211,9 @@
         var priceto = "@(ViewBag.priceto)";
         var CurrentPage = "@(ViewBag.CurrentPage)";
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             var priceElements = document.querySelectorAll('.current-price');
-            priceElements.forEach(function (priceElement) {
+            priceElements.forEach(function(priceElement) {
                 var priceText = priceElement.textContent.trim();
                 var price = parseFloat(priceText.replace(/\s/g, '').replace('VNĐ/h', ''));
                 var formattedPrice = price.toLocaleString('vi-VN');
@@ -222,10 +223,9 @@
         });
     </script>
     <style>
-    .axil-shop-sidebar {
-     padding-right: 0px; 
-
-    }
+        .axil-shop-sidebar {
+            padding-right: 0px;
+        }
     </style>
 </body>
 

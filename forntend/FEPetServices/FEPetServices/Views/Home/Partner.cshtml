@@ -16,7 +16,6 @@
 
     <!-- CSS
     ============================================ -->
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/assets/css/vendor/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/vendor/font-awesome.css">
@@ -69,31 +68,31 @@
                         <div class="row g-5">
                             @foreach (var partner in Model.partner)
                             {
-                            <div class="col-md-6">
-                                <div class="content-blog blog-grid">
-                                    <div class="inner">
-                                        <div class="thumbnail">
-                                            <a href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId" style="text-align:center;">
-                                                <img src="@partner?.ImagePartner"  style="border-radius:50%; width:300px;height:300px;">
-                                            </a>
-                                        </div>
-                                        <div class="content" >
-                                            <h5 class="title"style="text-align:center;"><a style="font-size:15px;" href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId">@partner.FirstName @partner.LastName - Mã nhân viên: @partner.PartnerInfoId </a></h5>
+                                <div class="col-md-6">
+                                    <div class="content-blog blog-grid">
+                                        <div class="inner">
+                                            <div class="thumbnail">
+                                                <a href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId" style="text-align:center;">
+                                                    <img src="@partner?.ImagePartner" style="border-radius:50%; width:300px;height:300px;">
+                                                </a>
+                                            </div>
+                                            <div class="content">
+                                                <h5 class="title" style="text-align:center;"><a style="font-size:15px;" href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId">@partner.FirstName @partner.LastName - Mã nhân viên: @partner.PartnerInfoId </a></h5>
 
-                                            <div class="read-more-btn">
-                                                <a class="axil-btn right-icon" href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId">Tìm hiểu thêm <i class="fal fa-long-arrow-right"></i></a>
+                                                <div class="read-more-btn">
+                                                    <a class="axil-btn right-icon" href="~/Home/PartnerDetail?partnerID=@partner.PartnerInfoId">Tìm hiểu thêm <i class="fal fa-long-arrow-right"></i></a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             }
                         </div>
                         <div style="text-align:center;">
                             <div class="pagination">
                                 @if (ViewBag.CurrentPage > 1)
                                 {
-                                    <a class="next page-numbers" href="@Url.Action("Partner", new { page = ViewBag.CurrentPage - 1, PartName=ViewBag.PartName })"><i class="fal fa-arrow-left"></i></a> 
+                                    <a class="next page-numbers" href="@Url.Action("Partner", new { page = ViewBag.CurrentPage - 1, PartName=ViewBag.PartName })"><i class="fal fa-arrow-left"></i></a>
                                 }
                                 @for (int i = 1; i <= ViewBag.TotalPages; i++)
                                 {
@@ -107,15 +106,15 @@
                         </div>
                     </div>
                     <div class="col-lg-4">
-                         <!-- Start Single Widget  -->
-                            <div class="axil-single-widget mt--40 widget_search">
-                                <h6 class="widget-title">Search</h6>
-                                <form class="blog-search" method="get">
-                                    <button class="search-button"><i class="fal fa-search"></i></button>
-                                    <input type="text" name="PartName" value="@ViewBag.PartName" placeholder="Tìm kiếm">
-                                </form>
-                            </div>
-                            <!-- End Single Widget  -->
+                        <!-- Start Single Widget  -->
+                        <div class="axil-single-widget mt--40 widget_search">
+                            <h6 class="widget-title">Search</h6>
+                            <form class="blog-search" method="get">
+                                <button class="search-button"><i class="fal fa-search"></i></button>
+                                <input type="text" name="PartName" value="@ViewBag.PartName" placeholder="Tìm kiếm">
+                            </form>
+                        </div>
+                        <!-- End Single Widget  -->
                         <!-- Start Sidebar Area  -->
                         <aside class="axil-sidebar-area">
 
@@ -126,16 +125,16 @@
                                 <!-- Start Single Post List  -->
                                 @foreach (var service in Model.CaServices)
                                 {
-                                <div class="content-blog post-list-view mb--20">
-                                    <div class="thumbnail">
-                                        <a href="~/Home/Service?sevicecategory=@service.SerCategoriesId">
-                                            <img src="@service.Picture" alt="Blog Images">
-                                        </a>
+                                    <div class="content-blog post-list-view mb--20">
+                                        <div class="thumbnail">
+                                            <a href="~/Home/Service?sevicecategory=@service.SerCategoriesId">
+                                                <img src="@service.Picture" alt="Blog Images">
+                                            </a>
+                                        </div>
+                                        <div class="content">
+                                            <h6 class="title"><a href="~/Home/Service?sevicecategory=@service.SerCategoriesId">@service.SerCategoriesName</a></h6>
+                                        </div>
                                     </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="~/Home/Service?sevicecategory=@service.SerCategoriesId">@service.SerCategoriesName</a></h6>
-                                    </div>
-                                </div>
                                 }
 
                             </div>
@@ -146,20 +145,21 @@
                                 <ul class="product_list_widget recent-viewed-product">
                                     <!-- Start Single product_list  -->
                                     @foreach (var product in Model.ListProductTop3)
-                                    { <li>
-                                        <div class="thumbnail">
-                                            <a href="/ProductList/Detail?proId=@product.ProductId">
-                                                <img src="@product.Picture" alt="Blog Images">
-                                            </a>
-                                        </div>
-                                        <div class="content">
-                                            <h6 class="title"><a href="/ProductList/Detail?proId=@product.ProductId">@product.ProductName</a></h6>
-                                            <div class="product-meta-content">
-                                                <span class="woocommerce-Price-amount amount">@product.Price VNĐ</span>
-                                                <p class="price sold">Đã bán: @product.QuantitySold</p>
+                                    {
+                                        <li>
+                                            <div class="thumbnail">
+                                                <a href="/ProductList/Detail?proId=@product.ProductId">
+                                                    <img src="@product.Picture" alt="Blog Images">
+                                                </a>
                                             </div>
-                                        </div>
-                                    </li>
+                                            <div class="content">
+                                                <h6 class="title"><a href="/ProductList/Detail?proId=@product.ProductId">@product.ProductName</a></h6>
+                                                <div class="product-meta-content">
+                                                    <span class="woocommerce-Price-amount amount">@product.Price VNĐ</span>
+                                                    <p class="price sold">Đã bán: @product.QuantitySold</p>
+                                                </div>
+                                            </div>
+                                        </li>
                                     }
                                     <!-- End Single product_list  -->
                                 </ul>
@@ -177,7 +177,7 @@
     </main>
 
     <!-- JS
-============================================ -->
+    ============================================ -->
     <!-- Modernizer JS -->
     <script src="/assets/js/vendor/modernizr.min.js"></script>
     <!-- jQuery JS -->
