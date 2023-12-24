@@ -1,4 +1,5 @@
-﻿﻿﻿<!doctype html>
+﻿﻿﻿
+<!doctype html>
 <html class="no-js" lang="en">
 
 <head>
@@ -82,7 +83,7 @@
                                                     <i class="far fa-star"></i>
                                                 }
                                             }
-                                        <span style="color: #7e7e7e; font-size: 17px;">@ViewBag.serviceStar</span>
+                                            <span style="color: #7e7e7e; font-size: 17px;">@ViewBag.serviceStar</span>
                                         </div>
                                         <div class="review-link">
                                             <a href="#">(<span>@ViewBag.FeedbackCount</span> đánh giá của khách hàng)</a>
@@ -94,6 +95,7 @@
                                     </ul>
                                     <p class="description mb--40">@Model?.Service.Desciptions</p>
                                     <div style="margin-bottom:10px;">
+
                                         <p class="title" style="font-family: serif; font-size: 15px; height:1px;">
                                             Nhân Viên: <a style="color: blue; cursor: pointer;" onclick="showMap()">Xem bản đồ</a>
                                         </p>
@@ -111,7 +113,7 @@
 
                                     <div style="margin-top:5px">
                                         <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ bắt đầu:</p>
-                                        <input id="datetimeStart" type="text" placeholder="Thời gian bắt đầu" style="border:2px solid black;height: 60px;border-radius: 5px;"  required>
+                                        <input id="datetimeStart" type="text" placeholder="Thời gian bắt đầu" style="border:2px solid black;height: 60px;border-radius: 5px;" required>
                                     </div>
                                     <div style="margin-top:5px ">
                                         <p style="font-family: serif; font-size: 15px; height:1px;">Chọn giờ kết thúc:</p>
@@ -124,22 +126,22 @@
                                             string? userimageuser = Context.Session.GetString("UserImage");
                                             if (userimageuser is not null)
                                             {
-                                                            @if (Model.account.UserInfo.PetInfos != null)
+                                                @if (Model.account.UserInfo.PetInfos != null)
                                                 {
-                                                                <select name="PetInfoId" id="PetInfoId" class="size-option" style="font-family: serif; width: 200px; height: 30px; border: 2px solid black; margin-bottom: 5px;" onchange="updateWeight()">
-                                                                    <option value=" ">Cân nặng của bé</option>
-                                                                    @foreach (var petInfor in Model.account.UserInfo.PetInfos)
+                                                    <select name="PetInfoId" id="PetInfoId" class="size-option" style="font-family: serif; width: 200px; height: 30px; border: 2px solid black; margin-bottom: 5px;" onchange="updateWeight()">
+                                                        <option value=" ">Cân nặng của bé</option>
+                                                        @foreach (var petInfor in Model.account.UserInfo.PetInfos)
                                                         {
-                                                                        <option value="@petInfor.Weight" data-weight="@petInfor.Weight">@petInfor.PetName @petInfor.Weight Kg</option>
+                                                            <option value="@petInfor.Weight" data-weight="@petInfor.Weight">@petInfor.PetName @petInfor.Weight Kg</option>
                                                         }
-                                                                    <option value="khac">Khác</option>
-                                                                </select>
+                                                        <option value="khac">Khác</option>
+                                                    </select>
                                                 }
-                                                            <input class="lgweight" id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black; display: none;" required>
+                                                <input class="lgweight" id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black; display: none;" required>
                                             }
                                             else
                                             {
-                                                            <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black;" required>
+                                                <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black;" required>
                                             }
                                         }
                                     </div>
@@ -149,7 +151,7 @@
                                             <form method="post" action="@Url.Action("AddToCart", "Home")">
                                                 @*@Html.AntiForgeryToken()
                                                 <button class="axil-btn btn-bg-primary" type="button" onclick="kiemTraAndSubmit('addToCartForm', '@Model?.Service.ServiceId')"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
-*@
+                                                *@
                                                 @Html.AntiForgeryToken()
                                                 <button class="axil-btn btn-bg-primary updateServiceCart" type="button" style="width:300px;">
                                                     <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
@@ -162,7 +164,7 @@
                                                 <input type="hidden" name="Weight" id="Weight" value="" />
                                                 <input type="hidden" name="PartnerId" id="PartnerId" value="" />
                                                 <input type="hidden" name="StartTime" id="StartTime" value="" />
-                                                <input type="hidden"  name="EndTime" id="EndTime" value="" />
+                                                <input type="hidden" name="EndTime" id="EndTime" value="" />
                                                 <button class="axil-btn btn-bg-primary" style="margin-left: 5px;" type="submit"><i class="fas fa-cart-plus"></i>Đặt ngay</button>
                                             </form>
                                         </ul>
@@ -198,29 +200,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <ul class="pro-des-features">
-                                    <li class="single-features">
-                                        <div class="icon">
-                                            <img src="/img/icon/pet-care.png" alt="icon">
-                                        </div>
-                                        Chăm sóc tận tình
-                                    </li>
-                                    <li class="single-features">
-                                        <div class="icon">
-                                            <img src="/img/icon/icon-2.png" alt="icon">
-                                        </div>
-                                        Dịch vụ chất lượng
-                                    </li>
-                                    <li class="single-features">
-                                        <div class="icon">
-                                            <img src="/img/icon/icon-1.png" alt="icon">
-                                        </div>
-                                        tận tâm cho mọi dịch vụ
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="row" style="width:70%">
+                            <img src="/img/icon/Banggia2.png" alt="icon">
                         </div>
                     </div>
                     <div class="reviews-wrapper">
@@ -289,17 +270,17 @@
                                             <div class="pagination">
                                                 @{
                                                     int pagenumber = ((@ViewBag.FeedbacksCount - 1) / 5) + 1;
-                                                                @if (ViewBag.CurrentPage > 1)
+                                                    @if (ViewBag.CurrentPage > 1)
                                                     {
-                                                                    <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
+                                                        <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
                                                     }
-                                                                @for (int i = 1; i <= pagenumber; i++)
+                                                    @for (int i = 1; i <= pagenumber; i++)
                                                     {
-                                                                    <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = i })">@i</a>
+                                                        <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = i })">@i</a>
                                                     }
-                                                                @if (ViewBag.CurrentPage < pagenumber)
+                                                    @if (ViewBag.CurrentPage < pagenumber)
                                                     {
-                                                                    <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
+                                                        <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
                                                     }
                                                 }
                                             </div>
@@ -346,7 +327,7 @@
             </div>
         </div>
 
-       @* ModelMap*@
+        @* ModelMap*@
         <div id="mapModall" class="modal">
             <div class="modal-content">
                 <div class="close-container">
@@ -355,26 +336,26 @@
                 <div id="mapService"></div>
             </div>
         </div>
-       
-    </main>
-   <script src="~/js/flatpickr.js"></script>
-    <script>
-    const datetimeStartInput = document.getElementById('datetimeStart');
-    let previousValue = '';
 
-    datetimeStartInput.addEventListener('input', function(event) {
-        if (datetimeStartInput.value === '') {
-            // Restore the previous value when the input is cleared
-            datetimeStartInput.value = previousValue;
-        } else {
-            // Update the previous value
-            previousValue = datetimeStartInput.value;
-        }
-    });
+    </main>
+    <script src="~/js/flatpickr.js"></script>
+    <script>
+        const datetimeStartInput = document.getElementById('datetimeStart');
+        let previousValue = '';
+
+        datetimeStartInput.addEventListener('input', function(event) {
+            if (datetimeStartInput.value === '') {
+                // Restore the previous value when the input is cleared
+                datetimeStartInput.value = previousValue;
+            } else {
+                // Update the previous value
+                previousValue = datetimeStartInput.value;
+            }
+        });
     </script>
     <script>
         const input = document.getElementById('petWeight');
-        input.addEventListener('change', function () {
+        input.addEventListener('change', function() {
             if (input.value && !input.value.endsWith('kg')) {
                 input.value += ' kg';
             }
@@ -413,7 +394,7 @@
         }
 
         // Cân nặng khi đặt cho người khác
-        document.getElementById("PetInfoId").addEventListener("change", function () {
+        document.getElementById("PetInfoId").addEventListener("change", function() {
             var selectedValue = this.value;
             var petWeightInputs = document.getElementsByClassName("lgweight");
 
@@ -431,16 +412,16 @@
         });
     </script>
     <script>
-         document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const fpStart = flatpickr("#datetimeStart", {
                 minDate: "today",
                 enableTime: true,
                 dateFormat: "Y-m-d H:i",
-                onClose: function (selectedDates, dateStr, instance) {
+                onClose: function(selectedDates, dateStr, instance) {
                     const currentTime = new Date(); // Thời gian hiện tại
                     const selectedTime = new Date(dateStr);
                     const serviceTime = @Model.Service.Time * 60 * 60 * 1000; // thời gian làm dịch vụ
-                    const openingTime = new Date(selectedTime.toDateString() + " " + "07:30");
+                    const openingTime = new Date(selectedTime.toDateString() + " " + "08:00");
                     const closingTime = new Date(selectedTime.toDateString() + " " + "19:00");
 
                     // Kiểm tra nếu thời gian đặt lịch nhỏ hơn thời gian hiện tại
@@ -453,8 +434,8 @@
                     if (selectedTime < openingTime) {
                         const nextDay = new Date(selectedTime);
                         nextDay.setDate(selectedTime.getDate());
-                        nextDay.setHours(7);
-                        nextDay.setMinutes(30);
+                        nextDay.setHours(8);
+                        nextDay.setMinutes(00);
                         selectedTime.setDate(nextDay.getDate());
                         selectedTime.setHours(nextDay.getHours());
                         selectedTime.setMinutes(nextDay.getMinutes());
@@ -465,13 +446,13 @@
                     if (selectedTime > closingTime || selectedTime.getTime() + serviceTime > closingTime.getTime()) {
                         const nextDay = new Date(selectedTime);
                         nextDay.setDate(selectedTime.getDate() + 1);
-                        nextDay.setHours(7);
-                        nextDay.setMinutes(30);
+                        nextDay.setHours(8);
+                        nextDay.setMinutes(00);
                         selectedTime.setDate(nextDay.getDate());
                         selectedTime.setHours(nextDay.getHours());
                         selectedTime.setMinutes(nextDay.getMinutes());
                     }
-                    const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false  };
+                    const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false };
                     const endTime = new Date(selectedTime.getTime() + serviceTime);
 
                     document.getElementById("datetimeEnd").value = endTime.toLocaleString('en-US', options);
@@ -485,31 +466,28 @@
                 }
             });
 
-        }); 
+        });
     </script>
     <script>
         function updateWeight() {
             var selectElement = document.getElementById("PetInfoId");
             var inputElement = document.getElementById("petWeight");
-
-            // Get the selected option
             var selectedOption = selectElement.options[selectElement.selectedIndex];
 
-            // Check if the selected option is not "Khác"
+            // Nếu chọn khác thì sẽ hiện ra một thanh input
             if (selectedOption.value !== "khac") {
-                // Set the input value to the data-weight attribute of the selected option
                 inputElement.value = selectedOption.getAttribute("data-weight");
                 var Weight = document.getElementById("Weight");
                 Weight.value = inputElement.value;
 
                 var servicePrice = parseFloat(document.querySelector('.price.current-price').textContent.replace(/,/g, '').replace(/\D/g, ''));
                 var additionalCost = 0;
-                var additional = 0;
-                if (document.getElementById('PartnerInfoId').value.trim() !== '') {
+        @*var additional = 0;
+                    if (document.getElementById('PartnerInfoId').value.trim() !== '') {
                     additional += 50000;
-                }
+                    }*@
 
-                if (inputElement.value <= 5) {
+                        if (inputElement.value <= 5) {
                     additionalCost += 0;
                 } else if (inputElement.value > 5 && inputElement.value <= 10) {
                     additionalCost += 50000;
@@ -527,7 +505,7 @@
                 var PartnerId = document.getElementById("PartnerId");
                 PartnerId.value = selectedPartnerId.value;
 
-                var totalAmount = servicePrice + additional + additionalCost;
+                var totalAmount = servicePrice + additionalCost;
                 console.log(additionalCost);
                 var totalPriceService = document.getElementById("totalPriceService");
                 totalPriceService.value = totalAmount;
@@ -536,17 +514,16 @@
                 function formatNumberToString(number) {
                     return number.toLocaleString('vi-VN').replace(/\s/g, '');
                 }
-                // Display the total amount in the HTML
+                //Hiển thị lên trang web
                 document.getElementById('totalAmountDisplay').textContent =
                     formatNumberToString(servicePrice) + "  (dịch vụ) + " +
                     formatNumberToString(additionalCost) + " (cân nặng) + " +
-                    formatNumberToString(additional) + "  (nhân viên) " +
                     "=" + formatNumberToString(totalAmount) + " VNĐ";
 
             } else {
                 // If "Khác" is selected, show the input field
                 inputElement.style.display = "block";
-                inputElement.value = ""; // You may want to clear the input value in this case
+                inputElement.value = "";
                 var Weight = document.getElementById("Weight");
                 Weight.value = inputElement.value;
             }
@@ -559,13 +536,13 @@
             var petWeight = parseFloat(document.getElementById('petWeight').value);
             var servicePrice = parseFloat(document.querySelector('.price.current-price').textContent.replace(/,/g, '').replace(/\D/g, ''));
             var additionalCost = 0;
-            var additional = 0;
-            if (document.getElementById('PartnerInfoId').value.trim() !== '') {
+        @*var additional = 0;
+                if (document.getElementById('PartnerInfoId').value.trim() !== '') {
                 additional += 50000;
-            }
+                }*@
 
 
-            if (petWeight <= 5) {
+                    if (petWeight <= 5) {
                 additionalCost += 0;
             } else if (petWeight > 5 && petWeight <= 10) {
                 additionalCost += 50000;
@@ -582,7 +559,7 @@
             var PartnerId = document.getElementById("PartnerId");
             PartnerId.value = selectedPartnerId.value;
 
-            var totalAmount = servicePrice + additional + additionalCost;
+            var totalAmount = servicePrice + additionalCost;
 
             var totalPriceService = document.getElementById("totalPriceService");
             var Weight = document.getElementById("Weight");
@@ -598,7 +575,6 @@
             document.getElementById('totalAmountDisplay').textContent =
                 formatNumberToString(servicePrice) + "  (dịch vụ) + " +
                 formatNumberToString(additionalCost) + " (cân nặng) + " +
-                formatNumberToString(additional) + "  (nhân viên) " +
                 "=" + formatNumberToString(totalAmount) + " VNĐ";
         }
         // Trigger the initial calculation
@@ -610,18 +586,18 @@
 
     </script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             var priceElements = document.querySelectorAll('.current-price');
-            priceElements.forEach(function (priceElement) {
+            priceElements.forEach(function(priceElement) {
                 var priceText = priceElement.textContent.trim();
                 var price = parseFloat(priceText.replace(/\s/g, '').replace('VNĐ', ''));
                 var formattedPrice = price.toLocaleString('vi-VN');
                 priceElement.textContent = formattedPrice + ' VNĐ';
             });
         });
-    </script>    
+    </script>
 
-   
+
 
     <script src="~/assets/js/vendor/modernizr.min.js"></script>
     <!-- jQuery JS -->
@@ -647,7 +623,7 @@
     <script src="~/assets/js/main.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             function showErrorToastQuantityProduct(errorMessage) {
                 console.error(errorMessage);
                 toast({
@@ -658,7 +634,7 @@
                 });
             }
 
-            $(".updateServiceCart").click(function (event) {
+            $(".updateServiceCart").click(function(event) {
                 event.preventDefault();
 
                 var ServiceId = $("#ServiceId").val();
@@ -670,7 +646,7 @@
 
                 if (!ServiceId || !PriceService || Weight == "NaN" || !StartTime || !EndTime) {
                     showErrorToastCheckInput();
-                    return; 
+                    return;
                 }
 
                 $.ajax({
@@ -687,11 +663,12 @@
                     headers: {
                         RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
                     },
-                    success: function (result) {
+                    success: function(result) {
                         $('#successModal').modal('show');
                         console.log(result);
+                        updateCartCount(result.totalQuantity);
                     },
-                    error: function (xhr, status, error) {
+                    error: function(xhr, status, error) {
                         showErrorToast(xhr.responseText);
                         console.error("Error updating cart:", error);
                     }
