@@ -46,7 +46,7 @@ namespace PetServices.Controllers
             {
                 var user = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserInfoId == feedback.UserId);
 
-                feedback.UserName = user?.LastName + user?.FirstName;
+                feedback.UserName = user?.LastName + " " + user?.FirstName;
                 feedback.UserImage = user?.ImageUser;
             }
 
@@ -127,7 +127,7 @@ namespace PetServices.Controllers
             {
                 var user = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserInfoId == feedback.UserId);
 
-                feedback.UserName = user?.LastName + user?.FirstName;
+                feedback.UserName = user?.LastName + " " + user?.FirstName;
                 feedback.UserImage = user?.ImageUser;
             }
 
@@ -145,7 +145,7 @@ namespace PetServices.Controllers
             {
                 var user = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserInfoId == feedback.UserId);
 
-                feedback.UserName = user?.LastName + user?.FirstName;
+                feedback.UserName = user?.LastName + " " + user?.FirstName;
                 feedback.UserImage = user?.ImageUser;
             }
 
@@ -226,7 +226,7 @@ namespace PetServices.Controllers
             {
                 var user = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserInfoId == feedback.UserId);
 
-                feedback.UserName = user?.LastName + user?.FirstName;
+                feedback.UserName = user?.LastName + " " + user?.FirstName;
                 feedback.UserImage = user?.ImageUser;
             }
 
@@ -244,7 +244,7 @@ namespace PetServices.Controllers
             {
                 var user = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserInfoId == feedback.UserId);
 
-                feedback.UserName = user?.FirstName + " " + user?.LastName;
+                feedback.UserName = user?.LastName + " " + user?.FirstName;
                 feedback.UserImage = user?.ImageUser;
             }
 
@@ -325,7 +325,7 @@ namespace PetServices.Controllers
             {
                 var user = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserInfoId == feedback.UserId);
 
-                feedback.UserName = user?.LastName + user?.FirstName;
+                feedback.UserName = user?.LastName + " " + user?.FirstName;
                 feedback.UserImage = user?.ImageUser;
             }
 
@@ -442,7 +442,7 @@ namespace PetServices.Controllers
             {
                 var user = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserInfoId == feedback.UserId);
 
-                feedback.UserName = user?.LastName + user?.FirstName;
+                feedback.UserName = user?.LastName + " " + user?.FirstName;
                 feedback.UserImage = user?.ImageUser;
             }
 
