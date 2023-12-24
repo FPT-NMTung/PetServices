@@ -13,7 +13,7 @@
 .modal-content {
     background-color: #fff;
     position: relative;
-    padding: 25px;
+    padding: 22px;
     max-width: 100%;
     width: 550px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -27,8 +27,8 @@
 .close-container {
     position: absolute;
     top: -12px;
-    left: 5px;
-    z-index: 1;
+    right: 5px;
+    z-index: 2;
 }
 
 .close {
