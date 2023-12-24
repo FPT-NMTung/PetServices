@@ -146,10 +146,12 @@
                         <div>
                             <label for="title">Tiêu Đề:</label>
                             <input type="text" id="ReasonOrderTitle" name="ReasonOrderTitle" style="width:100%" placeholder="Nhập Tiêu Đề">
+                            <div style="color:red" class="error-message" id="fname-error-message"></div>
                         </div>
                         <div>
                             <label for="description">Mô Tả:</label>
                             <textarea id="ReasonOrderDescription" name="ReasonOrderDescription" style="width:100%" placeholder="Nhập Mô Tả"></textarea>
+                            <div style="color:red" class="error-message" id="description-error-message"></div>
                         </div>
                     </div>
 
@@ -214,6 +216,8 @@
         @*<button class="btn btn-primary" onclick="window.print()">In hoá đơn</button>*@
 
     </div>
+    <script src="~/js/order/reasonreject.js"></script>
+
     <script>
         // Xử lý sự kiện khi chọn nút radio "Rejected"
         function handleStatusChange() {
