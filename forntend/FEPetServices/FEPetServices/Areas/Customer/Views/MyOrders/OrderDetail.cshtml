@@ -10,11 +10,12 @@
     <link href="~/css/map.css" rel="stylesheet" />
     <link href="~/css/OrderDetail.css" rel="stylesheet" />
     <link href="~/css/orders/detail.css" rel="stylesheet" />
+
 </head>
 @{
-    var isStep5ActiveProduct = false;
-    var isStep5ActiveService = false;
-    var isStep5ActivePartner = false;
+    var isStep5ActiveProduct = 0;
+    var isStep5ActiveService = 0;
+    var isStep5ActivePartner = 0;
 }
 <body>
     <div class="card right-profile-card">
@@ -167,10 +168,14 @@
                                 </div>
                                 @if ((productDetail.FeedbackStatus == null || productDetail.FeedbackStatus == false) && productDetail?.StatusOrderProduct?.Trim() == "Delivered")
                                 {
-                                    isStep5ActiveProduct = true;
+                                    isStep5ActiveProduct = 1;
                                     <div class="btn-content-detail">
                                         <button class="btn btn-outline-primary" onclick="openPopupProduct('@productDetail.Product.Picture', '@productDetail.Product.ProductName', '@productDetail.Quantity', '@productDetail.ProductId', '@Model.UserInfoId', '@Model.OrderId', '@productDetail.FeedbackStatus')">Đánh giá</button>
                                     </div>
+                                }
+                                else if ((productDetail.FeedbackStatus != null || productDetail.FeedbackStatus != false) && productDetail?.StatusOrderProduct?.Trim() == "Delivered")
+                                {
+                                    isStep5ActiveProduct = 2;
                                 }
                                 @if (i == Model.OrderProductDetails.Count - 1)
                                 {
@@ -233,11 +238,15 @@
                                                         var partnerName = serviceDetail?.PartnerInfo?.FirstName + " " + serviceDetail?.PartnerInfo?.LastName + " - " + serviceDetail?.PartnerInfoId;
                                                         if ((serviceDetail.FeedbackPartnerStatus == null || serviceDetail.FeedbackPartnerStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
                                                         {
-                                                            isStep5ActivePartner = true;
+                                                            isStep5ActivePartner = 1;
                                                             <p style="font-size:.8rem;">Đánh giá về nhân viên của chúng tôi :  </p>
                                                             <div style="margin-bottom:0px; margin-left:.2rem" class="btn-content-detail">
                                                                 <button class="btn btn-outline-primary" onclick="openPopupPartner('@serviceDetail?.PartnerInfo.ImagePartner', '@partnerName', '@serviceDetail.PartnerInfo.PartnerInfoId', '@serviceDetail.ServiceId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
                                                             </div>
+                                                        }
+                                                        else if ((serviceDetail.FeedbackPartnerStatus != null || serviceDetail.FeedbackPartnerStatus != false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                                        {
+                                                            isStep5ActivePartner = 2;
                                                         }
                                                     }
                                                 </div>
@@ -286,10 +295,14 @@
                                 </div>
                                 @if ((serviceDetail.FeedbackStatus == null || serviceDetail.FeedbackStatus == false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
                                 {
-                                    isStep5ActiveService = true;
+                                    isStep5ActiveService = 1;
                                     <div class="btn-content-detail">
                                         <button class="btn btn-outline-primary" onclick="openPopupService('@serviceDetail.Service.Picture', '@serviceDetail.Service.ServiceName', '@serviceDetail.Weight', '@serviceDetail.ServiceId', '@Model.UserInfoId', '@Model.OrderId')">Đánh giá</button>
                                     </div>
+                                }
+                                else if ((serviceDetail.FeedbackStatus != null || serviceDetail.FeedbackStatus != false) && @serviceDetail?.StatusOrderService?.Trim() == "Completed")
+                                {
+                                    isStep5ActiveService = 2;                                   
                                 }
                             }
                         </div>
@@ -311,23 +324,36 @@
                         }
                         @if (!Model.StatusPayment)
                         {
-                            <span class="badge badge-info">Chưa thanh toán</span>
+                             <span class="badge badge-info">Chưa thanh toán</span>
                         }
                         else
                         {
                             <span class="badge badge-info">Đã thanh toán</span>
                         }
                     </div>
+                    <div class="payment-fail">
+                        @if (Model.TypePay.Trim() == "vnpay" && !Model.StatusPayment)
+                        {
+                            <form method="post" action="@Url.Action("CheckoutAgain", "MyOrders")">
+                                <input type="hidden" name="orderID" value="@Model?.OrderId">
+                                <input type="hidden" name="orderDate" value="@Model?.OrderDate">
+                                <input type="hidden" name="totalPrice" value="@Model?.TotalPrice">
+                                <button type="submit" class="btn btn-primary">
+                                    Thanh toán ngay
+                                </button>
+                            </form>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
-        @if(isStep5ActiveService == true || isStep5ActiveProduct == true || isStep5ActivePartner == true)
+        @if(isStep5ActiveService == 1 || isStep5ActiveProduct == 1 || isStep5ActivePartner == 1)
         {
             <script>
                 document.getElementById('step5').classList.add('active');
             </script>
         }
-        else if (isStep5ActiveService != true && isStep5ActiveProduct != true && isStep5ActivePartner != true)
+        else if (isStep5ActiveProduct == 2 || (isStep5ActiveService == 2 && isStep5ActivePartner == 2))
         {
              <script>
                 document.getElementById('step5').classList.remove('active');
@@ -355,8 +381,45 @@
                 }
             </div>
         }
-    </div>
 
+        @if ((Model.OrderStatus.Trim() == "Placed" || Model.OrderStatus.Trim() == "Packaging" || Model.OrderStatus.Trim() == "Confirmed") && !Model.StatusPayment)
+        {
+            <div class="card-body" style="display:block;background-color:rgba(0, 0, 0, 0.03); border-radius:0px">
+                <form method="post" asp-controller="MyOrders" asp-action="OrderDetail"> 
+
+                    <input type="hidden" name="Id" value="@Model?.OrderId" />
+                    <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
+
+                    <div class="form-check form-check-inline" style="padding: 0;">
+                        <button class="btn btn-danger" type="button" onclick="handleCancelledChange()">
+                            Hủy Đơn
+                        </button>
+                    </div>
+
+                    <!-- Thêm lớp phủ -->
+                    <div id="overlay" class="overlay"></div>
+
+                    <!-- Popup -->
+                    <div id="cancelOrderPopup" class="custom-popup">
+                        <div class="popup-content">
+                            <span class="close" onclick="closeCancelOrderPopup()">&times;</span>
+                            <h5>Hủy Đơn</h5>
+                            <input name="newStatus" value="Cancelled" type="hidden" />
+                            <div style="padding-bottom: 15px;">
+                                <label for="title">Tiêu Đề:</label>
+                                <input type="text" id="ReasonOrderTitle" name="ReasonOrderTitle" style="width:700px;" placeholder="Nhập Tiêu Đề">
+                            </div>
+                            <div style="padding-bottom: 15px;">
+                                <label for="description">Mô Tả:</label>
+                                <textarea id="ReasonOrderDescription" name="ReasonOrderDescription" style="width:700px;height:100px;" placeholder="Nhập Mô Tả"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Xác nhận Hủy Đơn</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        }
+    </div>
     <div class="popup">
         <div id="overlay" class="overlay"></div>
         <div class="feedback popup-container" id="popup">
@@ -437,7 +500,7 @@
     <div id="mapModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeMapModal()">&times;</span>
-            <div id="map" style="width: 100%; height: 400px;"></div>
+            <div id="map"></div>
         </div>
         <div id="directionsPanel"></div>
     </div>
@@ -739,6 +802,36 @@
             }
         });
     </script>
+    @*Hủy đơn*@
+    <script>
+        function openCancelOrderPopup() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('cancelOrderPopup').classList.add('show-popup');
+        }
 
+        function closeCancelOrderPopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('cancelOrderPopup').classList.remove('show-popup');
+        }
+    </script>
+    <script>
+        function handleCancelledChange() {
+            // Hiển thị popup khi nút được nhấn
+            openCancelOrderPopup();
+
+            // Thiết lập giá trị "Cancelled" cho lựa chọn newStatus (hoặc thực hiện các hành động cần thiết)
+            var newStatusInput = document.querySelector('input[name="newStatus"]');
+            if (newStatusInput) {
+                newStatusInput.value = 'Cancelled';
+            }
+
+            // Hiển thị hoặc ẩn phần lý do hủy đơn tùy thuộc vào giá trị chọn
+            var reasonSelectDiv = document.getElementById('reasonSelect');
+            var lydoKhacDiv = document.getElementById('lydoKhac');
+
+            reasonSelectDiv.style.display = 'block';
+            lydoKhacDiv.style.display = 'block';
+        }
+    </script>
 </body>
 </html>

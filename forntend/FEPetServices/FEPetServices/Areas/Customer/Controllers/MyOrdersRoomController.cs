@@ -35,7 +35,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
-            HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/orderroomstatus/{orderStatus}?email={email}");
+            HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/getRoomOrderUser/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
             if (responsecheck.StatusCode == HttpStatusCode.NotFound)
             {
                 return View();

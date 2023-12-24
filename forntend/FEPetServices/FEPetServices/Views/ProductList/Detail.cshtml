@@ -381,7 +381,18 @@
             });
         });
     </script>
+    <script>
+        function validateQuantity() {
+            var input = document.getElementById('quantityInput');
+            var value = input.value;
 
+            if (value < 1) {
+                input.setCustomValidity('Giá trị phải lớn hơn 1');
+            } else {
+                input.setCustomValidity('');
+            }
+        }
+    </script>
 
     <script src="~/assets/js/vendor/modernizr.min.js"></script>
     <!-- jQuery JS -->
