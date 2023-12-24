@@ -97,7 +97,7 @@ namespace FEPetServices.Areas.Customer.Controllers
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
-            HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/GetOrderUserNoneFeedback/{email}?orderstatus={orderStatus}&page=1&pageSize=10");
+            HttpResponseMessage responsecheck = await _client.GetAsync($"{DefaultApiUrl}Order/GetOrderUserNoneFeedback/{email}?orderstatus={orderStatus}&page={page}&pageSize={pageSize}");
             if (!responsecheck.IsSuccessStatusCode)
             {
                 return View(); 
