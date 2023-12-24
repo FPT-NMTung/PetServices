@@ -298,7 +298,7 @@
                 <span class="badge badge-info">Đã thanh toán</span>
             }
         </div>
-        <form method="post" asp-controller="OrderLists" asp-action="OrderDetail">
+        <form method="post" asp-controller="OrderLists" asp-action="OrderDetail" onsubmit="return validateForm()">
             @if (Model.OrderStatus.Trim() == "Placed")
             {
                 <input type="hidden" name="Id" value="@Model?.OrderId" />
@@ -346,16 +346,14 @@
                     <div>
                         <label for="title">Tiêu Đề:</label>
                         <input type="text" id="ReasonOrderTitle" name="ReasonOrderTitle" style="width:100%" placeholder="Nhập Tiêu Đề">
+                        <div style="color:red" class="error-message" id="fname-error-message"></div>
                     </div>
                     <div>
                         <label for="description">Mô Tả:</label>
                         <textarea id="ReasonOrderDescription" name="ReasonOrderDescription" style="width:100%" placeholder="Nhập Mô Tả"></textarea>
+                        <div style="color:red" class="error-message" id="description-error-message"></div>
                     </div>
                 </div>
-                @*<select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
-            <option value="Confirmed">Xác nhận đơn hàng</option>
-            <option value="Cancelled">Huỷ đơn hàng</option>
-            </select>*@
 
                 <button class="btn btn-primary" style="margin-top: 20px;" type="submit">Xác nhận</button>
             }
@@ -366,6 +364,7 @@
             <a class="btn btn-primary" href="~/Manager/OrderLists/Index">Trở lại</a>
         </div>
     </div>
+    <script src="~/js/order/reasonreject.js"></script>
     <script>
         // Xử lý sự kiện khi chọn nút radio "Rejected"
         function handleStatusChange() {
