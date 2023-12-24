@@ -396,19 +396,22 @@
                         </button>
                     </div>
 
+                    <!-- Thêm lớp phủ -->
+                    <div id="overlay" class="overlay"></div>
+
                     <!-- Popup -->
                     <div id="cancelOrderPopup" class="custom-popup">
                         <div class="popup-content">
                             <span class="close" onclick="closeCancelOrderPopup()">&times;</span>
                             <h5>Hủy Đơn</h5>
                             <input name="newStatus" value="Cancelled" type="hidden" />
-                            <div>
+                            <div style="padding-bottom: 15px;">
                                 <label for="title">Tiêu Đề:</label>
-                                <input type="text" id="ReasonOrderTitle" name="ReasonOrderTitle" style="width:100%" placeholder="Nhập Tiêu Đề">
+                                <input type="text" id="ReasonOrderTitle" name="ReasonOrderTitle" style="width:700px;" placeholder="Nhập Tiêu Đề">
                             </div>
-                            <div>
+                            <div style="padding-bottom: 15px;">
                                 <label for="description">Mô Tả:</label>
-                                <textarea id="ReasonOrderDescription" name="ReasonOrderDescription" style="width:100%" placeholder="Nhập Mô Tả"></textarea>
+                                <textarea id="ReasonOrderDescription" name="ReasonOrderDescription" style="width:700px;height:100px;" placeholder="Nhập Mô Tả"></textarea>
                             </div>
                             <button type="submit" class="btn btn-danger">Xác nhận Hủy Đơn</button>
                         </div>
@@ -416,7 +419,6 @@
                 </form>
             </div>
         }
-
     </div>
     <div class="popup">
         <div id="overlay" class="overlay"></div>
@@ -803,11 +805,13 @@
     @*Hủy đơn*@
     <script>
         function openCancelOrderPopup() {
-            document.getElementById('cancelOrderPopup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('cancelOrderPopup').classList.add('show-popup');
         }
 
         function closeCancelOrderPopup() {
-            document.getElementById('cancelOrderPopup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('cancelOrderPopup').classList.remove('show-popup');
         }
     </script>
     <script>
