@@ -340,6 +340,16 @@
         </div>
     </main>
 
+    <script>
+        var roomcategory = "@(ViewBag.roomcategory)";
+        var sortby = "@(ViewBag.sortby)";
+        var roomname = "@(ViewBag.roomname)";
+        var pricefrom = "@(ViewBag.pricefrom)";
+        var priceto = "@(ViewBag.priceto)";
+        var startdate = "@(ViewBag.startdate)";
+        var enddate = "@(ViewBag.enddate)";
+    </script>
+
     @*check nhập thông tin ngày bookk phòng ms dược submit *@
     <script>
         function kiemTra() {
@@ -579,15 +589,7 @@
         });
     </script>
 
-    <script>
-        var roomcategory = "@(ViewBag.roomcategory)";
-        var sortby = "@(ViewBag.sortby)";
-        var roomname = "@(ViewBag.roomname)";
-        var pricefrom = "@(ViewBag.pricefrom)";
-        var priceto = "@(ViewBag.priceto)";
-        var startdate = "@(ViewBag.startdate)";
-        var enddate = "@(ViewBag.enddate)";
-    </script>
+    
 </body>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
