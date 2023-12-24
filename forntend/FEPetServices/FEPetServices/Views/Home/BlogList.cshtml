@@ -98,13 +98,13 @@
                                 @{
                                     var url ="/Home/BlogList";
                                 
-                                        <div class="@(string.IsNullOrEmpty(ViewBag.roomcategory) ? "tagcloud" : " ")">
-                                            <a href="@url">Tất cả</a>
-                                              @foreach (var category in ViewBag.Categories)
+                                                <div class="@(string.IsNullOrEmpty(ViewBag.roomcategory) ? "tagcloud" : " ")">
+                                                    <a href="@url">Tất cả</a>
+                                                      @foreach (var category in ViewBag.Categories)
                                             {
                                                 if(category.Status==true){
 
-                                                    <a href="@(url + (url.Contains("?") ? "&" : "?") + "tag=" + category.TagId)">@category.TagName</a>
+                                                            <a href="@(url + (url.Contains("?") ? "&" : "?") + "tag=" + category.TagId)">@category.TagName</a>
                                             }
                                             else
                                             {
@@ -112,7 +112,7 @@
                                             }
 
                                             }
-                                        </div>
+                                                </div>
                                 }
                             </div>
                             <!-- Start Sidebar Area  -->
@@ -129,7 +129,7 @@
                                 <div class="content-blog post-list-view mb--20">
                                     <div class="thumbnail">
                                         <a href="~/Home/BlogDetail?blogId=@blog.BlogId">
-                                            <img src="@blog.ImageUrl" alt="Blog Images">
+                                            <img style="object-fit:cover;" src="@blog.ImageUrl"  alt="Blog Images">
                                         </a>
                                     </div>
                                     <div class="content">
@@ -158,7 +158,7 @@
                                     { <li>
                                         <div class="thumbnail">
                                             <a href="/ProductList/Detail?proId=@product.ProductId">
-                                                <img src="@product.Picture" alt="Blog Images">
+                                                <img src="@product.Picture" style="object-fit:cover;" alt="Blog Images">
                                             </a>
                                         </div>
                                         <div class="content">
