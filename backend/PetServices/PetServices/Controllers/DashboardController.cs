@@ -43,8 +43,10 @@ namespace PetServices.Controllers
         public async Task<ActionResult> GetNumberCustomerInMonth()
         {
             int currentMonth = DateTime.Now.Month;
-
-            var customerNumber = await _context.Accounts.Where(a => a.CreateDate.Value.Month == currentMonth).ToListAsync();
+            int currentYear = DateTime.Now.Year;
+            var customerNumber = await _context.Accounts.Where(a => a.CreateDate.Value.Month == currentMonth
+            && a.CreateDate.Value.Year == currentYear && a.RoleId == 2
+            ).ToListAsync();
 
             return Ok(customerNumber.Count);
         }
@@ -69,8 +71,10 @@ namespace PetServices.Controllers
                 newYear = currentYear;
             }
 
-            var customerNumber = await _context.Accounts.Where(a => a.CreateDate.Value.Month == currentMonth && a.CreateDate.Value.Year == currentYear).ToListAsync();
-            var customerNumberPreviousMonth = await _context.Accounts.Where(a => a.CreateDate.Value.Month == previousMonth && a.CreateDate.Value.Year == newYear).ToListAsync();
+            var customerNumber = await _context.Accounts.Where(a => a.CreateDate.Value.Month == currentMonth && 
+            a.CreateDate.Value.Year == currentYear && a.RoleId == 2).ToListAsync();
+            var customerNumberPreviousMonth = await _context.Accounts.Where(a => a.CreateDate.Value.Month == previousMonth
+            && a.CreateDate.Value.Year == newYear && a.RoleId == 2).ToListAsync();
 
             if (customerNumberPreviousMonth.Count == 0)
             {
@@ -89,7 +93,8 @@ namespace PetServices.Controllers
             int currentMonth = DateTime.Now.Month;
             int currentYear = DateTime.Now.Year;
 
-            var numberOrder = await _context.Orders.Where(o => o.OrderDate.Value.Month == currentMonth && o.OrderDate.Value.Year == currentYear && o.OrderStatus == "Completed").ToListAsync();
+            var numberOrder = await _context.Orders.Where(o => o.OrderDate.Value.Month == currentMonth && 
+            o.OrderDate.Value.Year == currentYear && o.OrderStatus == "Completed").ToListAsync();
 
             return Ok(numberOrder.Count);
         }

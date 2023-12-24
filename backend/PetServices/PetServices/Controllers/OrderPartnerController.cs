@@ -170,13 +170,8 @@ namespace PetServices.Controllers
                     if (bookingDetail.PartnerInfoId != null)
                     {
                         bookingDetail.PartnerInfoId = null;
-                        if(bookingDetail.PriceService != null)
-                        {
-                            bookingDetail.PriceService -= 50000;
-                        }
                     }
                 }
-                order.TotalPrice -= 50000;
                 _context.Orders.Update(order);
 
                 await _context.SaveChangesAsync();
