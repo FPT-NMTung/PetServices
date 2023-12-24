@@ -231,7 +231,7 @@ namespace FEPetServices.Areas.Partner.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessToast"] = "Cập nhật vị trí thành công";
+                    ViewBag.SuccessToast = "Cập nhật vị trí thành công";
                     return Ok();
                 }
                 else

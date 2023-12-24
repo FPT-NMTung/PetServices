@@ -89,10 +89,9 @@
                 { "targets": [1], "width": "13%" },
                 { "targets": [2], "width": "25%" },
                 { "targets": [3], "width": "15%" },
-                { "targets": [4], "width": "10%" },
+                { "targets": [4], "width": "15%" },
                 { "targets": [5], "width": "15%" },
                 { "targets": [6], "width": "10%" },
-                { "targets": [7], "width": "10%" },
             ],
             "language": {
                 "lengthMenu": "Hiển thị _MENU_ dòng",
@@ -150,7 +149,6 @@
                 <th>Ảnh</th>
                 <th>Giá</th>
                 <th>Loại phòng</th>
-                <th>Số lượng</th>
                 <th>Chi tiết</th>
             </tr>
         </thead>
@@ -186,18 +184,11 @@
                         <td><img src="@room.Picture" width="50" height="50"></td>
                         <td>@string.Format("{0:#,##0} đ", room.Price).ToString().Replace(',', '.')</td>
                         <td>@room.RoomCategoriesName</td>
-                        <td>@room.Slot</td>
                         <td>
                             <a class="btn-detail" href="/Manager/Room/EditRoom?roomId=@room.RoomId">Chi tiết</a>
                         </td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="5" style="color:red">Không có dữ liệu để hiển thị.</td>
-                </tr>
             }
         </tbody>
     </table>
