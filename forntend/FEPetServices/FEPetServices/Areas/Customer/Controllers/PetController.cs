@@ -60,7 +60,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                 ViewBag.Title = "Thêm thông tin thú cưng";
                 ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
                 string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
-                HttpResponseMessage PetInfo = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/PetInfo/" + email);
+                HttpResponseMessage PetInfo = await client.GetAsync("https://localhost:7255/api/PetInfo/" + email);
 
                 if (PetInfo.IsSuccessStatusCode)
                 {

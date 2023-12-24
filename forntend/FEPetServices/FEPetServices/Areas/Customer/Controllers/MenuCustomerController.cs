@@ -190,7 +190,7 @@ namespace FEPetServices.Areas.Customer.Controllers
                 return View();
             }
 
-            string apiUrl = $"https://pet-service-api.azurewebsites.net/api/Account/newpassword?email={email}&oldpassword={changePassword.OldPassword}&newpassword={changePassword.NewPassword}&confirmnewpassword={changePassword.ConfirmNewPassword}";
+            string apiUrl = $"https://localhost:7255/api/Account/newpassword?email={email}&oldpassword={changePassword.OldPassword}&newpassword={changePassword.NewPassword}&confirmnewpassword={changePassword.ConfirmNewPassword}";
 
             HttpResponseMessage response = await _client.PutAsync(apiUrl, null);
 

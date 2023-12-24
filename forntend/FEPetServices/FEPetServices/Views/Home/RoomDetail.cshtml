@@ -486,7 +486,7 @@
                     console.log(startDate);
 
 
-                    let apiURL = `https://pet-service-api.azurewebsites.net/api/Room/CheckSlotInRoom?RoomId=${roomId}&startDate=${startValue}&endDate=${endValue}`;
+                    let apiURL = `https://localhost:7255/api/Room/CheckSlotInRoom?RoomId=${roomId}&startDate=${startValue}&endDate=${endValue}`;
                     console.log(apiURL);
                     fetch(apiURL)
                         .then(response => {

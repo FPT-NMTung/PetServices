@@ -719,7 +719,7 @@
                 //console.log("serviceId: " + serviceId + "productId: " + productId + "roomId: " + roomId + "partnerId: " + partnerId + "rating: " + rating + "userId: " + userId + "orderId: " + orderId + "feedbackMessage: " + feedbackMessage);
 
                 $.ajax({
-                    url: 'https://pet-service-api.azurewebsites.net/api/Feedback/AddFeedBack',
+                    url: 'https://localhost:7255/api/Feedback/AddFeedBack',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(data),

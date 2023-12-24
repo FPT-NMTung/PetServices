@@ -143,7 +143,7 @@ namespace FEPetServices.Areas.Manager.Controllers
                 HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "Product/ProductID/" + proId);
                 //HttpResponseMessage response = await client.GetAsync("https://localhost:7255/api/Product/Add" + proId);
 
-                HttpResponseMessage proCateResponse = await client.GetAsync("https://pet-service-api.azurewebsites.net/api/ProductCategory/GetAll");
+                HttpResponseMessage proCateResponse = await client.GetAsync("https://localhost:7255/api/ProductCategory/GetAll");
                 if (proCateResponse.IsSuccessStatusCode)
                 {
                     var proCategories = await proCateResponse.Content.ReadFromJsonAsync<List<ProductCategoryDTO>>();
