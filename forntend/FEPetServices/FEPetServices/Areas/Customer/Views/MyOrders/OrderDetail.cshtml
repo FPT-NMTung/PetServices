@@ -385,7 +385,7 @@
         @if ((Model.OrderStatus.Trim() == "Placed" || Model.OrderStatus.Trim() == "Packaging" || Model.OrderStatus.Trim() == "Confirmed") && !Model.StatusPayment)
         {
             <div class="card-body" style="display:block;background-color:rgba(0, 0, 0, 0.03); border-radius:0px">
-                <form method="post" asp-controller="MyOrders" asp-action="OrderDetail"> 
+                <form method="post" asp-controller="MyOrders" asp-action="OrderDetail" onsubmit="return validateForm()">
 
                     <input type="hidden" name="Id" value="@Model?.OrderId" />
                     <input type="hidden" name="oldStatus" value="@Model?.OrderStatus.Trim()" />
@@ -408,10 +408,12 @@
                             <div style="padding-bottom: 15px;">
                                 <label for="title">Tiêu Đề:</label>
                                 <input type="text" id="ReasonOrderTitle" name="ReasonOrderTitle" style="width:700px;" placeholder="Nhập Tiêu Đề">
+                                <div style="color:red" class="error-message" id="fname-error-message"></div>
                             </div>
                             <div style="padding-bottom: 15px;">
                                 <label for="description">Mô Tả:</label>
                                 <textarea id="ReasonOrderDescription" name="ReasonOrderDescription" style="width:700px;height:100px;" placeholder="Nhập Mô Tả"></textarea>
+                                <div style="color:red" class="error-message" id="description-error-message"></div>
                             </div>
                             <button type="submit" class="btn btn-danger">Xác nhận Hủy Đơn</button>
                         </div>
@@ -506,6 +508,7 @@
     </div>
 
     <script src="~/js/map.js"></script>
+    <script src="~/js/order/reasonreject.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMF53NXGYhHFNQQcT87lhe0ieM3AkUjYM"></script>
