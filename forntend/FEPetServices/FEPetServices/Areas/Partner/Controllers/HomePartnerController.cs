@@ -1,4 +1,5 @@
-﻿using FEPetServices.Areas.Admin.DTO;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using FEPetServices.Areas.Admin.DTO;
 using FEPetServices.Controllers;
 using FEPetServices.Form;
 using FEPetServices.Form.OrdersForm;
@@ -323,6 +324,11 @@ namespace FEPetServices.Areas.Partner.Controllers
                 status.newStatusProduct = "";
                 status.newStatus = "Processing";
                 status.newStatusService = "Completed";
+            }
+            if (string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderTitle) || string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderDescription))
+            {
+                TempData["ErrorToast"] = "Vui lòng nhập tiêu đề và mô tả trước khi cập nhật.";
+                return RedirectToAction("OrderPartnerDetail", new { orderId = orderId });
             }
             HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl+ "OrderPartner/ChangeStatus/" + email + "?orderId=" + orderId, status);
             reasonOrders.OrderId = orderId;

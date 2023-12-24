@@ -96,6 +96,11 @@ namespace FEPetServices.Areas.Manager.Controllers
                 status.newStatusProduct = "Cancelled";
                 status.newStatusService = "Cancelled";
             }
+            if (string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderTitle) || string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderDescription))
+            {
+                TempData["ErrorToast"] = "Vui lòng nhập tiêu đề và mô tả trước khi cập nhật.";
+                return RedirectToAction("OrderDetail", new { id = id });
+            }
             //HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
             HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "Order/changeStatus?Id=" + id, status);
             reasonOrders.OrderId = id;

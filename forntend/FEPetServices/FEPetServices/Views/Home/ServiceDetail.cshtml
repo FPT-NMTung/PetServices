@@ -30,7 +30,7 @@
                                 <div class="col-lg-12">
                                     <div class="product-large-thumbnail-2 single-product-thumbnail axil-product slick-layout-wrapper--15 axil-slick-arrow arrow-both-side-3">
                                         <div class="thumbnail">
-                                            <img src="@Model?.Service.Picture" alt="Images" style="height:615px;">
+                                            <img src="@Model?.Service.Picture" alt="Images" style="height:615px;object-fit:cover;">
                                         </div>
 
                                     </div>
@@ -42,7 +42,7 @@
                                             @if (sc.Status)
                                             {
                                                 <div class="small-thumb-img">
-                                                    <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sc.ServiceId"><img src="@sc.Picture" style="width:60px; height:60px;" alt="samll-thumb"></a>
+                                                    <a href="/Home/ServiceDetail?serviceCategoryId=@Model.ServiceCategory.SerCategoriesId&serviceIds=@sc.ServiceId"><img src="@sc.Picture" style="width:60px; height:60px;object-fit:cover;" alt="samll-thumb"></a>
                                                 </div>
                                             }
                                         }
@@ -126,22 +126,22 @@
                                             string? userimageuser = Context.Session.GetString("UserImage");
                                             if (userimageuser is not null)
                                             {
-                                                @if (Model.account.UserInfo.PetInfos != null)
+                                                            @if (Model.account.UserInfo.PetInfos != null)
                                                 {
-                                                    <select name="PetInfoId" id="PetInfoId" class="size-option" style="font-family: serif; width: 200px; height: 30px; border: 2px solid black; margin-bottom: 5px;" onchange="updateWeight()">
-                                                        <option value=" ">Cân nặng của bé</option>
-                                                        @foreach (var petInfor in Model.account.UserInfo.PetInfos)
+                                                                <select name="PetInfoId" id="PetInfoId" class="size-option" style="font-family: serif; width: 200px; height: 30px; border: 2px solid black; margin-bottom: 5px;" onchange="updateWeight()">
+                                                                    <option value=" ">Cân nặng của bé</option>
+                                                                    @foreach (var petInfor in Model.account.UserInfo.PetInfos)
                                                         {
-                                                            <option value="@petInfor.Weight" data-weight="@petInfor.Weight">@petInfor.PetName @petInfor.Weight Kg</option>
+                                                                        <option value="@petInfor.Weight" data-weight="@petInfor.Weight">@petInfor.PetName @petInfor.Weight Kg</option>
                                                         }
-                                                        <option value="khac">Khác</option>
-                                                    </select>
+                                                                    <option value="khac">Khác</option>
+                                                                </select>
                                                 }
-                                                <input class="lgweight" id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black; display: none;" required>
+                                                            <input class="lgweight" id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black; display: none;" required>
                                             }
                                             else
                                             {
-                                                <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black;" required>
+                                                            <input id="petWeight" type="text" placeholder="Cân nặng của thú cưng" style="border: 2px solid black;" required>
                                             }
                                         }
                                     </div>
@@ -270,17 +270,17 @@
                                             <div class="pagination">
                                                 @{
                                                     int pagenumber = ((@ViewBag.FeedbacksCount - 1) / 5) + 1;
-                                                    @if (ViewBag.CurrentPage > 1)
+                                                                @if (ViewBag.CurrentPage > 1)
                                                     {
-                                                        <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
+                                                                    <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage - 1 })">&laquo;</a>
                                                     }
-                                                    @for (int i = 1; i <= pagenumber; i++)
+                                                                @for (int i = 1; i <= pagenumber; i++)
                                                     {
-                                                        <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = i })">@i</a>
+                                                                    <a class="active @(i == ViewBag.CurrentPage ? "active1" : "")" href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = i })">@i</a>
                                                     }
-                                                    @if (ViewBag.CurrentPage < pagenumber)
+                                                                @if (ViewBag.CurrentPage < pagenumber)
                                                     {
-                                                        <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
+                                                                    <a href="@Url.Action("ServiceDetail", new { serviceCategoryId = Model.Service.SerCategoriesId, serviceIds = Model.Service.ServiceId, sortby = ViewBag.sortby, page = ViewBag.CurrentPage + 1 })">&raquo;</a>
                                                     }
                                                 }
                                             </div>
@@ -517,7 +517,7 @@
                 //Hiển thị lên trang web
                 document.getElementById('totalAmountDisplay').textContent =
                     formatNumberToString(servicePrice) + "  (dịch vụ) + " +
-                    formatNumberToString(additionalCost) + " (cân nặng) + " +
+                    formatNumberToString(additionalCost) + " (cân nặng) " +
                     "=" + formatNumberToString(totalAmount) + " VNĐ";
 
             } else {
@@ -574,7 +574,7 @@
             // Display the total amount in the HTML
             document.getElementById('totalAmountDisplay').textContent =
                 formatNumberToString(servicePrice) + "  (dịch vụ) + " +
-                formatNumberToString(additionalCost) + " (cân nặng) + " +
+                formatNumberToString(additionalCost) + " (cân nặng)  " +
                 "=" + formatNumberToString(totalAmount) + " VNĐ";
         }
         // Trigger the initial calculation
