@@ -324,14 +324,21 @@
             $(".updateProductQuantity").click(function (event) {
                 event.preventDefault();
                 var productid = $("#productId").val();
-                var quantity = $("#quantityInput").val();
+                var quantity = $("#quantityInput");
+                var currentQuantity = parseInt(quantity.val());
+
+                if (currentQuantity <= 0) {
+                    // Hiển thị thông báo lỗi hoặc xử lý theo cách cần thiết
+                    console.error("Số lượng phải lớn hơn 0");
+                    return;
+                }
 
                 $.ajax({
                     type: "POST",
                     url: "@Url.Action("AddToCart", "ProductList")",
                     data: {
                         productid: productid,
-                        quantityProduct: quantity
+                        quantityProduct: currentQuantity
                     },
                     success: function (result) {
                         window.location.href = "@Url.Action("Index", "Cart")";
@@ -357,13 +364,20 @@
                 event.preventDefault();
                 var productid = $("#productId").val();
                 var quantity = $("#quantityInput").val();
+                var currentQuantity = parseInt(quantity.val());
+
+                if (currentQuantity <= 0) {
+                    // Hiển thị thông báo lỗi hoặc xử lý theo cách cần thiết
+                    console.error("Số lượng phải lớn hơn 0");
+                    return;
+                }
 
                 $.ajax({
                     type: "POST",
                     url: "@Url.Action("AddToCart", "ProductList")",
                     data: {
                         productid: productid,
-                        quantityProduct: quantity
+                        quantityProduct: currentQuantity
                     },
                     headers: {
                         RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
