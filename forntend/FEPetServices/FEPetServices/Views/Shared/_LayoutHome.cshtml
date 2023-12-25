@@ -526,6 +526,17 @@
         }
     @*End - Base ViewBag*@
     @*-------------------------------------------------------*@
+    @*Start - Base ViewBag*@
+        function showErrorToastInvalidTimeServiceRoom(message) {
+            toast({
+                title: 'Thất bại',
+                message: 'Đặt phòng thất bại, Thời gian dịch vụ lớn hơn thời gian đặt phòng!. Bạn cần đặt tối thiểu ' + message + 'giờ !',
+                type: 'wating',
+                duration: 2000
+            });
+        }
+    @*End - Base ViewBag*@
+    @*-------------------------------------------------------*@
 </script>
 <script>
     function updateCartCount(totalQuantity) {
