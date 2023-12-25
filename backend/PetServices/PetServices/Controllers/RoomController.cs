@@ -561,5 +561,18 @@ namespace PetServices.Controllers
         }
 
 
+        [HttpGet("CheckService")]
+        public async Task<ActionResult> CheckService(int roomId)
+        {
+            var room = await _context.Rooms
+                .Include(r => r.Services)
+                .FirstOrDefaultAsync(r => r.RoomId == roomId);
+
+            var services = _mapper.Map<List<ServiceDTO>>(room.Services.Where(s => s.Status == true).ToList());
+
+            var timeDuration = services.Sum(s => s.Time);
+
+            return Ok(timeDuration);
+        }
     }
 }
