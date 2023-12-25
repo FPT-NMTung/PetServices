@@ -325,7 +325,7 @@
                 event.preventDefault();
                 var productid = $("#productId").val();
                 var quantity = $("#quantityInput");
-                var currentQuantity = parseInt(quantityInput.val());
+                var currentQuantity = parseInt(quantity.val());
 
                 if (currentQuantity <= 0) {
                     // Hiển thị thông báo lỗi hoặc xử lý theo cách cần thiết
@@ -363,8 +363,8 @@
             $(".updateProductQuantityCart").click(function (event) {
                 event.preventDefault();
                 var productid = $("#productId").val();
-                var quantity = $("#quantityInput");
-                var currentQuantity = parseInt(quantityInput.val());
+                var quantity = $("#quantityInput").val();
+                var currentQuantity = parseInt(quantity.val());
 
                 if (currentQuantity <= 0) {
                     // Hiển thị thông báo lỗi hoặc xử lý theo cách cần thiết
