@@ -90,6 +90,16 @@ namespace FEPetServices.Areas.Manager.Controllers
             {
                 status.newStatusProduct = "Packaging";
                 status.newStatusService = "Waiting";
+            }
+            if (status.newStatus == "Cancelled")
+            {
+                if (string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderTitle) || string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderDescription))
+                {
+                    TempData["ErrorToast"] = "Vui lòng nhập tiêu đề và mô tả trước khi cập nhật.";
+                    return RedirectToAction("OrderDetail", new { id = id });
+                }
+                status.newStatusProduct = "Cancelled";
+                status.newStatusService = "Cancelled";
                 HttpResponseMessage responseOrder = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
                 if (responseOrder.IsSuccessStatusCode)
                 {
@@ -101,26 +111,16 @@ namespace FEPetServices.Areas.Manager.Controllers
                     };
                     OrderForm orderDetail = System.Text.Json.JsonSerializer.Deserialize<OrderForm>(responseContent, options);
 
-                    if(orderDetail.OrderProductDetails.Count() > 0)
+                    if (orderDetail.OrderProductDetails.Count() > 0)
                     {
                         foreach (var orderProductDetail in orderDetail.OrderProductDetails)
                         {
-                            HttpResponseMessage responseProduct = await _client.PutAsync(DefaultApiUrl + "Product/ChangeProduct"
+                            HttpResponseMessage responseProduct = await _client.PutAsync(DefaultApiUrl + "Product/InChangeProduct"
                               + "?ProductId=" + orderProductDetail.ProductId +
                               "&Quantity=" + orderProductDetail.Quantity, null);
                         }
                     }
                 }
-            }
-            if (status.newStatus == "Cancelled")
-            {
-                if (string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderTitle) || string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderDescription))
-                {
-                    TempData["ErrorToast"] = "Vui lòng nhập tiêu đề và mô tả trước khi cập nhật.";
-                    return RedirectToAction("OrderDetail", new { id = id });
-                }
-                status.newStatusProduct = "Cancelled";
-                status.newStatusService = "Cancelled";
             }
             
             //HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
