@@ -200,6 +200,17 @@
         }
     @*End - Base ViewBag*@
     @*-------------------------------------------------------*@
+    @*Start - Base ViewBag*@
+        function showErrorToastInvalidTimeServiceRoom() {
+            toast({
+                title: 'Thất bại',
+                message: 'Đặt phòng thất bại, Thời gian dịch vụ lớn hơn thời gian đặt phòng!.',
+                type: 'wating',
+                duration: 2000
+            });
+        }
+    @*End - Base ViewBag*@
+    @*-------------------------------------------------------*@
 </script>
 <!-- Main JS -->
 @*<script src="~/assets/js/main.js"></script>*@@*

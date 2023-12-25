@@ -49,6 +49,7 @@
                                     <div class="product-large-thumbnail-2 single-product-thumbnail axil-product slick-layout-wrapper--15 axil-slick-arrow arrow-both-side-3">
                                         <div class="thumbnail">
                                             <img src="@Model.Room.Picture" alt="Product Images">
+                                            <input hidden id="roomid" value="@Model.Room.RoomId"/>
                                         </div>
                                     </div>
                                 </div>
@@ -387,17 +388,51 @@
         function kiemTra() {
             var datetimeStart = document.getElementById('start-datetime').value;
             var datetimeEnd = document.getElementById('end-datetime').value;
+            var roomId = document.getElementById('roomid').value;
+
+        let apiURLCheckService = `https://pet-service-api.azurewebsites.net/api/Room/CheckService?roomId=${roomId}`;
+
+        fetch(apiURLCheckService)
+            .then(response => response.json())
+            .then(data => {
+                let numericData = parseFloat(data);
+                let duration = calculateDurationDatetime(datetimeStart, datetimeEnd);
+
+                if (numericData > parseFloat(duration)) {
+                    showErrorToastInvalidTimeServiceRoom(data);
+                    return false;
+                }
+
+            })
+            .catch(error => {
+                console.log('Fetch error:', error);
+            });
+
+            console.log(datetimeStart);
 
             if (datetimeStart === '' || datetimeEnd === '') {
                 showErrorToastCheckInput();
-                return false; // Ngăn form submit nếu thông tin chưa được điền đầy đủ
+                return false;
             }
             if (document.querySelector(".status").textContent == "Không còn phòng") {
                 showErrorToastInvalidTimeRoom();
                 return false;
             }
 
+            console.log("4");
+            
             return true;
+        }
+
+        function calculateDurationDatetime(startDate, endDate) {
+            const startDateObj = new Date(startDate);
+            const endDateObj = new Date(endDate);
+
+            const oneHourInMillis = 60 * 60 * 1000;
+            const millisecondsDiff = endDateObj - startDateObj;
+            const totalHours = millisecondsDiff / oneHourInMillis;
+
+            return totalHours;
         }
     </script>
     <script>
@@ -507,7 +542,6 @@
                 let startValue = startPicker.input.value;
                 let endValue = endPicker.input.value;
 
-                console.log(startValue + " : " + endValue);
 
 
                 if (startValue && endValue) {
@@ -515,11 +549,7 @@
                     let endDate = endPicker.parseDate(endValue);
                     let roomId = @Model.Room.RoomId;
 
-                    console.log(startDate);
-
-
                     let apiURL = `https://pet-service-api.azurewebsites.net/api/Room/CheckSlotInRoom?RoomId=${roomId}&startDate=${startValue}&endDate=${endValue}`;
-                    console.log(apiURL);
                     fetch(apiURL)
                         .then(response => {
                             if (response.status === 200) {
@@ -533,7 +563,6 @@
                                 let timeduration = parseInt(duration / 24) + " ngày " + duration % 24 + " giờ";
                                 let timeBookingLabel = `${startDate.toLocaleString()} - ${endDate.toLocaleString()} (${timeduration})`;
                                 let priceTimeBooking = totalPrice.toLocaleString('vi-VN') + ' vnđ';
-                                console.log("timeduration: " + timeduration);
 
                                 $('.time-booking').text(timeBookingLabel);
                                 $('.price-time-booking').text(priceTimeBooking);
@@ -576,12 +605,10 @@
                         total += price;
                     }
                 });
-                console.log("total: " + total);
 
                 var timeBookingText = $('.price-time-booking').text();
                 var timeBookingPrice = timeBookingText ? parseInt(timeBookingText.replace(/,/g, '').replace(/\D/g, '')) : 0;
                 total += timeBookingPrice;
-                console.log("timeBookingPrice: " + timeBookingPrice);
 
                 $('.order-total-amount').text(total.toLocaleString('vi-VN') + ' vnđ');
                 var totalPrice = document.getElementById("totalPrice");
