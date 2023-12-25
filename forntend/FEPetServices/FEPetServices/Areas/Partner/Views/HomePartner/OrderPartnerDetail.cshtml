@@ -42,7 +42,7 @@
                             <span style="display:inline-block;background-color: #17a2b8;color: white;">Đơn hàng đặc biệt đang chờ xác nhận</span>
                         }
                     }
-                    
+
                 </div>
             </div>
             @*Thông tin khách hàng*@
@@ -114,32 +114,7 @@
                             <input class="form-check-input" type="radio" id="rejectedCheckbox" name="newStatus" value="Waiting" onchange="handleStatusChange()" onchange="handleRejectChange()">
                             <label class="form-check-label" for="rejectedCheckbox">Hủy Đơn</label>
                         </div>
-                        <div id="reasonSelect" style="display: none;" class="form-group">
-                            <div style="display:flex;">
-                                <div class="title" style="padding-right: 10px;">
-                                    <label for="ReasonId">Lý Do Hủy Đơn: </label>
-                                </div>
-                                <div class="typeinput">
-                                    @if (ViewBag.Reasons != null)
-                                    {
-                                        <select id="ReasonId" name="ReasonId" required onchange="handleReasonChange(this)">
-                                            <option value="Lý do">Chọn Lý Do Hủy Đơn</option>
-                                            @foreach (var rea in ViewBag.Reasons)
-                                            {
-                                                <option value="@rea.Value">@rea.Text</option>
-                                            }
-                                            <option value="khac">Lý Do Hủy Đơn Khác</option>
-                                        </select>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-danger">Error</span>
-                                    }
-                                </div>
-                            </div>
 
-
-                        </div>
 
                     </div>
                     <div id="lydoKhac" style="display: none;">
@@ -154,6 +129,19 @@
                             <div style="color:red" class="error-message" id="description-error-message"></div>
                         </div>
                     </div>
+                    @*
+            <div id="lydoKhac" style="display: none;">
+            <div>
+            <label for="title">Tiêu Đề:</label>
+            <input type="text" id="ReasonOrderTitle" name="ReasonOrderTitle" style="width:100%" placeholder="Nhập Tiêu Đề">
+            <div style="color:red" class="error-message" id="fname-error-message"></div>
+            </div>
+            <div>
+            <label for="description">Mô Tả:</label>
+            <textarea id="ReasonOrderDescription" name="ReasonOrderDescription" style="width:100%" placeholder="Nhập Mô Tả"></textarea>
+            <div style="color:red" class="error-message" id="description-error-message"></div>
+            </div>
+            </div>*@
 
                     @*<form method="post" asp-controller="HomePartner" asp-action="OrderPartnerDetail">*@
                     @Html.AntiForgeryToken()
@@ -211,7 +199,7 @@
                     <a class="btn btn-primary" style="margin-top: 20px;" href="~/Partner/HomePartner/ListOrderPartnerComplete">Trở lại</a>
                 }
             }
-            
+
         </form>
         @*<button class="btn btn-primary" onclick="window.print()">In hoá đơn</button>*@
 
@@ -221,21 +209,13 @@
     <script>
         // Xử lý sự kiện khi chọn nút radio "Rejected"
         function handleStatusChange() {
-            var receivedCheckbox = $('#receivedCheckbox');
-            var reasonSelectDiv = $('#reasonSelect');
-            var lydoKhacDiv = $('#lydoKhac');
+            var rejectedCheckbox = document.getElementById("rejectedCheckbox");
+            var lydoKhac = document.getElementById("lydoKhac");
 
-            if (receivedCheckbox.prop('checked')) {
-                reasonSelectDiv.hide();  // Ẩn select dropdown khi nút radio "Received" được chọn
-                lydoKhacDiv.hide();      // Ẩn div "lydoKhac" khi nút radio "Received" được chọn
+            if (rejectedCheckbox.checked) {
+                lydoKhac.style.display = "block";
             } else {
-                reasonSelectDiv.show();  // Hiển thị select dropdown khi nút radio "Rejected" được chọn
-                // Kiểm tra nếu "Lý Do Hủy Đơn Khác" đã được chọn, thì hiển thị "lydoKhacDiv"
-                if ($('#ReasonId').val() === 'khac') {
-                    lydoKhacDiv.show();
-                } else {
-                    lydoKhacDiv.hide();
-                }
+                lydoKhac.style.display = "none";
             }
         }
     </script>

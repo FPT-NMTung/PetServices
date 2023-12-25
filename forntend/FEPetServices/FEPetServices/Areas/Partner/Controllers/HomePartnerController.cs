@@ -263,12 +263,12 @@ namespace FEPetServices.Areas.Partner.Controllers
         {
             ViewBag.Title = "Chi tiết đơn hàng";
             //HttpResponseMessage reasonResponse = await client.GetAsync("https://localhost:7255/api/Reason/GetAll");
-            HttpResponseMessage reasonResponse = await client.GetAsync(DefaultApiUrl + "Reason/GetAll");
-            if (reasonResponse.IsSuccessStatusCode)
-            {
-                var reaCategories = await reasonResponse.Content.ReadFromJsonAsync<List<ReasonDTO>>();
-                ViewBag.Reasons = new SelectList(reaCategories, "ReasonId", "ReasonTitle");
-            }
+            //HttpResponseMessage reasonResponse = await client.GetAsync(DefaultApiUrl + "Reason/GetAll");
+            //if (reasonResponse.IsSuccessStatusCode)
+            //{
+            //    var reaCategories = await reasonResponse.Content.ReadFromJsonAsync<List<ReasonDTO>>();
+            //    ViewBag.Reasons = new SelectList(reaCategories, "ReasonId", "ReasonTitle");
+            //}
             HttpResponseMessage response = await client.GetAsync(DefaultApiUrl + "OrderPartner/" + orderId);
             //HttpResponseMessage response = await client.GetAsync(DefaultApiUrlOrderPartner + "/" + orderId);
             if (response.IsSuccessStatusCode)
@@ -306,6 +306,11 @@ namespace FEPetServices.Areas.Partner.Controllers
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
             if (status.newStatus == "Waiting")
             {
+                if (string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderTitle) || string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderDescription))
+                {
+                    TempData["ErrorToast"] = "Vui lòng nhập tiêu đề và mô tả trước khi cập nhật.";
+                    return RedirectToAction("OrderPartnerDetail", new { orderId = orderId });
+                }
                 status.newStatusProduct = "";
                 status.newStatusService = "Waiting";
             }
@@ -324,11 +329,6 @@ namespace FEPetServices.Areas.Partner.Controllers
                 status.newStatusProduct = "";
                 status.newStatus = "Processing";
                 status.newStatusService = "Completed";
-            }
-            if (string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderTitle) || string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderDescription))
-            {
-                TempData["ErrorToast"] = "Vui lòng nhập tiêu đề và mô tả trước khi cập nhật.";
-                return RedirectToAction("OrderPartnerDetail", new { orderId = orderId });
             }
             HttpResponseMessage response = await client.PutAsJsonAsync(DefaultApiUrl+ "OrderPartner/ChangeStatus/" + email + "?orderId=" + orderId, status);
             reasonOrders.OrderId = orderId;
