@@ -5,7 +5,7 @@
     const fnameErrorMessage = document.getElementById('fname-error-message');
     const descriptionErrorMessage = document.getElementById('description-error-message');
 
-    const specialChars = /[!@#%^*{}\[\]<>?-]/
+    const specialChars = /[!@#%^*{}\[\]<>?-]/;
     const specialChar = /[@#$%^&*{}\[\]~]/;
 
     fnameErrorMessage.textContent = "";

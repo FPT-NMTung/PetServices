@@ -97,7 +97,6 @@ namespace FEPetServices.Controllers
                 if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
                 {
                     List<CartItem> cartItems = GetCartItems();
-                    await UpdateProductQuantitiesAsync(cartItems);
                     HttpResponseMessage responseStatusPayment = await _client.PutAsync(DefaultApiUrl + "Order/changeStatusPayment"
                                + "?Id=" + orderId, null);
                     ClearCart();
@@ -111,7 +110,6 @@ namespace FEPetServices.Controllers
                 else
                 {
                     List<CartItem> cartItems = GetCartItems();
-                    await UpdateProductQuantitiesAsync(cartItems);
 
                     int orderLatestID = 0;
                     bool checkRoom = false;
@@ -167,19 +165,6 @@ namespace FEPetServices.Controllers
         private void ClearCartRoom()
         {
             HttpContext.Session.Remove(CARTKEYROOM);
-        }
-
-        private async Task UpdateProductQuantitiesAsync(List<CartItem> cartItems)
-        {
-            foreach (var cartItem in cartItems)
-            {
-                if (cartItem.product != null)
-                {
-                    HttpResponseMessage response = await _client.PutAsync(
-                        $"{DefaultApiUrl}Product/ChangeProduct" +
-                        $"?ProductId={cartItem.product.ProductId}&Quantity={cartItem.quantityProduct}", null);
-                }
-            }
         }
     }
 }
