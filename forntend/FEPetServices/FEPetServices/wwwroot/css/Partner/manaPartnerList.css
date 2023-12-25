@@ -1,0 +1,12 @@
+﻿@media only screen and (max-width: 400px) {
+    .mana-partner img{
+        padding-bottom: 40px;
+    }
+
+}
+
+@media only screen and (max-width: 768px) {
+    .mana-partner img {
+        padding-bottom: 40px;
+    }
+}

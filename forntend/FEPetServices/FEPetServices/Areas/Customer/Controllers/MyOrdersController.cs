@@ -197,8 +197,15 @@ namespace FEPetServices.Areas.Customer.Controllers
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+
             if (status.newStatus == "Cancelled")
             {
+                if (string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderTitle) || string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderDescription))
+                {
+                    TempData["ErrorToast"] = "Vui lòng nhập tiêu đề và mô tả trước khi cập nhật.";
+                    return RedirectToAction("OrderDetail", new { id = id });
+                }
                 status.newStatusProduct = "Cancelled";
                 status.newStatusService = "Cancelled";
             }

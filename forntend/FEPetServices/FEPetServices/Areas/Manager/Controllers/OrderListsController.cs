@@ -55,12 +55,12 @@ namespace FEPetServices.Areas.Manager.Controllers
         public async Task<IActionResult> OrderDetail(int id)
         {
             ViewBag.Title = "Chi tiết đơn hàng";
-            HttpResponseMessage reasonResponse = await _client.GetAsync(DefaultApiUrl + "Reason/GetAll");
-            if (reasonResponse.IsSuccessStatusCode)
-            {
-                var reaCategories = await reasonResponse.Content.ReadFromJsonAsync<List<ReasonDTO>>();
-                ViewBag.Reasons = new SelectList(reaCategories, "ReasonId", "ReasonTitle");
-            }
+            //HttpResponseMessage reasonResponse = await _client.GetAsync(DefaultApiUrl + "Reason/GetAll");
+            //if (reasonResponse.IsSuccessStatusCode)
+            //{
+            //    var reaCategories = await reasonResponse.Content.ReadFromJsonAsync<List<ReasonDTO>>();
+            //    ViewBag.Reasons = new SelectList(reaCategories, "ReasonId", "ReasonTitle");
+            //}
             //HttpResponseMessage response = await _client.GetAsync("https://localhost:7255/api/" + "Order/" + id);
             HttpResponseMessage response = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
             if (response.IsSuccessStatusCode)
@@ -93,6 +93,11 @@ namespace FEPetServices.Areas.Manager.Controllers
             }
             if (status.newStatus == "Cancelled")
             {
+                if (string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderTitle) || string.IsNullOrWhiteSpace(reasonOrders.ReasonOrderDescription))
+                {
+                    TempData["ErrorToast"] = "Vui lòng nhập tiêu đề và mô tả trước khi cập nhật.";
+                    return RedirectToAction("OrderDetail", new { id = id });
+                }
                 status.newStatusProduct = "Cancelled";
                 status.newStatusService = "Cancelled";
                 HttpResponseMessage responseOrder = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
@@ -116,8 +121,8 @@ namespace FEPetServices.Areas.Manager.Controllers
                         }
                     }
                 }
-
             }
+            
             //HttpResponseMessage response = await _client.PutAsJsonAsync("https://localhost:7255/api/" + "Order/changeStatus?Id=" + id, status);
             HttpResponseMessage response = await _client.PutAsJsonAsync(DefaultApiUrl + "Order/changeStatus?Id=" + id, status);
             reasonOrders.OrderId = id;

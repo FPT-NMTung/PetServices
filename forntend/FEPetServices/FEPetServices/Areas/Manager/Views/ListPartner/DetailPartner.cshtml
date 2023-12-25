@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="~/css/toastNotification.css" rel="stylesheet" />
     <link href="~/css/datatable.css" rel="stylesheet" />
+    <link href="~/css/partner/manapartnerlist.css" rel="stylesheet" />
 </head>
 <body>
     <div class="container light-style flex-grow-1 container-p-y">
@@ -16,32 +17,35 @@
             <div class="tab-content">
                 <div style="margin:2%" class="tab-pane fade active show" id="account-general">
                     <form method="post" asp-controller="ListPartner" asp-action="DetailPartner" style="margin-right:10px">
-                    <div class="card-body media align-items-center">
-                            <div style="margin-bottom:1%" class="media-body">
-                                <h3>
-                                    Hình ảnh
-                                </h3> &nbsp;
+                        <div class="row gx-3 mb-3 mana-partner">
+                            <div class="card-body col-md-6 media align-items-center">
+                                <div style="margin-bottom:1%" class="media-body">
+                                    <h3>
+                                        Hình ảnh
+                                    </h3>
+                                </div>
+                                @*Chưa thêm ảnh*@
+                                <img src="@Model?.PartnerInfo.ImagePartner" style="width:100%; height: 100%; max-width: 600px; max-height: 500px; object-fit: cover;" alt="" class="d-block ui-w-80">
                             </div>
-                        @*Chưa thêm ảnh*@
-                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="d-block ui-w-80">
-                    </div>
-                        <div class="card-body media align-items-center">
-                            <div style="margin-bottom:1%" class="media-body">
-                                <h3>
-                                    Hình ảnh giấy chứng nhận
-                                </h3> &nbsp;
+                            <div class="card-body col-md-6 media align-items-center">
+                                <div style="margin-bottom:1%" class="media-body">
+                                    <h3>
+                                        Hình ảnh giấy chứng nhận
+                                    </h3>
+                                </div>
+                                @*Chưa thêm ảnh*@
+                                <img src="@Model?.PartnerInfo.ImageCertificate" style="width:100%; height: 100%; max-width: 600px; max-height: 500px; object-fit: cover;" alt="" class="d-block ui-w-80">
                             </div>
-                            @*Chưa thêm ảnh*@
-                            <img style="width:100%;height:100%" src="@Model?.PartnerInfo.ImageCertificate" alt="" class="d-block ui-w-80">
                         </div>
+                        
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
-                                <label class="small mb-1" >Họ</label>
-                                <input class="form-control"  type="text" value="@Model?.PartnerInfo.FirstName" disabled>
+                                <label class="small mb-1">Họ</label>
+                                <input class="form-control" type="text" value="@Model?.PartnerInfo.FirstName" disabled>
                             </div>
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputLastName">Tên</label>
-                                <input class="form-control"  type="text" value="@Model?.PartnerInfo.LastName" disabled>
+                                <input class="form-control" type="text" value="@Model?.PartnerInfo.LastName" disabled>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -49,32 +53,32 @@
                             <input class="form-control" name="Dob" id="inputDob" type="date" value="@Model?.PartnerInfo.Dob?.ToString("yyyy-MM-dd")" disabled>
                         </div>
                         <div class="mb-3">
-                            <label class="small mb-1" >Email</label>
-                            <input class="form-control"  type="email" value="@Model?.Email" disabled>
+                            <label class="small mb-1">Email</label>
+                            <input class="form-control" type="email" value="@Model?.Email" disabled>
                         </div>
-                          <div class="mb-3">
-                                <label class="small mb-1" for="inputEmailAddress">Tên ngân hàng</label>
-                                <input class="form-control"  type="text" name="CardName" id="CardName"  value="@Model?.PartnerInfo.CardName" disabled>
-                            </div>
+                        <div class="mb-3">
+                            <label class="small mb-1" for="inputEmailAddress">Tên ngân hàng</label>
+                            <input class="form-control" type="text" name="CardName" id="CardName" value="@Model?.PartnerInfo.CardName" disabled>
+                        </div>
 
-                             <div class="mb-3">
-                                <label class="small mb-1" for="inputEmailAddress">Số tài khoản</label>
-                                <input class="form-control" id="CardNumber" type="text" name="CardNumber" value="@Model?.PartnerInfo.CardNumber" disabled>
-                            </div>
+                        <div class="mb-3">
+                            <label class="small mb-1" for="inputEmailAddress">Số tài khoản</label>
+                            <input class="form-control" id="CardNumber" type="text" name="CardNumber" value="@Model?.PartnerInfo.CardNumber" disabled>
+                        </div>
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
-                                <label class="small mb-1" >Tỉnh</label>
-                                <input class="form-control"  type="email" value="@Model?.PartnerInfo.Province" disabled>
+                                <label class="small mb-1">Tỉnh</label>
+                                <input class="form-control" type="email" value="@Model?.PartnerInfo.Province" disabled>
                             </div>
                             <div class="col-md-6">
-                                <label class="small mb-1" >Huyện/Thành Phố</label>
+                                <label class="small mb-1">Huyện/Thành Phố</label>
                                 <input class="form-control" type="email" value="@Model?.PartnerInfo.District" disabled>
                             </div>
                         </div>
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputWard">Xã/Quận</label>
-                                <input class="form-control"value="@Model?.PartnerInfo.Commune" disabled>
+                                <input class="form-control" value="@Model?.PartnerInfo.Commune" disabled>
                             </div>
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputAddress">Địa chỉ cụ thể</label>
@@ -87,7 +91,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="small mb-1" for="inputDescriptions">Mô tả </label>
-                            <textarea  style="height:300px;" class="form-control" >@Model?.PartnerInfo.Descriptions</textarea>
+                            <textarea style="height:300px;" class="form-control">@Model?.PartnerInfo.Descriptions</textarea>
                         </div>
                         <input type="hidden" name="Email" value="@Model?.Email" />
                         <input type="hidden" name="Password" value="@Model?.Password" />

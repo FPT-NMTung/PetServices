@@ -298,7 +298,7 @@
                 <span class="badge badge-info">Đã thanh toán</span>
             }
         </div>
-        <form method="post" asp-controller="OrderLists" asp-action="OrderDetail">
+        <form method="post" asp-controller="OrderLists" asp-action="OrderDetail" onsubmit="return validateForm()">
             @if (Model.OrderStatus.Trim() == "Placed")
             {
                 <input type="hidden" name="Id" value="@Model?.OrderId" />
@@ -315,7 +315,7 @@
                         <input class="form-check-input" type="radio" id="cancelledCheckbox" name="newStatus" value="Cancelled" onchange="handleStatusChange()" onchange="handleCancelledChange()">
                         <label class="form-check-label" for="cancelledCheckbox">Hủy Đơn</label>
                     </div>
-                    <div id="reasonSelect" style="display: none;" class="form-group">
+                    @*<div id="reasonSelect" style="display: none;" class="form-group">
                         <div style="display:flex;">
                             <div class="title" style="padding-right: 10px;">
                                 <label for="ReasonId">Lý Do Hủy Đơn: </label>
@@ -339,23 +339,21 @@
                             </div>
                         </div>
 
-                    </div>
+                    </div>*@
 
                 </div>
                 <div id="lydoKhac" style="display: none;">
                     <div>
                         <label for="title">Tiêu Đề:</label>
                         <input type="text" id="ReasonOrderTitle" name="ReasonOrderTitle" style="width:100%" placeholder="Nhập Tiêu Đề">
+                        <div style="color:red" class="error-message" id="fname-error-message"></div>
                     </div>
                     <div>
                         <label for="description">Mô Tả:</label>
                         <textarea id="ReasonOrderDescription" name="ReasonOrderDescription" style="width:100%" placeholder="Nhập Mô Tả"></textarea>
+                        <div style="color:red" class="error-message" id="description-error-message"></div>
                     </div>
                 </div>
-                @*<select style="margin-bottom:12px;" class="form-select select-status" name="newStatus">
-            <option value="Confirmed">Xác nhận đơn hàng</option>
-            <option value="Cancelled">Huỷ đơn hàng</option>
-            </select>*@
 
                 <button class="btn btn-primary" style="margin-top: 20px;" type="submit">Xác nhận</button>
             }
@@ -366,24 +364,17 @@
             <a class="btn btn-primary" href="~/Manager/OrderLists/Index">Trở lại</a>
         </div>
     </div>
+    <script src="~/js/order/reasonreject.js"></script>
     <script>
         // Xử lý sự kiện khi chọn nút radio "Rejected"
         function handleStatusChange() {
-            var receivedCheckbox = $('#confirmedCheckbox');
-            var reasonSelectDiv = $('#reasonSelect');
-            var lydoKhacDiv = $('#lydoKhac');
+            var rejectedCheckbox = document.getElementById("cancelledCheckbox");
+            var lydoKhac = document.getElementById("lydoKhac");
 
-            if (receivedCheckbox.prop('checked')) {
-                reasonSelectDiv.hide();  // Ẩn select dropdown khi nút radio "Received" được chọn
-                lydoKhacDiv.hide();      // Ẩn div "lydoKhac" khi nút radio "Received" được chọn
+            if (rejectedCheckbox.checked) {
+                lydoKhac.style.display = "block";
             } else {
-                reasonSelectDiv.show();  // Hiển thị select dropdown khi nút radio "Rejected" được chọn
-                // Kiểm tra nếu "Lý Do Hủy Đơn Khác" đã được chọn, thì hiển thị "lydoKhacDiv"
-                if ($('#ReasonId').val() === 'khac') {
-                    lydoKhacDiv.show();
-                } else {
-                    lydoKhacDiv.hide();
-                }
+                lydoKhac.style.display = "none";
             }
         }
     </script>
