@@ -344,7 +344,7 @@ namespace PetServices.Controllers
                 _context.Entry(product).OriginalValues["Quantity"] = product.Quantity;
 
                 product.Quantity += Quantity;
-                product.QuantitySold =- Quantity;
+                product.QuantitySold -= Quantity;
 
                 await _context.SaveChangesAsync();
                 return Ok("Cập nhật sản phẩm thành công!");
