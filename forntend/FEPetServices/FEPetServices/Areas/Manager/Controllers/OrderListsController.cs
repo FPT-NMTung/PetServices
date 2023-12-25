@@ -89,7 +89,28 @@ namespace FEPetServices.Areas.Manager.Controllers
             if (status.newStatus == "Confirmed")
             {
                 status.newStatusProduct = "Packaging";
-                status.newStatusService = "Waiting";    
+                status.newStatusService = "Waiting";
+                HttpResponseMessage responseOrder = await _client.GetAsync(DefaultApiUrl + "Order/" + id);
+                if (responseOrder.IsSuccessStatusCode)
+                {
+                    string responseContent = await responseOrder.Content.ReadAsStringAsync();
+
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+                    OrderForm orderDetail = System.Text.Json.JsonSerializer.Deserialize<OrderForm>(responseContent, options);
+
+                    if(orderDetail.OrderProductDetails.Count() > 0)
+                    {
+                        foreach (var orderProductDetail in orderDetail.OrderProductDetails)
+                        {
+                            HttpResponseMessage responseProduct = await _client.PutAsync(DefaultApiUrl + "Product/ChangeProduct"
+                              + "?ProductId=" + orderProductDetail.ProductId +
+                              "&Quantity=" + orderProductDetail.Quantity, null);
+                        }
+                    }
+                }
             }
             if (status.newStatus == "Cancelled")
             {

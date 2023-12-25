@@ -270,14 +270,6 @@ namespace FEPetServices.Controllers
                     }
                     else
                     {
-                        foreach (var cartItem in cartItems)
-                        {
-                            if (cartItem.product != null)
-                            {
-                                HttpResponseMessage response = await _client.PutAsync(DefaultApiUrl + "Product/ChangeProduct"
-                                    + "?ProductId=" + cartItem.product.ProductId + "&Quantity=" + cartItem.quantityProduct, null);
-                            }
-                        }
                         ClearCart();
                         TempData["SuccessToast"] = "Đặt hàng thành công. Vui lòng kiểm tra lại giỏ hàng.";
                         return RedirectToAction("Index", "Home");
